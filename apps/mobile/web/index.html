@@ -15,14 +15,16 @@
   <title>Koybul — Denizde yerini bul</title>
   <link rel="manifest" href="manifest.json">
   <style>
-    /* HTML ön-açılış katmanı (Koybul Marka Yüzeyi, 2026-08): Flutter motoru
-       inerken BEYAZ EKRAN yerine anında marka yüzeyi görünür — fotoğraf yok,
-       saf CSS/SVG (0 ek indirme). Flutter ilk karesini çizince yumuşakça
-       silinir (flutter-first-frame); Flutter tarafı aynı tasarımı devralır. */
+    /* HTML ön-açılış katmanı (Koybul Marka Yüzeyi): Flutter motoru inerken
+       BEYAZ EKRAN yerine anında marka yüzeyi görünür. Flutter ilk karesini
+       çizince yumuşakça silinir (flutter-first-frame).
+
+       BOYUT SÖZLEŞMESİ (kullanıcı kararı 2026-08): --mark, Flutter'daki
+       koybulMarkHeight() ile BİREBİR aynı formüldür →
+       clamp(130px, ekranın kısa kenarı × %30, 220px). Bütün ölçüler bu
+       değişkenden türediği için devralma anında logo asla büyümez/küçülmez.
+       TEK animasyon: dalga üzerinde giden yelkenli (Flutter'da da aynısı). */
     html, body { margin: 0; padding: 0; height: 100%; }
-    /* Poppins, Flutter paketinin KENDİ font dosyasından yüklenir (aynı sunucu,
-       ek indirme kaynağı yok) — ön-açılış ve uygulama BİREBİR aynı yazıyı
-       kullanır; devralma anında yazı da değişmez. */
     @font-face {
       font-family: 'Poppins'; font-weight: 700; font-display: swap;
       src: url('assets/assets/fonts/Poppins-Bold.ttf') format('truetype');
@@ -31,6 +33,7 @@
       font-family: 'Poppins'; font-weight: 400; font-display: swap;
       src: url('assets/assets/fonts/Poppins-Regular.ttf') format('truetype');
     }
+    :root { --mark: clamp(130px, 30vmin, 220px); }
     #koybul-splash {
       position: fixed; inset: 0; z-index: 9999;
       display: flex; flex-direction: column;
@@ -39,14 +42,22 @@
       transition: opacity .45s ease;
       font-family: 'Poppins', -apple-system, 'Segoe UI', Roboto, sans-serif;
     }
-    /* Dikey konum Flutter yüzeyiyle hizalı (blok merkezi ekranın %35'inde):
-       devralma anında logo ne büyür ne kayar (kullanıcı kararı 2026-08). */
+    /* Dikey konum Flutter yüzeyiyle hizalı (blok merkezi ekranın %35'inde). */
     #koybul-splash .icerik { transform: translateY(-15vh); text-align: center; }
-    #koybul-splash .ad {
-      font-weight: 700; font-size: 46px; letter-spacing: -1px;
-      color: #F2F5F9; margin-top: 22px; line-height: 1;
+    #koybul-splash .isaret {
+      width: calc(var(--mark) * 0.7693); height: var(--mark);
     }
-    #koybul-splash .slogan { font-size: 17px; color: #93A1B8; margin-top: 10px; }
+    #koybul-splash .ad {
+      font-weight: 700; letter-spacing: -1px; line-height: 1;
+      font-size: calc(var(--mark) * 0.354);
+      margin-top: calc(var(--mark) * 0.169);
+      color: #F2F5F9;
+    }
+    #koybul-splash .slogan {
+      font-size: calc(var(--mark) * 0.131);
+      margin-top: calc(var(--mark) * 0.077);
+      color: #93A1B8;
+    }
     #koybul-splash .m-body { fill: #F2F5F9; }
     #koybul-splash .m-disc { fill: #0A2540; }
     #koybul-splash .m-wave { stroke: #F2F5F9; }
@@ -59,25 +70,50 @@
     #koybul-splash.gunduz .m-body { fill: #0A2540; }
     #koybul-splash.gunduz .m-disc { fill: #FFFFFF; }
     #koybul-splash.gunduz .m-wave { stroke: #0A2540; }
-    #koybul-splash .noktalar {
-      position: absolute; bottom: 9%; display: flex; gap: 16px;
+    /* Yükleme göstergesi: dalga üzerinde giden yelkenli — TEK animasyon. */
+    #koybul-splash .yukleme {
+      position: absolute; bottom: 8%;
+      width: calc(var(--mark) * 1.15); height: calc(var(--mark) * 0.30);
     }
-    #koybul-splash .noktalar span {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: #2EC4B6; opacity: .25; animation: kb-nabiz 1.2s infinite;
+    #koybul-splash .dalga { position: absolute; inset: 0; width: 100%; height: 100%; }
+    #koybul-splash .dalga path {
+      fill: none; stroke: rgba(242, 245, 249, .30);
+      stroke-width: 1.6; stroke-linecap: round;
     }
-    #koybul-splash .noktalar span:nth-child(2) { animation-delay: .28s; }
-    #koybul-splash .noktalar span:nth-child(3) { animation-delay: .56s; }
-    @keyframes kb-nabiz { 0%, 100% { opacity: .25; } 40% { opacity: 1; } }
+    #koybul-splash.gunduz .dalga path { stroke: rgba(10, 37, 64, .30); }
+    #koybul-splash .tekne {
+      position: absolute; bottom: 30%;
+      width: calc(var(--mark) * 0.17); height: calc(var(--mark) * 0.15);
+      left: -6%; animation: kb-yol 3.2s linear infinite;
+    }
+    #koybul-splash .tekne-sallan {
+      animation: kb-salla .8s ease-in-out infinite alternate;
+      transform-origin: 50% 92%;
+    }
+    #koybul-splash .tekne .yelken { fill: #2EC4B6; }
+    #koybul-splash .tekne .govde {
+      fill: none; stroke: #F2F5F9; stroke-width: 2.2; stroke-linecap: round;
+    }
+    #koybul-splash.gunduz .tekne .govde { stroke: #0A2540; }
+    @keyframes kb-yol {
+      0% { left: -6%; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { left: 92%; opacity: 0; }
+    }
+    @keyframes kb-salla {
+      from { transform: translateY(-5%) rotate(-5deg); }
+      to { transform: translateY(5%) rotate(5deg); }
+    }
   </style>
 </head>
 <body>
   <div id="koybul-splash">
     <div class="icerik">
       <!-- viewBox işarete birebir kırpılmıştır (birim 20..80 × 10..88):
-           işaret burada da TAM 130px yüksekliktedir — Flutter'daki çizimle
+           işaret yüksekliği tam --mark değeridir — Flutter'daki çizimle
            piksel piksel aynı; devralmada büyüme/küçülme olmaz. -->
-      <svg width="100" height="130" viewBox="20 10 60 78" aria-label="Koybul">
+      <svg class="isaret" viewBox="20 10 60 78" aria-label="Koybul">
         <path class="m-body" d="M50 10 C66.6 10 80 23.4 80 40 C80 51.5 73.5 61.5 64 66.5 L52.5 86 C51.4 87.9 48.6 87.9 47.5 86 L36 66.5 C26.5 61.5 20 51.5 20 40 C20 23.4 33.4 10 50 10 Z"/>
         <circle class="m-disc" cx="50" cy="40" r="20"/>
         <path class="m-wave" d="M36.5 45.5 Q50 53.5 63.5 45.5" fill="none" stroke-width="4.6" stroke-linecap="round"/>
@@ -86,7 +122,17 @@
       <div class="ad">Koybul</div>
       <div class="slogan">Denizde yerini bul.</div>
     </div>
-    <div class="noktalar"><span></span><span></span><span></span></div>
+    <div class="yukleme">
+      <svg class="dalga" viewBox="0 0 100 26" preserveAspectRatio="none">
+        <path d="M0 17 Q12.5 8 25 17 T50 17 T75 17 T100 17"/>
+      </svg>
+      <svg class="tekne" viewBox="-10 -14 20 20">
+        <g class="tekne-sallan">
+          <path class="yelken" d="M0 -12 C4.6 -8.2 8.2 -3.6 9 -1.2 L0 -1.2 Z"/>
+          <path class="govde" d="M-8 0 Q0 5 8 0"/>
+        </g>
+      </svg>
+    </div>
   </div>
   <script>
     (function () {

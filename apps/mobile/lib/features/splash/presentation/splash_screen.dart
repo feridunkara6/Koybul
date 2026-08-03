@@ -100,10 +100,17 @@ class _SplashGateState extends ConsumerState<SplashGate> {
 }
 
 // =============================================================================
-// KOYBUL MARKA YÜZEYİ — logoyla aynı dili konuşan sade kurumsal açılış:
-// degrade zemin + hayalet su-yayı halkaları + Koybul işareti + yazı + yükleme
-// noktaları. Public: testler gündüz/gece varyantını `night` alanından doğrular.
+// KOYBUL MARKA YÜZEYİ — logoyla aynı dili konuşan sade kurumsal açılış.
+// BOYUT SÖZLEŞMESİ (kullanıcı kararı 2026-08): işaret yüksekliği HER YERDE
+// aynı formülle hesaplanır → clamp(ekranın kısa kenarı × 0.30, 130, 220).
+// Web ön-açılışı (index.html) CSS'te BİREBİR aynı formülü kullanır
+// (clamp(130px, 30vmin, 220px)) — devralma anında logo asla büyümez/küçülmez.
+// TEK animasyon: dalga üzerinde giden yelkenli (yükleme göstergesi).
 // =============================================================================
+
+/// Paylaşılan boyut formülü — index.html'deki CSS clamp ile birebir.
+double koybulMarkHeight(Size screen) =>
+    (math.min(screen.width, screen.height) * 0.30).clamp(130.0, 220.0);
 
 class BrandSplash extends StatefulWidget {
   const BrandSplash({required this.night, super.key});
@@ -116,15 +123,15 @@ class BrandSplash extends StatefulWidget {
 
 class _BrandSplashState extends State<BrandSplash>
     with SingleTickerProviderStateMixin {
-  /// Yükleme noktalarının nabzı (sürekli, yumuşak).
-  late final AnimationController _pulse = AnimationController(
+  /// Yelkenlinin dalga üzerindeki yolculuğu (tek ve sürekli animasyon).
+  late final AnimationController _sail = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 1200),
+    duration: const Duration(milliseconds: 3200),
   )..repeat();
 
   @override
   void dispose() {
-    _pulse.dispose();
+    _sail.dispose();
     super.dispose();
   }
 
@@ -137,9 +144,6 @@ class _BrandSplashState extends State<BrandSplash>
         : const <Color>[Color(0xFFF7FAFD), Color(0xFFE9F2F9)];
     final Color ink = night ? const Color(0xFFF2F5F9) : DocklyColors.brandDeep;
     final Color slogan = night ? const Color(0xFF93A1B8) : const Color(0xFF5B6B84);
-    final Color dotPassive =
-        night ? const Color(0xFF243A54) : const Color(0xFFC8D6E4);
-    final Color halo = night ? const Color(0x0DFFFFFF) : const Color(0x100A2540);
 
     return Scaffold(
       body: DecoratedBox(
@@ -150,71 +154,65 @@ class _BrandSplashState extends State<BrandSplash>
             colors: bg,
           ),
         ),
-        // SABİT BOYUT (kullanıcı kararı 2026-08): işaret HER ekranda 130px,
-        // yazılar 46/17px — web ön-açılışıyla birebir aynı ölçüler. Böylece
-        // Flutter devraldığı an hiçbir öğe büyümez/kıpırdamaz.
-        child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            Align(
-              alignment: const Alignment(0, -0.30),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  SizedBox(
-                    width: 130,
-                    height: 130,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: <Widget>[
-                        // Hayalet halkalar: logodaki su yayının dev yankıları.
-                        Positioned.fill(
-                          child: CustomPaint(
-                            painter: _HaloArcsPainter(color: halo),
-                          ),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints c) {
+            final double markH =
+                koybulMarkHeight(Size(c.maxWidth, c.maxHeight));
+            return Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                Align(
+                  alignment: const Alignment(0, -0.30),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      SizedBox(
+                        width: markH,
+                        height: markH,
+                        child: CustomPaint(
+                          key: const ValueKey<String>('koybul-mark'),
+                          painter: KoybulMarkPainter(night: night),
                         ),
-                        Positioned.fill(
-                          child: CustomPaint(
-                            key: const ValueKey<String>('koybul-mark'),
-                            painter: KoybulMarkPainter(night: night),
-                          ),
+                      ),
+                      SizedBox(height: markH * 0.169),
+                      Text(
+                        'Koybul',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: markH * 0.354,
+                          letterSpacing: -0.5,
+                          height: 1.0,
+                          color: ink,
+                          decoration: TextDecoration.none,
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: markH * 0.077),
+                      Text(
+                        'Denizde yerini bul.',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          fontSize: markH * 0.131,
+                          height: 1.0,
+                          color: slogan,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 22),
-                  Text(
-                    'Koybul',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 46,
-                      letterSpacing: -0.5,
-                      height: 1.0,
-                      color: ink,
-                      decoration: TextDecoration.none,
-                    ),
+                ),
+                Align(
+                  alignment: const Alignment(0, 0.82),
+                  child: _SailWaveLoader(
+                    anim: _sail,
+                    width: markH * 1.15,
+                    ink: ink,
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Denizde yerini bul.',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 17,
-                      height: 1.0,
-                      color: slogan,
-                      decoration: TextDecoration.none,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Align(
-              alignment: const Alignment(0, 0.80),
-              child: _LoadingDots(pulse: _pulse, passive: dotPassive),
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -287,80 +285,102 @@ class KoybulMarkPainter extends CustomPainter {
   bool shouldRepaint(KoybulMarkPainter oldDelegate) => oldDelegate.night != night;
 }
 
-/// Hayalet halkalar: işaretin su yayının dev, çok soluk yankıları — zemine
-/// derinlik verir, dikkati dağıtmaz (%5 civarı görünürlük).
-class _HaloArcsPainter extends CustomPainter {
-  _HaloArcsPainter({required this.color});
+/// Yükleme göstergesi: dalga üzerinde SOLDAN SAĞA giden minik yelkenli —
+/// açılıştaki TEK animasyon (kullanıcı kararı 2026-08). Yelken, logodaki
+/// yelkenin küçüğüdür; gövde logodaki su yayının küçüğü — marka tutarlı.
+class _SailWaveLoader extends StatelessWidget {
+  const _SailWaveLoader({
+    required this.anim,
+    required this.width,
+    required this.ink,
+  });
 
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    // Yay merkezi: işaretin disk merkezi (birim 40; widget merkezi birim 49).
-    final Offset center = Offset(
-      size.width / 2,
-      size.height / 2 - size.height * (9 / 78),
-    );
-    final Paint p = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round;
-    for (final double f in <double>[1.7, 2.2, 2.7]) {
-      canvas.drawArc(
-        Rect.fromCircle(center: center, radius: size.height * f),
-        0.4363, // 25°
-        2.2689, // 130° süpürme — alt yay (logodaki su çizgisiyle aynı aile)
-        false,
-        p,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(_HaloArcsPainter oldDelegate) => oldDelegate.color != color;
-}
-
-/// Üç noktalı yükleme göstergesi — turkuaz nabız, soldan sağa akar.
-class _LoadingDots extends StatelessWidget {
-  const _LoadingDots({required this.pulse, required this.passive});
-
-  final Animation<double> pulse;
-  final Color passive;
+  final Animation<double> anim;
+  final double width;
+  final Color ink;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      key: const ValueKey<String>('splash-dots'),
-      animation: pulse,
+      key: const ValueKey<String>('splash-sail'),
+      animation: anim,
       builder: (BuildContext context, Widget? _) {
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            for (int i = 0; i < 3; i++) ...<Widget>[
-              if (i > 0) const SizedBox(width: 16),
-              Container(
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color.lerp(
-                    passive,
-                    DocklyColors.accentTurquoise,
-                    _wave(pulse.value, i),
-                  ),
-                ),
-              ),
-            ],
-          ],
+        return CustomPaint(
+          size: Size(width, width * 0.30),
+          painter: _SailWavePainter(t: anim.value, ink: ink),
         );
       },
     );
   }
+}
 
-  /// Nokta i için 0..1 nabız değeri — faz kaydırmalı yumuşak sinüs.
-  static double _wave(double t, int i) {
-    final double x = (t - i * 0.28) * 2 * math.pi;
-    return 0.5 + 0.5 * math.sin(x);
+class _SailWavePainter extends CustomPainter {
+  _SailWavePainter({required this.t, required this.ink});
+
+  final double t;
+  final Color ink;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double w = size.width;
+    final double amp = size.height * 0.13; // dalga genliği
+    final double baseY = size.height * 0.66;
+    double waveY(double x) => baseY + amp * math.sin(2 * math.pi * 2 * x / w);
+
+    // Dalga: iki tam periyotluk sakin sinüs (statik — animasyon teknede).
+    final Path wavePath = Path()..moveTo(0, waveY(0));
+    for (double x = 2; x <= w; x += 2) {
+      wavePath.lineTo(x, waveY(x));
+    }
+    canvas.drawPath(
+      wavePath,
+      Paint()
+        ..color = ink.withValues(alpha: 0.30)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.4
+        ..strokeCap = StrokeCap.round,
+    );
+
+    // Tekne: dalga boyunca yol alır; eğim dalganın türevinden gelir (bata
+    // çıka gerçekçi ilerler). Uçlarda yumuşak görünüp kaybolur.
+    final double bx = w * (0.04 + 0.92 * t);
+    final double by = waveY(bx);
+    final double slope =
+        amp * (4 * math.pi / w) * math.cos(2 * math.pi * 2 * bx / w);
+    final double angle = math.atan(slope) * 0.85;
+    final double edge = math.min(t, 1 - t);
+    final double fade = (edge / 0.12).clamp(0.0, 1.0);
+
+    final double k = size.height * 0.052; // tekne ölçeği
+    canvas.save();
+    canvas.translate(bx, by - 1.5);
+    canvas.rotate(angle);
+    // Yelken (logodaki yelkenin oranlarıyla).
+    final Path sail = Path()
+      ..moveTo(0, -12 * k)
+      ..cubicTo(4.6 * k, -8.2 * k, 8.2 * k, -3.6 * k, 9 * k, -1.2 * k)
+      ..lineTo(0, -1.2 * k)
+      ..close();
+    canvas.drawPath(
+      sail,
+      Paint()..color = DocklyColors.accentTurquoise.withValues(alpha: fade),
+    );
+    // Gövde: logodaki su yayının minik yankısı.
+    final Path hull = Path()
+      ..moveTo(-8 * k, 0)
+      ..quadraticBezierTo(0, 5 * k, 8 * k, 0);
+    canvas.drawPath(
+      hull,
+      Paint()
+        ..color = ink.withValues(alpha: fade)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.6
+        ..strokeCap = StrokeCap.round,
+    );
+    canvas.restore();
   }
+
+  @override
+  bool shouldRepaint(_SailWavePainter oldDelegate) =>
+      oldDelegate.t != t || oldDelegate.ink != ink;
 }

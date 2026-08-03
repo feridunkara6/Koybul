@@ -94,7 +94,7 @@ class _DetailContent extends ConsumerWidget {
     final String? descriptionBelow =
         split != null ? split.general : detail.description;
 
-    return ListView(
+    final Widget content = ListView(
       key: LocationDetailScreen.contentKey,
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
       children: <Widget>[
@@ -258,6 +258,23 @@ class _DetailContent extends ConsumerWidget {
         ReviewsSection(idOrSlug: detail.id),
         NearbyAlternatives(locationId: detail.id, position: detail.position),
       ],
+    );
+    // GENİŞ EKRAN (kullanıcı isteği 2026-08): bilgisayar/yatay iPad'de içerik
+    // sütunu 760px'te sabitlenip ortalanır — kapak görsel alanı ekranı
+    // kaplamaz (16:9 × 760 = ~427px), satırlar okunur genişlikte kalır.
+    // Telefonda (≤840px) davranış değişmez.
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints c) {
+        if (c.maxWidth <= 840) {
+          return content;
+        }
+        return Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 760),
+            child: content,
+          ),
+        );
+      },
     );
   }
 

@@ -45,8 +45,14 @@ class LocationBottomCard extends ConsumerWidget {
       top: false,
       child: Padding(
         padding: const EdgeInsets.all(12),
-        child: Material(
-          key: cardKey,
+        // GENİŞ EKRAN (2026-08): kart bilgisayar/yatay iPad'de uçtan uca
+        // yayılmaz; 480px'te sabitlenip ortalanır. Telefonda değişiklik yok.
+        child: Center(
+          heightFactor: 1,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 480),
+            child: Material(
+              key: cardKey,
           elevation: 8,
           borderRadius: BorderRadius.circular(16),
           child: Padding(
@@ -125,6 +131,8 @@ class LocationBottomCard extends ConsumerWidget {
                   ),
                 ],
               ],
+            ),
+              ),
             ),
           ),
         ),

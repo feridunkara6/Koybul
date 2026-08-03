@@ -40,7 +40,7 @@ void main() {
     expect(find.byKey(const ValueKey<String>('koybul-mark')), findsOneWidget);
     expect(find.text('Koybul'), findsOneWidget);
     expect(find.text('Denizde yerini bul.'), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('splash-dots')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('splash-sail')), findsOneWidget);
     // PERF sözleşmesi: içerik açılış ekranı görünürken de KURULUDUR (arkada
     // yüklenir) — kararma bitince hazır harita karşılar.
     expect(find.text('HARITA'), findsOneWidget);
@@ -78,7 +78,7 @@ void main() {
 
     expect(_splash(night: false), findsOneWidget);
     expect(find.text('Koybul'), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('splash-dots')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('splash-sail')), findsOneWidget);
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pump(const Duration(milliseconds: 700));
     expect(find.text('HARITA'), findsOneWidget);
