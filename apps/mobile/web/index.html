@@ -20,6 +20,17 @@
        saf CSS/SVG (0 ek indirme). Flutter ilk karesini çizince yumuşakça
        silinir (flutter-first-frame); Flutter tarafı aynı tasarımı devralır. */
     html, body { margin: 0; padding: 0; height: 100%; }
+    /* Poppins, Flutter paketinin KENDİ font dosyasından yüklenir (aynı sunucu,
+       ek indirme kaynağı yok) — ön-açılış ve uygulama BİREBİR aynı yazıyı
+       kullanır; devralma anında yazı da değişmez. */
+    @font-face {
+      font-family: 'Poppins'; font-weight: 700; font-display: swap;
+      src: url('assets/assets/fonts/Poppins-Bold.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Poppins'; font-weight: 400; font-display: swap;
+      src: url('assets/assets/fonts/Poppins-Regular.ttf') format('truetype');
+    }
     #koybul-splash {
       position: fixed; inset: 0; z-index: 9999;
       display: flex; flex-direction: column;
@@ -63,7 +74,10 @@
 <body>
   <div id="koybul-splash">
     <div class="icerik">
-      <svg width="130" height="130" viewBox="0 0 100 100" aria-label="Koybul">
+      <!-- viewBox işarete birebir kırpılmıştır (birim 20..80 × 10..88):
+           işaret burada da TAM 130px yüksekliktedir — Flutter'daki çizimle
+           piksel piksel aynı; devralmada büyüme/küçülme olmaz. -->
+      <svg width="100" height="130" viewBox="20 10 60 78" aria-label="Koybul">
         <path class="m-body" d="M50 10 C66.6 10 80 23.4 80 40 C80 51.5 73.5 61.5 64 66.5 L52.5 86 C51.4 87.9 48.6 87.9 47.5 86 L36 66.5 C26.5 61.5 20 51.5 20 40 C20 23.4 33.4 10 50 10 Z"/>
         <circle class="m-disc" cx="50" cy="40" r="20"/>
         <path class="m-wave" d="M36.5 45.5 Q50 53.5 63.5 45.5" fill="none" stroke-width="4.6" stroke-linecap="round"/>
