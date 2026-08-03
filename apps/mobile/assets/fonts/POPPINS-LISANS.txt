@@ -1,0 +1,7 @@
+Poppins yazı ailesi
+Copyright 2020 The Poppins Project Authors
+https://github.com/itfoundry/Poppins
+
+Bu fontlar SIL Open Font License 1.1 ile lisanslanmıştır (ücretsiz kullanım,
+gömme ve dağıtım serbesttir). Lisansın tam metni:
+https://openfontlicense.org

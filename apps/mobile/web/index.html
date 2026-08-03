@@ -15,49 +15,68 @@
   <title>Koybul — Denizde yerini bul</title>
   <link rel="manifest" href="manifest.json">
   <style>
-    /* HTML ön-açılış katmanı: Flutter motoru inerken BEYAZ EKRAN yerine
-       anında marka zemini + aynı açılış fotoğrafı gösterilir. Flutter ilk
-       karesini çizince yumuşakça silinir (flutter-first-frame). */
+    /* HTML ön-açılış katmanı (Koybul Marka Yüzeyi, 2026-08): Flutter motoru
+       inerken BEYAZ EKRAN yerine anında marka yüzeyi görünür — fotoğraf yok,
+       saf CSS/SVG (0 ek indirme). Flutter ilk karesini çizince yumuşakça
+       silinir (flutter-first-frame); Flutter tarafı aynı tasarımı devralır. */
     html, body { margin: 0; padding: 0; height: 100%; }
-    #moorira-splash {
+    #koybul-splash {
       position: fixed; inset: 0; z-index: 9999;
-      background-color: #0B1B2B;
-      background-position: center;
-      background-repeat: no-repeat;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: linear-gradient(180deg, #0B1220 0%, #0E3052 100%);
       transition: opacity .45s ease;
+      font-family: 'Poppins', -apple-system, 'Segoe UI', Roboto, sans-serif;
     }
-    #moorira-splash.gunduz { background-color: #CFE3F2; }
+    #koybul-splash .icerik { transform: translateY(-9vh); text-align: center; }
+    #koybul-splash .ad {
+      font-weight: 700; font-size: 46px; letter-spacing: -1px;
+      color: #F2F5F9; margin-top: 22px; line-height: 1;
+    }
+    #koybul-splash .slogan { font-size: 17px; color: #93A1B8; margin-top: 10px; }
+    #koybul-splash .m-body { fill: #F2F5F9; }
+    #koybul-splash .m-disc { fill: #0A2540; }
+    #koybul-splash .m-wave { stroke: #F2F5F9; }
+    #koybul-splash .m-sail { fill: #2EC4B6; }
+    #koybul-splash.gunduz {
+      background: linear-gradient(180deg, #F7FAFD 0%, #E9F2F9 100%);
+    }
+    #koybul-splash.gunduz .ad { color: #0A2540; }
+    #koybul-splash.gunduz .slogan { color: #5B6B84; }
+    #koybul-splash.gunduz .m-body { fill: #0A2540; }
+    #koybul-splash.gunduz .m-disc { fill: #FFFFFF; }
+    #koybul-splash.gunduz .m-wave { stroke: #0A2540; }
+    #koybul-splash .noktalar {
+      position: absolute; bottom: 9%; display: flex; gap: 16px;
+    }
+    #koybul-splash .noktalar span {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #2EC4B6; opacity: .25; animation: kb-nabiz 1.2s infinite;
+    }
+    #koybul-splash .noktalar span:nth-child(2) { animation-delay: .28s; }
+    #koybul-splash .noktalar span:nth-child(3) { animation-delay: .56s; }
+    @keyframes kb-nabiz { 0%, 100% { opacity: .25; } 40% { opacity: 1; } }
   </style>
 </head>
 <body>
-  <div id="moorira-splash"></div>
+  <div id="koybul-splash">
+    <div class="icerik">
+      <svg width="130" height="130" viewBox="0 0 100 100" aria-label="Koybul">
+        <path class="m-body" d="M50 10 C66.6 10 80 23.4 80 40 C80 51.5 73.5 61.5 64 66.5 L52.5 86 C51.4 87.9 48.6 87.9 47.5 86 L36 66.5 C26.5 61.5 20 51.5 20 40 C20 23.4 33.4 10 50 10 Z"/>
+        <circle class="m-disc" cx="50" cy="40" r="20"/>
+        <path class="m-wave" d="M36.5 45.5 Q50 53.5 63.5 45.5" fill="none" stroke-width="4.6" stroke-linecap="round"/>
+        <path class="m-sail" d="M49 24.5 C54.5 29.5 58.5 35 59.5 41.5 L49 41.5 Z"/>
+      </svg>
+      <div class="ad">Koybul</div>
+      <div class="slogan">Denizde yerini bul.</div>
+    </div>
+    <div class="noktalar"><span></span><span></span><span></span></div>
+  </div>
   <script>
     (function () {
-      var s = document.getElementById('moorira-splash');
+      var s = document.getElementById('koybul-splash');
       var h = new Date().getHours();
-      var gece = (h >= 19 || h < 7);
-      if (!gece) s.className = 'gunduz';
-      // 2026-07 (kullanıcı tasarımı): DİKEY ekran dikey marka fotoğrafını,
-      // YATAY ekran (bilgisayar/tablet) gerçek deniz+tekne kompozisyonunu
-      // kaplar. Görsel 2:1 — dar yatay ekranlarda kırpma SOLA yaslanır ki
-      // logo hep görünsün. Flutter inince aynı görselin üzerine çok yavaş
-      // yakınlaşma eklenir; geçiş hissedilmez.
-      s.style.backgroundSize = 'cover';
-      function uydur() {
-        var yatay = window.innerWidth > window.innerHeight;
-        if (yatay) {
-          s.style.backgroundImage = 'url(assets/assets/splash/' +
-            (gece ? 'acilis_yatay_gece' : 'acilis_yatay_gunduz') + '.jpg)';
-          s.style.backgroundPosition =
-            (window.innerWidth / window.innerHeight >= 1.6) ? 'center' : '15% center';
-        } else {
-          s.style.backgroundImage = 'url(assets/assets/splash/' +
-            (gece ? 'splash_gece' : 'splash_gunduz') + '.jpg)';
-          s.style.backgroundPosition = 'center';
-        }
-      }
-      uydur();
-      window.addEventListener('resize', uydur);
+      if (!(h >= 19 || h < 7)) s.classList.add('gunduz');
       // Flutter ilk karesini çizince katmanı yumuşakça kaldır.
       window.addEventListener('flutter-first-frame', function () {
         s.style.opacity = '0';

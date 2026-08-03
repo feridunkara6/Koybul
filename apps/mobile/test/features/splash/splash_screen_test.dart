@@ -15,11 +15,9 @@ Widget _gate(DateTime time, {Duration duration = const Duration(milliseconds: 20
   );
 }
 
-/// Adı verilen açılış görselini taşıyan Image widget'ını bulur.
-Finder _asset(String name) => find.byWidgetPredicate((Widget w) =>
-    w is Image &&
-    w.image is AssetImage &&
-    (w.image as AssetImage).assetName.contains(name));
+/// Marka yüzeyini gündüz/gece varyantına göre bulur.
+Finder _splash({required bool night}) => find.byWidgetPredicate(
+    (Widget w) => w is BrandSplash && w.night == night);
 
 void main() {
   test('gece kabulü: 19:00 ve sonrası ile 07:00 öncesi gecedir', () {
@@ -31,16 +29,18 @@ void main() {
     expect(splashIsNight(DateTime(2026, 1, 1, 7)), isFalse);
   });
 
-  testWidgets('gündüz (12:00): aydınlık görsel + rota; içerik ARKADA hazırlanır',
+  testWidgets('gündüz (12:00): aydınlık marka yüzeyi; içerik ARKADA hazırlanır',
       (WidgetTester tester) async {
     await tester.pumpWidget(_gate(DateTime(2026, 7, 13, 12)));
     await tester.pump();
 
-    // Test yüzeyi YATAY (800x600) → masaüstü modu: kullanıcının gündüz
-    // tasarımı (gerçek deniz + tekne; rota ve logo görselin içinde).
-    expect(_asset('acilis_yatay_gunduz'), findsOneWidget);
-    expect(_asset('acilis_yatay_gece'), findsNothing);
-    expect(_asset('splash_gunduz'), findsNothing); // dikey fotoğraf yatayda yok
+    expect(_splash(night: false), findsOneWidget);
+    expect(_splash(night: true), findsNothing);
+    // Marka öğeleri: işaret + BÜYÜK K'li yazı + slogan + yükleme noktaları.
+    expect(find.byKey(const ValueKey<String>('koybul-mark')), findsOneWidget);
+    expect(find.text('Koybul'), findsOneWidget);
+    expect(find.text('Denizde yerini bul.'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('splash-dots')), findsOneWidget);
     // PERF sözleşmesi: içerik açılış ekranı görünürken de KURULUDUR (arkada
     // yüklenir) — kararma bitince hazır harita karşılar.
     expect(find.text('HARITA'), findsOneWidget);
@@ -49,23 +49,24 @@ void main() {
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pump(const Duration(milliseconds: 700));
     expect(find.text('HARITA'), findsOneWidget);
-    expect(_asset('acilis_yatay_gunduz'), findsNothing); // açılış tamamen kalktı
+    expect(find.byType(BrandSplash), findsNothing); // açılış tamamen kalktı
   });
 
-  testWidgets('gece (22:00): koyu görsel kullanılır', (WidgetTester tester) async {
+  testWidgets('gece (22:00): koyu marka yüzeyi kullanılır',
+      (WidgetTester tester) async {
     await tester.pumpWidget(_gate(DateTime(2026, 7, 13, 22)));
     await tester.pump();
 
-    expect(_asset('acilis_yatay_gece'), findsOneWidget);
-    expect(_asset('acilis_yatay_gunduz'), findsNothing);
+    expect(_splash(night: true), findsOneWidget);
+    expect(_splash(night: false), findsNothing);
 
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pump(const Duration(milliseconds: 700));
-    expect(_asset('acilis_yatay_gece'), findsNothing);
+    expect(find.byType(BrandSplash), findsNothing);
     expect(find.text('HARITA'), findsOneWidget);
   });
 
-  testWidgets('DİKEY (telefon) ekranda tek katman: fotoğraf ekranı kaplar',
+  testWidgets('DİKEY (telefon) ekranda aynı tasarım kendini ölçekler',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1.0;
@@ -75,20 +76,19 @@ void main() {
     await tester.pumpWidget(_gate(DateTime(2026, 7, 13, 12)));
     await tester.pump();
 
-    expect(_asset('splash_gunduz'), findsOneWidget); // tek katman
-    expect(_asset('acilis_yatay_gunduz'), findsNothing); // dikeyde dikey fotoğraf
-    // Rota animasyonu dikey açılışta yaşamaya devam eder.
-    expect(find.byKey(const ValueKey<String>('splash-route')), findsOneWidget);
+    expect(_splash(night: false), findsOneWidget);
+    expect(find.text('Koybul'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('splash-dots')), findsOneWidget);
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pump(const Duration(milliseconds: 700));
     expect(find.text('HARITA'), findsOneWidget);
   });
 
-  testWidgets('sabaha karşı (05:00) da koyu görsel kullanılır',
+  testWidgets('sabaha karşı (05:00) da koyu yüzey kullanılır',
       (WidgetTester tester) async {
     await tester.pumpWidget(_gate(DateTime(2026, 7, 13, 5)));
     await tester.pump();
-    expect(_asset('acilis_yatay_gece'), findsWidgets); // yatay yüzey → gece tasarımı
+    expect(_splash(night: true), findsOneWidget);
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pump(const Duration(milliseconds: 700));
     expect(find.text('HARITA'), findsOneWidget);

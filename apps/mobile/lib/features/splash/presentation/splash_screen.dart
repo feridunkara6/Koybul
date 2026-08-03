@@ -1,27 +1,27 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui' as ui;
 
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Açılış (splash) kapısı: uygulama her açılışta önce markalı açılış ekranını
-/// TAM EKRAN gösterir (telefonda dikey, bilgisayar/tablette yatay kompozisyon),
-/// ardından yumuşak geçişle asıl içeriğe döner. GÜNDÜZ/GECE duyarlı:
-/// 07:00-19:00 arası aydınlık deniz fotoğrafı, hava karardıktan sonra koyu
-/// gece fotoğrafı kullanılır (ürün kararı — profesyonel marka açılışı).
-/// Açılış ekranı hâlâ görünürken alttaki uygulamanın "beklemesi" gereken
-/// işler (karşılama sorusu gibi) bu sağlayıcıyı dinler. Varsayılan TRUE:
-/// SplashGate KULLANILMADAN kurulan ağaçlarda (testler) hiçbir şey beklemez;
-/// SplashGate açılışta false yapar, bitince true'ya çevirir.
+/// Açılış (splash) kapısı — KOYBUL "Marka Yüzeyi" tasarımı (2026-08, kullanıcı
+/// seçimi: konsept A). Fotoğraf YOK: yüzey tamamen koddan çizilir — her ekran
+/// boyutunda (telefon/tablet/bilgisayar, dikey/yatay) kusursuz ölçeklenir ve
+/// ~900 KB görsel yükünü ortadan kaldırır (açılış hızlanır).
+///
+/// GÜNDÜZ/GECE duyarlılığı korunur: 07:00-19:00 aydınlık yüzey, sonrası derin
+/// lacivert. Açılış ekranı hâlâ görünürken alttaki uygulamanın "beklemesi"
+/// gereken işler (karşılama sorusu gibi) bu sağlayıcıyı dinler. Varsayılan
+/// TRUE: SplashGate KULLANILMADAN kurulan ağaçlarda (testler) hiçbir şey
+/// beklemez; SplashGate açılışta false yapar, bitince true'ya çevirir.
 final StateProvider<bool> splashDoneProvider = StateProvider<bool>((ref) => true);
 
 class SplashGate extends ConsumerStatefulWidget {
   const SplashGate({
     required this.child,
-    // 1500ms: kullanıcı isteği (açılış hızlansın) — çizim ~0.95sn'e
-    // sıkıştırıldı; marka animasyonu korunur ama bekletmez.
+    // 1500ms: kullanıcı isteği (açılış hızlansın) — marka animasyonu korunur
+    // ama bekletmez.
     this.duration = const Duration(milliseconds: 1500),
     this.now,
     super.key,
@@ -80,10 +80,6 @@ class _SplashGateState extends ConsumerState<SplashGate> {
   Widget build(BuildContext context) {
     final DateTime t = (widget.now ?? DateTime.now)();
     final bool night = splashIsNight(t);
-    // Yatay ekran (bilgisayar/yatay tablet) → yatay kompozisyon; ekran
-    // döndürülürse sonraki karede doğru varyanta geçer.
-    final Size screen = MediaQuery.sizeOf(context);
-    final bool wide = screen.width > screen.height;
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -94,12 +90,8 @@ class _SplashGateState extends ConsumerState<SplashGate> {
             child: AnimatedOpacity(
               opacity: _done ? 0 : 1,
               duration: const Duration(milliseconds: 450),
-              // TELEFON (dikey): marka fotoğrafı. BİLGİSAYAR/TABLET (yatay):
-              // koddan çizilen sahne — her çözünürlükte kusursuz (2026-07
-              // yeniden tasarım; fotoğraf kırpma/büyütme sorunları bitti).
-              child: wide
-                  ? _WideSplash(night: night)
-                  : _SplashScreen(variant: night ? _gece : _gunduz),
+              // TEK tasarım her cihazda: marka yüzeyi kendini ekrana ölçekler.
+              child: BrandSplash(night: night),
             ),
           ),
       ],
@@ -107,393 +99,271 @@ class _SplashGateState extends ConsumerState<SplashGate> {
   }
 }
 
-/// Bir açılış görseli + üstüne çizilecek rotanın görsel-uzayı koordinatları
-/// (0..1 normalize). Rota, TEKNEDEN çıkıp kıvrılarak ÇAPA işaretine gider;
-/// noktalar her görselin kendi tekne/su kompozisyonuna göre ayarlanmıştır.
-///
-/// CİHAZA UYUM (kullanıcı kararı 2026-07): dikey ekranlar (telefon) dikey
-/// fotoğrafı, YATAY ekranlar (bilgisayar/yatay tablet) aynı fotoğrafın
-/// öğeleriyle kurulmuş GERÇEK YATAY kompozisyonu kullanır — görsel her
-/// cihazda tam ekrandır; küçük ortalanmış fotoğraf ve bulanık dolgu bitti.
-class _SplashVariant {
-  const _SplashVariant({
-    required this.asset,
-    required this.imageSize,
-    required this.start,
-    required this.c1,
-    required this.c2,
-    required this.end,
-  });
-
-  final String asset;
-
-  /// Fotoğrafın piksel boyutu — kapak (cover) kırpma matematiğinin referansı.
-  final Size imageSize;
-
-  final Offset start; // tekne (çizginin çıkış noktası)
-  final Offset c1; // bezier kontrol 1
-  final Offset c2; // bezier kontrol 2
-  final Offset end; // çapa pini
-}
-
-const Size _dikeyBoyut = Size(853, 1844);
-
-const _SplashVariant _gunduz = _SplashVariant(
-  asset: 'assets/splash/splash_gunduz.jpg',
-  imageSize: _dikeyBoyut,
-  start: Offset(0.475, 0.735),
-  c1: Offset(0.61, 0.78),
-  c2: Offset(0.72, 0.59),
-  end: Offset(0.825, 0.600),
-);
-
-const _SplashVariant _gece = _SplashVariant(
-  asset: 'assets/splash/splash_gece.jpg',
-  imageSize: _dikeyBoyut,
-  start: Offset(0.335, 0.585),
-  c1: Offset(0.44, 0.46),
-  c2: Offset(0.67, 0.72),
-  end: Offset(0.840, 0.565),
-);
-
-
-
-/// Fotoğrafın EKRANDAKİ yerleşim dikdörtgeni: her cihazda KAPLA (cover) —
-/// ekran oranı görselinkinden farklıysa taşan kenar kırpılır. Dikeyde dikey
-/// fotoğraf, yatayda yatay kompozisyon kullanıldığından kırpma hep küçüktür.
-Rect _splashImageRect(Size screen, Size image) {
-  final double sx = screen.width / image.width;
-  final double sy = screen.height / image.height;
-  final double scale = math.max(sx, sy);
-  final double dw = image.width * scale;
-  final double dh = image.height * scale;
-  return Rect.fromLTWH(
-    (screen.width - dw) / 2,
-    (screen.height - dh) / 2,
-    dw,
-    dh,
-  );
-}
-
-/// Görsel-uzayı normalize noktayı, fotoğrafın ekran dikdörtgenindeki gerçek
-/// konumuna çevirir — çizgi her yerleşimde teknenin üzerine oturur.
-Offset _mapInRect(Offset norm, Rect r) =>
-    Offset(r.left + norm.dx * r.width, r.top + norm.dy * r.height);
-
-/// Tam ekran fotoğraf + animasyonlu rota: kesik çizgi tekneden çapaya doğru
-/// ÇİZİLEREK uzar, sonra kesikler rota boyunca akmaya devam eder; çapa pini
-/// çizgi varınca yumuşakça belirir.
-class _SplashScreen extends StatefulWidget {
-  const _SplashScreen({required this.variant});
-
-  final _SplashVariant variant;
-
-  @override
-  State<_SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<_SplashScreen>
-    with TickerProviderStateMixin {
-  bool _precached = false;
-
-  /// Tek seferlik: çizginin tekneden çapaya uzaması.
-  late final AnimationController _draw = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 950),
-  )..forward();
-
-  /// Sürekli: kesiklerin rota boyunca akışı (yaşayan his).
-  late final AnimationController _march = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 900),
-  )..repeat();
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_precached) {
-      _precached = true;
-      // PERF: fotoğraf ilk karede hazır olsun (beyaz parlamayı önler).
-      precacheImage(AssetImage(widget.variant.asset), context);
-    }
-  }
-
-  @override
-  void dispose() {
-    _draw.dispose();
-    _march.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final _SplashVariant v = widget.variant;
-    return Scaffold(
-      body: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints c) {
-          final Size screen = Size(c.maxWidth, c.maxHeight);
-          final Rect rect = _splashImageRect(screen, v.imageSize);
-          final Offset pin = _mapInRect(v.end, rect);
-          return Stack(
-            fit: StackFit.expand,
-            children: <Widget>[
-              // TEK katman: cihaza uygun kompozisyon ekranı KAPLAR (cover).
-              // rect, rota ressamıyla aynı matematiği paylaşır — çizgi her
-              // ekranda fotoğrafın doğru noktalarına oturur.
-              Positioned.fromRect(
-                rect: rect,
-                child: Image.asset(
-                  v.asset,
-                  fit: BoxFit.fill,
-                  gaplessPlayback: true,
-                  filterQuality: FilterQuality.medium,
-                ),
-              ),
-              AnimatedBuilder(
-                animation: Listenable.merge(<Listenable>[_draw, _march]),
-                builder: (BuildContext context, Widget? _) {
-                  return CustomPaint(
-                    key: const ValueKey<String>('splash-route'),
-                    painter: _RoutePainter(
-                      start: v.start,
-                      c1: v.c1,
-                      c2: v.c2,
-                      end: v.end,
-                      rect: rect,
-                      progress: Curves.easeInOut.transform(_draw.value),
-                      phase: _march.value,
-                    ),
-                  );
-                },
-              ),
-              // Çapa pini: rota varmak üzereyken belirir + hafifçe büyür.
-              AnimatedBuilder(
-                animation: _draw,
-                builder: (BuildContext context, Widget? child) {
-                  final double t = ((_draw.value - 0.72) / 0.28).clamp(0.0, 1.0);
-                  return Positioned(
-                    left: pin.dx - 23,
-                    top: pin.dy - 23,
-                    child: Opacity(
-                      opacity: t,
-                      child: Transform.scale(
-                        scale: 0.6 + 0.4 * Curves.easeOutBack.transform(t),
-                        child: child,
-                      ),
-                    ),
-                  );
-                },
-                child: const _AnchorPin(),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
-/// Rota çizgisi ressamı: kübik bezier boyunca kesik çizgi. `progress` çizginin
-/// ne kadarının göründüğünü (0..1), `phase` kesiklerin akış kaymasını belirler.
-class _RoutePainter extends CustomPainter {
-  _RoutePainter({
-    required this.start,
-    required this.c1,
-    required this.c2,
-    required this.end,
-    required this.rect,
-    required this.progress,
-    required this.phase,
-  });
-
-  final Offset start;
-  final Offset c1;
-  final Offset c2;
-  final Offset end;
-
-  /// Fotoğrafın/sahnenin ekrandaki yerleşimi — rota noktaları buna eşlenir.
-  final Rect rect;
-  final double progress;
-  final double phase;
-
-  static const double _dash = 11;
-  static const double _gap = 9;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (progress <= 0.02) return;
-    final Offset p0 = _mapInRect(start, rect);
-    final Offset p1 = _mapInRect(c1, rect);
-    final Offset p2 = _mapInRect(c2, rect);
-    final Offset p3 = _mapInRect(end, rect);
-    final Path path = Path()
-      ..moveTo(p0.dx, p0.dy)
-      ..cubicTo(p1.dx, p1.dy, p2.dx, p2.dy, p3.dx, p3.dy);
-    final ui.PathMetric metric = path.computeMetrics().first;
-    final double visible = metric.length * progress;
-
-    final Paint line = Paint()
-      ..color = const Color(0xF2FFFFFF)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3
-      ..strokeCap = StrokeCap.round;
-    // Okunurluk: fotoğraf üstünde ince koyu hare (iki geçişli çizim).
-    final Paint halo = Paint()
-      ..color = const Color(0x330A2540)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 6
-      ..strokeCap = StrokeCap.round;
-
-    const double period = _dash + _gap;
-    // phase 0→1: kesikler çapaya DOĞRU akar (deniz rotası hissi).
-    for (final Paint p in <Paint>[halo, line]) {
-      for (double s = phase * period - period; s < visible; s += period) {
-        final double a = math.max(0, s);
-        final double b = math.min(visible, s + _dash);
-        if (b > a) canvas.drawPath(metric.extractPath(a, b), p);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(_RoutePainter old) =>
-      old.progress != progress ||
-      old.phase != phase ||
-      old.start != start ||
-      old.rect != rect;
-}
-
-/// Çapa pini — görsellerdeki dille: beyaz konturlu daire içinde çapa, altında
-/// küçük işaret ucu. Fotoğrafla bütünleşsin diye zemin hafif saydamdır.
-class _AnchorPin extends StatelessWidget {
-  const _AnchorPin();
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 46,
-      height: 52,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: const Color(0x1FFFFFFF),
-              border: Border.all(color: const Color(0xF2FFFFFF), width: 2.4),
-              boxShadow: const <BoxShadow>[
-                BoxShadow(
-                  color: Color(0x330A2540),
-                  blurRadius: 6,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: const Center(
-              child: DocklyIcon(
-                DocklyIcons.amMooring,
-                size: 21,
-                color: Color(0xF2FFFFFF),
-              ),
-            ),
-          ),
-          // İşaret ucu: daireden denize inen küçük üçgen (damla hissi).
-          Transform.rotate(
-            angle: math.pi / 4,
-            child: Container(
-              width: 9,
-              height: 9,
-              transform: Matrix4.translationValues(0, -5, 0),
-              decoration: const BoxDecoration(color: Color(0xF2FFFFFF)),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 // =============================================================================
-// YATAY AÇILIŞ (2026-07, kullanıcı tasarımı): bilgisayar/tablette GERÇEK
-// deniz + tekne görseli kullanılır — gündüz ve gece sürümleri kullanıcının
-// verdiği hazır kompozisyonlardır (logo, slogan, rota ve çapa pini görselin
-// içindedir). Üzerine yalnız çok yavaş bir yakınlaşma (Ken Burns) uygulanır:
-// sahne yaşar ama tasarıma hiçbir öğe eklenmez. Görsel 2:1 orandadır; dar
-// yatay ekranlarda (ör. 4:3 tablet) kırpma SOLA yaslanır ki logo hep görünsün.
+// KOYBUL MARKA YÜZEYİ — logoyla aynı dili konuşan sade kurumsal açılış:
+// degrade zemin + hayalet su-yayı halkaları + Koybul işareti + yazı + yükleme
+// noktaları. Public: testler gündüz/gece varyantını `night` alanından doğrular.
 // =============================================================================
 
-class _WideSplash extends StatefulWidget {
-  const _WideSplash({required this.night});
+class BrandSplash extends StatefulWidget {
+  const BrandSplash({required this.night, super.key});
 
   final bool night;
 
   @override
-  State<_WideSplash> createState() => _WideSplashState();
+  State<BrandSplash> createState() => _BrandSplashState();
 }
 
-class _WideSplashState extends State<_WideSplash>
+class _BrandSplashState extends State<BrandSplash>
     with SingleTickerProviderStateMixin {
-  bool _precached = false;
-
-  /// Çok yavaş yakınlaşma: 1.0 → 1.05, açılış boyunca sürer (tek yön).
-  late final AnimationController _zoom = AnimationController(
+  /// Yükleme noktalarının nabzı (sürekli, yumuşak).
+  late final AnimationController _pulse = AnimationController(
     vsync: this,
-    duration: const Duration(seconds: 9),
-  )..forward();
-
-  String get _asset => widget.night
-      ? 'assets/splash/acilis_yatay_gece.jpg'
-      : 'assets/splash/acilis_yatay_gunduz.jpg';
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_precached) {
-      _precached = true;
-      // PERF: görsel ilk karede hazır olsun (beyaz parlamayı önler).
-      precacheImage(AssetImage(_asset), context);
-    }
-  }
+    duration: const Duration(milliseconds: 1200),
+  )..repeat();
 
   @override
   void dispose() {
-    _zoom.dispose();
+    _pulse.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final bool night = widget.night;
+    // Konsept A renkleri (marka sayfasıyla hizalı).
+    final List<Color> bg = night
+        ? const <Color>[Color(0xFF0B1220), Color(0xFF0E3052)]
+        : const <Color>[Color(0xFFF7FAFD), Color(0xFFE9F2F9)];
+    final Color ink = night ? const Color(0xFFF2F5F9) : DocklyColors.brandDeep;
+    final Color slogan = night ? const Color(0xFF93A1B8) : const Color(0xFF5B6B84);
+    final Color dotPassive =
+        night ? const Color(0xFF243A54) : const Color(0xFFC8D6E4);
+    final Color halo = night ? const Color(0x0DFFFFFF) : const Color(0x100A2540);
+
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints c) {
-          final double ratio = c.maxWidth / c.maxHeight;
-          // Geniş ekranda (16:9 ve üstü) ortala; darlaştıkça sola yaslan —
-          // görselin sol yarısındaki marka bloğu asla kırpılmasın.
-          final Alignment align =
-              ratio >= 1.6 ? Alignment.center : const Alignment(-0.7, 0);
-          return ClipRect(
-            child: AnimatedBuilder(
-              animation: _zoom,
-              builder: (BuildContext context, Widget? child) {
-                final double scale =
-                    1.0 + 0.05 * Curves.easeOut.transform(_zoom.value);
-                return Transform.scale(scale: scale, child: child);
-              },
-              child: Image.asset(
-                _asset,
-                fit: BoxFit.cover,
-                alignment: align,
-                width: c.maxWidth,
-                height: c.maxHeight,
-                gaplessPlayback: true,
-                filterQuality: FilterQuality.medium,
-              ),
-            ),
-          );
-        },
+      body: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: bg,
+          ),
+        ),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints c) {
+            final double base = math.min(c.maxWidth, c.maxHeight);
+            final double markH = (base * 0.32).clamp(120.0, 190.0);
+            return Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                Align(
+                  alignment: const Alignment(0, -0.30),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      SizedBox(
+                        width: markH,
+                        height: markH,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: <Widget>[
+                            // Hayalet halkalar: logodaki su yayının dev yankıları.
+                            Positioned.fill(
+                              child: CustomPaint(
+                                painter: _HaloArcsPainter(color: halo),
+                              ),
+                            ),
+                            Positioned.fill(
+                              child: CustomPaint(
+                                key: const ValueKey<String>('koybul-mark'),
+                                painter: KoybulMarkPainter(night: night),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: markH * 0.16),
+                      Text(
+                        'Koybul',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w700,
+                          fontSize: markH * 0.40,
+                          letterSpacing: -0.5,
+                          height: 1.0,
+                          color: ink,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                      SizedBox(height: markH * 0.08),
+                      Text(
+                        'Denizde yerini bul.',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          fontSize: markH * 0.16,
+                          height: 1.0,
+                          color: slogan,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Align(
+                  alignment: const Alignment(0, 0.80),
+                  child: _LoadingDots(pulse: _pulse, passive: dotPassive),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
+  }
+}
+
+/// Koybul işareti — marka sayfasındaki vektörün birebir Dart karşılığı.
+/// Gündüz: lacivert gövde + beyaz disk; gece: beyaz gövde + lacivert disk;
+/// yelken her zaman Ege turkuazı.
+class KoybulMarkPainter extends CustomPainter {
+  KoybulMarkPainter({required this.night});
+
+  final bool night;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double s = size.height / 78.0; // birim uzayı 10..88 → yükseklik
+    final double ox = size.width / 2 - 50 * s;
+    final double oy = size.height / 2 - 49 * s;
+    Offset t(double x, double y) => Offset(x * s + ox, y * s + oy);
+
+    final Color body = night ? const Color(0xFFF2F5F9) : DocklyColors.brandDeep;
+    final Color disc = night ? DocklyColors.brandDeep : Colors.white;
+    final Color wave = body;
+    const Color sail = DocklyColors.accentTurquoise;
+
+    // Gövde: mercek + iğne sentezi.
+    final Path bodyPath = Path()
+      ..moveTo(t(50, 10).dx, t(50, 10).dy)
+      ..cubicTo(t(66.6, 10).dx, t(66.6, 10).dy, t(80, 23.4).dx, t(80, 23.4).dy,
+          t(80, 40).dx, t(80, 40).dy)
+      ..cubicTo(t(80, 51.5).dx, t(80, 51.5).dy, t(73.5, 61.5).dx,
+          t(73.5, 61.5).dy, t(64, 66.5).dx, t(64, 66.5).dy)
+      ..lineTo(t(52.5, 86).dx, t(52.5, 86).dy)
+      ..cubicTo(t(51.4, 87.9).dx, t(51.4, 87.9).dy, t(48.6, 87.9).dx,
+          t(48.6, 87.9).dy, t(47.5, 86).dx, t(47.5, 86).dy)
+      ..lineTo(t(36, 66.5).dx, t(36, 66.5).dy)
+      ..cubicTo(t(26.5, 61.5).dx, t(26.5, 61.5).dy, t(20, 51.5).dx,
+          t(20, 51.5).dy, t(20, 40).dx, t(20, 40).dy)
+      ..cubicTo(t(20, 23.4).dx, t(20, 23.4).dy, t(33.4, 10).dx, t(33.4, 10).dy,
+          t(50, 10).dx, t(50, 10).dy)
+      ..close();
+    canvas.drawPath(bodyPath, Paint()..color = body);
+
+    // İç disk.
+    canvas.drawCircle(t(50, 40), 20 * s, Paint()..color = disc);
+
+    // Su çizgisi: (36.5,45.5)-(63.5,45.5) alt yayı — merkez (50,24.72) r 24.78.
+    final Rect waveRect = Rect.fromCircle(center: t(50, 24.72), radius: 24.78 * s);
+    final Paint wavePaint = Paint()
+      ..color = wave
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4.6 * s
+      ..strokeCap = StrokeCap.round;
+    const double a1 = 2.1467; // atan2(20.78, -13.5)
+    const double a2 = 0.9946; // atan2(20.78, 13.5)
+    canvas.drawArc(waveRect, a1, a2 - a1, false, wavePaint);
+
+    // Yelken.
+    final Path sailPath = Path()
+      ..moveTo(t(49, 24.5).dx, t(49, 24.5).dy)
+      ..cubicTo(t(54.5, 29.5).dx, t(54.5, 29.5).dy, t(58.5, 35).dx,
+          t(58.5, 35).dy, t(59.5, 41.5).dx, t(59.5, 41.5).dy)
+      ..lineTo(t(49, 41.5).dx, t(49, 41.5).dy)
+      ..close();
+    canvas.drawPath(sailPath, Paint()..color = sail);
+  }
+
+  @override
+  bool shouldRepaint(KoybulMarkPainter old) => old.night != night;
+}
+
+/// Hayalet halkalar: işaretin su yayının dev, çok soluk yankıları — zemine
+/// derinlik verir, dikkati dağıtmaz (%5 civarı görünürlük).
+class _HaloArcsPainter extends CustomPainter {
+  _HaloArcsPainter({required this.color});
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Yay merkezi: işaretin disk merkezi (birim 40; widget merkezi birim 49).
+    final Offset center = Offset(
+      size.width / 2,
+      size.height / 2 - size.height * (9 / 78),
+    );
+    final Paint p = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round;
+    for (final double f in <double>[1.7, 2.2, 2.7]) {
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: size.height * f),
+        0.4363, // 25°
+        2.2689, // 130° süpürme — alt yay (logodaki su çizgisiyle aynı aile)
+        false,
+        p,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(_HaloArcsPainter old) => old.color != color;
+}
+
+/// Üç noktalı yükleme göstergesi — turkuaz nabız, soldan sağa akar.
+class _LoadingDots extends StatelessWidget {
+  const _LoadingDots({required this.pulse, required this.passive});
+
+  final Animation<double> pulse;
+  final Color passive;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      key: const ValueKey<String>('splash-dots'),
+      animation: pulse,
+      builder: (BuildContext context, Widget? _) {
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            for (int i = 0; i < 3; i++) ...<Widget>[
+              if (i > 0) const SizedBox(width: 16),
+              Container(
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color.lerp(
+                    passive,
+                    DocklyColors.accentTurquoise,
+                    _wave(pulse.value, i),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        );
+      },
+    );
+  }
+
+  /// Nokta i için 0..1 nabız değeri — faz kaydırmalı yumuşak sinüs.
+  static double _wave(double t, int i) {
+    final double x = (t - i * 0.28) * 2 * math.pi;
+    return 0.5 + 0.5 * math.sin(x);
   }
 }

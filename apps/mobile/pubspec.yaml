@@ -43,5 +43,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/splash/
+  # Marka yazısı (Koybul açılış yüzeyi + logotype): Poppins — SIL OFL 1.1
+  # lisanslı, ücretsiz (assets/fonts/POPPINS-LISANS.txt). Fotoğraflı açılış
+  # görselleri 2026-08'de kaldırıldı: yüzey koddan çizilir (~900 KB tasarruf).
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
