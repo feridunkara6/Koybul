@@ -92,7 +92,7 @@ class _DocklyAppState extends ConsumerState<DocklyApp> {
   Widget build(BuildContext context) {
     final AppLocale loc = ref.watch(appLocaleProvider);
     return MaterialApp(
-      title: 'Moorira',
+      title: 'Koybul',
       debugShowCheckedModeBanner: false,
       theme: buildDocklyTheme(Brightness.light),
       darkTheme: buildDocklyTheme(Brightness.dark),
@@ -159,7 +159,7 @@ class _HomePlaceholder extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Moorira')),
+      appBar: AppBar(title: const Text('Koybul')),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

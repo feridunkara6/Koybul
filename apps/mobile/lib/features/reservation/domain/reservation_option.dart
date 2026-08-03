@@ -24,7 +24,7 @@ class ReservationOption {
 String buildReservationMessage({double? boatLengthM}) {
   final String boatPart =
       boatLengthM != null ? '${_fmtLen(boatLengthM)} metre teknem' : 'teknem';
-  return 'Merhaba. Moorira uygulaması üzerinden marinanızı buldum. '
+  return 'Merhaba. Koybul uygulaması üzerinden marinanızı buldum. '
       '$boatPart için uygunluk hakkında bilgi almak ve rezervasyon talebi '
       'oluşturmak istiyorum.';
 }
