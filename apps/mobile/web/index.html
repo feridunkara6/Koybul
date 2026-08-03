@@ -28,7 +28,9 @@
       transition: opacity .45s ease;
       font-family: 'Poppins', -apple-system, 'Segoe UI', Roboto, sans-serif;
     }
-    #koybul-splash .icerik { transform: translateY(-9vh); text-align: center; }
+    /* Dikey konum Flutter yüzeyiyle hizalı (blok merkezi ekranın %35'inde):
+       devralma anında logo ne büyür ne kayar (kullanıcı kararı 2026-08). */
+    #koybul-splash .icerik { transform: translateY(-15vh); text-align: center; }
     #koybul-splash .ad {
       font-weight: 700; font-size: 46px; letter-spacing: -1px;
       color: #F2F5F9; margin-top: 22px; line-height: 1;

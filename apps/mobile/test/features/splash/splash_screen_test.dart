@@ -66,7 +66,7 @@ void main() {
     expect(find.text('HARITA'), findsOneWidget);
   });
 
-  testWidgets('DİKEY (telefon) ekranda aynı tasarım kendini ölçekler',
+  testWidgets('DİKEY (telefon) ekranda aynı tasarım, AYNI sabit boyutlar',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1.0;

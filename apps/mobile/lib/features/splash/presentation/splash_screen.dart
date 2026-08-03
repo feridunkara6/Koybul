@@ -150,74 +150,71 @@ class _BrandSplashState extends State<BrandSplash>
             colors: bg,
           ),
         ),
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints c) {
-            final double base = math.min(c.maxWidth, c.maxHeight);
-            final double markH = (base * 0.32).clamp(120.0, 190.0);
-            return Stack(
-              fit: StackFit.expand,
-              children: <Widget>[
-                Align(
-                  alignment: const Alignment(0, -0.30),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      SizedBox(
-                        width: markH,
-                        height: markH,
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: <Widget>[
-                            // Hayalet halkalar: logodaki su yayının dev yankıları.
-                            Positioned.fill(
-                              child: CustomPaint(
-                                painter: _HaloArcsPainter(color: halo),
-                              ),
-                            ),
-                            Positioned.fill(
-                              child: CustomPaint(
-                                key: const ValueKey<String>('koybul-mark'),
-                                painter: KoybulMarkPainter(night: night),
-                              ),
-                            ),
-                          ],
+        // SABİT BOYUT (kullanıcı kararı 2026-08): işaret HER ekranda 130px,
+        // yazılar 46/17px — web ön-açılışıyla birebir aynı ölçüler. Böylece
+        // Flutter devraldığı an hiçbir öğe büyümez/kıpırdamaz.
+        child: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            Align(
+              alignment: const Alignment(0, -0.30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  SizedBox(
+                    width: 130,
+                    height: 130,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: <Widget>[
+                        // Hayalet halkalar: logodaki su yayının dev yankıları.
+                        Positioned.fill(
+                          child: CustomPaint(
+                            painter: _HaloArcsPainter(color: halo),
+                          ),
                         ),
-                      ),
-                      SizedBox(height: markH * 0.16),
-                      Text(
-                        'Koybul',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w700,
-                          fontSize: markH * 0.40,
-                          letterSpacing: -0.5,
-                          height: 1.0,
-                          color: ink,
-                          decoration: TextDecoration.none,
+                        Positioned.fill(
+                          child: CustomPaint(
+                            key: const ValueKey<String>('koybul-mark'),
+                            painter: KoybulMarkPainter(night: night),
+                          ),
                         ),
-                      ),
-                      SizedBox(height: markH * 0.08),
-                      Text(
-                        'Denizde yerini bul.',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          fontSize: markH * 0.16,
-                          height: 1.0,
-                          color: slogan,
-                          decoration: TextDecoration.none,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Align(
-                  alignment: const Alignment(0, 0.80),
-                  child: _LoadingDots(pulse: _pulse, passive: dotPassive),
-                ),
-              ],
-            );
-          },
+                  const SizedBox(height: 22),
+                  Text(
+                    'Koybul',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 46,
+                      letterSpacing: -0.5,
+                      height: 1.0,
+                      color: ink,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Denizde yerini bul.',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 17,
+                      height: 1.0,
+                      color: slogan,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Align(
+              alignment: const Alignment(0, 0.80),
+              child: _LoadingDots(pulse: _pulse, passive: dotPassive),
+            ),
+          ],
         ),
       ),
     );
@@ -287,7 +284,7 @@ class KoybulMarkPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(KoybulMarkPainter old) => old.night != night;
+  bool shouldRepaint(KoybulMarkPainter oldDelegate) => oldDelegate.night != night;
 }
 
 /// Hayalet halkalar: işaretin su yayının dev, çok soluk yankıları — zemine
@@ -321,7 +318,7 @@ class _HaloArcsPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_HaloArcsPainter old) => old.color != color;
+  bool shouldRepaint(_HaloArcsPainter oldDelegate) => oldDelegate.color != color;
 }
 
 /// Üç noktalı yükleme göstergesi — turkuaz nabız, soldan sağa akar.
