@@ -91,12 +91,27 @@ void main() {
     expect(trip.distanceNm, closeTo(leg1.distanceNm + leg2.distanceNm, 1e-9));
     expect(trip.points.first.lat, leg1.points.first.lat);
     expect(trip.points.last.lon, leg2.points.last.lon);
-    // Süreklilik: ardışık kırıklıklar arasında kopukluk yok (< 6 nm) —
-    // bacak eklemi de dahil (durak noktasında rota kesintisiz görünür).
-    for (int i = 1; i < trip.points.length; i++) {
-      expect(haversineNm(trip.points[i - 1], trip.points[i]), lessThan(6),
-          reason: 'kopukluk: $i');
-    }
+    // EKLEM SÜREKLİLİĞİ (CI dersleri): segment uzunluğuna sınır KOYMA — açık
+    // denizde sadeleştirme 8+ nm'lik dümdüz su bacakları üretir (normal).
+    // Datça işareti kıyı kalınlaştırması yüzünden KARA hücresine düşebilir;
+    // bu durumda bacak işarete dokunup su merkezinden devam eder. Gerçek
+    // değişmez şudur: 1. bacağın SONU ile 2. bacağın BAŞI arasında büyük
+    // sıçrama olamaz (kapalı-koy toleransı ~1,2 nm'nin üstü kopukluk sayılır).
+    expect(haversineNm(leg1.points.last, leg2.points.first), lessThan(1.3),
+        reason: 'bacak ekleminde kopukluk olamaz');
+    // Her iki bacak da durak işaretine ~1,3 nm içinde dokunur (durak rozeti
+    // rotanın üstünde durur).
+    expect(haversineNm(leg1.points.last, datca), lessThan(1.3));
+    expect(haversineNm(leg2.points.first, datca), lessThan(1.3));
+    // Birleştirme nokta kaybetmez: eklem AYNI noktaysa tek kopya, değilse
+    // iki bacağın tüm noktaları korunur.
+    final bool sharedJoint =
+        leg1.points.last.lat == leg2.points.first.lat &&
+            leg1.points.last.lon == leg2.points.first.lon;
+    expect(
+      trip.points.length,
+      leg1.points.length + leg2.points.length - (sharedJoint ? 1 : 0),
+    );
     // Ara kırıklıklar suda (kaptan kuralı) — uçlar koy işaretine bağlanabilir.
     for (int i = 1; i < trip.points.length - 1; i++) {
       final GeoPoint p = trip.points[i];
