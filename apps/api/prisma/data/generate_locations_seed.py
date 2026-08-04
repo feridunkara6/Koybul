@@ -294,6 +294,60 @@ def emit(records, batch_meta):
 
 
 
+def emit_demirleme(here, records):
+    """DEMİRLEME BİLGİLERİ TURU (2026-08): zemin/derinlik, izinli kaynaklardan
+    birebir alıntıyla toplandı ve tamamı elle doğrulandı
+    (data/demirleme_bilgileri.json — kaynak URL'leri dosyada).
+    Yalnız BOŞ alanları doldurur (COALESCE) — batch verisi asla ezilmez.
+    anchorage_details satırında is_free AÇIKÇA NULL yazılır: restoran
+    iskelelerinde sahte "ücretsiz" rozeti yan etkisi YOKTUR (rüzgâr turu dersi).
+    UPDATE/UPSERT kullanılır ki mevcut canlı satırlara da aksın (idempotent)."""
+    path = here / "demirleme_bilgileri.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    slugs = {r["slug"] for r in records}
+    errors = []
+    for slug, v in sorted(data["veriler"].items()):
+        if slug not in slugs:
+            errors.append(f"demirleme: bilinmeyen slug '{slug}'")
+        z = v.get("zemin")
+        if z is not None and z not in HOLDING_TYPES:
+            errors.append(f"demirleme {slug}: geçersiz zemin '{z}' (izinli: {sorted(HOLDING_TYPES)})")
+        dmin, dmax = v.get("derinlik_min"), v.get("derinlik_max")
+        for d in (dmin, dmax):
+            if d is not None and not (0 < float(d) <= 60):
+                errors.append(f"demirleme {slug}: mantıksız derinlik {d}")
+        if dmin is not None and dmax is not None and float(dmin) > float(dmax):
+            errors.append(f"demirleme {slug}: derinlik_min > derinlik_max")
+        if z is None and dmin is None and dmax is None:
+            errors.append(f"demirleme {slug}: boş kayıt")
+    if errors:
+        for e in errors:
+            print("HATA:", e)
+        sys.exit(1)
+    out = [
+        "",
+        "-- =====================================================================",
+        "-- DEMİRLEME BİLGİLERİ (2026-08 turu — birebir alıntılı, elle doğrulandı)",
+        "-- =====================================================================",
+    ]
+    for slug, v in sorted(data["veriler"].items()):
+        dmin, dmax = v.get("derinlik_min"), v.get("derinlik_max")
+        if dmin is not None or dmax is not None:
+            out.append(
+                f"UPDATE locations SET depth_min_m = COALESCE(depth_min_m, {num(dmin)}), "
+                f"depth_max_m = COALESCE(depth_max_m, {num(dmax)}) WHERE slug = {q(slug)};"
+            )
+        if v.get("zemin") is not None:
+            out.append(
+                "INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)\n"
+                f"SELECT id, {q(v['zemin'])}, NULL, NULL FROM locations WHERE slug = {q(slug)}\n"
+                "ON CONFLICT (location_id) DO UPDATE SET holding_type = "
+                "COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);"
+            )
+    print(f"demirleme: {len(data['veriler'])} nokta işlendi")
+    return "\n".join(out) + "\n"
+
+
 def emit_i18n(here, records):
     """Veri çevirileri (i18n_*.json) → location_i18n satırları (idempotent).
 
@@ -465,6 +519,7 @@ def main():
         sys.exit(1)
     sql = emit(records, data)
     sql += emit_wind(here, records)
+    sql += emit_demirleme(here, records)
     sql += emit_i18n(here, records)
     sql += emit_corrections(here, records)
     (here.parent / "seed_locations.sql").write_text(sql, encoding="utf-8")

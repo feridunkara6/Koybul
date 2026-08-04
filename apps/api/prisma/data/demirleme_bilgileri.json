@@ -1,0 +1,354 @@
+{
+ "kaynak": "2026-08 demirleme bilgileri turu: 127 eksik nokta izinli kaynaklarda tarandı (turkeymarinas, sailingissues, grecosailor, karyayolu, resmî/yerel sayfalar); 58 nokta birebir kaynak alıntısıyla belgelendi ve tamamı elle doğrulandı; 6 şüpheli bulgu elendi (dalış duvarı tanımı, draught≠derinlik, gri kaynak, desteklenmeyen genelleme, mevcut veriyle çelişen zemin); 69 nokta için izinli kaynaklarda veri yok — uydurulmadı.",
+ "not": "Zemin kodları: sand|mud|weed|rock|mixed. Değerler yalnız BOŞ alanları doldurur (COALESCE) — batch verisi asla ezilmez. anchorage_details is_free AÇIKÇA NULL yazılır (ücretsiz rozeti yan etkisi yok).",
+ "veriler": {
+  "lindos-koyu": {
+   "zemin": null,
+   "derinlik_min": 4,
+   "derinlik_max": 8,
+   "url": "https://sailingissues.com/greekislands/rhodos.html"
+  },
+  "simi-marathounta-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 4,
+   "derinlik_max": 7,
+   "url": "https://sailingissues.com/greekislands/simi.html"
+  },
+  "simi-agios-vasileios-koyu": {
+   "zemin": "mixed",
+   "derinlik_min": 4,
+   "derinlik_max": 10,
+   "url": "https://sailingissues.com/greekislands/simi.html"
+  },
+  "vlychadia-samandira-sahasi": {
+   "zemin": null,
+   "derinlik_min": 4,
+   "derinlik_max": 6,
+   "url": "https://sailingissues.com/greekislands/leros.html"
+  },
+  "agia-markella-sakiz": {
+   "zemin": "sand",
+   "derinlik_min": null,
+   "derinlik_max": null,
+   "url": "https://grecosailor.com/skippers/eastern-sporades/chios/anchorages/"
+  },
+  "uzun-liman-hisaronu": {
+   "zemin": null,
+   "derinlik_min": 8,
+   "derinlik_max": 10,
+   "url": "https://turkeymarinas.blogspot.com/2016/06/uzun-liman-anchorage.html"
+  },
+  "soguksu-koyu-fethiye": {
+   "zemin": null,
+   "derinlik_min": 6,
+   "derinlik_max": 8,
+   "url": "https://turkeymarinas.blogspot.com/2016/04/soguksu-koyu-anchorage.html"
+  },
+  "kleftolimano-koyu-thymaina": {
+   "zemin": "mixed",
+   "derinlik_min": null,
+   "derinlik_max": null,
+   "url": "https://grecosailor.com/skippers/eastern-sporades/thymaina/"
+  },
+  "krios-plaji-paros": {
+   "zemin": "mixed",
+   "derinlik_min": null,
+   "derinlik_max": null,
+   "url": "https://grecosailor.com/skippers/cyclades/paros/"
+  },
+  "galissas-koyu-syros": {
+   "zemin": null,
+   "derinlik_min": 4,
+   "derinlik_max": 7,
+   "url": "https://sailingissues.com/greekislands/syros.html"
+  },
+  "azolimnos-koyu-syros": {
+   "zemin": "sand",
+   "derinlik_min": null,
+   "derinlik_max": null,
+   "url": "https://grecosailor.com/skippers/cyclades/syros/"
+  },
+  "filippoi-plaji-zakinthos": {
+   "zemin": "mixed",
+   "derinlik_min": null,
+   "derinlik_max": null,
+   "url": "https://grecosailor.com/skippers/ionian-islands/zakynthos/"
+  },
+  "vai-plaji-girit": {
+   "zemin": "sand",
+   "derinlik_min": null,
+   "derinlik_max": null,
+   "url": "https://grecosailor.com/skippers/crete/sitia/"
+  },
+  "analoukas-koyu-girit": {
+   "zemin": "sand",
+   "derinlik_min": null,
+   "derinlik_max": null,
+   "url": "https://grecosailor.com/skippers/crete/sitia/"
+  },
+  "aspat-koyu-demirleme": {
+   "zemin": null,
+   "derinlik_min": null,
+   "derinlik_max": 7,
+   "url": "https://turkeymarinas.blogspot.com/2016/07/aspat-cove-achorage.html"
+  },
+  "ovabuku-demirleme": {
+   "zemin": null,
+   "derinlik_min": 4,
+   "derinlik_max": 5,
+   "url": "https://turkeymarinas.blogspot.com/2016/06/ovabuku-cove-anchorage.html"
+  },
+  "kuzbuku-demirleme": {
+   "zemin": null,
+   "derinlik_min": 7,
+   "derinlik_max": 12,
+   "url": "https://turkeymarinas.blogspot.com/2016/05/kuzbuku-anchorage.html"
+  },
+  "girneyit-koyu-demirleme": {
+   "zemin": null,
+   "derinlik_min": 10,
+   "derinlik_max": 15,
+   "url": "https://turkeymarinas.blogspot.com/2016/05/girneyit-cove-anchorage.html"
+  },
+  "ilica-koyu-sigacik": {
+   "zemin": null,
+   "derinlik_min": 4,
+   "derinlik_max": 5,
+   "url": "https://turkeymarinas.blogspot.com/2016/09/ilica-cove-anchorage.html"
+  },
+  "papaz-bogazi-demirleme": {
+   "zemin": null,
+   "derinlik_min": 8,
+   "derinlik_max": 10,
+   "url": "https://turkeymarinas.blogspot.com/2016/09/papaz-bogazi-anchorage.html"
+  },
+  "tas-ada-koyu-demirleme": {
+   "zemin": null,
+   "derinlik_min": 4,
+   "derinlik_max": 5,
+   "url": "https://turkeymarinas.blogspot.com/2016/09/tas-ada-cove-anchorage.html"
+  },
+  "yarimada-koyu-demirleme": {
+   "zemin": null,
+   "derinlik_min": 3,
+   "derinlik_max": 4,
+   "url": "https://turkeymarinas.blogspot.com/2016/09/yarimada-cove-anchorage.html"
+  },
+  "ilicabuku-demirleme": {
+   "zemin": null,
+   "derinlik_min": 3,
+   "derinlik_max": 6,
+   "url": "https://turkeymarinas.blogspot.com/2016/08/ilica-buku-anchorage.html"
+  },
+  "kocabahce-koyu-demirleme": {
+   "zemin": "mixed",
+   "derinlik_min": 10,
+   "derinlik_max": 20,
+   "url": "https://turkeymarinas.blogspot.com/2016/05/kocabahce-cove-anchorage.html"
+  },
+  "tavsanbuku-demirleme": {
+   "zemin": null,
+   "derinlik_min": 5,
+   "derinlik_max": 10,
+   "url": "https://turkeymarinas.blogspot.com/2016/05/tavsanbuku-anchorage.html"
+  },
+  "ayaca-koyu-demirleme": {
+   "zemin": null,
+   "derinlik_min": 10,
+   "derinlik_max": 15,
+   "url": "https://turkeymarinas.blogspot.com/2016/05/ayaca-cove-anchorage.html"
+  },
+  "mercimek-buku-demirleme": {
+   "zemin": null,
+   "derinlik_min": 18,
+   "derinlik_max": 22,
+   "url": "https://turkeymarinas.blogspot.com/2016/05/mercimek-buku-anchorage_28.html"
+  },
+  "darbogaz-koyu-demirleme": {
+   "zemin": null,
+   "derinlik_min": 10,
+   "derinlik_max": 15,
+   "url": "https://turkeymarinas.blogspot.com/2016/04/darbogaz-koyu-anchorage.html"
+  },
+  "batikkaya-buku-demirleme": {
+   "zemin": null,
+   "derinlik_min": 5,
+   "derinlik_max": 10,
+   "url": "https://turkeymarinas.blogspot.com/2016/04/batikkaya-buku-anchorage.html"
+  },
+  "gunluklu-koyu-demirleme": {
+   "zemin": null,
+   "derinlik_min": null,
+   "derinlik_max": 10,
+   "url": "https://turkeymarinas.blogspot.com/2018/09/gunluklu-kucuk-kargi-cove-anchorage.html"
+  },
+  "kara-ada-demirleme": {
+   "zemin": "sand",
+   "derinlik_min": 5,
+   "derinlik_max": 6,
+   "url": "https://turkeymarinas.blogspot.com/2018/11/kara-island-anchorage.html"
+  },
+  "kissebuku-alakisla-demirleme": {
+   "zemin": "mixed",
+   "derinlik_min": null,
+   "derinlik_max": null,
+   "url": "https://turkeymarinas.blogspot.com/2016/07/alakisla-kisle-buku-anchorage.html"
+  },
+  "hisaronu-koyu-demirleme": {
+   "zemin": "sand",
+   "derinlik_min": null,
+   "derinlik_max": null,
+   "url": "https://turkeymarinas.blogspot.com/2018/09/hisaronu-cove-anchorage.html"
+  },
+  "adabogazi-akvaryum-demirleme": {
+   "zemin": "mixed",
+   "derinlik_min": null,
+   "derinlik_max": null,
+   "url": "https://www.limancepte.com/en/blog/bodrum-aquarium-bay-guide/"
+  },
+  "yedi-adalar-demirleme": {
+   "zemin": null,
+   "derinlik_min": 4,
+   "derinlik_max": 10,
+   "url": "https://deyachting.net/blog/gokova-bays-guide-anchorages-snorkeling"
+  },
+  "bitez-koyu-demirleme": {
+   "zemin": null,
+   "derinlik_min": 4,
+   "derinlik_max": 10,
+   "url": "https://turkeymarinas.blogspot.com/2016/07/bitez-cove-anchorage.html"
+  },
+  "akbuk-koyu-gokova": {
+   "zemin": null,
+   "derinlik_min": 6,
+   "derinlik_max": 12,
+   "url": "https://deyachting.net/blog/gokova-bays-guide-anchorages-snorkeling"
+  },
+  "dirsek-buku-koyu": {
+   "zemin": "sand",
+   "derinlik_min": null,
+   "derinlik_max": null,
+   "url": "https://turkeymarinas.blogspot.com/2018/12/dirsek-buku-anchorage.html"
+  },
+  "kumlubuk-koyu": {
+   "zemin": null,
+   "derinlik_min": null,
+   "derinlik_max": 15,
+   "url": "https://turkeymarinas.blogspot.com/2018/11/kumlubuku-yacht-club.html"
+  },
+  "knidos-antik-limani": {
+   "zemin": "weed",
+   "derinlik_min": 10,
+   "derinlik_max": 12,
+   "url": "https://turkeymarinas.blogspot.com/2016/06/knidos-cove-anchorage.html"
+  },
+  "siralibuk-koyu": {
+   "zemin": null,
+   "derinlik_min": 20,
+   "derinlik_max": 25,
+   "url": "https://www.gercekfethiye.com/gocek-in-sakli-cenneti-siralibuk-koyu/101322"
+  },
+  "kille-buku": {
+   "zemin": null,
+   "derinlik_min": 10,
+   "derinlik_max": 12,
+   "url": "https://karyayolu.wordpress.com/karia-kiyilari/koylar/kille-buku/"
+  },
+  "kucuk-kargi-koyu": {
+   "zemin": null,
+   "derinlik_min": 8,
+   "derinlik_max": 12,
+   "url": "https://karyayolu.wordpress.com/karia-kiyilari/koylar/kucuk-kargi-koyu-gunluklu-koyu/"
+  },
+  "gobun-samandira-sahasi": {
+   "zemin": "sand",
+   "derinlik_min": 5,
+   "derinlik_max": 7,
+   "url": "https://turkeymarinas.blogspot.com/2016/05/gobun-cove-anchorage.html"
+  },
+  "boynuzbuku-samandira-sahasi": {
+   "zemin": null,
+   "derinlik_min": 10,
+   "derinlik_max": 20,
+   "url": "https://karyayolu.wordpress.com/karia-kiyilari/koylar/boynuzbuku/"
+  },
+  "bedri-rahmi-samandira-sahasi": {
+   "zemin": "sand",
+   "derinlik_min": 10,
+   "derinlik_max": 15,
+   "url": "https://turkeymarinas.blogspot.com/2016/05/tasyaka-cove-anchorage.html"
+  },
+  "dalyankoy-koyu-demirleme": {
+   "zemin": "sand",
+   "derinlik_min": 3,
+   "derinlik_max": 4,
+   "url": "https://cnmarinas.com/news/cesme-marina-your-summer-cruising-itinerary-for-you-to-explore/"
+  },
+  "teos-limani-demirleme": {
+   "zemin": "mixed",
+   "derinlik_min": 5,
+   "derinlik_max": 7,
+   "url": "https://www.cruiserswiki.org/wiki/Sigacik_Region"
+  },
+  "kalekoy-simena-restoran-pontonlari": {
+   "zemin": "mixed",
+   "derinlik_min": 3,
+   "derinlik_max": 4,
+   "url": "https://turkeymarinas.blogspot.com/2016/04/kalekoy-marina.html"
+  },
+  "kale-pansiyon-iskelesi": {
+   "zemin": "mixed",
+   "derinlik_min": 3,
+   "derinlik_max": 4,
+   "url": "https://turkeymarinas.blogspot.com/2016/04/kalekoy-marina.html"
+  },
+  "kocabahce-iskelesi": {
+   "zemin": "mixed",
+   "derinlik_min": 10,
+   "derinlik_max": 20,
+   "url": "https://turkeymarinas.blogspot.com/2016/05/kocabahce-cove-anchorage.html"
+  },
+  "azmak-iskelesi-ciftlik": {
+   "zemin": "mixed",
+   "derinlik_min": 7,
+   "derinlik_max": 10,
+   "url": "https://turkeymarinas.blogspot.com/2016/05/ciftlik-cove-anchorage.html"
+  },
+  "kizilada-fener-restorani": {
+   "zemin": "sand",
+   "derinlik_min": 5,
+   "derinlik_max": 7,
+   "url": "https://turkeymarinas.blogspot.com/2018/06/kizilada-lighthouse-restaurant.html"
+  },
+  "gobun-restaurant": {
+   "zemin": "sand",
+   "derinlik_min": 5,
+   "derinlik_max": 7,
+   "url": "https://turkeymarinas.blogspot.com/2016/05/gobun-cove-anchorage.html"
+  },
+  "sarsala-restaurant": {
+   "zemin": "mixed",
+   "derinlik_min": 4,
+   "derinlik_max": null,
+   "url": "https://turkeymarinas.blogspot.com/2016/05/sarsala-cove-anchorage.html"
+  },
+  "miori-restaurant": {
+   "zemin": "sand",
+   "derinlik_min": 10,
+   "derinlik_max": 15,
+   "url": "https://irmakyachting.com/blog/tomb-bay-the-skopea-limani-3641-6%E2%80%B2n-2852-3%E2%80%B2e/"
+  },
+  "dirsek-buku-restaurant": {
+   "zemin": "sand",
+   "derinlik_min": null,
+   "derinlik_max": null,
+   "url": "https://turkeymarinas.blogspot.com/2018/12/dirsek-buku-anchorage.html"
+  },
+  "loryma-restaurant-bozukkale": {
+   "zemin": "mixed",
+   "derinlik_min": 8,
+   "derinlik_max": 10,
+   "url": "https://turkeymarinas.blogspot.com/2018/12/loryma-restaurant-jetty.html"
+  }
+ }
+}
