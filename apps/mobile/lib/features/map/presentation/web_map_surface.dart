@@ -380,7 +380,10 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
                 points: <LatLng>[_drag!.anchorPrev, _drag!.pos, _drag!.anchorNext],
                 strokeWidth: 3.5,
                 color: DocklyColors.brandPrimary.withValues(alpha: 0.85),
-                pattern: const StrokePattern.dashed(segments: <double>[10, 7]),
+                // NOT: `const` OLAMAZ — StrokePattern.dashed'in assert'i
+                // `segments.length` okur; Dart sabit ifadede liste uzunluğuna
+                // erişime izin vermez (CI dersi: const_eval_property_access).
+                pattern: StrokePattern.dashed(segments: const <double>[10, 7]),
               ),
             ],
           ),
