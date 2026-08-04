@@ -21,6 +21,7 @@ class MapState {
     this.isRouting = false,
     this.routeSeq = 0,
     this.routeWind,
+    this.routeFailSeq = 0,
   });
 
   final List<LocationPin> pins;
@@ -48,6 +49,10 @@ class MapState {
 
   /// Rota rüzgâr raporu (Rota v2) — analiz bitince dolar; en iyi çaba.
   final RouteWindReport? routeWind;
+
+  /// Rota HESAPLANAMADI sinyali (kara yasağı): her başarısız denemede artar;
+  /// arayüz kullanıcıya dürüst bir uyarı gösterir (düz çizgi çizilmez).
+  final int routeFailSeq;
 
   /// En az bir yükleme tamamlandı mı? İlk yükleme bitmeden "boş durum" GÖSTERİLMEZ
   /// (aksi halde açılışta kısa süre yanlış "liman yok" mesajı yanıp söner — P9).
@@ -87,6 +92,7 @@ class MapState {
     int? routeSeq,
     RouteWindReport? routeWind,
     bool clearRouteWind = false,
+    int? routeFailSeq,
   }) {
     return MapState(
       pins: pins ?? this.pins,
@@ -104,6 +110,7 @@ class MapState {
       routeWind: (clearRoute || clearRouteWind)
           ? null
           : (routeWind ?? this.routeWind),
+      routeFailSeq: routeFailSeq ?? this.routeFailSeq,
     );
   }
 }

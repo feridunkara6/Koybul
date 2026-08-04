@@ -52,13 +52,21 @@ class _Label extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DocklyIconData? icon = this.icon;
-    if (icon == null) return Text(label);
+    if (icon == null) {
+      return Text(label, maxLines: 1, overflow: TextOverflow.ellipsis);
+    }
+    // TAŞMA EMNİYETİ (CI dersi 2026-08): dar butonda (örn. alt kartta yan yana
+    // iki buton) uzun etiket taşarsa Flutter bunu HATA sayar (RenderFlex
+    // overflow — testleri kırar, gerçek cihazda sarı çizgili şerit çizer).
+    // Etiket Flexible + ellipsis ile sığmadığında zarifçe kısalır; ikon sabit.
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         DocklyIcon(icon, size: 20),
         const SizedBox(width: 8),
-        Text(label),
+        Flexible(
+          child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
+        ),
       ],
     );
   }

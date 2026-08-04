@@ -18,6 +18,16 @@ import 'sea_route.dart';
 /// 1 hücre kalınlaştırıldığından çok dar geçitler kapalı sayılır; hedef koy
 /// ızgarada kapalıysa rota koyun açığındaki EN YAKIN suya kadar hesaplanır
 /// (`reachedGoal=false`) ve arayüz son yaklaşma uyarısı gösterir.
+///
+/// KARA ÜZERİNDEN ÇİZGİ YASAĞI (kaptan kuralı, 2026-08): İstanbul→Antalya
+/// gibi dolambaçlı rotalarda dar arama penceresi boğazı (Çanakkale) dışarıda
+/// bırakabiliyordu; motor "ulaşamadım" deyip kalan yolu düz çizgiyle
+/// tamamlıyor ve çizgi KARADAN geçiyordu. Artık İKİ AŞAMA vardır:
+/// 1) dar pencere (hızlı, kısa rotaların tamamı); 2) başarısızsa TÜM BÖLGE
+/// taraması (boğazlar dahil). Hedefe yine ulaşılamazsa ve en yakın varış
+/// 2 deniz milinden uzaksa rota HİÇ üretilmez (null) — kara üzerinden düz
+/// çizgi ASLA çizilmez. 2 nm altındaki fark yalnız kapalı koy ağzıdır
+/// (emniyet kalınlaştırması) ve son-yaklaşma notuyla gösterilir.
 class SeaRoutePlan {
   const SeaRoutePlan({
     required this.points,
@@ -51,8 +61,13 @@ SeaRoutePlan directLinePlan(GeoPoint from, GeoPoint to) => SeaRoutePlan(
       viaSea: false,
     );
 
-/// `from` → `to` deniz rotası. Maske noktaları kapsamıyorsa null (çağıran
-/// kuş uçuşuna düşer). `maxPop` A* güvenlik tavanıdır (sonsuz arama olmaz).
+/// Kapalı koy ağzı toleransı (nm): hedefe bundan yakın kalınmışsa rota
+/// "koyun açığına kadar" kabul edilir; uzaksa rota ÜRETİLMEZ (kara yasağı).
+const double kCoastalApproachNm = 2.0;
+
+/// `from` → `to` deniz rotası. İKİ AŞAMA: dar pencere → tam bölge.
+/// Hedefe ulaşılamaz ve en yakın varış [kCoastalApproachNm]'den uzaksa null —
+/// KARA ÜZERİNDEN düz çizgi asla üretilmez (kaptan kuralı).
 SeaRoutePlan? planSeaRoute(
   SeaMask m,
   GeoPoint from,
@@ -66,31 +81,118 @@ SeaRoutePlan? planSeaRoute(
   final int sx = sIdxRaw % m.width, sy = sIdxRaw ~/ m.width;
   final int gx = gIdxRaw % m.width, gy = gIdxRaw ~/ m.width;
 
-  // Arama kutusu: iki ucu saran, %35 + 120 hücre marjlı pencere (perf).
-  final int margin = math.max(120, (math.max((sx - gx).abs(), (sy - gy).abs()) * 0.35).round());
-  final int bx0 = math.max(0, math.min(sx, gx) - margin);
-  final int by0 = math.max(0, math.min(sy, gy) - margin);
-  final int bx1 = math.min(m.width - 1, math.max(sx, gx) + margin);
-  final int by1 = math.min(m.height - 1, math.max(sy, gy) + margin);
+  // 1. AŞAMA — dar pencere: kısa/orta rotaların tamamını milisaniyelerde çözer.
+  final int margin =
+      math.max(120, (math.max((sx - gx).abs(), (sy - gy).abs()) * 0.35).round());
+  _Attempt res = _search(
+    m, sx, sy, gx, gy,
+    bx0: math.max(0, math.min(sx, gx) - margin),
+    by0: math.max(0, math.min(sy, gy) - margin),
+    bx1: math.min(m.width - 1, math.max(sx, gx) + margin),
+    by1: math.min(m.height - 1, math.max(sy, gy) + margin),
+    maxPop: maxPop,
+  );
+
+  // 2. AŞAMA — dar pencere hedefe ulaşamadıysa TÜM BÖLGE (boğazlar dahil).
+  // İstanbul→Antalya gibi rotalar Çanakkale'den ancak böyle geçer.
+  // İstisna: hedefe zaten ≤ tolerans kadar yaklaşıldıysa bu KAPALI KOY
+  // ağzıdır (emniyet kalınlaştırması) — tam tarama boşuna koşturulmaz.
+  if (!res.reached && res.bestGapNm > kCoastalApproachNm) {
+    final _Attempt full = _search(
+      m, sx, sy, gx, gy,
+      bx0: 0, by0: 0, bx1: m.width - 1, by1: m.height - 1,
+      maxPop: 2600000,
+    );
+    if (full.reached || full.bestGapNm < res.bestGapNm) res = full;
+  }
+
+  // KARA YASAĞI: hedefe ulaşılamadıysa yalnız kapalı-koy toleransı kadar
+  // (≤ 2 nm) açık bırakılabilir; daha uzaksa rota YOK (düz çizgi çizilmez).
+  if (!res.reached && res.bestGapNm > kCoastalApproachNm) return null;
+  if (res.px.isEmpty) return null;
+
+  // Görüş-hattı sadeleştirme: ardışık kırıklıklar, aradaki tüm hücreler su
+  // kaldığı sürece birleştirilir (süpürme çizgisi kara bilmezse köşe kalır).
+  final List<int> px = res.px, py = res.py;
+  final List<GeoPoint> pts = <GeoPoint>[from];
+  int anchor = 0;
+  for (int i = 1; i < px.length; i++) {
+    final bool last = i == px.length - 1;
+    if (!last && _clearLine(m, px[anchor], py[anchor], px[i + 1], py[i + 1])) {
+      continue; // bir sonraki de görünüyor — bu kırıklık gereksiz
+    }
+    pts.add(m.centerOf(px[i], py[i]));
+    anchor = i;
+  }
+  pts.add(to);
+
+  double dist = 0;
+  for (int i = 1; i < pts.length; i++) {
+    dist += haversineNm(pts[i - 1], pts[i]);
+  }
+  return SeaRoutePlan(
+    points: pts,
+    distanceNm: dist,
+    reachedGoal: res.reached,
+    viaSea: true,
+  );
+}
+
+/// Tek A* koşusunun sonucu: hücre yolu + hedefe kalan en küçük mesafe.
+class _Attempt {
+  const _Attempt({
+    required this.reached,
+    required this.px,
+    required this.py,
+    required this.bestGapNm,
+  });
+
+  final bool reached;
+  final List<int> px, py;
+  final double bestGapNm;
+}
+
+/// Verilen kutu içinde A* araması. Hedefe ulaşamazsa hedefe EN YAKIN düğüme
+/// giden yolu döndürür (bestGapNm = o düğüm ile hedef arası nm).
+_Attempt _search(
+  SeaMask m,
+  int sx,
+  int sy,
+  int gx,
+  int gy, {
+  required int bx0,
+  required int by0,
+  required int bx1,
+  required int by1,
+  required int maxPop,
+}) {
   final int bw = bx1 - bx0 + 1, bh = by1 - by0 + 1;
   final int n = bw * bh;
 
-  final Float64List gScore = Float64List(n)..fillRange(0, n, double.infinity);
+  // Float32 yeter (nm toplamları) — TAM BÖLGE koşusunda belleği yarılar.
+  final Float32List gScore = Float32List(n)..fillRange(0, n, double.infinity);
   final Int32List cameFrom = Int32List(n)..fillRange(0, n, -1);
   final Uint8List closed = Uint8List(n);
-  final _Heap heap = _Heap(n ~/ 8 + 64);
+  final _Heap heap = _Heap(math.min(n ~/ 8 + 64, 400000));
 
   int local(int x, int y) => (y - by0) * bw + (x - bx0);
-  final GeoPoint goalPt = m.centerOf(gx, gy);
+  final double goalLat = m.latAt(gy), goalLon = m.lonAt(gx);
+  final double hCos =
+      math.cos(((m.latAt(sy) + goalLat) / 2) * math.pi / 180.0);
 
-  // Satır başına doğu-batı hücre uzunluğu (nm) — enlemle değişir.
-  final Float64List lonNmRow = Float64List(bh);
+  // Hızlı sezgisel (eşdikdörtgen yaklaşımı, %1 emniyet payıyla küçültülmüş —
+  // A* eniyiliği bozulmaz): tam bölge taramasında haversine'den kat kat ucuz.
+  double hOf(int x, int y) {
+    final double dLat = (m.latAt(y) - goalLat) * 60.0;
+    final double dLon = (m.lonAt(x) - goalLon) * 60.0 * hCos;
+    return math.sqrt(dLat * dLat + dLon * dLon) * 0.99;
+  }
+
+  final Float32List lonNmRow = Float32List(bh);
   final double latNm = 60.0 * m.res;
   for (int r = 0; r < bh; r++) {
     lonNmRow[r] = latNm * math.cos(m.latAt(by0 + r) * math.pi / 180.0);
   }
-
-  double hOf(int x, int y) => haversineNm(m.centerOf(x, y), goalPt);
 
   final int start = local(sx, sy), goal = local(gx, gy);
   gScore[start] = 0;
@@ -127,10 +229,9 @@ SeaRoutePlan? planSeaRoute(
         final int ni = local(nx, ny);
         if (closed[ni] == 1) continue;
         double step = (dx == 0) ? latNm : (dy == 0 ? ew : diag);
-        // KIYIDAN KADEMELİ KAÇINMA (kullanıcı isteği 2026-08, v2): kara
-        // komşusu olan hücreye güçlü, iki hücre yakınına hafif ceza — rota
-        // mecbur kalmadıkça kıyıyı yalamaz, açık sudan dolaşır. Dar geçitler
-        // yine geçilebilir (ceza yasak değildir, yalnız pahalıdır).
+        // KIYIDAN KADEMELİ KAÇINMA (kaptan kuralı): kara komşusu olan hücreye
+        // güçlü, iki hücre yakınına hafif ceza — rota mecbur kalmadıkça kıyıyı
+        // yalamaz, açık sudan dolaşır. Dar geçitler yine geçilebilir.
         if (m.isLand(nx + 1, ny) || m.isLand(nx - 1, ny) ||
             m.isLand(nx, ny + 1) || m.isLand(nx, ny - 1)) {
           step += latNm * 0.35;
@@ -150,12 +251,9 @@ SeaRoutePlan? planSeaRoute(
 
   final int endNode = reached ? goal : best;
   if (!reached && endNode == start) {
-    // Hedefe hiç yaklaşılamadı (başlangıç kapalı havuzda / arama tıkandı) →
-    // "deniz rotası" diye düz çizgi satmayız; çağıran dürüst kuş uçuşuna düşer.
-    return null;
+    return const _Attempt(
+        reached: false, px: <int>[], py: <int>[], bestGapNm: double.infinity);
   }
-
-  // Yolu geri sar → hücre listesi.
   final List<int> cellsX = <int>[], cellsY = <int>[];
   int cur = endNode;
   while (cur != -1) {
@@ -163,33 +261,17 @@ SeaRoutePlan? planSeaRoute(
     cellsY.add(by0 + cur ~/ bw);
     cur = cameFrom[cur];
   }
-  // start→end sırasına çevir.
-  final List<int> px = cellsX.reversed.toList(growable: false);
-  final List<int> py = cellsY.reversed.toList(growable: false);
-
-  // Görüş-hattı sadeleştirme: ardışık kırıklıklar, aradaki tüm hücreler su
-  // kaldığı sürece birleştirilir (süpürme çizgisi kara bilmezse köşe kalır).
-  final List<GeoPoint> pts = <GeoPoint>[from];
-  int anchor = 0;
-  for (int i = 1; i < px.length; i++) {
-    final bool last = i == px.length - 1;
-    if (!last && _clearLine(m, px[anchor], py[anchor], px[i + 1], py[i + 1])) {
-      continue; // bir sonraki de görünüyor — bu kırıklık gereksiz
-    }
-    pts.add(m.centerOf(px[i], py[i]));
-    anchor = i;
-  }
-  pts.add(to);
-
-  double dist = 0;
-  for (int i = 1; i < pts.length; i++) {
-    dist += haversineNm(pts[i - 1], pts[i]);
-  }
-  return SeaRoutePlan(
-    points: pts,
-    distanceNm: dist,
-    reachedGoal: reached,
-    viaSea: true,
+  final double gap = reached
+      ? 0
+      : haversineNm(
+          m.centerOf(bx0 + endNode % bw, by0 + endNode ~/ bw),
+          m.centerOf(gx, gy),
+        );
+  return _Attempt(
+    reached: reached,
+    px: cellsX.reversed.toList(growable: false),
+    py: cellsY.reversed.toList(growable: false),
+    bestGapNm: gap,
   );
 }
 

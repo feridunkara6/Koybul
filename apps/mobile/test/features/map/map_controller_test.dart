@@ -466,17 +466,16 @@ void main() {
     expect(state.routeSeq, 1);
   });
 
-  test('deniz rotası: motor null dönerse DÜRÜST kuş uçuşu yedeği (viaSea=false)', () async {
+  test('KARA YASAĞI: motor rota bulamazsa ÇİZGİ ÇİZİLMEZ, hata sinyali artar', () async {
     final container =
         _containerWith(FakeMapGateway(result: pinResult), routeEngine: FakeSeaRouteEngine());
     await _ctrl(container).loadViewport(pinViewport);
     _shareLocation(container);
     await _ctrl(container).routeToPin(testPin);
     final state = _state(container);
-    expect(state.route, isNotNull);
-    expect(state.route!.viaSea, isFalse);
-    expect(state.route!.points, hasLength(2));
-    expect(state.route!.points.last.lat, testPin.position.lat);
+    expect(state.route, isNull); // düz çizgi yedeği YOK (kaptan kuralı)
+    expect(state.isRouting, isFalse);
+    expect(state.routeFailSeq, 1); // arayüz bu sinyalle uyarı gösterir
   });
 
   test('KONUM ŞARTI: konum paylaşılmadan rota OLUŞTURULMAZ (harita merkezi yetmez)', () async {
@@ -533,15 +532,15 @@ void main() {
     expect(_state(container).routeWind, same(report));
   });
 
-  test('rüzgâr analizi kuş uçuşu yedeğinde ÇAĞRILMAZ (viaSea=false)', () async {
+  test('rüzgâr analizi başarısız rotada ÇAĞRILMAZ', () async {
     final container = _containerWith(
       FakeMapGateway(result: pinResult),
-      routeEngine: FakeSeaRouteEngine(), // motor null → kuş uçuşu
+      routeEngine: FakeSeaRouteEngine(), // motor null → rota yok
     );
     await _ctrl(container).loadViewport(pinViewport);
     _shareLocation(container);
     await _ctrl(container).routeToPin(testPin);
-    expect(_state(container).route!.viaSea, isFalse);
+    expect(_state(container).route, isNull);
     // Danışman hiç OKUNMADI bile (tembel sağlayıcı) — ağ maliyeti sıfır.
     expect(lastFakeAdvisor?.calls ?? 0, 0);
     expect(_state(container).routeWind, isNull);

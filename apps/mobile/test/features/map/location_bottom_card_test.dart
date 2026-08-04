@@ -17,6 +17,25 @@ Widget _wrap(Widget card) =>
     ProviderScope(child: MaterialApp(home: Scaffold(body: card)));
 
 void main() {
+  testWidgets('DAR EKRAN + iki buton: taşma HATASI olmaz, etiketler bulunur (CI dersi)',
+      (WidgetTester tester) async {
+    // dockly_button _Label taşma emniyeti: test yazı tipi geniştir; 'Deniz
+    // rotası' dar butonda taşarsa RenderFlex hatası testleri kırıyordu.
+    await tester.pumpWidget(_wrap(SizedBox(
+      width: 340,
+      child: LocationBottomCard(
+        pin: testPin,
+        onClose: () {},
+        onOpenDetail: () {},
+        onRoute: () {},
+      ),
+    )));
+    await tester.pump();
+    expect(tester.takeException(), isNull); // taşma istisnası YOK
+    expect(find.text('Detay'), findsOneWidget);
+    expect(find.text('Deniz rotası'), findsOneWidget);
+  });
+
   testWidgets('kart: tip etiketi + ad + puan + fiyat rozeti gösterir', (WidgetTester tester) async {
     await tester.pumpWidget(
       _wrap(LocationBottomCard(pin: testPin, onClose: () {})),

@@ -231,8 +231,9 @@ class MapController extends Notifier<MapState> {
   /// seçili noktaya, denizden (karadan kaçınan) rota. KONUM ŞARTI (kullanıcı
   /// kararı 2026-08): konum paylaşılmadan rota OLUŞTURULMAZ — harita merkezi
   /// gibi tahmini başlangıç kullanılmaz; arayüz "konumunu paylaş" uyarısı
-  /// gösterir. Motor kullanılamazsa DÜRÜST kuş uçuşu yedeğine düşer
-  /// (viaSea=false — arayüz farkı söyler).
+  /// gösterir. Motor rota bulamazsa (kapsam dışı, kapalı havza) rota
+  /// ÇİZİLMEZ ve "hesaplanamadı" uyarısı verilir — kara üzerinden düz
+  /// çizgi ASLA gösterilmez (kaptan kuralı).
   Future<void> routeToPin(LocationPin pin) async {
     final GeoPoint? origin = ref.read(devicePositionProvider);
     if (origin == null || state.isRouting) return;
@@ -245,7 +246,16 @@ class MapController extends Notifier<MapState> {
       plan = null;
     }
     if (req != _routeReq) return;
-    final SeaRoutePlan resolved = plan ?? directLinePlan(origin, pin.position);
+    // KARA YASAĞI (kaptan kuralı 2026-08): motor rota bulamazsa DÜZ ÇİZGİ
+    // ÇİZİLMEZ — kullanıcıya dürüst "hesaplanamadı" uyarısı gösterilir.
+    if (plan == null) {
+      state = state.copyWith(
+        isRouting: false,
+        routeFailSeq: state.routeFailSeq + 1,
+      );
+      return;
+    }
+    final SeaRoutePlan resolved = plan;
     state = state.copyWith(
       route: resolved,
       isRouting: false,

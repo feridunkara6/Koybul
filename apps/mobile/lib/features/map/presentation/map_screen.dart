@@ -31,6 +31,20 @@ class MapScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final MapState state = ref.watch(mapControllerProvider);
     final MapController controller = ref.read(mapControllerProvider.notifier);
+    // KARA YASAĞI uyarısı: rota hesaplanamadıysa (düz çizgi çizilmez) kullanıcı
+    // dürüstçe bilgilendirilir — sinyal sayacı her başarısız denemede artar.
+    ref.listen<int>(
+      mapControllerProvider.select((MapState s) => s.routeFailSeq),
+      (int? prev, int next) {
+        if (next > (prev ?? 0)) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text(ref.read(l10nProvider).routeDirectNote)),
+            );
+        }
+      },
+    );
     final MapSurfaceBuilder surfaceBuilder = ref.watch(mapSurfaceBuilderProvider);
     final bool isList = ref.watch(mapViewIsListProvider);
     final selectedPin = state.selectedPin;

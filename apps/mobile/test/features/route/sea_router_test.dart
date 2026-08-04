@@ -72,6 +72,30 @@ void main() {
     expect(a.reachedGoal, b.reachedGoal);
   });
 
+  test('İstanbul→Antalya: TAM BÖLGE aşaması Çanakkale üzerinden DENİZ rotası bulur', () {
+    const GeoPoint istanbul = GeoPoint(lat: 41.02, lon: 28.98);
+    const GeoPoint antalya = GeoPoint(lat: 36.55, lon: 30.55);
+    final SeaRoutePlan? plan = planSeaRoute(mask, istanbul, antalya);
+    expect(plan, isNotNull, reason: 'uzun rota tam-bölge aşamasıyla çözülmeli');
+    expect(plan!.viaSea, isTrue);
+    expect(plan.reachedGoal, isTrue);
+    final double straight = haversineNm(istanbul, antalya); // ~278 nm (karadan!)
+    expect(plan.distanceNm, greaterThan(straight * 1.5)); // deniz yolu ~584 nm
+    expect(plan.distanceNm, lessThan(straight * 3.0));
+    // Rota Çanakkale'den geçmeli: 26.0-26.6 boylam aralığına kırıklık düşer.
+    expect(
+      plan.points.any((GeoPoint p) => p.lon > 25.8 && p.lon < 26.8 && p.lat > 39.8),
+      isTrue,
+      reason: 'rota Çanakkale Boğazı bölgesinden geçmeli',
+    );
+    // Hiçbir ara kırıklık karada olamaz (kaptan kuralı).
+    for (int i = 1; i < plan.points.length - 1; i++) {
+      final GeoPoint p = plan.points[i];
+      expect(mask.isWater(mask.colOf(p.lon), mask.rowOf(p.lat)), isTrue,
+          reason: 'karada kırıklık: ${p.lat},${p.lon}');
+    }
+  });
+
   test('bölge dışı nokta → null (çağıran kuş uçuşu yedeğine düşer)', () {
     const GeoPoint marseille = GeoPoint(lat: 43.3, lon: 5.4);
     const GeoPoint bodrum = GeoPoint(lat: 37.02, lon: 27.40);
