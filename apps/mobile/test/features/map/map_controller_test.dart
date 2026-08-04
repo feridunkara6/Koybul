@@ -4,6 +4,8 @@ import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
 import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
+import 'package:dockly_mobile/features/map/data/bundled_map_snapshot.dart';
+import 'package:dockly_mobile/features/map/data/shared_prefs_map_cache.dart';
 import 'package:dockly_mobile/features/map/domain/map_cache.dart';
 import 'package:dockly_mobile/features/map/domain/map_state.dart';
 import 'package:dockly_mobile/features/map/domain/map_viewport.dart';
@@ -12,10 +14,26 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/map_fakes.dart';
 
+/// Sahte gömülü anlık görüntü — determinizm: gerçek `rootBundle` varlığına
+/// test ortamında ASLA gidilmez; verilen harita döner (varsayılan: yok).
+class FakeBundledSnapshot extends BundledMapSnapshot {
+  FakeBundledSnapshot([this.map]);
+
+  final CachedMap? map;
+  int loadCount = 0;
+
+  @override
+  Future<CachedMap?> load() async {
+    loadCount++;
+    return map;
+  }
+}
+
 ProviderContainer _containerWith(
   FakeMapGateway gateway, {
   Duration debounce = Duration.zero,
   FakeMapCache? cache,
+  FakeBundledSnapshot? snapshot,
 }) {
   final container = ProviderContainer(
     overrides: <Override>[
@@ -23,6 +41,7 @@ ProviderContainer _containerWith(
       mapDebounceProvider.overrideWithValue(debounce),
       // Önbellek HER ZAMAN sahte (testler arası sızıntı olmasın — determinizm).
       mapCacheProvider.overrideWithValue(cache ?? FakeMapCache()),
+      bundledMapSnapshotProvider.overrideWithValue(snapshot ?? FakeBundledSnapshot()),
     ],
   );
   addTearDown(container.dispose);
@@ -309,6 +328,79 @@ void main() {
     await _ctrl(container).loadViewport(clusterViewport); // zoom 6 → ağ
     expect(gateway.calls, hasLength(2));
     expect(_state(container).clusters.single.count, 34);
+  });
+
+  test('gömülü anlık görüntü: İLK ziyarette (önbellek boş) harita anında dolar, taze veri gelince yerini bırakır', () async {
+    final snapshot = FakeBundledSnapshot(CachedMap(
+      pins: const <LocationPin>[],
+      clusters: clusterResult.clusters,
+      savedAt: DateTime(2026),
+    ));
+    final gateway = FakeMapGateway()..pending = Completer<MapResult>();
+    final container = _containerWith(gateway, snapshot: snapshot);
+
+    final Future<void> loading = _ctrl(container).loadViewport(clusterViewport);
+    await Future<void>.delayed(const Duration(milliseconds: 1));
+    // Ağ yanıtı henüz yok ama harita DOLU: gömülü balonlar gösteriliyor.
+    expect(snapshot.loadCount, 1);
+    expect(_state(container).clusters.single.count, 34);
+    expect(_state(container).isLoading, isTrue);
+
+    gateway.pending!.complete(pinResult);
+    await loading;
+    expect(_state(container).pins.single.id, 'loc-1'); // taze veri kazandı
+    expect(_state(container).isLoading, isFalse);
+  });
+
+  test('gömülü anlık görüntü: cihaz önbelleği DOLUYSA hiç okunmaz', () async {
+    final snapshot = FakeBundledSnapshot(CachedMap(
+      pins: const <LocationPin>[],
+      clusters: clusterResult.clusters,
+      savedAt: DateTime(2026),
+    ));
+    final cache = FakeMapCache(
+      cached: CachedMap(
+        pins: pinResult.locations,
+        clusters: const <Cluster>[],
+        savedAt: DateTime(2026),
+      ),
+    );
+    final container = _containerWith(
+      FakeMapGateway(result: pinResult),
+      cache: cache,
+      snapshot: snapshot,
+    );
+    await _ctrl(container).loadViewport(pinViewport);
+    expect(snapshot.loadCount, 0); // cihaz önbelleği yeterliydi
+  });
+
+  test('gömülü anlık görüntü + ağ hatası → veri korunur, çevrimdışı şerit (tam-ekran hata YOK)', () async {
+    final snapshot = FakeBundledSnapshot(CachedMap(
+      pins: const <LocationPin>[],
+      clusters: clusterResult.clusters,
+      savedAt: DateTime(2026),
+    ));
+    final gateway = FakeMapGateway(error: const NetworkFailure());
+    final container = _containerWith(gateway, snapshot: snapshot);
+    await _ctrl(container).loadViewport(clusterViewport);
+    final state = _state(container);
+    expect(state.clusters.single.count, 34); // gömülü veri ekranda kaldı
+    expect(state.isOffline, isTrue);
+    expect(state.failure, isNull);
+  });
+
+  test('decodeCachedMapJson: geçerli anlık görüntü çözülür; bozuk girdi null', () {
+    const String raw = '{"pins":[],"clusters":[{"position":{"lat":38.9,"lon":27.1},'
+        '"count":12,"bbox":[26.7,38.5,27.4,39.2],"countryCode":"TR"}]}';
+    final CachedMap? map = decodeCachedMapJson(raw);
+    expect(map, isNotNull);
+    expect(map!.pins, isEmpty);
+    expect(map.clusters.single.count, 12);
+    expect(map.clusters.single.countryCode, 'TR');
+    expect(map.clusters.single.bbox.minLon, 26.7);
+
+    expect(decodeCachedMapJson('çöp'), isNull);
+    expect(decodeCachedMapJson('[1,2]'), isNull);
   });
 
   test('stale koruması: eski yanıt geç gelirse yok sayılır (en son kazanır)', () async {

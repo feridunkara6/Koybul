@@ -33,9 +33,16 @@ const int _initialZoom = 7;
 const String _tileKey = String.fromEnvironment('MAP_TILE_KEY');
 const String _tileStyle =
     String.fromEnvironment('MAP_TILE_STYLE', defaultValue: 'aquarelle');
+// PERF (2026-08): MapTiler'da 512px karo kullanılır (URL'de /256/ yok =
+// varsayılan 512). Aynı ekran alanı 4 KAT AZ istekle dolar → daha az ağ
+// turu, daha az çözme işi, daha akıcı kaydırma. flutter_map tarafında
+// tileSize 512 + zoomOffset -1 ile ölçek birebir korunur. OSM düşüşü
+// 512 sunmadığı için 256'da kalır.
 final String _baseTileUrl = _tileKey.isEmpty
     ? 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-    : 'https://api.maptiler.com/maps/$_tileStyle/256/{z}/{x}/{y}.png?key=$_tileKey';
+    : 'https://api.maptiler.com/maps/$_tileStyle/{z}/{x}/{y}.png?key=$_tileKey';
+final double _baseTileSize = _tileKey.isEmpty ? 256 : 512;
+final double _baseZoomOffset = _tileKey.isEmpty ? 0 : -1;
 final String _attributionText = _tileKey.isEmpty
     ? '© OpenStreetMap katkıcıları · OpenSeaMap'
     : '© MapTiler · © OpenStreetMap katkıcıları · OpenSeaMap';
@@ -169,6 +176,8 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
           urlTemplate: _baseTileUrl,
           userAgentPackageName: 'app.moorira.mobile',
           tileDisplay: const TileDisplay.instantaneous(),
+          tileSize: _baseTileSize,
+          zoomOffset: _baseZoomOffset,
           maxZoom: 19,
           // Perf: kaydırırken bir halka komşu karo önceden yüklenir; geri
           // dönüşte karo atılmasın diye tampon büyütüldü → akıcı gezinme.

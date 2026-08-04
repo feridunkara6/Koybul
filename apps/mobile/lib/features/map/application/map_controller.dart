@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/origin_provider.dart';
 import '../../../core/providers.dart';
 import '../data/api_map_locations_gateway.dart';
+import '../data/bundled_map_snapshot.dart';
 import '../data/shared_prefs_map_cache.dart';
 import '../domain/map_cache.dart';
 import '../domain/map_locations_gateway.dart';
@@ -22,6 +23,11 @@ final Provider<MapLocationsGateway> mapLocationsGatewayProvider =
 /// Çevrimdışı önbellek sağlayıcısı — testte sahte ile override edilir.
 final Provider<MapCache> mapCacheProvider =
     Provider<MapCache>((ref) => const SharedPrefsMapCache());
+
+/// Gömülü anlık görüntü sağlayıcısı (İLK ziyaret hızlandırması) — testte
+/// sahte ile override edilir.
+final Provider<BundledMapSnapshot> bundledMapSnapshotProvider =
+    Provider<BundledMapSnapshot>((ref) => const BundledMapSnapshot());
 
 /// "Teknem sığar" filtresi (ürün kararı): açıkken, tekne profiline SIĞMAYAN
 /// yerler haritadan ve listeden gizlenir. Limiti BİLİNMEYEN yerler gizlenmez —
@@ -132,7 +138,13 @@ class MapController extends Notifier<MapState> {
     // cihazdaki son başarılı veri ANINDA gösterilir — açılışta boş harita ve
     // uzun spinner yerine dolu harita + ince yükleme çubuğu.
     if (!state.hasLoadedOnce && !state.hasData) {
-      final CachedMap? warm = await ref.read(mapCacheProvider).load();
+      CachedMap? warm = await ref.read(mapCacheProvider).load();
+      // İLK ZİYARET (perf, 2026-08): cihaz önbelleği boşsa uygulamayla gömülü
+      // gelen anlık görüntü kullanılır — harita ilk açılışta da ağı beklemeden
+      // dolar; taze veri gelince yerini bırakır.
+      if (warm == null || warm.isEmpty) {
+        warm = await ref.read(bundledMapSnapshotProvider).load();
+      }
       if (seq == _seq && warm != null && !warm.isEmpty && !state.hasData) {
         state = state.copyWith(pins: warm.pins, clusters: warm.clusters);
       }

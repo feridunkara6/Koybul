@@ -43,6 +43,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    # Gömülü harita anlık görüntüsü (perf 2026-08): yayınlı kayıtlardan üretilen
+    # balon özeti — ilk ziyarette harita ağı beklemeden dolar. Üretimi:
+    # apps/api/prisma/data/generate_map_snapshot.py (elle düzenlenmez).
+    - assets/map/map_snapshot.json
   # Marka yazısı (Koybul açılış yüzeyi + logotype): Poppins — SIL OFL 1.1
   # lisanslı, ücretsiz (assets/fonts/POPPINS-LISANS.txt). Fotoğraflı açılış
   # görselleri 2026-08'de kaldırıldı: yüzey koddan çizilir (~900 KB tasarruf).

@@ -12,6 +12,13 @@
   <meta name="apple-mobile-web-app-title" content="Koybul">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
   <link rel="icon" type="image/png" href="favicon.png"/>
+  <!-- PERF (2026-08): sık kullanılan sunuculara TLS bağlantısı önceden açılır —
+       ilk veri/karo isteği el sıkışma beklemez (~100-300ms kazanç/başına).
+       API fetch CORS modunda çalıştığı için crossorigin; karo sunucuları
+       görsel (no-cors) olduğundan düz preconnect. -->
+  <link rel="preconnect" href="https://dockly-proje.onrender.com" crossorigin>
+  <link rel="preconnect" href="https://api.maptiler.com">
+  <link rel="preconnect" href="https://tiles.openseamap.org">
   <title>Koybul — Denizde yerini bul</title>
   <link rel="manifest" href="manifest.json">
   <style>

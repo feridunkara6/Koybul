@@ -1,4 +1,5 @@
 import { join } from 'path';
+import compression from 'compression';
 import { NestFactory } from '@nestjs/core';
 import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module';
@@ -11,6 +12,11 @@ async function bootstrap(): Promise<void> {
   const logger = app.get(Logger);
   app.useLogger(logger);
   app.useGlobalFilters(new GlobalProblemFilter());
+  // Sıkıştırma (perf, 2026-08): JSON yanıtları gzip'lenir — harita pin/balon
+  // yanıtı ~%80-90 küçülür; yavaş mobil bağlantıda "noktalar geç geliyor"
+  // şikayetinin sunucu ayağını kapatır. Statik eşik/filtre varsayılanları
+  // (1 KB üstü, sıkıştırılabilir içerik tipleri) bilinçli korunur.
+  app.use(compression());
   // CORS: misafir okuma uçları herkese açık; yazma uçları zaten Bearer token ister.
   // Web önizlemesi (GitHub Pages) ve gelecekteki web istemcileri bu sayede erişir.
   app.enableCors();

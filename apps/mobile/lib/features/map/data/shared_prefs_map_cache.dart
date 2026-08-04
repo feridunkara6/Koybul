@@ -20,21 +20,7 @@ class SharedPrefsMapCache implements MapCache {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? raw = prefs.getString(_key);
       if (raw == null || raw.isEmpty) return null;
-      final Object? decoded = jsonDecode(raw);
-      if (decoded is! Map<String, dynamic>) return null;
-      final List<LocationPin> pins =
-          (decoded['pins'] as List<dynamic>? ?? const <dynamic>[])
-              .whereType<Map<String, dynamic>>()
-              .map(LocationPin.fromJson)
-              .toList(growable: false);
-      final List<Cluster> clusters =
-          (decoded['clusters'] as List<dynamic>? ?? const <dynamic>[])
-              .whereType<Map<String, dynamic>>()
-              .map(Cluster.fromJson)
-              .toList(growable: false);
-      final DateTime savedAt =
-          DateTime.tryParse(decoded['savedAt'] as String? ?? '') ?? DateTime.now();
-      return CachedMap(pins: pins, clusters: clusters, savedAt: savedAt);
+      return decodeCachedMapJson(raw);
     } catch (_) {
       return null;
     }
@@ -74,5 +60,31 @@ class SharedPrefsMapCache implements MapCache {
     } catch (_) {
       // en iyi çaba — sessizce geç
     }
+  }
+}
+
+/// Önbellek/anlık-görüntü JSON'unu `CachedMap`'e çözer (ortak çözücü):
+/// hem cihaz önbelleği (yukarıdaki `save` biçimi) hem uygulamayla gömülü gelen
+/// `assets/map/map_snapshot.json` aynı şemayı kullanır. Bozuk girdi → null
+/// (en iyi çaba — akış bozulmaz).
+CachedMap? decodeCachedMapJson(String raw) {
+  try {
+    final Object? decoded = jsonDecode(raw);
+    if (decoded is! Map<String, dynamic>) return null;
+    final List<LocationPin> pins =
+        (decoded['pins'] as List<dynamic>? ?? const <dynamic>[])
+            .whereType<Map<String, dynamic>>()
+            .map(LocationPin.fromJson)
+            .toList(growable: false);
+    final List<Cluster> clusters =
+        (decoded['clusters'] as List<dynamic>? ?? const <dynamic>[])
+            .whereType<Map<String, dynamic>>()
+            .map(Cluster.fromJson)
+            .toList(growable: false);
+    final DateTime savedAt =
+        DateTime.tryParse(decoded['savedAt'] as String? ?? '') ?? DateTime.now();
+    return CachedMap(pins: pins, clusters: clusters, savedAt: savedAt);
+  } catch (_) {
+    return null;
   }
 }
