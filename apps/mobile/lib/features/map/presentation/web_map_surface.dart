@@ -10,6 +10,7 @@ import 'package:latlong2/latlong.dart';
 
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
+import '../../route/domain/sea_route.dart' show haversineNm;
 import '../domain/map_viewport.dart';
 import 'map_surface.dart';
 
@@ -243,16 +244,43 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
     setState(() => _drag = null);
   }
 
-  /// Bacak ortalarındaki tutamaç işaretçileri. Çok kısa bacaklarda (3 kırıktan
-  /// az) tutamaç çizilmez — işaretçi kalabalığı olmasın.
+  /// Bacağın MESAFECE orta noktası (saha dersi: açık denizde sadeleştirilmiş
+  /// bacak yalnız 2 kırıktan oluşabilir — dizin ortası uç noktaya düşer ve
+  /// tutamaç hiç çıkmazdı; artık yol uzunluğunun yarısında enterpolasyon).
+  static GeoPoint? _legMidpoint(List<GeoPoint> pts) {
+    if (pts.length < 2) return null;
+    final List<double> seg = <double>[];
+    double total = 0;
+    for (int i = 1; i < pts.length; i++) {
+      final double d = haversineNm(pts[i - 1], pts[i]);
+      seg.add(d);
+      total += d;
+    }
+    if (total < 0.5) return null; // çok kısa bacakta tutamaç çizilmez
+    double half = total / 2;
+    for (int i = 0; i < seg.length; i++) {
+      if (half <= seg[i]) {
+        final double f = seg[i] <= 0 ? 0 : half / seg[i];
+        final GeoPoint a = pts[i], b = pts[i + 1];
+        return GeoPoint(
+          lat: a.lat + (b.lat - a.lat) * f,
+          lon: a.lon + (b.lon - a.lon) * f,
+        );
+      }
+      half -= seg[i];
+    }
+    return pts.last;
+  }
+
+  /// Bacak ortalarındaki tutamaç işaretçileri.
   List<Marker> _legHandles() {
     final List<List<GeoPoint>>? legs = widget.data.routeLegPoints;
     if (legs == null) return const <Marker>[];
     final List<Marker> out = <Marker>[];
     for (int j = 0; j < legs.length; j++) {
       final List<GeoPoint> pts = legs[j];
-      if (pts.length < 3) continue;
-      final GeoPoint mid = pts[pts.length ~/ 2];
+      final GeoPoint? mid = _legMidpoint(pts);
+      if (mid == null) continue;
       out.add(
         Marker(
           point: LatLng(mid.lat, mid.lon),
@@ -356,9 +384,17 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
         ),
         // AKILLI DENİZ ROTASI (2026-08): karaları tanıyan rota çizgisi —
         // beyaz kontur + marka mavisi; işaretçilerin ALTINDA kalır.
-        if (widget.data.routePoints != null && widget.data.routePoints!.length >= 2)
-          PolylineLayer(
-            polylines: <Polyline>[
+        //
+        // SAHA DERSİ (rota düzenleme düzeltmesi): bu iki katman HER ZAMAN
+        // ağaçta durur (rota/sürükleme yokken boş liste çizerler). Eskiden
+        // `if (...)` ile koşulluydular; sürükleme başlayınca araya katman
+        // girmesi çocuk listesini kaydırıyor, Flutter işaretçi katmanını
+        // BAŞTAN kuruyor ve aktif sürükleme hareketi ilk karede ölüyordu —
+        // "tutamaç hareket etmiyor" bunun sonucuydu. Yapı sabit kalmalı.
+        PolylineLayer(
+          polylines: <Polyline>[
+            if (widget.data.routePoints != null &&
+                widget.data.routePoints!.length >= 2)
               Polyline(
                 points: <LatLng>[
                   for (final GeoPoint p in widget.data.routePoints!)
@@ -369,13 +405,13 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
                 borderColor: const Color(0xFFFFFFFF),
                 borderStrokeWidth: 1.6,
               ),
-            ],
-          ),
+          ],
+        ),
         // SÜRÜKLEME ÖNİZLEMESİ (rota düzenleme): parmak ekrandayken kesikli
         // çizgi — bırakınca gerçek deniz rotası (A*) hesaplanır.
-        if (_drag != null)
-          PolylineLayer(
-            polylines: <Polyline>[
+        PolylineLayer(
+          polylines: <Polyline>[
+            if (_drag != null)
               Polyline(
                 points: <LatLng>[_drag!.anchorPrev, _drag!.pos, _drag!.anchorNext],
                 strokeWidth: 3.5,
@@ -385,8 +421,8 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
                 // erişime izin vermez (CI dersi: const_eval_property_access).
                 pattern: StrokePattern.dashed(segments: const <double>[10, 7]),
               ),
-            ],
-          ),
+          ],
+        ),
         MarkerLayer(
           markers: <Marker>[
             // KULLANICININ KONUMU — yelkenli imleç (kullanıcı isteği): beyaz

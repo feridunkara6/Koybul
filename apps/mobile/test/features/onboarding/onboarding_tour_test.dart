@@ -100,12 +100,12 @@ void main() {
 
     await tester.tap(find.byKey(_pinKey));
     await tester.pumpAndSettle();
-    expect(find.byKey(ValueKey<String>('onb-hint-$kHintBottomCard')),
+    expect(find.byKey(const ValueKey<String>('onb-hint-$kHintBottomCard')),
         findsOneWidget);
 
     await tester.tap(find.text('Anladım'));
     await tester.pumpAndSettle();
-    expect(find.byKey(ValueKey<String>('onb-hint-$kHintBottomCard')),
+    expect(find.byKey(const ValueKey<String>('onb-hint-$kHintBottomCard')),
         findsNothing);
     expect(store.data!.seenHints, contains(kHintBottomCard)); // kalıcı
 
@@ -114,7 +114,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(_pinKey));
     await tester.pumpAndSettle();
-    expect(find.byKey(ValueKey<String>('onb-hint-$kHintBottomCard')),
+    expect(find.byKey(const ValueKey<String>('onb-hint-$kHintBottomCard')),
         findsNothing);
   });
 
@@ -125,7 +125,7 @@ void main() {
     expect(find.byKey(const ValueKey<String>('onb-welcome')), findsNothing);
     await tester.tap(find.byKey(_pinKey));
     await tester.pumpAndSettle();
-    expect(find.byKey(ValueKey<String>('onb-hint-$kHintBottomCard')),
+    expect(find.byKey(const ValueKey<String>('onb-hint-$kHintBottomCard')),
         findsNothing);
   });
 }
