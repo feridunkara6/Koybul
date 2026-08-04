@@ -1,0 +1,310 @@
+{
+ "kaynak": "yaklasma_notlari.json arşivindeki DOĞRULANMIŞ bulguların ekran metinleri (TR) + EN/ES/RU çevirileri (2026-08 açıklama zenginleştirme). Her slug'ın birebir alıntısı ve kaynak URL'si arşiv dosyasındadır; buraya yeni bilgi EKLENMEZ.",
+ "not": "Rakamlar dört dilde AYNI kalır (ondalık ayracı , ve . eşdeğer sayılır — üretici doğrular). Ön ek üreticide: 'Yaklaşma notu:' / 'Approach note:' / 'Nota de aproximación:' / 'Заметка о подходе:'.",
+ "atlananlar": {
+  "karacaoren-adasi-demirleme": "geçit kayaları + doğudan yaklaşma açıklamada zaten var (DİKKAT bölümü)",
+  "girneyit-koyu-demirleme": "gece demirleme uyarısı açıklamada zaten var (UYARI bölümü)"
+ },
+ "metinler": {
+  "gokkaya-koyu-kekova": {
+   "tr": "Adacık grubunun çevresindeki resiflere ve grubun hemen batısında üzerinde yalnız 3,5 m su bulunan izole kayaya dikkat; batıya uzanan dar koyun girişinin ortasında su altı kayası var; gece kalışta iyi bir demir feneri şart.",
+   "en": "Beware of the reefs around the islet group and the isolated rock with only 3.5 m of water just west of the group; there is a submerged rock in the middle of the entrance to the narrow western inlet; a good anchor light is essential when staying overnight.",
+   "es": "Atención a los arrecifes alrededor del grupo de islotes y a la roca aislada con solo 3,5 m de agua justo al oeste del grupo; hay una roca sumergida en el centro de la entrada de la cala estrecha que se extiende al oeste; de noche es imprescindible una buena luz de fondeo.",
+   "ru": "Остерегайтесь рифов вокруг группы островков и одиночной скалы с глубиной всего 3,5 м сразу к западу от группы; посреди входа в узкую западную бухту есть подводная скала; при ночёвке обязателен хороший якорный огонь."
+  },
+  "kekova-tersane-koyu": {
+   "tr": "Kuvvetli hamleler olabilir; iki yana koltuk hattı alınır (kayalardaki deliklerden geçirilmiş hazır halatlar var); gündüz tur tekneleri yoğundur.",
+   "en": "Strong gusts are possible; lines are taken ashore on both sides (there are ready lines threaded through holes in the rocks); tour boats are busy during the day.",
+   "es": "Puede haber rachas fuertes; se llevan cabos a tierra por ambos lados (hay cabos preparados pasados por agujeros en las rocas); de día hay mucho tráfico de barcos turísticos.",
+   "ru": "Возможны сильные шквалы; концы заводят на берег с обеих сторон (в скалах есть готовые тросы, продетые через отверстия); днём много экскурсионных судов."
+  },
+  "karaloz-limani-kekova": {
+   "tr": "Giriş uzaktan seçilemez; girişte derinlik fazladır; kuvvetli hamleler olabilir; mutlaka karaya koltuk alınmalı.",
+   "en": "The entrance is hard to make out from a distance; depths at the entrance are considerable; strong gusts are possible; a line ashore is essential.",
+   "es": "La entrada no se distingue desde lejos; en la entrada hay mucha profundidad; puede haber rachas fuertes; es imprescindible llevar un cabo a tierra.",
+   "ru": "Вход трудно различить издалека; глубины у входа большие; возможны сильные шквалы; обязательно заведите конец на берег."
+  },
+  "ekincik-koyu-demirleme": {
+   "tr": "Meltemiye karşı en iyi korunmayı KD koycuğu sağlar; GB koycuğunda demirlenirse ağaca çok uzun koltuk hattı alınmalı.",
+   "en": "The NE cove gives the best shelter from the meltemi; if anchoring in the SW cove, take a very long shore line to a tree.",
+   "es": "La caleta NE ofrece el mejor abrigo frente al meltemi; si se fondea en la caleta SO, hay que llevar un cabo muy largo a un árbol.",
+   "ru": "Лучшую защиту от мельтеми даёт северо-восточная бухточка; при стоянке в юго-западной бухточке заведите очень длинный конец на дерево."
+  },
+  "uzun-liman-hisaronu": {
+   "tr": "Koyun ortasına uzanan sığ bank uzaktan fark edilmez, kıyılar sazlıktır; karaya koltuk alınır.",
+   "en": "A shallow bank extending into the middle of the bay is not visible from a distance and the shores are reedy; take a line ashore.",
+   "es": "Un banco poco profundo que se extiende hasta el centro de la bahía no se aprecia desde lejos y las orillas tienen cañaverales; se lleva un cabo a tierra.",
+   "ru": "Мелководная банка, тянущаяся к середине бухты, издалека незаметна, берега заросли тростником; заводят конец на берег."
+  },
+  "tas-ada-koyu-demirleme": {
+   "tr": "Girişteki kayanın batısından girilir; kayanın doğusundan dışarı uzanan resifler vardır.",
+   "en": "Enter to the west of the rock at the entrance; reefs extend seaward from the east side of the rock.",
+   "es": "Se entra por el oeste de la roca de la entrada; del lado este de la roca se extienden arrecifes hacia fuera.",
+   "ru": "Входите к западу от скалы у входа; от восточной стороны скалы в море тянутся рифы."
+  },
+  "yarimada-koyu-demirleme": {
+   "tr": "Girişte kolay seçilen su seviyesindeki kayaların doğusundan girilmelidir.",
+   "en": "Enter to the east of the easily seen awash rocks at the entrance.",
+   "es": "Hay que entrar por el este de las rocas a flor de agua, fáciles de ver, en la entrada.",
+   "ru": "Входить следует к востоку от хорошо заметных скал у самой поверхности воды на входе."
+  },
+  "gok-liman-kokar-demirleme": {
+   "tr": "Girişte gemi şamandırası vardır; gece girişte dikkat gerekir; kuzey koyunda 15 m'ye demirleyip doğu kıyısına baştan koltuk almak önerilir.",
+   "en": "There is a ship mooring buoy at the entrance; care is needed entering at night; in the north cove it is advisable to anchor in 15 m and take a bow line to the east shore.",
+   "es": "Hay una boya de amarre de buques en la entrada; de noche la entrada exige precaución; en la cala norte se recomienda fondear en 15 m y llevar un cabo de proa a la orilla este.",
+   "ru": "У входа стоит судовой швартовный буй; ночью вход требует осторожности; в северной бухте рекомендуется встать на якорь на 15 м и завести носовой конец на восточный берег."
+  },
+  "ilicabuku-demirleme": {
+   "tr": "Koyun iki burnundan da sığ kaya yatakları uzanır; ortadan rota izlenmeli; kuvvetli kuzey rüzgârları içeri dalga sokar.",
+   "en": "Shallow rocky ledges run out from both headlands of the bay; keep to the middle on entry; strong northerlies send waves inside.",
+   "es": "De ambas puntas de la bahía salen lajas rocosas poco profundas; conviene entrar por el centro; los vientos fuertes del norte meten ola dentro.",
+   "ru": "От обоих мысов бухты тянутся мелководные каменные гряды; держитесь середины; сильные северные ветры нагоняют волну внутрь."
+  },
+  "demir-liman-demirleme": {
+   "tr": "Yaklaşırken derinlik 18-20 m'den hızla 7 m'ye düşer; dip sığlaşınca sancaktaki resiflerden mesafeli geçilmeli; kuzeyde 4 m üzerinde su bulunan batık kayalık saha vardır.",
+   "en": "On approach the depth drops quickly from 18-20 m to 7 m; once it shoals, keep clear of the reefs to starboard; to the north there is a sunken rocky area with 4 m of water over it.",
+   "es": "En la aproximación la profundidad baja rápido de 18-20 m a 7 m; cuando el fondo sube, pase con margen de los arrecifes a estribor; al norte hay una zona rocosa sumergida con 4 m de agua encima.",
+   "ru": "На подходе глубина быстро падает с 18-20 м до 7 м; на отмели держитесь в стороне от рифов по правому борту; к северу есть затопленный каменистый участок с глубиной 4 м над ним."
+  },
+  "kuyucakbuku-demirleme": {
+   "tr": "Koyda çok sayıda balık çiftliği vardır; kafes bağlantı halatlarına dikkat; bir yaka bataklık olup girilemez.",
+   "en": "There are many fish farms in the bay; watch out for the cage mooring lines; one shore is marshy and cannot be approached.",
+   "es": "En la bahía hay numerosas piscifactorías; cuidado con los cabos de amarre de las jaulas; una de las orillas es pantanosa y no se puede acceder.",
+   "ru": "В бухте много рыбных ферм; остерегайтесь швартовных тросов садков; один из берегов болотистый и недоступен."
+  },
+  "tavsanbuku-demirleme": {
+   "tr": "Adacık ile anakara arasındaki geçitten geçilmez; en iyi yer Değirmen Burnu'nun doğusundaki koydur, karaya koltukla yatılır.",
+   "en": "The passage between the islet and the mainland is not navigable; the best spot is the cove east of Değirmen Burnu, lying with a line ashore.",
+   "es": "El paso entre el islote y tierra firme no es navegable; el mejor sitio es la cala al este de Değirmen Burnu, amarrado con cabo a tierra.",
+   "ru": "Проход между островком и материком несудоходен; лучшее место — бухта к востоку от мыса Değirmen Burnu, стоянка с концом на берег."
+  },
+  "ayaca-koyu-demirleme": {
+   "tr": "Burnun ucunda resifler vardır; açıktan geçilmeli.",
+   "en": "There are reefs off the tip of the headland; give it a wide berth.",
+   "es": "Hay arrecifes frente a la punta del cabo; pase con buen resguardo.",
+   "ru": "У оконечности мыса есть рифы; обходите их мористее."
+  },
+  "ilica-koyu-sigacik": {
+   "tr": "Dar koydur, karaya koltuk gerekir; dağlardan denize kuvvetli hamleler iner.",
+   "en": "A narrow cove where a line ashore is needed; strong gusts sweep down from the mountains.",
+   "es": "Es una cala estrecha donde hace falta cabo a tierra; de las montañas bajan rachas fuertes.",
+   "ru": "Узкая бухта, нужен конец на берег; с гор к морю срываются сильные шквалы."
+  },
+  "darbogaz-koyu-demirleme": {
+   "tr": "Hâkim rüzgârlar soluğan sokar; GB tarafına karadan koltuk alınır.",
+   "en": "The prevailing winds send in a swell; moor with a shore line on the SW side.",
+   "es": "Los vientos dominantes meten mar de fondo; se amarra con cabo a tierra en el lado SO.",
+   "ru": "Господствующие ветры нагоняют зыбь; встают с концом на берег у юго-западной стороны."
+  },
+  "soguksu-koyu-aydincik": {
+   "tr": "Giriş ortalanırsa tehlike yok; gece kuzeydeki vadiden inen kuvvetli yerel rüzgâra dikkat; haritalardaki giriş şamandırası ve platform artık yok (2017).",
+   "en": "The entrance is safe if taken down the middle; at night beware the strong local wind falling from the valley to the north; the entrance buoy and platform shown on charts are gone (2017).",
+   "es": "La entrada no presenta peligro si se toma por el centro; de noche atención al fuerte viento local que baja del valle al norte; la boya de entrada y la plataforma de las cartas ya no existen (2017).",
+   "ru": "Вход безопасен, если держаться середины; ночью остерегайтесь сильного местного ветра, падающего из долины с севера; входной буй и платформа, показанные на картах, больше не существуют (2017)."
+  },
+  "oguns-place-hayitbuku": {
+   "tr": "Koyun ortasından ~100 m açığa uzanan resife dikkat; taş dalgakırandan yaklaşık yarım tekne boyu mesafede demirleyip iskeleye kıçtan bağlanılır.",
+   "en": "Beware the reef running out ~100 m from the middle of the cove; anchor about half a boat length off the stone breakwater and berth stern-to at the jetty.",
+   "es": "Atención al arrecife que sale ~100 m desde el centro de la cala; se fondea aproximadamente a media eslora del rompeolas de piedra y se atraca de popa al muelle.",
+   "ru": "Остерегайтесь рифа, выступающего примерно на 100 м от середины бухты; станьте на якорь примерно в половине длины корпуса от каменного мола и швартуйтесь кормой к причалу."
+  },
+  "osmans-place-selimiye": {
+   "tr": "Selimiye'de dip derindir, kaloma fazla bırakılmalı; iskelelere tonozla bağlanılır.",
+   "en": "The bottom at Selimiye is deep, so pay out plenty of scope; berthing at the jetties is with laid moorings.",
+   "es": "En Selimiye el fondo es profundo, hay que dar bastante cadena; en los muelles se amarra con muertos.",
+   "ru": "В Селимие глубины большие, вытравливайте побольше цепи; у причалов швартуются на заведённые мурринги."
+  },
+  "poseidon-selimiye": {
+   "tr": "Selimiye'de dip derindir, kaloma fazla bırakılmalı; iskelelere tonozla bağlanılır.",
+   "en": "The bottom at Selimiye is deep, so pay out plenty of scope; berthing at the jetties is with laid moorings.",
+   "es": "En Selimiye el fondo es profundo, hay que dar bastante cadena; en los muelles se amarra con muertos.",
+   "ru": "В Селимие глубины большие, вытравливайте побольше цепи; у причалов швартуются на заведённые мурринги."
+  },
+  "selimiye-koyu-demirleme": {
+   "tr": "Dip derindir, kaloma fazla bırakılmalı; alarga için koyun en doğusu, kayalıklara yakın bölge önerilir.",
+   "en": "The bottom is deep, so pay out plenty of scope; for anchoring off, the far east of the bay near the rocks is recommended.",
+   "es": "El fondo es profundo, hay que dar bastante cadena; para fondear a la gira se recomienda el extremo este de la bahía, cerca de las rocas.",
+   "ru": "Глубины большие, вытравливайте побольше цепи; для стоянки на якоре рекомендуется самая восточная часть бухты, ближе к скалам."
+  },
+  "sovalye-adasi-demirleme": {
+   "tr": "Ada karşısındaki Batıkkaya sığlığı kuzey kardinal şamandırasıyla işaretlidir; adanın Fethiye'ye bakan GD yakası melteme ve soluğana korunaklıdır.",
+   "en": "The Batıkkaya shoal opposite the island is marked by a north cardinal buoy; the SE side of the island facing Fethiye is sheltered from the meltemi and swell.",
+   "es": "El bajo Batıkkaya frente a la isla está señalizado con una boya cardinal norte; el lado SE de la isla, que mira a Fethiye, está protegido del meltemi y de la mar de fondo.",
+   "ru": "Отмель Batıkkaya напротив острова обозначена северным кардинальным буем; юго-восточная сторона острова, обращённая к Фетхие, укрыта от мельтеми и зыби."
+  },
+  "batikkaya-buku-demirleme": {
+   "tr": "Şövalye Adası karşısındaki Batıkkaya sığlığı kuzey kardinal işaretiyle işaretlidir.",
+   "en": "The Batıkkaya shoal opposite Şövalye Island is marked with a north cardinal mark.",
+   "es": "El bajo Batıkkaya frente a la isla Şövalye está señalizado con una marca cardinal norte.",
+   "ru": "Отмель Batıkkaya напротив острова Şövalye обозначена северным кардинальным знаком."
+  },
+  "kale-pansiyon-iskelesi": {
+   "tr": "Kaleköy'e yaklaşmada çok sayıda resif vardır; en güvenli yaklaşma kaleye doğru 010° rotadır; köyün 200 m GD'sinde ve doğu geçidin 200 m kuzeyinde işaretsiz resifler vardır.",
+   "en": "There are numerous reefs on the approach to Kaleköy; the safest approach is a course of 010° toward the castle; there are unmarked reefs 200 m SE of the village and 200 m north of the eastern passage.",
+   "es": "En la aproximación a Kaleköy hay numerosos arrecifes; la aproximación más segura es rumbo 010° hacia el castillo; hay arrecifes sin señalizar a 200 m al SE del pueblo y a 200 m al norte del paso este.",
+   "ru": "На подходе к Калекёй множество рифов; самый безопасный подход — курсом 010° на крепость; необозначенные рифы находятся в 200 м к юго-востоку от деревни и в 200 м к северу от восточного прохода."
+  },
+  "kalekoy-simena-restoran-pontonlari": {
+   "tr": "Kaleköy'e yaklaşmada çok sayıda resif vardır; en güvenli yaklaşma kaleye doğru 010° rotadır; pontonlarda derinlik kökte 4,5 m, uçta 12-14 m'dir.",
+   "en": "There are numerous reefs on the approach to Kaleköy; the safest approach is a course of 010° toward the castle; depths at the pontoons are 4.5 m at the root and 12-14 m at the head.",
+   "es": "En la aproximación a Kaleköy hay numerosos arrecifes; la aproximación más segura es rumbo 010° hacia el castillo; la profundidad en los pantalanes es de 4,5 m en el arranque y 12-14 m en el extremo.",
+   "ru": "На подходе к Калекёй множество рифов; самый безопасный подход — курсом 010° на крепость; глубины у понтонов — 4,5 м у корня и 12-14 м на оконечности."
+  },
+  "kelebekler-vadisi-demirleme": {
+   "tr": "Derinlikler fazladır, kaloma fazla verilmeli; koy hâkim rüzgârlara açıktır ve çok dalga alır.",
+   "en": "Depths are considerable, so pay out plenty of scope; the bay is open to the prevailing winds and gets a lot of wave action.",
+   "es": "Las profundidades son grandes, hay que dar bastante cadena; la bahía está expuesta a los vientos dominantes y entra mucha ola.",
+   "ru": "Глубины большие, вытравливайте побольше цепи; бухта открыта господствующим ветрам, и волнение здесь сильное."
+  },
+  "adabogazi-akvaryum-demirleme": {
+   "tr": "Kuzeyden giriş çok sığ olduğundan denenmemelidir.",
+   "en": "The northern entrance is very shallow and should not be attempted.",
+   "es": "La entrada por el norte es muy poco profunda y no debe intentarse.",
+   "ru": "Северный вход очень мелководен, заходить через него не следует."
+  },
+  "kissebuku-alakisla-demirleme": {
+   "tr": "Kıyıdan 300 m açıkta, üzerinde 1 m su bulunan kayalık sığlık vardır ve şamandırayla işaretlidir.",
+   "en": "There is a rocky shoal with 1 m of water over it 300 m offshore, marked by a buoy.",
+   "es": "A 300 m de la costa hay un bajo rocoso con 1 m de agua encima, señalizado con una boya.",
+   "ru": "В 300 м от берега есть каменистая отмель с глубиной 1 м над ней, обозначенная буем."
+  },
+  "yedi-adalar-demirleme": {
+   "tr": "Adalar arası geçitlerde tehlikeli sığlık ve kayalıklar vardır; Göllü Ada kuzeyinde en sığ noktası 2 m olan topuk vardır (şamandırası kopmuş olabilir); karaya koltuk yaygındır.",
+   "en": "The passages between the islands hold dangerous shoals and rocks; north of Göllü Ada there is a knoll with a least depth of 2 m (its buoy may have gone adrift); lines ashore are common here.",
+   "es": "En los pasos entre las islas hay bajos y rocas peligrosos; al norte de Göllü Ada hay un bajo con una sonda mínima de 2 m (su boya puede haberse soltado); es habitual amarrar con cabo a tierra.",
+   "ru": "В проходах между островами опасные отмели и скалы; к северу от Göllü Ada есть банка с наименьшей глубиной 2 м (её буй мог сорвать); здесь обычно заводят концы на берег."
+  },
+  "bitez-koyu-demirleme": {
+   "tr": "Kıyı boyunca yüzme şamandıraları ve platformlar vardır; geceleri dağlardan kuvvetli hamleler iner.",
+   "en": "Swimming buoys and platforms line the shore; at night strong gusts come down from the mountains.",
+   "es": "A lo largo de la costa hay boyas de baño y plataformas; de noche bajan rachas fuertes de las montañas.",
+   "ru": "Вдоль берега купальные буи и платформы; ночью с гор срываются сильные шквалы."
+  },
+  "bencik-koyu": {
+   "tr": "Girişte 'dişli kaya' belirgindir; içeride yer yer hızla sığlaşır; doğusundaki güney kardinali işaretsizdir; genelde batı yakasına kıçtan koltukla gecelenir.",
+   "en": "The 'toothed rock' at the entrance is conspicuous; inside, the water shoals quickly in places; the south cardinal on its east side is unmarked; boats usually spend the night on the west shore, stern-to with a line ashore.",
+   "es": "La 'roca dentada' de la entrada es bien visible; dentro, el fondo sube rápido en algunos puntos; la cardinal sur de su lado este carece de señal; normalmente se pasa la noche en la orilla oeste, de popa con cabo a tierra.",
+   "ru": "«Зубчатая скала» у входа хорошо заметна; внутри местами быстро мелеет; южный кардинальный знак с её восточной стороны не обозначен; обычно ночуют у западного берега, кормой с концом на берег."
+  },
+  "serce-limani": {
+   "tr": "Girişte batı burnu açığında ~10 m uzanan resifler vardır; 135 m'lik dar giriş uzaktan seçilemez; kuvvetli hâkim rüzgârda içeri soluğan girer.",
+   "en": "Reefs extend ~10 m off the western headland at the entrance; the narrow 135 m entrance cannot be made out from a distance; in strong prevailing winds a swell works its way inside.",
+   "es": "En la entrada, frente a la punta oeste, salen arrecifes ~10 m; la entrada estrecha de 135 m no se distingue desde lejos; con viento dominante fuerte entra mar de fondo.",
+   "ru": "У входа, напротив западного мыса, рифы выступают примерно на 10 м; узкий вход шириной 135 м издалека не различим; при сильном господствующем ветре внутрь заходит зыбь."
+  },
+  "gerbekse-koyu": {
+   "tr": "GB'den yaklaşırken burnun ucundaki döküntülere dikkat; melteme kapalı olsa da boğazdan zaman zaman sağnak iner.",
+   "en": "Approaching from the SW, watch the debris off the tip of the headland; though closed to the meltemi, squalls sometimes funnel down through the gap.",
+   "es": "Al aproximarse desde el SO, cuidado con los restos frente a la punta del cabo; aunque está resguardada del meltemi, a veces bajan turbonadas por el desfiladero.",
+   "ru": "Подходя с юго-запада, остерегайтесь каменных обломков у оконечности мыса; хотя бухта закрыта от мельтеми, из ущелья временами срываются шквалы."
+  },
+  "mersincik-koyu": {
+   "tr": "İnce kum altında taş olduğundan çapa rüzgâr artınca tarayabilir; kalın erişte kümelerinden kaçınılmalı.",
+   "en": "As there is stone under the thin sand, the anchor may drag when the wind gets up; avoid the patches of thick weed.",
+   "es": "Como hay piedra bajo la fina capa de arena, el ancla puede garrear cuando arrecia el viento; evite las matas densas de algas.",
+   "ru": "Под тонким слоем песка камень, поэтому при усилении ветра якорь может ползти; избегайте плотных пятен водорослей."
+  },
+  "katranci-koyu": {
+   "tr": "Girişin ortasında görünür kayalık, öncesi ve sonrasında su altı kayaları vardır; plaj önleri şamandırayla kapalıdır.",
+   "en": "In the middle of the entrance there is a visible rock with submerged rocks before and beyond it; the areas off the beach are closed off with buoys.",
+   "es": "En el centro de la entrada hay un peñasco visible, con rocas sumergidas antes y después; la zona frente a la playa está acotada con boyas.",
+   "ru": "Посреди входа видимая скала, до и после неё — подводные камни; акватория у пляжа огорожена буями."
+  },
+  "yassica-adalari": {
+   "tr": "Adaların arasından yelkenli geçemez; bölgede tonozlar ve kırmızı babalar vardır.",
+   "en": "Sailing yachts cannot pass between the islands; there are laid moorings and red mooring bollards in the area.",
+   "es": "Los veleros no pueden pasar entre las islas; en la zona hay muertos de fondeo y norays rojos.",
+   "ru": "Парусные яхты не могут проходить между островами; в районе есть мурринги и красные швартовные тумбы."
+  },
+  "pasalimani-adasi-demirleme": {
+   "tr": "Kıyı boyunca çok sayıda adacık ve resif vardır; İncirli Burnu'nun KD'sinde yarım mile yakın uzanan tehlikeli resifler vardır.",
+   "en": "Numerous islets and reefs lie along the coast; NE of İncirli Burnu dangerous reefs extend nearly half a mile.",
+   "es": "A lo largo de la costa hay numerosos islotes y arrecifes; al NE de İncirli Burnu hay arrecifes peligrosos que se extienden casi media milla.",
+   "ru": "Вдоль берега множество островков и рифов; к северо-востоку от мыса İncirli Burnu опасные рифы тянутся почти на полмили."
+  },
+  "maden-adasi-demirleme": {
+   "tr": "Girişte hemen bir sığlık yaması vardır.",
+   "en": "There is a shallow patch right at the entrance.",
+   "es": "Hay una mancha de poco fondo justo en la entrada.",
+   "ru": "Прямо у входа есть мелководное пятно."
+  },
+  "bademli-deniz-ilicasi-koyu": {
+   "tr": "Garip Adası ile Kalem Adası arası çok sığdır, geçilmez; girişte sığlık sancakta kalır, işaret şamandıralarının iskele yakınından geçilmeli; doğru noktada giriş derinliği 2,5 m; geceleri gündoğusu 30-40 kn esebilir.",
+   "en": "The passage between Garip Adası and Kalem Adası is very shallow and cannot be used; at the entrance the shoal stays to starboard — pass close to port of the marker buoys; at the right spot the entrance depth is 2.5 m; at night the easterly can blow at 30-40 kn.",
+   "es": "El paso entre Garip Adası y Kalem Adası es muy somero y no se puede usar; en la entrada el bajo queda a estribor — pase pegado por babor de las boyas de señalización; en el punto correcto la sonda de entrada es de 2,5 m; de noche el viento del este puede soplar a 30-40 kn.",
+   "ru": "Проход между островами Garip Adası и Kalem Adası очень мелководен и непроходим; на входе отмель остаётся справа — держитесь ближе к левой стороне у сигнальных буёв; в правильной точке глубина на входе 2,5 м; ночью восточный ветер может дуть 30-40 узлов."
+  },
+  "kalem-adasi-koyu": {
+   "tr": "Bademli tarafından yaklaşırken Garip Adası ile Kalem Adası arasındaki geçit çok sığdır, geçilmez.",
+   "en": "Approaching from the Bademli side, the passage between Garip Adası and Kalem Adası is very shallow and cannot be used.",
+   "es": "Viniendo del lado de Bademli, el paso entre Garip Adası y Kalem Adası es muy somero y no se puede usar.",
+   "ru": "При подходе со стороны Бадемли проход между Garip Adası и Kalem Adası очень мелководен и непроходим."
+  },
+  "mersin-korfezi-demirleme-cesme": {
+   "tr": "Çırakan adasının güneyinde su altı kayalı sığlık vardır; güneyinden geçerken kıyıyla arada en az 200 m bırakılmalı; girişte balık çiftliği şamandıraları vardır.",
+   "en": "South of Çırakan island there is a shoal with submerged rocks; passing south of it, keep at least 200 m off the shore; there are fish-farm buoys at the entrance.",
+   "es": "Al sur de la isla Çırakan hay un bajo con rocas sumergidas; al pasar por su sur, deje al menos 200 m con la costa; en la entrada hay boyas de piscifactoría.",
+   "ru": "К югу от острова Çırakan отмель с подводными камнями; проходя южнее, держитесь не менее 200 м от берега; у входа буи рыбной фермы."
+  },
+  "phaselis-koylari-demirleme": {
+   "tr": "Kuzey koyunda doğu yakadan uzanan, kısmen su üstünde görünen batık antik dalgakıran tehlikelidir.",
+   "en": "In the north bay, the sunken ancient breakwater running out from the east shore, partly visible above water, is dangerous.",
+   "es": "En la bahía norte es peligroso el antiguo rompeolas sumergido que sale de la orilla este, en parte visible sobre el agua.",
+   "ru": "В северной бухте опасен затопленный античный мол, идущий от восточного берега и местами выступающий из воды."
+  },
+  "kapi-creek-restaurant": {
+   "tr": "Giriş dardır ve neredeyse üzerine gelene dek görülmez; koyun batı tarafı tamamen sığdır; iskele yakınındaki kayalar nedeniyle baştan kara bağlanılır.",
+   "en": "The entrance is narrow and barely visible until you are almost on it; the western side of the cove is entirely shallow; because of the rocks near the jetty, boats berth bows-to.",
+   "es": "La entrada es estrecha y apenas se ve hasta tenerla casi encima; el lado oeste de la cala es todo somero; por las rocas junto al muelle se atraca de proa.",
+   "ru": "Вход узкий и почти не виден, пока не окажешься рядом; западная сторона бухты сплошь мелководна; из-за камней у причала швартуются носом."
+  },
+  "gobun-samandira-sahasi": {
+   "tr": "Giriş uzaktan belli olmaz; batı tarafı tamamen sığdır; su altında antik kalıntılar vardır.",
+   "en": "The entrance is not obvious from a distance; the western side is entirely shallow; there are ancient remains underwater.",
+   "es": "La entrada no se aprecia desde lejos; el lado oeste es todo somero; hay restos antiguos bajo el agua.",
+   "ru": "Вход издалека не заметен; западная сторона сплошь мелководна; под водой античные руины."
+  },
+  "degirmen-buku-ingiliz-limani": {
+   "tr": "Burun uçlarındaki kayalık ve sığ kesimlerden kaçınılmalı; karadan koltukla demirlenir.",
+   "en": "Avoid the rocky, shallow patches off the headlands; anchor with a line ashore.",
+   "es": "Evite las zonas rocosas y someras frente a las puntas; se fondea con cabo a tierra.",
+   "ru": "Избегайте каменистых и мелководных участков у мысов; якорная стоянка с концом на берег."
+  },
+  "okluk-koyu": {
+   "tr": "Sazlık kıyılara yaklaşırken hızla sığlaşır; iskeleler arasında veya kuzey köşede karadan koltukla demirlenir.",
+   "en": "The water shoals quickly toward the reedy shores; anchor with a line ashore between the jetties or in the northern corner.",
+   "es": "El fondo sube rápido al acercarse a las orillas con cañaverales; se fondea con cabo a tierra entre los muelles o en el rincón norte.",
+   "ru": "У тростниковых берегов быстро мелеет; якорная стоянка с концом на берег между причалами или в северном углу."
+  },
+  "lakka-koyu-paksos": {
+   "tr": "KB'deki kayalık adacık ve resif Vrak Marmaro'ya geniş mesafe bırakılmalı; kuvvetli kuzey rüzgârı soluğan sokar; giriş kanalı 6-8 m'dir.",
+   "en": "Give a wide berth to the rocky islet and reef Vrak Marmaro to the NW; strong northerlies send in a swell; the entrance channel carries 6-8 m.",
+   "es": "Deje buen resguardo al islote rocoso y arrecife Vrak Marmaro al NO; el viento fuerte del norte mete mar de fondo; el canal de entrada tiene 6-8 m.",
+   "ru": "Обходите с запасом каменистый островок и риф Vrak Marmaro на северо-западе; сильный северный ветер нагоняет зыбь; глубина входного канала 6-8 м."
+  },
+  "anthony-quinn-koyu": {
+   "tr": "Geceleri güneyden 20 kn'a varan ani hamleler olabilir; Ladiko Burnu'nun kuzeyi tam haritalanmamıştır.",
+   "en": "At night sudden gusts of up to 20 kn can come from the south; the area north of Ladiko point is not fully charted.",
+   "es": "De noche puede haber rachas repentinas del sur de hasta 20 kn; la zona al norte de la punta Ladiko no está totalmente cartografiada.",
+   "ru": "Ночью с юга возможны внезапные шквалы до 20 узлов; район к северу от мыса Ладико закартографирован не полностью."
+  },
+  "simi-nanou-koyu": {
+   "tr": "Koyun güneyinde izole kaya/sığlık yaması vardır; meltemide kuvvetli KB hamleleri olur; koltuk hattı önerilir.",
+   "en": "There is an isolated rock/shoal patch in the south of the bay; in the meltemi strong NW gusts occur; a shore line is recommended.",
+   "es": "En el sur de la bahía hay una roca aislada/mancha de bajo fondo; con meltemi se producen rachas fuertes del NO; se recomienda cabo a tierra.",
+   "ru": "В южной части бухты одиночная скала/мелководное пятно; при мельтеми бывают сильные северо-западные шквалы; рекомендуется конец на берег."
+  },
+  "lindos-koyu": {
+   "tr": "Kuzey koycukta 3 m'nin altında sığ yama vardır; iskele yanaşmaları gündüz yerel kayıklara ayrılır.",
+   "en": "In the northern cove there is a shallow patch with less than 3 m; daytime berthing at the jetty is reserved for local boats.",
+   "es": "En la caleta norte hay una mancha somera con menos de 3 m; de día el atraque en el muelle está reservado a las barcas locales.",
+   "ru": "В северной бухточке мелководное пятно с глубиной менее 3 м; днём стоянка у причала отведена местным лодкам."
+  },
+  "loryma-restaurant-bozukkale": {
+   "tr": "Meltemide bile koy içinde, genellikle gece yarısı, herhangi bir yönden dışarıdakinin iki-üç katı şiddetinde ani hamleler olabilir; restoranların hazır tonozları vardır.",
+   "en": "Even in the meltemi, sudden gusts two to three times stronger than outside can strike inside the bay from any direction, usually around midnight; the restaurants have laid moorings ready.",
+   "es": "Incluso con meltemi, dentro de la bahía pueden golpear rachas repentinas de dos a tres veces la fuerza del exterior, desde cualquier dirección y normalmente hacia medianoche; los restaurantes tienen muertos preparados.",
+   "ru": "Даже при мельтеми внутри бухты, обычно около полуночи, с любого направления возможны внезапные шквалы в два-три раза сильнее, чем снаружи; у ресторанов подготовлены мурринги."
+  }
+ }
+}

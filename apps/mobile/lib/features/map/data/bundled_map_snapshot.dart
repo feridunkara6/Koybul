@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../domain/map_cache.dart';
@@ -17,6 +18,12 @@ class BundledMapSnapshot {
   static const String assetPath = 'assets/map/map_snapshot.json';
 
   Future<CachedMap?> load() async {
+    // YALNIZ WEB (CI dersi, 2026-08): flutter test pubspec varlıklarını
+    // GERÇEKTEN yükleyebildiği için gömülü görüntü VM testlerinde haritayı
+    // beklenmedik şekilde doldurup determinizmi bozuyordu (20 kırmızı).
+    // Web dışında (mobil dahil) kapalıdır: mobilde ilk açılış zaten mağaza
+    // indirmesi sonrası tek seferdir; testler ise sahtesini override eder.
+    if (!kIsWeb) return null;
     try {
       final String raw = await rootBundle.loadString(assetPath);
       return decodeCachedMapJson(raw);

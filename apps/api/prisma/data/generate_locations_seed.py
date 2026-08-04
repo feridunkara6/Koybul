@@ -430,6 +430,89 @@ def emit_i18n(here, records):
     return "\n".join(out)
 
 
+def emit_yaklasma(here, records):
+    """Yaklaşma/tehlike notları → açıklamalara (4 dil) eklenir (2026-08).
+
+    Kaynak zinciri: yaklasma_notlari.json = birebir alıntı + URL arşivi
+    (doğrulanmış bulgular); yaklasma_i18n.json = oradan derlenen ekran
+    metinleri (TR) + EN/ES/RU çevirileri. Bu üretici:
+      locations.description        = taban TR + "\\n\\n" + "Yaklaşma notu: " + not
+      location_i18n tr/en/es/ru    = taban çeviri + ön ek + notun çevirisi
+    TAM DEĞİŞTİRME yazar (append değil) → yeniden koşmak idempotenttir.
+    emit_i18n'den SONRA koşmalıdır: en/es/ru taban çevirilerinin üzerine
+    notlu birleşik metni yazar (aksi hâlde taban çeviri notu ezerdi).
+    Kurallar: slug hem arşivde hem kayıtlarda olmalı; 4 dil de dolu olmalı;
+    rakamlar dört dilde AYNI olmalı (ondalık , ve . eşdeğer — 0 uydurma
+    ilkesinin uzantısı); TR metin arşivdeki nottan türemiş olmalı."""
+    f = here / "yaklasma_i18n.json"
+    if not f.exists():
+        return ""
+    display = json.loads(f.read_text(encoding="utf-8"))["metinler"]
+    arsiv = json.loads((here / "yaklasma_notlari.json").read_text(encoding="utf-8"))["notlar"]
+    by = {r["slug"]: r for r in records}
+    # Taban çeviriler: emit_i18n ile aynı kaynak ve aynı öncelik (son dosya kazanır).
+    base_i18n = {}
+    for jf in sorted(here.glob("i18n_*.json")):
+        for slug, tr_map in json.loads(jf.read_text(encoding="utf-8"))["translations"].items():
+            base_i18n.setdefault(slug, {}).update(tr_map)
+    PREFIX = {"tr": "Yaklaşma notu: ", "en": "Approach note: ",
+              "es": "Nota de aproximación: ", "ru": "Заметка о подходе: "}
+    norm_digits = lambda t: sorted(
+        d.replace(",", ".") for d in re.findall(r"\d+(?:[.,]\d+)?", t or ""))
+    errors = []
+    out = ["", "-- " + "=" * 70,
+           "-- YAKLAŞMA NOTLARI — açıklamalara eklenir (4 dil, tam-değiştirme).",
+           "-- Kaynak: yaklasma_notlari.json (alıntı+URL) → yaklasma_i18n.json."]
+    for slug, texts in sorted(display.items()):
+        r = by.get(slug)
+        if r is None:
+            errors.append(f"yaklasma {slug}: kayıtlarda yok"); continue
+        if slug not in arsiv:
+            errors.append(f"yaklasma {slug}: arşivde (yaklasma_notlari.json) yok"); continue
+        tr_text = texts.get("tr", "")
+        # TR ekran metni arşivdeki nottan türemiş olmalı (ilk harf büyütme
+        # serbest — karşılaştırma ilk karakter atlanarak yapılır).
+        if not (tr_text and (tr_text in arsiv[slug]["not"] or tr_text[1:] in arsiv[slug]["not"])):
+            errors.append(f"yaklasma {slug}: TR metin arşiv notundan türememiş")
+        base_tr = r.get("descriptionTr")
+        if not base_tr:
+            errors.append(f"yaklasma {slug}: taban TR açıklama yok"); continue
+        if PREFIX["tr"] in base_tr:
+            errors.append(f"yaklasma {slug}: taban açıklama zaten not içeriyor (çift ekleme)")
+        for locale in ("tr", "en", "es", "ru"):
+            text = texts.get(locale)
+            if not isinstance(text, str) or not text.strip():
+                errors.append(f"yaklasma {slug}/{locale}: boş metin"); continue
+            if norm_digits(text) != norm_digits(tr_text):
+                errors.append(
+                    f"yaklasma {slug}/{locale}: rakamlar TR ile uyuşmuyor "
+                    f"({norm_digits(tr_text)} ≠ {norm_digits(text)})")
+        if errors:
+            continue
+        combined = {"tr": f"{base_tr}\n\n{PREFIX['tr']}{tr_text}"}
+        for locale in ("en", "es", "ru"):
+            # Taban çeviri varsa onun üstüne; yoksa TR taban + yerel not (uyarı
+            # güvenlik-kritik olduğu için her dilde mutlaka yerelleşir).
+            base_loc = base_i18n.get(slug, {}).get(locale) or base_tr
+            combined[locale] = f"{base_loc}\n\n{PREFIX[locale]}{texts[locale]}"
+        out.append(f"-- --- {slug} ---")
+        out.append(
+            f"UPDATE locations SET description = {q(combined['tr'])} WHERE slug = {q(slug)};")
+        for locale in ("tr", "en", "es", "ru"):
+            out.append(
+                "INSERT INTO location_i18n (location_id, locale, name, description)\n"
+                f"SELECT id, {q(locale)}, NULL, {q(combined[locale])} FROM locations WHERE slug = {q(slug)}\n"
+                "ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;"
+            )
+    if errors:
+        for e in errors:
+            print(f"HATA: {e}", file=sys.stderr)
+        sys.exit(1)
+    print(f"yaklasma: {len(display)} nokta 4 dilde açıklamalara işlendi")
+    out.append("")
+    return "\n".join(out)
+
+
 def emit_wind(here, records):
     """Rüzgâra açık yönler (ruzgar_yonleri.json) → locations.wind_exposed_dirs.
 
@@ -547,6 +630,8 @@ def main():
     sql += emit_wind(here, records)
     sql += emit_demirleme(here, records)
     sql += emit_i18n(here, records)
+    # yaklaşma, i18n'den SONRA: birleşik (notlu) metin taban çeviriyi ezmeli.
+    sql += emit_yaklasma(here, records)
     sql += emit_corrections(here, records)
     (here.parent / "seed_locations.sql").write_text(sql, encoding="utf-8")
     published = sum(1 for r in records if r["status"] == "published")
