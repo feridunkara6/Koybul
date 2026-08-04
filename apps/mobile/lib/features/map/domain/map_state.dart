@@ -1,6 +1,7 @@
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
 
+import '../../route/domain/route_wind.dart';
 import '../../route/domain/sea_router.dart';
 
 /// Harita ekranı durumu (docs/26 §4). Yeniden yükleme sırasında mevcut
@@ -19,6 +20,7 @@ class MapState {
     this.route,
     this.isRouting = false,
     this.routeSeq = 0,
+    this.routeWind,
   });
 
   final List<LocationPin> pins;
@@ -43,6 +45,9 @@ class MapState {
 
   /// Her yeni rotada artar — harita yüzeyi kamerayı rotaya bu sayaçla sığdırır.
   final int routeSeq;
+
+  /// Rota rüzgâr raporu (Rota v2) — analiz bitince dolar; en iyi çaba.
+  final RouteWindReport? routeWind;
 
   /// En az bir yükleme tamamlandı mı? İlk yükleme bitmeden "boş durum" GÖSTERİLMEZ
   /// (aksi halde açılışta kısa süre yanlış "liman yok" mesajı yanıp söner — P9).
@@ -80,6 +85,8 @@ class MapState {
     bool clearRoute = false,
     bool? isRouting,
     int? routeSeq,
+    RouteWindReport? routeWind,
+    bool clearRouteWind = false,
   }) {
     return MapState(
       pins: pins ?? this.pins,
@@ -94,6 +101,9 @@ class MapState {
       route: clearRoute ? null : (route ?? this.route),
       isRouting: isRouting ?? this.isRouting,
       routeSeq: routeSeq ?? this.routeSeq,
+      routeWind: (clearRoute || clearRouteWind)
+          ? null
+          : (routeWind ?? this.routeWind),
     );
   }
 }

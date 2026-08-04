@@ -205,6 +205,9 @@ class L10n {
     required this.shareCopied,
     required this.shareLineFmt,
     required this.revEmpty,
+    required this.routeWindFmt,
+    required this.routeWindHeadwind,
+    required this.routeArrivalExposedFmt,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -303,6 +306,9 @@ class L10n {
   // yorum boş durumu (UX analizi 2026-08).
   final String appleBtn, guestBtn, signInWelcome, shareTooltip, shareCopied,
       shareLineFmt, revEmpty;
+
+  // Rota rüzgâr analizi (Rota v2, 2026-08).
+  final String routeWindFmt, routeWindHeadwind, routeArrivalExposedFmt;
 
   String windExposedLabel(String code) => windExposedLabels[code] ?? code;
 
@@ -564,7 +570,7 @@ const L10n _tr = L10n(
   routeApproxNote: 'Tahminî deniz rotası — seyir için resmî deniz haritalarını kullanın.',
   routeCoastNote: 'Rota koyun açığında biter — son yaklaşmayı resmî haritayla planlayın.',
   routeDirectNote: 'Kuş uçuşu gösterildi — bu bölge için deniz rotası hesaplanamadı.',
-  routeNeedOrigin: 'Rota için başlangıç gerekli — "Konumum"a dokun ya da haritayı gezdir.',
+  routeNeedOrigin: 'Deniz rotası için önce konumunu paylaşmalısın — "Konumum"a dokun.',
   etaHmFmt: '{0} sa {1} dk',
   etaMFmt: '{0} dk',
   appleBtn: 'Apple ile devam et',
@@ -574,6 +580,9 @@ const L10n _tr = L10n(
   shareCopied: 'Bağlantı metni kopyalandı — istediğin yere yapıştırabilirsin.',
   shareLineFmt: '{0} ({1}) — Koybul: https://koybul.com',
   revEmpty: 'Henüz yorum yok — ilk yorumu sen yazabilirsin.',
+  routeWindFmt: 'Rüzgâr (tahmin): en çok {0} kn {1}',
+  routeWindHeadwind: 'bazı bölümlerde karşı rüzgâr',
+  routeArrivalExposedFmt: 'Varışta koy {0} rüzgârına açık olabilir ({1} kn) — korunaklı alternatif düşünün.',
 );
 
 const L10n _en = L10n(
@@ -807,7 +816,7 @@ const L10n _en = L10n(
   routeApproxNote: 'Estimated sea route — use official nautical charts for navigation.',
   routeCoastNote: 'The route ends off the cove — plan the final approach with official charts.',
   routeDirectNote: 'Straight line shown — a sea route could not be computed for this area.',
-  routeNeedOrigin: 'A start point is needed — tap "My location" or move the map.',
+  routeNeedOrigin: 'Share your location first to get a sea route — tap "My location".',
   etaHmFmt: '{0} h {1} min',
   etaMFmt: '{0} min',
   appleBtn: 'Continue with Apple',
@@ -817,6 +826,9 @@ const L10n _en = L10n(
   shareCopied: 'Link text copied — paste it anywhere.',
   shareLineFmt: '{0} ({1}) — Koybul: https://koybul.com',
   revEmpty: 'No reviews yet — be the first to write one.',
+  routeWindFmt: 'Wind (forecast): up to {0} kn {1}',
+  routeWindHeadwind: 'headwind on some legs',
+  routeArrivalExposedFmt: 'On arrival the bay may be open to the {0} wind ({1} kn) — consider a sheltered alternative.',
 );
 
 const L10n _es = L10n(
@@ -1050,7 +1062,7 @@ const L10n _es = L10n(
   routeApproxNote: 'Ruta marítima estimada — use cartas náuticas oficiales para navegar.',
   routeCoastNote: 'La ruta termina frente a la cala — planifique la aproximación final con cartas oficiales.',
   routeDirectNote: 'Se muestra línea recta — no se pudo calcular una ruta marítima para esta zona.',
-  routeNeedOrigin: 'Se necesita un punto de partida — toca "Mi ubicación" o mueve el mapa.',
+  routeNeedOrigin: 'Comparte tu ubicación para obtener la ruta marítima — toca "Mi ubicación".',
   etaHmFmt: '{0} h {1} min',
   etaMFmt: '{0} min',
   appleBtn: 'Continuar con Apple',
@@ -1060,6 +1072,9 @@ const L10n _es = L10n(
   shareCopied: 'Texto copiado — pégalo donde quieras.',
   shareLineFmt: '{0} ({1}) — Koybul: https://koybul.com',
   revEmpty: 'Aún no hay reseñas — sé el primero en escribir una.',
+  routeWindFmt: 'Viento (previsión): hasta {0} kn {1}',
+  routeWindHeadwind: 'viento de proa en algunos tramos',
+  routeArrivalExposedFmt: 'A la llegada, la cala puede estar expuesta al viento del {0} ({1} kn) — considere una alternativa abrigada.',
 );
 
 const L10n _ru = L10n(
@@ -1293,7 +1308,7 @@ const L10n _ru = L10n(
   routeApproxNote: 'Примерный морской маршрут — для навигации используйте официальные морские карты.',
   routeCoastNote: 'Маршрут заканчивается на подходе к бухте — финальный заход планируйте по официальным картам.',
   routeDirectNote: 'Показана прямая линия — морской маршрут для этого района рассчитать не удалось.',
-  routeNeedOrigin: 'Нужна начальная точка — нажмите «Моё местоположение» или подвигайте карту.',
+  routeNeedOrigin: 'Чтобы построить морской маршрут, сначала поделитесь местоположением — нажмите «Моё местоположение».',
   etaHmFmt: '{0} ч {1} мин',
   etaMFmt: '{0} мин',
   appleBtn: 'Продолжить с Apple',
@@ -1303,6 +1318,9 @@ const L10n _ru = L10n(
   shareCopied: 'Текст со ссылкой скопирован — вставьте его куда угодно.',
   shareLineFmt: '{0} ({1}) — Koybul: https://koybul.com',
   revEmpty: 'Отзывов пока нет — станьте первым.',
+  routeWindFmt: 'Ветер (прогноз): до {0} узлов, {1}',
+  routeWindHeadwind: 'на отдельных участках встречный ветер',
+  routeArrivalExposedFmt: 'По прибытии бухта может быть открыта ветру {0} ({1} узлов) — рассмотрите защищённую альтернативу.',
 );
 
 /// Saf eşleme — birim testli.

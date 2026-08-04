@@ -127,11 +127,16 @@ SeaRoutePlan? planSeaRoute(
         final int ni = local(nx, ny);
         if (closed[ni] == 1) continue;
         double step = (dx == 0) ? latNm : (dy == 0 ? ew : diag);
-        // Kıyıya bitişik hücrelere hafif ceza: rota açıktan gitmeyi tercih
-        // etsin (görsel olarak da denizci alışkanlığına uygun).
+        // KIYIDAN KADEMELİ KAÇINMA (kullanıcı isteği 2026-08, v2): kara
+        // komşusu olan hücreye güçlü, iki hücre yakınına hafif ceza — rota
+        // mecbur kalmadıkça kıyıyı yalamaz, açık sudan dolaşır. Dar geçitler
+        // yine geçilebilir (ceza yasak değildir, yalnız pahalıdır).
         if (m.isLand(nx + 1, ny) || m.isLand(nx - 1, ny) ||
             m.isLand(nx, ny + 1) || m.isLand(nx, ny - 1)) {
           step += latNm * 0.35;
+        } else if (m.isLand(nx + 2, ny) || m.isLand(nx - 2, ny) ||
+            m.isLand(nx, ny + 2) || m.isLand(nx, ny - 2)) {
+          step += latNm * 0.12;
         }
         final double tentative = gScore[cur] + step;
         if (tentative < gScore[ni]) {

@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/origin_provider.dart';
 import '../../../core/providers.dart';
+import '../../route/application/route_wind_advisor.dart';
 import '../../route/application/sea_route_engine.dart';
+import '../../route/domain/route_wind.dart';
 import '../../route/domain/sea_router.dart';
 import '../data/api_map_locations_gateway.dart';
 import '../data/bundled_map_snapshot.dart';
@@ -225,14 +227,14 @@ class MapController extends Notifier<MapState> {
     if (viewport != null) await loadViewport(viewport);
   }
 
-  /// AKILLI DENİZ ROTASI (2026-08): kullanıcının konumundan (GPS yoksa
-  /// haritada baktığı yerin merkezi = origin) seçili noktaya, karaları
-  /// tanıyan rota. Motor kullanılamazsa DÜRÜST kuş uçuşu yedeğine düşer
-  /// (viaSea=false — arayüz farkı söyler). Başlangıç yoksa sessizce çıkar;
-  /// arayüz kendi uyarısını gösterir.
+  /// AKILLI DENİZ ROTASI (2026-08): kullanıcının PAYLAŞILAN GPS konumundan
+  /// seçili noktaya, denizden (karadan kaçınan) rota. KONUM ŞARTI (kullanıcı
+  /// kararı 2026-08): konum paylaşılmadan rota OLUŞTURULMAZ — harita merkezi
+  /// gibi tahmini başlangıç kullanılmaz; arayüz "konumunu paylaş" uyarısı
+  /// gösterir. Motor kullanılamazsa DÜRÜST kuş uçuşu yedeğine düşer
+  /// (viaSea=false — arayüz farkı söyler).
   Future<void> routeToPin(LocationPin pin) async {
-    final GeoPoint? origin =
-        ref.read(devicePositionProvider) ?? ref.read(originProvider);
+    final GeoPoint? origin = ref.read(devicePositionProvider);
     if (origin == null || state.isRouting) return;
     state = state.copyWith(isRouting: true);
     final int req = ++_routeReq; // stale koruması (rota istekleri arasında)
@@ -243,11 +245,22 @@ class MapController extends Notifier<MapState> {
       plan = null;
     }
     if (req != _routeReq) return;
+    final SeaRoutePlan resolved = plan ?? directLinePlan(origin, pin.position);
     state = state.copyWith(
-      route: plan ?? directLinePlan(origin, pin.position),
+      route: resolved,
       isRouting: false,
       routeSeq: state.routeSeq + 1,
+      clearRouteWind: true, // yeni rota → eski rüzgâr raporu geçersiz
     );
+    // RÜZGÂR ANALİZİ (Rota v2): arka planda, en iyi çaba — rota çizimi bunu
+    // BEKLEMEZ. Rapor gelince çipe rüzgâr satırı eklenir; gelmezse sessiz.
+    if (resolved.viaSea) {
+      final RouteWindReport? wind = await ref
+          .read(routeWindAdvisorProvider)
+          .analyze(resolved, pin.id);
+      if (req != _routeReq || !identical(state.route, resolved)) return;
+      if (wind != null) state = state.copyWith(routeWind: wind);
+    }
   }
 
   /// Çizili rotayı kaldırır (rota çipindeki kapat düğmesi).

@@ -10,8 +10,10 @@ import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../../emergency/presentation/emergency_screen.dart';
+import '../../location/application/location_controller.dart';
 import '../../location/presentation/locate_button.dart';
 import '../../nearby/presentation/nearby_sheet.dart';
+import '../../route/domain/route_wind.dart';
 import '../../route/domain/sea_route.dart';
 import '../../route/domain/sea_router.dart';
 import '../../search/presentation/search_screen.dart';
@@ -134,6 +136,7 @@ class MapScreen extends ConsumerWidget {
                       Center(
                         child: _RouteChip(
                           route: state.route!,
+                          wind: state.routeWind,
                           onClear: controller.clearRoute,
                         ),
                       ),
@@ -177,13 +180,22 @@ class MapScreen extends ConsumerWidget {
                 ),
                 routing: state.isRouting,
                 onRoute: () {
-                  final bool hasOrigin = ref.read(devicePositionProvider) != null ||
-                      ref.read(originProvider) != null;
-                  if (!hasOrigin) {
+                  // KONUM ŞARTI (kullanıcı kararı 2026-08): rota YALNIZ
+                  // paylaşılan gerçek konumdan hesaplanır. Konum yoksa uyarı +
+                  // tek dokunuşla konum isteme eylemi gösterilir.
+                  if (ref.read(devicePositionProvider) == null) {
+                    final L10n tt = ref.read(l10nProvider);
                     ScaffoldMessenger.of(context)
                       ..hideCurrentSnackBar()
                       ..showSnackBar(SnackBar(
-                        content: Text(ref.read(l10nProvider).routeNeedOrigin),
+                        content: Text(tt.routeNeedOrigin),
+                        duration: const Duration(seconds: 6),
+                        action: SnackBarAction(
+                          label: tt.locateTooltip,
+                          onPressed: () => ref
+                              .read(locationControllerProvider.notifier)
+                              .locateMe(),
+                        ),
                       ));
                     return;
                   }
@@ -489,12 +501,14 @@ class _MapSearchButton extends ConsumerWidget {
   }
 }
 
-/// Deniz rotası bilgi çipi: mesafe + kaba süre + dürüst uyarı notu.
+/// Deniz rotası bilgi çipi: mesafe + kaba süre + dürüst uyarı notu +
+/// (analiz gelince) rüzgâr satırı ve varış açık-yön uyarısı (Rota v2).
 /// Kapat düğmesi rotayı haritadan kaldırır.
 class _RouteChip extends ConsumerWidget {
-  const _RouteChip({required this.route, required this.onClear});
+  const _RouteChip({required this.route, required this.onClear, this.wind});
 
   final SeaRoutePlan route;
+  final RouteWindReport? wind;
   final VoidCallback onClear;
 
   @override
@@ -512,6 +526,7 @@ class _RouteChip extends ConsumerWidget {
     final String note = !route.viaSea
         ? t.routeDirectNote
         : (route.reachedGoal ? t.routeApproxNote : t.routeCoastNote);
+    final RouteWindReport? w = wind;
     return Material(
       elevation: 2,
       borderRadius: BorderRadius.circular(14),
@@ -554,6 +569,45 @@ class _RouteChip extends ConsumerWidget {
                     ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
               ),
             ),
+            // RÜZGÂR SATIRI (Rota v2): rapor geldiyse — eşik renkleri rüzgâr
+            // rozetiyle aynı (16 kn turuncu, 25 kn kırmızı).
+            if (w != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 4, right: 8),
+                child: Text(
+                  L10n.fmt2(
+                        t.routeWindFmt,
+                        w.worst.windKn.toStringAsFixed(0),
+                        t.windExposedLabel(dir8Tr(w.worst.windDirDeg)),
+                      ) +
+                      (w.anyHeadwind ? ' · ${t.routeWindHeadwind}' : ''),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontWeight: w.warn ? FontWeight.w700 : FontWeight.w500,
+                    color: w.strong
+                        ? DocklyColors.error
+                        : (w.warn
+                            ? DocklyColors.warning
+                            : theme.colorScheme.onSurfaceVariant),
+                  ),
+                ),
+              ),
+            if (w != null && w.arrival != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 4, right: 8),
+                child: Text(
+                  L10n.fmt2(
+                    t.routeArrivalExposedFmt,
+                    t.windExposedLabel(w.arrival!.dirTr),
+                    w.arrival!.windKn.toStringAsFixed(0),
+                  ),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: w.arrival!.windKn >= kRouteWindStrongKn
+                        ? DocklyColors.error
+                        : DocklyColors.warning,
+                  ),
+                ),
+              ),
           ],
         ),
       ),

@@ -7,10 +7,12 @@ import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/data/bundled_map_snapshot.dart';
 import 'package:dockly_mobile/features/map/data/shared_prefs_map_cache.dart';
 import 'package:dockly_mobile/features/map/domain/map_cache.dart';
-import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
-import 'package:dockly_mobile/features/route/domain/sea_router.dart';
 import 'package:dockly_mobile/features/map/domain/map_state.dart';
 import 'package:dockly_mobile/features/map/domain/map_viewport.dart';
+import 'package:dockly_mobile/features/route/application/route_wind_advisor.dart';
+import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
+import 'package:dockly_mobile/features/route/domain/route_wind.dart';
+import 'package:dockly_mobile/features/route/domain/sea_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -45,13 +47,36 @@ class FakeSeaRouteEngine extends SeaRouteEngine {
   }
 }
 
+/// Sahte rüzgâr danışmanı — ağa/varlığa gidilmez; verilen rapor döner.
+class FakeRouteWindAdvisor extends RouteWindAdvisor {
+  FakeRouteWindAdvisor(super.ref, [this.report]);
+
+  final RouteWindReport? report;
+  int calls = 0;
+
+  @override
+  Future<RouteWindReport?> analyze(
+    SeaRoutePlan plan,
+    String destinationIdOrSlug, {
+    DateTime? departure,
+  }) async {
+    calls++;
+    return report;
+  }
+}
+
+/// Testte kurulan son sahte danışman (çağrı sayısı denetimi için).
+FakeRouteWindAdvisor? lastFakeAdvisor;
+
 ProviderContainer _containerWith(
   FakeMapGateway gateway, {
   Duration debounce = Duration.zero,
   FakeMapCache? cache,
   FakeBundledSnapshot? snapshot,
   FakeSeaRouteEngine? routeEngine,
+  RouteWindReport? windReport,
 }) {
+  lastFakeAdvisor = null; // önceki testten sarkmasın (determinizm)
   final container = ProviderContainer(
     overrides: <Override>[
       mapLocationsGatewayProvider.overrideWithValue(gateway),
@@ -60,6 +85,11 @@ ProviderContainer _containerWith(
       mapCacheProvider.overrideWithValue(cache ?? FakeMapCache()),
       bundledMapSnapshotProvider.overrideWithValue(snapshot ?? FakeBundledSnapshot()),
       seaRouteEngineProvider.overrideWithValue(routeEngine ?? FakeSeaRouteEngine()),
+      // Danışman HER ZAMAN sahte: gerçek danışman ağa (hava tahmini + detay)
+      // çıkar — testler asla ağa çıkmaz.
+      routeWindAdvisorProvider.overrideWith(
+        (ref) => lastFakeAdvisor = FakeRouteWindAdvisor(ref, windReport),
+      ),
     ],
   );
   addTearDown(container.dispose);
@@ -67,6 +97,12 @@ ProviderContainer _containerWith(
 }
 
 MapController _ctrl(ProviderContainer c) => c.read(mapControllerProvider.notifier);
+
+/// KONUM ŞARTI (2026-08): rota testleri paylaşılmış GPS konumu kurar —
+/// rota yalnız gerçek konumdan hesaplanır (harita merkezi yeterli DEĞİL).
+void _shareLocation(ProviderContainer c) =>
+    c.read(devicePositionProvider.notifier).state =
+        const GeoPoint(lat: 36.76, lon: 28.96);
 MapState _state(ProviderContainer c) => c.read(mapControllerProvider);
 
 void main() {
@@ -408,8 +444,8 @@ void main() {
   });
 
   test('deniz rotası: motor plan dönerse duruma yazılır, seq artar', () async {
-    final plan = SeaRoutePlan(
-      points: const <GeoPoint>[
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[
         GeoPoint(lat: 36.75, lon: 28.95),
         GeoPoint(lat: 36.70, lon: 28.90),
         GeoPoint(lat: 36.60, lon: 28.90),
@@ -420,7 +456,8 @@ void main() {
     );
     final engine = FakeSeaRouteEngine(plan);
     final container = _containerWith(FakeMapGateway(result: pinResult), routeEngine: engine);
-    await _ctrl(container).loadViewport(pinViewport); // origin harita merkezine yazılır
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container); // KONUM ŞARTI: rota paylaşılan konumdan
     await _ctrl(container).routeToPin(testPin);
     final state = _state(container);
     expect(engine.calls, 1);
@@ -433,6 +470,7 @@ void main() {
     final container =
         _containerWith(FakeMapGateway(result: pinResult), routeEngine: FakeSeaRouteEngine());
     await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
     await _ctrl(container).routeToPin(testPin);
     final state = _state(container);
     expect(state.route, isNotNull);
@@ -441,17 +479,19 @@ void main() {
     expect(state.route!.points.last.lat, testPin.position.lat);
   });
 
-  test('deniz rotası: origin yokken istek sessizce yok sayılır', () async {
+  test('KONUM ŞARTI: konum paylaşılmadan rota OLUŞTURULMAZ (harita merkezi yetmez)', () async {
     final engine = FakeSeaRouteEngine();
-    final container = _containerWith(FakeMapGateway(), routeEngine: engine);
-    await _ctrl(container).routeToPin(testPin); // hiç yükleme yok → origin yok
-    expect(engine.calls, 0);
+    final container = _containerWith(FakeMapGateway(result: pinResult), routeEngine: engine);
+    // Harita yüklendi → origin (harita merkezi) var ama GPS konumu YOK.
+    await _ctrl(container).loadViewport(pinViewport);
+    await _ctrl(container).routeToPin(testPin);
+    expect(engine.calls, 0); // motor hiç çağrılmadı
     expect(_state(container).route, isNull);
   });
 
   test('clearRoute: çizili rota kaldırılır', () async {
-    final plan = SeaRoutePlan(
-      points: const <GeoPoint>[GeoPoint(lat: 36.7, lon: 28.9), GeoPoint(lat: 36.6, lon: 28.9)],
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.7, lon: 28.9), GeoPoint(lat: 36.6, lon: 28.9)],
       distanceNm: 6,
       reachedGoal: true,
       viaSea: true,
@@ -459,10 +499,81 @@ void main() {
     final container =
         _containerWith(FakeMapGateway(result: pinResult), routeEngine: FakeSeaRouteEngine(plan));
     await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
     await _ctrl(container).routeToPin(testPin);
     expect(_state(container).route, isNotNull);
     _ctrl(container).clearRoute();
     expect(_state(container).route, isNull);
+  });
+
+  test('rüzgâr raporu (Rota v2): analiz sonucu duruma yazılır', () async {
+    const RouteSample rs = RouteSample(
+      point: GeoPoint(lat: 36.7, lon: 28.9),
+      etaHours: 1,
+      bearingDeg: 0,
+    );
+    final RouteWindReport report = buildRouteWindReport(const <RouteWindSample>[
+      RouteWindSample(sample: rs, windKn: 21, gustKn: null, windDirDeg: 10),
+    ])!;
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.75, lon: 28.95), GeoPoint(lat: 36.6, lon: 28.9)],
+      distanceNm: 10,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final container = _containerWith(
+      FakeMapGateway(result: pinResult),
+      routeEngine: FakeSeaRouteEngine(plan),
+      windReport: report,
+    );
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin);
+    expect(lastFakeAdvisor!.calls, 1);
+    expect(_state(container).routeWind, same(report));
+  });
+
+  test('rüzgâr analizi kuş uçuşu yedeğinde ÇAĞRILMAZ (viaSea=false)', () async {
+    final container = _containerWith(
+      FakeMapGateway(result: pinResult),
+      routeEngine: FakeSeaRouteEngine(), // motor null → kuş uçuşu
+    );
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin);
+    expect(_state(container).route!.viaSea, isFalse);
+    // Danışman hiç OKUNMADI bile (tembel sağlayıcı) — ağ maliyeti sıfır.
+    expect(lastFakeAdvisor?.calls ?? 0, 0);
+    expect(_state(container).routeWind, isNull);
+  });
+
+  test('clearRoute rüzgâr raporunu da temizler', () async {
+    const RouteSample rs = RouteSample(
+      point: GeoPoint(lat: 36.7, lon: 28.9),
+      etaHours: 1,
+      bearingDeg: 0,
+    );
+    final RouteWindReport report = buildRouteWindReport(const <RouteWindSample>[
+      RouteWindSample(sample: rs, windKn: 18, gustKn: null, windDirDeg: 90),
+    ])!;
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.75, lon: 28.95), GeoPoint(lat: 36.6, lon: 28.9)],
+      distanceNm: 10,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final container = _containerWith(
+      FakeMapGateway(result: pinResult),
+      routeEngine: FakeSeaRouteEngine(plan),
+      windReport: report,
+    );
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin);
+    expect(_state(container).routeWind, isNotNull);
+    _ctrl(container).clearRoute();
+    expect(_state(container).route, isNull);
+    expect(_state(container).routeWind, isNull);
   });
 
   test('decodeCachedMapJson: geçerli anlık görüntü çözülür; bozuk girdi null', () {
