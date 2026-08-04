@@ -1,9 +1,9 @@
 {
- "kaynak": "2026-08 demirleme bilgileri turu: 127 eksik nokta izinli kaynaklarda tarandı (turkeymarinas, sailingissues, grecosailor, karyayolu, resmî/yerel sayfalar); 58 nokta birebir kaynak alıntısıyla belgelendi ve tamamı elle doğrulandı; 6 şüpheli bulgu elendi (dalış duvarı tanımı, draught≠derinlik, gri kaynak, desteklenmeyen genelleme, mevcut veriyle çelişen zemin); 69 nokta için izinli kaynaklarda veri yok — uydurulmadı.",
- "not": "Zemin kodları: sand|mud|weed|rock|mixed. Değerler yalnız BOŞ alanları doldurur (COALESCE) — batch verisi asla ezilmez. anchorage_details is_free AÇIKÇA NULL yazılır (ücretsiz rozeti yan etkisi yok).",
+ "kaynak": "2026-08 demirleme bilgileri turu: 127 eksik nokta izinli kaynaklarda tarandı (turkeymarinas, sailingissues, grecosailor, karyayolu, resmî/yerel sayfalar); 58 nokta birebir kaynak alıntısıyla belgelendi ve tamamı elle doğrulandı; 6 şüpheli bulgu elendi (dalış duvarı tanımı, draught≠derinlik, gri kaynak, desteklenmeyen genelleme, mevcut veriyle çelişen zemin); 69 nokta için izinli kaynaklarda veri yok — uydurulmadı. | 2026-08 koy derinleştirme turu: 142 hedef; +18 zemin, +18 derinlik girişi (wikiderya, cruiserswiki, turkeymarinas, sailingissues, grecosailor); 5 şüpheli bulgu elendi (Loryma 'her yöne açık' iddiası bilinen gerçekle çeliştiği için reddedildi; dalış-duvarı zemini 2. kez reddedildi).",
+ "not": "Zemin kodları: sand|mud|weed|rock|mixed. Değerler yalnız BOŞ alanları doldurur (COALESCE) — batch verisi asla ezilmez. is_free kolonu INSERT'e yazılmaz (şemada NOT NULL DEFAULT true; NULL yasak — CI dersi 2026-08): yeni satır şema varsayılanını alır, mevcut satır değişmez; restoran iskelelerinde API restaurant_dock_details'i önceliklediği için sahte 'ücretsiz' rozeti oluşmaz.",
  "veriler": {
   "lindos-koyu": {
-   "zemin": null,
+   "zemin": "sand",
    "derinlik_min": 4,
    "derinlik_max": 8,
    "url": "https://sailingissues.com/greekislands/rhodos.html"
@@ -232,7 +232,7 @@
   },
   "kumlubuk-koyu": {
    "zemin": null,
-   "derinlik_min": null,
+   "derinlik_min": 3.5,
    "derinlik_max": 15,
    "url": "https://turkeymarinas.blogspot.com/2018/11/kumlubuku-yacht-club.html"
   },
@@ -267,7 +267,7 @@
    "url": "https://turkeymarinas.blogspot.com/2016/05/gobun-cove-anchorage.html"
   },
   "boynuzbuku-samandira-sahasi": {
-   "zemin": null,
+   "zemin": "mud",
    "derinlik_min": 10,
    "derinlik_max": 20,
    "url": "https://karyayolu.wordpress.com/karia-kiyilari/koylar/boynuzbuku/"
@@ -349,6 +349,132 @@
    "derinlik_min": 8,
    "derinlik_max": 10,
    "url": "https://turkeymarinas.blogspot.com/2018/12/loryma-restaurant-jetty.html"
+  },
+  "soguksu-koyu-aydincik": {
+   "zemin": "mixed",
+   "derinlik_min": 6,
+   "derinlik_max": 8,
+   "url": "https://www.wikiderya.org/wiki/soguksu-limani-aydincik"
+  },
+  "sovalye-adasi-demirleme": {
+   "zemin": "mud",
+   "derinlik_min": 10,
+   "derinlik_max": 15,
+   "url": "https://www.wikiderya.org/wiki/fethiye-sovalye-adasi"
+  },
+  "lakka-koyu-paksos": {
+   "zemin": null,
+   "derinlik_min": 3,
+   "derinlik_max": 4,
+   "url": "https://www.cruiserswiki.org/wiki/Port_Lakka"
+  },
+  "kargi-koyu-datca-demirleme": {
+   "zemin": "mixed",
+   "derinlik_min": 8,
+   "derinlik_max": 12,
+   "url": "https://www.wikiderya.org/wiki/kargı-koyu-datça"
+  },
+  "phaselis-koylari-demirleme": {
+   "zemin": "sand",
+   "derinlik_min": null,
+   "derinlik_max": 6,
+   "url": "https://www.cruiserswiki.org/wiki/Antalya"
+  },
+  "adrasan-koyu-demirleme": {
+   "zemin": "sand",
+   "derinlik_min": 6,
+   "derinlik_max": 7,
+   "url": "https://www.cruiserswiki.org/wiki/Antalya"
+  },
+  "boynuzbuku-restaurant": {
+   "zemin": "mud",
+   "derinlik_min": 10,
+   "derinlik_max": 20,
+   "url": "https://www.wikiderya.org/wiki/boynuzbuku"
+  },
+  "degirmen-buku-ingiliz-limani": {
+   "zemin": "mud",
+   "derinlik_min": 6,
+   "derinlik_max": 7,
+   "url": "https://turkeymarinas.blogspot.com/2016/06/degirmen-buku-anchorage_21.html"
+  },
+  "okluk-koyu": {
+   "zemin": "mud",
+   "derinlik_min": 7,
+   "derinlik_max": 12,
+   "url": "https://turkeymarinas.blogspot.com/2016/06/okluk-cove.html"
+  },
+  "tuzla-koyu-gokova": {
+   "zemin": "mud",
+   "derinlik_min": null,
+   "derinlik_max": null,
+   "url": "https://www.wikiderya.org/wiki/tuzla-gokova"
+  },
+  "serce-limani": {
+   "zemin": null,
+   "derinlik_min": 5,
+   "derinlik_max": 8,
+   "url": "https://turkeymarinas.blogspot.com/2016/05/serce-limani-anchorage.html"
+  },
+  "gerbekse-koyu": {
+   "zemin": "mixed",
+   "derinlik_min": 10,
+   "derinlik_max": 12,
+   "url": "https://www.wikiderya.org/wiki/gebekse"
+  },
+  "mersincik-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 10,
+   "derinlik_max": 15,
+   "url": "https://www.wikiderya.org/wiki/mersincik"
+  },
+  "katranci-koyu": {
+   "zemin": null,
+   "derinlik_min": 8,
+   "derinlik_max": 10,
+   "url": "https://www.wikiderya.org/wiki/katranci"
+  },
+  "cam-limani-koyu-heybeliada": {
+   "zemin": "mixed",
+   "derinlik_min": 5,
+   "derinlik_max": 15,
+   "url": "https://www.cruiserswiki.org/wiki/Princes_Islands"
+  },
+  "pasalimani-adasi-demirleme": {
+   "zemin": "mixed",
+   "derinlik_min": 5,
+   "derinlik_max": 10,
+   "url": "https://www.cruiserswiki.org/wiki/Marmara_Islands"
+  },
+  "maden-adasi-demirleme": {
+   "zemin": "sand",
+   "derinlik_min": null,
+   "derinlik_max": 5,
+   "url": "https://www.cruiserswiki.org/wiki/Ayvalik"
+  },
+  "bademli-deniz-ilicasi-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 2,
+   "derinlik_max": 3.5,
+   "url": "https://www.wikiderya.org/wiki/bademli"
+  },
+  "octopus-restaurant-sogut": {
+   "zemin": null,
+   "derinlik_min": 12,
+   "derinlik_max": 14,
+   "url": "https://www.cruiserswiki.org/wiki/Coast_W_of_Marmaris_and_Sombeki_Korfesi"
+  },
+  "gemiler-adasi-demirleme": {
+   "zemin": null,
+   "derinlik_min": 15,
+   "derinlik_max": 20,
+   "url": "https://www.cruiserswiki.org/wiki/Fethiye"
+  },
+  "ornos-koyu-mykonos": {
+   "zemin": "mixed",
+   "derinlik_min": null,
+   "derinlik_max": null,
+   "url": "https://sailingissues.com/greekislands/mykonos.html"
   }
  }
 }

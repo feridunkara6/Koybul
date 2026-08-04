@@ -299,8 +299,15 @@ def emit_demirleme(here, records):
     birebir alıntıyla toplandı ve tamamı elle doğrulandı
     (data/demirleme_bilgileri.json — kaynak URL'leri dosyada).
     Yalnız BOŞ alanları doldurur (COALESCE) — batch verisi asla ezilmez.
-    anchorage_details satırında is_free AÇIKÇA NULL yazılır: restoran
-    iskelelerinde sahte "ücretsiz" rozeti yan etkisi YOKTUR (rüzgâr turu dersi).
+
+    is_free KURALI (CI dersi, 2026-08): kolon şemada NOT NULL DEFAULT true —
+    NULL yazmak yasak (constraint ihlali, seed kırmızısı). Bu yüzden is_free
+    kolonu INSERT'e hiç yazılmaz: yeni satır şema varsayılanını alır (batch
+    ekleyicisiyle aynı davranış), MEVCUT satırların değeri asla değişmez.
+    Sahte "ücretsiz" rozeti riski yok: restoran iskelelerinde API her zaman
+    restaurant_dock_details'i öncelikler (repository else-if sırası), yani
+    oradaki anchorage satırı görünmez; gerçek demirleme koylarında ise
+    "demirleme ücretsizdir" şemanın kendi varsayılanıdır.
     UPDATE/UPSERT kullanılır ki mevcut canlı satırlara da aksın (idempotent)."""
     path = here / "demirleme_bilgileri.json"
     data = json.loads(path.read_text(encoding="utf-8"))
@@ -339,8 +346,10 @@ def emit_demirleme(here, records):
             )
         if v.get("zemin") is not None:
             out.append(
-                "INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)\n"
-                f"SELECT id, {q(v['zemin'])}, NULL, NULL FROM locations WHERE slug = {q(slug)}\n"
+                # is_free BİLEREK yok: NOT NULL DEFAULT true — NULL yazılamaz;
+                # yeni satır şema varsayılanını alır, mevcut satıra dokunulmaz.
+                "INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)\n"
+                f"SELECT id, {q(v['zemin'])}, NULL FROM locations WHERE slug = {q(slug)}\n"
                 "ON CONFLICT (location_id) DO UPDATE SET holding_type = "
                 "COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);"
             )

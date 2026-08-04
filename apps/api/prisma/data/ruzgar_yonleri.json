@@ -1,5 +1,5 @@
 {
- "kaynak": "Koy açıklamalarındaki (descriptionTr) doğrulanmış korunma/maruz kalma ifadelerinden çıkarıldı; 2026-07 elle gözden geçirildi (49 kayıt). Yeni kayıt eklerken açıklamada yön ifadesi varsa buraya da işlenir. 2026-07 rüzgâr verisi turu: 65 nokta daha, kayıtlı kaynaklardan birebir alıntıyla (turkeymarinas, sailingissues, resmî/yerel sayfalar); tamamı elle doğrulandı.",
+ "kaynak": "Koy açıklamalarındaki (descriptionTr) doğrulanmış korunma/maruz kalma ifadelerinden çıkarıldı; 2026-07 elle gözden geçirildi (49 kayıt). Yeni kayıt eklerken açıklamada yön ifadesi varsa buraya da işlenir. 2026-07 rüzgâr verisi turu: 65 nokta daha, kayıtlı kaynaklardan birebir alıntıyla (turkeymarinas, sailingissues, resmî/yerel sayfalar); tamamı elle doğrulandı. | 2026-08 koy derinleştirme turu: 6 nokta daha (wikiderya/cruiserswiki/sailingissues, birebir alıntıyla; elle doğrulandı).",
  "not": "Yön kodları TR pusula: K,KD,D,GD,G,GB,B,KB. Yalnız AÇIK (maruz) yönler tutulur; açıklamada yön bilgisi olmayan koylar bilinçli olarak YOKTUR (tahmin yazılmaz).",
  "yonler": {
   "yesilkoy-firnaz-koyu": [
@@ -395,6 +395,27 @@
   ],
   "sarpdere-limani-demirleme": [
    "K"
+  ],
+  "soguksu-koyu-aydincik": [
+   "G",
+   "D"
+  ],
+  "lakka-koyu-paksos": [
+   "KD"
+  ],
+  "adrasan-koyu-demirleme": [
+   "D"
+  ],
+  "boynuzbuku-restaurant": [
+   "D",
+   "GB"
+  ],
+  "kara-ada-demirleme": [
+   "K"
+  ],
+  "anthony-quinn-koyu": [
+   "KD",
+   "D"
   ]
  }
 }
