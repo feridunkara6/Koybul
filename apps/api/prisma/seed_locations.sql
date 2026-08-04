@@ -11055,9 +11055,6 @@ UPDATE locations SET depth_min_m = COALESCE(depth_min_m, NULL), depth_max_m = CO
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 10), depth_max_m = COALESCE(depth_max_m, 15) WHERE slug = 'ayaca-koyu-demirleme';
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 7), depth_max_m = COALESCE(depth_max_m, 10) WHERE slug = 'azmak-iskelesi-ciftlik';
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
-SELECT id, 'mixed', NULL FROM locations WHERE slug = 'azmak-iskelesi-ciftlik'
-ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
-INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
 SELECT id, 'sand', NULL FROM locations WHERE slug = 'azolimnos-koyu-syros'
 ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 2), depth_max_m = COALESCE(depth_max_m, 3.5) WHERE slug = 'bademli-deniz-ilicasi-koyu';
@@ -11071,9 +11068,6 @@ SELECT id, 'sand', NULL FROM locations WHERE slug = 'bedri-rahmi-samandira-sahas
 ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 4), depth_max_m = COALESCE(depth_max_m, 10) WHERE slug = 'bitez-koyu-demirleme';
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 10), depth_max_m = COALESCE(depth_max_m, 20) WHERE slug = 'boynuzbuku-restaurant';
-INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
-SELECT id, 'mud', NULL FROM locations WHERE slug = 'boynuzbuku-restaurant'
-ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 10), depth_max_m = COALESCE(depth_max_m, 20) WHERE slug = 'boynuzbuku-samandira-sahasi';
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
 SELECT id, 'mud', NULL FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
@@ -11095,9 +11089,6 @@ INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
 SELECT id, 'sand', NULL FROM locations WHERE slug = 'dirsek-buku-koyu'
 ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
-SELECT id, 'sand', NULL FROM locations WHERE slug = 'dirsek-buku-restaurant'
-ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
-INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
 SELECT id, 'mixed', NULL FROM locations WHERE slug = 'filippoi-plaji-zakinthos'
 ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 4), depth_max_m = COALESCE(depth_max_m, 7) WHERE slug = 'galissas-koyu-syros';
@@ -11108,9 +11099,6 @@ SELECT id, 'mixed', NULL FROM locations WHERE slug = 'gerbekse-koyu'
 ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 10), depth_max_m = COALESCE(depth_max_m, 15) WHERE slug = 'girneyit-koyu-demirleme';
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 5), depth_max_m = COALESCE(depth_max_m, 7) WHERE slug = 'gobun-restaurant';
-INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
-SELECT id, 'sand', NULL FROM locations WHERE slug = 'gobun-restaurant'
-ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 5), depth_max_m = COALESCE(depth_max_m, 7) WHERE slug = 'gobun-samandira-sahasi';
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
 SELECT id, 'sand', NULL FROM locations WHERE slug = 'gobun-samandira-sahasi'
@@ -11122,13 +11110,7 @@ ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_detail
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 4), depth_max_m = COALESCE(depth_max_m, 5) WHERE slug = 'ilica-koyu-sigacik';
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 3), depth_max_m = COALESCE(depth_max_m, 6) WHERE slug = 'ilicabuku-demirleme';
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 3), depth_max_m = COALESCE(depth_max_m, 4) WHERE slug = 'kale-pansiyon-iskelesi';
-INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
-SELECT id, 'mixed', NULL FROM locations WHERE slug = 'kale-pansiyon-iskelesi'
-ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 3), depth_max_m = COALESCE(depth_max_m, 4) WHERE slug = 'kalekoy-simena-restoran-pontonlari';
-INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
-SELECT id, 'mixed', NULL FROM locations WHERE slug = 'kalekoy-simena-restoran-pontonlari'
-ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 5), depth_max_m = COALESCE(depth_max_m, 6) WHERE slug = 'kara-ada-demirleme';
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
 SELECT id, 'sand', NULL FROM locations WHERE slug = 'kara-ada-demirleme'
@@ -11144,9 +11126,6 @@ SELECT id, 'mixed', NULL FROM locations WHERE slug = 'kissebuku-alakisla-demirle
 ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 5), depth_max_m = COALESCE(depth_max_m, 7) WHERE slug = 'kizilada-fener-restorani';
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
-SELECT id, 'sand', NULL FROM locations WHERE slug = 'kizilada-fener-restorani'
-ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
-INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
 SELECT id, 'mixed', NULL FROM locations WHERE slug = 'kleftolimano-koyu-thymaina'
 ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 10), depth_max_m = COALESCE(depth_max_m, 12) WHERE slug = 'knidos-antik-limani';
@@ -11154,9 +11133,6 @@ INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
 SELECT id, 'weed', NULL FROM locations WHERE slug = 'knidos-antik-limani'
 ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 10), depth_max_m = COALESCE(depth_max_m, 20) WHERE slug = 'kocabahce-iskelesi';
-INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
-SELECT id, 'mixed', NULL FROM locations WHERE slug = 'kocabahce-iskelesi'
-ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 10), depth_max_m = COALESCE(depth_max_m, 20) WHERE slug = 'kocabahce-koyu-demirleme';
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
 SELECT id, 'mixed', NULL FROM locations WHERE slug = 'kocabahce-koyu-demirleme'
@@ -11173,9 +11149,6 @@ INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
 SELECT id, 'sand', NULL FROM locations WHERE slug = 'lindos-koyu'
 ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 8), depth_max_m = COALESCE(depth_max_m, 10) WHERE slug = 'loryma-restaurant-bozukkale';
-INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
-SELECT id, 'mixed', NULL FROM locations WHERE slug = 'loryma-restaurant-bozukkale'
-ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, NULL), depth_max_m = COALESCE(depth_max_m, 5) WHERE slug = 'maden-adasi-demirleme';
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
 SELECT id, 'sand', NULL FROM locations WHERE slug = 'maden-adasi-demirleme'
@@ -11186,9 +11159,6 @@ INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
 SELECT id, 'sand', NULL FROM locations WHERE slug = 'mersincik-koyu'
 ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 10), depth_max_m = COALESCE(depth_max_m, 15) WHERE slug = 'miori-restaurant';
-INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
-SELECT id, 'sand', NULL FROM locations WHERE slug = 'miori-restaurant'
-ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 12), depth_max_m = COALESCE(depth_max_m, 14) WHERE slug = 'octopus-restaurant-sogut';
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 7), depth_max_m = COALESCE(depth_max_m, 12) WHERE slug = 'okluk-koyu';
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
@@ -11208,9 +11178,6 @@ INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
 SELECT id, 'sand', NULL FROM locations WHERE slug = 'phaselis-koylari-demirleme'
 ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 4), depth_max_m = COALESCE(depth_max_m, NULL) WHERE slug = 'sarsala-restaurant';
-INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)
-SELECT id, 'mixed', NULL FROM locations WHERE slug = 'sarsala-restaurant'
-ON CONFLICT (location_id) DO UPDATE SET holding_type = COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 5), depth_max_m = COALESCE(depth_max_m, 8) WHERE slug = 'serce-limani';
 UPDATE locations SET depth_min_m = COALESCE(depth_min_m, 4), depth_max_m = COALESCE(depth_max_m, 10) WHERE slug = 'simi-agios-vasileios-koyu';
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)

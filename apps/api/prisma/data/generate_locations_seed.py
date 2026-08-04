@@ -304,14 +304,22 @@ def emit_demirleme(here, records):
     NULL yazmak yasak (constraint ihlali, seed kırmızısı). Bu yüzden is_free
     kolonu INSERT'e hiç yazılmaz: yeni satır şema varsayılanını alır (batch
     ekleyicisiyle aynı davranış), MEVCUT satırların değeri asla değişmez.
-    Sahte "ücretsiz" rozeti riski yok: restoran iskelelerinde API her zaman
-    restaurant_dock_details'i öncelikler (repository else-if sırası), yani
-    oradaki anchorage satırı görünmez; gerçek demirleme koylarında ise
+    Sahte "ücretsiz" rozeti riski yok: gerçek demirleme koylarında
     "demirleme ücretsizdir" şemanın kendi varsayılanıdır.
+
+    TİP KURALI (CI dersi #2, 2026-08): DB tetikleyicisi
+    trg_check_anchorage_details_type anchorage_details'i YALNIZ
+    mooring_point/buoy/guest_mooring tipli location'lara izin verir.
+    Bu yüzden zemin SQL'i yalnız bu tiplere yazılır; diğer tiplerdeki
+    (ör. restoran iskelesi) zemin bulguları JSON arşivinde kalır ve
+    üretici bunları raporlayıp ATLAR — derinlik bulguları ise locations
+    tablosuna gittiği için HER tipte işlenir.
     UPDATE/UPSERT kullanılır ki mevcut canlı satırlara da aksın (idempotent)."""
     path = here / "demirleme_bilgileri.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     slugs = {r["slug"] for r in records}
+    type_by_slug = {r["slug"]: r["typeCode"] for r in records}
+    ANCHORAGE_TYPES = {"mooring_point", "buoy", "guest_mooring"}
     errors = []
     for slug, v in sorted(data["veriler"].items()):
         if slug not in slugs:
@@ -337,6 +345,7 @@ def emit_demirleme(here, records):
         "-- DEMİRLEME BİLGİLERİ (2026-08 turu — birebir alıntılı, elle doğrulandı)",
         "-- =====================================================================",
     ]
+    atlanlar = []
     for slug, v in sorted(data["veriler"].items()):
         dmin, dmax = v.get("derinlik_min"), v.get("derinlik_max")
         if dmin is not None or dmax is not None:
@@ -345,6 +354,11 @@ def emit_demirleme(here, records):
                 f"depth_max_m = COALESCE(depth_max_m, {num(dmax)}) WHERE slug = {q(slug)};"
             )
         if v.get("zemin") is not None:
+            if type_by_slug.get(slug) not in ANCHORAGE_TYPES:
+                # DB tetikleyicisi bu tipe anchorage satırı YASAKLAR — zemin
+                # bulgusu JSON arşivinde kalır, SQL üretilmez (CI dersi #2).
+                atlanlar.append(f"{slug} ({type_by_slug.get(slug)})")
+                continue
             out.append(
                 # is_free BİLEREK yok: NOT NULL DEFAULT true — NULL yazılamaz;
                 # yeni satır şema varsayılanını alır, mevcut satıra dokunulmaz.
@@ -353,6 +367,9 @@ def emit_demirleme(here, records):
                 "ON CONFLICT (location_id) DO UPDATE SET holding_type = "
                 "COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);"
             )
+    if atlanlar:
+        print(f"demirleme: {len(atlanlar)} zemin ATLANDI (tip anchorage değil): "
+              + ", ".join(atlanlar))
     print(f"demirleme: {len(data['veriler'])} nokta işlendi")
     return "\n".join(out) + "\n"
 
