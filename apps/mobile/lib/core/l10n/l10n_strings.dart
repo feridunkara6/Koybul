@@ -208,6 +208,18 @@ class L10n {
     required this.routeWindFmt,
     required this.routeWindHeadwind,
     required this.routeArrivalExposedFmt,
+    required this.verifiedLabel,
+    required this.glanceSeabed,
+    required this.glanceOpenDir,
+    required this.glanceBoat,
+    required this.fitShortYes,
+    required this.fitShortNo,
+    required this.approachTitle,
+    required this.aboutTitle,
+    required this.routeSectionTitle,
+    required this.wwBandNote,
+    required this.coordsCopied,
+    required this.contactTypeLabels,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -309,6 +321,17 @@ class L10n {
 
   // Rota rüzgâr analizi (Rota v2, 2026-08).
   final String routeWindFmt, routeWindHeadwind, routeArrivalExposedFmt;
+
+  // Detay sayfası yeniden tasarımı (2026-08, kullanıcı onaylı A+B+C+D):
+  // kimlik kartı + "Bir Bakışta" şeridi + uyarı kartları + bölüm kartları.
+  final String verifiedLabel, glanceSeabed, glanceOpenDir, glanceBoat,
+      fitShortYes, fitShortNo, approachTitle, aboutTitle, routeSectionTitle,
+      wwBandNote, coordsCopied;
+
+  /// İletişim türü kodu → dokunulabilir kutucuk etiketi ("Ara", "WhatsApp"…).
+  final Map<String, String> contactTypeLabels;
+
+  String contactTypeLabel(String code) => contactTypeLabels[code] ?? code;
 
   String windExposedLabel(String code) => windExposedLabels[code] ?? code;
 
@@ -583,6 +606,22 @@ const L10n _tr = L10n(
   routeWindFmt: 'Rüzgâr (tahmin): en çok {0} kn {1}',
   routeWindHeadwind: 'bazı bölümlerde karşı rüzgâr',
   routeArrivalExposedFmt: 'Varışta koy {0} rüzgârına açık olabilir ({1} kn) — korunaklı alternatif düşünün.',
+  verifiedLabel: 'Doğrulanmış',
+  glanceSeabed: 'Zemin',
+  glanceOpenDir: 'Açık yön',
+  glanceBoat: 'Teknem',
+  fitShortYes: 'Sığar',
+  fitShortNo: 'Sığmayabilir',
+  approachTitle: 'Yaklaşma notu',
+  aboutTitle: 'Hakkında',
+  routeSectionTitle: 'Deniz Rotası',
+  wwBandNote: 'Koyun açık olduğu yönden kuvvetli rüzgâr tahmini var.',
+  coordsCopied: 'Koordinatlar panoya kopyalandı.',
+  contactTypeLabels: <String, String>{
+    'phone': 'Ara', 'whatsapp': 'WhatsApp', 'email': 'E-posta',
+    'website': 'Web', 'vhf': 'VHF', 'reservation_link': 'Rezervasyon',
+    'instagram': 'Instagram', 'facebook': 'Facebook', 'emergency': 'Acil',
+  },
 );
 
 const L10n _en = L10n(
@@ -829,6 +868,22 @@ const L10n _en = L10n(
   routeWindFmt: 'Wind (forecast): up to {0} kn {1}',
   routeWindHeadwind: 'headwind on some legs',
   routeArrivalExposedFmt: 'On arrival the bay may be open to the {0} wind ({1} kn) — consider a sheltered alternative.',
+  verifiedLabel: 'Verified',
+  glanceSeabed: 'Seabed',
+  glanceOpenDir: 'Exposed',
+  glanceBoat: 'My boat',
+  fitShortYes: 'Fits',
+  fitShortNo: 'May not fit',
+  approachTitle: 'Approach note',
+  aboutTitle: 'About',
+  routeSectionTitle: 'Sea Route',
+  wwBandNote: 'Strong wind is forecast from a direction this bay is exposed to.',
+  coordsCopied: 'Coordinates copied to clipboard.',
+  contactTypeLabels: <String, String>{
+    'phone': 'Call', 'whatsapp': 'WhatsApp', 'email': 'Email',
+    'website': 'Website', 'vhf': 'VHF', 'reservation_link': 'Booking',
+    'instagram': 'Instagram', 'facebook': 'Facebook', 'emergency': 'Emergency',
+  },
 );
 
 const L10n _es = L10n(
@@ -1075,6 +1130,22 @@ const L10n _es = L10n(
   routeWindFmt: 'Viento (previsión): hasta {0} kn {1}',
   routeWindHeadwind: 'viento de proa en algunos tramos',
   routeArrivalExposedFmt: 'A la llegada, la cala puede estar expuesta al viento del {0} ({1} kn) — considere una alternativa abrigada.',
+  verifiedLabel: 'Verificado',
+  glanceSeabed: 'Fondo',
+  glanceOpenDir: 'Expuesto',
+  glanceBoat: 'Mi barco',
+  fitShortYes: 'Cabe',
+  fitShortNo: 'Quizá no cabe',
+  approachTitle: 'Nota de aproximación',
+  aboutTitle: 'Acerca de',
+  routeSectionTitle: 'Ruta marítima',
+  wwBandNote: 'Se pronostica viento fuerte desde una dirección expuesta de la cala.',
+  coordsCopied: 'Coordenadas copiadas al portapapeles.',
+  contactTypeLabels: <String, String>{
+    'phone': 'Llamar', 'whatsapp': 'WhatsApp', 'email': 'Correo',
+    'website': 'Web', 'vhf': 'VHF', 'reservation_link': 'Reserva',
+    'instagram': 'Instagram', 'facebook': 'Facebook', 'emergency': 'Emergencia',
+  },
 );
 
 const L10n _ru = L10n(
@@ -1321,6 +1392,22 @@ const L10n _ru = L10n(
   routeWindFmt: 'Ветер (прогноз): до {0} узлов, {1}',
   routeWindHeadwind: 'на отдельных участках встречный ветер',
   routeArrivalExposedFmt: 'По прибытии бухта может быть открыта ветру {0} ({1} узлов) — рассмотрите защищённую альтернативу.',
+  verifiedLabel: 'Проверено',
+  glanceSeabed: 'Грунт',
+  glanceOpenDir: 'Открыт к',
+  glanceBoat: 'Моя лодка',
+  fitShortYes: 'Подходит',
+  fitShortNo: 'Может не пройти',
+  approachTitle: 'Заметка о подходе',
+  aboutTitle: 'О месте',
+  routeSectionTitle: 'Морской маршрут',
+  wwBandNote: 'С открытого направления бухты прогнозируется сильный ветер.',
+  coordsCopied: 'Координаты скопированы в буфер обмена.',
+  contactTypeLabels: <String, String>{
+    'phone': 'Позвонить', 'whatsapp': 'WhatsApp', 'email': 'Почта',
+    'website': 'Сайт', 'vhf': 'VHF', 'reservation_link': 'Бронь',
+    'instagram': 'Instagram', 'facebook': 'Facebook', 'emergency': 'Экстренный',
+  },
 );
 
 /// Saf eşleme — birim testli.

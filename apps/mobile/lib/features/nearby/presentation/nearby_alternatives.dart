@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../../core/widgets/section_card.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../application/nearby_controller.dart';
 
@@ -34,16 +35,16 @@ class NearbyAlternatives extends ConsumerWidget {
       error: (Object _, StackTrace __) => const SizedBox.shrink(),
       data: (List<LocationSummary> items) {
         if (items.isEmpty) return const SizedBox.shrink();
-        final ThemeData theme = Theme.of(context);
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const SizedBox(height: 20),
-            Text(ref.watch(l10nProvider).nearbyAltTitle, style: theme.textTheme.titleMedium),
-            const SizedBox(height: 4),
-            for (final LocationSummary item in items) _AltTile(item: item),
-          ],
+        // Bölüm kartı (yeniden tasarım 2026-08): koy doluysa plan B hemen elde.
+        return SectionCard(
+          icon: DocklyIcons.place,
+          title: ref.watch(l10nProvider).nearbyAltTitle,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              for (final LocationSummary item in items) _AltTile(item: item),
+            ],
+          ),
         );
       },
     );

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../../core/widgets/section_card.dart';
 import '../application/reviews_controller.dart';
 
 /// Detay ekranında "Yorumlar" bölümü (S-09). Onaylı yorumları okuma — misafir
@@ -34,22 +35,23 @@ class ReviewsSection extends ConsumerWidget {
       data: (List<Review> items) {
         final ThemeData theme = Theme.of(context);
         final L10n t = ref.watch(l10nProvider);
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const SizedBox(height: 20),
-            Text(t.reviewsTitle, style: theme.textTheme.titleMedium),
-            const SizedBox(height: 8),
-            if (items.isEmpty)
-              Text(
-                t.revEmpty,
-                style: theme.textTheme.bodyMedium
-                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-              )
-            else
-              for (final Review r in items) _ReviewCard(review: r),
-          ],
+        // Bölüm kartı (yeniden tasarım 2026-08): ikonlu başlık + içerik.
+        return SectionCard(
+          icon: DocklyIcons.chat,
+          title: t.reviewsTitle,
+          child: items.isEmpty
+              ? Text(
+                  t.revEmpty,
+                  style: theme.textTheme.bodyMedium
+                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    for (final Review r in items) _ReviewCard(review: r),
+                  ],
+                ),
         );
       },
     );

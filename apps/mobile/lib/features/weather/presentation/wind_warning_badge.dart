@@ -97,29 +97,44 @@ class WindWarningBadge extends ConsumerWidget {
     final String kn = w.maxKn == w.maxKn.roundToDouble()
         ? w.maxKn.toStringAsFixed(0)
         : w.maxKn.toStringAsFixed(1);
+    // BANT KART görünümü (detay yeniden tasarımı 2026-08, kullanıcı onaylı B):
+    // tam genişlik, vurgulu başlık + kısa açıklama satırı — gözden kaçmaz.
     return Padding(
-      padding: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: 12),
       child: Container(
         key: const ValueKey<String>('wind-warning-badge'),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           color: c.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(14),
           border: Border.all(color: c.withValues(alpha: 0.55)),
         ),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            DocklyIcon(DocklyIcons.errorOutline, size: 16, color: c),
-            const SizedBox(width: 6),
-            Flexible(
-              child: Text(
-                L10n.fmt2(t.wwBadgeFmt, t.windExposedLabel(w.dir), kn),
-                maxLines: 2,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: theme.colorScheme.onSurface,
-                ),
+            DocklyIcon(DocklyIcons.errorOutline, size: 18, color: c),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    L10n.fmt2(t.wwBadgeFmt, t.windExposedLabel(w.dir), kn),
+                    maxLines: 2,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    t.wwBandNote,
+                    style: theme.textTheme.bodySmall
+                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                ],
               ),
             ),
           ],

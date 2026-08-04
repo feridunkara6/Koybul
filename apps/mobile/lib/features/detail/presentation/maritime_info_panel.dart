@@ -1,6 +1,8 @@
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/widgets/section_card.dart';
+
 /// Tek bir denizci istatistiği: ikon + değer + etiket. Detay ekranındaki
 /// "Denizci Bilgileri" panelinde kart olarak gösterilir. Salt-veri modeli —
 /// hangi veriyi göstereceğine detay ekranı karar verir (uydurma veri yok:
@@ -30,14 +32,11 @@ class MaritimeInfoPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (stats.isEmpty) return const SizedBox.shrink();
-    final ThemeData theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const SizedBox(height: 20),
-        Text(title, style: theme.textTheme.titleMedium),
-        const SizedBox(height: 10),
-        LayoutBuilder(
+    // Bölüm kartı (yeniden tasarım 2026-08): ikonlu başlık + stat ızgarası.
+    return SectionCard(
+      icon: DocklyIcons.sailing,
+      title: title,
+      child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             const double gap = 10;
             // İki sütun; dar ekranlarda taşarsa Wrap alt satıra alır.
@@ -62,8 +61,7 @@ class MaritimeInfoPanel extends StatelessWidget {
               ],
             );
           },
-        ),
-      ],
+      ),
     );
   }
 }

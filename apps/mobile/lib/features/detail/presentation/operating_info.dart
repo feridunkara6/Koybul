@@ -1,8 +1,10 @@
 import 'package:dockly_api/dockly_api.dart';
+import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../../core/widgets/section_card.dart';
 
 /// Detayda çalışma saatleri + sezon bölümü (docs/23 §11.3). Veri yoksa gizlenir.
 ///
@@ -28,14 +30,12 @@ class OperatingInfo extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
     final L10n t = ref.watch(l10nProvider);
+    final bool hasHours = is24h || hours.isNotEmpty;
     final List<Widget> children = <Widget>[];
 
     if (is24h) {
-      children
-        ..add(_title(theme, t.opHoursTitle))
-        ..add(_Row(label: t.everyDay, value: t.open24));
+      children.add(_Row(label: t.everyDay, value: t.open24));
     } else if (hours.isNotEmpty) {
-      children.add(_title(theme, t.opHoursTitle));
       for (final int dow in _weekOrder) {
         final List<Hour> dayHours = hours.where((Hour h) => h.dayOfWeek == dow).toList();
         if (dayHours.isEmpty) continue;
@@ -48,7 +48,9 @@ class OperatingInfo extends ConsumerWidget {
     }
 
     if (seasons.isNotEmpty) {
-      children.add(_title(theme, t.seasonTitle));
+      // Saatler de varsa sezon kendi ara başlığını taşır; yalnız sezon varsa
+      // kartın başlığı zaten sezon olur (aşağıda) — ikinci başlık gerekmez.
+      if (hasHours) children.add(_title(theme, t.seasonTitle));
       for (final Season s in seasons) {
         children.add(_Row(
             label: t.openLabel,
@@ -57,10 +59,15 @@ class OperatingInfo extends ConsumerWidget {
     }
 
     if (children.isEmpty) return const SizedBox.shrink();
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[const SizedBox(height: 20), ...children],
+    // Bölüm kartı (yeniden tasarım 2026-08): ikonlu başlık + satırlar.
+    return SectionCard(
+      icon: DocklyIcons.amClock,
+      title: hasHours ? t.opHoursTitle : t.seasonTitle,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: children,
+      ),
     );
   }
 

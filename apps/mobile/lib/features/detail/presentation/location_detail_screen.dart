@@ -10,8 +10,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/external_links.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../../../core/origin_provider.dart';
+import '../../../core/widgets/section_card.dart';
 import '../../auth/presentation/account_gate.dart';
-import '../../boat/presentation/boat_fit.dart';
+import '../../boat/application/my_boat_controller.dart';
+import '../../boat/domain/my_boat.dart';
+import '../../boat/presentation/boat_sheet.dart';
 import '../../favorites/domain/favorite_location.dart';
 import '../../favorites/presentation/favorite_button.dart';
 import '../../location/application/location_controller.dart';
@@ -20,18 +23,25 @@ import '../../nearby/presentation/nearby_alternatives.dart';
 import '../../reservation/presentation/reservation_sheet.dart';
 import '../../reviews/presentation/reviews_section.dart';
 import '../../route/domain/sea_route.dart';
+import '../../occupancy/application/occupancy_controller.dart';
 import '../../occupancy/presentation/occupancy_row.dart';
 import '../application/location_detail_controller.dart';
 import '../domain/anchorage_notes.dart';
+import '../domain/approach_note.dart';
 import 'cover_photo.dart';
 import 'maritime_info_panel.dart';
 import '../../weather/presentation/weather_card.dart';
 import '../../weather/presentation/wind_warning_badge.dart';
 import 'operating_info.dart';
 
-/// Lokasyon detay ekranı (S-09, docs/01-prd §6.6). Türe özel bölümleri,
-/// olanakları, iletişimi ve boyut/kapasite verisini gösterir. Yazma eylemleri
-/// (yorum, favori, talep) misafir modda kilitli — sonraki fazda bağlanacak.
+/// Lokasyon detay ekranı (S-09, docs/01-prd §6.6) — YENİDEN TASARIM 2026-08
+/// (kullanıcı onaylı A+B+C+D):
+///  A) Lacivert KİMLİK KARTI (tip + doğrulanmış + ad + konum/koordinat +
+///     rozetler) ve "BİR BAKIŞTA" şeridi (derinlik/zemin/açık yön/teknem).
+///  B) UYARI KARTLARI: yaklaşma notu turuncu kart, rüzgâr bandı kırmızı/turuncu.
+///  C) İkonlu BÖLÜM KARTLARI + tek dokunuş iletişim kutucukları.
+///  D) YAPIŞKAN EYLEM ÇUBUĞU: Deniz Rotası + Doluluk Bildir/Rezervasyon.
+/// 0-uydurma ilkesi sürer: verisi olmayan kutu/bölüm hiç çizilmez.
 class LocationDetailScreen extends ConsumerWidget {
   const LocationDetailScreen({required this.idOrSlug, super.key});
 
@@ -84,166 +94,87 @@ class _DetailContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
     final L10n t = ref.watch(l10nProvider);
-    // Denizci bilgileri: boyut + türe özel veriden yalnız DOLU alanlar stat'a
-    // çevrilir (uydurma veri yok). Tekne boyu/su çekimi zaten BoatFitRow'da
-    // gösterildiği için burada tekrar edilmez.
+    // Denizci bilgileri: yalnız DOLU alanlar stat'a çevrilir (uydurma veri
+    // yok). Derinlik ve zemin artık "Bir Bakışta" şeridinde — burada tekrar
+    // edilmez (tasarım 2026-08).
     final List<MaritimeStat> stats = <MaritimeStat>[
       ..._dimensionStats(t, detail.dimensions),
       ..._typeStats(t, detail.typeDetails),
     ];
 
-    // Demirleme tiplerinde açıklama cümle cümle ayrıştırılır: zemin/DİKKAT
-    // cümleleri "Demirleme Notları" kartına taşınır, koyu anlatan metin
-    // aşağıda açıklama olarak kalır (ürün kararı 2026-07, 0-uydurma).
+    // 1) YAKLAŞMA NOTU açıklamadan ayrılır (turuncu uyarı kartı, onaylı B).
+    final ApproachNoteSplit ap = splitApproachNote(detail.description);
+    // 2) Demirleme tiplerinde kalan metin cümle cümle ayrıştırılır: zemin ve
+    //    DİKKAT cümleleri "Demirleme Notları" kartına, koyu anlatan metin
+    //    "Hakkında" kartına (ürün kararı 2026-07, 0-uydurma).
     final AnchorageDescriptionSplit? split =
-        _isAnchoringType(detail.type) ? splitAnchorageDescription(detail.description) : null;
-    final String? descriptionBelow =
-        split != null ? split.general : detail.description;
+        _isAnchoringType(detail.type) ? splitAnchorageDescription(ap.rest) : null;
+    final String? about = split != null ? split.general : ap.rest;
 
-    final Widget content = ListView(
+    final Widget list = ListView(
       key: LocationDetailScreen.contentKey,
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
       children: <Widget>[
-        // Kapak: fotoğraf varsa onu, yoksa tasarımlı tip-renkli yer tutucu
-        // göster (misafirin ilk gördüğü şey — sayfa hiç boş görünmesin, P0).
+        // Fotoğraf varsa kapak kalır; kimlik kartı her durumda çizilir —
+        // fotoğrafsız koylarda boş gri alan yerine dolu, profesyonel bir giriş.
         if (detail.media.cover != null) ...<Widget>[
           CoverPhoto(cover: detail.media.cover!),
-          const SizedBox(height: 14),
-        ] else ...<Widget>[
-          // Etiket YOK: tip zaten hemen altta gösteriliyor (tekrar olmasın).
-          DocklyCoverPlaceholder(type: detail.type, title: detail.name),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
         ],
-        // Başlık bloğu
-        Row(
-          children: <Widget>[
-            Container(
-              width: 12,
-              height: 12,
-              decoration: BoxDecoration(
-                color: DocklyMapColors.forType(detail.type),
-                shape: BoxShape.circle,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(t.typeLabel(detail.type), style: theme.textTheme.labelLarge),
-            if (detail.verifiedAt != null) ...<Widget>[
-              const SizedBox(width: 8),
-              const DocklyIcon(DocklyIcons.verified, size: 16, color: DocklyColors.success),
-            ],
-            // DOLULUK ÇİPİ (kullanıcı kararı 2026-07): bağlama noktası
-            // işaretinin hemen yanında; veri yoksa görünmez.
-            const SizedBox(width: 10),
-            Flexible(
-              child: OccupancyChip(idOrSlug: detail.id, initial: detail.occupancy),
-            ),
-          ],
-        ),
-        const SizedBox(height: 6),
-        // Fotoğraf varsa isim burada (H1); yer tutucu "hero" kullanılıyorsa isim
-        // zaten kapağın üstünde, tekrar etmemek için gizlenir.
-        if (detail.media.cover != null)
-          Text(detail.name, style: theme.textTheme.headlineSmall),
-        if (_locationLine(detail.geo) != null) ...<Widget>[
-          const SizedBox(height: 4),
-          Text(_locationLine(detail.geo)!, style: theme.textTheme.bodyMedium),
-        ],
-        const SizedBox(height: 10),
-        Row(
-          children: <Widget>[
-            const DocklyIcon(DocklyIcons.star, size: 18, color: DocklyColors.warning),
-            const SizedBox(width: 4),
-            Text(
-              detail.rating.avg != null
-                  ? '${detail.rating.avg!.toStringAsFixed(1)} (${detail.rating.count})'
-                  : t.noRatingYet,
-            ),
-            const SizedBox(width: 12),
-            if (detail.priceTier == 'free' || detail.priceTier == 'paid')
-              _Pill(label: detail.priceTier == 'free' ? t.freeChip : t.pricePaid),
-            if (detail.is24h) ...<Widget>[
-              const SizedBox(width: 8),
-              const _Pill(label: '7/24'),
-            ],
-          ],
-        ),
+        _HeroCard(detail: detail),
+        _GlanceStrip(detail: detail),
 
-        // RÜZGÂR UYARI ROZETİ (2026-07 ②): koyun açık yönünden bugün eşik
-        // üstü rüzgâr bekleniyorsa görünür; veri/tahmin yoksa hiç çizilmez.
+        // RÜZGÂR UYARI BANDI (onaylı B): koyun açık yönünden eşik üstü rüzgâr
+        // bekleniyorsa görünür; veri/tahmin yoksa hiç çizilmez.
         WindWarningBadge(
           exposedDirs: detail.windExposedDirs,
           position: detail.position,
         ),
 
-        const SizedBox(height: 12),
-        BoatFitRow(
-          maxBoatLengthM: detail.dimensions.maxBoatLengthM,
-          maxDraftM: detail.dimensions.maxDraftM,
-        ),
-        _SeaRouteRow(destination: detail.position, idOrSlug: detail.id),
+        // YAKLAŞMA NOTU (onaylı B): açıklama içinde kaybolmaz, uyarı kartı olur.
+        if (ap.note != null) _ApproachNoteCard(note: ap.note!),
 
-        const SizedBox(height: 14),
-        // ÜRÜN KARARI: demirleme yerlerinde (koy/şamandıra/tonoz) rezervasyon
-        // OLMAZ — ilk gelen demirler. Bu tiplerde talep düğmesi yerine
-        // "Demirleme Notları" gösterilir; diğer tiplerde düğme kalır.
-        if (split != null)
-          _AnchoringNotes(detail: detail, split: split)
-        else
-          SizedBox(
-            width: double.infinity,
-            child: DocklyButton(
-              label: t.rezTitle,
-              icon: DocklyIcons.eventNote,
-              // ÜYELİK KAPISI (kullanıcı kararı 2026-07): talep göndermek
-              // hesap ister; hesabı olmayana kayıt yolu gösterilir.
-              onPressed: () => requireAccount(
-                context,
-                ref,
-                message: t.gateReservationMsg,
-                onAllowed: () => showReservationSheet(
-                  context,
-                  locationName: detail.name,
-                  contacts: detail.contacts,
-                ),
-              ),
-            ),
+        if (about != null && about.trim().isNotEmpty)
+          SectionCard(
+            icon: DocklyIcons.infoOutline,
+            title: t.aboutTitle,
+            child: Text(about, style: theme.textTheme.bodyMedium?.copyWith(height: 1.45)),
           ),
-        // DOLULUK BİLDİR (kullanıcı kararı 2026-07): yalnız bağlanma yerleri
-        // ve restoran iskelelerinde, ana eylemin hemen altında tam genişlik
-        // ikincil düğme. Marina/limanda bu özellik KAPALI.
-        if (occupancySupported(detail.type))
-          OccupancyRow(idOrSlug: detail.id, position: detail.position),
 
-        if (descriptionBelow != null && descriptionBelow.trim().isNotEmpty) ...<Widget>[
-          const SizedBox(height: 16),
-          Text(descriptionBelow, style: theme.textTheme.bodyLarge),
-        ],
+        // Demirleme tiplerinde koya özel notlar kartı (zemin/derinlik/DİKKAT).
+        if (split != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: _AnchoringNotes(detail: detail, split: split),
+          ),
+
+        _SeaRouteRow(destination: detail.position),
 
         MaritimeInfoPanel(stats: stats, title: t.maritimeTitle),
 
-        if (detail.amenities.isNotEmpty) ...<Widget>[
-          const SizedBox(height: 20),
-          _SectionTitle(t.sectionAmenities),
-          const SizedBox(height: 8),
-          _IconChips(
-            items: <(DocklyIconData, String)>[
-              for (final AmenityLabeled a in detail.amenities)
-                (DocklyIcons.forAmenity(a.code), a.label),
-            ],
+        if (detail.amenities.isNotEmpty)
+          SectionCard(
+            icon: DocklyIcons.checkCircle,
+            title: t.sectionAmenities,
+            child: _IconChips(
+              items: <(DocklyIconData, String)>[
+                for (final AmenityLabeled a in detail.amenities)
+                  (DocklyIcons.forAmenity(a.code), a.label),
+              ],
+            ),
           ),
-        ],
 
-        if (detail.services.isNotEmpty) ...<Widget>[
-          const SizedBox(height: 20),
-          _SectionTitle(t.sectionServices),
-          const SizedBox(height: 8),
-          _IconChips(
-            items: <(DocklyIconData, String)>[
-              for (final ServiceLabeled s in detail.services)
-                (DocklyIcons.forAmenity(s.code), s.label),
-            ],
+        if (detail.services.isNotEmpty)
+          SectionCard(
+            icon: DocklyIcons.amTool,
+            title: t.sectionServices,
+            child: _IconChips(
+              items: <(DocklyIconData, String)>[
+                for (final ServiceLabeled s in detail.services)
+                  (DocklyIcons.forAmenity(s.code), s.label),
+              ],
+            ),
           ),
-        ],
 
         OperatingInfo(
           hours: detail.hours,
@@ -254,64 +185,63 @@ class _DetailContent extends ConsumerWidget {
         // Rüzgâr & Hava — noktanın 48 saatlik tahmini (MET Norway, atıflı).
         WeatherCard(position: detail.position),
 
-        if (detail.contacts.isNotEmpty) ...<Widget>[
-          const SizedBox(height: 20),
-          _SectionTitle(t.sectionContact),
-          const SizedBox(height: 6),
-          for (final Contact c in detail.contacts) _ContactRow(contact: c),
-        ],
+        // İLETİŞİM (onaylı C): satır listesi yerine tek dokunuş kutucukları.
+        if (detail.contacts.isNotEmpty)
+          SectionCard(
+            icon: DocklyIcons.phone,
+            title: t.sectionContact,
+            child: _ContactTiles(contacts: detail.contacts),
+          ),
+
+        // Restoran iskelesi: rezervasyon çubukta, doluluk bildirimi listede
+        // (iki eylem birden çubuğa sığmaz; demirleme tiplerinde doluluk zaten
+        // çubukta olduğundan burada tekrar çizilmez).
+        if (occupancySupported(detail.type) && !_isAnchoringType(detail.type))
+          OccupancyRow(idOrSlug: detail.id, position: detail.position),
 
         ReviewsSection(idOrSlug: detail.id),
         NearbyAlternatives(locationId: detail.id, position: detail.position),
       ],
     );
+
     // GENİŞ EKRAN (kullanıcı isteği 2026-08): bilgisayar/yatay iPad'de içerik
-    // sütunu 760px'te sabitlenip ortalanır — kapak görsel alanı ekranı
-    // kaplamaz (16:9 × 760 = ~427px), satırlar okunur genişlikte kalır.
-    // Telefonda (≤840px) davranış değişmez.
-    return LayoutBuilder(
+    // sütunu 760px'te sabitlenip ortalanır. Telefonda (≤840px) davranış aynı.
+    final Widget content = LayoutBuilder(
       builder: (BuildContext context, BoxConstraints c) {
         if (c.maxWidth <= 840) {
-          return content;
+          return list;
         }
         return Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 760),
-            child: content,
+            child: list,
           ),
         );
       },
     );
+
+    // YAPIŞKAN EYLEM ÇUBUĞU (onaylı D): sayfanın neresinde olursa olsun ana
+    // eylemler tek dokunuş uzağında.
+    return Column(
+      children: <Widget>[
+        Expanded(child: content),
+        _ActionBar(detail: detail),
+      ],
+    );
   }
 
-  static String? _locationLine(GeoInfo geo) {
-    final List<String> parts = <String>[];
-    final AdminAreaRef? area = geo.adminArea;
-    if (area != null) {
-      parts.add(area.name);
-      if (area.province != null && area.province != area.name) parts.add(area.province!);
-    }
-    if (geo.waterBody != null) parts.add(geo.waterBody!.name);
-    return parts.isEmpty ? null : parts.join(' · ');
-  }
-
-  /// Boyut verisi → stat kartları. Tekne boyu & su çekimi bilerek DIŞARIDA:
-  /// onları BoatFitRow zaten üstte gösteriyor (tekrar olmasın).
+  /// Boyut verisi → stat kartları. Derinlik BİLEREK dışarıda: "Bir Bakışta"
+  /// şeridi gösteriyor (tekrar olmasın). Tekne boyu/su çekimi de tekne
+  /// uygunluğu kutusunda.
   static List<MaritimeStat> _dimensionStats(L10n t, Dimensions d) {
     return <MaritimeStat>[
-      if (d.depthMinM != null || d.depthMaxM != null)
-        MaritimeStat(
-          icon: DocklyIcons.straighten,
-          value: _range(d.depthMinM, d.depthMaxM),
-          label: t.statDepth,
-        ),
       if (d.capacity != null)
         MaritimeStat(icon: DocklyIcons.amMooring, value: '${d.capacity}', label: t.statCapacity),
     ];
   }
 
   /// Türe özel detay → stat kartları (yalnız dolu alanlar; switch EXPRESSION ile
-  /// enum'lar üzerinde tam kapsama).
+  /// enum'lar üzerinde tam kapsama). Zemin (holdingType) "Bir Bakışta"da.
   static List<MaritimeStat> _typeStats(L10n t, TypeDetails? td) {
     if (td == null) return const <MaritimeStat>[];
     return switch (td) {
@@ -366,12 +296,6 @@ class _DetailContent extends ConsumerWidget {
             ),
         ],
       AnchorageTypeDetails a => <MaritimeStat>[
-          if (a.holdingType != null)
-            MaritimeStat(
-              icon: DocklyIcons.amMooring,
-              value: t.holdingLabel(a.holdingType!),
-              label: t.statHolding,
-            ),
           if (a.swellExposure != null)
             MaritimeStat(
               icon: DocklyIcons.sailing,
@@ -388,23 +312,455 @@ class _DetailContent extends ConsumerWidget {
     };
   }
 
+  static String _num(double v) =>
+      v == v.roundToDouble() ? v.toInt().toString() : v.toString();
+}
+
+/// A) KİMLİK KARTI — boş fotoğraf alanı yerine lacivert marka kartı: tip çipi
+/// (+ doğrulanmış), ad, konum + KOPYALANABİLİR koordinat, rozetler (puan,
+/// ücret, doluluk). Veri yoksa ilgili rozet hiç çizilmez.
+class _HeroCard extends ConsumerWidget {
+  const _HeroCard({required this.detail});
+
+  final LocationDetail detail;
+
+  /// Kart degradesinin açık ucu (marka lacivertinin bir tık aydınlığı).
+  static const Color _heroTop = Color(0xFF0E3052);
+
+  /// Tip çipinin turkuaz mürekkebi (koyu zeminde okunur açık ton).
+  static const Color _chipInk = Color(0xFF7FE3D9);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final String coords =
+        '${detail.position.lat.toStringAsFixed(4)}, ${detail.position.lon.toStringAsFixed(4)}';
+    final String? locLine = _locationLine(detail.geo);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[_heroTop, DocklyColors.brandDeep],
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Wrap(
+            spacing: 8,
+            runSpacing: 6,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: <Widget>[
+              _TypeChip(
+                icon: DocklyIcons.forLocationType(detail.type),
+                label: t.typeLabel(detail.type),
+              ),
+              if (detail.verifiedAt != null)
+                _TypeChip(icon: DocklyIcons.verified, label: t.verifiedLabel),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            detail.name,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              height: 1.15,
+            ),
+          ),
+          const SizedBox(height: 4),
+          // Konum satırı + koordinat: koordinata dokunmak panoya kopyalar
+          // (kaptan onu GPS cihazına/telsize geçirebilsin).
+          Wrap(
+            spacing: 6,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: <Widget>[
+              if (locLine != null)
+                Text(
+                  '$locLine ·',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.72),
+                    fontSize: 12.5,
+                  ),
+                ),
+              InkWell(
+                borderRadius: BorderRadius.circular(6),
+                onTap: () async {
+                  await Clipboard.setData(ClipboardData(text: coords));
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(SnackBar(content: Text(t.coordsCopied)));
+                },
+                child: Text(
+                  coords,
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.72),
+                    fontSize: 12.5,
+                    decoration: TextDecoration.underline,
+                    decorationStyle: TextDecorationStyle.dotted,
+                    decorationColor: Colors.white.withValues(alpha: 0.45),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 6,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: <Widget>[
+              _HeroBadge(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const DocklyIcon(DocklyIcons.star, size: 14, color: DocklyColors.warning),
+                    const SizedBox(width: 4),
+                    Text(
+                      detail.rating.avg != null
+                          ? '${detail.rating.avg!.toStringAsFixed(1)} (${detail.rating.count})'
+                          : t.noRatingYet,
+                      style: _badgeText,
+                    ),
+                  ],
+                ),
+              ),
+              if (detail.priceTier == 'free' || detail.priceTier == 'paid')
+                _HeroBadge(
+                  child: Text(
+                    detail.priceTier == 'free' ? t.freeChip : t.pricePaid,
+                    style: _badgeText,
+                  ),
+                ),
+              if (detail.is24h)
+                const _HeroBadge(child: Text('7/24', style: _badgeText)),
+              // DOLULUK (kullanıcı kararı 2026-07): veri yoksa rozet (boş hap
+              // dahil) hiç çizilmez — tahmin yok.
+              if ((ref.watch(occupancyOverridesProvider)[detail.id] ??
+                      detail.occupancy) !=
+                  null)
+                _HeroBadge(
+                  child: OccupancyChip(
+                    idOrSlug: detail.id,
+                    initial: detail.occupancy,
+                    onDark: true,
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  static const TextStyle _badgeText = TextStyle(
+    color: Colors.white,
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+  );
+
+  static String? _locationLine(GeoInfo geo) {
+    final List<String> parts = <String>[];
+    final AdminAreaRef? area = geo.adminArea;
+    if (area != null) {
+      parts.add(area.name);
+      if (area.province != null && area.province != area.name) parts.add(area.province!);
+    }
+    if (geo.waterBody != null) parts.add(geo.waterBody!.name);
+    return parts.isEmpty ? null : parts.join(' · ');
+  }
+}
+
+/// Kimlik kartındaki tip/doğrulanmış çipi (turkuaz tonlu).
+class _TypeChip extends StatelessWidget {
+  const _TypeChip({required this.icon, required this.label});
+
+  final DocklyIconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: DocklyColors.accentTurquoise.withValues(alpha: 0.18),
+        border: Border.all(color: DocklyColors.accentTurquoise.withValues(alpha: 0.5)),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          DocklyIcon(icon, size: 13, color: _HeroCard._chipInk),
+          const SizedBox(width: 5),
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: _HeroCard._chipInk,
+                fontSize: 11.5,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Kimlik kartı rozeti — yarı saydam beyaz hap.
+class _HeroBadge extends StatelessWidget {
+  const _HeroBadge({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.10),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: child,
+    );
+  }
+}
+
+/// A) "BİR BAKIŞTA" ŞERİDİ — kaptanın demir atmadan önce ilk baktığı bilgiler:
+/// derinlik, zemin, rüzgâra açık yönler, tekne uygunluğu. Yalnız verisi olan
+/// kutular çizilir; tekne kutusuna dokunmak tekne tanımını açar.
+class _GlanceStrip extends ConsumerWidget {
+  const _GlanceStrip({required this.detail});
+
+  final LocationDetail detail;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final List<Widget> tiles = <Widget>[];
+
+    final Dimensions d = detail.dimensions;
+    if (d.depthMinM != null || d.depthMaxM != null) {
+      tiles.add(_GlanceTile(label: t.statDepth, value: _range(d.depthMinM, d.depthMaxM)));
+    }
+
+    final AnchorageTypeDetails? a = switch (detail.typeDetails) {
+      final AnchorageTypeDetails x => x,
+      _ => null,
+    };
+    if (a?.holdingType != null) {
+      tiles.add(_GlanceTile(label: t.glanceSeabed, value: _capTr(t.holdingLabel(a!.holdingType!))));
+    }
+
+    final String? dirs = detail.windExposedDirs;
+    if (dirs != null && dirs.trim().isNotEmpty) {
+      final String value =
+          dirs.split(',').map((String s) => s.trim()).where((String s) => s.isNotEmpty).join(', ');
+      tiles.add(_GlanceTile(label: t.glanceOpenDir, value: value));
+    }
+
+    // Tekne uygunluğu: tekne tanımlıysa otomatik karşılaştırma; değilse
+    // dokun-tanımla daveti. Limit verisi hiç yoksa kutu iddiada bulunmaz (—).
+    final MyBoat? boat = ref.watch(myBoatProvider);
+    final BoatFit fit = computeBoatFit(
+      boat: boat,
+      maxBoatLengthM: d.maxBoatLengthM,
+      maxDraftM: d.maxDraftM,
+    );
+    final (String fitValue, Color? fitColor) = switch (fit) {
+      BoatFit.fits => (t.fitShortYes, DocklyColors.success),
+      BoatFit.tooBig => (t.fitShortNo, DocklyColors.error),
+      BoatFit.unknown => ('—', null),
+    };
+    tiles.add(_GlanceTile(
+      label: t.glanceBoat,
+      value: fitValue,
+      valueColor: fitColor,
+      sub: boat == null
+          ? t.boatDefineCta
+          : '${_num(boat.lengthM)} m${boat.draftM != null ? ' · ${_num(boat.draftM!)} m' : ''}',
+      onTap: () => showBoatSheet(context),
+    ));
+
+    if (tiles.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          for (int i = 0; i < tiles.length; i++) ...<Widget>[
+            if (i > 0) const SizedBox(width: 8),
+            Expanded(child: tiles[i]),
+          ],
+        ],
+      ),
+    );
+  }
+
   static String _range(double? min, double? max) {
-    if (min != null && max != null) return '${_num(min)}–${_num(max)} m';
+    if (min != null && max != null && min != max) return '${_num(min)}–${_num(max)} m';
     return '${_num((min ?? max)!)} m';
   }
 
   static String _num(double v) =>
       v == v.roundToDouble() ? v.toInt().toString() : v.toString();
+
+  /// Türkçe baş harf büyütme ("çamur" → "Çamur"; i→İ, ı→I kuralına saygılı).
+  static String _capTr(String s) {
+    if (s.isEmpty) return s;
+    final String first = switch (s[0]) {
+      'i' => 'İ',
+      'ı' => 'I',
+      final String c => c.toUpperCase(),
+    };
+    return first + s.substring(1);
+  }
 }
 
-/// Deniz-rota önizlemesi (P2, docs vizyon — denizcilik-odaklı rota, karayolu YOK).
-/// Başlangıç noktası (harita merkezi) biliniyorsa: yön (pusula + ok) + kuşuçuşu
-/// deniz mili + kaba süre. Başlangıç yoksa gizlenir.
+class _GlanceTile extends StatelessWidget {
+  const _GlanceTile({
+    required this.label,
+    required this.value,
+    this.valueColor,
+    this.sub,
+    this.onTap,
+  });
+
+  final String label;
+  final String value;
+  final Color? valueColor;
+  final String? sub;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    // Maritime stat kutularıyla aynı sabit boy (84) — 3 metin satırı + dolgu
+    // gerçek tema metrikleriyle de rahat sığar (taşma payı geniş tutuldu).
+    final double height = MediaQuery.textScalerOf(context).scale(84);
+    final Widget inner = Container(
+      height: height,
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        border: Border.all(color: theme.colorScheme.outline),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.3,
+            ),
+          ),
+          const SizedBox(height: 3),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              value,
+              maxLines: 1,
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w800,
+                color: valueColor ?? theme.colorScheme.onSurface,
+              ),
+            ),
+          ),
+          if (sub != null) ...<Widget>[
+            const SizedBox(height: 2),
+            Text(
+              sub!,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.labelSmall
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+          ],
+        ],
+      ),
+    );
+    if (onTap == null) return inner;
+    return InkWell(borderRadius: BorderRadius.circular(12), onTap: onTap, child: inner);
+  }
+}
+
+/// B) YAKLAŞMA NOTU KARTI — güvenlik-kritik bilgi açıklama paragrafı içinde
+/// kaybolmasın diye turuncu uyarı kartında (metin, doğrulanmış kaynaklardan
+/// gelen notun kendisidir — 0-uydurma).
+class _ApproachNoteCard extends ConsumerWidget {
+  const _ApproachNoteCard({required this.note});
+
+  final String note;
+
+  /// Turuncu mürekkep: DocklyColors.warning zemin üstünde okunur koyu ton.
+  static const Color _ink = Color(0xFFB45309);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ThemeData theme = Theme.of(context);
+    final L10n t = ref.watch(l10nProvider);
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(top: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: DocklyColors.warning.withValues(alpha: 0.10),
+        border: Border.all(color: DocklyColors.warning.withValues(alpha: 0.5)),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const DocklyIcon(DocklyIcons.errorOutline, size: 18, color: _ink),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  t.approachTitle,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: _ink,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.4,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(note, style: theme.textTheme.bodyMedium?.copyWith(height: 1.45)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Deniz-rota önizleme bölümü (P2 → bölüm kartı, 2026-08). Yön (pusula + ok) +
+/// kuşuçuşu deniz mili + kaba süre. Başlangıç (harita konumu) yoksa gizlenir.
+/// ROTA ÇİZ eylemi artık yapışkan çubukta — her an erişilebilir.
 class _SeaRouteRow extends ConsumerWidget {
-  const _SeaRouteRow({required this.destination, required this.idOrSlug});
+  const _SeaRouteRow({required this.destination});
 
   final GeoPoint destination;
-  final String idOrSlug;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -414,78 +770,47 @@ class _SeaRouteRow extends ConsumerWidget {
     final SeaRoutePreview route = computeSeaRoute(origin, destination);
     if (route.distanceNm < 0.05) return const SizedBox.shrink();
     final ThemeData theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.only(top: 12),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          border: Border.all(color: DocklyColors.brandPrimary),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: <Widget>[
-            Transform.rotate(
-              angle: route.bearingDeg * math.pi / 180.0,
-              child: const DocklyIcon(DocklyIcons.navigation, color: DocklyColors.brandPrimary),
+    return SectionCard(
+      icon: DocklyIcons.navigation,
+      title: t.routeSectionTitle,
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: DocklyColors.brandPrimary.withValues(alpha: 0.10),
+              borderRadius: BorderRadius.circular(20),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(L10n.fmt(t.seaRouteFmt, route.compass), style: theme.textTheme.titleSmall),
-                  const SizedBox(height: 2),
-                  Text(
-                    L10n.fmt2(t.seaRouteLineFmt, _fmtNm(route.distanceNm),
-                      _fmtEta(t, route.etaHoursAtCruise)),
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                  Text(
-                    t.seaRouteFrom,
-                    style: theme.textTheme.bodySmall
-                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                  ),
-                  const SizedBox(height: 10),
-                  // ROTA ÇİZ (UX 2026-08): aramadan gelen kullanıcı haritaya
-                  // dönüp işareti yeniden bulmak zorunda kalmasın — rota
-                  // BURADAN istenir, harita rota çizili olarak açılır.
-                  // Konum şartı haritayla aynıdır (kaptan kuralı).
-                  SizedBox(
-                    width: double.infinity,
-                    child: DocklyButton(
-                      label: t.routeBtn,
-                      icon: DocklyIcons.navigation,
-                      variant: DocklyButtonVariant.secondary,
-                      onPressed: () {
-                        if (ref.read(devicePositionProvider) == null) {
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(SnackBar(
-                              content: Text(t.routeNeedOrigin),
-                              duration: const Duration(seconds: 6),
-                              action: SnackBarAction(
-                                label: t.locateTooltip,
-                                onPressed: () => ref
-                                    .read(locationControllerProvider.notifier)
-                                    .locateMe(),
-                              ),
-                            ));
-                          return;
-                        }
-                        // Hesap arka planda başlar; kullanıcı haritaya döner,
-                        // rota + mesafe/süre çipi orada belirir.
-                        ref
-                            .read(mapControllerProvider.notifier)
-                            .routeTo(destination, idOrSlug);
-                        Navigator.of(context).popUntil((Route<dynamic> r) => r.isFirst);
-                      },
-                    ),
-                  ),
-                ],
+            child: Center(
+              child: Transform.rotate(
+                angle: route.bearingDeg * math.pi / 180.0,
+                child: const DocklyIcon(DocklyIcons.navigation,
+                    size: 20, color: DocklyColors.brandPrimary),
               ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(L10n.fmt(t.seaRouteFmt, route.compass), style: theme.textTheme.titleSmall),
+                const SizedBox(height: 2),
+                Text(
+                  L10n.fmt2(t.seaRouteLineFmt, _fmtNm(route.distanceNm),
+                      _fmtEta(t, route.etaHoursAtCruise)),
+                  style: theme.textTheme.bodyMedium,
+                ),
+                Text(
+                  t.seaRouteFrom,
+                  style: theme.textTheme.bodySmall
+                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -505,13 +830,104 @@ String _fmtEta(L10n t, double hours) {
   return m == 0 ? '$h ${t.hourUnit}' : '$h ${t.hourUnit} $m ${t.minUnit}';
 }
 
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle(this.title);
-  final String title;
+/// D) YAPIŞKAN EYLEM ÇUBUĞU — Deniz Rotası (birincil) + türe göre ikinci eylem:
+/// demirleme tiplerinde Doluluk Bildir, diğerlerinde Rezervasyon Talebi.
+/// Konum şartı haritayla aynıdır (kaptan kuralı): GPS yoksa rota başlamaz.
+class _ActionBar extends ConsumerWidget {
+  const _ActionBar({required this.detail});
+
+  final LocationDetail detail;
 
   @override
-  Widget build(BuildContext context) {
-    return Text(title, style: Theme.of(context).textTheme.titleMedium);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ThemeData theme = Theme.of(context);
+    final L10n t = ref.watch(l10nProvider);
+    final bool anchoring = _isAnchoringType(detail.type);
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        border: Border(
+          top: BorderSide(color: theme.dividerColor.withValues(alpha: 0.35)),
+        ),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 760),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: DocklyButton(
+                      label: t.routeBtn,
+                      icon: DocklyIcons.navigation,
+                      onPressed: () => _startRoute(context, ref),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: anchoring
+                        ? DocklyButton(
+                            key: const ValueKey<String>('occupancy-report-button'),
+                            label: t.occReportCta,
+                            variant: DocklyButtonVariant.secondary,
+                            onPressed: () => startOccupancyReport(
+                              context,
+                              ref,
+                              idOrSlug: detail.id,
+                              position: detail.position,
+                            ),
+                          )
+                        : DocklyButton(
+                            label: t.rezTitle,
+                            variant: DocklyButtonVariant.secondary,
+                            // ÜYELİK KAPISI (kullanıcı kararı 2026-07): talep
+                            // göndermek hesap ister.
+                            onPressed: () => requireAccount(
+                              context,
+                              ref,
+                              message: t.gateReservationMsg,
+                              onAllowed: () => showReservationSheet(
+                                context,
+                                locationName: detail.name,
+                                contacts: detail.contacts,
+                              ),
+                            ),
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Rota: aramadan/detaydan gelen kullanıcı haritaya dönüp işareti yeniden
+  /// bulmak zorunda kalmasın — rota BURADAN istenir, harita rota çizili açılır.
+  void _startRoute(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.read(l10nProvider);
+    if (ref.read(devicePositionProvider) == null) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+          content: Text(t.routeNeedOrigin),
+          duration: const Duration(seconds: 6),
+          action: SnackBarAction(
+            label: t.locateTooltip,
+            onPressed: () =>
+                ref.read(locationControllerProvider.notifier).locateMe(),
+          ),
+        ));
+      return;
+    }
+    // Hesap arka planda başlar; kullanıcı haritaya döner, rota + mesafe/süre
+    // çipi orada belirir.
+    ref.read(mapControllerProvider.notifier).routeTo(detail.position, detail.id);
+    Navigator.of(context).popUntil((Route<dynamic> r) => r.isFirst);
   }
 }
 
@@ -537,51 +953,107 @@ class _IconChips extends StatelessWidget {
   }
 }
 
-class _ContactRow extends ConsumerWidget {
-  const _ContactRow({required this.contact});
+/// C) İLETİŞİM KUTUCUKLARI — satır listesi yerine tek dokunuş kutucukları:
+/// Ara / WhatsApp / VHF / Web… Açılabilen türler dokununca çalışır (telefon ve
+/// WhatsApp üyelik kapılı, kullanıcı kararı 2026-07); VHF gibi açılamayanlar
+/// bilgi kutusu olarak durur. Numara/değer her zaman görünür (bilgi herkese açık).
+class _ContactTiles extends StatelessWidget {
+  const _ContactTiles({required this.contacts});
+
+  final List<Contact> contacts;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints c) {
+        const double gap = 8;
+        final int perRow = contacts.length >= 3 ? 3 : contacts.length;
+        final double width = perRow <= 1
+            ? c.maxWidth
+            : (c.maxWidth - gap * (perRow - 1)) / perRow;
+        return Wrap(
+          spacing: gap,
+          runSpacing: gap,
+          children: <Widget>[
+            for (final Contact contact in contacts)
+              SizedBox(width: width, child: _ContactTile(contact: contact)),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ContactTile extends ConsumerWidget {
+  const _ContactTile({required this.contact});
+
   final Contact contact;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
-    final String? label = contact.label;
+    final L10n t = ref.watch(l10nProvider);
     final Uri? uri = contactUri(contact.type, contact.value);
-    final Widget valueWidget = label == null
-        ? Text(contact.value)
-        : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    final Widget inner = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        border: Border.all(color: theme.colorScheme.outline),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: DocklyColors.brandPrimary.withValues(alpha: 0.10),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Center(
+              child: DocklyIcon(_iconFor(contact.type),
+                  size: 15, color: DocklyColors.brandPrimary),
+            ),
+          ),
+          const SizedBox(height: 5),
+          Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                label,
-                style: theme.textTheme.bodySmall
-                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              Flexible(
+                child: Text(
+                  contact.label ?? t.contactTypeLabel(contact.type),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
               ),
-              Text(contact.value),
+              if (uri != null) ...<Widget>[
+                const SizedBox(width: 3),
+                DocklyIcon(DocklyIcons.openInNew,
+                    size: 11, color: theme.colorScheme.onSurfaceVariant),
+              ],
             ],
-          );
-    final Widget inner = Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: <Widget>[
-          DocklyIcon(_iconFor(contact.type), size: 18, color: DocklyColors.brandPrimary),
-          const SizedBox(width: 10),
-          Expanded(child: valueWidget),
-          if (uri != null)
-            DocklyIcon(DocklyIcons.openInNew,
-                size: 16, color: theme.colorScheme.onSurfaceVariant),
+          ),
+          const SizedBox(height: 1),
+          Text(
+            contact.value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.labelSmall
+                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          ),
         ],
       ),
     );
-    // Açılabilen türler (telefon/WhatsApp/web/e-posta) tek dokunuşla çalışır;
-    // VHF gibi açılamayanlar düz metin kalır. ÜYELİK KAPISI (kullanıcı kararı
+    // Açılabilen türler tek dokunuşla çalışır. ÜYELİK KAPISI (kullanıcı kararı
     // 2026-07): marina/limanı DOĞRUDAN ARAMAK (telefon/WhatsApp) hesap ister;
-    // numara görünür kalır, web/e-posta serbesttir. Acil Durum sayfası kapı
-    // dışıdır (güvenlik).
+    // değer görünür kalır, web/e-posta serbesttir.
     if (uri == null) return inner;
     final bool needsAccount =
         contact.type == 'phone' || contact.type == 'whatsapp';
     return InkWell(
+      borderRadius: BorderRadius.circular(12),
       onTap: () {
         if (!needsAccount) {
           launchContact(context, contact.type, contact.value);
@@ -619,26 +1091,6 @@ class _ContactRow extends ConsumerWidget {
       default:
         return DocklyIcons.infoOutline;
     }
-  }
-}
-
-class _Pill extends StatelessWidget {
-  const _Pill({required this.label});
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-      decoration: BoxDecoration(
-        border: Border.all(color: DocklyColors.brandPrimary),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(fontSize: 12, color: DocklyColors.brandPrimary),
-      ),
-    );
   }
 }
 
@@ -705,8 +1157,7 @@ class _ShareButton extends ConsumerWidget {
 bool _isAnchoringType(String type) =>
     type == 'mooring_point' || type == 'buoy' || type == 'guest_mooring';
 
-/// "Demirleme Notları" — rezervasyon düğmesinin yerini alan bilgi kutusu.
-/// Sabit metin yerine KOYA ÖZEL veri gösterir (ürün kararı 2026-07):
+/// "Demirleme Notları" — koya özel bilgi kutusu (ürün kararı 2026-07):
 /// zemin (dip tutunması) + derinlik satırları ve açıklamadan ayrıştırılan
 /// demirleme/DİKKAT cümleleri. UYDURMA VERİ YOK ilkesi: yalnız kayıtlı alanlar
 /// ve açıklamada zaten var olan cümleler; koya özel veri hiç yoksa bunu
