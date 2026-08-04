@@ -108,16 +108,18 @@ class _SplashGateState extends ConsumerState<SplashGate> {
 
 // =============================================================================
 // KOYBUL MARKA YÜZEYİ — logoyla aynı dili konuşan sade kurumsal açılış.
-// BOYUT SÖZLEŞMESİ (kullanıcı kararı 2026-08): işaret yüksekliği HER YERDE
-// aynı formülle hesaplanır → clamp(ekranın kısa kenarı × 0.30, 130, 220).
-// Web ön-açılışı (index.html) CSS'te BİREBİR aynı formülü kullanır
-// (clamp(130px, 30vmin, 220px)) — devralma anında logo asla büyümez/küçülmez.
+// BOYUT SÖZLEŞMESİ (kullanıcı kararı 2026-08, "büyük olsun ve DEĞİŞMESİN"):
+// işaret yüksekliği HER YERDE aynı formülle hesaplanır →
+// clamp(ekranın kısa kenarı × 0.32, 150, 240). Web ön-açılışı (index.html)
+// aynı formülü açılışta JS ile TEK KEZ hesaplayıp sabit px olarak DONDURUR;
+// marka yazısı da sayfaya gömülü alt-küme fontla ilk kareden doğru çizilir —
+// logonun/yazının sonradan büyümesi her iki katmanda da imkânsızdır.
 // TEK animasyon: dalga üzerinde giden yelkenli (yükleme göstergesi).
 // =============================================================================
 
-/// Paylaşılan boyut formülü — index.html'deki CSS clamp ile birebir.
+/// Paylaşılan boyut formülü — index.html'deki dondurulmuş değerle birebir.
 double koybulMarkHeight(Size screen) =>
-    (math.min(screen.width, screen.height) * 0.30).clamp(130.0, 220.0);
+    (math.min(screen.width, screen.height) * 0.32).clamp(150.0, 240.0);
 
 class BrandSplash extends StatefulWidget {
   const BrandSplash({required this.night, super.key});
