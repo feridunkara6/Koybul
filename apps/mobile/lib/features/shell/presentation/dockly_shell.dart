@@ -10,6 +10,7 @@ import '../../reservation/presentation/reservations_placeholder_screen.dart';
 import '../../search/presentation/search_screen.dart';
 import '../../splash/presentation/splash_screen.dart';
 import '../../welcome/presentation/welcome_prompt.dart';
+import '../application/shell_tab_provider.dart';
 
 /// Uygulama kabuğu — 5 sekmeli alt menü (docs/01-prd §6.13):
 /// Keşfet (harita) · Arama · Favoriler · Taleplerim · Profil.
@@ -25,8 +26,6 @@ class DocklyShell extends ConsumerStatefulWidget {
 }
 
 class _DocklyShellState extends ConsumerState<DocklyShell> {
-  int _index = 0;
-
   /// PERF (tembel sekmeler): açılışta yalnız Keşfet kurulur; diğer sekmeler
   /// İLK ziyarette kurulur ve sonra durumunu korur (IndexedStack canlı tutar).
   /// Açılışta 5 ekran yerine 1 ekran kurmak ilk kareyi belirgin hızlandırır.
@@ -65,6 +64,10 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
   @override
   Widget build(BuildContext context) {
     final L10n t = ref.watch(l10nProvider); // dil değişince menü yenilenir
+    // Sekme artık sağlayıcıda (tanıtım 2026-08): Profil'deki "turu tekrar
+    // izle" Keşfet'e dönebilsin. Dışarıdan gelen geçişte de sekme kurulur.
+    final int index = ref.watch(shellTabProvider);
+    _built[index] = true;
     final bool dark = Theme.of(context).brightness == Brightness.dark;
     // Tasarım sistemi §5 (glass tab bar) + mockup: açık cam zemin (0.72 beyaz),
     // ince üst çizgi, PILL GÖSTERGESİZ sekmeler — seçili sekme marka mavisi
@@ -74,7 +77,7 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
     final Color unselected = dark ? DocklyColors.text2Dark : DocklyColors.text2;
     return Scaffold(
       body: IndexedStack(
-        index: _index,
+        index: index,
         children: <Widget>[
           const MapScreen(), // her zaman canlı (harita durumu korunur)
           _built[1] ? const SearchScreen() : const SizedBox.shrink(),
@@ -121,11 +124,11 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
             ),
           ),
           child: NavigationBar(
-            selectedIndex: _index,
-            onDestinationSelected: (int i) => setState(() {
-              _built[i] = true; // ilk ziyarette kur, sonra canlı tut
-              _index = i;
-            }),
+            selectedIndex: index,
+            onDestinationSelected: (int i) {
+              setState(() => _built[i] = true); // ilk ziyarette kur, canlı tut
+              ref.read(shellTabProvider.notifier).state = i;
+            },
             destinations: <NavigationDestination>[
               NavigationDestination(
                 icon: const DocklyIcon(DocklyIcons.exploreOutlined),

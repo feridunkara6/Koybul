@@ -13,6 +13,9 @@ import '../../emergency/presentation/emergency_screen.dart';
 import '../../location/application/location_controller.dart';
 import '../../location/presentation/locate_button.dart';
 import '../../nearby/presentation/nearby_sheet.dart';
+import '../../onboarding/application/onboarding_controller.dart';
+import '../../onboarding/presentation/onboarding_overlay.dart';
+import '../../onboarding/presentation/tour_targets.dart';
 import '../../route/domain/route_wind.dart';
 import '../../route/domain/sea_route.dart';
 import '../../route/domain/sea_router.dart';
@@ -76,6 +79,8 @@ class MapScreen extends ConsumerWidget {
       },
     );
     final MapSurfaceBuilder surfaceBuilder = ref.watch(mapSurfaceBuilderProvider);
+    // YENİ KULLANICI TANITIMI (2026-08): karşılama + tur + ilk-dokunuş ipuçları.
+    final OnboardingState onb = ref.watch(onboardingControllerProvider);
     final bool isList = ref.watch(mapViewIsListProvider);
     final selectedPin = state.selectedPin;
     // "Teknem sığar" filtresi: SIĞMAYANLAR gizlenir; bilinmeyenler kalır.
@@ -143,7 +148,13 @@ class MapScreen extends ConsumerWidget {
             top: 12,
             left: 0,
             right: 0,
-            child: SafeArea(child: _TypeFilterRow(selected: state.types)),
+            child: SafeArea(
+              // Tur hedefi (tanıtım 2026-08): 2. adım bu şeridi aydınlatır.
+              child: KeyedSubtree(
+                key: tourKeyChips,
+                child: _TypeFilterRow(selected: state.types),
+              ),
+            ),
           ),
           // Çip şeridinin HEMEN ALTINDA sağda: "Konumum" (her zaman) +
           // harita↔liste geçişi (yalnız pin/yakın zoom verisi varken).
@@ -155,13 +166,14 @@ class MapScreen extends ConsumerWidget {
                 children: <Widget>[
                   // ACİL DURUM KISAYOLU (UX analizi 2026-08): panik anında tek
                   // dokunuş — Profil'in derinliğinde kalmasın. Üyelik kapısı YOK.
-                  const _SosButton(),
+                  // KeyedSubtree'ler tur hedefleri (tanıtım 2026-08).
+                  KeyedSubtree(key: tourKeySos, child: const _SosButton()),
                   const SizedBox(height: 8),
-                  const LocateButton(),
+                  KeyedSubtree(key: tourKeyLocate, child: const LocateButton()),
                   const SizedBox(height: 8),
                   // HARİTADA ARAMA (UX analizi 2026-08): sekme değiştirmeden
                   // arama — sonuçtan detay açılır, harita durumu korunur.
-                  const _MapSearchButton(),
+                  KeyedSubtree(key: tourKeySearch, child: const _MapSearchButton()),
                   if (state.pins.isNotEmpty) ...<Widget>[
                     const SizedBox(height: 8),
                     _ViewToggle(
@@ -227,7 +239,26 @@ class MapScreen extends ConsumerWidget {
               left: 0,
               right: 0,
               bottom: 0,
-              child: LocationBottomCard(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  // İLK-DOKUNUŞ İPUCU (tanıtım 2026-08): ilk pin seçiminde
+                  // kartın üstünde tek seferlik açıklama balonu.
+                  if (onb.showHint(kHintBottomCard))
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 4),
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 480),
+                          child: OnboardingHintBubble(
+                            hintKey: kHintBottomCard,
+                            title: ref.watch(l10nProvider).onbHintCardTitle,
+                            body: ref.watch(l10nProvider).onbHintCardBody,
+                          ),
+                        ),
+                      ),
+                    ),
+                  LocationBottomCard(
                 pin: selectedPin,
                 // Tekne tanımlıysa kartta uyum rozeti (harita pinleriyle tutarlı).
                 fit: computeBoatFit(
@@ -278,8 +309,15 @@ class MapScreen extends ConsumerWidget {
                         }
                         controller.routeToPin(selectedPin);
                       },
+                  ),
+                ],
               ),
             ),
+          // TANITIM KAPLAMALARI (en üstte): karşılama kartı ve spot ışıklı tur.
+          if (!isList && onb.showWelcome)
+            const Positioned.fill(child: OnboardingWelcomeCard()),
+          if (!isList && onb.tourActive)
+            Positioned.fill(child: TourOverlay(step: onb.tourStep)),
         ],
       ),
     );

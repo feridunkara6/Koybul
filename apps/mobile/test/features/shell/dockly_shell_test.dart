@@ -1,5 +1,6 @@
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
+import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
 import 'package:dockly_mobile/features/search/presentation/search_screen.dart';
 import 'package:dockly_mobile/features/shell/presentation/dockly_shell.dart';
 import 'package:dockly_mobile/features/welcome/presentation/welcome_prompt.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/fake_map_surface.dart';
 import '../../support/map_fakes.dart';
+import '../../support/onboarding_fakes.dart';
 import '../../support/welcome_fakes.dart';
 
 Widget _app() {
@@ -20,6 +22,8 @@ Widget _app() {
       mapCacheProvider.overrideWithValue(FakeMapCache()),
       // Karşılama sorusu bu testlerin konusu değil — "soruldu" kabul edilir.
       welcomeStoreProvider.overrideWithValue(FakeWelcomeStore(shown: true)),
+      // Tanıtım (2026-08) da konu dışı — "görüldü" kabul edilir.
+      onboardingStoreProvider.overrideWithValue(doneOnboardingStore()),
     ],
     child: const MaterialApp(home: DocklyShell()),
   );

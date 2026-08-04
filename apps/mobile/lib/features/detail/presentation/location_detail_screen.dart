@@ -20,6 +20,7 @@ import '../../favorites/presentation/favorite_button.dart';
 import '../../location/application/location_controller.dart';
 import '../../map/application/map_controller.dart';
 import '../../map/domain/map_state.dart';
+import '../../onboarding/application/onboarding_controller.dart';
 import '../../route/domain/sea_trip.dart';
 import '../../nearby/presentation/nearby_alternatives.dart';
 import '../../reservation/presentation/reservation_sheet.dart';
@@ -395,6 +396,10 @@ class _HeroCard extends ConsumerWidget {
               InkWell(
                 borderRadius: BorderRadius.circular(6),
                 onTap: () async {
+                  // Kopyalama ipucu görevini tamamladı (tanıtım 2026-08).
+                  ref
+                      .read(onboardingControllerProvider.notifier)
+                      .markHintSeen(kHintCoords);
                   await Clipboard.setData(ClipboardData(text: coords));
                   if (!context.mounted) return;
                   ScaffoldMessenger.of(context)
@@ -414,6 +419,55 @@ class _HeroCard extends ConsumerWidget {
               ),
             ],
           ),
+          // İLK-DOKUNUŞ İPUCU (tanıtım 2026-08): koordinat kopyalama tek
+          // seferlik anlatılır; "Anladım" ya da ilk kopyalama kapatır.
+          if (ref.watch(onboardingControllerProvider
+              .select((OnboardingState s) => s.showHint(kHintCoords))))
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(10, 5, 4, 5),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.10),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Flexible(
+                      child: Text(
+                        t.onbHintCoords,
+                        maxLines: 2,
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.85),
+                          fontSize: 11.5,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () => ref
+                          .read(onboardingControllerProvider.notifier)
+                          .markHintSeen(kHintCoords),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 3),
+                        child: Text(
+                          t.onbGotIt,
+                          style: const TextStyle(
+                            color: Color(0xFF7FE3D9),
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,

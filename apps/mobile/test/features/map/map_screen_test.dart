@@ -18,10 +18,13 @@ import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart
 
 import 'package:dockly_mobile/features/location/application/location_controller.dart';
 
+import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
+
 import '../../support/fake_map_surface.dart';
 import '../../support/location_fakes.dart';
 import '../../support/map_fakes.dart';
 import '../../support/nearby_fakes.dart';
+import '../../support/onboarding_fakes.dart';
 import '../../support/search_fakes.dart';
 
 /// İkonlar artık SVG tabanlı [DocklyIcon]; ikon verisiyle bulunur.
@@ -56,6 +59,8 @@ Widget _app(
       // Yakın-liman rayı da HER ZAMAN sahte (varsayılan boş → ray gizli) —
       // gerçek ağ geçidi testte HTTP'ye çıkardı.
       nearbyGatewayProvider.overrideWithValue(nearby ?? FakeNearbyGateway()),
+      // Tanıtım (2026-08) bu testlerin konusu değil — "görüldü" kabul edilir.
+      onboardingStoreProvider.overrideWithValue(doneOnboardingStore()),
       if (boat != null) myBoatProvider.overrideWith(() => _FixedBoat(boat)),
     ],
     child: const MaterialApp(home: MapScreen()),

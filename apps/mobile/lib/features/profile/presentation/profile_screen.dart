@@ -9,6 +9,8 @@ import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
 import '../../emergency/presentation/emergency_screen.dart';
+import '../../onboarding/application/onboarding_controller.dart';
+import '../../shell/application/shell_tab_provider.dart';
 
 /// Profil sekmesi (misafir). Kalıcı tekne bilgisini gösterir/düzenler, hesap
 /// bölümünü ve DİL seçimini barındırır (kullanıcı kararı 2026-07: dil cihazdan
@@ -53,7 +55,52 @@ class ProfileScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           // DİL — az yer kaplayan tek satır; menü aşağı açılır.
           const _LanguageRow(),
+          const SizedBox(height: 16),
+          // TANITIM TURU (2026-08): tur istendiği an yeniden izlenebilir —
+          // dokununca Keşfet sekmesine dönülür ve tur başlar.
+          const _TourReplayRow(),
         ],
+      ),
+    );
+  }
+}
+
+/// "Tanıtım turunu tekrar izle" satırı — dil satırıyla aynı görsel dil.
+class _TourReplayRow extends ConsumerWidget {
+  const _TourReplayRow();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final ThemeData theme = Theme.of(context);
+    return Material(
+      color: theme.colorScheme.surfaceContainerLow,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: () {
+          ref.read(onboardingControllerProvider.notifier).replayTour();
+          ref.read(shellTabProvider.notifier).state = 0; // Keşfet'e dön
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: theme.dividerColor.withValues(alpha: 0.4)),
+          ),
+          child: Row(
+            children: <Widget>[
+              DocklyIcon(DocklyIcons.infoOutline,
+                  size: 20, color: theme.colorScheme.primary),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(t.onbReplay, style: theme.textTheme.bodyMedium),
+              ),
+              DocklyIcon(DocklyIcons.arrowForward,
+                  size: 16, color: theme.colorScheme.onSurfaceVariant),
+            ],
+          ),
+        ),
       ),
     );
   }

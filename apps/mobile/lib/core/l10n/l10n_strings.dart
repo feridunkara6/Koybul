@@ -225,6 +225,20 @@ class L10n {
     required this.routeStopRemoveTooltip,
     required this.routeEditFail,
     required this.routeViaHint,
+    required this.onbWelcomeTitle,
+    required this.onbWelcomeBody,
+    required this.onbStartTour,
+    required this.onbNotNow,
+    required this.onbSkip,
+    required this.onbNext,
+    required this.onbDone,
+    required this.onbGotIt,
+    required this.onbReplay,
+    required this.onbHintCardTitle,
+    required this.onbHintCardBody,
+    required this.onbHintCoords,
+    required this.tourTitles,
+    required this.tourBodies,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -341,6 +355,15 @@ class L10n {
   // Rota düzenleme (2026-08, kullanıcı onaylı): tutamaçla kaydırma + duraklar.
   final String routeAddStop, routeStopsFmt, routeStopRemoveTooltip,
       routeEditFail, routeViaHint;
+
+  // Yeni kullanıcı tanıtımı (2026-08, kullanıcı onaylı): karşılama + 6 adımlı
+  // spot ışıklı tur + ilk-dokunuş ipuçları.
+  final String onbWelcomeTitle, onbWelcomeBody, onbStartTour, onbNotNow,
+      onbSkip, onbNext, onbDone, onbGotIt, onbReplay, onbHintCardTitle,
+      onbHintCardBody, onbHintCoords;
+
+  /// Tur adım başlıkları/metinleri (6 adım, sırayla).
+  final List<String> tourTitles, tourBodies;
 
   String windExposedLabel(String code) => windExposedLabels[code] ?? code;
 
@@ -636,6 +659,37 @@ const L10n _tr = L10n(
   routeStopRemoveTooltip: 'Durağı çıkar',
   routeEditFail: 'Buradan geçen deniz rotası bulunamadı — rota değiştirilmedi.',
   routeViaHint: 'Ara noktayı sürükleyerek taşıyabilir, üzerine dokunarak kaldırabilirsin.',
+  onbWelcomeTitle: "Koybul'a hoş geldin, kaptan",
+  onbWelcomeBody:
+      'Koyları keşfet, rüzgârı gör, deniz rotanı çiz. İstersen 30 saniyede uygulamayı birlikte gezelim.',
+  onbStartTour: 'Turu başlat',
+  onbNotNow: 'Şimdi değil',
+  onbSkip: 'Atla',
+  onbNext: 'İleri',
+  onbDone: 'Bitti',
+  onbGotIt: 'Anladım',
+  onbReplay: 'Tanıtım turunu tekrar izle',
+  onbHintCardTitle: 'Koy kartı',
+  onbHintCardBody:
+      '"Deniz rotası" konumundan bu koya karaya değmeyen rotayı çizer; '
+      "Detay'da derinlik, rüzgâr ve iletişim bilgileri var.",
+  onbHintCoords: 'Koordinata dokun — panoya kopyalanır.',
+  tourTitles: <String>[
+    'Harita ve koylar',
+    'Filtreler',
+    'Konumum',
+    'SOS',
+    'Arama',
+    'Koy kartı',
+  ],
+  tourBodies: <String>[
+    'Renkli işaretler koyları, marinaları ve iskeleleri gösterir. Sayılı balonlara dokunarak bölgeye yaklaşabilirsin.',
+    'Üstteki çiplerle haritayı türe göre süz. "Teknem sığar" açıkken teknene uymayan yerler gizlenir.',
+    'Konumunu paylaşırsan teknen haritada görünür; mesafeler ve deniz rotası senin konumundan hesaplanır.',
+    'Acil durumda tek dokunuş: koordinatın, telsiz kanalları ve acil numaralar — kapı yok, internetsiz de çalışır.',
+    'Büyüteçle koy ve marina ara; sonuçtan detaya geç. Alttaki düğmeyle harita ↔ liste görünümü değişir.',
+    'Haritada bir koya dokun: alttaki kartta Detay ve karaya değmeyen Deniz Rotası seni bekler.',
+  ],
 );
 
 const L10n _en = L10n(
@@ -903,6 +957,37 @@ const L10n _en = L10n(
   routeStopRemoveTooltip: 'Remove stop',
   routeEditFail: 'No sea route passes through there — the route was not changed.',
   routeViaHint: 'Drag the waypoint to move it, tap it to remove it.',
+  onbWelcomeTitle: 'Welcome aboard, captain',
+  onbWelcomeBody:
+      'Discover bays, check the wind, plot your sea route. If you like, we can tour the app together in 30 seconds.',
+  onbStartTour: 'Start the tour',
+  onbNotNow: 'Not now',
+  onbSkip: 'Skip',
+  onbNext: 'Next',
+  onbDone: 'Done',
+  onbGotIt: 'Got it',
+  onbReplay: 'Replay the intro tour',
+  onbHintCardTitle: 'Bay card',
+  onbHintCardBody:
+      '"Sea route" draws a land-avoiding route from your position to this bay; '
+      'Details has depth, wind and contact info.',
+  onbHintCoords: 'Tap the coordinates to copy them.',
+  tourTitles: <String>[
+    'Map and bays',
+    'Filters',
+    'My location',
+    'SOS',
+    'Search',
+    'Bay card',
+  ],
+  tourBodies: <String>[
+    'Colored markers show bays, marinas and piers. Tap a numbered bubble to zoom into that area.',
+    'Filter the map by type with the chips above. With "My boat fits" on, places your boat can\'t fit are hidden.',
+    'Share your location and your boat appears on the map; distances and sea routes are calculated from where you are.',
+    'One tap in an emergency: your coordinates, radio channels and emergency numbers — no sign-in, works offline.',
+    'Search bays and marinas with the magnifier; open details from a result. The button below toggles map ↔ list view.',
+    'Tap a bay on the map: the card below offers Details and a land-avoiding Sea Route.',
+  ],
 );
 
 const L10n _es = L10n(
@@ -1170,6 +1255,37 @@ const L10n _es = L10n(
   routeStopRemoveTooltip: 'Quitar parada',
   routeEditFail: 'No hay ruta marítima por ahí — la ruta no se modificó.',
   routeViaHint: 'Arrastra el punto para moverlo; tócalo para quitarlo.',
+  onbWelcomeTitle: 'Bienvenido a bordo, capitán',
+  onbWelcomeBody:
+      'Descubre calas, mira el viento, traza tu ruta marítima. Si quieres, recorremos la app juntos en 30 segundos.',
+  onbStartTour: 'Iniciar el tour',
+  onbNotNow: 'Ahora no',
+  onbSkip: 'Omitir',
+  onbNext: 'Siguiente',
+  onbDone: 'Listo',
+  onbGotIt: 'Entendido',
+  onbReplay: 'Repetir el tour de introducción',
+  onbHintCardTitle: 'Tarjeta de la cala',
+  onbHintCardBody:
+      '"Ruta marítima" traza una ruta que evita tierra desde tu posición hasta esta cala; '
+      'en Detalles hay profundidad, viento y contacto.',
+  onbHintCoords: 'Toca las coordenadas para copiarlas.',
+  tourTitles: <String>[
+    'Mapa y calas',
+    'Filtros',
+    'Mi ubicación',
+    'SOS',
+    'Búsqueda',
+    'Tarjeta de la cala',
+  ],
+  tourBodies: <String>[
+    'Los marcadores de colores muestran calas, marinas y muelles. Toca una burbuja numerada para acercarte a esa zona.',
+    'Filtra el mapa por tipo con los chips de arriba. Con "Mi barco cabe" activo, se ocultan los sitios donde no cabe.',
+    'Comparte tu ubicación y tu barco aparece en el mapa; distancias y rutas se calculan desde donde estás.',
+    'Un toque en emergencia: tus coordenadas, canales de radio y números de emergencia — sin registro, funciona sin internet.',
+    'Busca calas y marinas con la lupa; abre detalles desde un resultado. El botón de abajo alterna mapa ↔ lista.',
+    'Toca una cala en el mapa: la tarjeta inferior ofrece Detalles y una Ruta marítima que evita tierra.',
+  ],
 );
 
 const L10n _ru = L10n(
@@ -1437,6 +1553,37 @@ const L10n _ru = L10n(
   routeStopRemoveTooltip: 'Убрать остановку',
   routeEditFail: 'Морской маршрут через эту точку не найден — маршрут не изменён.',
   routeViaHint: 'Перетащите точку, чтобы переместить её; коснитесь, чтобы убрать.',
+  onbWelcomeTitle: 'Добро пожаловать на борт, капитан',
+  onbWelcomeBody:
+      'Открывайте бухты, смотрите ветер, прокладывайте морской маршрут. Если хотите, за 30 секунд пройдём приложение вместе.',
+  onbStartTour: 'Начать тур',
+  onbNotNow: 'Не сейчас',
+  onbSkip: 'Пропустить',
+  onbNext: 'Далее',
+  onbDone: 'Готово',
+  onbGotIt: 'Понятно',
+  onbReplay: 'Посмотреть вводный тур ещё раз',
+  onbHintCardTitle: 'Карточка бухты',
+  onbHintCardBody:
+      '«Морской маршрут» прокладывает путь в обход суши от вашей позиции до этой бухты; '
+      'в «Подробнее» — глубина, ветер и контакты.',
+  onbHintCoords: 'Коснитесь координат, чтобы скопировать их.',
+  tourTitles: <String>[
+    'Карта и бухты',
+    'Фильтры',
+    'Моя позиция',
+    'SOS',
+    'Поиск',
+    'Карточка бухты',
+  ],
+  tourBodies: <String>[
+    'Цветные метки — бухты, марины и причалы. Коснитесь пузырька с числом, чтобы приблизить район.',
+    'Фильтруйте карту по типу чипами сверху. При включённом «Моя лодка подходит» неподходящие места скрываются.',
+    'Поделитесь позицией — лодка появится на карте; расстояния и маршруты считаются от вас.',
+    'Одно касание в экстренной ситуации: ваши координаты, радиоканалы и номера служб — без входа, работает офлайн.',
+    'Ищите бухты и марины через лупу; открывайте детали из результата. Кнопка ниже переключает карту ↔ список.',
+    'Коснитесь бухты на карте: в карточке снизу — «Подробнее» и морской маршрут в обход суши.',
+  ],
 );
 
 /// Saf eşleme — birim testli.
