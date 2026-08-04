@@ -9,6 +9,11 @@ import 'package:flutter/material.dart';
 /// Mapbox annotation API'si renk olarak ARGB `int` beklediğinden değerler int olarak
 /// tutulur; `forType` ayrıca Flutter `Color` döndürür (lejant/rozet kullanımı için).
 abstract final class DocklyMapColors {
+  /// Harita zemini — karo yüklenene dek görünen renk. Gri yerine açık deniz
+  /// tonu: yüklenmemiş alan "bozuk" değil "henüz gelmemiş su" gibi durur
+  /// (algılanan hız, 2026-08). Aquarelle stilinin deniz tonuyla uyumludur.
+  static const Color seaBackground = Color(0xFFBFD9EE);
+
   /// Bilinmeyen/yeni tip için güvenli varsayılan (marka birincil).
   static const int _fallbackArgb = 0xFF0C7BDC;
 

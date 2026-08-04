@@ -38,9 +38,11 @@ jobs:
         run: |
           flutter create --platforms=web --project-name dockly_mobile .
           flutter pub get
+          # PWA önbelleği AÇIK (2026-08 hız kararı): motor+uygulama dosyaları
+          # cihazda önbelleklenir -> tekrar ziyaretler ANINDA açılır. Yeni sürüm
+          # arka planda iner, bir sonraki ziyarette devreye girer.
           flutter build web --release \
             --no-tree-shake-icons \
-            --pwa-strategy=none \
             --dart-define=API_BASE_URL=https://dockly-proje.onrender.com \
             --dart-define=MAP_TILE_KEY=${{ secrets.MAP_TILE_KEY }} \
             --dart-define=MAP_TILE_STYLE=${{ vars.MAP_TILE_STYLE || 'aquarelle' }} \

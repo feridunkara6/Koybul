@@ -184,6 +184,8 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
     return FlutterMap(
       mapController: _map,
       options: MapOptions(
+        // Karo gelene dek gri yerine DENİZ tonu — "bozuk görünüm" hissini keser.
+        backgroundColor: DocklyMapColors.seaBackground,
         initialCenter: const LatLng(38.85, 28.05),
         initialZoom: _initialZoom.toDouble(),
         minZoom: 4,

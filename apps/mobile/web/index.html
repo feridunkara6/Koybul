@@ -19,6 +19,10 @@
   <link rel="preconnect" href="https://dockly-proje.onrender.com" crossorigin>
   <link rel="preconnect" href="https://api.maptiler.com">
   <link rel="preconnect" href="https://tiles.openseamap.org">
+  <!-- Motor ön-yüklemesi (2026-08): ana uygulama ve çizim motoru dosyaları,
+       açılış ekranı görünür görünmez İNDİRİLMEYE başlar (sırada beklemez). -->
+  <link rel="preload" href="main.dart.js" as="script">
+  <link rel="preload" href="canvaskit/canvaskit.wasm" as="fetch" type="application/wasm" crossorigin>
   <title>Koybul — Denizde yerini bul</title>
   <link rel="manifest" href="manifest.json">
   <style>
