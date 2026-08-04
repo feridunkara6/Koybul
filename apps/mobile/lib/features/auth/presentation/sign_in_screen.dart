@@ -3,11 +3,14 @@ import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n/l10n_strings.dart';
 import '../application/auth_controller.dart';
 import '../domain/auth_gateway.dart';
 
-/// S-03 Giriş ekranı (docs/21). Apple/Google/E-posta/Telefon + Misafir modu.
-/// E-posta/Telefon detay ekranları 2.4c'de; şimdilik bilgi mesajı gösterir.
+/// S-03 Giriş ekranı (docs/21). Apple/Google + Misafir modu.
+/// UX kararı (2026-08): ÇALIŞMAYAN seçenek gösterilmez — E-posta/Telefon
+/// düğmeleri gerçek akışları gelene dek ekrandan kaldırıldı ("çok yakında"
+/// duvarı ürünü yarım gösteriyordu). Metinler l10n'dadır (4 dil).
 class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
 
@@ -29,10 +32,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     }
   }
 
-  void _comingSoon() {
-    _showMessage('Bu giriş yöntemi çok yakında.');
-  }
-
   void _showMessage(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(context)
@@ -43,6 +42,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     final busy = _busyKind != null;
+    final L10n t = ref.watch(l10nProvider);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -57,40 +57,26 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 8),
-              const Text('Hoş geldin, kaptan.', textAlign: TextAlign.center),
+              Text(t.signInWelcome, textAlign: TextAlign.center),
               const SizedBox(height: 40),
               DocklyButton(
-                label: 'Apple ile devam et',
+                label: t.appleBtn,
                 icon: DocklyIcons.apple,
                 loading: _busyKind == AuthProviderKind.apple,
                 onPressed: busy ? null : () => _signIn(AuthProviderKind.apple),
               ),
               const SizedBox(height: 12),
               DocklyButton(
-                label: 'Google ile devam et',
+                label: t.googleBtn,
                 icon: DocklyIcons.google,
                 loading: _busyKind == AuthProviderKind.google,
                 onPressed: busy ? null : () => _signIn(AuthProviderKind.google),
-              ),
-              const SizedBox(height: 12),
-              DocklyButton(
-                label: 'E-posta ile devam et',
-                variant: DocklyButtonVariant.secondary,
-                icon: DocklyIcons.mailOutline,
-                onPressed: busy ? null : _comingSoon,
-              ),
-              const SizedBox(height: 12),
-              DocklyButton(
-                label: 'Telefon ile devam et',
-                variant: DocklyButtonVariant.secondary,
-                icon: DocklyIcons.phoneOutlined,
-                onPressed: busy ? null : _comingSoon,
               ),
               const SizedBox(height: 24),
               TextButton(
                 onPressed:
                     busy ? null : () => _signIn(AuthProviderKind.guest),
-                child: const Text('Misafir olarak gez'),
+                child: Text(t.guestBtn),
               ),
             ],
           ),

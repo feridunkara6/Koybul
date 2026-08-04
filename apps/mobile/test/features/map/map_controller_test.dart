@@ -7,6 +7,8 @@ import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/data/bundled_map_snapshot.dart';
 import 'package:dockly_mobile/features/map/data/shared_prefs_map_cache.dart';
 import 'package:dockly_mobile/features/map/domain/map_cache.dart';
+import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
+import 'package:dockly_mobile/features/route/domain/sea_router.dart';
 import 'package:dockly_mobile/features/map/domain/map_state.dart';
 import 'package:dockly_mobile/features/map/domain/map_viewport.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,11 +31,26 @@ class FakeBundledSnapshot extends BundledMapSnapshot {
   }
 }
 
+/// Sahte rota motoru — gerçek maske varlığına gidilmez; verilen plan döner.
+class FakeSeaRouteEngine extends SeaRouteEngine {
+  FakeSeaRouteEngine([this.plan]);
+
+  final SeaRoutePlan? plan;
+  int calls = 0;
+
+  @override
+  Future<SeaRoutePlan?> route(GeoPoint from, GeoPoint to) async {
+    calls++;
+    return plan;
+  }
+}
+
 ProviderContainer _containerWith(
   FakeMapGateway gateway, {
   Duration debounce = Duration.zero,
   FakeMapCache? cache,
   FakeBundledSnapshot? snapshot,
+  FakeSeaRouteEngine? routeEngine,
 }) {
   final container = ProviderContainer(
     overrides: <Override>[
@@ -42,6 +59,7 @@ ProviderContainer _containerWith(
       // Önbellek HER ZAMAN sahte (testler arası sızıntı olmasın — determinizm).
       mapCacheProvider.overrideWithValue(cache ?? FakeMapCache()),
       bundledMapSnapshotProvider.overrideWithValue(snapshot ?? FakeBundledSnapshot()),
+      seaRouteEngineProvider.overrideWithValue(routeEngine ?? FakeSeaRouteEngine()),
     ],
   );
   addTearDown(container.dispose);
@@ -387,6 +405,64 @@ void main() {
     expect(state.clusters.single.count, 34); // gömülü veri ekranda kaldı
     expect(state.isOffline, isTrue);
     expect(state.failure, isNull);
+  });
+
+  test('deniz rotası: motor plan dönerse duruma yazılır, seq artar', () async {
+    final plan = SeaRoutePlan(
+      points: const <GeoPoint>[
+        GeoPoint(lat: 36.75, lon: 28.95),
+        GeoPoint(lat: 36.70, lon: 28.90),
+        GeoPoint(lat: 36.60, lon: 28.90),
+      ],
+      distanceNm: 12.5,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final engine = FakeSeaRouteEngine(plan);
+    final container = _containerWith(FakeMapGateway(result: pinResult), routeEngine: engine);
+    await _ctrl(container).loadViewport(pinViewport); // origin harita merkezine yazılır
+    await _ctrl(container).routeToPin(testPin);
+    final state = _state(container);
+    expect(engine.calls, 1);
+    expect(state.route, same(plan));
+    expect(state.isRouting, isFalse);
+    expect(state.routeSeq, 1);
+  });
+
+  test('deniz rotası: motor null dönerse DÜRÜST kuş uçuşu yedeği (viaSea=false)', () async {
+    final container =
+        _containerWith(FakeMapGateway(result: pinResult), routeEngine: FakeSeaRouteEngine());
+    await _ctrl(container).loadViewport(pinViewport);
+    await _ctrl(container).routeToPin(testPin);
+    final state = _state(container);
+    expect(state.route, isNotNull);
+    expect(state.route!.viaSea, isFalse);
+    expect(state.route!.points, hasLength(2));
+    expect(state.route!.points.last.lat, testPin.position.lat);
+  });
+
+  test('deniz rotası: origin yokken istek sessizce yok sayılır', () async {
+    final engine = FakeSeaRouteEngine();
+    final container = _containerWith(FakeMapGateway(), routeEngine: engine);
+    await _ctrl(container).routeToPin(testPin); // hiç yükleme yok → origin yok
+    expect(engine.calls, 0);
+    expect(_state(container).route, isNull);
+  });
+
+  test('clearRoute: çizili rota kaldırılır', () async {
+    final plan = SeaRoutePlan(
+      points: const <GeoPoint>[GeoPoint(lat: 36.7, lon: 28.9), GeoPoint(lat: 36.6, lon: 28.9)],
+      distanceNm: 6,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final container =
+        _containerWith(FakeMapGateway(result: pinResult), routeEngine: FakeSeaRouteEngine(plan));
+    await _ctrl(container).loadViewport(pinViewport);
+    await _ctrl(container).routeToPin(testPin);
+    expect(_state(container).route, isNotNull);
+    _ctrl(container).clearRoute();
+    expect(_state(container).route, isNull);
   });
 
   test('decodeCachedMapJson: geçerli anlık görüntü çözülür; bozuk girdi null', () {

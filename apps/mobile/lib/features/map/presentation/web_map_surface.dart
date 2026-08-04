@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'package:dockly_api/dockly_api.dart' show Bbox, Cluster, LocationPin;
+import 'package:dockly_api/dockly_api.dart' show Bbox, Cluster, GeoPoint, LocationPin;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -96,6 +96,25 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
       final double targetZoom = math.max(_map.camera.zoom, 12);
       _lastZoom = targetZoom;
       _map.move(LatLng(f.point.lat, f.point.lon), targetZoom);
+      _emit(_map.camera);
+    }
+    // Yeni deniz rotası: kamera rotanın tamamını görecek şekilde BİR KEZ
+    // sığdırılır (sonrasında kullanıcı serbestçe gezebilir).
+    final List<GeoPoint>? route = widget.data.routePoints;
+    if (route != null &&
+        route.length >= 2 &&
+        widget.data.routeSeq != oldWidget.data.routeSeq) {
+      final LatLngBounds b = LatLngBounds.fromPoints(
+        <LatLng>[for (final GeoPoint p in route) LatLng(p.lat, p.lon)],
+      );
+      _map.fitCamera(
+        CameraFit.bounds(
+          bounds: b,
+          padding: const EdgeInsets.fromLTRB(48, 132, 48, 228),
+          maxZoom: 13,
+        ),
+      );
+      _lastZoom = _map.camera.zoom;
       _emit(_map.camera);
     }
   }
@@ -199,6 +218,23 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
             );
           },
         ),
+        // AKILLI DENİZ ROTASI (2026-08): karaları tanıyan rota çizgisi —
+        // beyaz kontur + marka mavisi; işaretçilerin ALTINDA kalır.
+        if (widget.data.routePoints != null && widget.data.routePoints!.length >= 2)
+          PolylineLayer(
+            polylines: <Polyline>[
+              Polyline(
+                points: <LatLng>[
+                  for (final GeoPoint p in widget.data.routePoints!)
+                    LatLng(p.lat, p.lon),
+                ],
+                strokeWidth: 4,
+                color: DocklyColors.brandPrimary,
+                borderColor: const Color(0xFFFFFFFF),
+                borderStrokeWidth: 1.6,
+              ),
+            ],
+          ),
         MarkerLayer(
           markers: <Marker>[
             // KULLANICININ KONUMU — yelkenli imleç (kullanıcı isteği): beyaz

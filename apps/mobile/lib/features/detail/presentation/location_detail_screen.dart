@@ -4,6 +4,7 @@ import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart' show AppFailure;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/external_links.dart';
@@ -44,6 +45,9 @@ class LocationDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(loaded?.name ?? ref.watch(l10nProvider).detailFallbackTitle),
         actions: <Widget>[
+          // PAYLAŞ (UX analizi 2026-08): ad + koordinat + site bağlantısını
+          // panoya kopyalar — ek bağımlılık yok, her platformda çalışır.
+          if (loaded != null) _ShareButton(detail: loaded),
           if (loaded != null) FavoriteButton(favorite: _favoriteFrom(loaded)),
         ],
       ),
@@ -599,14 +603,14 @@ class _Pill extends StatelessWidget {
   }
 }
 
-class _DetailError extends StatelessWidget {
+class _DetailError extends ConsumerWidget {
   const _DetailError({required this.message, required this.onRetry});
 
   final String message;
   final VoidCallback onRetry;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -615,10 +619,43 @@ class _DetailError extends StatelessWidget {
           children: <Widget>[
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 16),
-            DocklyButton(label: 'Tekrar dene', onPressed: onRetry),
+            // l10n (2026-08): sabit 'Tekrar dene' yerine ortak retryLabel.
+            DocklyButton(
+              label: ref.watch(l10nProvider).retryLabel,
+              onPressed: onRetry,
+            ),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Paylaş düğmesi: '{ad} ({lat, lon}) — Koybul: https://koybul.com' metnini
+/// panoya kopyalar ve kısa onay gösterir. (Gerçek paylaşım sayfası ve koy
+/// bağlantıları, URL desteğiyle — Paket C — gelecek.)
+class _ShareButton extends ConsumerWidget {
+  const _ShareButton({required this.detail});
+
+  final LocationDetail detail;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    return IconButton(
+      icon: const DocklyIcon(DocklyIcons.share),
+      tooltip: t.shareTooltip,
+      onPressed: () async {
+        final String coords =
+            '${detail.position.lat.toStringAsFixed(4)}, ${detail.position.lon.toStringAsFixed(4)}';
+        await Clipboard.setData(
+          ClipboardData(text: L10n.fmt2(t.shareLineFmt, detail.name, coords)),
+        );
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(content: Text(t.shareCopied)));
+      },
     );
   }
 }

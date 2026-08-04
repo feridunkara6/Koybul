@@ -35,10 +35,12 @@ void main() {
     expect(find.text('Personel iyi.'), findsOneWidget);
   });
 
-  testWidgets('yorum yoksa bölüm gizlenir', (WidgetTester tester) async {
+  testWidgets('yorum yoksa DOST boş durum gösterilir (UX 2026-08)',
+      (WidgetTester tester) async {
     await tester.pumpWidget(_app(FakeReviewsGateway()));
     await tester.pumpAndSettle();
-    expect(find.text('Yorumlar'), findsNothing);
+    expect(find.text('Yorumlar'), findsOneWidget);
+    expect(find.text('Henüz yorum yok — ilk yorumu sen yazabilirsin.'), findsOneWidget);
   });
 
   testWidgets('hata olsa da bölüm gizlenir (misafiri rahatsız etmez)',

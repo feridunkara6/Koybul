@@ -1,6 +1,8 @@
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
 
+import '../../route/domain/sea_router.dart';
+
 /// Harita ekranı durumu (docs/26 §4). Yeniden yükleme sırasında mevcut
 /// marker'lar korunur (`isLoading` bindirme göstergesi); hata da veriyi silmez.
 class MapState {
@@ -14,6 +16,9 @@ class MapState {
     this.hasLoadedOnce = false,
     this.types = const <String>{},
     this.isOffline = false,
+    this.route,
+    this.isRouting = false,
+    this.routeSeq = 0,
   });
 
   final List<LocationPin> pins;
@@ -29,6 +34,15 @@ class MapState {
   /// Çevrimdışı görünüm: ağ hatasında cihazdaki son başarılı veri gösteriliyor.
   /// Bir sonraki başarılı yüklemede kapanır.
   final bool isOffline;
+
+  /// Çizili deniz rotası (kullanıcı "Deniz rotası"na dokundu). null = yok.
+  final SeaRoutePlan? route;
+
+  /// Rota hesabı sürüyor (düğme dönen gösterge gösterir).
+  final bool isRouting;
+
+  /// Her yeni rotada artar — harita yüzeyi kamerayı rotaya bu sayaçla sığdırır.
+  final int routeSeq;
 
   /// En az bir yükleme tamamlandı mı? İlk yükleme bitmeden "boş durum" GÖSTERİLMEZ
   /// (aksi halde açılışta kısa süre yanlış "liman yok" mesajı yanıp söner — P9).
@@ -62,6 +76,10 @@ class MapState {
     bool? hasLoadedOnce,
     Set<String>? types,
     bool? isOffline,
+    SeaRoutePlan? route,
+    bool clearRoute = false,
+    bool? isRouting,
+    int? routeSeq,
   }) {
     return MapState(
       pins: pins ?? this.pins,
@@ -73,6 +91,9 @@ class MapState {
       hasLoadedOnce: hasLoadedOnce ?? this.hasLoadedOnce,
       types: types ?? this.types,
       isOffline: isOffline ?? this.isOffline,
+      route: clearRoute ? null : (route ?? this.route),
+      isRouting: isRouting ?? this.isRouting,
+      routeSeq: routeSeq ?? this.routeSeq,
     );
   }
 }

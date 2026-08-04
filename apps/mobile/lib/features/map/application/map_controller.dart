@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/origin_provider.dart';
 import '../../../core/providers.dart';
+import '../../route/application/sea_route_engine.dart';
+import '../../route/domain/sea_router.dart';
 import '../data/api_map_locations_gateway.dart';
 import '../data/bundled_map_snapshot.dart';
 import '../data/shared_prefs_map_cache.dart';
@@ -65,6 +67,7 @@ class MapController extends Notifier<MapState> {
   Timer? _debounce;
   MapViewport? _lastRequested;
   int _seq = 0;
+  int _routeReq = 0; // rota istekleri için AYRI sayaç (viewport _seq'ine karışmaz)
 
   // Bellek-içi pin önbelleği (perf): son BAŞARILI, filtre-siz, TAM (truncated
   // değil) pin yanıtı. Yakınlaşınca yeni bbox bu kapsamın İÇİNDEYSE ağa hiç
@@ -220,6 +223,36 @@ class MapController extends Notifier<MapState> {
     _pinCachePins = const <LocationPin>[];
     final viewport = _lastRequested;
     if (viewport != null) await loadViewport(viewport);
+  }
+
+  /// AKILLI DENİZ ROTASI (2026-08): kullanıcının konumundan (GPS yoksa
+  /// haritada baktığı yerin merkezi = origin) seçili noktaya, karaları
+  /// tanıyan rota. Motor kullanılamazsa DÜRÜST kuş uçuşu yedeğine düşer
+  /// (viaSea=false — arayüz farkı söyler). Başlangıç yoksa sessizce çıkar;
+  /// arayüz kendi uyarısını gösterir.
+  Future<void> routeToPin(LocationPin pin) async {
+    final GeoPoint? origin =
+        ref.read(devicePositionProvider) ?? ref.read(originProvider);
+    if (origin == null || state.isRouting) return;
+    state = state.copyWith(isRouting: true);
+    final int req = ++_routeReq; // stale koruması (rota istekleri arasında)
+    SeaRoutePlan? plan;
+    try {
+      plan = await ref.read(seaRouteEngineProvider).route(origin, pin.position);
+    } catch (_) {
+      plan = null;
+    }
+    if (req != _routeReq) return;
+    state = state.copyWith(
+      route: plan ?? directLinePlan(origin, pin.position),
+      isRouting: false,
+      routeSeq: state.routeSeq + 1,
+    );
+  }
+
+  /// Çizili rotayı kaldırır (rota çipindeki kapat düğmesi).
+  void clearRoute() {
+    state = state.copyWith(clearRoute: true, isRouting: false);
   }
 
   void selectPin(String pinId) {

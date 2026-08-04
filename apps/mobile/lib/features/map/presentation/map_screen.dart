@@ -9,9 +9,12 @@ import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
 import '../../detail/presentation/location_detail_screen.dart';
+import '../../emergency/presentation/emergency_screen.dart';
 import '../../location/presentation/locate_button.dart';
 import '../../nearby/presentation/nearby_sheet.dart';
 import '../../route/domain/sea_route.dart';
+import '../../route/domain/sea_router.dart';
+import '../../search/presentation/search_screen.dart';
 import '../application/map_controller.dart';
 import '../domain/map_state.dart';
 import 'location_bottom_card.dart';
@@ -60,6 +63,8 @@ class MapScreen extends ConsumerWidget {
                       // "Konumum" isteği → kamera odaklanır (kullanıcı isteği).
                       devicePosition: ref.watch(devicePositionProvider),
                       focus: ref.watch(mapFocusProvider),
+                      routePoints: state.route?.points,
+                      routeSeq: state.routeSeq,
                     ),
                     MapSurfaceCallbacks(
                       onViewportChanged: controller.onViewportChanged,
@@ -85,7 +90,15 @@ class MapScreen extends ConsumerWidget {
             child: SafeArea(
               child: Column(
                 children: <Widget>[
+                  // ACİL DURUM KISAYOLU (UX analizi 2026-08): panik anında tek
+                  // dokunuş — Profil'in derinliğinde kalmasın. Üyelik kapısı YOK.
+                  const _SosButton(),
+                  const SizedBox(height: 8),
                   const LocateButton(),
+                  const SizedBox(height: 8),
+                  // HARİTADA ARAMA (UX analizi 2026-08): sekme değiştirmeden
+                  // arama — sonuçtan detay açılır, harita durumu korunur.
+                  const _MapSearchButton(),
                   if (state.pins.isNotEmpty) ...<Widget>[
                     const SizedBox(height: 8),
                     _ViewToggle(
@@ -105,13 +118,28 @@ class MapScreen extends ConsumerWidget {
               right: 0,
               child: LinearProgressIndicator(minHeight: 3),
             ),
-          // Çevrimdışı görünüm şeridi: cihazdaki son başarılı veri gösteriliyor.
-          if (state.isOffline)
-            const Positioned(
+          // Üst-orta bilgi katmanı: çevrimdışı şeridi + deniz rotası çipi.
+          if (state.isOffline || state.route != null)
+            Positioned(
               top: 60,
-              left: 0,
-              right: 0,
-              child: SafeArea(child: Center(child: _OfflineBanner())),
+              left: 64,
+              right: 64,
+              child: SafeArea(
+                child: Column(
+                  children: <Widget>[
+                    if (state.isOffline) const Center(child: _OfflineBanner()),
+                    if (state.isOffline && state.route != null)
+                      const SizedBox(height: 8),
+                    if (state.route != null)
+                      Center(
+                        child: _RouteChip(
+                          route: state.route!,
+                          onClear: controller.clearRoute,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
             ),
           if (state.truncated) const _TruncatedHint(),
           if (state.isLoading && !state.hasData)
@@ -147,6 +175,20 @@ class MapScreen extends ConsumerWidget {
                     builder: (_) => LocationDetailScreen(idOrSlug: selectedPin.id),
                   ),
                 ),
+                routing: state.isRouting,
+                onRoute: () {
+                  final bool hasOrigin = ref.read(devicePositionProvider) != null ||
+                      ref.read(originProvider) != null;
+                  if (!hasOrigin) {
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(SnackBar(
+                        content: Text(ref.read(l10nProvider).routeNeedOrigin),
+                      ));
+                    return;
+                  }
+                  controller.routeToPin(selectedPin);
+                },
               ),
             ),
         ],
@@ -380,6 +422,139 @@ class _TruncatedHint extends ConsumerWidget {
             ref.watch(l10nProvider).tooManyHint,
             textAlign: TextAlign.center,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Acil Durum kısayolu (2026-08): kırmızı SOS — panikte tek dokunuş.
+/// Bilinçli olarak üyelik kapısız; Acil Durum sayfası tamamen çevrimdışıdır.
+class _SosButton extends ConsumerWidget {
+  const _SosButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    return Material(
+      elevation: 3,
+      color: DocklyColors.error,
+      borderRadius: BorderRadius.circular(24),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(24),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => const EmergencyScreen()),
+        ),
+        child: Tooltip(
+          message: t.emergencyTitle,
+          child: const SizedBox(
+            width: 48,
+            height: 48,
+            child: Center(
+              child: Text(
+                'SOS',
+                style: TextStyle(
+                  color: Color(0xFFFFFFFF),
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Haritada arama kısayolu (2026-08): sekmeye gitmeden arama sayfasını açar.
+class _MapSearchButton extends ConsumerWidget {
+  const _MapSearchButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    return Material(
+      elevation: 3,
+      borderRadius: BorderRadius.circular(24),
+      child: IconButton(
+        icon: const DocklyIcon(DocklyIcons.search),
+        tooltip: t.navSearch,
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => const SearchScreen()),
+        ),
+      ),
+    );
+  }
+}
+
+/// Deniz rotası bilgi çipi: mesafe + kaba süre + dürüst uyarı notu.
+/// Kapat düğmesi rotayı haritadan kaldırır.
+class _RouteChip extends ConsumerWidget {
+  const _RouteChip({required this.route, required this.onClear});
+
+  final SeaRoutePlan route;
+  final VoidCallback onClear;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final ThemeData theme = Theme.of(context);
+    final double hours = route.etaHoursAtCruise;
+    final int h = hours.floor();
+    final int min = ((hours - h) * 60).round();
+    final String eta = h > 0
+        ? L10n.fmt2(t.etaHmFmt, '$h', '$min')
+        : L10n.fmt(t.etaMFmt, '$min');
+    // Dürüstlük notu: rota tahminîdir; koya ulaşmadıysa ya da motor
+    // çalışmadıysa (kuş uçuşu) bunu AÇIKÇA söyleriz.
+    final String note = !route.viaSea
+        ? t.routeDirectNote
+        : (route.reachedGoal ? t.routeApproxNote : t.routeCoastNote);
+    return Material(
+      elevation: 2,
+      borderRadius: BorderRadius.circular(14),
+      color: theme.colorScheme.surface,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 8, 4, 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const DocklyIcon(
+                  DocklyIcons.navigation,
+                  size: 16,
+                  color: DocklyColors.brandPrimary,
+                ),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    '≈ ${_fmtNm(route.distanceNm)} ${t.nmUnit} · ~$eta',
+                    style: theme.textTheme.titleSmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                IconButton(
+                  icon: const DocklyIcon(DocklyIcons.close, size: 18),
+                  tooltip: t.routeClearTooltip,
+                  visualDensity: VisualDensity.compact,
+                  onPressed: onClear,
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: Text(
+                note,
+                style: theme.textTheme.bodySmall
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              ),
+            ),
+          ],
         ),
       ),
     );

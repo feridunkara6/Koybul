@@ -48,6 +48,9 @@ flutter:
     # balon özeti — ilk ziyarette harita ağı beklemeden dolar. Üretimi:
     # apps/api/prisma/data/generate_map_snapshot.py (elle düzenlenmez).
     - assets/map/map_snapshot.json
+    # Su/kara bit haritası (deniz rotası motoru, 2026-08): Natural Earth 10m
+    # (KAMU MALI) kıyılarından üretilir — apps/mobile/tool/generate_sea_mask.py.
+    - assets/route/sea_mask.bin
   # Marka yazısı (Koybul açılış yüzeyi + logotype): Poppins — SIL OFL 1.1
   # lisanslı, ücretsiz (assets/fonts/POPPINS-LISANS.txt). Fotoğraflı açılış
   # görselleri 2026-08'de kaldırıldı: yüzey koddan çizilir (~900 KB tasarruf).

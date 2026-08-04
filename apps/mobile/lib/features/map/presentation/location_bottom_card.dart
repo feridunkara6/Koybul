@@ -16,6 +16,8 @@ class LocationBottomCard extends ConsumerWidget {
     required this.pin,
     required this.onClose,
     this.onOpenDetail,
+    this.onRoute,
+    this.routing = false,
     this.fit,
     super.key,
   });
@@ -25,6 +27,12 @@ class LocationBottomCard extends ConsumerWidget {
 
   /// "Detay" aksiyonu — verilmezse buton gösterilmez (B.3 uyumu).
   final VoidCallback? onOpenDetail;
+
+  /// "Deniz rotası" aksiyonu (2026-08) — verilmezse buton gösterilmez.
+  final VoidCallback? onRoute;
+
+  /// Rota hesabı sürüyor — buton dönen gösterge gösterir.
+  final bool routing;
 
   /// Tekne-uyum rozeti (verilirse ve `unknown` değilse gösterilir). Ekran
   /// hesaplar; kart sağlayıcı-bağımsız kalır (testte sarma gerekmez).
@@ -119,15 +127,33 @@ class LocationBottomCard extends ConsumerWidget {
                   const SizedBox(height: 8),
                   BoatFitBadge(fit: fit!),
                 ],
-                if (onOpenDetail != null) ...<Widget>[
+                if (onOpenDetail != null || onRoute != null) ...<Widget>[
                   const SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
-                    child: DocklyButton(
-                      label: t.detailBtn,
-                      icon: DocklyIcons.arrowForward,
-                      onPressed: onOpenDetail,
-                    ),
+                  Row(
+                    children: <Widget>[
+                      if (onOpenDetail != null)
+                        Expanded(
+                          child: DocklyButton(
+                            label: t.detailBtn,
+                            icon: DocklyIcons.arrowForward,
+                            onPressed: onOpenDetail,
+                          ),
+                        ),
+                      if (onOpenDetail != null && onRoute != null)
+                        const SizedBox(width: 8),
+                      // AKILLI DENİZ ROTASI (2026-08): konumdan bu noktaya,
+                      // karaları tanıyan rota — hesap uygulamanın İÇİNDE.
+                      if (onRoute != null)
+                        Expanded(
+                          child: DocklyButton(
+                            label: t.routeBtn,
+                            icon: DocklyIcons.navigation,
+                            variant: DocklyButtonVariant.secondary,
+                            loading: routing,
+                            onPressed: onRoute,
+                          ),
+                        ),
+                    ],
                   ),
                 ],
               ],

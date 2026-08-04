@@ -116,6 +116,15 @@ abstract final class DocklyIcons {
     '<line x1="10" y1="14" x2="21" y2="3"/>',
   );
 
+  /// Paylaş (2026-08 UX paketi): üç düğümlü klasik paylaşım işareti.
+  static const DocklyIconData share = DocklyIconData(
+    '<circle cx="18" cy="5" r="3"/>'
+    '<circle cx="6" cy="12" r="3"/>'
+    '<circle cx="18" cy="19" r="3"/>'
+    '<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>'
+    '<line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>',
+  );
+
   // Durum / bilgi
   static const DocklyIconData checkCircle = DocklyIconData(
     '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>'

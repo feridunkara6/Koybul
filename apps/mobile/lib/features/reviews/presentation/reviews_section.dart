@@ -7,7 +7,10 @@ import '../../../core/l10n/l10n_strings.dart';
 import '../application/reviews_controller.dart';
 
 /// Detay ekranında "Yorumlar" bölümü (S-09). Onaylı yorumları okuma — misafir
-/// dostu (yazma üyelik ister, sonraki faz). Boş/hata durumunda sessizce gizlenir.
+/// dostu (yazma üyelik ister, sonraki faz). UX kararı (2026-08): BOŞ durumda
+/// gizlenmek yerine tek satırlık dost mesaj gösterilir — kullanıcı "yorum yok
+/// mu, yüklenemedi mi?" belirsizliği yaşamaz. Hata durumunda bölüm gizli kalır
+/// (misafiri teknik hatayla rahatsız etmeme kararı korunur).
 class ReviewsSection extends ConsumerWidget {
   const ReviewsSection({required this.idOrSlug, super.key});
 
@@ -29,16 +32,23 @@ class ReviewsSection extends ConsumerWidget {
       ),
       error: (Object _, StackTrace __) => const SizedBox.shrink(),
       data: (List<Review> items) {
-        if (items.isEmpty) return const SizedBox.shrink();
         final ThemeData theme = Theme.of(context);
+        final L10n t = ref.watch(l10nProvider);
         return Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const SizedBox(height: 20),
-            Text(ref.watch(l10nProvider).reviewsTitle, style: theme.textTheme.titleMedium),
+            Text(t.reviewsTitle, style: theme.textTheme.titleMedium),
             const SizedBox(height: 8),
-            for (final Review r in items) _ReviewCard(review: r),
+            if (items.isEmpty)
+              Text(
+                t.revEmpty,
+                style: theme.textTheme.bodyMedium
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              )
+            else
+              for (final Review r in items) _ReviewCard(review: r),
           ],
         );
       },

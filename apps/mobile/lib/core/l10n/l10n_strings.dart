@@ -190,6 +190,21 @@ class L10n {
     required this.occTooFar,
     required this.windExposedLabels,
     required this.wwBadgeFmt,
+    required this.routeBtn,
+    required this.routeClearTooltip,
+    required this.routeApproxNote,
+    required this.routeCoastNote,
+    required this.routeDirectNote,
+    required this.routeNeedOrigin,
+    required this.etaHmFmt,
+    required this.etaMFmt,
+    required this.appleBtn,
+    required this.guestBtn,
+    required this.signInWelcome,
+    required this.shareTooltip,
+    required this.shareCopied,
+    required this.shareLineFmt,
+    required this.revEmpty,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -279,6 +294,15 @@ class L10n {
   /// TR pusula kodu → "şu yöne açık" etiketi (TR'de denizci rüzgâr adlarıyla).
   final Map<String, String> windExposedLabels;
   final String wwBadgeFmt;
+
+  // Deniz rotası (2026-08): uygulama içi, kara tanıyan rota önizlemesi.
+  final String routeBtn, routeClearTooltip, routeApproxNote, routeCoastNote,
+      routeDirectNote, routeNeedOrigin, etaHmFmt, etaMFmt;
+
+  // Giriş ekranı (l10n'a taşındı — eskiden sabit Türkçe idi) + paylaşım +
+  // yorum boş durumu (UX analizi 2026-08).
+  final String appleBtn, guestBtn, signInWelcome, shareTooltip, shareCopied,
+      shareLineFmt, revEmpty;
 
   String windExposedLabel(String code) => windExposedLabels[code] ?? code;
 
@@ -535,6 +559,21 @@ const L10n _tr = L10n(
     'B': 'Batıya açık', 'KB': 'Karayele açık',
   },
   wwBadgeFmt: '{0} — bugün {1} kn bekleniyor',
+  routeBtn: 'Deniz rotası',
+  routeClearTooltip: 'Rotayı temizle',
+  routeApproxNote: 'Tahminî deniz rotası — seyir için resmî deniz haritalarını kullanın.',
+  routeCoastNote: 'Rota koyun açığında biter — son yaklaşmayı resmî haritayla planlayın.',
+  routeDirectNote: 'Kuş uçuşu gösterildi — bu bölge için deniz rotası hesaplanamadı.',
+  routeNeedOrigin: 'Rota için başlangıç gerekli — "Konumum"a dokun ya da haritayı gezdir.',
+  etaHmFmt: '{0} sa {1} dk',
+  etaMFmt: '{0} dk',
+  appleBtn: 'Apple ile devam et',
+  guestBtn: 'Misafir olarak gez',
+  signInWelcome: 'Hoş geldin, kaptan.',
+  shareTooltip: 'Paylaş',
+  shareCopied: 'Bağlantı metni kopyalandı — istediğin yere yapıştırabilirsin.',
+  shareLineFmt: '{0} ({1}) — Koybul: https://koybul.com',
+  revEmpty: 'Henüz yorum yok — ilk yorumu sen yazabilirsin.',
 );
 
 const L10n _en = L10n(
@@ -763,6 +802,21 @@ const L10n _en = L10n(
     'B': 'Exposed to W', 'KB': 'Exposed to NW',
   },
   wwBadgeFmt: '{0} — {1} kn expected today',
+  routeBtn: 'Sea route',
+  routeClearTooltip: 'Clear route',
+  routeApproxNote: 'Estimated sea route — use official nautical charts for navigation.',
+  routeCoastNote: 'The route ends off the cove — plan the final approach with official charts.',
+  routeDirectNote: 'Straight line shown — a sea route could not be computed for this area.',
+  routeNeedOrigin: 'A start point is needed — tap "My location" or move the map.',
+  etaHmFmt: '{0} h {1} min',
+  etaMFmt: '{0} min',
+  appleBtn: 'Continue with Apple',
+  guestBtn: 'Browse as guest',
+  signInWelcome: 'Welcome aboard, captain.',
+  shareTooltip: 'Share',
+  shareCopied: 'Link text copied — paste it anywhere.',
+  shareLineFmt: '{0} ({1}) — Koybul: https://koybul.com',
+  revEmpty: 'No reviews yet — be the first to write one.',
 );
 
 const L10n _es = L10n(
@@ -991,6 +1045,21 @@ const L10n _es = L10n(
     'B': 'Expuesta al O', 'KB': 'Expuesta al NO',
   },
   wwBadgeFmt: '{0} — hoy se esperan {1} kn',
+  routeBtn: 'Ruta marítima',
+  routeClearTooltip: 'Quitar ruta',
+  routeApproxNote: 'Ruta marítima estimada — use cartas náuticas oficiales para navegar.',
+  routeCoastNote: 'La ruta termina frente a la cala — planifique la aproximación final con cartas oficiales.',
+  routeDirectNote: 'Se muestra línea recta — no se pudo calcular una ruta marítima para esta zona.',
+  routeNeedOrigin: 'Se necesita un punto de partida — toca "Mi ubicación" o mueve el mapa.',
+  etaHmFmt: '{0} h {1} min',
+  etaMFmt: '{0} min',
+  appleBtn: 'Continuar con Apple',
+  guestBtn: 'Explorar como invitado',
+  signInWelcome: 'Bienvenido a bordo, capitán.',
+  shareTooltip: 'Compartir',
+  shareCopied: 'Texto copiado — pégalo donde quieras.',
+  shareLineFmt: '{0} ({1}) — Koybul: https://koybul.com',
+  revEmpty: 'Aún no hay reseñas — sé el primero en escribir una.',
 );
 
 const L10n _ru = L10n(
@@ -1219,6 +1288,21 @@ const L10n _ru = L10n(
     'B': 'Открыта западу', 'KB': 'Открыта северо-западу',
   },
   wwBadgeFmt: '{0} — сегодня ожидается {1} уз',
+  routeBtn: 'Морской маршрут',
+  routeClearTooltip: 'Убрать маршрут',
+  routeApproxNote: 'Примерный морской маршрут — для навигации используйте официальные морские карты.',
+  routeCoastNote: 'Маршрут заканчивается на подходе к бухте — финальный заход планируйте по официальным картам.',
+  routeDirectNote: 'Показана прямая линия — морской маршрут для этого района рассчитать не удалось.',
+  routeNeedOrigin: 'Нужна начальная точка — нажмите «Моё местоположение» или подвигайте карту.',
+  etaHmFmt: '{0} ч {1} мин',
+  etaMFmt: '{0} мин',
+  appleBtn: 'Продолжить с Apple',
+  guestBtn: 'Продолжить как гость',
+  signInWelcome: 'Добро пожаловать на борт, капитан.',
+  shareTooltip: 'Поделиться',
+  shareCopied: 'Текст со ссылкой скопирован — вставьте его куда угодно.',
+  shareLineFmt: '{0} ({1}) — Koybul: https://koybul.com',
+  revEmpty: 'Отзывов пока нет — станьте первым.',
 );
 
 /// Saf eşleme — birim testli.

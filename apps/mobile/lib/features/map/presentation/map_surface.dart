@@ -12,6 +12,8 @@ class MapSurfaceData {
     required this.selectedPinId,
     this.devicePosition,
     this.focus,
+    this.routePoints,
+    this.routeSeq = 0,
   });
 
   final List<LocationPin> pins;
@@ -23,6 +25,12 @@ class MapSurfaceData {
 
   /// Kameraya "bu noktaya git" isteği (seq artınca uygulanır).
   final MapFocusRequest? focus;
+
+  /// Çizili deniz rotası kırıklıkları (null = rota yok).
+  final List<GeoPoint>? routePoints;
+
+  /// Yeni rotada artar — yüzey kamerayı rotaya bir kez sığdırır.
+  final int routeSeq;
 }
 
 /// Harita yüzeyinden gelen etkileşim geri çağrıları.

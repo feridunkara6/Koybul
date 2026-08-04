@@ -18,13 +18,14 @@ Future<void> _pump(WidgetTester tester, FakeAuthRepository repo) {
 }
 
 void main() {
-  testWidgets('S-03: sağlayıcı butonları ve misafir seçeneği görünür', (tester) async {
+  testWidgets('S-03: yalnız ÇALIŞAN seçenekler görünür (UX 2026-08)', (tester) async {
     await _pump(tester, FakeAuthRepository());
     expect(find.text('Apple ile devam et'), findsOneWidget);
     expect(find.text('Google ile devam et'), findsOneWidget);
-    expect(find.text('E-posta ile devam et'), findsOneWidget);
-    expect(find.text('Telefon ile devam et'), findsOneWidget);
     expect(find.text('Misafir olarak gez'), findsOneWidget);
+    // "Çok yakında" duvarı KALDIRILDI: çalışmayan seçenek gösterilmez.
+    expect(find.text('E-posta ile devam et'), findsNothing);
+    expect(find.text('Telefon ile devam et'), findsNothing);
   });
 
   testWidgets('Google butonu repo.signIn(google) çağırır', (tester) async {
@@ -54,10 +55,4 @@ void main() {
     expect(find.text('Giriş sağlayıcısı henüz hazır değil.'), findsOneWidget);
   });
 
-  testWidgets('E-posta butonu "çok yakında" mesajı gösterir (2.4c)', (tester) async {
-    await _pump(tester, FakeAuthRepository());
-    await tester.tap(find.text('E-posta ile devam et'));
-    await tester.pump();
-    expect(find.textContaining('çok yakında'), findsOneWidget);
-  });
 }
