@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:dockly_ui/dockly_ui.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -80,11 +81,17 @@ class _SplashGateState extends ConsumerState<SplashGate> {
   Widget build(BuildContext context) {
     final DateTime t = (widget.now ?? DateTime.now)();
     final bool night = splashIsNight(t);
+    // TEK-RESSAM KURALI (kullanıcı kararı 2026-08): WEB'de açılışı yalnız
+    // index.html'deki katman çizer; Flutter web'de İKİNCİ bir açılış çizmez.
+    // Böylece devralma diye bir an kalmaz — logonun oynaması/boyut
+    // değiştirmesi kategorik olarak imkânsızdır. iOS/Android'de HTML katmanı
+    // olmadığından BrandSplash orada tek ressam olarak çalışmayı sürdürür.
+    // Zamanlayıcı her platformda korunur (splashDoneProvider sözleşmesi).
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
         widget.child,
-        if (!_gone)
+        if (!_gone && !kIsWeb)
           IgnorePointer(
             ignoring: _done,
             child: AnimatedOpacity(

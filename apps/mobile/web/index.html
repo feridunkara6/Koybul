@@ -139,10 +139,20 @@
       var s = document.getElementById('koybul-splash');
       var h = new Date().getHours();
       if (!(h >= 19 || h < 7)) s.classList.add('gunduz');
-      // Flutter ilk karesini çizince katmanı yumuşakça kaldır.
-      window.addEventListener('flutter-first-frame', function () {
+      // TEK-RESSAM KURALI (2026-08): web'in açılışı YALNIZ bu katmandır —
+      // Flutter web'de ikinci bir açılış çizmez. Katman, uygulamanın ilk
+      // karesi çizilene VE en az 1800ms marka süresi dolana kadar durur;
+      // sonra doğrudan hazır haritaya yumuşakça açılır. Logo tek kez
+      // çizildiği için oynaması/boyut değiştirmesi imkânsızdır.
+      var t0 = Date.now();
+      var MIN_SURE = 1800;
+      function kaldir() {
         s.style.opacity = '0';
         setTimeout(function () { s.remove(); }, 500);
+      }
+      window.addEventListener('flutter-first-frame', function () {
+        var kalan = MIN_SURE - (Date.now() - t0);
+        setTimeout(kaldir, kalan > 0 ? kalan : 0);
       });
     })();
   </script>
