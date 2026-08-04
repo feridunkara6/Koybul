@@ -11,6 +11,21 @@ import 'package:dockly_api/dockly_api.dart' show GeoPoint;
 import 'sea_route.dart';
 import 'sea_router.dart';
 
+/// Rotanın BAŞLANGICI (rota planlama 2026-08, kullanıcı onaylı): kullanıcının
+/// GPS konumu ([isDevice] true) YA DA haritadan/koydan seçilen A noktası —
+/// sefer planı konumdan bağımsız da kurulabilir.
+class RouteOrigin {
+  const RouteOrigin({required this.pos, this.name, this.isDevice = false});
+
+  final GeoPoint pos;
+
+  /// Koy adı (başlangıç bir koy ise); serbest nokta/konum için null.
+  final String? name;
+
+  /// true → paylaşılan GPS konumu ("Konumum").
+  final bool isDevice;
+}
+
 /// Rotadaki tek ara nokta. [name] doluysa bu bir DURAK (koy — çipte listelenir);
 /// null ise tutamaçla eklenen serbest ara noktadır (yalnız haritada görünür).
 class RouteWaypoint {

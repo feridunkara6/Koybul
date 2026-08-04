@@ -10,13 +10,14 @@ import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../../emergency/presentation/emergency_screen.dart';
-import '../../location/application/location_controller.dart';
 import '../../location/presentation/locate_button.dart';
 import '../../nearby/presentation/nearby_sheet.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/presentation/onboarding_overlay.dart';
 import '../../onboarding/presentation/tour_targets.dart';
+import '../../route/application/saved_routes_controller.dart';
 import '../../route/domain/route_wind.dart';
+import '../../route/domain/saved_route.dart';
 import '../../route/domain/sea_route.dart';
 import '../../route/domain/sea_router.dart';
 import '../../route/domain/sea_trip.dart';
@@ -25,6 +26,7 @@ import '../application/map_controller.dart';
 import '../domain/map_state.dart';
 import 'location_bottom_card.dart';
 import 'map_surface.dart';
+import 'route_origin_menu.dart';
 
 /// Harita ekranı (S-06). Somut harita yüzeyi üstüne durum katmanları:
 /// yükleme, boş, hata+retry, "çok fazla sonuç" ipucu (docs/26 §4, docs/23 §9.5).
@@ -59,6 +61,19 @@ class MapScreen extends ConsumerWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(content: Text(ref.read(l10nProvider).routeEditFail)),
+            );
+        }
+      },
+    );
+    // BAŞLANGIÇ SEÇİMİ başarısız (yakında deniz yok): kısa uyarı, mod açık kalır.
+    ref.listen<int>(
+      mapControllerProvider.select((MapState s) => s.originPickFailSeq),
+      (int? prev, int next) {
+        if (next > (prev ?? 0)) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text(ref.read(l10nProvider).originPickFail)),
             );
         }
       },
@@ -130,6 +145,11 @@ class MapScreen extends ConsumerWidget {
                             MapRouteVia(index: i, pos: state.routeWaypoints[i].pos),
                       ],
                       routeStops: _stopMarkers(state.routeWaypoints),
+                      // A NOKTASI rozeti: başlangıç GPS değilse çizilir.
+                      routeOriginBadge: state.routeOrigin != null &&
+                              !state.routeOrigin!.isDevice
+                          ? state.routeOrigin!.pos
+                          : null,
                     ),
                     MapSurfaceCallbacks(
                       onViewportChanged: controller.onViewportChanged,
@@ -138,6 +158,7 @@ class MapScreen extends ConsumerWidget {
                       onRouteInsertVia: controller.insertVia,
                       onRouteMoveVia: controller.moveVia,
                       onRouteRemoveVia: controller.removeWaypoint,
+                      onMapTap: controller.onMapTapped,
                     ),
                   ),
           ),
@@ -211,8 +232,12 @@ class MapScreen extends ConsumerWidget {
                           route: state.route!,
                           wind: state.routeWind,
                           waypoints: state.routeWaypoints,
+                          origin: state.routeOrigin,
                           onClear: controller.clearRoute,
                           onRemoveStop: controller.removeWaypoint,
+                          onSave: () => _saveRouteDialog(context, ref, state),
+                          onChangeOrigin: () =>
+                              showRouteOriginMenu(context, ref),
                         ),
                       ),
                   ],
@@ -288,23 +313,17 @@ class MapScreen extends ConsumerWidget {
                 onRoute: state.route != null
                     ? null
                     : () {
-                        // KONUM ŞARTI (kullanıcı kararı 2026-08): rota YALNIZ
-                        // paylaşılan gerçek konumdan hesaplanır. Konum yoksa
-                        // uyarı + tek dokunuşla konum isteme eylemi gösterilir.
+                        // ROTA PLANLAMA (2026-08): GPS yoksa artık yalnız
+                        // uyarı değil — başlangıç menüsü açılır (Konumumdan /
+                        // Başlangıç noktası seç). GPS varsa eski hızlı yol.
                         if (ref.read(devicePositionProvider) == null) {
-                          final L10n tt = ref.read(l10nProvider);
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(SnackBar(
-                              content: Text(tt.routeNeedOrigin),
-                              duration: const Duration(seconds: 6),
-                              action: SnackBarAction(
-                                label: tt.locateTooltip,
-                                onPressed: () => ref
-                                    .read(locationControllerProvider.notifier)
-                                    .locateMe(),
-                              ),
-                            ));
+                          showRouteOriginMenu(
+                            context,
+                            ref,
+                            destPos: selectedPin.position,
+                            destId: selectedPin.id,
+                            destName: selectedPin.name,
+                          );
                           return;
                         }
                         controller.routeToPin(selectedPin);
@@ -312,6 +331,14 @@ class MapScreen extends ConsumerWidget {
                   ),
                 ],
               ),
+            ),
+          // BAŞLANGIÇ SEÇ şeridi (rota planlama 2026-08): mod açıkken üstte.
+          if (state.pickingOrigin)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: _OriginPickBanner(onCancel: controller.cancelOriginPick),
             ),
           // TANITIM KAPLAMALARI (en üstte): karşılama kartı ve spot ışıklı tur.
           if (!isList && onb.showWelcome)
@@ -388,6 +415,121 @@ class _MapListView extends ConsumerWidget {
 }
 
 String _fmtNm(double nm) => nm >= 10 ? nm.round().toString() : nm.toStringAsFixed(1);
+
+/// BAŞLANGIÇ SEÇ şeridi (rota planlama 2026-08): lacivert, tek satır yönerge +
+/// Vazgeç. Mod açıkken haritaya/koya dokunuş A noktasını belirler.
+class _OriginPickBanner extends ConsumerWidget {
+  const _OriginPickBanner({required this.onCancel});
+
+  final VoidCallback onCancel;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    return Material(
+      color: DocklyColors.brandDeep,
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: 26,
+                height: 26,
+                decoration: BoxDecoration(
+                  color: DocklyColors.accentTurquoise.withValues(alpha: 0.25),
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(
+                  child: DocklyIcon(DocklyIcons.place,
+                      size: 14, color: Color(0xFF7FE3D9)),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  t.routePickBanner,
+                  style: const TextStyle(
+                    color: Color(0xFFFFFFFF),
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w700,
+                    height: 1.3,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: onCancel,
+                child: Text(
+                  t.cancelLabel,
+                  style: TextStyle(
+                    color: const Color(0xFFFFFFFF).withValues(alpha: 0.85),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// ROTAYI KAYDET diyaloğu (rota planlama 2026-08): ad önerilir, Kaydet cihaza
+/// yazar (başlangıç + duraklar — açılışta aynı motorla yeniden hesaplanır).
+Future<void> _saveRouteDialog(
+    BuildContext context, WidgetRef ref, MapState state) async {
+  final L10n t = ref.read(l10nProvider);
+  final RouteOrigin? origin = state.routeOrigin;
+  final SeaRoutePlan? route = state.route;
+  if (origin == null || route == null || state.routeWaypoints.isEmpty) return;
+  final String originLabel =
+      origin.name ?? (origin.isDevice ? t.routeOriginDevice : t.routeOriginPicked);
+  final TextEditingController nameCtrl = TextEditingController(
+    text: suggestRouteName(originLabel, state.routeWaypoints),
+  );
+  final bool? ok = await showDialog<bool>(
+    context: context,
+    builder: (BuildContext dialogContext) => AlertDialog(
+      title: Text(t.routeSaveTitle),
+      content: TextField(
+        controller: nameCtrl,
+        autofocus: true,
+        decoration: InputDecoration(
+          labelText: t.routeSaveNameHint,
+          border: const OutlineInputBorder(),
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(false),
+          child: Text(t.cancelLabel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(dialogContext).pop(true),
+          child: Text(t.saveLabel),
+        ),
+      ],
+    ),
+  );
+  final String name = nameCtrl.text.trim();
+  nameCtrl.dispose(); // diyalog kapandı — denetleyici sızdırılmaz
+  if (ok != true || !context.mounted) return;
+  final int now = DateTime.now().millisecondsSinceEpoch;
+  await ref.read(savedRoutesProvider.notifier).add(SavedRoute(
+        id: 'r$now',
+        name: name.isEmpty ? originLabel : name,
+        origin: origin,
+        waypoints: state.routeWaypoints,
+        distanceNm: route.distanceNm,
+        savedAtMs: now,
+      ));
+  if (!context.mounted) return;
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(SnackBar(content: Text(t.routeSaved)));
+}
 
 /// Duraklardan numaralı harita rozetleri (1, 2, …). Tek duraklı rotada (yalnız
 /// hedef) rozet çizilmez — hedefin pini zaten oradadır.
@@ -637,7 +779,10 @@ class _RouteChip extends ConsumerWidget {
     required this.onClear,
     this.wind,
     this.waypoints = const <RouteWaypoint>[],
+    this.origin,
     this.onRemoveStop,
+    this.onSave,
+    this.onChangeOrigin,
   });
 
   final SeaRoutePlan route;
@@ -647,8 +792,17 @@ class _RouteChip extends ConsumerWidget {
   /// Rotanın sıralı ara noktaları (duraklar + tutamaç noktaları).
   final List<RouteWaypoint> waypoints;
 
+  /// Rotanın başlangıcı — çipte "A:" satırı (rota planlama 2026-08).
+  final RouteOrigin? origin;
+
   /// Çipteki ✕ ile durak çıkarma (dizin, durum listesine göredir).
   final void Function(int wpIndex)? onRemoveStop;
+
+  /// Rotayı kaydet (yer imi simgesi).
+  final VoidCallback? onSave;
+
+  /// Başlangıcı değiştir ("A:" satırındaki bağlantı).
+  final VoidCallback? onChangeOrigin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -698,6 +852,13 @@ class _RouteChip extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
+                if (onSave != null)
+                  IconButton(
+                    icon: const DocklyIcon(DocklyIcons.bookmark, size: 17),
+                    tooltip: t.routeSaveTitle,
+                    visualDensity: VisualDensity.compact,
+                    onPressed: onSave,
+                  ),
                 IconButton(
                   icon: const DocklyIcon(DocklyIcons.close, size: 18),
                   tooltip: t.routeClearTooltip,
@@ -706,6 +867,49 @@ class _RouteChip extends ConsumerWidget {
                 ),
               ],
             ),
+            // BAŞLANGIÇ satırı (rota planlama 2026-08): A noktası + değiştir.
+            if (origin != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 2, right: 8),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Flexible(
+                      child: Text(
+                        L10n.fmt(
+                          t.routeOriginFmt,
+                          origin!.name ??
+                              (origin!.isDevice
+                                  ? t.routeOriginDevice
+                                  : t.routeOriginPicked),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall
+                            ?.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    if (onChangeOrigin != null) ...<Widget>[
+                      const SizedBox(width: 6),
+                      InkWell(
+                        borderRadius: BorderRadius.circular(8),
+                        onTap: onChangeOrigin,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 2),
+                          child: Text(
+                            t.routeOriginChange,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: DocklyColors.brandPrimary,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
             // DURAK LİSTESİ: 2+ durakta sıralı hap listesi; hedef dışındakiler
             // ✕ ile çıkarılabilir (mesafe/süre tüm bacakların toplamıdır).
             if (stopCount >= 2)

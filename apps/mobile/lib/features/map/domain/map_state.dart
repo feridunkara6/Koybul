@@ -26,6 +26,9 @@ class MapState {
     this.routeWaypoints = const <RouteWaypoint>[],
     this.routeLegs = const <SeaRoutePlan>[],
     this.routeEditFailSeq = 0,
+    this.routeOrigin,
+    this.pickingOrigin = false,
+    this.originPickFailSeq = 0,
   });
 
   final List<LocationPin> pins;
@@ -71,6 +74,18 @@ class MapState {
   /// bulamadıysa artar — ESKİ ROTA KORUNUR, arayüz kısa bir uyarı gösterir.
   final int routeEditFailSeq;
 
+  /// Rotanın başlangıcı (rota planlama 2026-08): GPS ("Konumum") ya da
+  /// haritadan/koydan seçilen A noktası. null = rota yok.
+  final RouteOrigin? routeOrigin;
+
+  /// BAŞLANGIÇ SEÇ modu: haritaya/koya dokunuş A noktasını belirler; arayüz
+  /// üstte lacivert seçim şeridi gösterir.
+  final bool pickingOrigin;
+
+  /// Başlangıç seçimi BAŞARISIZ sinyali (dokunulan yerin yakınında deniz yok):
+  /// her başarısızlıkta artar; arayüz kısa bir uyarı gösterir.
+  final int originPickFailSeq;
+
   /// En az bir yükleme tamamlandı mı? İlk yükleme bitmeden "boş durum" GÖSTERİLMEZ
   /// (aksi halde açılışta kısa süre yanlış "liman yok" mesajı yanıp söner — P9).
   final bool hasLoadedOnce;
@@ -113,6 +128,9 @@ class MapState {
     List<RouteWaypoint>? routeWaypoints,
     List<SeaRoutePlan>? routeLegs,
     int? routeEditFailSeq,
+    RouteOrigin? routeOrigin,
+    bool? pickingOrigin,
+    int? originPickFailSeq,
   }) {
     return MapState(
       pins: pins ?? this.pins,
@@ -137,6 +155,9 @@ class MapState {
       routeLegs:
           clearRoute ? const <SeaRoutePlan>[] : (routeLegs ?? this.routeLegs),
       routeEditFailSeq: routeEditFailSeq ?? this.routeEditFailSeq,
+      routeOrigin: clearRoute ? null : (routeOrigin ?? this.routeOrigin),
+      pickingOrigin: pickingOrigin ?? this.pickingOrigin,
+      originPickFailSeq: originPickFailSeq ?? this.originPickFailSeq,
     );
   }
 }

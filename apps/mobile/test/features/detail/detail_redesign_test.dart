@@ -162,12 +162,18 @@ void main() {
     expect(find.text('Doluluk bildir'), findsNothing);
   });
 
-  testWidgets('D) KONUM ŞARTI: GPS yokken rota düğmesi uyarı gösterir',
+  testWidgets('D) GPS yokken rota düğmesi BAŞLANGIÇ MENÜSÜ açar (rota planlama); '
+      '"Konumumdan" seçilirse konum uyarısı gösterilir',
       (WidgetTester tester) async {
     await tester.pumpWidget(_app(sampleAnchorageDetail));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Deniz rotası'));
-    await tester.pump();
+    await tester.pumpAndSettle();
+    // Menü: iki seçenek (konumdan bağımsız planlama — kullanıcı onaylı).
+    expect(find.text('Konumumdan'), findsOneWidget);
+    expect(find.text('Başlangıç noktası seç'), findsOneWidget);
+    await tester.tap(find.text('Konumumdan'));
+    await tester.pumpAndSettle();
     expect(find.textContaining('önce konumunu paylaşmalısın'), findsOneWidget);
     await tester.pump(const Duration(seconds: 7));
     await tester.pumpAndSettle();

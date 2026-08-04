@@ -10,6 +10,7 @@ import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
 import '../../emergency/presentation/emergency_screen.dart';
 import '../../onboarding/application/onboarding_controller.dart';
+import '../../route/presentation/saved_routes_screen.dart';
 import '../../shell/application/shell_tab_provider.dart';
 
 /// Profil sekmesi (misafir). Kalıcı tekne bilgisini gösterir/düzenler, hesap
@@ -56,10 +57,58 @@ class ProfileScreen extends ConsumerWidget {
           // DİL — az yer kaplayan tek satır; menü aşağı açılır.
           const _LanguageRow(),
           const SizedBox(height: 16),
+          // KAYITLI ROTALAR (rota planlama 2026-08): cihazdaki rota kayıtları.
+          _NavRow(
+            icon: DocklyIcons.navigation,
+            label: t.savedRoutesTitle,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const SavedRoutesScreen()),
+            ),
+          ),
+          const SizedBox(height: 12),
           // TANITIM TURU (2026-08): tur istendiği an yeniden izlenebilir —
           // dokununca Keşfet sekmesine dönülür ve tur başlar.
           const _TourReplayRow(),
         ],
+      ),
+    );
+  }
+}
+
+/// Profildeki gezinme satırı (dil satırıyla aynı görsel dil): ikon + etiket +
+/// ok; dokununca [onTap].
+class _NavRow extends StatelessWidget {
+  const _NavRow({required this.icon, required this.label, required this.onTap});
+
+  final DocklyIconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Material(
+      color: theme.colorScheme.surfaceContainerLow,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: theme.dividerColor.withValues(alpha: 0.4)),
+          ),
+          child: Row(
+            children: <Widget>[
+              DocklyIcon(icon, size: 20, color: theme.colorScheme.primary),
+              const SizedBox(width: 10),
+              Expanded(child: Text(label, style: theme.textTheme.bodyMedium)),
+              DocklyIcon(DocklyIcons.arrowForward,
+                  size: 16, color: theme.colorScheme.onSurfaceVariant),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -353,6 +353,10 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
         minZoom: 4,
         maxZoom: 18,
         onPositionChanged: _onMove,
+        // ROTA PLANLAMA (2026-08): boşluğa dokunuş — BAŞLANGIÇ SEÇ modunda
+        // A noktası olur (kontrolcü mod dışında yok sayar).
+        onTap: (TapPosition _, LatLng p) => widget.callbacks.onMapTap
+            ?.call(GeoPoint(lat: p.latitude, lon: p.longitude)),
       ),
       children: <Widget>[
         TileLayer(
@@ -477,6 +481,17 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
                 ),
               ),
             // --- ROTA DÜZENLEME işaretçileri (pinlerin ÜSTÜNDE) ---
+            // A NOKTASI (rota planlama 2026-08): başlangıç GPS değilse rozet.
+            if (widget.data.routeOriginBadge != null)
+              Marker(
+                point: LatLng(
+                  widget.data.routeOriginBadge!.lat,
+                  widget.data.routeOriginBadge!.lon,
+                ),
+                width: 28,
+                height: 28,
+                child: const IgnorePointer(child: _OriginBadge()),
+              ),
             // Numaralı DURAK rozetleri (etkileşimsiz — pinin kendisi altta).
             for (final MapRouteStop s in widget.data.routeStops)
               Marker(
@@ -774,6 +789,36 @@ class _GhostHandle extends StatelessWidget {
               color: DocklyColors.brandPrimary,
               shape: BoxShape.circle,
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A NOKTASI rozeti (rota planlama): lacivert daire içinde turkuaz "A" —
+/// haritadan/koydan seçilen başlangıç.
+class _OriginBadge extends StatelessWidget {
+  const _OriginBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: DocklyColors.brandDeep,
+        shape: BoxShape.circle,
+        border: Border.all(color: const Color(0xFFFFFFFF), width: 2.5),
+        boxShadow: const <BoxShadow>[
+          BoxShadow(color: Color(0x400A2540), blurRadius: 4, offset: Offset(0, 1)),
+        ],
+      ),
+      child: const Center(
+        child: Text(
+          'A',
+          style: TextStyle(
+            color: Color(0xFF7FE3D9),
+            fontSize: 12,
+            fontWeight: FontWeight.w800,
           ),
         ),
       ),

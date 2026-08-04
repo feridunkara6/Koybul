@@ -238,33 +238,122 @@ class MapController extends Notifier<MapState> {
   Future<void> routeToPin(LocationPin pin) =>
       routeTo(pin.position, pin.id, name: pin.name);
 
-  /// Başarılı planın başlangıç noktası — rota DÜZENLEMELERİ (durak/tutamaç)
-  /// aynı başlangıçtan yeniden hesaplanır (GPS o an oynasa da rota zıplamaz).
-  GeoPoint? _routeOrigin;
+  /// BAŞLANGIÇ SEÇ modunda bekleyen hedef (rota henüz yokken "Başlangıç seç"
+  /// dendiğinde saklanır; A noktası seçilince rota buna çizilir).
+  GeoPoint? _pendingDestPos;
+  String? _pendingDestId;
+  String? _pendingDestName;
 
   /// Genel giriş: hedef koordinat + kimlik (haritadaki kart VE detay sayfası
   /// buradan rota ister — arama sonucundan açılan detayda da çalışır).
+  /// Başlangıç: paylaşılan GPS konumu ("Konumum").
   Future<void> routeTo(GeoPoint destination, String idOrSlug, {String? name}) async {
-    final GeoPoint? origin = ref.read(devicePositionProvider);
-    if (origin == null || state.isRouting) return;
+    final GeoPoint? gps = ref.read(devicePositionProvider);
+    if (gps == null || state.isRouting) return;
     await _planTrip(
-      origin,
+      RouteOrigin(pos: gps, isDevice: true),
       <RouteWaypoint>[RouteWaypoint(pos: destination, id: idOrSlug, name: name)],
       editing: false,
     );
+  }
+
+  // --- ROTA PLANLAMA (2026-08, kullanıcı onaylı): konumdan bağımsız A→B ---
+
+  /// BAŞLANGIÇ SEÇ moduna girer. Rota yokken hedef bilgisi verilir (A noktası
+  /// seçilince rota o hedefe kurulur); rota varken verilmez (mevcut rota yeni
+  /// başlangıçtan yeniden hesaplanır).
+  void beginOriginPick({GeoPoint? destPos, String? destId, String? destName}) {
+    _pendingDestPos = destPos;
+    _pendingDestId = destId;
+    _pendingDestName = destName;
+    state = state.copyWith(pickingOrigin: true, clearSelection: true);
+  }
+
+  /// Seçim modundan vazgeç (şerit üzerindeki düğme).
+  void cancelOriginPick() {
+    _pendingDestPos = null;
+    _pendingDestId = null;
+    _pendingDestName = null;
+    state = state.copyWith(pickingOrigin: false);
+  }
+
+  /// Harita boşluğuna dokunuş — yalnız seçim modunda anlamlı.
+  void onMapTapped(GeoPoint point) {
+    if (!state.pickingOrigin) return;
+    unawaited(originPicked(point));
+  }
+
+  /// A noktası seçildi (haritadan serbest nokta ya da koy). Nokta denize
+  /// oturtulur; yakında deniz yoksa seçim başarısız sinyali verilir ve mod
+  /// AÇIK kalır (kullanıcı yeniden dokunur ya da vazgeçer).
+  Future<void> originPicked(GeoPoint point, {String? name}) async {
+    if (state.isRouting) return;
+    GeoPoint? snapped;
+    try {
+      snapped = await ref.read(seaRouteEngineProvider).snapWater(point);
+    } catch (_) {
+      snapped = null;
+    }
+    if (snapped == null) {
+      state = state.copyWith(originPickFailSeq: state.originPickFailSeq + 1);
+      return;
+    }
+    final RouteOrigin origin = RouteOrigin(pos: snapped, name: name);
+    state = state.copyWith(pickingOrigin: false);
+    await _replanWithOrigin(origin);
+  }
+
+  /// Başlangıcı GPS konumuna döndürür (çipteki "değiştir" menüsü). Arayüz
+  /// GPS şartını çağırmadan ÖNCE denetler.
+  Future<void> setDeviceOrigin() async {
+    final GeoPoint? gps = ref.read(devicePositionProvider);
+    if (gps == null || state.isRouting) return;
+    state = state.copyWith(pickingOrigin: false);
+    await _replanWithOrigin(RouteOrigin(pos: gps, isDevice: true));
+  }
+
+  /// KAYITLI ROTAYI AÇ (dürüstlük kararı: kayıtta çizgi değil başlangıç +
+  /// duraklar durur — rota aynı motorla YENİDEN hesaplanır). "Konumum"
+  /// başlangıçlı kayıtlarda arayüz GPS şartını önceden denetler.
+  Future<void> openSavedRoute(RouteOrigin origin, List<RouteWaypoint> waypoints) async {
+    if (state.isRouting || waypoints.isEmpty) return;
+    RouteOrigin effective = origin;
+    if (origin.isDevice) {
+      final GeoPoint? gps = ref.read(devicePositionProvider);
+      if (gps == null) return;
+      effective = RouteOrigin(pos: gps, isDevice: true);
+    }
+    await _planTrip(effective, waypoints, editing: false);
+  }
+
+  /// Yeni başlangıçla: mevcut rota varsa onu, yoksa bekleyen hedefi planlar.
+  Future<void> _replanWithOrigin(RouteOrigin origin) async {
+    if (state.routeWaypoints.isNotEmpty) {
+      await _planTrip(origin, state.routeWaypoints, editing: true);
+      return;
+    }
+    final GeoPoint? destPos = _pendingDestPos;
+    if (destPos == null) return;
+    final List<RouteWaypoint> wps = <RouteWaypoint>[
+      RouteWaypoint(pos: destPos, id: _pendingDestId, name: _pendingDestName),
+    ];
+    _pendingDestPos = null;
+    _pendingDestId = null;
+    _pendingDestName = null;
+    await _planTrip(origin, wps, editing: false);
   }
 
   /// ROTA DÜZENLEME (2026-08, kullanıcı onaylı): koyu DURAK olarak ekler.
   /// Durak, toplam sapmayı en aza indiren bacağa otomatik yerleştirilir
   /// (rota geri dönüş yapmaz). Aynı koy ikinci kez eklenmez.
   Future<void> addStop(GeoPoint pos, String idOrSlug, String name) async {
-    final GeoPoint? origin = _routeOrigin ?? ref.read(devicePositionProvider);
+    final RouteOrigin? origin = state.routeOrigin;
     if (state.route == null || origin == null || state.isRouting) return;
     if (state.routeWaypoints.any((RouteWaypoint w) => w.id == idOrSlug)) return;
     final List<RouteWaypoint> wps =
         List<RouteWaypoint>.of(state.routeWaypoints);
     final int idx = bestStopInsertIndex(
-      origin,
+      origin.pos,
       <GeoPoint>[for (final RouteWaypoint w in wps) w.pos],
       pos,
     );
@@ -275,7 +364,7 @@ class MapController extends Notifier<MapState> {
   /// ROTA DÜZENLEME: bacak tutamacı bırakıldı → o bacağa yeni ARA NOKTA.
   /// Karaya bırakılan nokta en yakın denize oturtulur (motor `snapWater`).
   Future<void> insertVia(int legIndex, GeoPoint pos) async {
-    final GeoPoint? origin = _routeOrigin;
+    final RouteOrigin? origin = state.routeOrigin;
     if (state.route == null || origin == null || state.isRouting) return;
     final GeoPoint? snapped =
         await _snapForEdit(pos);
@@ -289,7 +378,7 @@ class MapController extends Notifier<MapState> {
 
   /// ROTA DÜZENLEME: mevcut ara nokta yeni yerine taşındı.
   Future<void> moveVia(int wpIndex, GeoPoint pos) async {
-    final GeoPoint? origin = _routeOrigin;
+    final RouteOrigin? origin = state.routeOrigin;
     if (state.route == null || origin == null || state.isRouting) return;
     if (wpIndex < 0 || wpIndex >= state.routeWaypoints.length) return;
     if (state.routeWaypoints[wpIndex].isStop) return; // duraklar taşınmaz
@@ -304,7 +393,7 @@ class MapController extends Notifier<MapState> {
   /// ROTA DÜZENLEME: ara noktayı/durağı kaldırır (çipteki ✕ ya da tutamaça
   /// dokunuş). Hedef (son eleman) buradan kaldırılmaz — rota ✕ ile kapanır.
   Future<void> removeWaypoint(int wpIndex) async {
-    final GeoPoint? origin = _routeOrigin;
+    final RouteOrigin? origin = state.routeOrigin;
     if (state.route == null || origin == null || state.isRouting) return;
     if (wpIndex < 0 || wpIndex >= state.routeWaypoints.length - 1) return;
     final List<RouteWaypoint> wps =
@@ -331,7 +420,7 @@ class MapController extends Notifier<MapState> {
   /// [editing] true iken başarısızlık ESKİ ROTAYI KORUR ve yalnız düzenleme
   /// uyarısı sinyali verir; false iken rota yoktur, "hesaplanamadı" gösterilir.
   Future<void> _planTrip(
-    GeoPoint origin,
+    RouteOrigin origin,
     List<RouteWaypoint> wps, {
     required bool editing,
   }) async {
@@ -341,7 +430,7 @@ class MapController extends Notifier<MapState> {
     try {
       trip = await ref
           .read(seaRouteEngineProvider)
-          .trip(origin, <GeoPoint>[for (final RouteWaypoint w in wps) w.pos]);
+          .trip(origin.pos, <GeoPoint>[for (final RouteWaypoint w in wps) w.pos]);
     } catch (_) {
       trip = null;
     }
@@ -360,12 +449,12 @@ class MapController extends Notifier<MapState> {
             );
       return;
     }
-    _routeOrigin = origin;
     final SeaRoutePlan resolved = trip.combined;
     state = state.copyWith(
       route: resolved,
       routeLegs: trip.legs,
       routeWaypoints: List<RouteWaypoint>.unmodifiable(wps),
+      routeOrigin: origin,
       isRouting: false,
       // Kamera yalnız YENİ rotaya sığdırılır; düzenlemede (tutamaç/durak)
       // kullanıcının baktığı yer değişmez (seq artmaz).
@@ -386,11 +475,21 @@ class MapController extends Notifier<MapState> {
 
   /// Çizili rotayı kaldırır (rota çipindeki kapat düğmesi).
   void clearRoute() {
-    _routeOrigin = null;
     state = state.copyWith(clearRoute: true, isRouting: false);
   }
 
   void selectPin(String pinId) {
+    // BAŞLANGIÇ SEÇ modunda pine dokunuş SEÇİM değil A NOKTASIDIR (rota
+    // planlama 2026-08): koy, rotanın başlangıcı olur.
+    if (state.pickingOrigin) {
+      for (final LocationPin pin in state.pins) {
+        if (pin.id == pinId) {
+          unawaited(originPicked(pin.position, name: pin.name));
+          return;
+        }
+      }
+      return;
+    }
     state = state.copyWith(selectedPinId: pinId);
   }
 

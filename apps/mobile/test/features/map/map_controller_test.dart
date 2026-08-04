@@ -13,6 +13,7 @@ import 'package:dockly_mobile/features/route/application/route_wind_advisor.dart
 import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
 import 'package:dockly_mobile/features/route/domain/route_wind.dart';
 import 'package:dockly_mobile/features/route/domain/sea_router.dart';
+import 'package:dockly_mobile/features/route/domain/sea_trip.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -41,15 +42,19 @@ class FakeSeaRouteEngine extends SeaRouteEngine {
 
   SeaRoutePlan? plan; // testte değiştirilebilir (düzenleme-başarısız senaryosu)
   int calls = 0;
+  bool snapFails = false; // true → suya oturtma başarısız (iç kara senaryosu)
+  GeoPoint? lastFrom; // son bacağın başlangıcı (A noktası doğrulaması)
 
   @override
   Future<SeaRoutePlan?> route(GeoPoint from, GeoPoint to) async {
     calls++;
+    lastFrom ??= from; // ilk bacağın başlangıcı
     return plan;
   }
 
   @override
-  Future<GeoPoint?> snapWater(GeoPoint p) async => p; // varlık yüklemesi YOK
+  Future<GeoPoint?> snapWater(GeoPoint p) async =>
+      snapFails ? null : p; // varlık yüklemesi YOK
 }
 
 /// Sahte rüzgâr danışmanı — ağa/varlığa gidilmez; verilen rapor döner.
@@ -694,6 +699,110 @@ void main() {
     expect(s.routeWaypoints, hasLength(1)); // ara nokta EKLENMEDİ
     expect(s.routeEditFailSeq, 1); // arayüz kısa uyarı gösterir
     expect(s.routeFailSeq, 0); // "hesaplanamadı" akışı değil
+  });
+
+  // --- ROTA PLANLAMA (2026-08): konumdan bağımsız A→B + kayıtlı rota açma ---
+
+  test('BAŞLANGIÇ SEÇ: GPS olmadan A noktası seçilir, rota A\'dan çizilir', () async {
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.70, lon: 27.70), GeoPoint(lat: 36.75, lon: 28.93)],
+      distanceNm: 20,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final engine = FakeSeaRouteEngine(plan);
+    final container =
+        _containerWith(FakeMapGateway(result: pinResult), routeEngine: engine);
+    await _ctrl(container).loadViewport(pinViewport);
+    // GPS PAYLAŞILMADI — plan modu yine çalışmalı (kullanıcı isteği).
+    _ctrl(container).beginOriginPick(
+      destPos: testPin.position,
+      destId: testPin.id,
+      destName: testPin.name,
+    );
+    expect(_state(container).pickingOrigin, isTrue);
+
+    const GeoPoint aPoint = GeoPoint(lat: 36.70, lon: 27.70);
+    await _ctrl(container).originPicked(aPoint);
+    final MapState s = _state(container);
+    expect(s.pickingOrigin, isFalse);
+    expect(s.route, isNotNull);
+    expect(s.routeOrigin!.isDevice, isFalse);
+    expect(s.routeOrigin!.pos.lat, aPoint.lat);
+    expect(engine.lastFrom!.lat, aPoint.lat); // motor A'dan hesapladı
+    expect(s.routeWaypoints.single.id, 'loc-1');
+  });
+
+  test('BAŞLANGIÇ SEÇ modunda pine dokunuş SEÇİM değil A noktasıdır', () async {
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.75, lon: 28.93), GeoPoint(lat: 36.6, lon: 28.9)],
+      distanceNm: 10,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final container = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: FakeSeaRouteEngine(plan));
+    await _ctrl(container).loadViewport(pinViewport); // pinler durumda
+    _ctrl(container).beginOriginPick(
+      destPos: const GeoPoint(lat: 36.6, lon: 28.9),
+      destId: 'hedef-koy',
+      destName: 'Hedef Koy',
+    );
+    _ctrl(container).selectPin('loc-1'); // pick modunda → A noktası olur
+    await Future<void>.delayed(Duration.zero);
+    final MapState s = _state(container);
+    expect(s.selectedPinId, isNull); // kart AÇILMADI
+    expect(s.routeOrigin, isNotNull);
+    expect(s.routeOrigin!.name, 'D-Marin Göcek'); // A = koy (isimli)
+    expect(s.routeWaypoints.single.id, 'hedef-koy');
+  });
+
+  test('BAŞLANGIÇ SEÇ: yakında deniz yoksa sinyal artar, MOD AÇIK kalır', () async {
+    final engine = FakeSeaRouteEngine()..snapFails = true;
+    final container =
+        _containerWith(FakeMapGateway(result: pinResult), routeEngine: engine);
+    await _ctrl(container).loadViewport(pinViewport);
+    _ctrl(container).beginOriginPick(
+        destPos: testPin.position, destId: testPin.id, destName: testPin.name);
+    await _ctrl(container).originPicked(const GeoPoint(lat: 39.9, lon: 32.5));
+    final MapState s = _state(container);
+    expect(s.originPickFailSeq, 1);
+    expect(s.pickingOrigin, isTrue); // kullanıcı yeniden dokunabilir
+    expect(s.route, isNull);
+  });
+
+  test('KAYITLI ROTA AÇ: seçilen-nokta başlangıçlı kayıt GPS olmadan açılır; '
+      '"Konumum" başlangıçlı kayıt GPS ister', () async {
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.70, lon: 27.70), GeoPoint(lat: 36.75, lon: 28.93)],
+      distanceNm: 20,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final container = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: FakeSeaRouteEngine(plan));
+    await _ctrl(container).loadViewport(pinViewport);
+    const RouteOrigin picked =
+        RouteOrigin(pos: GeoPoint(lat: 36.70, lon: 27.70), name: 'Datça');
+    const List<RouteWaypoint> wps = <RouteWaypoint>[
+      RouteWaypoint(pos: GeoPoint(lat: 36.75, lon: 28.93), id: 'loc-1', name: 'D-Marin Göcek'),
+    ];
+    await _ctrl(container).openSavedRoute(picked, wps);
+    expect(_state(container).route, isNotNull);
+    expect(_state(container).routeOrigin!.name, 'Datça');
+
+    // "Konumum" başlangıçlı kayıt: GPS yok → açılmaz (arayüz uyarıyı gösterir).
+    _ctrl(container).clearRoute();
+    const RouteOrigin device =
+        RouteOrigin(pos: GeoPoint(lat: 0, lon: 0), isDevice: true);
+    await _ctrl(container).openSavedRoute(device, wps);
+    expect(_state(container).route, isNull);
+    // GPS paylaşılınca açılır ve başlangıç GÜNCEL konumdur.
+    _shareLocation(container);
+    await _ctrl(container).openSavedRoute(device, wps);
+    expect(_state(container).route, isNotNull);
+    expect(_state(container).routeOrigin!.isDevice, isTrue);
+    expect(_state(container).routeOrigin!.pos.lat, 36.76);
   });
 
   test('clearRoute ara noktaları ve bacakları da temizler', () async {

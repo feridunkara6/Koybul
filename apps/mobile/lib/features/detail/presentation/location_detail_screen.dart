@@ -17,9 +17,9 @@ import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
 import '../../favorites/domain/favorite_location.dart';
 import '../../favorites/presentation/favorite_button.dart';
-import '../../location/application/location_controller.dart';
 import '../../map/application/map_controller.dart';
 import '../../map/domain/map_state.dart';
+import '../../map/presentation/route_origin_menu.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../route/domain/sea_trip.dart';
 import '../../nearby/presentation/nearby_alternatives.dart';
@@ -978,20 +978,22 @@ class _ActionBar extends ConsumerWidget {
 
   /// Rota: aramadan/detaydan gelen kullanıcı haritaya dönüp işareti yeniden
   /// bulmak zorunda kalmasın — rota BURADAN istenir, harita rota çizili açılır.
+  /// ROTA PLANLAMA (2026-08): GPS yoksa başlangıç menüsü açılır (Konumumdan /
+  /// Başlangıç noktası seç); seçim moduna girilirse haritaya dönülür.
   void _startRoute(BuildContext context, WidgetRef ref) {
-    final L10n t = ref.read(l10nProvider);
     if (ref.read(devicePositionProvider) == null) {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(
-          content: Text(t.routeNeedOrigin),
-          duration: const Duration(seconds: 6),
-          action: SnackBarAction(
-            label: t.locateTooltip,
-            onPressed: () =>
-                ref.read(locationControllerProvider.notifier).locateMe(),
-          ),
-        ));
+      showRouteOriginMenu(
+        context,
+        ref,
+        destPos: detail.position,
+        destId: detail.id,
+        destName: detail.name,
+        afterPick: () {
+          if (context.mounted) {
+            Navigator.of(context).popUntil((Route<dynamic> r) => r.isFirst);
+          }
+        },
+      );
       return;
     }
     // Hesap arka planda başlar; kullanıcı haritaya döner, rota + mesafe/süre

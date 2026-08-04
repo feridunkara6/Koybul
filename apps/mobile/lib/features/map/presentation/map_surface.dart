@@ -34,6 +34,7 @@ class MapSurfaceData {
     this.routeLegPoints,
     this.routeVias = const <MapRouteVia>[],
     this.routeStops = const <MapRouteStop>[],
+    this.routeOriginBadge,
   });
 
   final List<LocationPin> pins;
@@ -61,6 +62,10 @@ class MapSurfaceData {
 
   /// Numaralı duraklar (görsel rozet; etkileşimsiz).
   final List<MapRouteStop> routeStops;
+
+  /// Rotanın A NOKTASI rozeti (rota planlama 2026-08): başlangıç GPS değilse
+  /// (haritadan/koydan seçildiyse) çizilir. null = rozet yok.
+  final GeoPoint? routeOriginBadge;
 }
 
 /// Harita yüzeyinden gelen etkileşim geri çağrıları.
@@ -72,6 +77,7 @@ class MapSurfaceCallbacks {
     this.onRouteInsertVia,
     this.onRouteMoveVia,
     this.onRouteRemoveVia,
+    this.onMapTap,
   });
 
   /// Kamera durulunca yeni görünüm (bbox + zoom).
@@ -87,6 +93,10 @@ class MapSurfaceCallbacks {
 
   /// Ara noktaya dokunuldu → kaldır.
   final void Function(int wpIndex)? onRouteRemoveVia;
+
+  /// Harita boşluğuna dokunuş (rota planlama 2026-08): BAŞLANGIÇ SEÇ modunda
+  /// A noktasını belirler; diğer durumlarda kontrolcü yok sayar.
+  final void Function(GeoPoint point)? onMapTap;
 }
 
 /// Somut harita yüzeyini üreten fabrika — prod'da Mapbox (4.3b), testte sahte.

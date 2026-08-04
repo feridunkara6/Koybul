@@ -124,6 +124,10 @@ abstract final class DocklyIcons {
     '<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>'
     '<line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>',
   );
+  // Yer imi / kaydet (rota kaydetme 2026-08 — Feather "bookmark").
+  static const DocklyIconData bookmark = DocklyIconData(
+    '<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>',
+  );
 
   // Durum / bilgi
   static const DocklyIconData checkCircle = DocklyIconData(

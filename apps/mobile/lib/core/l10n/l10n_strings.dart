@@ -239,6 +239,23 @@ class L10n {
     required this.onbHintCoords,
     required this.tourTitles,
     required this.tourBodies,
+    required this.cancelLabel,
+    required this.saveLabel,
+    required this.routeFromDeviceOpt,
+    required this.routePickOriginOpt,
+    required this.routePickBanner,
+    required this.routeOriginFmt,
+    required this.routeOriginDevice,
+    required this.routeOriginPicked,
+    required this.routeOriginChange,
+    required this.originPickFail,
+    required this.routeSaveTitle,
+    required this.routeSaveNameHint,
+    required this.routeSaved,
+    required this.savedRoutesTitle,
+    required this.savedOpenBtn,
+    required this.savedDeleteTooltip,
+    required this.savedEmpty,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -364,6 +381,14 @@ class L10n {
 
   /// Tur adım başlıkları/metinleri (6 adım, sırayla).
   final List<String> tourTitles, tourBodies;
+
+  // Rota planlama + kayıtlı rotalar (2026-08, kullanıcı onaylı):
+  // konumdan bağımsız A→B başlangıç seçimi ve cihazda rota kaydetme.
+  final String cancelLabel, saveLabel, routeFromDeviceOpt, routePickOriginOpt,
+      routePickBanner, routeOriginFmt, routeOriginDevice, routeOriginPicked,
+      routeOriginChange, originPickFail, routeSaveTitle, routeSaveNameHint,
+      routeSaved, savedRoutesTitle, savedOpenBtn, savedDeleteTooltip,
+      savedEmpty;
 
   String windExposedLabel(String code) => windExposedLabels[code] ?? code;
 
@@ -690,6 +715,23 @@ const L10n _tr = L10n(
     'Büyüteçle koy ve marina ara; sonuçtan detaya geç. Alttaki düğmeyle harita ↔ liste görünümü değişir.',
     'Haritada bir koya dokun: alttaki kartta Detay ve karaya değmeyen Deniz Rotası seni bekler.',
   ],
+  cancelLabel: 'Vazgeç',
+  saveLabel: 'Kaydet',
+  routeFromDeviceOpt: 'Konumumdan',
+  routePickOriginOpt: 'Başlangıç noktası seç',
+  routePickBanner: 'Başlangıç noktasını seç — haritada bir yere ya da koya dokun.',
+  routeOriginFmt: 'A: {0}',
+  routeOriginDevice: 'Konumum',
+  routeOriginPicked: 'Seçilen nokta',
+  routeOriginChange: 'değiştir',
+  originPickFail: 'Buranın yakınında deniz yok — başlangıç için denize daha yakın bir yere dokun.',
+  routeSaveTitle: 'Rotayı kaydet',
+  routeSaveNameHint: 'Rota adı',
+  routeSaved: 'Rota kaydedildi — Profil → Kayıtlı Rotalar.',
+  savedRoutesTitle: 'Kayıtlı Rotalar',
+  savedOpenBtn: 'Haritada aç',
+  savedDeleteTooltip: 'Rotayı sil',
+  savedEmpty: 'Henüz kayıtlı rota yok. Haritada rota çiz, üstteki çipte kaydet simgesine dokun.',
 );
 
 const L10n _en = L10n(
@@ -988,6 +1030,23 @@ const L10n _en = L10n(
     'Search bays and marinas with the magnifier; open details from a result. The button below toggles map ↔ list view.',
     'Tap a bay on the map: the card below offers Details and a land-avoiding Sea Route.',
   ],
+  cancelLabel: 'Cancel',
+  saveLabel: 'Save',
+  routeFromDeviceOpt: 'From my location',
+  routePickOriginOpt: 'Choose a starting point',
+  routePickBanner: 'Choose the starting point — tap the map or a bay.',
+  routeOriginFmt: 'A: {0}',
+  routeOriginDevice: 'My location',
+  routeOriginPicked: 'Chosen point',
+  routeOriginChange: 'change',
+  originPickFail: 'No sea near there — tap somewhere closer to the water to start.',
+  routeSaveTitle: 'Save route',
+  routeSaveNameHint: 'Route name',
+  routeSaved: 'Route saved — Profile → Saved Routes.',
+  savedRoutesTitle: 'Saved Routes',
+  savedOpenBtn: 'Open on map',
+  savedDeleteTooltip: 'Delete route',
+  savedEmpty: 'No saved routes yet. Draw a route on the map, then tap the save icon on the chip.',
 );
 
 const L10n _es = L10n(
@@ -1286,6 +1345,23 @@ const L10n _es = L10n(
     'Busca calas y marinas con la lupa; abre detalles desde un resultado. El botón de abajo alterna mapa ↔ lista.',
     'Toca una cala en el mapa: la tarjeta inferior ofrece Detalles y una Ruta marítima que evita tierra.',
   ],
+  cancelLabel: 'Cancelar',
+  saveLabel: 'Guardar',
+  routeFromDeviceOpt: 'Desde mi ubicación',
+  routePickOriginOpt: 'Elegir punto de partida',
+  routePickBanner: 'Elige el punto de partida: toca el mapa o una cala.',
+  routeOriginFmt: 'A: {0}',
+  routeOriginDevice: 'Mi ubicación',
+  routeOriginPicked: 'Punto elegido',
+  routeOriginChange: 'cambiar',
+  originPickFail: 'No hay mar cerca de ahí — toca más cerca del agua para empezar.',
+  routeSaveTitle: 'Guardar ruta',
+  routeSaveNameHint: 'Nombre de la ruta',
+  routeSaved: 'Ruta guardada: Perfil → Rutas guardadas.',
+  savedRoutesTitle: 'Rutas guardadas',
+  savedOpenBtn: 'Abrir en el mapa',
+  savedDeleteTooltip: 'Eliminar ruta',
+  savedEmpty: 'Aún no hay rutas guardadas. Traza una ruta y toca el icono de guardar en el chip.',
 );
 
 const L10n _ru = L10n(
@@ -1584,6 +1660,23 @@ const L10n _ru = L10n(
     'Ищите бухты и марины через лупу; открывайте детали из результата. Кнопка ниже переключает карту ↔ список.',
     'Коснитесь бухты на карте: в карточке снизу — «Подробнее» и морской маршрут в обход суши.',
   ],
+  cancelLabel: 'Отмена',
+  saveLabel: 'Сохранить',
+  routeFromDeviceOpt: 'От моей позиции',
+  routePickOriginOpt: 'Выбрать точку старта',
+  routePickBanner: 'Выберите точку старта — коснитесь карты или бухты.',
+  routeOriginFmt: 'A: {0}',
+  routeOriginDevice: 'Моя позиция',
+  routeOriginPicked: 'Выбранная точка',
+  routeOriginChange: 'изменить',
+  originPickFail: 'Рядом нет моря — коснитесь точки ближе к воде.',
+  routeSaveTitle: 'Сохранить маршрут',
+  routeSaveNameHint: 'Название маршрута',
+  routeSaved: 'Маршрут сохранён — Профиль → Сохранённые маршруты.',
+  savedRoutesTitle: 'Сохранённые маршруты',
+  savedOpenBtn: 'Открыть на карте',
+  savedDeleteTooltip: 'Удалить маршрут',
+  savedEmpty: 'Пока нет сохранённых маршрутов. Проложите маршрут и коснитесь значка сохранения на чипе.',
 );
 
 /// Saf eşleme — birim testli.
