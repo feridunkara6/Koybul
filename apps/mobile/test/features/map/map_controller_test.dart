@@ -34,10 +34,12 @@ class FakeBundledSnapshot extends BundledMapSnapshot {
 }
 
 /// Sahte rota motoru — gerçek maske varlığına gidilmez; verilen plan döner.
+/// `trip()` taban sınıftan gelir ve `route()` üzerinden çalışır — her bacak
+/// için aynı sahte plan döner (rota düzenleme testleri için yeterli).
 class FakeSeaRouteEngine extends SeaRouteEngine {
   FakeSeaRouteEngine([this.plan]);
 
-  final SeaRoutePlan? plan;
+  SeaRoutePlan? plan; // testte değiştirilebilir (düzenleme-başarısız senaryosu)
   int calls = 0;
 
   @override
@@ -45,6 +47,9 @@ class FakeSeaRouteEngine extends SeaRouteEngine {
     calls++;
     return plan;
   }
+
+  @override
+  Future<GeoPoint?> snapWater(GeoPoint p) async => p; // varlık yüklemesi YOK
 }
 
 /// Sahte rüzgâr danışmanı — ağa/varlığa gidilmez; verilen rapor döner.
@@ -573,6 +578,143 @@ void main() {
     _ctrl(container).clearRoute();
     expect(_state(container).route, isNull);
     expect(_state(container).routeWind, isNull);
+  });
+
+  // --- ROTA DÜZENLEME (2026-08, kullanıcı onaylı): duraklar + tutamaçlar ---
+
+  test('rota → tek ara nokta (hedef, DURAK) ve bacak durumda tutulur', () async {
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.76, lon: 28.96), GeoPoint(lat: 36.75, lon: 28.93)],
+      distanceNm: 2,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final container =
+        _containerWith(FakeMapGateway(result: pinResult), routeEngine: FakeSeaRouteEngine(plan));
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin);
+    final MapState s = _state(container);
+    expect(s.routeWaypoints, hasLength(1));
+    expect(s.routeWaypoints.single.isStop, isTrue); // hedef DURAKTIR (isimli)
+    expect(s.routeWaypoints.single.name, 'D-Marin Göcek');
+    expect(s.routeLegs, hasLength(1));
+  });
+
+  test('addStop: durak eklenir, iki bacak hesaplanır; aynı koy ikinci kez EKLENMEZ', () async {
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.76, lon: 28.96), GeoPoint(lat: 36.75, lon: 28.93)],
+      distanceNm: 2,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final engine = FakeSeaRouteEngine(plan);
+    final container =
+        _containerWith(FakeMapGateway(result: pinResult), routeEngine: engine);
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin); // 1 bacak
+    expect(engine.calls, 1);
+
+    await _ctrl(container)
+        .addStop(const GeoPoint(lat: 36.75, lon: 28.94), 'loc-2', 'Kille Koyu');
+    MapState s = _state(container);
+    expect(s.routeWaypoints, hasLength(2));
+    expect(engine.calls, 3); // + iki bacak
+    // Durak, hedeften ÖNCE (başlangıca yakın olduğu bacağa) girdi.
+    expect(s.routeWaypoints.first.name, 'Kille Koyu');
+    expect(s.routeWaypoints.last.id, 'loc-1');
+    // Birleşik rota iki bacağın toplamı (sahte planla 2+2 nm).
+    expect(s.route!.distanceNm, closeTo(4, 1e-9));
+
+    // Aynı koy ikinci kez eklenmez (sessiz koruma).
+    await _ctrl(container)
+        .addStop(const GeoPoint(lat: 36.75, lon: 28.94), 'loc-2', 'Kille Koyu');
+    s = _state(container);
+    expect(s.routeWaypoints, hasLength(2));
+    expect(engine.calls, 3);
+  });
+
+  test('insertVia/moveVia/removeWaypoint: tutamaç akışı; kamera edit\'te SIÇRAMAZ', () async {
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.76, lon: 28.96), GeoPoint(lat: 36.75, lon: 28.93)],
+      distanceNm: 2,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final container = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: FakeSeaRouteEngine(plan));
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin);
+    expect(_state(container).routeSeq, 1);
+
+    // Bacak 0'a ara nokta ekle (tutamaç bırakıldı).
+    await _ctrl(container).insertVia(0, const GeoPoint(lat: 36.70, lon: 28.90));
+    MapState s = _state(container);
+    expect(s.routeWaypoints, hasLength(2));
+    expect(s.routeWaypoints.first.isStop, isFalse); // isimsiz ara nokta
+    expect(s.routeSeq, 1); // düzenlemede kamera sıçramaz (seq artmaz)
+
+    // Ara noktayı taşı.
+    await _ctrl(container).moveVia(0, const GeoPoint(lat: 36.68, lon: 28.88));
+    s = _state(container);
+    expect(s.routeWaypoints.first.pos.lat, 36.68);
+
+    // Ara noktayı kaldır (tutamaça dokunuş).
+    await _ctrl(container).removeWaypoint(0);
+    s = _state(container);
+    expect(s.routeWaypoints, hasLength(1));
+    expect(s.routeWaypoints.single.id, 'loc-1');
+
+    // Hedef (son eleman) buradan kaldırılamaz.
+    await _ctrl(container).removeWaypoint(0);
+    expect(_state(container).routeWaypoints, hasLength(1));
+  });
+
+  test('DÜZENLEME BAŞARISIZ: motor rota bulamazsa ESKİ ROTA KORUNUR + edit sinyali', () async {
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.76, lon: 28.96), GeoPoint(lat: 36.75, lon: 28.93)],
+      distanceNm: 2,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final engine = FakeSeaRouteEngine(plan);
+    final container =
+        _containerWith(FakeMapGateway(result: pinResult), routeEngine: engine);
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin);
+    final SeaRoutePlan? before = _state(container).route;
+
+    engine.plan = null; // bundan sonra hiçbir bacak bulunamaz
+    await _ctrl(container).insertVia(0, const GeoPoint(lat: 36.70, lon: 28.90));
+    final MapState s = _state(container);
+    expect(s.route, same(before)); // eski rota DURUYOR (düz çizgi/boşluk yok)
+    expect(s.routeWaypoints, hasLength(1)); // ara nokta EKLENMEDİ
+    expect(s.routeEditFailSeq, 1); // arayüz kısa uyarı gösterir
+    expect(s.routeFailSeq, 0); // "hesaplanamadı" akışı değil
+  });
+
+  test('clearRoute ara noktaları ve bacakları da temizler', () async {
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.76, lon: 28.96), GeoPoint(lat: 36.75, lon: 28.93)],
+      distanceNm: 2,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final container = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: FakeSeaRouteEngine(plan));
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin);
+    await _ctrl(container).insertVia(0, const GeoPoint(lat: 36.70, lon: 28.90));
+    expect(_state(container).routeWaypoints, hasLength(2));
+    _ctrl(container).clearRoute();
+    final MapState s = _state(container);
+    expect(s.route, isNull);
+    expect(s.routeWaypoints, isEmpty);
+    expect(s.routeLegs, isEmpty);
   });
 
   test('decodeCachedMapJson: geçerli anlık görüntü çözülür; bozuk girdi null', () {

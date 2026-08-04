@@ -19,6 +19,8 @@ import '../../favorites/domain/favorite_location.dart';
 import '../../favorites/presentation/favorite_button.dart';
 import '../../location/application/location_controller.dart';
 import '../../map/application/map_controller.dart';
+import '../../map/domain/map_state.dart';
+import '../../route/domain/sea_trip.dart';
 import '../../nearby/presentation/nearby_alternatives.dart';
 import '../../reservation/presentation/reservation_sheet.dart';
 import '../../reviews/presentation/reviews_section.dart';
@@ -843,6 +845,18 @@ class _ActionBar extends ConsumerWidget {
     final ThemeData theme = Theme.of(context);
     final L10n t = ref.watch(l10nProvider);
     final bool anchoring = _isAnchoringType(detail.type);
+    // ROTA DÜZENLEME (2026-08): haritada rota ÇİZİLİYKEN bu sayfadan aynı
+    // eylem "Durak ekle" olur — koy, rotaya en mantıklı sırayla eklenir.
+    // Koy zaten rotadaysa düğme normal "Deniz rotası"na döner (yeniden kurar).
+    final (bool hasRoute, bool inRoute) = ref.watch(
+      mapControllerProvider.select(
+        (MapState s) => (
+          s.route != null,
+          s.routeWaypoints.any((RouteWaypoint w) => w.id == detail.id),
+        ),
+      ),
+    );
+    final bool addStopMode = hasRoute && !inRoute;
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -861,9 +875,11 @@ class _ActionBar extends ConsumerWidget {
                 children: <Widget>[
                   Expanded(
                     child: DocklyButton(
-                      label: t.routeBtn,
-                      icon: DocklyIcons.navigation,
-                      onPressed: () => _startRoute(context, ref),
+                      label: addStopMode ? t.routeAddStop : t.routeBtn,
+                      icon: addStopMode ? DocklyIcons.place : DocklyIcons.navigation,
+                      onPressed: addStopMode
+                          ? () => _addStop(context, ref)
+                          : () => _startRoute(context, ref),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -926,7 +942,17 @@ class _ActionBar extends ConsumerWidget {
     }
     // Hesap arka planda başlar; kullanıcı haritaya döner, rota + mesafe/süre
     // çipi orada belirir.
-    ref.read(mapControllerProvider.notifier).routeTo(detail.position, detail.id);
+    ref
+        .read(mapControllerProvider.notifier)
+        .routeTo(detail.position, detail.id, name: detail.name);
+    Navigator.of(context).popUntil((Route<dynamic> r) => r.isFirst);
+  }
+
+  /// Rota çiziliyken: bu koyu DURAK olarak ekler ve haritaya döner.
+  void _addStop(BuildContext context, WidgetRef ref) {
+    ref
+        .read(mapControllerProvider.notifier)
+        .addStop(detail.position, detail.id, detail.name);
     Navigator.of(context).popUntil((Route<dynamic> r) => r.isFirst);
   }
 }

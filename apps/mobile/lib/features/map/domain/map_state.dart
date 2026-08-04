@@ -3,6 +3,7 @@ import 'package:dockly_core/dockly_core.dart';
 
 import '../../route/domain/route_wind.dart';
 import '../../route/domain/sea_router.dart';
+import '../../route/domain/sea_trip.dart';
 
 /// Harita ekranı durumu (docs/26 §4). Yeniden yükleme sırasında mevcut
 /// marker'lar korunur (`isLoading` bindirme göstergesi); hata da veriyi silmez.
@@ -22,6 +23,9 @@ class MapState {
     this.routeSeq = 0,
     this.routeWind,
     this.routeFailSeq = 0,
+    this.routeWaypoints = const <RouteWaypoint>[],
+    this.routeLegs = const <SeaRoutePlan>[],
+    this.routeEditFailSeq = 0,
   });
 
   final List<LocationPin> pins;
@@ -53,6 +57,19 @@ class MapState {
   /// Rota HESAPLANAMADI sinyali (kara yasağı): her başarısız denemede artar;
   /// arayüz kullanıcıya dürüst bir uyarı gösterir (düz çizgi çizilmez).
   final int routeFailSeq;
+
+  /// Rotanın sıralı ara noktaları (ROTA DÜZENLEME 2026-08): duraklar (isimli
+  /// koylar) + tutamaç ara noktaları (isimsiz). Son eleman hedeftir. Boş =
+  /// rota yok.
+  final List<RouteWaypoint> routeWaypoints;
+
+  /// Bacak planları (ara nokta sayısı kadar) — tutamaçlar bacak ortalarına
+  /// yerleştirilir; [route] bunların birleşimidir.
+  final List<SeaRoutePlan> routeLegs;
+
+  /// Rota DÜZENLEMESİ başarısız sinyali: tutamaç/durak değişikliği rota
+  /// bulamadıysa artar — ESKİ ROTA KORUNUR, arayüz kısa bir uyarı gösterir.
+  final int routeEditFailSeq;
 
   /// En az bir yükleme tamamlandı mı? İlk yükleme bitmeden "boş durum" GÖSTERİLMEZ
   /// (aksi halde açılışta kısa süre yanlış "liman yok" mesajı yanıp söner — P9).
@@ -93,6 +110,9 @@ class MapState {
     RouteWindReport? routeWind,
     bool clearRouteWind = false,
     int? routeFailSeq,
+    List<RouteWaypoint>? routeWaypoints,
+    List<SeaRoutePlan>? routeLegs,
+    int? routeEditFailSeq,
   }) {
     return MapState(
       pins: pins ?? this.pins,
@@ -111,6 +131,12 @@ class MapState {
           ? null
           : (routeWind ?? this.routeWind),
       routeFailSeq: routeFailSeq ?? this.routeFailSeq,
+      routeWaypoints: clearRoute
+          ? const <RouteWaypoint>[]
+          : (routeWaypoints ?? this.routeWaypoints),
+      routeLegs:
+          clearRoute ? const <SeaRoutePlan>[] : (routeLegs ?? this.routeLegs),
+      routeEditFailSeq: routeEditFailSeq ?? this.routeEditFailSeq,
     );
   }
 }

@@ -16,6 +16,7 @@ import '../../nearby/presentation/nearby_sheet.dart';
 import '../../route/domain/route_wind.dart';
 import '../../route/domain/sea_route.dart';
 import '../../route/domain/sea_router.dart';
+import '../../route/domain/sea_trip.dart';
 import '../../search/presentation/search_screen.dart';
 import '../application/map_controller.dart';
 import '../domain/map_state.dart';
@@ -41,6 +42,35 @@ class MapScreen extends ConsumerWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(content: Text(ref.read(l10nProvider).routeDirectNote)),
+            );
+        }
+      },
+    );
+    // ROTA DÜZENLEME uyarısı (2026-08): tutamaç/durak değişikliği rota
+    // bulamadıysa ESKİ ROTA KORUNUR ve kısa bir açıklama gösterilir.
+    ref.listen<int>(
+      mapControllerProvider.select((MapState s) => s.routeEditFailSeq),
+      (int? prev, int next) {
+        if (next > (prev ?? 0)) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text(ref.read(l10nProvider).routeEditFail)),
+            );
+        }
+      },
+    );
+    // İlk ara nokta eklenince tek seferlik ipucu: taşımak için sürükle,
+    // kaldırmak için dokun (keşfedilebilirlik).
+    ref.listen<int>(
+      mapControllerProvider.select((MapState s) =>
+          s.routeWaypoints.where((RouteWaypoint w) => !w.isStop).length),
+      (int? prev, int next) {
+        if ((prev ?? 0) == 0 && next > 0) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text(ref.read(l10nProvider).routeViaHint)),
             );
         }
       },
@@ -81,11 +111,28 @@ class MapScreen extends ConsumerWidget {
                       focus: ref.watch(mapFocusProvider),
                       routePoints: state.route?.points,
                       routeSeq: state.routeSeq,
+                      // ROTA DÜZENLEME (2026-08): bacaklar → tutamaçlar,
+                      // ara noktalar → taşınabilir tutamaçlar, duraklar →
+                      // numaralı rozetler.
+                      routeLegPoints: state.routeLegs.isEmpty
+                          ? null
+                          : <List<GeoPoint>>[
+                              for (final SeaRoutePlan l in state.routeLegs) l.points,
+                            ],
+                      routeVias: <MapRouteVia>[
+                        for (int i = 0; i < state.routeWaypoints.length; i++)
+                          if (!state.routeWaypoints[i].isStop)
+                            MapRouteVia(index: i, pos: state.routeWaypoints[i].pos),
+                      ],
+                      routeStops: _stopMarkers(state.routeWaypoints),
                     ),
                     MapSurfaceCallbacks(
                       onViewportChanged: controller.onViewportChanged,
                       onPinTap: controller.selectPin,
                       onClusterTap: (_) => controller.clearSelection(),
+                      onRouteInsertVia: controller.insertVia,
+                      onRouteMoveVia: controller.moveVia,
+                      onRouteRemoveVia: controller.removeWaypoint,
                     ),
                   ),
           ),
@@ -151,7 +198,9 @@ class MapScreen extends ConsumerWidget {
                         child: _RouteChip(
                           route: state.route!,
                           wind: state.routeWind,
+                          waypoints: state.routeWaypoints,
                           onClear: controller.clearRoute,
+                          onRemoveStop: controller.removeWaypoint,
                         ),
                       ),
                   ],
@@ -193,28 +242,42 @@ class MapScreen extends ConsumerWidget {
                   ),
                 ),
                 routing: state.isRouting,
-                onRoute: () {
-                  // KONUM ŞARTI (kullanıcı kararı 2026-08): rota YALNIZ
-                  // paylaşılan gerçek konumdan hesaplanır. Konum yoksa uyarı +
-                  // tek dokunuşla konum isteme eylemi gösterilir.
-                  if (ref.read(devicePositionProvider) == null) {
-                    final L10n tt = ref.read(l10nProvider);
-                    ScaffoldMessenger.of(context)
-                      ..hideCurrentSnackBar()
-                      ..showSnackBar(SnackBar(
-                        content: Text(tt.routeNeedOrigin),
-                        duration: const Duration(seconds: 6),
-                        action: SnackBarAction(
-                          label: tt.locateTooltip,
-                          onPressed: () => ref
-                              .read(locationControllerProvider.notifier)
-                              .locateMe(),
-                        ),
-                      ));
-                    return;
-                  }
-                  controller.routeToPin(selectedPin);
-                },
+                // ROTA DÜZENLEME (2026-08): rota ÇİZİLİYKEN başka koya
+                // dokununca "Durak ekle" gösterilir (rota baştan kurulmaz);
+                // koy zaten rotadaysa yalnız Detay kalır.
+                onAddStop: state.route != null &&
+                        !state.routeWaypoints
+                            .any((RouteWaypoint w) => w.id == selectedPin.id)
+                    ? () => controller.addStop(
+                          selectedPin.position,
+                          selectedPin.id,
+                          selectedPin.name,
+                        )
+                    : null,
+                onRoute: state.route != null
+                    ? null
+                    : () {
+                        // KONUM ŞARTI (kullanıcı kararı 2026-08): rota YALNIZ
+                        // paylaşılan gerçek konumdan hesaplanır. Konum yoksa
+                        // uyarı + tek dokunuşla konum isteme eylemi gösterilir.
+                        if (ref.read(devicePositionProvider) == null) {
+                          final L10n tt = ref.read(l10nProvider);
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(SnackBar(
+                              content: Text(tt.routeNeedOrigin),
+                              duration: const Duration(seconds: 6),
+                              action: SnackBarAction(
+                                label: tt.locateTooltip,
+                                onPressed: () => ref
+                                    .read(locationControllerProvider.notifier)
+                                    .locateMe(),
+                              ),
+                            ));
+                          return;
+                        }
+                        controller.routeToPin(selectedPin);
+                      },
               ),
             ),
         ],
@@ -287,6 +350,17 @@ class _MapListView extends ConsumerWidget {
 }
 
 String _fmtNm(double nm) => nm >= 10 ? nm.round().toString() : nm.toStringAsFixed(1);
+
+/// Duraklardan numaralı harita rozetleri (1, 2, …). Tek duraklı rotada (yalnız
+/// hedef) rozet çizilmez — hedefin pini zaten oradadır.
+List<MapRouteStop> _stopMarkers(List<RouteWaypoint> wps) {
+  final List<MapRouteStop> out = <MapRouteStop>[];
+  int n = 0;
+  for (final RouteWaypoint w in wps) {
+    if (w.isStop) out.add(MapRouteStop(number: ++n, pos: w.pos));
+  }
+  return out.length <= 1 ? const <MapRouteStop>[] : out;
+}
 
 class _CenterProgress extends ConsumerWidget {
   const _CenterProgress();
@@ -516,14 +590,27 @@ class _MapSearchButton extends ConsumerWidget {
 }
 
 /// Deniz rotası bilgi çipi: mesafe + kaba süre + dürüst uyarı notu +
-/// (analiz gelince) rüzgâr satırı ve varış açık-yön uyarısı (Rota v2).
+/// (analiz gelince) rüzgâr satırı ve varış açık-yön uyarısı (Rota v2) +
+/// DURAK LİSTESİ (rota düzenleme 2026-08: sıralı, ✕ ile çıkarılabilir).
 /// Kapat düğmesi rotayı haritadan kaldırır.
 class _RouteChip extends ConsumerWidget {
-  const _RouteChip({required this.route, required this.onClear, this.wind});
+  const _RouteChip({
+    required this.route,
+    required this.onClear,
+    this.wind,
+    this.waypoints = const <RouteWaypoint>[],
+    this.onRemoveStop,
+  });
 
   final SeaRoutePlan route;
   final RouteWindReport? wind;
   final VoidCallback onClear;
+
+  /// Rotanın sıralı ara noktaları (duraklar + tutamaç noktaları).
+  final List<RouteWaypoint> waypoints;
+
+  /// Çipteki ✕ ile durak çıkarma (dizin, durum listesine göredir).
+  final void Function(int wpIndex)? onRemoveStop;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -541,6 +628,10 @@ class _RouteChip extends ConsumerWidget {
         ? t.routeDirectNote
         : (route.reachedGoal ? t.routeApproxNote : t.routeCoastNote);
     final RouteWindReport? w = wind;
+    final int stopCount =
+        waypoints.where((RouteWaypoint x) => x.isStop).length;
+    final String title =
+        '≈ ${_fmtNm(route.distanceNm)} ${t.nmUnit} · ~$eta';
     return Material(
       elevation: 2,
       borderRadius: BorderRadius.circular(14),
@@ -562,7 +653,9 @@ class _RouteChip extends ConsumerWidget {
                 const SizedBox(width: 6),
                 Flexible(
                   child: Text(
-                    '≈ ${_fmtNm(route.distanceNm)} ${t.nmUnit} · ~$eta',
+                    stopCount >= 2
+                        ? '${L10n.fmt(t.routeStopsFmt, '$stopCount')} · $title'
+                        : title,
                     style: theme.textTheme.titleSmall,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -575,6 +668,30 @@ class _RouteChip extends ConsumerWidget {
                 ),
               ],
             ),
+            // DURAK LİSTESİ: 2+ durakta sıralı hap listesi; hedef dışındakiler
+            // ✕ ile çıkarılabilir (mesafe/süre tüm bacakların toplamıdır).
+            if (stopCount >= 2)
+              Padding(
+                padding: const EdgeInsets.only(top: 4, bottom: 4, right: 8),
+                child: Wrap(
+                  spacing: 6,
+                  runSpacing: 4,
+                  children: <Widget>[
+                    for (final (int wpIndex, int number, RouteWaypoint wp)
+                        in _numberedStops())
+                      _StopPill(
+                        number: number,
+                        name: wp.name ?? '',
+                        isLast: wpIndex == waypoints.length - 1,
+                        removeTooltip: t.routeStopRemoveTooltip,
+                        onRemove: onRemoveStop == null ||
+                                wpIndex == waypoints.length - 1
+                            ? null
+                            : () => onRemoveStop!(wpIndex),
+                      ),
+                  ],
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.only(right: 8),
               child: Text(
@@ -624,6 +741,98 @@ class _RouteChip extends ConsumerWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// Duraklar (isimli ara noktalar), rota sırasına göre numaralanmış:
+  /// (durum dizini, sıra numarası, ara nokta).
+  List<(int, int, RouteWaypoint)> _numberedStops() {
+    final List<(int, int, RouteWaypoint)> out = <(int, int, RouteWaypoint)>[];
+    int n = 0;
+    for (int i = 0; i < waypoints.length; i++) {
+      final RouteWaypoint w = waypoints[i];
+      if (w.isStop) out.add((i, ++n, w));
+    }
+    return out;
+  }
+}
+
+/// Çipteki durak hapı: sıra numarası + koy adı (+ hedef değilse ✕).
+class _StopPill extends StatelessWidget {
+  const _StopPill({
+    required this.number,
+    required this.name,
+    required this.isLast,
+    required this.removeTooltip,
+    this.onRemove,
+  });
+
+  final int number;
+  final String name;
+  final bool isLast;
+  final String removeTooltip;
+  final VoidCallback? onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Color badge =
+        isLast ? DocklyColors.accentTurquoise : DocklyColors.brandPrimary;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.6)),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            width: 16,
+            height: 16,
+            decoration: BoxDecoration(color: badge, shape: BoxShape.circle),
+            child: Center(
+              child: Text(
+                '$number',
+                style: const TextStyle(
+                  color: Color(0xFFFFFFFF),
+                  fontSize: 9.5,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 5),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 110),
+            child: Text(
+              name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(fontWeight: FontWeight.w600),
+            ),
+          ),
+          if (onRemove != null) ...<Widget>[
+            const SizedBox(width: 3),
+            Tooltip(
+              message: removeTooltip,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(999),
+                onTap: onRemove,
+                child: Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: DocklyIcon(
+                    DocklyIcons.close,
+                    size: 13,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }

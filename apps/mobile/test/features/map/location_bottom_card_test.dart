@@ -112,6 +112,27 @@ void main() {
     expect(find.text('Uygunluk bilinmiyor'), findsNothing);
   });
 
+  testWidgets('ROTA DÜZENLEME: onAddStop verilince "Durak ekle" görünür ve çağırır',
+      (WidgetTester tester) async {
+    bool added = false;
+    await tester.pumpWidget(_wrap(SizedBox(
+      width: 340, // dar ekran taşma emniyeti bu düğme için de denetlenir
+      child: LocationBottomCard(
+        pin: testPin,
+        onClose: () {},
+        onOpenDetail: () {},
+        onAddStop: () => added = true, // rota çizili → rota düğmesi YOK
+      ),
+    )));
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+    expect(find.text('Durak ekle'), findsOneWidget);
+    expect(find.text('Deniz rotası'), findsNothing);
+    await tester.tap(find.text('Durak ekle'));
+    await tester.pump();
+    expect(added, isTrue);
+  });
+
   testWidgets('doluluk rozeti: pin özet taşıyorsa tip etiketinin yanında görünür',
       (WidgetTester tester) async {
     final LocationPin occPin = LocationPin(

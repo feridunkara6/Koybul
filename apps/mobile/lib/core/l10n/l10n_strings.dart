@@ -220,6 +220,11 @@ class L10n {
     required this.wwBandNote,
     required this.coordsCopied,
     required this.contactTypeLabels,
+    required this.routeAddStop,
+    required this.routeStopsFmt,
+    required this.routeStopRemoveTooltip,
+    required this.routeEditFail,
+    required this.routeViaHint,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -332,6 +337,10 @@ class L10n {
   final Map<String, String> contactTypeLabels;
 
   String contactTypeLabel(String code) => contactTypeLabels[code] ?? code;
+
+  // Rota düzenleme (2026-08, kullanıcı onaylı): tutamaçla kaydırma + duraklar.
+  final String routeAddStop, routeStopsFmt, routeStopRemoveTooltip,
+      routeEditFail, routeViaHint;
 
   String windExposedLabel(String code) => windExposedLabels[code] ?? code;
 
@@ -622,6 +631,11 @@ const L10n _tr = L10n(
     'website': 'Web', 'vhf': 'VHF', 'reservation_link': 'Rezervasyon',
     'instagram': 'Instagram', 'facebook': 'Facebook', 'emergency': 'Acil',
   },
+  routeAddStop: 'Durak ekle',
+  routeStopsFmt: '{0} durak',
+  routeStopRemoveTooltip: 'Durağı çıkar',
+  routeEditFail: 'Buradan geçen deniz rotası bulunamadı — rota değiştirilmedi.',
+  routeViaHint: 'Ara noktayı sürükleyerek taşıyabilir, üzerine dokunarak kaldırabilirsin.',
 );
 
 const L10n _en = L10n(
@@ -884,6 +898,11 @@ const L10n _en = L10n(
     'website': 'Website', 'vhf': 'VHF', 'reservation_link': 'Booking',
     'instagram': 'Instagram', 'facebook': 'Facebook', 'emergency': 'Emergency',
   },
+  routeAddStop: 'Add stop',
+  routeStopsFmt: '{0} stops',
+  routeStopRemoveTooltip: 'Remove stop',
+  routeEditFail: 'No sea route passes through there — the route was not changed.',
+  routeViaHint: 'Drag the waypoint to move it, tap it to remove it.',
 );
 
 const L10n _es = L10n(
@@ -1146,6 +1165,11 @@ const L10n _es = L10n(
     'website': 'Web', 'vhf': 'VHF', 'reservation_link': 'Reserva',
     'instagram': 'Instagram', 'facebook': 'Facebook', 'emergency': 'Emergencia',
   },
+  routeAddStop: 'Añadir parada',
+  routeStopsFmt: '{0} paradas',
+  routeStopRemoveTooltip: 'Quitar parada',
+  routeEditFail: 'No hay ruta marítima por ahí — la ruta no se modificó.',
+  routeViaHint: 'Arrastra el punto para moverlo; tócalo para quitarlo.',
 );
 
 const L10n _ru = L10n(
@@ -1408,6 +1432,11 @@ const L10n _ru = L10n(
     'website': 'Сайт', 'vhf': 'VHF', 'reservation_link': 'Бронь',
     'instagram': 'Instagram', 'facebook': 'Facebook', 'emergency': 'Экстренный',
   },
+  routeAddStop: 'Добавить остановку',
+  routeStopsFmt: 'Остановок: {0}',
+  routeStopRemoveTooltip: 'Убрать остановку',
+  routeEditFail: 'Морской маршрут через эту точку не найден — маршрут не изменён.',
+  routeViaHint: 'Перетащите точку, чтобы переместить её; коснитесь, чтобы убрать.',
 );
 
 /// Saf eşleme — birim testli.

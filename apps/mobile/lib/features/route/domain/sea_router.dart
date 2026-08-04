@@ -310,6 +310,18 @@ _Attempt _search(
   );
 }
 
+/// Noktayı suya oturtur (ROTA DÜZENLEME 2026-08): nokta zaten sudaysa aynen
+/// döner; karadaysa en yakın su hücresinin MERKEZİ döner (tutamaç karaya
+/// bırakılırsa kendiliğinden denize kayar). Kapsam dışı/su yoksa null.
+GeoPoint? nearestWaterCenter(SeaMask m, GeoPoint p, {int maxR = 10}) {
+  if (!m.covers(p)) return null;
+  final int cx = m.colOf(p.lon), cy = m.rowOf(p.lat);
+  if (m.isWater(cx, cy)) return p;
+  final int? idx = _snapToWater(m, cx, cy, maxR: maxR);
+  if (idx == null) return null;
+  return m.centerOf(idx % m.width, idx ~/ m.width);
+}
+
 /// En yakın su hücresi (kare halkalarla, ~5 km'ye kadar). Bulunamazsa null.
 int? _snapToWater(SeaMask m, int cx, int cy, {int maxR = 10}) {
   if (m.isWater(cx, cy)) return cy * m.width + cx;

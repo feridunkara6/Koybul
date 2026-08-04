@@ -17,6 +17,7 @@ class LocationBottomCard extends ConsumerWidget {
     required this.onClose,
     this.onOpenDetail,
     this.onRoute,
+    this.onAddStop,
     this.routing = false,
     this.fit,
     super.key,
@@ -30,6 +31,10 @@ class LocationBottomCard extends ConsumerWidget {
 
   /// "Deniz rotası" aksiyonu (2026-08) — verilmezse buton gösterilmez.
   final VoidCallback? onRoute;
+
+  /// "Durak ekle" aksiyonu (rota düzenleme 2026-08): rota ÇİZİLİYKEN başka
+  /// koya dokununca gösterilir — koy, rotaya en mantıklı sırayla eklenir.
+  final VoidCallback? onAddStop;
 
   /// Rota hesabı sürüyor — buton dönen gösterge gösterir.
   final bool routing;
@@ -127,7 +132,7 @@ class LocationBottomCard extends ConsumerWidget {
                   const SizedBox(height: 8),
                   BoatFitBadge(fit: fit!),
                 ],
-                if (onOpenDetail != null || onRoute != null) ...<Widget>[
+                if (onOpenDetail != null || onRoute != null || onAddStop != null) ...<Widget>[
                   const SizedBox(height: 12),
                   Row(
                     children: <Widget>[
@@ -139,7 +144,8 @@ class LocationBottomCard extends ConsumerWidget {
                             onPressed: onOpenDetail,
                           ),
                         ),
-                      if (onOpenDetail != null && onRoute != null)
+                      if (onOpenDetail != null &&
+                          (onRoute != null || onAddStop != null))
                         const SizedBox(width: 8),
                       // AKILLI DENİZ ROTASI (2026-08): konumdan bu noktaya,
                       // karaları tanıyan rota — hesap uygulamanın İÇİNDE.
@@ -151,6 +157,18 @@ class LocationBottomCard extends ConsumerWidget {
                             variant: DocklyButtonVariant.secondary,
                             loading: routing,
                             onPressed: onRoute,
+                          ),
+                        ),
+                      // ROTA DÜZENLEME (2026-08): rota çiziliyken bu koy
+                      // rotaya DURAK olarak eklenir (rota baştan kurulmaz).
+                      if (onAddStop != null)
+                        Expanded(
+                          child: DocklyButton(
+                            label: t.routeAddStop,
+                            icon: DocklyIcons.place,
+                            variant: DocklyButtonVariant.secondary,
+                            loading: routing,
+                            onPressed: onAddStop,
                           ),
                         ),
                     ],

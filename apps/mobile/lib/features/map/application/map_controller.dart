@@ -10,6 +10,7 @@ import '../../route/application/route_wind_advisor.dart';
 import '../../route/application/sea_route_engine.dart';
 import '../../route/domain/route_wind.dart';
 import '../../route/domain/sea_router.dart';
+import '../../route/domain/sea_trip.dart';
 import '../data/api_map_locations_gateway.dart';
 import '../data/bundled_map_snapshot.dart';
 import '../data/shared_prefs_map_cache.dart';
@@ -234,44 +235,150 @@ class MapController extends Notifier<MapState> {
   /// gösterir. Motor rota bulamazsa (kapsam dışı, kapalı havza) rota
   /// ÇİZİLMEZ ve "hesaplanamadı" uyarısı verilir — kara üzerinden düz
   /// çizgi ASLA gösterilmez (kaptan kuralı).
-  Future<void> routeToPin(LocationPin pin) => routeTo(pin.position, pin.id);
+  Future<void> routeToPin(LocationPin pin) =>
+      routeTo(pin.position, pin.id, name: pin.name);
+
+  /// Başarılı planın başlangıç noktası — rota DÜZENLEMELERİ (durak/tutamaç)
+  /// aynı başlangıçtan yeniden hesaplanır (GPS o an oynasa da rota zıplamaz).
+  GeoPoint? _routeOrigin;
 
   /// Genel giriş: hedef koordinat + kimlik (haritadaki kart VE detay sayfası
   /// buradan rota ister — arama sonucundan açılan detayda da çalışır).
-  Future<void> routeTo(GeoPoint destination, String idOrSlug) async {
+  Future<void> routeTo(GeoPoint destination, String idOrSlug, {String? name}) async {
     final GeoPoint? origin = ref.read(devicePositionProvider);
     if (origin == null || state.isRouting) return;
+    await _planTrip(
+      origin,
+      <RouteWaypoint>[RouteWaypoint(pos: destination, id: idOrSlug, name: name)],
+      editing: false,
+    );
+  }
+
+  /// ROTA DÜZENLEME (2026-08, kullanıcı onaylı): koyu DURAK olarak ekler.
+  /// Durak, toplam sapmayı en aza indiren bacağa otomatik yerleştirilir
+  /// (rota geri dönüş yapmaz). Aynı koy ikinci kez eklenmez.
+  Future<void> addStop(GeoPoint pos, String idOrSlug, String name) async {
+    final GeoPoint? origin = _routeOrigin ?? ref.read(devicePositionProvider);
+    if (state.route == null || origin == null || state.isRouting) return;
+    if (state.routeWaypoints.any((RouteWaypoint w) => w.id == idOrSlug)) return;
+    final List<RouteWaypoint> wps =
+        List<RouteWaypoint>.of(state.routeWaypoints);
+    final int idx = bestStopInsertIndex(
+      origin,
+      <GeoPoint>[for (final RouteWaypoint w in wps) w.pos],
+      pos,
+    );
+    wps.insert(idx, RouteWaypoint(pos: pos, id: idOrSlug, name: name));
+    await _planTrip(origin, wps, editing: true);
+  }
+
+  /// ROTA DÜZENLEME: bacak tutamacı bırakıldı → o bacağa yeni ARA NOKTA.
+  /// Karaya bırakılan nokta en yakın denize oturtulur (motor `snapWater`).
+  Future<void> insertVia(int legIndex, GeoPoint pos) async {
+    final GeoPoint? origin = _routeOrigin;
+    if (state.route == null || origin == null || state.isRouting) return;
+    final GeoPoint? snapped =
+        await _snapForEdit(pos);
+    if (snapped == null) return; // sinyal _snapForEdit içinde verildi
+    final List<RouteWaypoint> wps =
+        List<RouteWaypoint>.of(state.routeWaypoints);
+    final int idx = legIndex.clamp(0, wps.length - 1);
+    wps.insert(idx, RouteWaypoint(pos: snapped));
+    await _planTrip(origin, wps, editing: true);
+  }
+
+  /// ROTA DÜZENLEME: mevcut ara nokta yeni yerine taşındı.
+  Future<void> moveVia(int wpIndex, GeoPoint pos) async {
+    final GeoPoint? origin = _routeOrigin;
+    if (state.route == null || origin == null || state.isRouting) return;
+    if (wpIndex < 0 || wpIndex >= state.routeWaypoints.length) return;
+    if (state.routeWaypoints[wpIndex].isStop) return; // duraklar taşınmaz
+    final GeoPoint? snapped = await _snapForEdit(pos);
+    if (snapped == null) return;
+    final List<RouteWaypoint> wps =
+        List<RouteWaypoint>.of(state.routeWaypoints);
+    wps[wpIndex] = RouteWaypoint(pos: snapped);
+    await _planTrip(origin, wps, editing: true);
+  }
+
+  /// ROTA DÜZENLEME: ara noktayı/durağı kaldırır (çipteki ✕ ya da tutamaça
+  /// dokunuş). Hedef (son eleman) buradan kaldırılmaz — rota ✕ ile kapanır.
+  Future<void> removeWaypoint(int wpIndex) async {
+    final GeoPoint? origin = _routeOrigin;
+    if (state.route == null || origin == null || state.isRouting) return;
+    if (wpIndex < 0 || wpIndex >= state.routeWaypoints.length - 1) return;
+    final List<RouteWaypoint> wps =
+        List<RouteWaypoint>.of(state.routeWaypoints)..removeAt(wpIndex);
+    await _planTrip(origin, wps, editing: true);
+  }
+
+  /// Bırakılan noktayı suya oturtur; su bulunamazsa düzenleme-başarısız
+  /// sinyali verir (eski rota korunur) ve null döner.
+  Future<GeoPoint?> _snapForEdit(GeoPoint pos) async {
+    GeoPoint? snapped;
+    try {
+      snapped = await ref.read(seaRouteEngineProvider).snapWater(pos);
+    } catch (_) {
+      snapped = null;
+    }
+    if (snapped == null) {
+      state = state.copyWith(routeEditFailSeq: state.routeEditFailSeq + 1);
+    }
+    return snapped;
+  }
+
+  /// Ortak planlayıcı: başlangıçtan sıralı ara noktalara ÇOK BACAKLI yolculuk.
+  /// [editing] true iken başarısızlık ESKİ ROTAYI KORUR ve yalnız düzenleme
+  /// uyarısı sinyali verir; false iken rota yoktur, "hesaplanamadı" gösterilir.
+  Future<void> _planTrip(
+    GeoPoint origin,
+    List<RouteWaypoint> wps, {
+    required bool editing,
+  }) async {
     state = state.copyWith(isRouting: true);
     final int req = ++_routeReq; // stale koruması (rota istekleri arasında)
-    SeaRoutePlan? plan;
+    SeaTrip? trip;
     try {
-      plan = await ref.read(seaRouteEngineProvider).route(origin, destination);
+      trip = await ref
+          .read(seaRouteEngineProvider)
+          .trip(origin, <GeoPoint>[for (final RouteWaypoint w in wps) w.pos]);
     } catch (_) {
-      plan = null;
+      trip = null;
     }
     if (req != _routeReq) return;
     // KARA YASAĞI (kaptan kuralı 2026-08): motor rota bulamazsa DÜZ ÇİZGİ
-    // ÇİZİLMEZ — kullanıcıya dürüst "hesaplanamadı" uyarısı gösterilir.
-    if (plan == null) {
-      state = state.copyWith(
-        isRouting: false,
-        routeFailSeq: state.routeFailSeq + 1,
-      );
+    // ÇİZİLMEZ. Düzenlemede eski rota korunur; yeni rotada dürüst uyarı.
+    if (trip == null) {
+      state = editing
+          ? state.copyWith(
+              isRouting: false,
+              routeEditFailSeq: state.routeEditFailSeq + 1,
+            )
+          : state.copyWith(
+              isRouting: false,
+              routeFailSeq: state.routeFailSeq + 1,
+            );
       return;
     }
-    final SeaRoutePlan resolved = plan;
+    _routeOrigin = origin;
+    final SeaRoutePlan resolved = trip.combined;
     state = state.copyWith(
       route: resolved,
+      routeLegs: trip.legs,
+      routeWaypoints: List<RouteWaypoint>.unmodifiable(wps),
       isRouting: false,
-      routeSeq: state.routeSeq + 1,
+      // Kamera yalnız YENİ rotaya sığdırılır; düzenlemede (tutamaç/durak)
+      // kullanıcının baktığı yer değişmez (seq artmaz).
+      routeSeq: state.routeSeq + (editing ? 0 : 1),
       clearRouteWind: true, // yeni rota → eski rüzgâr raporu geçersiz
     );
     // RÜZGÂR ANALİZİ (Rota v2): arka planda, en iyi çaba — rota çizimi bunu
-    // BEKLEMEZ. Rapor gelince çipe rüzgâr satırı eklenir; gelmezse sessiz.
-    if (resolved.viaSea) {
+    // BEKLEMEZ. Analiz HEDEF koyun kimliğiyle yapılır (varış açık-yön uyarısı).
+    final String? destId = wps.last.id;
+    if (resolved.viaSea && destId != null) {
       final RouteWindReport? wind = await ref
           .read(routeWindAdvisorProvider)
-          .analyze(resolved, idOrSlug);
+          .analyze(resolved, destId);
       if (req != _routeReq || !identical(state.route, resolved)) return;
       if (wind != null) state = state.copyWith(routeWind: wind);
     }
@@ -279,6 +386,7 @@ class MapController extends Notifier<MapState> {
 
   /// Çizili rotayı kaldırır (rota çipindeki kapat düğmesi).
   void clearRoute() {
+    _routeOrigin = null;
     state = state.copyWith(clearRoute: true, isRouting: false);
   }
 

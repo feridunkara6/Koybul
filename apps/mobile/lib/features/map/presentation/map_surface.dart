@@ -4,6 +4,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../domain/map_viewport.dart';
 
+/// Rota üzerindeki ARA NOKTA işaretçisi (rota düzenleme 2026-08): tutamaçla
+/// eklenen serbest nokta. [index] durum listesindeki ara nokta dizinidir.
+class MapRouteVia {
+  const MapRouteVia({required this.index, required this.pos});
+
+  final int index;
+  final GeoPoint pos;
+}
+
+/// Rota DURAK işaretçisi: numaralı koy rozeti (1, 2, …; son numara hedef).
+class MapRouteStop {
+  const MapRouteStop({required this.number, required this.pos});
+
+  final int number;
+  final GeoPoint pos;
+}
+
 /// Harita yüzeyine çizilecek veri (marker/cluster + seçim + kullanıcı konumu).
 class MapSurfaceData {
   const MapSurfaceData({
@@ -14,6 +31,9 @@ class MapSurfaceData {
     this.focus,
     this.routePoints,
     this.routeSeq = 0,
+    this.routeLegPoints,
+    this.routeVias = const <MapRouteVia>[],
+    this.routeStops = const <MapRouteStop>[],
   });
 
   final List<LocationPin> pins;
@@ -31,6 +51,16 @@ class MapSurfaceData {
 
   /// Yeni rotada artar — yüzey kamerayı rotaya bir kez sığdırır.
   final int routeSeq;
+
+  /// Bacak bacak rota kırıklıkları (rota düzenleme): her bacağın ortasına
+  /// sürüklenebilir tutamaç konur. null/boş = tutamaç çizilmez.
+  final List<List<GeoPoint>>? routeLegPoints;
+
+  /// Serbest ara noktalar — sürüklenerek taşınır, dokununca kaldırılır.
+  final List<MapRouteVia> routeVias;
+
+  /// Numaralı duraklar (görsel rozet; etkileşimsiz).
+  final List<MapRouteStop> routeStops;
 }
 
 /// Harita yüzeyinden gelen etkileşim geri çağrıları.
@@ -39,12 +69,24 @@ class MapSurfaceCallbacks {
     required this.onViewportChanged,
     required this.onPinTap,
     required this.onClusterTap,
+    this.onRouteInsertVia,
+    this.onRouteMoveVia,
+    this.onRouteRemoveVia,
   });
 
   /// Kamera durulunca yeni görünüm (bbox + zoom).
   final void Function(MapViewport viewport) onViewportChanged;
   final void Function(String pinId) onPinTap;
   final void Function(Cluster cluster) onClusterTap;
+
+  /// Bacak tutamacı bırakıldı → o bacağa yeni ara nokta (rota düzenleme).
+  final void Function(int legIndex, GeoPoint pos)? onRouteInsertVia;
+
+  /// Ara nokta yeni yerine bırakıldı.
+  final void Function(int wpIndex, GeoPoint pos)? onRouteMoveVia;
+
+  /// Ara noktaya dokunuldu → kaldır.
+  final void Function(int wpIndex)? onRouteRemoveVia;
 }
 
 /// Somut harita yüzeyini üreten fabrika — prod'da Mapbox (4.3b), testte sahte.

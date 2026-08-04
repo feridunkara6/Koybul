@@ -69,10 +69,41 @@ class _WebMapSurface extends ConsumerStatefulWidget {
 /// pin modu. Eşik GEÇİLİRKEN debounce beklenmez — pinler anında istenir.
 const int _minPinZoom = 9;
 
+/// Süren tutamaç sürüklemesi (ROTA DÜZENLEME 2026-08). Sürükleme boyunca
+/// rota YENİDEN HESAPLANMAZ (A* pahalı) — kesikli önizleme çizgisi ve hayalet
+/// tutamaç gösterilir; parmak kalkınca kontrolcü gerçek rotayı hesaplar.
+class _RouteDrag {
+  _RouteDrag({
+    required this.isNew,
+    required this.index,
+    required this.anchorPrev,
+    required this.anchorNext,
+    required this.screen,
+    required this.pos,
+  });
+
+  /// true → bacak tutamacı (bırakınca YENİ ara nokta); false → mevcut ara nokta.
+  final bool isNew;
+
+  /// isNew: bacak dizini; değilse ara noktanın durumdaki dizini.
+  final int index;
+
+  /// Önizleme kesikli çizgisinin sabit uçları (bacağın başı ve sonu).
+  final LatLng anchorPrev;
+  final LatLng anchorNext;
+
+  /// Sürüklenen noktanın ekran koordinatı (delta'lar buna eklenir).
+  math.Point<double> screen;
+
+  /// Sürüklenen noktanın harita koordinatı (ekrandan çevrilir).
+  LatLng pos;
+}
+
 class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
   final MapController _map = MapController();
   Timer? _debounce;
   double _lastZoom = 7; // _initialZoom ile hizalı; eşik-geçişi tespiti için
+  _RouteDrag? _drag;
 
   @override
   void initState() {
@@ -164,6 +195,109 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
     );
   }
 
+  // --- ROTA DÜZENLEME: tutamaç sürükleme makinesi -------------------------
+
+  void _startDrag({
+    required bool isNew,
+    required int index,
+    required GeoPoint at,
+    required LatLng anchorPrev,
+    required LatLng anchorNext,
+  }) {
+    final LatLng p = LatLng(at.lat, at.lon);
+    setState(() {
+      _drag = _RouteDrag(
+        isNew: isNew,
+        index: index,
+        anchorPrev: anchorPrev,
+        anchorNext: anchorNext,
+        screen: _map.camera.latLngToScreenPoint(p),
+        pos: p,
+      );
+    });
+  }
+
+  void _updateDrag(Offset delta) {
+    final _RouteDrag? d = _drag;
+    if (d == null) return;
+    setState(() {
+      d.screen = math.Point<double>(d.screen.x + delta.dx, d.screen.y + delta.dy);
+      d.pos = _map.camera.pointToLatLng(d.screen);
+    });
+  }
+
+  void _endDrag() {
+    final _RouteDrag? d = _drag;
+    if (d == null) return;
+    final GeoPoint dropped = GeoPoint(lat: d.pos.latitude, lon: d.pos.longitude);
+    setState(() => _drag = null);
+    if (d.isNew) {
+      widget.callbacks.onRouteInsertVia?.call(d.index, dropped);
+    } else {
+      widget.callbacks.onRouteMoveVia?.call(d.index, dropped);
+    }
+  }
+
+  void _cancelDrag() {
+    if (_drag == null) return;
+    setState(() => _drag = null);
+  }
+
+  /// Bacak ortalarındaki tutamaç işaretçileri. Çok kısa bacaklarda (3 kırıktan
+  /// az) tutamaç çizilmez — işaretçi kalabalığı olmasın.
+  List<Marker> _legHandles() {
+    final List<List<GeoPoint>>? legs = widget.data.routeLegPoints;
+    if (legs == null) return const <Marker>[];
+    final List<Marker> out = <Marker>[];
+    for (int j = 0; j < legs.length; j++) {
+      final List<GeoPoint> pts = legs[j];
+      if (pts.length < 3) continue;
+      final GeoPoint mid = pts[pts.length ~/ 2];
+      out.add(
+        Marker(
+          point: LatLng(mid.lat, mid.lon),
+          width: 30,
+          height: 30,
+          child: _RouteHandle(
+            size: 14,
+            onDragStart: () => _startDrag(
+              isNew: true,
+              index: j,
+              at: mid,
+              anchorPrev: LatLng(pts.first.lat, pts.first.lon),
+              anchorNext: LatLng(pts.last.lat, pts.last.lon),
+            ),
+            onDragUpdate: _updateDrag,
+            onDragEnd: _endDrag,
+            onDragCancel: _cancelDrag,
+          ),
+        ),
+      );
+    }
+    return out;
+  }
+
+  /// Ara nokta sürüklemesi: önizleme uçları = gelen bacağın başı + giden
+  /// bacağın sonu.
+  void _startViaDrag(MapRouteVia v) {
+    final List<List<GeoPoint>>? legs = widget.data.routeLegPoints;
+    LatLng prev = LatLng(v.pos.lat, v.pos.lon);
+    LatLng next = prev;
+    if (legs != null && v.index < legs.length && legs[v.index].isNotEmpty) {
+      prev = LatLng(legs[v.index].first.lat, legs[v.index].first.lon);
+    }
+    if (legs != null && v.index + 1 < legs.length && legs[v.index + 1].isNotEmpty) {
+      next = LatLng(legs[v.index + 1].last.lat, legs[v.index + 1].last.lon);
+    }
+    _startDrag(
+      isNew: false,
+      index: v.index,
+      at: v.pos,
+      anchorPrev: prev,
+      anchorNext: next,
+    );
+  }
+
   /// Cluster'a dokununca: kontrolcüye haber ver + kamerayı o bölgeye yaklaştır,
   /// ardından yeni görünümü bildir (programatik hareket onPositionChanged'te
   /// hasGesture=false geldiği için elle emit edilir).
@@ -237,6 +371,19 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
               ),
             ],
           ),
+        // SÜRÜKLEME ÖNİZLEMESİ (rota düzenleme): parmak ekrandayken kesikli
+        // çizgi — bırakınca gerçek deniz rotası (A*) hesaplanır.
+        if (_drag != null)
+          PolylineLayer(
+            polylines: <Polyline>[
+              Polyline(
+                points: <LatLng>[_drag!.anchorPrev, _drag!.pos, _drag!.anchorNext],
+                strokeWidth: 3.5,
+                color: DocklyColors.brandPrimary.withValues(alpha: 0.85),
+                pattern: const StrokePattern.dashed(segments: <double>[10, 7]),
+              ),
+            ],
+          ),
         MarkerLayer(
           markers: <Marker>[
             // KULLANICININ KONUMU — yelkenli imleç (kullanıcı isteği): beyaz
@@ -289,6 +436,47 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
                     onTap: () => widget.callbacks.onPinTap(p.id),
                   ),
                 ),
+              ),
+            // --- ROTA DÜZENLEME işaretçileri (pinlerin ÜSTÜNDE) ---
+            // Numaralı DURAK rozetleri (etkileşimsiz — pinin kendisi altta).
+            for (final MapRouteStop s in widget.data.routeStops)
+              Marker(
+                point: LatLng(s.pos.lat, s.pos.lon),
+                width: 26,
+                height: 26,
+                child: IgnorePointer(
+                  child: _StopBadge(
+                    number: s.number,
+                    isLast: s.number == widget.data.routeStops.length,
+                  ),
+                ),
+              ),
+            // Bacak tutamaçları: bacağın ortasında küçük beyaz nokta —
+            // sürükleyip bırakınca oraya YENİ ara nokta eklenir.
+            if (widget.callbacks.onRouteInsertVia != null)
+              ..._legHandles(),
+            // Ara nokta tutamaçları: sürükle = taşı, dokun = kaldır.
+            for (final MapRouteVia v in widget.data.routeVias)
+              Marker(
+                point: LatLng(v.pos.lat, v.pos.lon),
+                width: 34,
+                height: 34,
+                child: _RouteHandle(
+                  size: 20,
+                  onTap: () => widget.callbacks.onRouteRemoveVia?.call(v.index),
+                  onDragStart: () => _startViaDrag(v),
+                  onDragUpdate: _updateDrag,
+                  onDragEnd: _endDrag,
+                  onDragCancel: _cancelDrag,
+                ),
+              ),
+            // Sürükleme hayaleti: parmağın altındaki geçici nokta.
+            if (_drag != null)
+              Marker(
+                point: _drag!.pos,
+                width: 30,
+                height: 30,
+                child: const IgnorePointer(child: _GhostHandle()),
               ),
           ],
         ),
@@ -457,6 +645,130 @@ class _FitDot extends StatelessWidget {
           fits ? DocklyIcons.checkCircle : DocklyIcons.errorOutline,
           size: 9,
           color: const Color(0xFFFFFFFF),
+        ),
+      ),
+    );
+  }
+}
+
+/// ROTA TUTAMACI (rota düzenleme 2026-08): beyaz daire + marka mavisi halka.
+/// Sürüklenebilir; ara nokta tutamaçlarında dokunuş = kaldır. GestureDetector
+/// haritanın kendi kaydırmasını KAZANIR (hit-test çocuğu önce kaydeder) —
+/// tutamacı sürüklerken harita kaymaz.
+class _RouteHandle extends StatelessWidget {
+  const _RouteHandle({
+    required this.size,
+    required this.onDragStart,
+    required this.onDragUpdate,
+    required this.onDragEnd,
+    required this.onDragCancel,
+    this.onTap,
+  });
+
+  final double size;
+  final VoidCallback onDragStart;
+  final void Function(Offset delta) onDragUpdate;
+  final VoidCallback onDragEnd;
+  final VoidCallback onDragCancel;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      onPanStart: (DragStartDetails _) => onDragStart(),
+      onPanUpdate: (DragUpdateDetails d) => onDragUpdate(d.delta),
+      onPanEnd: (DragEndDetails _) => onDragEnd(),
+      onPanCancel: onDragCancel,
+      child: Center(
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFFFFF),
+            shape: BoxShape.circle,
+            border: Border.all(color: DocklyColors.brandPrimary, width: 3),
+            boxShadow: const <BoxShadow>[
+              BoxShadow(color: Color(0x400A2540), blurRadius: 4, offset: Offset(0, 1)),
+            ],
+          ),
+          child: size >= 18
+              ? Center(
+                  child: Container(
+                    width: 5,
+                    height: 5,
+                    decoration: const BoxDecoration(
+                      color: DocklyColors.brandPrimary,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                )
+              : null,
+        ),
+      ),
+    );
+  }
+}
+
+/// Sürükleme hayaleti: parmağın altındaki büyük geçici tutamaç.
+class _GhostHandle extends StatelessWidget {
+  const _GhostHandle();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFFFFF),
+        shape: BoxShape.circle,
+        border: Border.all(color: DocklyColors.brandPrimary, width: 4),
+        boxShadow: const <BoxShadow>[
+          BoxShadow(color: Color(0x590A2540), blurRadius: 8, offset: Offset(0, 2)),
+        ],
+      ),
+      child: const Center(
+        child: SizedBox(
+          width: 6,
+          height: 6,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: DocklyColors.brandPrimary,
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Numaralı DURAK rozeti: marka mavisi daire içinde sıra numarası (son numara
+/// hedef — turkuaz).
+class _StopBadge extends StatelessWidget {
+  const _StopBadge({required this.number, this.isLast = false});
+
+  final int number;
+  final bool isLast;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: isLast ? DocklyColors.accentTurquoise : DocklyColors.brandPrimary,
+        shape: BoxShape.circle,
+        border: Border.all(color: const Color(0xFFFFFFFF), width: 2.5),
+        boxShadow: const <BoxShadow>[
+          BoxShadow(color: Color(0x400A2540), blurRadius: 4, offset: Offset(0, 1)),
+        ],
+      ),
+      child: Center(
+        child: Text(
+          '$number',
+          style: const TextStyle(
+            color: Color(0xFFFFFFFF),
+            fontSize: 11,
+            fontWeight: FontWeight.w800,
+          ),
         ),
       ),
     );
