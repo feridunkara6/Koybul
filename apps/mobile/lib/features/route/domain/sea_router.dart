@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:dockly_api/dockly_api.dart' show GeoPoint;
 
 import '../data/sea_mask.dart';
+import '../data/tr_coast_grid.dart';
 import 'sea_route.dart';
 
 /// AKILLI DENİZ ROTASI (2026-08, kullanıcı isteği: "yol tarifi uygulama
@@ -73,13 +74,26 @@ SeaRoutePlan? planSeaRoute(
   GeoPoint from,
   GeoPoint to, {
   int maxPop = 900000,
+  TrCoastGrid? waters,
 }) {
   if (!m.covers(from) || !m.covers(to)) return null;
-  final int? sIdxRaw = _snapToWater(m, m.colOf(from.lon), m.rowOf(from.lat));
+  // KARADAKİ BAŞLANGIÇ (kaptan kuralı #2, 2026-08): kullanıcı karada (evde/
+  // şehirde) olabilir — başlangıç, EN YAKIN kıyı suyuna oturtulur (~20 km'ye
+  // kadar aranır) ve rota ORADAN başlar; karadaki ilk bacak ASLA çizilmez.
+  final int? sIdxRaw =
+      _snapToWater(m, m.colOf(from.lon), m.rowOf(from.lat), maxR: 40);
   final int? gIdxRaw = _snapToWater(m, m.colOf(to.lon), m.rowOf(to.lat));
   if (sIdxRaw == null || gIdxRaw == null) return null;
   final int sx = sIdxRaw % m.width, sy = sIdxRaw ~/ m.width;
   final int gx = gIdxRaw % m.width, gy = gIdxRaw ~/ m.width;
+
+  // TÜRK KARASULARI TERCİHİ (kaptan kuralı #3): hedef Türk kıyısındaysa
+  // (Türk karasına ≤ 3 nm ve Yunan tarafında değil) rota Yunan tarafına
+  // geçmemeyi TERCİH eder (yumuşak maliyet — dar boğaz geçişleri yine
+  // mümkündür). Hedef Yunan adasıysa tercih kapanır, geçiş serbesttir.
+  final bool preferTr = waters != null &&
+      waters.distTrNm(to) <= 3.0 &&
+      !waters.greekSide(to);
 
   // 1. AŞAMA — dar pencere: kısa/orta rotaların tamamını milisaniyelerde çözer.
   final int margin =
@@ -91,6 +105,7 @@ SeaRoutePlan? planSeaRoute(
     bx1: math.min(m.width - 1, math.max(sx, gx) + margin),
     by1: math.min(m.height - 1, math.max(sy, gy) + margin),
     maxPop: maxPop,
+    waters: preferTr ? waters : null,
   );
 
   // 2. AŞAMA — dar pencere hedefe ulaşamadıysa TÜM BÖLGE (boğazlar dahil).
@@ -102,6 +117,7 @@ SeaRoutePlan? planSeaRoute(
       m, sx, sy, gx, gy,
       bx0: 0, by0: 0, bx1: m.width - 1, by1: m.height - 1,
       maxPop: 2600000,
+      waters: preferTr ? waters : null,
     );
     if (full.reached || full.bestGapNm < res.bestGapNm) res = full;
   }
@@ -114,7 +130,12 @@ SeaRoutePlan? planSeaRoute(
   // Görüş-hattı sadeleştirme: ardışık kırıklıklar, aradaki tüm hücreler su
   // kaldığı sürece birleştirilir (süpürme çizgisi kara bilmezse köşe kalır).
   final List<int> px = res.px, py = res.py;
-  final List<GeoPoint> pts = <GeoPoint>[from];
+  // Başlangıç karadaysa çizgi SUDAN başlar (ilk hücre merkezi) — karadaki
+  // eve/şehre çizgi çekilmez; kaptan denizdeyse gerçek konum kullanılır.
+  final bool fromOnWater = m.isWater(m.colOf(from.lon), m.rowOf(from.lat));
+  final List<GeoPoint> pts = <GeoPoint>[
+    if (fromOnWater) from else m.centerOf(sx, sy),
+  ];
   int anchor = 0;
   for (int i = 1; i < px.length; i++) {
     final bool last = i == px.length - 1;
@@ -124,7 +145,15 @@ SeaRoutePlan? planSeaRoute(
     pts.add(m.centerOf(px[i], py[i]));
     anchor = i;
   }
-  pts.add(to);
+  // Hedef işareti kıyıda/az içerideyse çizgi işarete bağlanır (görsel bağ);
+  // işaret denizden 1,2 nm'den uzaktaysa çizgi SUDA biter (kara yasağı).
+  final GeoPoint goalCenter = m.centerOf(gx, gy);
+  final bool toOnWater = m.isWater(m.colOf(to.lon), m.rowOf(to.lat));
+  if (toOnWater || haversineNm(goalCenter, to) <= 1.2) {
+    pts.add(to);
+  } else {
+    pts.add(goalCenter);
+  }
 
   double dist = 0;
   for (int i = 1; i < pts.length; i++) {
@@ -165,6 +194,7 @@ _Attempt _search(
   required int bx1,
   required int by1,
   required int maxPop,
+  TrCoastGrid? waters,
 }) {
   final int bw = bx1 - bx0 + 1, bh = by1 - by0 + 1;
   final int n = bw * bh;
@@ -238,6 +268,11 @@ _Attempt _search(
         } else if (m.isLand(nx + 2, ny) || m.isLand(nx - 2, ny) ||
             m.isLand(nx, ny + 2) || m.isLand(nx, ny - 2)) {
           step += latNm * 0.12;
+        }
+        // TÜRK KARASULARI TERCİHİ: Yunan tarafındaki hücreye geçiş pahalıdır
+        // (yasak değil — dar boğazlarda kısa geçişler yine yapılabilir).
+        if (waters != null && waters.greekSideAt(m.latAt(ny), m.lonAt(nx))) {
+          step += latNm * 0.6;
         }
         final double tentative = gScore[cur] + step;
         if (tentative < gScore[ni]) {

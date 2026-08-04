@@ -2,6 +2,7 @@ import 'package:dockly_api/dockly_api.dart' show GeoPoint;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/sea_mask.dart';
+import '../data/tr_coast_grid.dart';
 import '../domain/sea_router.dart';
 
 /// Deniz rotası motoru — maskeyi bir kez yükler, sonra bellekten hesaplar.
@@ -10,16 +11,20 @@ import '../domain/sea_router.dart';
 /// override eder (bkz. seaRouteEngineProvider).
 class SeaRouteEngine {
   SeaMask? _mask;
+  TrCoastGrid? _waters;
   bool _loadTried = false;
 
   Future<SeaRoutePlan?> route(GeoPoint from, GeoPoint to) async {
     if (_mask == null && !_loadTried) {
       _loadTried = true;
       _mask = await SeaMask.load();
+      // Karasuları tercihi ızgarası — yüklenemezse rota TERCİHSİZ çalışır
+      // (en iyi çaba; rota yine tamamen denizden).
+      _waters = await TrCoastGrid.load();
     }
     final SeaMask? m = _mask;
     if (m == null) return null;
-    return planSeaRoute(m, from, to);
+    return planSeaRoute(m, from, to, waters: _waters);
   }
 }
 

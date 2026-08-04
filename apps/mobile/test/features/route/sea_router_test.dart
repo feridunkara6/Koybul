@@ -1,5 +1,6 @@
 import 'package:dockly_api/dockly_api.dart' show GeoPoint;
 import 'package:dockly_mobile/features/route/data/sea_mask.dart';
+import 'package:dockly_mobile/features/route/data/tr_coast_grid.dart';
 import 'package:dockly_mobile/features/route/domain/sea_route.dart';
 import 'package:dockly_mobile/features/route/domain/sea_router.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,11 +12,15 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   late SeaMask mask;
+  late TrCoastGrid waters;
 
   setUpAll(() async {
     final SeaMask? m = await SeaMask.load();
     expect(m, isNotNull, reason: 'assets/route/sea_mask.bin yüklenmeli');
     mask = m!;
+    final TrCoastGrid? w = await TrCoastGrid.load();
+    expect(w, isNotNull, reason: 'assets/route/tr_coast_dist.bin yüklenmeli');
+    waters = w!;
   });
 
   test('maske başlığı: bölge Ege-Akdeniz-Marmara-İyon penceresini kapsar', () {
@@ -94,6 +99,51 @@ void main() {
       expect(mask.isWater(mask.colOf(p.lon), mask.rowOf(p.lat)), isTrue,
           reason: 'karada kırıklık: ${p.lat},${p.lon}');
     }
+  });
+
+  test('karasuları ızgarası: Antalya TR kıyısı, Simi Yunan tarafı', () {
+    expect(waters.distTrNm(const GeoPoint(lat: 36.55, lon: 30.55)), lessThanOrEqualTo(1.0));
+    expect(waters.greekSide(const GeoPoint(lat: 36.55, lon: 30.55)), isFalse);
+    expect(waters.greekSide(const GeoPoint(lat: 36.62, lon: 27.84)), isTrue); // Simi
+    expect(waters.greekSide(const GeoPoint(lat: 38.35, lon: 26.35)), isFalse); // Çeşme kanalı TR yakası
+  });
+
+  test('KARADAKİ BAŞLANGIÇ: rota en yakın kıyı suyundan başlar, eve çizgi çekilmez', () {
+    // Kullanıcının yaşadığı senaryo: GPS şehir içinde (İstanbul, karada) —
+    // eski davranış karadan denize düz çizgi çekiyordu; artık yasak.
+    const GeoPoint istanbulIci = GeoPoint(lat: 41.03, lon: 28.98);
+    const GeoPoint erdek = GeoPoint(lat: 40.55, lon: 27.75); // Marmara suyu
+    expect(mask.isLand(mask.colOf(istanbulIci.lon), mask.rowOf(istanbulIci.lat)), isTrue);
+    final SeaRoutePlan? plan = planSeaRoute(mask, istanbulIci, erdek);
+    expect(plan, isNotNull);
+    final GeoPoint first = plan!.points.first;
+    expect(first.lat == istanbulIci.lat && first.lon == istanbulIci.lon, isFalse,
+        reason: 'çizgi karadaki ham konumdan BAŞLAYAMAZ');
+    expect(mask.isWater(mask.colOf(first.lon), mask.rowOf(first.lat)), isTrue,
+        reason: 'çizginin ilk noktası suda olmalı');
+    // Tüm ara kırıklıklar da suda (kaptan kuralı).
+    for (int i = 0; i < plan.points.length - 1; i++) {
+      final GeoPoint q = plan.points[i];
+      expect(mask.isWater(mask.colOf(q.lon), mask.rowOf(q.lat)), isTrue);
+    }
+  });
+
+  test('TÜRK KARASULARI TERCİHİ: TR hedefte Yunan-tarafı kırıklıkları azalır; Yunan hedefte serbest', () {
+    const GeoPoint cesme = GeoPoint(lat: 38.32, lon: 26.28);
+    const GeoPoint antalya = GeoPoint(lat: 36.55, lon: 30.55);
+    int greekCount(SeaRoutePlan p) =>
+        p.points.where((GeoPoint q) => waters.greekSide(q)).length;
+    final SeaRoutePlan tercihli = planSeaRoute(mask, cesme, antalya, waters: waters)!;
+    final SeaRoutePlan serbest = planSeaRoute(mask, cesme, antalya)!;
+    expect(tercihli.reachedGoal, isTrue);
+    // Tercihli rota Yunan tarafında daha az bulunur (yumuşak kural).
+    expect(greekCount(tercihli), lessThanOrEqualTo(greekCount(serbest)));
+    // Yunan hedefi (Simi): tercih otomatik KAPALI — rota kısa ve serbest.
+    const GeoPoint datca = GeoPoint(lat: 36.71, lon: 27.60);
+    const GeoPoint simi = GeoPoint(lat: 36.62, lon: 27.84);
+    final SeaRoutePlan simiPlan = planSeaRoute(mask, datca, simi, waters: waters)!;
+    expect(simiPlan.reachedGoal, isTrue);
+    expect(simiPlan.distanceNm, lessThan(30));
   });
 
   test('bölge dışı nokta → null (çağıran kuş uçuşu yedeğine düşer)', () {

@@ -14,6 +14,8 @@ import '../../auth/presentation/account_gate.dart';
 import '../../boat/presentation/boat_fit.dart';
 import '../../favorites/domain/favorite_location.dart';
 import '../../favorites/presentation/favorite_button.dart';
+import '../../location/application/location_controller.dart';
+import '../../map/application/map_controller.dart';
 import '../../nearby/presentation/nearby_alternatives.dart';
 import '../../reservation/presentation/reservation_sheet.dart';
 import '../../reviews/presentation/reviews_section.dart';
@@ -178,7 +180,7 @@ class _DetailContent extends ConsumerWidget {
           maxBoatLengthM: detail.dimensions.maxBoatLengthM,
           maxDraftM: detail.dimensions.maxDraftM,
         ),
-        _SeaRouteRow(destination: detail.position),
+        _SeaRouteRow(destination: detail.position, idOrSlug: detail.id),
 
         const SizedBox(height: 14),
         // ÜRÜN KARARI: demirleme yerlerinde (koy/şamandıra/tonoz) rezervasyon
@@ -399,9 +401,10 @@ class _DetailContent extends ConsumerWidget {
 /// Başlangıç noktası (harita merkezi) biliniyorsa: yön (pusula + ok) + kuşuçuşu
 /// deniz mili + kaba süre. Başlangıç yoksa gizlenir.
 class _SeaRouteRow extends ConsumerWidget {
-  const _SeaRouteRow({required this.destination});
+  const _SeaRouteRow({required this.destination, required this.idOrSlug});
 
   final GeoPoint destination;
+  final String idOrSlug;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -441,6 +444,42 @@ class _SeaRouteRow extends ConsumerWidget {
                     t.seaRouteFrom,
                     style: theme.textTheme.bodySmall
                         ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                  const SizedBox(height: 10),
+                  // ROTA ÇİZ (UX 2026-08): aramadan gelen kullanıcı haritaya
+                  // dönüp işareti yeniden bulmak zorunda kalmasın — rota
+                  // BURADAN istenir, harita rota çizili olarak açılır.
+                  // Konum şartı haritayla aynıdır (kaptan kuralı).
+                  SizedBox(
+                    width: double.infinity,
+                    child: DocklyButton(
+                      label: t.routeBtn,
+                      icon: DocklyIcons.navigation,
+                      variant: DocklyButtonVariant.secondary,
+                      onPressed: () {
+                        if (ref.read(devicePositionProvider) == null) {
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(SnackBar(
+                              content: Text(t.routeNeedOrigin),
+                              duration: const Duration(seconds: 6),
+                              action: SnackBarAction(
+                                label: t.locateTooltip,
+                                onPressed: () => ref
+                                    .read(locationControllerProvider.notifier)
+                                    .locateMe(),
+                              ),
+                            ));
+                          return;
+                        }
+                        // Hesap arka planda başlar; kullanıcı haritaya döner,
+                        // rota + mesafe/süre çipi orada belirir.
+                        ref
+                            .read(mapControllerProvider.notifier)
+                            .routeTo(destination, idOrSlug);
+                        Navigator.of(context).popUntil((Route<dynamic> r) => r.isFirst);
+                      },
+                    ),
                   ),
                 ],
               ),

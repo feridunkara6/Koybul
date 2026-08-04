@@ -234,14 +234,18 @@ class MapController extends Notifier<MapState> {
   /// gösterir. Motor rota bulamazsa (kapsam dışı, kapalı havza) rota
   /// ÇİZİLMEZ ve "hesaplanamadı" uyarısı verilir — kara üzerinden düz
   /// çizgi ASLA gösterilmez (kaptan kuralı).
-  Future<void> routeToPin(LocationPin pin) async {
+  Future<void> routeToPin(LocationPin pin) => routeTo(pin.position, pin.id);
+
+  /// Genel giriş: hedef koordinat + kimlik (haritadaki kart VE detay sayfası
+  /// buradan rota ister — arama sonucundan açılan detayda da çalışır).
+  Future<void> routeTo(GeoPoint destination, String idOrSlug) async {
     final GeoPoint? origin = ref.read(devicePositionProvider);
     if (origin == null || state.isRouting) return;
     state = state.copyWith(isRouting: true);
     final int req = ++_routeReq; // stale koruması (rota istekleri arasında)
     SeaRoutePlan? plan;
     try {
-      plan = await ref.read(seaRouteEngineProvider).route(origin, pin.position);
+      plan = await ref.read(seaRouteEngineProvider).route(origin, destination);
     } catch (_) {
       plan = null;
     }
@@ -267,7 +271,7 @@ class MapController extends Notifier<MapState> {
     if (resolved.viaSea) {
       final RouteWindReport? wind = await ref
           .read(routeWindAdvisorProvider)
-          .analyze(resolved, pin.id);
+          .analyze(resolved, idOrSlug);
       if (req != _routeReq || !identical(state.route, resolved)) return;
       if (wind != null) state = state.copyWith(routeWind: wind);
     }
