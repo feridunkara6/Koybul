@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+// NOT: DragStartBehavior material'ın dışa aktardığı widgets/gestures'tan gelir
+// (ayrı gestures import'u unnecessary_import uyarısı üretir — CI dersi).
 import 'package:dockly_api/dockly_api.dart' show Bbox, Cluster, GeoPoint, LocationPin;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +56,44 @@ Widget webMapSurfaceBuilder(
   MapSurfaceCallbacks callbacks,
 ) {
   return _WebMapSurface(data: data, callbacks: callbacks);
+}
+
+/// Bacak boyunca TUTAMAÇ NOKTALARI (kullanıcı dostu sürükleme 2026-08):
+/// bacağın MESAFECE eşit aralıklı kesirlerinde 1-5 nokta — uzun bacakta çok
+/// tutamaç (çizgi her yerinden yakalanır), kısa bacakta tek, 0,5 nm altında
+/// hiç (kalabalık olmaz). Saf işlev — birim testli. Saha dersi: açık denizde
+/// sadeleştirilmiş bacak 2 kırıktan oluşabilir; dizin yerine mesafe boyunca
+/// enterpolasyon şarttır.
+List<GeoPoint> legHandlePoints(List<GeoPoint> pts) {
+  if (pts.length < 2) return const <GeoPoint>[];
+  final List<double> seg = <double>[];
+  double total = 0;
+  for (int i = 1; i < pts.length; i++) {
+    final double d = haversineNm(pts[i - 1], pts[i]);
+    seg.add(d);
+    total += d;
+  }
+  if (total < 0.5) return const <GeoPoint>[];
+  final int n = total < 3 ? 1 : (total < 10 ? 3 : 5);
+  final List<GeoPoint> out = <GeoPoint>[];
+  for (int k = 1; k <= n; k++) {
+    double target = total * k / (n + 1);
+    GeoPoint? point;
+    for (int i = 0; i < seg.length; i++) {
+      if (target <= seg[i]) {
+        final double f = seg[i] <= 0 ? 0 : target / seg[i];
+        final GeoPoint a = pts[i], b = pts[i + 1];
+        point = GeoPoint(
+          lat: a.lat + (b.lat - a.lat) * f,
+          lon: a.lon + (b.lon - a.lon) * f,
+        );
+        break;
+      }
+      target -= seg[i];
+    }
+    out.add(point ?? pts.last);
+  }
+  return out;
 }
 
 class _WebMapSurface extends ConsumerStatefulWidget {
@@ -244,63 +284,37 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
     setState(() => _drag = null);
   }
 
-  /// Bacağın MESAFECE orta noktası (saha dersi: açık denizde sadeleştirilmiş
-  /// bacak yalnız 2 kırıktan oluşabilir — dizin ortası uç noktaya düşer ve
-  /// tutamaç hiç çıkmazdı; artık yol uzunluğunun yarısında enterpolasyon).
-  static GeoPoint? _legMidpoint(List<GeoPoint> pts) {
-    if (pts.length < 2) return null;
-    final List<double> seg = <double>[];
-    double total = 0;
-    for (int i = 1; i < pts.length; i++) {
-      final double d = haversineNm(pts[i - 1], pts[i]);
-      seg.add(d);
-      total += d;
-    }
-    if (total < 0.5) return null; // çok kısa bacakta tutamaç çizilmez
-    double half = total / 2;
-    for (int i = 0; i < seg.length; i++) {
-      if (half <= seg[i]) {
-        final double f = seg[i] <= 0 ? 0 : half / seg[i];
-        final GeoPoint a = pts[i], b = pts[i + 1];
-        return GeoPoint(
-          lat: a.lat + (b.lat - a.lat) * f,
-          lon: a.lon + (b.lon - a.lon) * f,
-        );
-      }
-      half -= seg[i];
-    }
-    return pts.last;
-  }
-
-  /// Bacak ortalarındaki tutamaç işaretçileri.
+  /// Bacak boyundaki tutamaç işaretçileri (KULLANICI DOSTU sürükleme 2026-08:
+  /// tek orta nokta yerine bacak uzunluğuna göre 1-5 tutamaç — kaptan çizgiyi
+  /// istediği yerinden yakalar; dokunma alanı 44px, mobil parmak standardı).
   List<Marker> _legHandles() {
     final List<List<GeoPoint>>? legs = widget.data.routeLegPoints;
     if (legs == null) return const <Marker>[];
     final List<Marker> out = <Marker>[];
     for (int j = 0; j < legs.length; j++) {
       final List<GeoPoint> pts = legs[j];
-      final GeoPoint? mid = _legMidpoint(pts);
-      if (mid == null) continue;
-      out.add(
-        Marker(
-          point: LatLng(mid.lat, mid.lon),
-          width: 30,
-          height: 30,
-          child: _RouteHandle(
-            size: 14,
-            onDragStart: () => _startDrag(
-              isNew: true,
-              index: j,
-              at: mid,
-              anchorPrev: LatLng(pts.first.lat, pts.first.lon),
-              anchorNext: LatLng(pts.last.lat, pts.last.lon),
+      for (final GeoPoint h in legHandlePoints(pts)) {
+        out.add(
+          Marker(
+            point: LatLng(h.lat, h.lon),
+            width: 44, // dokunma hedefi (görsel nokta daha küçük çizilir)
+            height: 44,
+            child: _RouteHandle(
+              size: 16,
+              onDragStart: () => _startDrag(
+                isNew: true,
+                index: j,
+                at: h,
+                anchorPrev: LatLng(pts.first.lat, pts.first.lon),
+                anchorNext: LatLng(pts.last.lat, pts.last.lon),
+              ),
+              onDragUpdate: _updateDrag,
+              onDragEnd: _endDrag,
+              onDragCancel: _cancelDrag,
             ),
-            onDragUpdate: _updateDrag,
-            onDragEnd: _endDrag,
-            onDragCancel: _cancelDrag,
           ),
-        ),
-      );
+        );
+      }
     }
     return out;
   }
@@ -513,10 +527,10 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
             for (final MapRouteVia v in widget.data.routeVias)
               Marker(
                 point: LatLng(v.pos.lat, v.pos.lon),
-                width: 34,
-                height: 34,
+                width: 48, // ara nokta: en büyük dokunma hedefi (taşı/kaldır)
+                height: 48,
                 child: _RouteHandle(
-                  size: 20,
+                  size: 22,
                   onTap: () => widget.callbacks.onRouteRemoveVia?.call(v.index),
                   onDragStart: () => _startViaDrag(v),
                   onDragUpdate: _updateDrag,
@@ -524,12 +538,15 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
                   onDragCancel: _cancelDrag,
                 ),
               ),
-            // Sürükleme hayaleti: parmağın altındaki geçici nokta.
+            // Sürükleme hayaleti: PARMAĞIN ÜSTÜNDE görünür (mobil dostu —
+            // işaret parmağın altında kaybolmaz); ince sap gerçek noktayı
+            // gösterir, rota tam oradan geçer.
             if (_drag != null)
               Marker(
                 point: _drag!.pos,
-                width: 30,
-                height: 30,
+                width: 44,
+                height: 74,
+                alignment: Alignment.topCenter,
                 child: const IgnorePointer(child: _GhostHandle()),
               ),
           ],
@@ -730,6 +747,9 @@ class _RouteHandle extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
+      // MOBİL DOSTU (2026-08): sürükleme parmağın İLK indiği andan izlenir —
+      // küçük hedefte gecikme/kayma hissi olmaz.
+      dragStartBehavior: DragStartBehavior.down,
       onTap: onTap,
       onPanStart: (DragStartDetails _) => onDragStart(),
       onPanUpdate: (DragUpdateDetails d) => onDragUpdate(d.delta),
@@ -765,33 +785,55 @@ class _RouteHandle extends StatelessWidget {
   }
 }
 
-/// Sürükleme hayaleti: parmağın altındaki büyük geçici tutamaç.
+/// Sürükleme hayaleti (mobil dostu 2026-08): büyük daire PARMAĞIN ÜSTÜNDE
+/// durur, ince sap + uç nokta rotanın GERÇEKTEN geçeceği yeri gösterir —
+/// işaret parmağın altında kaybolmaz.
 class _GhostHandle extends StatelessWidget {
   const _GhostHandle();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFFFFF),
-        shape: BoxShape.circle,
-        border: Border.all(color: DocklyColors.brandPrimary, width: 4),
-        boxShadow: const <BoxShadow>[
-          BoxShadow(color: Color(0x590A2540), blurRadius: 8, offset: Offset(0, 2)),
-        ],
-      ),
-      child: const Center(
-        child: SizedBox(
-          width: 6,
-          height: 6,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: DocklyColors.brandPrimary,
-              shape: BoxShape.circle,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Container(
+          width: 30,
+          height: 30,
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFFFFF),
+            shape: BoxShape.circle,
+            border: Border.all(color: DocklyColors.brandPrimary, width: 4),
+            boxShadow: const <BoxShadow>[
+              BoxShadow(
+                  color: Color(0x590A2540), blurRadius: 8, offset: Offset(0, 2)),
+            ],
+          ),
+          child: const Center(
+            child: SizedBox(
+              width: 6,
+              height: 6,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: DocklyColors.brandPrimary,
+                  shape: BoxShape.circle,
+                ),
+              ),
             ),
           ),
         ),
-      ),
+        // Sap: daireden gerçek noktaya inen ince çizgi.
+        Container(width: 2.5, height: 32, color: DocklyColors.brandPrimary),
+        // Uç: rotanın geçeceği nokta.
+        Container(
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(
+            color: DocklyColors.brandPrimary,
+            shape: BoxShape.circle,
+            border: Border.all(color: const Color(0xFFFFFFFF), width: 1.5),
+          ),
+        ),
+      ],
     );
   }
 }
