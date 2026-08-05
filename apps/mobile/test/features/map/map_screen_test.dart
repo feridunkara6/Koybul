@@ -19,6 +19,9 @@ import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart
 import 'package:dockly_mobile/features/location/application/location_controller.dart';
 
 import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
+import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
+import 'package:dockly_mobile/features/route/domain/sea_router.dart';
+import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
 
 import '../../support/fake_map_surface.dart';
 import '../../support/location_fakes.dart';
@@ -26,6 +29,7 @@ import '../../support/map_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/onboarding_fakes.dart';
 import '../../support/search_fakes.dart';
+import '../../support/weather_fakes.dart';
 
 /// İkonlar artık SVG tabanlı [DocklyIcon]; ikon verisiyle bulunur.
 Finder _docklyIcon(DocklyIconData d) =>
@@ -39,16 +43,37 @@ class _FixedBoat extends MyBoatController {
   MyBoat? build() => _boat;
 }
 
+/// Sahte rota motoru — gerçek maske varlığına gidilmez; sabit kısa plan döner.
+class _FakeRouteEngine extends SeaRouteEngine {
+  @override
+  Future<SeaRoutePlan?> route(GeoPoint from, GeoPoint to) async =>
+      const SeaRoutePlan(
+        points: <GeoPoint>[
+          GeoPoint(lat: 36.76, lon: 28.96),
+          GeoPoint(lat: 36.75, lon: 28.93),
+        ],
+        distanceNm: 2,
+        reachedGoal: true,
+        viaSea: true,
+      );
+
+  @override
+  Future<GeoPoint?> snapWater(GeoPoint p) async => p;
+}
+
 Widget _app(
   FakeMapGateway gateway, {
   FakeMapCache? cache,
   MyBoat? boat,
   FakeNearbyGateway? nearby,
   FakeLocationService? location,
+  SeaRouteEngine? routeEngine,
 }) {
   return ProviderScope(
     overrides: <Override>[
       if (location != null) locationServiceProvider.overrideWithValue(location),
+      if (routeEngine != null)
+        seaRouteEngineProvider.overrideWithValue(routeEngine),
       mapLocationsGatewayProvider.overrideWithValue(gateway),
       mapSurfaceBuilderProvider.overrideWithValue(fakeMapSurfaceBuilder()),
       mapDebounceProvider.overrideWithValue(Duration.zero),
@@ -61,6 +86,8 @@ Widget _app(
       nearbyGatewayProvider.overrideWithValue(nearby ?? FakeNearbyGateway()),
       // Tanıtım (2026-08) bu testlerin konusu değil — "görüldü" kabul edilir.
       onboardingStoreProvider.overrideWithValue(doneOnboardingStore()),
+      // Hava ağ geçidi HER ZAMAN sahte (rota rüzgâr analizi ağa çıkmasın).
+      weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
       if (boat != null) myBoatProvider.overrideWith(() => _FixedBoat(boat)),
     ],
     child: const MaterialApp(home: MapScreen()),
@@ -337,6 +364,32 @@ void main() {
 
     expect(find.byKey(const ValueKey<String>('device-boat')), findsNothing);
     expect(find.textContaining('Konum alınamadı'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('AKILLI ROTA (2026-08): konum yokken "Deniz rotası" izin akışını '
+      'kendiliğinden başlatır; izin gelince rota OTOMATİK çizilir',
+      (WidgetTester tester) async {
+    final FakeLocationService location =
+        FakeLocationService(const GeoPoint(lat: 36.76, lon: 28.96));
+    await tester.pumpWidget(_app(
+      FakeMapGateway(result: pinResult),
+      location: location,
+      routeEngine: _FakeRouteEngine(),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(_pinKey));
+    await tester.pumpAndSettle();
+    // Konum paylaşılmamış — düğmeye basınca izin istenir ve rota kendiliğinden
+    // oluşur (koyu yeniden bulup basmak GEREKMEZ — kullanıcı isteği).
+    await tester.tap(find.text('Deniz rotası'));
+    await tester.pumpAndSettle();
+
+    expect(location.calls, 1); // izin akışı otomatik tetiklendi
+    expect(find.textContaining('≈'), findsOneWidget); // rota çipi ekranda
+    // İlk ara nokta ipucu SnackBar'ı vb. zamanlayıcıları akıt.
     await tester.pump(const Duration(seconds: 5));
     await tester.pumpAndSettle();
   });

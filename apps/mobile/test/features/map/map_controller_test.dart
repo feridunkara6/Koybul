@@ -805,6 +805,42 @@ void main() {
     expect(_state(container).routeOrigin!.pos.lat, 36.76);
   });
 
+  test('NOKTA EKLE modu: haritaya dokunuş ara nokta, pine dokunuş DURAK ekler', () async {
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.76, lon: 28.96), GeoPoint(lat: 36.75, lon: 28.93)],
+      distanceNm: 2,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final container = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: FakeSeaRouteEngine(plan));
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin);
+
+    // Haritaya dokunuş → isimsiz ARA NOKTA (en az sapan bacağa girer).
+    _ctrl(container).beginAddPoint();
+    expect(_state(container).addingPoint, isTrue);
+    await _ctrl(container).addPointAt(const GeoPoint(lat: 36.755, lon: 28.945));
+    MapState s = _state(container);
+    expect(s.addingPoint, isFalse); // mod tek dokunuşta kapanır
+    expect(s.routeWaypoints, hasLength(2));
+    expect(s.routeWaypoints.first.isStop, isFalse);
+
+    // Pine dokunuş (mod açıkken) → DURAK; kart AÇILMAZ.
+    _ctrl(container).beginAddPoint();
+    _ctrl(container).selectPin('loc-1'); // zaten rotada → addStop sessiz atlar
+    await Future<void>.delayed(Duration.zero);
+    s = _state(container);
+    expect(s.selectedPinId, isNull);
+    expect(s.addingPoint, isFalse);
+
+    // Rota yokken mod AÇILMAZ.
+    _ctrl(container).clearRoute();
+    _ctrl(container).beginAddPoint();
+    expect(_state(container).addingPoint, isFalse);
+  });
+
   test('clearRoute ara noktaları ve bacakları da temizler', () async {
     const SeaRoutePlan plan = SeaRoutePlan(
       points: <GeoPoint>[GeoPoint(lat: 36.76, lon: 28.96), GeoPoint(lat: 36.75, lon: 28.93)],

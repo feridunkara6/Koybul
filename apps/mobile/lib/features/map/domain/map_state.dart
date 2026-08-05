@@ -28,6 +28,7 @@ class MapState {
     this.routeEditFailSeq = 0,
     this.routeOrigin,
     this.pickingOrigin = false,
+    this.addingPoint = false,
     this.originPickFailSeq = 0,
   });
 
@@ -82,6 +83,11 @@ class MapState {
   /// üstte lacivert seçim şeridi gösterir.
   final bool pickingOrigin;
 
+  /// NOKTA EKLE modu (kullanıcı isteği 2026-08, mobil dostu): rota çiziliyken
+  /// haritaya dokunuş rotaya ARA NOKTA ekler, koya dokunuş DURAK ekler —
+  /// sürüklemeye gerek kalmadan dokunarak düzenleme.
+  final bool addingPoint;
+
   /// Başlangıç seçimi BAŞARISIZ sinyali (dokunulan yerin yakınında deniz yok):
   /// her başarısızlıkta artar; arayüz kısa bir uyarı gösterir.
   final int originPickFailSeq;
@@ -130,6 +136,7 @@ class MapState {
     int? routeEditFailSeq,
     RouteOrigin? routeOrigin,
     bool? pickingOrigin,
+    bool? addingPoint,
     int? originPickFailSeq,
   }) {
     return MapState(
@@ -157,6 +164,7 @@ class MapState {
       routeEditFailSeq: routeEditFailSeq ?? this.routeEditFailSeq,
       routeOrigin: clearRoute ? null : (routeOrigin ?? this.routeOrigin),
       pickingOrigin: pickingOrigin ?? this.pickingOrigin,
+      addingPoint: clearRoute ? false : (addingPoint ?? this.addingPoint),
       originPickFailSeq: originPickFailSeq ?? this.originPickFailSeq,
     );
   }

@@ -266,7 +266,9 @@ class MapController extends Notifier<MapState> {
     _pendingDestPos = destPos;
     _pendingDestId = destId;
     _pendingDestName = destName;
-    state = state.copyWith(pickingOrigin: true, clearSelection: true);
+    // İki mod aynı anda açık kalmasın (üst üste iki şerit çıkmasın).
+    state = state.copyWith(
+        pickingOrigin: true, addingPoint: false, clearSelection: true);
   }
 
   /// Seçim modundan vazgeç (şerit üzerindeki düğme).
@@ -277,10 +279,51 @@ class MapController extends Notifier<MapState> {
     state = state.copyWith(pickingOrigin: false);
   }
 
-  /// Harita boşluğuna dokunuş — yalnız seçim modunda anlamlı.
+  /// Harita boşluğuna dokunuş — başlangıç seçimi ya da nokta ekleme modunda.
   void onMapTapped(GeoPoint point) {
-    if (!state.pickingOrigin) return;
-    unawaited(originPicked(point));
+    if (state.pickingOrigin) {
+      unawaited(originPicked(point));
+      return;
+    }
+    if (state.addingPoint) {
+      unawaited(addPointAt(point));
+    }
+  }
+
+  // --- NOKTA EKLE modu (kullanıcı isteği 2026-08, mobil dostu düzenleme) ---
+
+  /// NOKTA EKLE moduna girer (çipteki "+ Nokta ekle"). Haritaya dokunuş ara
+  /// nokta, koya dokunuş durak ekler — sürükleme gerektirmez.
+  void beginAddPoint() {
+    if (state.route == null) return;
+    // İki mod aynı anda açık kalmasın (üst üste iki şerit çıkmasın).
+    state = state.copyWith(
+        addingPoint: true, pickingOrigin: false, clearSelection: true);
+  }
+
+  /// Nokta ekleme modundan vazgeç (şerit üzerindeki düğme).
+  void cancelAddPoint() {
+    state = state.copyWith(addingPoint: false);
+  }
+
+  /// Dokunulan noktayı rotaya ARA NOKTA olarak ekler: denize oturtulur,
+  /// en az sapma yapan bacağa yerleştirilir, rota yeniden hesaplanır.
+  /// Yakında deniz yoksa sinyal verilir ve MOD AÇIK kalır (yeniden dokunulur).
+  Future<void> addPointAt(GeoPoint point) async {
+    final RouteOrigin? origin = state.routeOrigin;
+    if (state.route == null || origin == null || state.isRouting) return;
+    final GeoPoint? snapped = await _snapForEdit(point);
+    if (snapped == null) return; // sinyal verildi; mod açık kalır
+    final List<RouteWaypoint> wps =
+        List<RouteWaypoint>.of(state.routeWaypoints);
+    final int idx = bestStopInsertIndex(
+      origin.pos,
+      <GeoPoint>[for (final RouteWaypoint w in wps) w.pos],
+      snapped,
+    );
+    wps.insert(idx, RouteWaypoint(pos: snapped));
+    state = state.copyWith(addingPoint: false);
+    await _planTrip(origin, wps, editing: true);
   }
 
   /// A noktası seçildi (haritadan serbest nokta ya da koy). Nokta denize
@@ -485,6 +528,17 @@ class MapController extends Notifier<MapState> {
       for (final LocationPin pin in state.pins) {
         if (pin.id == pinId) {
           unawaited(originPicked(pin.position, name: pin.name));
+          return;
+        }
+      }
+      return;
+    }
+    // NOKTA EKLE modunda pine dokunuş DURAK ekler (kullanıcı isteği 2026-08).
+    if (state.addingPoint) {
+      for (final LocationPin pin in state.pins) {
+        if (pin.id == pinId) {
+          state = state.copyWith(addingPoint: false);
+          unawaited(addStop(pin.position, pin.id, pin.name));
           return;
         }
       }

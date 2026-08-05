@@ -14,7 +14,6 @@ import '../../location/presentation/locate_button.dart';
 import '../../nearby/presentation/nearby_sheet.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/presentation/onboarding_overlay.dart';
-import '../../onboarding/presentation/tour_targets.dart';
 import '../../route/application/saved_routes_controller.dart';
 import '../../route/domain/route_wind.dart';
 import '../../route/domain/saved_route.dart';
@@ -169,13 +168,7 @@ class MapScreen extends ConsumerWidget {
             top: 12,
             left: 0,
             right: 0,
-            child: SafeArea(
-              // Tur hedefi (tanıtım 2026-08): 2. adım bu şeridi aydınlatır.
-              child: KeyedSubtree(
-                key: tourKeyChips,
-                child: _TypeFilterRow(selected: state.types),
-              ),
-            ),
+            child: SafeArea(child: _TypeFilterRow(selected: state.types)),
           ),
           // Çip şeridinin HEMEN ALTINDA sağda: "Konumum" (her zaman) +
           // harita↔liste geçişi (yalnız pin/yakın zoom verisi varken).
@@ -187,14 +180,13 @@ class MapScreen extends ConsumerWidget {
                 children: <Widget>[
                   // ACİL DURUM KISAYOLU (UX analizi 2026-08): panik anında tek
                   // dokunuş — Profil'in derinliğinde kalmasın. Üyelik kapısı YOK.
-                  // KeyedSubtree'ler tur hedefleri (tanıtım 2026-08).
-                  KeyedSubtree(key: tourKeySos, child: const _SosButton()),
+                  const _SosButton(),
                   const SizedBox(height: 8),
-                  KeyedSubtree(key: tourKeyLocate, child: const LocateButton()),
+                  const LocateButton(),
                   const SizedBox(height: 8),
                   // HARİTADA ARAMA (UX analizi 2026-08): sekme değiştirmeden
                   // arama — sonuçtan detay açılır, harita durumu korunur.
-                  KeyedSubtree(key: tourKeySearch, child: const _MapSearchButton()),
+                  const _MapSearchButton(),
                   if (state.pins.isNotEmpty) ...<Widget>[
                     const SizedBox(height: 8),
                     _ViewToggle(
@@ -238,6 +230,7 @@ class MapScreen extends ConsumerWidget {
                           onSave: () => _saveRouteDialog(context, ref, state),
                           onChangeOrigin: () =>
                               showRouteOriginMenu(context, ref),
+                          onAddPoint: controller.beginAddPoint,
                         ),
                       ),
                   ],
@@ -310,39 +303,44 @@ class MapScreen extends ConsumerWidget {
                           selectedPin.name,
                         )
                     : null,
+                // AKILLI ROTA (kullanıcı isteği 2026-08): konum yoksa izin
+                // OTOMATİK istenir; onay gelince rota kendiliğinden çizilir.
                 onRoute: state.route != null
                     ? null
-                    : () {
-                        // ROTA PLANLAMA (2026-08): GPS yoksa artık yalnız
-                        // uyarı değil — başlangıç menüsü açılır (Konumumdan /
-                        // Başlangıç noktası seç). GPS varsa eski hızlı yol.
-                        if (ref.read(devicePositionProvider) == null) {
-                          showRouteOriginMenu(
-                            context,
-                            ref,
-                            destPos: selectedPin.position,
-                            destId: selectedPin.id,
-                            destName: selectedPin.name,
-                          );
-                          return;
-                        }
-                        controller.routeToPin(selectedPin);
-                      },
+                    : () => startSeaRoute(
+                          context,
+                          ref,
+                          destPos: selectedPin.position,
+                          destId: selectedPin.id,
+                          destName: selectedPin.name,
+                        ),
                   ),
                 ],
               ),
             ),
-          // BAŞLANGIÇ SEÇ şeridi (rota planlama 2026-08): mod açıkken üstte.
+          // MOD ŞERİTLERİ: başlangıç seçimi / rotaya nokta ekleme (üstte).
           if (state.pickingOrigin)
             Positioned(
               top: 0,
               left: 0,
               right: 0,
-              child: _OriginPickBanner(onCancel: controller.cancelOriginPick),
+              child: _ModeBanner(
+                text: ref.watch(l10nProvider).routePickBanner,
+                onCancel: controller.cancelOriginPick,
+              ),
             ),
-          // TANITIM KAPLAMALARI (en üstte): karşılama kartı ve spot ışıklı tur.
-          if (!isList && onb.showWelcome)
-            const Positioned.fill(child: OnboardingWelcomeCard()),
+          if (state.addingPoint)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: _ModeBanner(
+                text: ref.watch(l10nProvider).routeAddPointBanner,
+                onCancel: controller.cancelAddPoint,
+              ),
+            ),
+          // TANITIM KARTLARI v2 (en üstte): ilk açılışta kendiliğinden başlar,
+          // ekrana dokundukça ilerler (kullanıcı isteği 2026-08).
           if (!isList && onb.tourActive)
             Positioned.fill(child: TourOverlay(step: onb.tourStep)),
         ],
@@ -416,11 +414,12 @@ class _MapListView extends ConsumerWidget {
 
 String _fmtNm(double nm) => nm >= 10 ? nm.round().toString() : nm.toStringAsFixed(1);
 
-/// BAŞLANGIÇ SEÇ şeridi (rota planlama 2026-08): lacivert, tek satır yönerge +
-/// Vazgeç. Mod açıkken haritaya/koya dokunuş A noktasını belirler.
-class _OriginPickBanner extends ConsumerWidget {
-  const _OriginPickBanner({required this.onCancel});
+/// MOD ŞERİDİ (rota planlama/nokta ekleme): lacivert, tek satır yönerge +
+/// Vazgeç. Mod açıkken haritaya/koya dokunuşun anlamını açıklar.
+class _ModeBanner extends ConsumerWidget {
+  const _ModeBanner({required this.text, required this.onCancel});
 
+  final String text;
   final VoidCallback onCancel;
 
   @override
@@ -449,7 +448,7 @@ class _OriginPickBanner extends ConsumerWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  t.routePickBanner,
+                  text,
                   style: const TextStyle(
                     color: Color(0xFFFFFFFF),
                     fontSize: 12.5,
@@ -783,6 +782,7 @@ class _RouteChip extends ConsumerWidget {
     this.onRemoveStop,
     this.onSave,
     this.onChangeOrigin,
+    this.onAddPoint,
   });
 
   final SeaRoutePlan route;
@@ -803,6 +803,10 @@ class _RouteChip extends ConsumerWidget {
 
   /// Başlangıcı değiştir ("A:" satırındaki bağlantı).
   final VoidCallback? onChangeOrigin;
+
+  /// NOKTA EKLE modunu açar (kullanıcı isteği 2026-08): dokunarak ara nokta /
+  /// durak ekleme — mobilde sürüklemeye alternatif en kolay yol.
+  final VoidCallback? onAddPoint;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -903,6 +907,34 @@ class _RouteChip extends ConsumerWidget {
                               color: DocklyColors.brandPrimary,
                               fontWeight: FontWeight.w800,
                             ),
+                          ),
+                        ),
+                      ),
+                    ],
+                    // + NOKTA EKLE (kullanıcı isteği 2026-08): dokunarak
+                    // ara nokta/durak ekleme modu — mobilde en kolay yol.
+                    if (onAddPoint != null) ...<Widget>[
+                      const SizedBox(width: 8),
+                      InkWell(
+                        borderRadius: BorderRadius.circular(8),
+                        onTap: onAddPoint,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 2),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              const DocklyIcon(DocklyIcons.place,
+                                  size: 12, color: DocklyColors.brandPrimary),
+                              const SizedBox(width: 3),
+                              Text(
+                                t.routeAddPointBtn,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: DocklyColors.brandPrimary,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

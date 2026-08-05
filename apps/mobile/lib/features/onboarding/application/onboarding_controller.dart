@@ -9,9 +9,10 @@ import '../domain/onboarding_store.dart';
 final Provider<OnboardingStore> onboardingStoreProvider =
     Provider<OnboardingStore>((ref) => const SharedPrefsOnboardingStore());
 
-/// Turun adım sayısı: ① harita & koylar ② filtreler ③ Konumum ④ SOS
-/// ⑤ arama & liste ⑥ koy kartı.
-const int kTourStepCount = 6;
+/// Turun adım sayısı (v2, kullanıcı isteği 2026-08 — dokundukça ilerleyen
+/// kartlar): ① hoş geldin ② harita & koylar ③ filtreler ④ Konumum ⑤ SOS
+/// ⑥ deniz rotası ⑦ rota düzenleme & kaydetme.
+const int kTourStepCount = 7;
 
 /// İlk-dokunuş ipucu anahtarları (cihazda kalıcı — bir kez gösterilir).
 const String kHintBottomCard = 'bottom_card';
@@ -34,13 +35,12 @@ class OnboardingState {
   final int tourStep;
   final Set<String> seenHints;
 
-  bool get showWelcome => ready && !welcomeDone && tourStep < 0;
   bool get tourActive => tourStep >= 0;
 
-  /// İpucu gösterilsin mi? Depo hazır değilse ya da tur/karşılama açıkken
+  /// İpucu gösterilsin mi? Depo hazır değilse ya da tanıtım kartları açıkken
   /// gösterilmez (ekran kalabalığı olmasın).
   bool showHint(String key) =>
-      ready && welcomeDone && !tourActive && !seenHints.contains(key);
+      ready && !tourActive && !seenHints.contains(key);
 
   OnboardingState copyWith({
     bool? ready,
@@ -72,9 +72,23 @@ class OnboardingController extends Notifier<OnboardingState> {
   Future<void> _load() async {
     final OnboardingData? data = await _store.load();
     if (data == null) return; // depo yok/bozuk → tanıtım hiç açılmaz
+    if (!data.welcomeDone) {
+      // İLK AÇILIŞ (v2, kullanıcı isteği 2026-08): tanıtım kartları
+      // KENDİLİĞİNDEN başlar — ayrı karşılama sorusu yok; ekrana dokundukça
+      // kart ilerler. Karar hemen işlenir: yarıda kapatılsa bile bir daha
+      // kendiliğinden açılmaz (Profil'den istenince tekrar izlenir).
+      state = OnboardingState(
+        ready: true,
+        welcomeDone: true,
+        tourStep: 0,
+        seenHints: data.seenHints,
+      );
+      _persist();
+      return;
+    }
     state = state.copyWith(
       ready: true,
-      welcomeDone: data.welcomeDone,
+      welcomeDone: true,
       seenHints: data.seenHints,
     );
   }
@@ -86,19 +100,7 @@ class OnboardingController extends Notifier<OnboardingState> {
     )));
   }
 
-  /// Karşılamada "Şimdi değil" — bir daha sorulmaz (Profil'den dönülebilir).
-  void dismissWelcome() {
-    state = state.copyWith(welcomeDone: true);
-    _persist();
-  }
-
-  /// Karşılamada "Turu başlat".
-  void startTour() {
-    state = state.copyWith(welcomeDone: true, tourStep: 0);
-    _persist();
-  }
-
-  /// "İleri" — son adımda turu bitirir.
+  /// Ekrana dokunuş — sonraki kart; son kartta tanıtım biter.
   void nextStep() {
     if (!state.tourActive) return;
     final int next = state.tourStep + 1;

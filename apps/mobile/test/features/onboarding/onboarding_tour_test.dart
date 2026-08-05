@@ -29,72 +29,65 @@ Widget _app(FakeOnboardingStore store) {
 
 const ValueKey<String> _pinKey = ValueKey<String>('pin-loc-1');
 
-/// YENİ KULLANICI TANITIMI ekran testleri: karşılama kartı, spot ışıklı tur
-/// ve ilk pin dokunuşundaki koy kartı ipucu.
+/// TANITIM KARTLARI v2 ekran testleri (kullanıcı isteği 2026-08): kartlar ilk
+/// açılışta KENDİLİĞİNDEN başlar, EKRANA dokundukça ilerler, Atla kapatır.
 void main() {
-  testWidgets('İLK açılış: karşılama kartı çıkar; "Şimdi değil" kalıcı kapatır',
+  testWidgets('İLK açılış: kart 1 kendiliğinden görünür; ekrana dokununca kart 2',
       (WidgetTester tester) async {
     final FakeOnboardingStore store =
         FakeOnboardingStore(data: const OnboardingData());
     await tester.pumpWidget(_app(store));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(const ValueKey<String>('onb-welcome')), findsOneWidget);
-    expect(find.text("Koybul'a hoş geldin, kaptan"), findsOneWidget);
-
-    await tester.tap(find.text('Şimdi değil'));
-    await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey<String>('onb-welcome')), findsNothing);
-    expect(store.data!.welcomeDone, isTrue); // cihaza işlendi
-  });
-
-  testWidgets('TUR: başlat → adımlar ilerler, spot balonları doğru metni taşır, Atla kapatır',
-      (WidgetTester tester) async {
-    final FakeOnboardingStore store =
-        FakeOnboardingStore(data: const OnboardingData());
-    await tester.pumpWidget(_app(store));
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.text('Turu başlat'));
-    await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey<String>('onb-tour-step-0')), findsOneWidget);
+    expect(find.text('Hoş geldin, kaptan'), findsOneWidget);
+    expect(store.data!.welcomeDone, isTrue); // karar anında işlendi
+
+    // EKRANIN HERHANGİ BİR YERİNE dokun → sonraki kart.
+    await tester.tapAt(const Offset(40, 560));
+    await tester.pumpAndSettle();
     expect(find.text('Harita ve koylar'), findsOneWidget);
 
-    await tester.tap(find.text('İleri'));
+    // Kartın kendisine dokunmak da ilerletir.
+    await tester.tap(find.text('Harita ve koylar'));
     await tester.pumpAndSettle();
     expect(find.text('Filtreler'), findsOneWidget);
-
-    await tester.tap(find.text('Atla'));
-    await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey<String>('onb-tour-step-1')), findsNothing);
-    // Tur kapandı; karşılama da geri gelmez (karar verilmişti).
-    expect(find.byKey(const ValueKey<String>('onb-welcome')), findsNothing);
   });
 
-  testWidgets('TUR: son adımda "Bitti" görünür ve turu bitirir',
+  testWidgets('Atla: kartlar kapanır ve bir daha kendiliğinden açılmaz',
       (WidgetTester tester) async {
     final FakeOnboardingStore store =
         FakeOnboardingStore(data: const OnboardingData());
     await tester.pumpWidget(_app(store));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Turu başlat'));
+    await tester.tap(find.text('Atla'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('onb-tour-step-0')), findsNothing);
+    expect(store.data!.welcomeDone, isTrue);
+  });
+
+  testWidgets('7 dokunuşta tanıtım biter; son kartta rota düzenleme anlatılır',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+        _app(FakeOnboardingStore(data: const OnboardingData())));
     await tester.pumpAndSettle();
 
     for (int i = 0; i < kTourStepCount - 1; i++) {
-      await tester.tap(find.text('İleri'));
+      await tester.tapAt(const Offset(40, 560));
       await tester.pumpAndSettle();
     }
-    expect(find.text('Koy kartı'), findsOneWidget); // son adım başlığı
-    expect(find.text('Bitti'), findsOneWidget);
-    await tester.tap(find.text('Bitti'));
+    // Son kart: rota düzenleme + kaydetme anlatımı (kullanıcı isteği).
+    expect(find.text('Rotanı düzenle ve kaydet'), findsOneWidget);
+    expect(find.text('Başlamak için ekrana dokun'), findsOneWidget);
+    await tester.tapAt(const Offset(40, 560));
     await tester.pumpAndSettle();
-    expect(find.textContaining('Koy kartı'), findsNothing);
+    expect(find.text('Rotanı düzenle ve kaydet'), findsNothing);
   });
 
   testWidgets('İPUCU: ilk pin dokunuşunda koy kartı balonu; "Anladım" bir daha göstermez',
       (WidgetTester tester) async {
     final FakeOnboardingStore store = FakeOnboardingStore(
-        data: const OnboardingData(welcomeDone: true)); // karşılama geçilmiş
+        data: const OnboardingData(welcomeDone: true)); // kartlar kapalı
     await tester.pumpWidget(_app(store));
     await tester.pumpAndSettle();
 
@@ -122,7 +115,7 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(_app(doneOnboardingStore()));
     await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey<String>('onb-welcome')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('onb-tour-step-0')), findsNothing);
     await tester.tap(find.byKey(_pinKey));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey<String>('onb-hint-$kHintBottomCard')),

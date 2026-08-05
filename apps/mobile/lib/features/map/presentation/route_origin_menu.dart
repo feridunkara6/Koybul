@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:dockly_api/dockly_api.dart' show GeoPoint;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,46 @@ import '../../../core/l10n/l10n_strings.dart';
 import '../../../core/origin_provider.dart';
 import '../../location/application/location_controller.dart';
 import '../application/map_controller.dart';
+
+/// ROTA BAŞLAT — AKILLI AKIŞ (kullanıcı isteği 2026-08): "Deniz rotası"na
+/// basınca konum İZNİ OTOMATİK istenir; kullanıcı onay verirse rota kendiliğinden
+/// çizilir — koyu yeniden bulup basmak gerekmez. İzin reddedilir/alınamazsa
+/// başlangıç menüsüne düşülür (Konumumdan / Başlangıç noktası seç).
+Future<void> startSeaRoute(
+  BuildContext context,
+  WidgetRef ref, {
+  required GeoPoint destPos,
+  required String destId,
+  String? destName,
+  VoidCallback? afterPick,
+  VoidCallback? onRouted,
+}) async {
+  final MapController controller = ref.read(mapControllerProvider.notifier);
+  // Konum zaten paylaşılmışsa: doğrudan rota (eski hızlı yol).
+  if (ref.read(devicePositionProvider) != null) {
+    unawaited(controller.routeTo(destPos, destId, name: destName));
+    onRouted?.call();
+    return;
+  }
+  // KONUM İZNİ OTOMATİK: tarayıcı/işletim sistemi izin penceresi burada açılır.
+  await ref.read(locationControllerProvider.notifier).locateMe();
+  if (!context.mounted) return;
+  if (ref.read(devicePositionProvider) != null) {
+    unawaited(controller.routeTo(destPos, destId, name: destName));
+    onRouted?.call();
+    return;
+  }
+  // İzin gelmedi → dürüst geri düşüş: başlangıç menüsü.
+  await showRouteOriginMenu(
+    context,
+    ref,
+    destPos: destPos,
+    destId: destId,
+    destName: destName,
+    afterPick: afterPick,
+    onRouted: onRouted,
+  );
+}
 
 /// BAŞLANGIÇ MENÜSÜ (rota planlama 2026-08, kullanıcı onaylı): rota
 /// başlangıcı ya paylaşılan GPS konumudur ya da haritadan/koydan seçilir.
@@ -21,6 +63,7 @@ Future<void> showRouteOriginMenu(
   String? destId,
   String? destName,
   VoidCallback? afterPick,
+  VoidCallback? onRouted,
 }) async {
   final L10n t = ref.read(l10nProvider);
   final String? choice = await showModalBottomSheet<String>(
@@ -65,7 +108,8 @@ Future<void> showRouteOriginMenu(
       return;
     }
     if (destPos != null && destId != null) {
-      await controller.routeTo(destPos, destId, name: destName);
+      unawaited(controller.routeTo(destPos, destId, name: destName));
+      onRouted?.call();
     } else {
       await controller.setDeviceOrigin();
     }

@@ -256,6 +256,10 @@ class L10n {
     required this.savedOpenBtn,
     required this.savedDeleteTooltip,
     required this.savedEmpty,
+    required this.routeAddPointBtn,
+    required this.routeAddPointBanner,
+    required this.tourTapHint,
+    required this.tourTapHintLast,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -389,6 +393,11 @@ class L10n {
       routeOriginChange, originPickFail, routeSaveTitle, routeSaveNameHint,
       routeSaved, savedRoutesTitle, savedOpenBtn, savedDeleteTooltip,
       savedEmpty;
+
+  // Mobil rota UX 2.0 (2026-08): dokunarak nokta ekleme + dokundukça ilerleyen
+  // tanıtım kartları.
+  final String routeAddPointBtn, routeAddPointBanner, tourTapHint,
+      tourTapHintLast;
 
   String windExposedLabel(String code) => windExposedLabels[code] ?? code;
 
@@ -700,20 +709,22 @@ const L10n _tr = L10n(
       "Detay'da derinlik, rüzgâr ve iletişim bilgileri var.",
   onbHintCoords: 'Koordinata dokun — panoya kopyalanır.',
   tourTitles: <String>[
+    'Hoş geldin, kaptan',
     'Harita ve koylar',
     'Filtreler',
     'Konumum',
     'SOS',
-    'Arama',
-    'Koy kartı',
+    'Deniz rotası',
+    'Rotanı düzenle ve kaydet',
   ],
   tourBodies: <String>[
+    'Koybul; koyları keşfetmen, rüzgârı görmen ve deniz rotanı çizmen için yapıldı. Kısa tanıtım için ekrana dokunarak ilerle.',
     'Renkli işaretler koyları, marinaları ve iskeleleri gösterir. Sayılı balonlara dokunarak bölgeye yaklaşabilirsin.',
     'Üstteki çiplerle haritayı türe göre süz. "Teknem sığar" açıkken teknene uymayan yerler gizlenir.',
     'Konumunu paylaşırsan teknen haritada görünür; mesafeler ve deniz rotası senin konumundan hesaplanır.',
     'Acil durumda tek dokunuş: koordinatın, telsiz kanalları ve acil numaralar — kapı yok, internetsiz de çalışır.',
-    'Büyüteçle koy ve marina ara; sonuçtan detaya geç. Alttaki düğmeyle harita ↔ liste görünümü değişir.',
-    'Haritada bir koya dokun: alttaki kartta Detay ve karaya değmeyen Deniz Rotası seni bekler.',
+    'Bir koya dokun, "Deniz rotası"na bas: karaya değmeyen rota çizilir. Konum iznin yoksa uygulama kendiliğinden sorar; onay verince rota otomatik oluşur.',
+    'Çizgideki beyaz noktaları sürükleyerek rotayı bük. Çipteki "Nokta ekle" ile dokunarak nokta ekle — koya dokunursan durak olur. Yer imi simgesi rotayı kaydeder.',
   ],
   cancelLabel: 'Vazgeç',
   saveLabel: 'Kaydet',
@@ -732,6 +743,10 @@ const L10n _tr = L10n(
   savedOpenBtn: 'Haritada aç',
   savedDeleteTooltip: 'Rotayı sil',
   savedEmpty: 'Henüz kayıtlı rota yok. Haritada rota çiz, üstteki çipte kaydet simgesine dokun.',
+  routeAddPointBtn: 'Nokta ekle',
+  routeAddPointBanner: 'Rotaya nokta ekle — haritada bir yere dokun; koya dokunursan durak olur.',
+  tourTapHint: 'Devam etmek için ekrana dokun',
+  tourTapHintLast: 'Başlamak için ekrana dokun',
 );
 
 const L10n _en = L10n(
@@ -1015,20 +1030,22 @@ const L10n _en = L10n(
       'Details has depth, wind and contact info.',
   onbHintCoords: 'Tap the coordinates to copy them.',
   tourTitles: <String>[
+    'Welcome aboard, captain',
     'Map and bays',
     'Filters',
     'My location',
     'SOS',
-    'Search',
-    'Bay card',
+    'Sea route',
+    'Edit and save your route',
   ],
   tourBodies: <String>[
+    'Koybul is built for discovering bays, checking the wind and plotting sea routes. Tap the screen to continue this short intro.',
     'Colored markers show bays, marinas and piers. Tap a numbered bubble to zoom into that area.',
     'Filter the map by type with the chips above. With "My boat fits" on, places your boat can\'t fit are hidden.',
     'Share your location and your boat appears on the map; distances and sea routes are calculated from where you are.',
     'One tap in an emergency: your coordinates, radio channels and emergency numbers — no sign-in, works offline.',
-    'Search bays and marinas with the magnifier; open details from a result. The button below toggles map ↔ list view.',
-    'Tap a bay on the map: the card below offers Details and a land-avoiding Sea Route.',
+    'Tap a bay, press "Sea route": a land-avoiding route is drawn. If location is off, the app asks automatically; once you allow, the route is created for you.',
+    'Drag the white dots to bend the line. Tap "Add point" on the chip to add points by touch — tapping a bay makes it a stop. The bookmark icon saves the route.',
   ],
   cancelLabel: 'Cancel',
   saveLabel: 'Save',
@@ -1047,6 +1064,10 @@ const L10n _en = L10n(
   savedOpenBtn: 'Open on map',
   savedDeleteTooltip: 'Delete route',
   savedEmpty: 'No saved routes yet. Draw a route on the map, then tap the save icon on the chip.',
+  routeAddPointBtn: 'Add point',
+  routeAddPointBanner: 'Add a point to the route — tap the map; tapping a bay adds it as a stop.',
+  tourTapHint: 'Tap the screen to continue',
+  tourTapHintLast: 'Tap the screen to start',
 );
 
 const L10n _es = L10n(
@@ -1330,20 +1351,22 @@ const L10n _es = L10n(
       'en Detalles hay profundidad, viento y contacto.',
   onbHintCoords: 'Toca las coordenadas para copiarlas.',
   tourTitles: <String>[
+    'Bienvenido a bordo, capitán',
     'Mapa y calas',
     'Filtros',
     'Mi ubicación',
     'SOS',
-    'Búsqueda',
-    'Tarjeta de la cala',
+    'Ruta marítima',
+    'Edita y guarda tu ruta',
   ],
   tourBodies: <String>[
+    'Koybul sirve para descubrir calas, ver el viento y trazar rutas marítimas. Toca la pantalla para seguir esta breve introducción.',
     'Los marcadores de colores muestran calas, marinas y muelles. Toca una burbuja numerada para acercarte a esa zona.',
     'Filtra el mapa por tipo con los chips de arriba. Con "Mi barco cabe" activo, se ocultan los sitios donde no cabe.',
     'Comparte tu ubicación y tu barco aparece en el mapa; distancias y rutas se calculan desde donde estás.',
     'Un toque en emergencia: tus coordenadas, canales de radio y números de emergencia — sin registro, funciona sin internet.',
-    'Busca calas y marinas con la lupa; abre detalles desde un resultado. El botón de abajo alterna mapa ↔ lista.',
-    'Toca una cala en el mapa: la tarjeta inferior ofrece Detalles y una Ruta marítima que evita tierra.',
+    'Toca una cala y pulsa "Ruta marítima": se traza una ruta que evita tierra. Si la ubicación está apagada, la app la pide sola; al permitirla, la ruta se crea automáticamente.',
+    'Arrastra los puntos blancos para curvar la línea. Con "Añadir punto" del chip añades puntos tocando — tocar una cala la convierte en parada. El marcador guarda la ruta.',
   ],
   cancelLabel: 'Cancelar',
   saveLabel: 'Guardar',
@@ -1362,6 +1385,10 @@ const L10n _es = L10n(
   savedOpenBtn: 'Abrir en el mapa',
   savedDeleteTooltip: 'Eliminar ruta',
   savedEmpty: 'Aún no hay rutas guardadas. Traza una ruta y toca el icono de guardar en el chip.',
+  routeAddPointBtn: 'Añadir punto',
+  routeAddPointBanner: 'Añade un punto a la ruta: toca el mapa; si tocas una cala, será una parada.',
+  tourTapHint: 'Toca la pantalla para continuar',
+  tourTapHintLast: 'Toca la pantalla para empezar',
 );
 
 const L10n _ru = L10n(
@@ -1645,20 +1672,22 @@ const L10n _ru = L10n(
       'в «Подробнее» — глубина, ветер и контакты.',
   onbHintCoords: 'Коснитесь координат, чтобы скопировать их.',
   tourTitles: <String>[
+    'Добро пожаловать на борт, капитан',
     'Карта и бухты',
     'Фильтры',
     'Моя позиция',
     'SOS',
-    'Поиск',
-    'Карточка бухты',
+    'Морской маршрут',
+    'Редактируйте и сохраняйте маршрут',
   ],
   tourBodies: <String>[
+    'Koybul создан, чтобы открывать бухты, видеть ветер и прокладывать морские маршруты. Касайтесь экрана, чтобы листать это короткое знакомство.',
     'Цветные метки — бухты, марины и причалы. Коснитесь пузырька с числом, чтобы приблизить район.',
     'Фильтруйте карту по типу чипами сверху. При включённом «Моя лодка подходит» неподходящие места скрываются.',
     'Поделитесь позицией — лодка появится на карте; расстояния и маршруты считаются от вас.',
     'Одно касание в экстренной ситуации: ваши координаты, радиоканалы и номера служб — без входа, работает офлайн.',
-    'Ищите бухты и марины через лупу; открывайте детали из результата. Кнопка ниже переключает карту ↔ список.',
-    'Коснитесь бухты на карте: в карточке снизу — «Подробнее» и морской маршрут в обход суши.',
+    'Коснитесь бухты и нажмите «Морской маршрут»: путь строится в обход суши. Если геолокация выключена, приложение само попросит доступ; после разрешения маршрут создаётся автоматически.',
+    'Тяните белые точки, чтобы изгибать линию. «Добавить точку» на чипе добавляет точки касанием — касание бухты делает её остановкой. Значок закладки сохраняет маршрут.',
   ],
   cancelLabel: 'Отмена',
   saveLabel: 'Сохранить',
@@ -1677,6 +1706,10 @@ const L10n _ru = L10n(
   savedOpenBtn: 'Открыть на карте',
   savedDeleteTooltip: 'Удалить маршрут',
   savedEmpty: 'Пока нет сохранённых маршрутов. Проложите маршрут и коснитесь значка сохранения на чипе.',
+  routeAddPointBtn: 'Добавить точку',
+  routeAddPointBanner: 'Добавьте точку к маршруту — коснитесь карты; касание бухты добавит её как остановку.',
+  tourTapHint: 'Коснитесь экрана, чтобы продолжить',
+  tourTapHintLast: 'Коснитесь экрана, чтобы начать',
 );
 
 /// Saf eşleme — birim testli.

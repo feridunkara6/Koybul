@@ -3,8 +3,6 @@ import 'dart:math' as math;
 
 import 'package:dockly_api/dockly_api.dart' show Bbox, Cluster, GeoPoint, LocationPin;
 import 'package:dockly_ui/dockly_ui.dart';
-// CI dersi: DragStartBehavior material'dan GELMEZ — gestures'tan açıkça alınır.
-import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -145,6 +143,17 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
   Timer? _debounce;
   double _lastZoom = 7; // _initialZoom ile hizalı; eşik-geçişi tespiti için
   _RouteDrag? _drag;
+
+  /// Tutamaç üzerinde duran parmak sayısı (MOBİL DÜZELTME 2026-08): parmak
+  /// tutamaca değdiği AN haritanın tüm jestleri kilitlenir — sürükleme
+  /// haritayla asla yarışmaz ("nokta sürükleme çalışmıyor" kök nedeni:
+  /// haritanın kendi jest tanıyıcısı aynı parmağı izleyip haritayı kaydırıyordu).
+  int _handleTouches = 0;
+
+  void _handleTouchStart() => setState(() => _handleTouches++);
+
+  void _handleTouchEnd() =>
+      setState(() => _handleTouches = _handleTouches > 0 ? _handleTouches - 1 : 0);
 
   @override
   void initState() {
@@ -301,6 +310,8 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
             height: 44,
             child: _RouteHandle(
               size: 16,
+              onTouchStart: _handleTouchStart,
+              onTouchEnd: _handleTouchEnd,
               onDragStart: () => _startDrag(
                 isNew: true,
                 index: j,
@@ -366,6 +377,14 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
         initialZoom: _initialZoom.toDouble(),
         minZoom: 4,
         maxZoom: 18,
+        // MOBİL DÜZELTME (2026-08): parmak bir tutamaçtayken ya da sürükleme
+        // sürerken haritanın jestleri TAMAMEN kapatılır — tutamaç sürükleme
+        // haritayı kaydırmaz, kesin ve öngörülebilir çalışır.
+        interactionOptions: InteractionOptions(
+          flags: _handleTouches > 0 || _drag != null
+              ? InteractiveFlag.none
+              : InteractiveFlag.all,
+        ),
         onPositionChanged: _onMove,
         // ROTA PLANLAMA (2026-08): boşluğa dokunuş — BAŞLANGIÇ SEÇ modunda
         // A noktası olur (kontrolcü mod dışında yok sayar).
@@ -531,6 +550,8 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
                 height: 48,
                 child: _RouteHandle(
                   size: 22,
+                  onTouchStart: _handleTouchStart,
+                  onTouchEnd: _handleTouchEnd,
                   onTap: () => widget.callbacks.onRouteRemoveVia?.call(v.index),
                   onDragStart: () => _startViaDrag(v),
                   onDragUpdate: _updateDrag,
@@ -722,13 +743,16 @@ class _FitDot extends StatelessWidget {
   }
 }
 
-/// ROTA TUTAMACI (rota düzenleme 2026-08): beyaz daire + marka mavisi halka.
-/// Sürüklenebilir; ara nokta tutamaçlarında dokunuş = kaldır. GestureDetector
-/// haritanın kendi kaydırmasını KAZANIR (hit-test çocuğu önce kaydeder) —
-/// tutamacı sürüklerken harita kaymaz.
-class _RouteHandle extends StatelessWidget {
+/// ROTA TUTAMACI (rota düzenleme 2026-08 → MOBİL DÜZELTME): beyaz daire +
+/// marka mavisi halka. Jest arenasına GİRMEZ — ham işaretçi (Listener) ile
+/// izlenir; parmak değdiği an yüzey haritayı kilitler (onTouchStart), 6px
+/// üstü hareket SÜRÜKLEMEDİR, hareketsiz bırakma DOKUNUŞTUR (ara noktada:
+/// kaldır). Böylece dokunmatikte sürükleme her zaman ve öngörülebilir çalışır.
+class _RouteHandle extends StatefulWidget {
   const _RouteHandle({
     required this.size,
+    required this.onTouchStart,
+    required this.onTouchEnd,
     required this.onDragStart,
     required this.onDragUpdate,
     required this.onDragEnd,
@@ -737,6 +761,8 @@ class _RouteHandle extends StatelessWidget {
   });
 
   final double size;
+  final VoidCallback onTouchStart;
+  final VoidCallback onTouchEnd;
   final VoidCallback onDragStart;
   final void Function(Offset delta) onDragUpdate;
   final VoidCallback onDragEnd;
@@ -744,21 +770,67 @@ class _RouteHandle extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
+  State<_RouteHandle> createState() => _RouteHandleState();
+}
+
+class _RouteHandleState extends State<_RouteHandle> {
+  Offset? _down; // işaretçinin indiği küresel nokta
+  Offset? _last; // son küresel nokta (delta hesabı)
+  bool _dragging = false;
+
+  /// Sürükleme eşiği: bunun altı DOKUNUŞ sayılır (kaldırma), üstü SÜRÜKLEME.
+  static const double _slop = 6;
+
+  void _reset() {
+    _down = null;
+    _last = null;
+    _dragging = false;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return Listener(
       behavior: HitTestBehavior.opaque,
-      // MOBİL DOSTU (2026-08): sürükleme parmağın İLK indiği andan izlenir —
-      // küçük hedefte gecikme/kayma hissi olmaz.
-      dragStartBehavior: DragStartBehavior.down,
-      onTap: onTap,
-      onPanStart: (DragStartDetails _) => onDragStart(),
-      onPanUpdate: (DragUpdateDetails d) => onDragUpdate(d.delta),
-      onPanEnd: (DragEndDetails _) => onDragEnd(),
-      onPanCancel: onDragCancel,
+      onPointerDown: (PointerDownEvent e) {
+        _down = e.position;
+        _last = e.position;
+        _dragging = false;
+        widget.onTouchStart(); // harita jestleri ANINDA kilitlenir
+      },
+      onPointerMove: (PointerMoveEvent e) {
+        final Offset? down = _down;
+        if (down == null) return;
+        if (!_dragging) {
+          if ((e.position - down).distance < _slop) return;
+          _dragging = true;
+          widget.onDragStart();
+          widget.onDragUpdate(e.position - down); // biriken ilk kayma
+          _last = e.position;
+          return;
+        }
+        widget.onDragUpdate(e.position - (_last ?? e.position));
+        _last = e.position;
+      },
+      onPointerUp: (PointerUpEvent _) {
+        final bool wasDrag = _dragging;
+        _reset();
+        widget.onTouchEnd();
+        if (wasDrag) {
+          widget.onDragEnd();
+        } else {
+          widget.onTap?.call();
+        }
+      },
+      onPointerCancel: (PointerCancelEvent _) {
+        final bool wasDrag = _dragging;
+        _reset();
+        widget.onTouchEnd();
+        if (wasDrag) widget.onDragCancel();
+      },
       child: Center(
         child: Container(
-          width: size,
-          height: size,
+          width: widget.size,
+          height: widget.size,
           decoration: BoxDecoration(
             color: const Color(0xFFFFFFFF),
             shape: BoxShape.circle,
@@ -767,7 +839,7 @@ class _RouteHandle extends StatelessWidget {
               BoxShadow(color: Color(0x400A2540), blurRadius: 4, offset: Offset(0, 1)),
             ],
           ),
-          child: size >= 18
+          child: widget.size >= 18
               ? Center(
                   child: Container(
                     width: 5,

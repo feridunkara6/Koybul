@@ -978,30 +978,25 @@ class _ActionBar extends ConsumerWidget {
 
   /// Rota: aramadan/detaydan gelen kullanıcı haritaya dönüp işareti yeniden
   /// bulmak zorunda kalmasın — rota BURADAN istenir, harita rota çizili açılır.
-  /// ROTA PLANLAMA (2026-08): GPS yoksa başlangıç menüsü açılır (Konumumdan /
-  /// Başlangıç noktası seç); seçim moduna girilirse haritaya dönülür.
+  /// AKILLI ROTA (kullanıcı isteği 2026-08): konum paylaşılmamışsa izin
+  /// OTOMATİK istenir; onay gelince rota kendiliğinden çizilir ve haritaya
+  /// dönülür. İzin gelmezse başlangıç menüsü açılır.
   void _startRoute(BuildContext context, WidgetRef ref) {
-    if (ref.read(devicePositionProvider) == null) {
-      showRouteOriginMenu(
-        context,
-        ref,
-        destPos: detail.position,
-        destId: detail.id,
-        destName: detail.name,
-        afterPick: () {
-          if (context.mounted) {
-            Navigator.of(context).popUntil((Route<dynamic> r) => r.isFirst);
-          }
-        },
-      );
-      return;
+    void backToMap() {
+      if (context.mounted) {
+        Navigator.of(context).popUntil((Route<dynamic> r) => r.isFirst);
+      }
     }
-    // Hesap arka planda başlar; kullanıcı haritaya döner, rota + mesafe/süre
-    // çipi orada belirir.
-    ref
-        .read(mapControllerProvider.notifier)
-        .routeTo(detail.position, detail.id, name: detail.name);
-    Navigator.of(context).popUntil((Route<dynamic> r) => r.isFirst);
+
+    startSeaRoute(
+      context,
+      ref,
+      destPos: detail.position,
+      destId: detail.id,
+      destName: detail.name,
+      afterPick: backToMap,
+      onRouted: backToMap,
+    );
   }
 
   /// Rota çiziliyken: bu koyu DURAK olarak ekler ve haritaya döner.
