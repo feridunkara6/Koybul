@@ -4,6 +4,7 @@ import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
 import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
 import 'package:dockly_mobile/features/boat/domain/my_boat.dart';
+import 'package:dockly_mobile/features/checklist/application/checklist_controller.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/domain/map_cache.dart';
 import 'package:dockly_mobile/features/map/presentation/location_bottom_card.dart';
@@ -25,6 +26,7 @@ import 'package:dockly_mobile/features/weather/application/weather_controller.da
 
 import '../../support/fake_map_surface.dart';
 import '../../support/location_fakes.dart';
+import '../../support/checklist_fakes.dart';
 import '../../support/map_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/onboarding_fakes.dart';
@@ -68,10 +70,13 @@ Widget _app(
   FakeNearbyGateway? nearby,
   FakeLocationService? location,
   SeaRouteEngine? routeEngine,
+  FakeChecklistStore? checklist,
 }) {
   return ProviderScope(
     overrides: <Override>[
       if (location != null) locationServiceProvider.overrideWithValue(location),
+      // Kontrol deposu HER ZAMAN sahte (gerçek shared_preferences'a gitmesin).
+      checklistStoreProvider.overrideWithValue(checklist ?? FakeChecklistStore()),
       if (routeEngine != null)
         seaRouteEngineProvider.overrideWithValue(routeEngine),
       mapLocationsGatewayProvider.overrideWithValue(gateway),
@@ -391,6 +396,42 @@ void main() {
     expect(find.textContaining('≈'), findsOneWidget); // rota çipi ekranda
     // İlk ara nokta ipucu SnackBar'ı vb. zamanlayıcıları akıt.
     await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
+  });
+  testWidgets('SEYİR ÖNCESİ KONTROL (2026-08): rota çizilince nazik şerit '
+      'GÜNDE BİR kez sorar; "Hazırım" kapatır, aynı gün tekrar çıkmaz',
+      (WidgetTester tester) async {
+    final FakeChecklistStore checklist = FakeChecklistStore();
+    await tester.pumpWidget(_app(
+      FakeMapGateway(result: pinResult),
+      location: FakeLocationService(const GeoPoint(lat: 36.76, lon: 28.96)),
+      routeEngine: _FakeRouteEngine(),
+      checklist: checklist,
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(_pinKey));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Deniz rotası'));
+    await tester.pumpAndSettle();
+
+    // Şerit geldi; "Hazırım" kapatır ve karar cihaza işlenir.
+    expect(find.text('Seyir öncesi kontrollerini yaptın mı?'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey<String>('checklist-ready')));
+    await tester.pumpAndSettle();
+    expect(find.text('Seyir öncesi kontrollerini yaptın mı?'), findsNothing);
+    expect(checklist.askDay, isNotNull);
+
+    // Aynı gün İKİNCİ rota → şerit BİR DAHA çıkmaz (onaylı doz: günde bir).
+    final ProviderContainer c =
+        ProviderScope.containerOf(tester.element(find.byType(MapScreen)));
+    await c
+        .read(mapControllerProvider.notifier)
+        .routeTo(const GeoPoint(lat: 36.70, lon: 28.80), 'loc-2', name: 'B');
+    await tester.pumpAndSettle();
+    expect(find.text('Seyir öncesi kontrollerini yaptın mı?'), findsNothing);
+    // Zamanlayıcı artıklarını akıt (snackbar vb.).
+    await tester.pump(const Duration(seconds: 6));
     await tester.pumpAndSettle();
   });
 }

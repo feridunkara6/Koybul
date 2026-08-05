@@ -10,6 +10,7 @@ import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
 import '../../emergency/presentation/emergency_screen.dart';
 import '../../onboarding/application/onboarding_controller.dart';
+import '../../logbook/presentation/logbook_screen.dart';
 import '../../route/presentation/saved_routes_screen.dart';
 import '../../shell/application/shell_tab_provider.dart';
 
@@ -63,6 +64,15 @@ class ProfileScreen extends ConsumerWidget {
             label: t.savedRoutesTitle,
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute<void>(builder: (_) => const SavedRoutesScreen()),
+            ),
+          ),
+          const SizedBox(height: 12),
+          // KAPTANIN GÜNLÜĞÜ (kullanıcı onayı 2026-08): seyir notları.
+          _NavRow(
+            icon: DocklyIcons.edit,
+            label: t.logbookTitle,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const LogbookScreen()),
             ),
           ),
           const SizedBox(height: 12),

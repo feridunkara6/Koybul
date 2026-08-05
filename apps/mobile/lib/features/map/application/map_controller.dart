@@ -358,7 +358,11 @@ class MapController extends Notifier<MapState> {
   /// KAYITLI ROTAYI AÇ (dürüstlük kararı: kayıtta çizgi değil başlangıç +
   /// duraklar durur — rota aynı motorla YENİDEN hesaplanır). "Konumum"
   /// başlangıçlı kayıtlarda arayüz GPS şartını önceden denetler.
-  Future<void> openSavedRoute(RouteOrigin origin, List<RouteWaypoint> waypoints) async {
+  Future<void> openSavedRoute(
+    RouteOrigin origin,
+    List<RouteWaypoint> waypoints, {
+    String? name,
+  }) async {
     if (state.isRouting || waypoints.isEmpty) return;
     RouteOrigin effective = origin;
     if (origin.isDevice) {
@@ -367,6 +371,11 @@ class MapController extends Notifier<MapState> {
       effective = RouteOrigin(pos: gps, isDevice: true);
     }
     await _planTrip(effective, waypoints, editing: false);
+    // KAYITLI ROTA ADI (kullanıcı isteği 2026-08): verdiği isim çipte
+    // görünsün. Yalnız plan BAŞARILIYSA yazılır.
+    if (name != null && state.route != null) {
+      state = state.copyWith(routeLabel: name);
+    }
   }
 
   /// Yeni başlangıçla: mevcut rota varsa onu, yoksa bekleyen hedefi planlar.
@@ -502,6 +511,9 @@ class MapController extends Notifier<MapState> {
       // Kamera yalnız YENİ rotaya sığdırılır; düzenlemede (tutamaç/durak)
       // kullanıcının baktığı yer değişmez (seq artmaz).
       routeSeq: state.routeSeq + (editing ? 0 : 1),
+      // Yeni rota kuruluşunda eski kayıt adı düşer (openSavedRoute başarı
+      // sonrası adı yeniden yazar); düzenlemede ad korunur.
+      clearRouteLabel: !editing,
       clearRouteWind: true, // yeni rota → eski rüzgâr raporu geçersiz
     );
     // RÜZGÂR ANALİZİ (Rota v2): arka planda, en iyi çaba — rota çizimi bunu

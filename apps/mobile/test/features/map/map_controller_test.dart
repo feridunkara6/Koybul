@@ -788,9 +788,11 @@ void main() {
     const List<RouteWaypoint> wps = <RouteWaypoint>[
       RouteWaypoint(pos: GeoPoint(lat: 36.75, lon: 28.93), id: 'loc-1', name: 'D-Marin Göcek'),
     ];
-    await _ctrl(container).openSavedRoute(picked, wps);
+    await _ctrl(container).openSavedRoute(picked, wps, name: 'Datça turu');
     expect(_state(container).route, isNotNull);
     expect(_state(container).routeOrigin!.name, 'Datça');
+    // KAYITLI ROTA ADI (kullanıcı isteği 2026-08): verdiği isim çipte görünsün.
+    expect(_state(container).routeLabel, 'Datça turu');
 
     // "Konumum" başlangıçlı kayıt: GPS yok → açılmaz (arayüz uyarıyı gösterir).
     _ctrl(container).clearRoute();
@@ -800,10 +802,18 @@ void main() {
     expect(_state(container).route, isNull);
     // GPS paylaşılınca açılır ve başlangıç GÜNCEL konumdur.
     _shareLocation(container);
-    await _ctrl(container).openSavedRoute(device, wps);
+    await _ctrl(container).openSavedRoute(device, wps, name: 'Eve dönüş');
     expect(_state(container).route, isNotNull);
     expect(_state(container).routeOrigin!.isDevice, isTrue);
     expect(_state(container).routeOrigin!.pos.lat, 36.76);
+    expect(_state(container).routeLabel, 'Eve dönüş');
+
+    // YENİ rota kurulunca kayıt adı düşer (etiket bayat kalmaz).
+    await _ctrl(container).routeTo(
+        const GeoPoint(lat: 36.75, lon: 28.93), 'loc-1',
+        name: 'D-Marin Göcek');
+    expect(_state(container).route, isNotNull);
+    expect(_state(container).routeLabel, isNull);
   });
 
   test('NOKTA EKLE modu: haritaya dokunuş ara nokta, pine dokunuş DURAK ekler', () async {

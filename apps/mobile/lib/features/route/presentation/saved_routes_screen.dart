@@ -1,4 +1,5 @@
-import 'package:dockly_api/dockly_api.dart' show GeoPoint;
+import 'dart:async' show unawaited;
+
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -69,7 +70,13 @@ class SavedRouteCard extends ConsumerWidget {
     if (route.stopCount >= 2) {
       meta = '${L10n.fmt(t.routeStopsFmt, '${route.stopCount}')} · $meta';
     }
-    return Container(
+    // KARTIN TAMAMI TIKLANABİLİR (kullanıcı isteği 2026-08): karta dokunmak
+    // rotayı açar — küçük düğmeyi aramak gerekmez.
+    return InkWell(
+      key: ValueKey<String>('saved-route-${route.id}'),
+      borderRadius: BorderRadius.circular(14),
+      onTap: () => _open(context, ref),
+      child: Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.fromLTRB(12, 12, 6, 12),
       decoration: BoxDecoration(
@@ -124,33 +131,35 @@ class SavedRouteCard extends ConsumerWidget {
           ),
         ],
       ),
+      ),
     );
   }
 
   /// "Haritada aç": Konumum başlangıçlı kayıtta GPS şartı burada denetlenir;
   /// sonra Keşfet sekmesine dönülür ve rota yeniden hesaplanır.
-  void _open(BuildContext context, WidgetRef ref) {
-    final L10n t = ref.read(l10nProvider);
-    if (route.origin.isDevice) {
-      final GeoPoint? gps = ref.read(devicePositionProvider);
-      if (gps == null) {
+  Future<void> _open(BuildContext context, WidgetRef ref) async {
+    // AKILLI AKIŞ (kullanıcı isteği 2026-08, "üzerine basınca rota otomatik
+    // oluşsun"): Konumum başlangıçlı kayıtta GPS yoksa izin penceresi
+    // KENDİLİĞİNDEN açılır; onay gelince rota otomatik kurulur. İzin
+    // gelmezse dürüst uyarı gösterilir — sessiz başarısızlık yok.
+    if (route.origin.isDevice &&
+        ref.read(devicePositionProvider) == null) {
+      await ref.read(locationControllerProvider.notifier).locateMe();
+      if (!context.mounted) return;
+      if (ref.read(devicePositionProvider) == null) {
+        final L10n t = ref.read(l10nProvider);
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(SnackBar(
             content: Text(t.routeNeedOrigin),
             duration: const Duration(seconds: 6),
-            action: SnackBarAction(
-              label: t.locateTooltip,
-              onPressed: () =>
-                  ref.read(locationControllerProvider.notifier).locateMe(),
-            ),
           ));
         return;
       }
     }
-    ref
+    unawaited(ref
         .read(mapControllerProvider.notifier)
-        .openSavedRoute(route.origin, route.waypoints);
+        .openSavedRoute(route.origin, route.waypoints, name: route.name));
     ref.read(shellTabProvider.notifier).state = 0; // Keşfet'e dön
     Navigator.of(context).popUntil((Route<dynamic> r) => r.isFirst);
   }

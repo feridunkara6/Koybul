@@ -30,6 +30,7 @@ class MapState {
     this.pickingOrigin = false,
     this.addingPoint = false,
     this.originPickFailSeq = 0,
+    this.routeLabel,
   });
 
   final List<LocationPin> pins;
@@ -78,6 +79,10 @@ class MapState {
   /// Rotanın başlangıcı (rota planlama 2026-08): GPS ("Konumum") ya da
   /// haritadan/koydan seçilen A noktası. null = rota yok.
   final RouteOrigin? routeOrigin;
+
+  /// Açık rotanın kullanıcı adı (KAYITLI ROTA açıldıysa verdiği isim) — çipte
+  /// gösterilir. Yeni rota kurulunca temizlenir (kullanıcı isteği 2026-08).
+  final String? routeLabel;
 
   /// BAŞLANGIÇ SEÇ modu: haritaya/koya dokunuş A noktasını belirler; arayüz
   /// üstte lacivert seçim şeridi gösterir.
@@ -138,6 +143,8 @@ class MapState {
     bool? pickingOrigin,
     bool? addingPoint,
     int? originPickFailSeq,
+    String? routeLabel,
+    bool clearRouteLabel = false,
   }) {
     return MapState(
       pins: pins ?? this.pins,
@@ -166,6 +173,9 @@ class MapState {
       pickingOrigin: pickingOrigin ?? this.pickingOrigin,
       addingPoint: clearRoute ? false : (addingPoint ?? this.addingPoint),
       originPickFailSeq: originPickFailSeq ?? this.originPickFailSeq,
+      routeLabel: (clearRoute || clearRouteLabel)
+          ? null
+          : (routeLabel ?? this.routeLabel),
     );
   }
 }

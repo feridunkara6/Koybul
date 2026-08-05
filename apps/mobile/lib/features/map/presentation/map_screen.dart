@@ -21,6 +21,10 @@ import '../../route/domain/sea_route.dart';
 import '../../route/domain/sea_router.dart';
 import '../../route/domain/sea_trip.dart';
 import '../../search/presentation/search_screen.dart';
+import '../../checklist/application/checklist_controller.dart';
+import '../../checklist/presentation/checklist_sheet.dart';
+import '../../logbook/domain/log_entry.dart';
+import '../../logbook/presentation/logbook_screen.dart' show showLogEntryEditor;
 import '../application/map_controller.dart';
 import '../domain/map_state.dart';
 import 'location_bottom_card.dart';
@@ -38,6 +42,16 @@ class MapScreen extends ConsumerWidget {
     final MapController controller = ref.read(mapControllerProvider.notifier);
     // KARA YASAĞI uyarısı: rota hesaplanamadıysa (düz çizgi çizilmez) kullanıcı
     // dürüstçe bilgilendirilir — sinyal sayacı her başarısız denemede artar.
+    // SEYİR ÖNCESİ KONTROL (kullanıcı onayı 2026-08, günde bir nazik şerit):
+    // yeni rota çizildi → kontrol şeridi (düzenlemeler routeSeq artırmaz).
+    ref.listen<int>(
+      mapControllerProvider.select((MapState s) => s.routeSeq),
+      (int? prev, int next) {
+        if (prev != null && next > prev) {
+          ref.read(checklistProvider.notifier).maybePrompt();
+        }
+      },
+    );
     ref.listen<int>(
       mapControllerProvider.select((MapState s) => s.routeFailSeq),
       (int? prev, int next) {
@@ -228,6 +242,7 @@ class MapScreen extends ConsumerWidget {
                           onClear: controller.clearRoute,
                           onRemoveStop: controller.removeWaypoint,
                           onSave: () => _saveRouteDialog(context, ref, state),
+                          label: state.routeLabel,
                           onChangeOrigin: () =>
                               showRouteOriginMenu(context, ref),
                           onAddPoint: controller.beginAddPoint,
@@ -339,6 +354,22 @@ class MapScreen extends ConsumerWidget {
                 onCancel: controller.cancelAddPoint,
               ),
             ),
+          // SEYİR ÖNCESİ KONTROL ŞERİDİ (günde bir; onaylı doz): nazik soru,
+          // iki saygın çıkış — "Listeyi aç" / "Hazırım".
+          if (ref.watch(checklistProvider).promptVisible)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: _ChecklistBanner(
+                onOpen: () {
+                  ref.read(checklistProvider.notifier).dismissPrompt();
+                  showChecklistSheet(context);
+                },
+                onReady: () =>
+                    ref.read(checklistProvider.notifier).dismissPrompt(),
+              ),
+            ),
           // TANITIM KARTLARI v2 (en üstte): ilk açılışta kendiliğinden başlar,
           // ekrana dokundukça ilerler (kullanıcı isteği 2026-08).
           if (!isList && onb.tourActive)
@@ -416,6 +447,69 @@ String _fmtNm(double nm) => nm >= 10 ? nm.round().toString() : nm.toStringAsFixe
 
 /// MOD ŞERİDİ (rota planlama/nokta ekleme): lacivert, tek satır yönerge +
 /// Vazgeç. Mod açıkken haritaya/koya dokunuşun anlamını açıklar.
+/// Seyir öncesi kontrol şeridi (kullanıcı onayı 2026-08): lacivert zemin,
+/// soru + iki eylem. Günde bir kez görünür; "Hazırım" ya da liste açılınca
+/// aynı gün bir daha çıkmaz.
+class _ChecklistBanner extends ConsumerWidget {
+  const _ChecklistBanner({required this.onOpen, required this.onReady});
+
+  final VoidCallback onOpen;
+  final VoidCallback onReady;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    return Material(
+      color: DocklyColors.brandDeep,
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 10, 8, 10),
+          child: Row(
+            children: <Widget>[
+              const DocklyIcon(DocklyIcons.checkCircle,
+                  size: 18, color: Color(0xFF7FE7DC)),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  t.checklistAsk,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              TextButton(
+                key: const ValueKey<String>('checklist-open'),
+                onPressed: onOpen,
+                child: Text(
+                  t.checklistOpenBtn,
+                  style: const TextStyle(
+                    color: Color(0xFF7FE7DC),
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              TextButton(
+                key: const ValueKey<String>('checklist-ready'),
+                onPressed: onReady,
+                child: Text(
+                  t.checklistReadyBtn,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _ModeBanner extends ConsumerWidget {
   const _ModeBanner({required this.text, required this.onCancel});
 
@@ -525,9 +619,27 @@ Future<void> _saveRouteDialog(
         savedAtMs: now,
       ));
   if (!context.mounted) return;
+  // GÜNLÜK KISAYOLU (kullanıcı onayı 2026-08): rota kaydedildi → tek
+  // dokunuşla günlüğe not düşülür; rota bağlamı kendiliğinden eklenir.
+  final LogContext logCtx = LogContext(
+    routeName: name.isEmpty ? originLabel : name,
+    distanceNm: route.distanceNm,
+    stops: state.routeWaypoints.where((RouteWaypoint w) => w.isStop).length,
+  );
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
-    ..showSnackBar(SnackBar(content: Text(t.routeSaved)));
+    ..showSnackBar(SnackBar(
+      content: Text(t.routeSaved),
+      duration: const Duration(seconds: 6),
+      action: SnackBarAction(
+        label: t.logbookSnackAction,
+        onPressed: () {
+          if (context.mounted) {
+            showLogEntryEditor(context, ref, logContext: logCtx);
+          }
+        },
+      ),
+    ));
 }
 
 /// Duraklardan numaralı harita rozetleri (1, 2, …). Tek duraklı rotada (yalnız
@@ -783,7 +895,12 @@ class _RouteChip extends ConsumerWidget {
     this.onSave,
     this.onChangeOrigin,
     this.onAddPoint,
+    this.label,
   });
+
+  /// KAYITLI ROTA adı (kullanıcı isteği 2026-08): kayıttan açılan rotanın
+  /// kullanıcı verdiği ismi başlıkta görünür.
+  final String? label;
 
   final SeaRoutePlan route;
   final RouteWindReport? wind;
@@ -826,8 +943,11 @@ class _RouteChip extends ConsumerWidget {
     final RouteWindReport? w = wind;
     final int stopCount =
         waypoints.where((RouteWaypoint x) => x.isStop).length;
-    final String title =
+    final String metaTitle =
         '≈ ${_fmtNm(route.distanceNm)} ${t.nmUnit} · ~$eta';
+    // Kayıtlı rota adıyla açıldıysa isim başa gelir: "Datça turu · ≈ 26 nm…"
+    final String title =
+        label == null ? metaTitle : '$label · $metaTitle';
     return Material(
       elevation: 2,
       borderRadius: BorderRadius.circular(14),
@@ -855,6 +975,13 @@ class _RouteChip extends ConsumerWidget {
                     style: theme.textTheme.titleSmall,
                     overflow: TextOverflow.ellipsis,
                   ),
+                ),
+                // SEYİR ÖNCESİ KONTROL: liste çipten her an açılabilir.
+                IconButton(
+                  tooltip: t.checklistTooltip,
+                  visualDensity: VisualDensity.compact,
+                  icon: const DocklyIcon(DocklyIcons.checkCircle, size: 17),
+                  onPressed: () => showChecklistSheet(context),
                 ),
                 if (onSave != null)
                   IconButton(

@@ -294,6 +294,21 @@ class L10n {
     required this.locSkipBtn,
     required this.locTrustNote,
     required this.favSectionPlaces,
+    required this.logbookTitle,
+    required this.logbookEmpty,
+    required this.logbookNew,
+    required this.logbookTitleHint,
+    required this.logbookTextHint,
+    required this.logbookDeleteTooltip,
+    required this.logbookSnackAction,
+    required this.checklistTitle,
+    required this.checklistAsk,
+    required this.checklistOpenBtn,
+    required this.checklistReadyBtn,
+    required this.checklistNote,
+    required this.checklistAllDone,
+    required this.checklistTooltip,
+    required this.checklistItems,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -449,6 +464,15 @@ class L10n {
 
   /// Favoriler sekmesi bölüm başlığı (kayıtlı rotalar ayrı bölüm, 2026-08).
   final String favSectionPlaces;
+
+  // Kaptanın Günlüğü + Seyir Öncesi Kontrol (kullanıcı onayı 2026-08).
+  final String logbookTitle, logbookEmpty, logbookNew, logbookTitleHint,
+      logbookTextHint, logbookDeleteTooltip, logbookSnackAction,
+      checklistTitle, checklistAsk, checklistOpenBtn, checklistReadyBtn,
+      checklistNote, checklistAllDone, checklistTooltip;
+
+  /// Kontrol maddeleri — kChecklistItemCount (10) ile AYNI uzunlukta.
+  final List<String> checklistItems;
 
   String windExposedLabel(String code) => windExposedLabels[code] ?? code;
 
@@ -832,6 +856,32 @@ const L10n _tr = L10n(
   locSkipBtn: 'Şimdilik bölgemle devam',
   locTrustNote: 'Konumun cihazında kalır; izin vermezsen hiçbir özellik kilitlenmez.',
   favSectionPlaces: 'Favori yerler',
+  logbookTitle: 'Kaptanın Günlüğü',
+  logbookEmpty: 'Henüz günlük girişi yok. Seyirden sonra "+ Yeni kayıt" ile ilk notunu düş — aktif rotan varsa bilgileri kendiliğinden gelir.',
+  logbookNew: 'Yeni kayıt',
+  logbookTitleHint: 'Başlık (isteğe bağlı)',
+  logbookTextHint: 'Bugünün seyri nasıldı, kaptan?',
+  logbookDeleteTooltip: 'Girişi sil',
+  logbookSnackAction: 'Günlüğe not düş',
+  checklistTitle: 'Seyir Öncesi Kontrol',
+  checklistAsk: 'Seyir öncesi kontrollerini yaptın mı?',
+  checklistOpenBtn: 'Listeyi aç',
+  checklistReadyBtn: 'Hazırım',
+  checklistNote: 'Bu liste bir hatırlatıcıdır; resmî güvenlik gereklerinin ve iyi denizcilik uygulamalarının yerine geçmez.',
+  checklistAllDone: 'Tüm kontroller tamam — iyi seyirler, kaptan!',
+  checklistTooltip: 'Seyir öncesi kontrol',
+  checklistItems: <String>[
+    'Hava ve deniz tahminini kontrol ettim.',
+    'Yakıt ve tatlı su seviyeleri yeterli.',
+    'Can yelekleri erişilebilir ve herkese uygun.',
+    'VHF telsiz çalışıyor, Kanal 16 dinlemede.',
+    'Demir ve ırgat donanımı hazır.',
+    'Sintine kuru, pompalar çalışıyor.',
+    'Motor yağı, soğutma suyu ve kayış kontrol edildi.',
+    'Seyir fenerleri çalışıyor.',
+    'Rota ve alternatif limanlar gözden geçirildi.',
+    'Kıyıdaki bir kişiye seyir planı bildirildi.',
+  ],
 );
 
 const L10n _en = L10n(
@@ -1187,6 +1237,32 @@ const L10n _en = L10n(
   locSkipBtn: 'Continue with my region for now',
   locTrustNote: 'Your location stays on your device; nothing is locked if you decline.',
   favSectionPlaces: 'Favorite places',
+  logbookTitle: "Captain's Log",
+  logbookEmpty: 'No log entries yet. After a voyage, tap "+ New entry" — if a route is active, its details are attached automatically.',
+  logbookNew: 'New entry',
+  logbookTitleHint: 'Title (optional)',
+  logbookTextHint: 'How was today at sea, captain?',
+  logbookDeleteTooltip: 'Delete entry',
+  logbookSnackAction: 'Add to log',
+  checklistTitle: 'Pre-departure Checks',
+  checklistAsk: 'Have you done your pre-departure checks?',
+  checklistOpenBtn: 'Open the list',
+  checklistReadyBtn: 'All set',
+  checklistNote: 'This list is a reminder; it does not replace official safety requirements and good seamanship.',
+  checklistAllDone: 'All checks complete — fair winds, captain!',
+  checklistTooltip: 'Pre-departure checks',
+  checklistItems: <String>[
+    'Weather and sea forecast checked.',
+    'Fuel and fresh water levels sufficient.',
+    'Life jackets accessible and fit everyone.',
+    'VHF radio working, Channel 16 on watch.',
+    'Anchor and windlass gear ready.',
+    'Bilge dry, pumps working.',
+    'Engine oil, coolant and belt checked.',
+    'Navigation lights working.',
+    'Route and alternative harbors reviewed.',
+    'Voyage plan shared with someone ashore.',
+  ],
 );
 
 const L10n _es = L10n(
@@ -1542,6 +1618,32 @@ const L10n _es = L10n(
   locSkipBtn: 'Seguir con mi zona por ahora',
   locTrustNote: 'Tu ubicación queda en tu dispositivo; si no das permiso, nada se bloquea.',
   favSectionPlaces: 'Lugares favoritos',
+  logbookTitle: 'Diario del Capitán',
+  logbookEmpty: 'Aún no hay entradas. Tras la travesía, toca "+ Nueva entrada"; si hay una ruta activa, sus datos se adjuntan solos.',
+  logbookNew: 'Nueva entrada',
+  logbookTitleHint: 'Título (opcional)',
+  logbookTextHint: '¿Cómo fue el día en el mar, capitán?',
+  logbookDeleteTooltip: 'Eliminar entrada',
+  logbookSnackAction: 'Añadir al diario',
+  checklistTitle: 'Comprobaciones previas',
+  checklistAsk: '¿Hiciste las comprobaciones previas a la salida?',
+  checklistOpenBtn: 'Abrir la lista',
+  checklistReadyBtn: 'Listo',
+  checklistNote: 'Esta lista es un recordatorio; no sustituye los requisitos oficiales de seguridad ni el buen arte marinero.',
+  checklistAllDone: '¡Todo comprobado — buen viento, capitán!',
+  checklistTooltip: 'Comprobaciones previas',
+  checklistItems: <String>[
+    'Pronóstico de tiempo y mar revisado.',
+    'Niveles de combustible y agua dulce suficientes.',
+    'Chalecos salvavidas accesibles y adecuados.',
+    'Radio VHF operativa, Canal 16 en escucha.',
+    'Ancla y molinete listos.',
+    'Sentina seca, bombas funcionando.',
+    'Aceite, refrigerante y correa del motor revisados.',
+    'Luces de navegación funcionando.',
+    'Ruta y puertos alternativos revisados.',
+    'Plan de navegación comunicado a alguien en tierra.',
+  ],
 );
 
 const L10n _ru = L10n(
@@ -1897,6 +1999,32 @@ const L10n _ru = L10n(
   locSkipBtn: 'Пока продолжить с моим регионом',
   locTrustNote: 'Позиция остаётся на устройстве; без разрешения ничего не блокируется.',
   favSectionPlaces: 'Избранные места',
+  logbookTitle: 'Судовой журнал',
+  logbookEmpty: 'Записей пока нет. После похода нажмите «+ Новая запись» — если маршрут активен, его данные добавятся сами.',
+  logbookNew: 'Новая запись',
+  logbookTitleHint: 'Заголовок (необязательно)',
+  logbookTextHint: 'Как прошёл день в море, капитан?',
+  logbookDeleteTooltip: 'Удалить запись',
+  logbookSnackAction: 'Записать в журнал',
+  checklistTitle: 'Предпоходные проверки',
+  checklistAsk: 'Вы выполнили предпоходные проверки?',
+  checklistOpenBtn: 'Открыть список',
+  checklistReadyBtn: 'Готов',
+  checklistNote: 'Список — напоминание; он не заменяет официальные требования безопасности и хорошую морскую практику.',
+  checklistAllDone: 'Все проверки выполнены — попутного ветра, капитан!',
+  checklistTooltip: 'Предпоходные проверки',
+  checklistItems: <String>[
+    'Прогноз погоды и моря проверен.',
+    'Топлива и пресной воды достаточно.',
+    'Спасательные жилеты доступны и подходят всем.',
+    'УКВ-радио работает, канал 16 на прослушивании.',
+    'Якорь и брашпиль готовы.',
+    'Трюм сухой, помпы работают.',
+    'Масло, охлаждение и ремень двигателя проверены.',
+    'Ходовые огни работают.',
+    'Маршрут и запасные гавани просмотрены.',
+    'План похода сообщён кому-то на берегу.',
+  ],
 );
 
 /// Saf eşleme — birim testli.
