@@ -42,6 +42,10 @@ void main() {
     await tester.pumpWidget(_app(store));
     await tester.pumpAndSettle();
 
+    // CI DERSİ: test ekranı 800×600 — alt öğeler ekran dışında kalabilir;
+    // dokunmadan önce kaydırıp görünür yap (SingleChildScrollView var).
+    await tester.ensureVisible(find.byKey(const ValueKey<String>('launch-start')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey<String>('launch-start')));
     await tester.pumpAndSettle();
 
@@ -69,6 +73,10 @@ void main() {
     await tester.pumpWidget(_app(store));
     await tester.pumpAndSettle();
 
+    // CI DERSİ: "Giriş yap" satırı 600 piksellik test ekranının hemen
+    // altında (y≈607) — önce kaydır, sonra dokun; yoksa dokunuş boşa gider.
+    await tester.ensureVisible(find.byKey(const ValueKey<String>('launch-signin')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey<String>('launch-signin')));
     await tester.pumpAndSettle();
     expect(find.byType(SignInScreen), findsOneWidget);
