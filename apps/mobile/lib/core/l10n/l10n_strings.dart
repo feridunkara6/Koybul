@@ -287,6 +287,12 @@ class L10n {
     required this.qRegionSub,
     required this.qRegionCta,
     required this.qRegionNote,
+    required this.locTitle,
+    required this.locBenefit1,
+    required this.locBenefit2,
+    required this.locUseBtn,
+    required this.locSkipBtn,
+    required this.locTrustNote,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -435,6 +441,10 @@ class L10n {
       qTypeSail, qTypeMotor, qTypeCat, qTypeGulet, qSizeTitle, qSizeSub,
       qSizeLen, qSizeDraft, qSizeBenefitDraft, qSizeBenefitLen, qRegionTitle,
       qRegionSub, qRegionCta, qRegionNote;
+
+  // Konum ön-izin ekranı — E6 (onaylı açılış tasarımı 2026-08).
+  final String locTitle, locBenefit1, locBenefit2, locUseBtn, locSkipBtn,
+      locTrustNote;
 
   String windExposedLabel(String code) => windExposedLabels[code] ?? code;
 
@@ -746,7 +756,7 @@ const L10n _tr = L10n(
       "Detay'da derinlik, rüzgâr ve iletişim bilgileri var.",
   onbHintCoords: 'Koordinata dokun — panoya kopyalanır.',
   tourTitles: <String>[
-    'Hoş geldin, kaptan',
+    'Harita hazır, kaptan',
     'Harita ve koylar',
     'Filtreler',
     'Konumum',
@@ -755,7 +765,7 @@ const L10n _tr = L10n(
     'Rotanı düzenle ve kaydet',
   ],
   tourBodies: <String>[
-    'Koybul; koyları keşfetmen, rüzgârı görmen ve deniz rotanı çizmen için yapıldı. Kısa tanıtım için ekrana dokunarak ilerle.',
+    'Kısa bir turla en önemli düğmeleri gösterelim. İlerlemek için ekrana dokun.',
     'Renkli işaretler koyları, marinaları ve iskeleleri gösterir. Sayılı balonlara dokunarak bölgeye yaklaşabilirsin.',
     'Üstteki çiplerle haritayı türe göre süz. "Teknem sığar" açıkken teknene uymayan yerler gizlenir.',
     'Konumunu paylaşırsan teknen haritada görünür; mesafeler ve deniz rotası senin konumundan hesaplanır.',
@@ -811,6 +821,12 @@ const L10n _tr = L10n(
   qRegionSub: 'Haritayı oraya odaklı açarız.',
   qRegionCta: 'Haritayı aç',
   qRegionNote: 'Tüm kıyılar her zaman haritada — bu sadece başlangıç odağı.',
+  locTitle: 'Haritayı sana göre açalım',
+  locBenefit1: 'Mesafeler ve rotalar senin konumundan hesaplanır.',
+  locBenefit2: 'En yakın koylar ve marinalar önce gelir.',
+  locUseBtn: 'Konumumu kullan',
+  locSkipBtn: 'Şimdilik bölgemle devam',
+  locTrustNote: 'Konumun cihazında kalır; izin vermezsen hiçbir özellik kilitlenmez.',
 );
 
 const L10n _en = L10n(
@@ -1094,7 +1110,7 @@ const L10n _en = L10n(
       'Details has depth, wind and contact info.',
   onbHintCoords: 'Tap the coordinates to copy them.',
   tourTitles: <String>[
-    'Welcome aboard, captain',
+    'The map is ready, captain',
     'Map and bays',
     'Filters',
     'My location',
@@ -1103,7 +1119,7 @@ const L10n _en = L10n(
     'Edit and save your route',
   ],
   tourBodies: <String>[
-    'Koybul is built for discovering bays, checking the wind and plotting sea routes. Tap the screen to continue this short intro.',
+    'A short tour of the essentials. Tap the screen to continue.',
     'Colored markers show bays, marinas and piers. Tap a numbered bubble to zoom into that area.',
     'Filter the map by type with the chips above. With "My boat fits" on, places your boat can\'t fit are hidden.',
     'Share your location and your boat appears on the map; distances and sea routes are calculated from where you are.',
@@ -1159,6 +1175,12 @@ const L10n _en = L10n(
   qRegionSub: 'We open the map focused there.',
   qRegionCta: 'Open the map',
   qRegionNote: 'Every coast is always on the map — this is just the starting focus.',
+  locTitle: 'Let us open the map around you',
+  locBenefit1: 'Distances and routes are calculated from your position.',
+  locBenefit2: 'The nearest coves and marinas come first.',
+  locUseBtn: 'Use my location',
+  locSkipBtn: 'Continue with my region for now',
+  locTrustNote: 'Your location stays on your device; nothing is locked if you decline.',
 );
 
 const L10n _es = L10n(
@@ -1442,7 +1464,7 @@ const L10n _es = L10n(
       'en Detalles hay profundidad, viento y contacto.',
   onbHintCoords: 'Toca las coordenadas para copiarlas.',
   tourTitles: <String>[
-    'Bienvenido a bordo, capitán',
+    'El mapa está listo, capitán',
     'Mapa y calas',
     'Filtros',
     'Mi ubicación',
@@ -1451,7 +1473,7 @@ const L10n _es = L10n(
     'Edita y guarda tu ruta',
   ],
   tourBodies: <String>[
-    'Koybul sirve para descubrir calas, ver el viento y trazar rutas marítimas. Toca la pantalla para seguir esta breve introducción.',
+    'Un breve recorrido por lo esencial. Toca la pantalla para continuar.',
     'Los marcadores de colores muestran calas, marinas y muelles. Toca una burbuja numerada para acercarte a esa zona.',
     'Filtra el mapa por tipo con los chips de arriba. Con "Mi barco cabe" activo, se ocultan los sitios donde no cabe.',
     'Comparte tu ubicación y tu barco aparece en el mapa; distancias y rutas se calculan desde donde estás.',
@@ -1507,6 +1529,12 @@ const L10n _es = L10n(
   qRegionSub: 'Abrimos el mapa centrado ahí.',
   qRegionCta: 'Abrir el mapa',
   qRegionNote: 'Todas las costas están siempre en el mapa; esto es solo el enfoque inicial.',
+  locTitle: 'Abramos el mapa en torno a ti',
+  locBenefit1: 'Distancias y rutas se calculan desde tu posición.',
+  locBenefit2: 'Las calas y puertos más cercanos van primero.',
+  locUseBtn: 'Usar mi ubicación',
+  locSkipBtn: 'Seguir con mi zona por ahora',
+  locTrustNote: 'Tu ubicación queda en tu dispositivo; si no das permiso, nada se bloquea.',
 );
 
 const L10n _ru = L10n(
@@ -1790,7 +1818,7 @@ const L10n _ru = L10n(
       'в «Подробнее» — глубина, ветер и контакты.',
   onbHintCoords: 'Коснитесь координат, чтобы скопировать их.',
   tourTitles: <String>[
-    'Добро пожаловать на борт, капитан',
+    'Карта готова, капитан',
     'Карта и бухты',
     'Фильтры',
     'Моя позиция',
@@ -1799,7 +1827,7 @@ const L10n _ru = L10n(
     'Редактируйте и сохраняйте маршрут',
   ],
   tourBodies: <String>[
-    'Koybul создан, чтобы открывать бухты, видеть ветер и прокладывать морские маршруты. Касайтесь экрана, чтобы листать это короткое знакомство.',
+    'Короткая экскурсия по главному. Касайтесь экрана, чтобы продолжить.',
     'Цветные метки — бухты, марины и причалы. Коснитесь пузырька с числом, чтобы приблизить район.',
     'Фильтруйте карту по типу чипами сверху. При включённом «Моя лодка подходит» неподходящие места скрываются.',
     'Поделитесь позицией — лодка появится на карте; расстояния и маршруты считаются от вас.',
@@ -1855,6 +1883,12 @@ const L10n _ru = L10n(
   qRegionSub: 'Откроем карту с фокусом там.',
   qRegionCta: 'Открыть карту',
   qRegionNote: 'Все побережья всегда на карте — это лишь стартовый фокус.',
+  locTitle: 'Откроем карту вокруг вас',
+  locBenefit1: 'Расстояния и маршруты считаются от вашей позиции.',
+  locBenefit2: 'Ближайшие бухты и марины показываются первыми.',
+  locUseBtn: 'Использовать мою позицию',
+  locSkipBtn: 'Пока продолжить с моим регионом',
+  locTrustNote: 'Позиция остаётся на устройстве; без разрешения ничего не блокируется.',
 );
 
 /// Saf eşleme — birim testli.

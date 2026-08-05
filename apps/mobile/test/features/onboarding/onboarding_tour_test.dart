@@ -40,7 +40,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey<String>('onb-tour-step-0')), findsOneWidget);
-    expect(find.text('Hoş geldin, kaptan'), findsOneWidget);
+    // Kart 1 sadeleşti (Paket 3): karşılama işini açılış akışı (E2) yapıyor.
+    expect(find.text('Harita hazır, kaptan'), findsOneWidget);
     expect(store.data!.welcomeDone, isTrue); // karar anında işlendi
 
     // EKRANIN HERHANGİ BİR YERİNE dokun → sonraki kart.

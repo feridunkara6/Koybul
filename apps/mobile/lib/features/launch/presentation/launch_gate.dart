@@ -2,13 +2,16 @@ import 'package:dockly_api/dockly_api.dart' show GeoPoint;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/origin_provider.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
+import '../../location/application/location_controller.dart';
 import '../../map/application/map_controller.dart';
 import '../../map/domain/map_viewport.dart';
 import '../data/shared_prefs_launch_store.dart';
 import '../domain/launch_answers.dart';
 import '../domain/launch_store.dart';
+import 'location_primer_screen.dart';
 import 'question_screens.dart';
 import 'welcome_screen.dart';
 
@@ -19,9 +22,9 @@ final Provider<LaunchStore> launchStoreProvider =
 /// AÇILIŞ KAPISI (onaylı tasarım 2026-08, Paket 2: E2 + E3–E5).
 ///
 /// İLK açılış: karşılama (E2) → tekne tipi (E3) → ölçüler (E4) → bölge (E5)
-/// → harita. DÖNEN kullanıcı hiçbirini görmez. Kurallar:
-/// - "Soruları atla" kalan TÜM soruları atlar; o ana dek verilen cevaplar
-///   YİNE uygulanır (atlayan cezalandırılmaz).
+/// → konum ön-izni (E6) → harita. DÖNEN kullanıcı hiçbirini görmez. Kurallar:
+/// - "Soruları atla" kalan soruları atlar ve E6'ya gider (onaylı akış); o ana
+///   dek verilen cevaplar YİNE uygulanır (atlayan cezalandırılmaz).
 /// - Adım cihaza işlenir (`onb.v2.step`): sekmeyi E4'te kapatan, E4'te açar.
 /// - Tekne cevapları MEVCUT "Teknem" modeline yazılır (tek gerçek kaynak;
 ///   çift tekne kaydı oluşmaz). Bölge, haritanın açılış odağı olur.
@@ -39,7 +42,7 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
   /// null = depo okunuyor; true = kabuk; false = akış.
   bool? _done;
 
-  /// 0 karşılama · 1 tekne tipi · 2 ölçüler · 3 bölge.
+  /// 0 karşılama · 1 tekne tipi · 2 ölçüler · 3 bölge · 4 konum ön-izni.
   int _step = 0;
 
   // Akış içinde toplanan cevaplar (hepsi isteğe bağlı).
@@ -55,7 +58,7 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
       final LaunchStore store = ref.read(launchStoreProvider);
       final bool done = await store.isDone();
       // Yarım kalan akış kaldığı adımdan sürer (onaylı iyileştirme).
-      final int step = done ? 0 : (await store.step()).clamp(0, 3);
+      final int step = done ? 0 : (await store.step()).clamp(0, 4);
       if (mounted) {
         setState(() {
           _done = done;
@@ -70,9 +73,20 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
     setState(() => _step = step);
   }
 
+  /// E6: "Konumumu kullan" — tarayıcı izin penceresi BURADA açılır (locateMe).
+  /// İzin gelirse kamera konuma iner (locateMe odak isteğini kendisi üretir,
+  /// bölge odağı uygulanmaz); gelmezse SESSİZCE bölgeyle devam edilir —
+  /// suçlama yok, hiçbir özellik kilitlenmez (onaylı E6 kuralı).
+  Future<void> _useLocation() async {
+    await ref.read(locationControllerProvider.notifier).locateMe();
+    if (!mounted) return;
+    final bool granted = ref.read(devicePositionProvider) != null;
+    _complete(applyRegion: !granted);
+  }
+
   /// Akışı bitirir: karar cihaza, cevaplar sistemlere.
-  /// [applyRegion] yalnız E5 CTA'sında true — "Soruları atla" bölge odağı
-  /// uygulamaz (seçilmemiş bölge uydurulamaz).
+  /// [applyRegion] E6 çıkışlarında true olur; "seçilmemiş bölge" uydurulamaz —
+  /// kullanıcı E5'te bölge seçmediyse odak yine uygulanmaz.
   void _complete({bool applyRegion = false}) {
     ref.read(launchStoreProvider).markDone();
     // Tekne: boy verilmişse MEVCUT modele yazılır (marka korunur — tek
@@ -122,7 +136,7 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
           selected: _type,
           onSelect: (BoatTypeChoice c) => setState(() => _type = c),
           onContinue: () => _goto(2),
-          onSkipAll: _complete,
+          onSkipAll: () => _goto(4), // onaylı akış: Atla → E6 (konum)
         ),
       2 => BoatSizeScreen(
           key: const ValueKey<String>('launch-step-2'),
@@ -133,14 +147,19 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
             _draftM = draftM;
             _goto(3);
           },
-          onSkipAll: _complete,
+          onSkipAll: () => _goto(4),
         ),
-      _ => RegionScreen(
+      3 => RegionScreen(
           key: const ValueKey<String>('launch-step-3'),
           selectedIndex: _regionIndex,
           onSelect: (int i) => setState(() => _regionIndex = i),
-          onOpenMap: () => _complete(applyRegion: true),
-          onSkipAll: _complete,
+          onOpenMap: () => _goto(4), // "Haritayı aç" → önce konum ön-izni
+          onSkipAll: () => _goto(4),
+        ),
+      _ => LocationPrimerScreen(
+          key: const ValueKey<String>('launch-step-4'),
+          onUseLocation: _useLocation,
+          onContinueWithout: () => _complete(applyRegion: true),
         ),
     };
 

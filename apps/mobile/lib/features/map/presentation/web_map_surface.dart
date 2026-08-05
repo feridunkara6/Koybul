@@ -138,11 +138,15 @@ class _RouteDrag {
   LatLng pos;
 }
 
-class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
+class _WebMapSurfaceState extends ConsumerState<_WebMapSurface>
+    with TickerProviderStateMixin {
   final MapController _map = MapController();
   Timer? _debounce;
   double _lastZoom = 7; // _initialZoom ile hizalı; eşik-geçişi tespiti için
   _RouteDrag? _drag;
+
+  /// AÇILIŞ KAMERA İNİŞİ (onaylı E7): bekleyen odak isteğine sinematik uçuş.
+  AnimationController? _flight;
 
   /// Tutamaç üzerinde duran parmak sayısı (MOBİL DÜZELTME 2026-08): parmak
   /// tutamaca değdiği AN haritanın tüm jestleri kilitlenir — sürükleme
@@ -174,6 +178,9 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
     // görünümü bildir (programatik hareket gesture saymaz).
     final MapFocusRequest? f = widget.data.focus;
     if (f != null && f.seq != oldWidget.data.focus?.seq) {
+      // Açılış uçuşu sürüyorsa iptal — kamera çekişmesi olmasın (denetim).
+      _flight?.dispose();
+      _flight = null;
       // İstek kendi zoom'unu taşıyabilir (bölge odağı 9); yoksa "Konumum"
       // davranışı: en az 12 — tekne imleci tek bakışta seçilsin.
       final double targetZoom = f.zoom ?? math.max(_map.camera.zoom, 12);
@@ -187,6 +194,9 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
     if (route != null &&
         route.length >= 2 &&
         widget.data.routeSeq != oldWidget.data.routeSeq) {
+      // Açılış uçuşu sürüyorsa iptal — rota sığdırmasıyla çekişmesin.
+      _flight?.dispose();
+      _flight = null;
       final LatLngBounds b = LatLngBounds.fromPoints(
         <LatLng>[for (final GeoPoint p in route) LatLng(p.lat, p.lon)],
       );
@@ -205,6 +215,7 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
   @override
   void dispose() {
     _debounce?.cancel();
+    _flight?.dispose();
     super.dispose();
   }
 
@@ -366,14 +377,49 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
     _emit(_map.camera);
   }
 
-  /// Kuruluşta bekleyen odak isteğini uygular (açılış bölge seçimi).
+  /// Kuruluşta bekleyen odak isteğini uygular (açılış bölge/konum seçimi).
+  /// SİNEMATİK İNİŞ (onaylı E7): kamera geniş Türkiye görünümünden hedefe
+  /// 1,2 sn'de easeOutCubic ile süzülür ("uçak inişi" hissi). Hareket
+  /// azaltma açıksa animasyonsuz tek adımda gidilir.
   void _applyPendingFocus() {
     final MapFocusRequest? f = widget.data.focus;
     if (f == null) return;
     final double targetZoom = f.zoom ?? math.max(_map.camera.zoom, 12);
-    _lastZoom = targetZoom;
-    _map.move(LatLng(f.point.lat, f.point.lon), targetZoom);
-    _emit(_map.camera);
+    final LatLng target = LatLng(f.point.lat, f.point.lon);
+    if (MediaQuery.of(context).disableAnimations) {
+      _lastZoom = targetZoom;
+      _map.move(target, targetZoom);
+      _emit(_map.camera);
+      return;
+    }
+    final LatLng from = _map.camera.center;
+    final double fromZoom = _map.camera.zoom;
+    _flight?.dispose();
+    final AnimationController ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    _flight = ctrl;
+    final CurvedAnimation curve =
+        CurvedAnimation(parent: ctrl, curve: Curves.easeOutCubic);
+    curve.addListener(() {
+      final double t = curve.value;
+      _map.move(
+        LatLng(
+          from.latitude + (target.latitude - from.latitude) * t,
+          from.longitude + (target.longitude - from.longitude) * t,
+        ),
+        fromZoom + (targetZoom - fromZoom) * t,
+      );
+    });
+    ctrl.addStatusListener((AnimationStatus s) {
+      if (s != AnimationStatus.completed) return;
+      _lastZoom = targetZoom;
+      _emit(_map.camera); // pinler İNİŞ BİTİNCE yüklenir (uçuşta istek yok)
+      if (_flight == ctrl) _flight = null;
+      ctrl.dispose();
+    });
+    ctrl.forward();
   }
 
   @override
@@ -513,20 +559,27 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
             // Damlanın ucu koordinata basar (alignment: topCenter).
             for (final LocationPin p in widget.data.pins)
               Marker(
+                // AÇILIŞ HİSSİ (onaylı E7): pin İLK göründüğünde küçükten
+                // büyüyerek "damlar". Anahtar MARKER'da olmalı — MarkerLayer
+                // öğeleri marker anahtarıyla eşler; anahtar çocukta kalırsa
+                // her kaydırmada animasyon yeniden oynar (denetim bulgusu).
+                key: ValueKey<String>('pin-drop-${p.id}'),
                 point: LatLng(p.position.lat, p.position.lon),
                 width: 44,
                 height: 44,
                 alignment: Alignment.topCenter,
                 child: RepaintBoundary(
-                  child: _PinMarker(
-                    type: p.type,
-                    selected: p.id == widget.data.selectedPinId,
-                    fit: computeBoatFit(
-                      boat: boat,
-                      maxBoatLengthM: p.maxBoatLengthM,
-                      maxDraftM: p.maxDraftM,
+                  child: _DropIn(
+                    child: _PinMarker(
+                      type: p.type,
+                      selected: p.id == widget.data.selectedPinId,
+                      fit: computeBoatFit(
+                        boat: boat,
+                        maxBoatLengthM: p.maxBoatLengthM,
+                        maxDraftM: p.maxDraftM,
+                      ),
+                      onTap: () => widget.callbacks.onPinTap(p.id),
                     ),
-                    onTap: () => widget.callbacks.onPinTap(p.id),
                   ),
                 ),
               ),
@@ -661,6 +714,26 @@ class _MapAttribution extends StatelessWidget {
 /// Damla-formlu liman pini (tasarım §06): tip rengi zemin, 2.5px beyaz kontur,
 /// içinde beyaz tip ikonu; seçiliyse %25 büyür. Tekne tanımlıysa sağ-üstte
 /// uyum rozeti: yeşil = sığar, turuncu = sığmayabilir (bilinmiyorsa rozet yok).
+/// Pin "damlama" girişi (onaylı E7): küçükten büyüyerek belirme — TEK yönlü,
+/// 260 ms'de biter (tekrar eden animasyon yok; test/pil dostu).
+class _DropIn extends StatelessWidget {
+  const _DropIn({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0.8, end: 1),
+      duration: const Duration(milliseconds: 260),
+      curve: Curves.easeOutBack,
+      builder: (BuildContext context, double s, Widget? c) =>
+          Transform.scale(scale: s, child: c),
+      child: child,
+    );
+  }
+}
+
 class _PinMarker extends StatelessWidget {
   const _PinMarker({
     required this.type,

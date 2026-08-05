@@ -1,6 +1,9 @@
+import 'package:dockly_api/dockly_api.dart' show GeoPoint;
+import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/auth/presentation/sign_in_screen.dart';
 import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
 import 'package:dockly_mobile/features/launch/presentation/launch_gate.dart';
+import 'package:dockly_mobile/features/location/application/location_controller.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/domain/map_viewport.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +11,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/launch_fakes.dart';
+import '../../support/location_fakes.dart';
 import '../../support/welcome_fakes.dart';
 
-Widget _app(FakeLaunchStore store, {FakeBoatStorage? boatStorage}) {
+Widget _app(
+  FakeLaunchStore store, {
+  FakeBoatStorage? boatStorage,
+  FakeLocationService? location,
+}) {
   return ProviderScope(
     overrides: <Override>[
       launchStoreProvider.overrideWithValue(store),
       boatStorageProvider.overrideWithValue(boatStorage ?? FakeBoatStorage()),
+      // CI DERSİ: konum akışına dokunan HER test sahte konum servisi kullanır
+      // (gerçek eklenti test ortamında sonsuza dek bekler).
+      locationServiceProvider
+          .overrideWithValue(location ?? FakeLocationService(null)),
     ],
     child: const MaterialApp(
       home: LaunchGate(child: Text('KABUK')),
@@ -30,9 +42,8 @@ Future<void> _tapVisible(WidgetTester tester, Finder finder) async {
   await tester.pumpAndSettle();
 }
 
-/// AÇILIŞ AKIŞI testleri — E2–E5 (onaylı tasarım 2026-08, Paket 2):
-/// karşılama → tekne tipi → ölçüler → bölge → harita; "Soruları atla" kalan
-/// tümünü atlar; cevaplar Teknem modeline ve harita odağına akar.
+/// AÇILIŞ AKIŞI testleri — E2–E6 (onaylı tasarım 2026-08, Paket 3):
+/// karşılama → tekne tipi → ölçüler → bölge → KONUM ÖN-İZNİ → harita.
 void main() {
   testWidgets('İLK açılış: karşılama görünür, kabuk görünmez', (
     WidgetTester tester,
@@ -46,8 +57,8 @@ void main() {
     expect(find.text('KABUK'), findsNothing);
   });
 
-  testWidgets('TAM AKIŞ: karşılama → tip → ölçüler → bölge → harita; '
-      'cevaplar Teknem modeline ve harita odağına yazılır', (
+  testWidgets('TAM AKIŞ: sorular → E6 "bölgemle devam" → harita; cevaplar '
+      'Teknem modeline, bölge harita odağına yazılır', (
     WidgetTester tester,
   ) async {
     final FakeLaunchStore store = FakeLaunchStore();
@@ -55,40 +66,44 @@ void main() {
     await tester.pumpWidget(_app(store, boatStorage: boatStorage));
     await tester.pumpAndSettle();
 
-    // E2 → E3 (adım cihaza işlenir — yarım kalan akış kaldığı yerden sürer).
+    // E2 → E3 (adım cihaza işlenir).
     await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-start')));
     expect(find.text('Nasıl bir tekneyle geziyorsun?'), findsOneWidget);
     expect(store.savedStep, 1);
 
-    // Yelkenli seç → Devam. Seçim otomatik İLERLETMEZ (onaylı kural).
+    // Yelkenli seç → Devam (seçim otomatik ilerletmez — onaylı kural).
     await _tapVisible(tester, find.byKey(const ValueKey<String>('boat-type-sail')));
     expect(find.text('Nasıl bir tekneyle geziyorsun?'), findsOneWidget);
     await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-q-cta')));
 
-    // E4: yelkenli varsayılanları (12 m / 1.8 m) ekranda; Devam.
+    // E4: yelkenli varsayılanları (12 m / 1.8 m); Devam.
     expect(find.text('Teknenin ölçüleri?'), findsOneWidget);
     expect(find.text('12 m'), findsOneWidget);
     expect(find.text('1.8 m'), findsOneWidget);
     await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-q-cta')));
 
-    // E5: Bodrum–Gökova seç → Haritayı aç.
+    // E5: Bodrum–Gökova seç → "Haritayı aç" → E6 KONUM ÖN-İZNİ (harita değil!).
     expect(find.text('En çok nerede geziyorsun?'), findsOneWidget);
     await _tapVisible(tester, find.byKey(const ValueKey<String>('region-2')));
     await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-q-cta')));
+    expect(find.text('Haritayı sana göre açalım'), findsOneWidget);
+    expect(find.text('KABUK'), findsNothing);
+    expect(store.savedStep, 4);
 
-    // Harita açıldı; karar kalıcı, adım izi temiz.
+    // E6: izinsiz devam → harita; bölge odağı uygulanır, izin penceresi YOK.
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-loc-skip')));
     expect(find.text('KABUK'), findsOneWidget);
     expect(store.done, isTrue);
     expect(store.markCount, 1);
     expect(store.savedStep, 0);
 
-    // Tekne TEK gerçek kaynağa yazıldı (Profil → Teknem ile aynı depo).
+    // Tekne TEK gerçek kaynağa yazıldı.
     expect(boatStorage.boat, isNotNull);
     expect(boatStorage.boat!.lengthM, 12);
     expect(boatStorage.boat!.draftM, 1.8);
     expect(boatStorage.boat!.typeId, 'sail');
 
-    // Bölge, haritanın açılış odağı oldu (körfez ölçeği zoom 9).
+    // Bölge odağı: Gökova, körfez ölçeği (zoom 9).
     final ProviderContainer c =
         ProviderScope.containerOf(tester.element(find.text('KABUK')));
     final MapFocusRequest? focus = c.read(mapFocusProvider);
@@ -97,8 +112,51 @@ void main() {
     expect(focus.point.lat, closeTo(36.99, 0.01));
   });
 
-  testWidgets('SORULARI ATLA: E3\'te atla → doğrudan harita; tekne yazılmaz, '
-      'bölge odağı uygulanmaz', (WidgetTester tester) async {
+  testWidgets('E6 "Konumumu kullan" (izin VERİLDİ): konum alınır, kamera '
+      'konuma iner — bölge odağı konumu EZMEZ', (WidgetTester tester) async {
+    final FakeLaunchStore store = FakeLaunchStore();
+    final FakeLocationService location =
+        FakeLocationService(const GeoPoint(lat: 36.55, lon: 28.05));
+    await tester.pumpWidget(_app(store, location: location));
+    await tester.pumpAndSettle();
+
+    // Hızlı yol: soruları atla → E6.
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-start')));
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-skip-all')));
+    expect(find.text('Haritayı sana göre açalım'), findsOneWidget);
+
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-loc-use')));
+    expect(find.text('KABUK'), findsOneWidget);
+    expect(location.calls, 1); // izin akışı tetiklendi
+    expect(store.done, isTrue);
+
+    final ProviderContainer c =
+        ProviderScope.containerOf(tester.element(find.text('KABUK')));
+    expect(c.read(devicePositionProvider)?.lat, 36.55);
+    // Odak KONUMA gitti (locateMe üretti; zoom yüzey varsayılanı → null).
+    final MapFocusRequest? focus = c.read(mapFocusProvider);
+    expect(focus, isNotNull);
+    expect(focus!.point.lat, closeTo(36.55, 0.001));
+    expect(focus.zoom, isNull);
+  });
+
+  testWidgets('E6 izin REDDEDİLDİ: sessizce devam — kabuk açılır, suçlama yok',
+      (WidgetTester tester) async {
+    final FakeLaunchStore store = FakeLaunchStore(savedStep: 4);
+    final FakeLocationService location = FakeLocationService(null);
+    await tester.pumpWidget(_app(store, location: location));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Haritayı sana göre açalım'), findsOneWidget);
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-loc-use')));
+
+    expect(location.calls, 1);
+    expect(find.text('KABUK'), findsOneWidget); // akış kilitlenmedi
+    expect(store.done, isTrue);
+  });
+
+  testWidgets('SORULARI ATLA: E3\'te atla → E6\'ya gider (haritaya değil); '
+      'tekne yazılmaz, bölge odağı uygulanmaz', (WidgetTester tester) async {
     final FakeLaunchStore store = FakeLaunchStore();
     final FakeBoatStorage boatStorage = FakeBoatStorage();
     await tester.pumpWidget(_app(store, boatStorage: boatStorage));
@@ -108,12 +166,16 @@ void main() {
     await _tapVisible(
         tester, find.byKey(const ValueKey<String>('launch-skip-all')));
 
+    // Onaylı akış: Atla → E6 (konum sorusu atlanmaz, sorular atlanır).
+    expect(find.text('Haritayı sana göre açalım'), findsOneWidget);
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-loc-skip')));
+
     expect(find.text('KABUK'), findsOneWidget);
     expect(store.done, isTrue);
     expect(boatStorage.boat, isNull); // uydurma tekne kaydı yok
     final ProviderContainer c =
         ProviderScope.containerOf(tester.element(find.text('KABUK')));
-    expect(c.read(mapFocusProvider), isNull); // uydurma bölge odağı yok
+    expect(c.read(mapFocusProvider), isNull); // seçilmemiş bölge uydurulamaz
   });
 
   testWidgets('YARIM KALAN akış kaldığı adımdan sürer (onb.v2.step)', (
@@ -122,7 +184,6 @@ void main() {
     await tester.pumpWidget(_app(FakeLaunchStore(savedStep: 2)));
     await tester.pumpAndSettle();
 
-    // Karşılama DEĞİL, doğrudan E4 (ölçüler).
     expect(find.byKey(const ValueKey<String>('launch-welcome')), findsNothing);
     expect(find.text('Teknenin ölçüleri?'), findsOneWidget);
   });
