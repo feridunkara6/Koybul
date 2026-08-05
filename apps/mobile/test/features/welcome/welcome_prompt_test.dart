@@ -26,50 +26,27 @@ Widget _app({required FakeWelcomeStore store, FakeBoatStorage? boatStorage}) {
   );
 }
 
+/// ESKİ KARŞILAMA SORUSU — EMEKLİLİK SÖZLEŞMESİ (Paket 2, 2026-08).
+///
+/// "Teknen kaç metre?" açılır penceresi kabuktan KALDIRILDI: tekne bilgisi
+/// artık onaylı açılış akışında (E3–E4, launch_gate_test) soruluyor ve aynı
+/// Teknem modeline yazılıyor. Bu dosya eski davranışın GERİ GELMEDİĞİNİ ve
+/// paylaşılan yardımcıların doğru kaldığını korur.
 void main() {
-  testWidgets('ilk açılış: karşılama sorusu görünür; hızlı boy seçimi tekneyi tanımlar',
+  testWidgets('kabuk AÇILINCA eski karşılama sorusu ÇIKMAZ (görev E3–E4\'te)',
       (WidgetTester tester) async {
-    final FakeWelcomeStore store = FakeWelcomeStore();
+    final FakeWelcomeStore store = FakeWelcomeStore(); // hiç sorulmamış olsa bile
     await tester.pumpWidget(_app(store: store));
     await tester.pumpAndSettle();
 
-    // TEKİL metinle doğrula (CI dersi: 'Teknenin markası' hem açıklamada hem
-    // alan etiketinde geçer → textContaining 2 widget bulur ve test patlar).
-    expect(find.text('Hoş geldin, kaptan'), findsOneWidget);
-
-    // Denizci dili: marka yaz + FEET çipi seç → metreye çevrilip saklanır.
-    // TextField karşılama sayfasına DARALTILIR (arama sekmesindekiyle karışmasın).
-    await tester.enterText(
-      find.descendant(
-        of: find.byType(WelcomeSheetBody),
-        matching: find.byType(TextField),
-      ),
-      'Beneteau',
-    );
-    await tester.tap(find.widgetWithText(ActionChip, '39 ft'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Hoş geldin, kaptan'), findsNothing); // kapandı
-    final ProviderContainer container =
-        ProviderScope.containerOf(tester.element(find.byType(DocklyShell)));
-    expect(container.read(myBoatProvider)?.lengthM, 11.9); // 39 ft → 11.9 m
-    expect(container.read(myBoatProvider)?.brand, 'Beneteau');
-    expect(store.shown, isTrue); // bir daha sorulmaz
-  });
-
-  test('feetToMeters: 1 ft = 0.3048 m, 1 ondalık', () {
-    expect(feetToMeters(39), 11.9);
-    expect(feetToMeters(26), 7.9);
-    expect(feetToMeters(79), 24.1);
-  });
-
-  testWidgets('daha önce soruldu → karşılama çıkmaz', (WidgetTester tester) async {
-    await tester.pumpWidget(_app(store: FakeWelcomeStore(shown: true)));
-    await tester.pumpAndSettle();
     expect(find.text('Hoş geldin, kaptan'), findsNothing);
+    expect(find.byType(WelcomeSheetBody), findsNothing);
+    // Kabuk depoya DOKUNMAZ: bayrak yazılmaz, sayaç oynamaz.
+    expect(store.shown, isFalse);
+    expect(store.markCount, 0);
   });
 
-  testWidgets('cihazda tekne zaten kayıtlı → soru çıkmaz, soruldu işaretlenir',
+  testWidgets('tekne kayıtlıyken de kabuk sessiz: soru yok, bayrak yazılmaz',
       (WidgetTester tester) async {
     final FakeWelcomeStore store = FakeWelcomeStore();
     await tester.pumpWidget(_app(
@@ -77,23 +54,21 @@ void main() {
       boatStorage: FakeBoatStorage(boat: const MyBoat(lengthM: 15)),
     ));
     await tester.pumpAndSettle();
-    expect(find.text('Hoş geldin, kaptan'), findsNothing);
-    expect(store.shown, isTrue);
-  });
-
-  testWidgets('"Şimdilik geç" → kapanır, tekne tanımlanmaz, tekrar sorulmaz',
-      (WidgetTester tester) async {
-    final FakeWelcomeStore store = FakeWelcomeStore();
-    await tester.pumpWidget(_app(store: store));
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.text('Şimdilik geç'));
-    await tester.pumpAndSettle();
 
     expect(find.text('Hoş geldin, kaptan'), findsNothing);
+    expect(store.markCount, 0);
+    // Tekne cihazdan geri yüklenmeye devam eder (rozetler çalışsın).
+    // Geri yükleme ASENKRON: önce sağlayıcıyı kur, akmasını bekle, sonra oku.
     final ProviderContainer container =
         ProviderScope.containerOf(tester.element(find.byType(DocklyShell)));
-    expect(container.read(myBoatProvider), isNull);
-    expect(store.shown, isTrue);
+    container.read(myBoatProvider);
+    await tester.pumpAndSettle();
+    expect(container.read(myBoatProvider)?.lengthM, 15);
+  });
+
+  test('feetToMeters: 1 ft = 0.3048 m, 1 ondalık', () {
+    expect(feetToMeters(39), 11.9);
+    expect(feetToMeters(26), 7.9);
+    expect(feetToMeters(79), 24.1);
   });
 }
