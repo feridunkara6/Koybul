@@ -27,26 +27,30 @@ import 'map_surface.dart';
 const Bbox _initialBbox = Bbox(minLon: 25.9, minLat: 36.6, maxLon: 30.2, maxLat: 41.1);
 const int _initialZoom = 7;
 
-/// Harita stili: MAP_TILE_KEY verilirse MapTiler'ın stilleri kullanılır.
-/// Varsayılan: aquarelle (suluboya — renkli ama "gerçek harita" hissinden uzak,
-/// ürün kararı). MAP_TILE_STYLE ile ör. ocean/dataviz/streets-v2-pastel
-/// seçilebilir. Anahtar yoksa OSM'e güvenli düşüş — harita asla boş kalmaz.
-const String _tileKey = String.fromEnvironment('MAP_TILE_KEY');
+/// Harita zemini (HARİTA KARARI 2026-08): ESRI_TILE_KEY verilirse ArcGIS
+/// statik zemin karoları kullanılır — ayda 2 MİLYON karo ücretsiz, ticari
+/// kullanım serbest, aşımda sabit paket yok (MapTiler emekli: 100k kota +
+/// ücretsiz pakette ticari yasak + filigran). Stil ESRI_TILE_STYLE ile
+/// seçilir; kullanıcı seçimi: arcgis/community. Diğerleri: arcgis/oceans,
+/// arcgis/outdoor, arcgis/navigation, arcgis/nova, arcgis/light-gray...
+/// Anahtar yoksa OSM'e güvenli düşüş — harita asla boş kalmaz.
+const String _tileKey = String.fromEnvironment('ESRI_TILE_KEY');
 const String _tileStyle =
-    String.fromEnvironment('MAP_TILE_STYLE', defaultValue: 'aquarelle');
-// PERF (2026-08): MapTiler'da 512px karo kullanılır (URL'de /256/ yok =
-// varsayılan 512). Aynı ekran alanı 4 KAT AZ istekle dolar → daha az ağ
-// turu, daha az çözme işi, daha akıcı kaydırma. flutter_map tarafında
-// tileSize 512 + zoomOffset -1 ile ölçek birebir korunur. OSM düşüşü
-// 512 sunmadığı için 256'da kalır.
+    String.fromEnvironment('ESRI_TILE_STYLE', defaultValue: 'arcgis/community');
+// PERF: ESRI karoları 512px'tir (belge: "512 x 512px PNG") — aynı ekran
+// alanı 4 KAT AZ istekle dolar. flutter_map tarafında tileSize 512 +
+// zoomOffset -1 ile ölçek birebir korunur. OSM düşüşü 256'da kalır.
+// DİKKAT: ESRI yolu {z}/{y}/{x} sırasıyla ister (satır önce, sütun sonra).
 final String _baseTileUrl = _tileKey.isEmpty
     ? 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-    : 'https://api.maptiler.com/maps/$_tileStyle/{z}/{x}/{y}.png?key=$_tileKey';
+    : 'https://static-map-tiles-api.arcgis.com/arcgis/rest/services/'
+        'static-basemap-tiles-service/v1/$_tileStyle/static/tile/{z}/{y}/{x}'
+        '?token=$_tileKey';
 final double _baseTileSize = _tileKey.isEmpty ? 256 : 512;
 final double _baseZoomOffset = _tileKey.isEmpty ? 0 : -1;
 final String _attributionText = _tileKey.isEmpty
     ? '© OpenStreetMap katkıcıları · OpenSeaMap'
-    : '© MapTiler · © OpenStreetMap katkıcıları · OpenSeaMap';
+    : 'Powered by Esri · © OpenStreetMap katkıcıları · OpenSeaMap';
 
 Widget webMapSurfaceBuilder(
   BuildContext context,

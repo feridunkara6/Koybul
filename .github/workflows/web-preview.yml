@@ -44,10 +44,13 @@ jobs:
           flutter build web --release \
             --no-tree-shake-icons \
             --dart-define=API_BASE_URL=https://dockly-proje.onrender.com \
-            --dart-define=MAP_TILE_KEY=${{ secrets.MAP_TILE_KEY }} \
-            --dart-define=MAP_TILE_STYLE=${{ vars.MAP_TILE_STYLE || 'aquarelle' }} \
-            --base-href="/"  # ozel alan adi (moorira.com) kok dizinde servis eder
-          # MAP_TILE_KEY tanimsizsa bos gecer -> uygulama OSM'e guvenli duser.
+            --dart-define=ESRI_TILE_KEY=${{ secrets.ESRI_TILE_KEY }} \
+            --dart-define=ESRI_TILE_STYLE=${{ vars.ESRI_TILE_STYLE || 'arcgis/community' }} \
+            --base-href="/"  # ozel alan adi (koybul.com) kok dizinde servis eder
+          # ESRI_TILE_KEY tanimsizsa bos gecer -> uygulama OSM'e guvenli duser.
+          # Stil degistirmek icin: Settings > Secrets and variables > Actions >
+          # Variables sekmesi > ESRI_TILE_STYLE degiskeni (ör. arcgis/oceans) —
+          # kod paketi GEREKMEZ, sonraki yayinla stil degisir.
       - uses: actions/configure-pages@v5
         with:
           # Pages kapalıysa otomatik aç (Settings'e girmeye gerek yok).
