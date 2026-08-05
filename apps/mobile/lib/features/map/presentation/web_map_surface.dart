@@ -399,21 +399,24 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface>
     final LatLng from = _map.camera.center;
     final double fromZoom = _map.camera.zoom;
     _flight?.dispose();
+    // HIZ (kullanıcı geri bildirimi): 850 ms + zoom SONA yığılır — uçuşun
+    // başında geniş görünümde kaydırılır, yakınlaşma son %70'te olur; ara
+    // zoom seviyeleri için boşa karo indirilmez (kasma azalır).
     final AnimationController ctrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 850),
     );
     _flight = ctrl;
-    final CurvedAnimation curve =
-        CurvedAnimation(parent: ctrl, curve: Curves.easeOutCubic);
-    curve.addListener(() {
-      final double t = curve.value;
+    ctrl.addListener(() {
+      final double t = Curves.easeOutCubic.transform(ctrl.value);
+      final double zt = const Interval(0.30, 1.0, curve: Curves.easeOutCubic)
+          .transform(ctrl.value);
       _map.move(
         LatLng(
           from.latitude + (target.latitude - from.latitude) * t,
           from.longitude + (target.longitude - from.longitude) * t,
         ),
-        fromZoom + (targetZoom - fromZoom) * t,
+        fromZoom + (targetZoom - fromZoom) * zt,
       );
     });
     ctrl.addStatusListener((AnimationStatus s) {
@@ -466,10 +469,17 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface>
           tileSize: _baseTileSize,
           zoomOffset: _baseZoomOffset,
           maxZoom: 19,
-          // Perf: kaydırırken bir halka komşu karo önceden yüklenir; geri
-          // dönüşte karo atılmasın diye tampon büyütüldü → akıcı gezinme.
-          panBuffer: 1,
+          // HIZ AYARI (kullanıcı geri bildirimi 2026-08, "geç doluyor/kasıyor"):
+          // • panBuffer 0 — 512px karoda görünmez halkayı önceden indirmek
+          //   her harekette isteği ikiye katlıyordu; ekran dışı karo beklemesin.
+          // • keepBuffer 4 — geri dönüşte eski karolar atılmaz (korundu).
+          // • throttle 250 ms — kaydırma/animasyon sırasında karo istekleri
+          //   her karede değil saniyede en çok 4 kez tazelenir; açılış
+          //   uçuşundaki karo fırtınası ve gezinme kasması kesilir.
+          panBuffer: 0,
           keepBuffer: 4,
+          tileUpdateTransformer:
+              TileUpdateTransformers.throttle(const Duration(milliseconds: 250)),
         ),
         // Denizcilik katmanı: OpenSeaMap seamark'ları (şamandıra, fener, liman
         // işaretleri) — açık lisanslı, jetonsuz. Şeffaf bindirme. Perf: işaretler
