@@ -2,6 +2,7 @@ import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
 import 'package:dockly_mobile/features/detail/presentation/location_detail_screen.dart';
+import 'package:dockly_mobile/features/location/application/location_controller.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:dockly_mobile/features/reviews/application/reviews_controller.dart';
 import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/detail_fakes.dart';
+import '../../support/location_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/reviews_fakes.dart';
 import '../../support/weather_fakes.dart';
@@ -73,6 +75,11 @@ Widget _app(LocationDetail detail, {List<Override> extra = const <Override>[]}) 
       nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
       reviewsGatewayProvider.overrideWithValue(FakeReviewsGateway()),
       weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
+      // CI DERSİ (2026-08): gerçek konum eklentisi widget testinde ASLA
+      // çalıştırılmamalı — kanal yanıtı sahte-zaman döngüsünde hiç gelmez ve
+      // akış sonsuza dek bekler (başlangıç menüsü hiç açılmaz → kırmızı).
+      // Sahte servis: konum alınamadı → null (izin reddi senaryosu).
+      locationServiceProvider.overrideWithValue(FakeLocationService(null)),
       ...extra,
     ],
     child: const MaterialApp(home: LocationDetailScreen(idOrSlug: 'loc-1')),
