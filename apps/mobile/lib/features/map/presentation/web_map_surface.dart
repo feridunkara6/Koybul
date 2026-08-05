@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-// NOT: DragStartBehavior material'ın dışa aktardığı widgets/gestures'tan gelir
-// (ayrı gestures import'u unnecessary_import uyarısı üretir — CI dersi).
 import 'package:dockly_api/dockly_api.dart' show Bbox, Cluster, GeoPoint, LocationPin;
 import 'package:dockly_ui/dockly_ui.dart';
+// CI dersi: DragStartBehavior material'dan GELMEZ — gestures'tan açıkça alınır.
+import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
