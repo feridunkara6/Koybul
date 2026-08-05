@@ -16,6 +16,7 @@ import 'features/auth/application/auth_controller.dart';
 import 'features/auth/domain/auth_state.dart';
 import 'features/auth/infrastructure/firebase_auth_gateway.dart';
 import 'features/auth/presentation/sign_in_screen.dart';
+import 'features/launch/presentation/launch_gate.dart';
 import 'features/shell/presentation/dockly_shell.dart';
 import 'features/splash/presentation/splash_screen.dart';
 // Harita platform katmanı: mobilde Mapbox, web'de liste-yüzeyi (Mapbox web'de
@@ -107,9 +108,11 @@ class _DocklyAppState extends ConsumerState<DocklyApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      // Açılış ekranı (marka) → 5 sekmeli kabuk; giriş/hesap Profil sekmesinde
-      // (AccountSection). Giriş zorunlu değil — misafir modu ilkedir.
-      home: const SplashGate(child: DocklyShell()),
+      // Açılış ekranı (marka) → İLK açılışta karşılama (E2, onaylı tasarım
+      // 2026-08) → 5 sekmeli kabuk; dönen kullanıcı karşılamayı görmez.
+      // Giriş/hesap Profil sekmesinde (AccountSection). Giriş zorunlu değil —
+      // misafir modu ilkedir.
+      home: const SplashGate(child: LaunchGate(child: DocklyShell())),
     );
   }
 }

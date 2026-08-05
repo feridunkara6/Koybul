@@ -260,6 +260,14 @@ class L10n {
     required this.routeAddPointBanner,
     required this.tourTapHint,
     required this.tourTapHintLast,
+    required this.launchTitleA,
+    required this.launchTitleB,
+    required this.launchVal1,
+    required this.launchVal2,
+    required this.launchVal3,
+    required this.launchCta,
+    required this.launchHaveAccount,
+    required this.launchGuestNote,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -398,6 +406,10 @@ class L10n {
   // tanıtım kartları.
   final String routeAddPointBtn, routeAddPointBanner, tourTapHint,
       tourTapHintLast;
+
+  // Karşılama ekranı — E2 (onaylı açılış tasarımı 2026-08).
+  final String launchTitleA, launchTitleB, launchVal1, launchVal2, launchVal3,
+      launchCta, launchHaveAccount, launchGuestNote;
 
   String windExposedLabel(String code) => windExposedLabels[code] ?? code;
 
@@ -747,6 +759,14 @@ const L10n _tr = L10n(
   routeAddPointBanner: 'Rotaya nokta ekle — haritada bir yere dokun; koya dokunursan durak olur.',
   tourTapHint: 'Devam etmek için ekrana dokun',
   tourTapHintLast: 'Başlamak için ekrana dokun',
+  launchTitleA: "Ege ve Akdeniz'in koyları",
+  launchTitleB: 'artık cebinde',
+  launchVal1: 'Koylar, marinalar, derinlik ve rüzgâr bilgisi',
+  launchVal2: 'Karadan değil denizden giden akıllı rotalar',
+  launchVal3: 'Denizcilerin yorumları ve gerçek deneyimleri',
+  launchCta: 'Keşfe başla',
+  launchHaveAccount: 'Hesabın var mı?',
+  launchGuestNote: 'Kayıt gerekmez — istediğin an hesap açabilirsin.',
 );
 
 const L10n _en = L10n(
@@ -1068,6 +1088,14 @@ const L10n _en = L10n(
   routeAddPointBanner: 'Add a point to the route — tap the map; tapping a bay adds it as a stop.',
   tourTapHint: 'Tap the screen to continue',
   tourTapHintLast: 'Tap the screen to start',
+  launchTitleA: 'The coves of the Aegean and Med',
+  launchTitleB: 'now in your pocket',
+  launchVal1: 'Coves, marinas, depth and wind info',
+  launchVal2: 'Smart routes that travel by sea, not land',
+  launchVal3: 'Reviews and real experiences from sailors',
+  launchCta: 'Start exploring',
+  launchHaveAccount: 'Already have an account?',
+  launchGuestNote: 'No sign-up needed — create an account anytime.',
 );
 
 const L10n _es = L10n(
@@ -1389,6 +1417,14 @@ const L10n _es = L10n(
   routeAddPointBanner: 'Añade un punto a la ruta: toca el mapa; si tocas una cala, será una parada.',
   tourTapHint: 'Toca la pantalla para continuar',
   tourTapHintLast: 'Toca la pantalla para empezar',
+  launchTitleA: 'Las calas del Egeo y el Mediterráneo',
+  launchTitleB: 'ahora en tu bolsillo',
+  launchVal1: 'Calas, puertos, profundidad y viento',
+  launchVal2: 'Rutas inteligentes por mar, no por tierra',
+  launchVal3: 'Reseñas y experiencias reales de navegantes',
+  launchCta: 'Empieza a explorar',
+  launchHaveAccount: '¿Ya tienes cuenta?',
+  launchGuestNote: 'Sin registro: crea una cuenta cuando quieras.',
 );
 
 const L10n _ru = L10n(
@@ -1710,6 +1746,14 @@ const L10n _ru = L10n(
   routeAddPointBanner: 'Добавьте точку к маршруту — коснитесь карты; касание бухты добавит её как остановку.',
   tourTapHint: 'Коснитесь экрана, чтобы продолжить',
   tourTapHintLast: 'Коснитесь экрана, чтобы начать',
+  launchTitleA: 'Бухты Эгейского и Средиземного морей',
+  launchTitleB: 'теперь у вас в кармане',
+  launchVal1: 'Бухты, марины, глубины и ветер',
+  launchVal2: 'Умные маршруты по морю, а не по суше',
+  launchVal3: 'Отзывы и реальный опыт моряков',
+  launchCta: 'Начать исследовать',
+  launchHaveAccount: 'Уже есть аккаунт?',
+  launchGuestNote: 'Без регистрации — аккаунт можно создать в любой момент.',
 );
 
 /// Saf eşleme — birim testli.
