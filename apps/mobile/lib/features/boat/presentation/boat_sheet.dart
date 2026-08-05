@@ -50,7 +50,15 @@ class _BoatSheetState extends ConsumerState<_BoatSheet> {
     }
     final String draftText = _draftCtrl.text.trim();
     final double? draft = draftText.isEmpty ? null : double.tryParse(draftText.replaceAll(',', '.'));
-    ref.read(myBoatProvider.notifier).set(MyBoat(lengthM: length, draftM: draft));
+    // Dokunulmayan alanlar KORUNUR (Paket 2 dersi): boy/su çekimi güncellemek
+    // marka ve tekne tipini (açılış E3 cevabı) silmesin.
+    final MyBoat? current = ref.read(myBoatProvider);
+    ref.read(myBoatProvider.notifier).set(MyBoat(
+          lengthM: length,
+          draftM: draft,
+          brand: current?.brand,
+          typeId: current?.typeId,
+        ));
     Navigator.of(context).pop();
   }
 

@@ -174,7 +174,9 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
     // görünümü bildir (programatik hareket gesture saymaz).
     final MapFocusRequest? f = widget.data.focus;
     if (f != null && f.seq != oldWidget.data.focus?.seq) {
-      final double targetZoom = math.max(_map.camera.zoom, 12);
+      // İstek kendi zoom'unu taşıyabilir (bölge odağı 9); yoksa "Konumum"
+      // davranışı: en az 12 — tekne imleci tek bakışta seçilsin.
+      final double targetZoom = f.zoom ?? math.max(_map.camera.zoom, 12);
       _lastZoom = targetZoom;
       _map.move(LatLng(f.point.lat, f.point.lon), targetZoom);
       _emit(_map.camera);
@@ -364,6 +366,16 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
     _emit(_map.camera);
   }
 
+  /// Kuruluşta bekleyen odak isteğini uygular (açılış bölge seçimi).
+  void _applyPendingFocus() {
+    final MapFocusRequest? f = widget.data.focus;
+    if (f == null) return;
+    final double targetZoom = f.zoom ?? math.max(_map.camera.zoom, 12);
+    _lastZoom = targetZoom;
+    _map.move(LatLng(f.point.lat, f.point.lon), targetZoom);
+    _emit(_map.camera);
+  }
+
   @override
   Widget build(BuildContext context) {
     // Tekne tanımlıysa pinlerde uyum rozeti gösterilir (wow kişiselleştirme).
@@ -386,6 +398,11 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface> {
               : InteractiveFlag.all,
         ),
         onPositionChanged: _onMove,
+        // AÇILIŞ ODAĞI (onaylı tasarım E5, 2026-08): harita kurulmadan ÖNCE
+        // verilmiş bir odak isteği varsa (seyir bölgesi seçimi) ilk karede
+        // uygulanır. didUpdateWidget yalnız DEĞİŞEN seq'i görür; kuruluşta
+        // bekleyen istek ancak burada yakalanır.
+        onMapReady: _applyPendingFocus,
         // ROTA PLANLAMA (2026-08): boşluğa dokunuş — BAŞLANGIÇ SEÇ modunda
         // A noktası olur (kontrolcü mod dışında yok sayar).
         onTap: (TapPosition _, LatLng p) => widget.callbacks.onMapTap

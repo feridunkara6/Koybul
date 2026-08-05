@@ -12,6 +12,7 @@ class SharedPrefsLaunchStore implements LaunchStore {
   const SharedPrefsLaunchStore();
 
   static const String _doneKey = 'onb.v2.launchDone';
+  static const String _stepKey = 'onb.v2.step';
 
   @override
   Future<bool> isDone() async {
@@ -28,8 +29,29 @@ class SharedPrefsLaunchStore implements LaunchStore {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool(_doneKey, true);
+      await prefs.remove(_stepKey); // akış bitti — adım izi temizlenir
     } catch (_) {
       // sessizce geç — bir sonraki açılışta en kötü ihtimalle tekrar sorulur
+    }
+  }
+
+  @override
+  Future<int> step() async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.getInt(_stepKey) ?? 0;
+    } catch (_) {
+      return 0;
+    }
+  }
+
+  @override
+  Future<void> setStep(int value) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setInt(_stepKey, value);
+    } catch (_) {
+      // sessizce geç
     }
   }
 }

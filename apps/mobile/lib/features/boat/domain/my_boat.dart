@@ -1,7 +1,7 @@
 /// Kullanıcının teknesi — hafif, oturum içi model (docs/01-prd §6.2 basitleştirilmiş).
 /// Kalıcılık (cihazda hatırlama) bir sonraki küçük adımda eklenecek.
 class MyBoat {
-  const MyBoat({required this.lengthM, this.draftM, this.brand});
+  const MyBoat({required this.lengthM, this.draftM, this.brand, this.typeId});
 
   /// Tekne boyu (m) — zorunlu. İÇ BİRİM her zaman metredir (uyum hesapları
   /// metre üzerinden); karşılama ekranı denizci diliyle FEET sorar ve çevirir.
@@ -12,6 +12,11 @@ class MyBoat {
 
   /// Tekne markası (ör. Beneteau) — opsiyonel, kişiselleştirme için.
   final String? brand;
+
+  /// Tekne tipi kimliği — opsiyonel (onaylı açılış tasarımı E3, 2026-08):
+  /// 'sail' | 'motor' | 'catamaran' | 'gulet'. Rüzgâr vurguları ve ileride
+  /// rezervasyon ön-dolumu için saklanır; bilinmiyorsa null.
+  final String? typeId;
 }
 
 /// Feet → metre (uluslararası sabit: 1 ft = 0.3048 m), 1 ondalığa yuvarlanır.

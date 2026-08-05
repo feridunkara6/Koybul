@@ -39,7 +39,14 @@ Future<void> maybeShowWelcomePrompt(BuildContext context, WidgetRef ref) async {
     useSafeArea: true,
     builder: (BuildContext sheetContext) => WelcomeSheetBody(
       onPickLength: (double lengthM, String? brand) {
-        ref.read(myBoatProvider.notifier).set(MyBoat(lengthM: lengthM, brand: brand));
+        // Dokunulmayan alanlar korunur (emekli akış; tutarlılık için aynı kural).
+        final MyBoat? current = ref.read(myBoatProvider);
+        ref.read(myBoatProvider.notifier).set(MyBoat(
+              lengthM: lengthM,
+              brand: brand,
+              draftM: current?.draftM,
+              typeId: current?.typeId,
+            ));
         Navigator.of(sheetContext).pop();
       },
       onCustom: () {

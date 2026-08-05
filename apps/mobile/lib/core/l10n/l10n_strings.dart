@@ -268,6 +268,25 @@ class L10n {
     required this.launchCta,
     required this.launchHaveAccount,
     required this.launchGuestNote,
+    required this.qSkipAll,
+    required this.qContinue,
+    required this.qLaterNote,
+    required this.qTypeTitle,
+    required this.qTypeSub,
+    required this.qTypeSail,
+    required this.qTypeMotor,
+    required this.qTypeCat,
+    required this.qTypeGulet,
+    required this.qSizeTitle,
+    required this.qSizeSub,
+    required this.qSizeLen,
+    required this.qSizeDraft,
+    required this.qSizeBenefitDraft,
+    required this.qSizeBenefitLen,
+    required this.qRegionTitle,
+    required this.qRegionSub,
+    required this.qRegionCta,
+    required this.qRegionNote,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -410,6 +429,12 @@ class L10n {
   // Karşılama ekranı — E2 (onaylı açılış tasarımı 2026-08).
   final String launchTitleA, launchTitleB, launchVal1, launchVal2, launchVal3,
       launchCta, launchHaveAccount, launchGuestNote;
+
+  // Açılış soruları — E3–E5 (onaylı tasarım 2026-08).
+  final String qSkipAll, qContinue, qLaterNote, qTypeTitle, qTypeSub,
+      qTypeSail, qTypeMotor, qTypeCat, qTypeGulet, qSizeTitle, qSizeSub,
+      qSizeLen, qSizeDraft, qSizeBenefitDraft, qSizeBenefitLen, qRegionTitle,
+      qRegionSub, qRegionCta, qRegionNote;
 
   String windExposedLabel(String code) => windExposedLabels[code] ?? code;
 
@@ -767,6 +792,25 @@ const L10n _tr = L10n(
   launchCta: 'Keşfe başla',
   launchHaveAccount: 'Hesabın var mı?',
   launchGuestNote: 'Kayıt gerekmez — istediğin an hesap açabilirsin.',
+  qSkipAll: 'Soruları atla',
+  qContinue: 'Devam',
+  qLaterNote: "Profil → Teknem'den her zaman değiştirebilirsin.",
+  qTypeTitle: 'Nasıl bir tekneyle geziyorsun?',
+  qTypeSub: 'Önerileri ve uyarıları teknene göre ayarlarız.',
+  qTypeSail: 'Yelkenli',
+  qTypeMotor: 'Motoryat',
+  qTypeCat: 'Katamaran',
+  qTypeGulet: 'Gulet / diğer',
+  qSizeTitle: 'Teknenin ölçüleri?',
+  qSizeSub: 'Aşağı yukarı yeter — sığ koy uyarıları buna bakar.',
+  qSizeLen: 'BOY',
+  qSizeDraft: 'SU ÇEKİMİ',
+  qSizeBenefitDraft: "{0} m'den sığ koylarda seni uyaracağız.",
+  qSizeBenefitLen: "{0} m'yi almayan bağlama yerlerini işaretleriz.",
+  qRegionTitle: 'En çok nerede geziyorsun?',
+  qRegionSub: 'Haritayı oraya odaklı açarız.',
+  qRegionCta: 'Haritayı aç',
+  qRegionNote: 'Tüm kıyılar her zaman haritada — bu sadece başlangıç odağı.',
 );
 
 const L10n _en = L10n(
@@ -1096,6 +1140,25 @@ const L10n _en = L10n(
   launchCta: 'Start exploring',
   launchHaveAccount: 'Already have an account?',
   launchGuestNote: 'No sign-up needed — create an account anytime.',
+  qSkipAll: 'Skip questions',
+  qContinue: 'Continue',
+  qLaterNote: 'You can change this anytime in Profile → My boat.',
+  qTypeTitle: 'What kind of boat do you sail?',
+  qTypeSub: 'We tune suggestions and warnings to your boat.',
+  qTypeSail: 'Sailboat',
+  qTypeMotor: 'Motor yacht',
+  qTypeCat: 'Catamaran',
+  qTypeGulet: 'Gulet / other',
+  qSizeTitle: 'Your boat measurements?',
+  qSizeSub: 'Rough numbers are fine — shallow-cove warnings use these.',
+  qSizeLen: 'LENGTH',
+  qSizeDraft: 'DRAUGHT',
+  qSizeBenefitDraft: 'We will warn you in coves shallower than {0} m.',
+  qSizeBenefitLen: 'We flag berths that cannot take {0} m.',
+  qRegionTitle: 'Where do you sail most?',
+  qRegionSub: 'We open the map focused there.',
+  qRegionCta: 'Open the map',
+  qRegionNote: 'Every coast is always on the map — this is just the starting focus.',
 );
 
 const L10n _es = L10n(
@@ -1425,6 +1488,25 @@ const L10n _es = L10n(
   launchCta: 'Empieza a explorar',
   launchHaveAccount: '¿Ya tienes cuenta?',
   launchGuestNote: 'Sin registro: crea una cuenta cuando quieras.',
+  qSkipAll: 'Saltar preguntas',
+  qContinue: 'Continuar',
+  qLaterNote: 'Puedes cambiarlo cuando quieras en Perfil → Mi barco.',
+  qTypeTitle: '¿Con qué tipo de barco navegas?',
+  qTypeSub: 'Ajustamos sugerencias y avisos a tu barco.',
+  qTypeSail: 'Velero',
+  qTypeMotor: 'Yate a motor',
+  qTypeCat: 'Catamarán',
+  qTypeGulet: 'Goleta / otro',
+  qSizeTitle: '¿Las medidas de tu barco?',
+  qSizeSub: 'Con cifras aproximadas basta: los avisos de calas poco profundas usan esto.',
+  qSizeLen: 'ESLORA',
+  qSizeDraft: 'CALADO',
+  qSizeBenefitDraft: 'Te avisaremos en calas con menos de {0} m.',
+  qSizeBenefitLen: 'Marcamos amarres que no admiten {0} m.',
+  qRegionTitle: '¿Dónde navegas más?',
+  qRegionSub: 'Abrimos el mapa centrado ahí.',
+  qRegionCta: 'Abrir el mapa',
+  qRegionNote: 'Todas las costas están siempre en el mapa; esto es solo el enfoque inicial.',
 );
 
 const L10n _ru = L10n(
@@ -1754,6 +1836,25 @@ const L10n _ru = L10n(
   launchCta: 'Начать исследовать',
   launchHaveAccount: 'Уже есть аккаунт?',
   launchGuestNote: 'Без регистрации — аккаунт можно создать в любой момент.',
+  qSkipAll: 'Пропустить вопросы',
+  qContinue: 'Продолжить',
+  qLaterNote: 'Это всегда можно изменить в Профиль → Моя лодка.',
+  qTypeTitle: 'На какой лодке вы ходите?',
+  qTypeSub: 'Подстроим подсказки и предупреждения под вашу лодку.',
+  qTypeSail: 'Парусник',
+  qTypeMotor: 'Моторная яхта',
+  qTypeCat: 'Катамаран',
+  qTypeGulet: 'Гулет / другое',
+  qSizeTitle: 'Размеры вашей лодки?',
+  qSizeSub: 'Примерно достаточно — предупреждения о мелких бухтах используют это.',
+  qSizeLen: 'ДЛИНА',
+  qSizeDraft: 'ОСАДКА',
+  qSizeBenefitDraft: 'Предупредим в бухтах мельче {0} м.',
+  qSizeBenefitLen: 'Отметим стоянки, куда не поместится {0} м.',
+  qRegionTitle: 'Где вы чаще всего ходите?',
+  qRegionSub: 'Откроем карту с фокусом там.',
+  qRegionCta: 'Открыть карту',
+  qRegionNote: 'Все побережья всегда на карте — это лишь стартовый фокус.',
 );
 
 /// Saf eşleme — birim testli.

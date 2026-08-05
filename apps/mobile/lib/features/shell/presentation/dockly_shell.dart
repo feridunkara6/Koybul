@@ -8,8 +8,6 @@ import '../../map/presentation/map_screen.dart';
 import '../../profile/presentation/profile_screen.dart';
 import '../../reservation/presentation/reservations_placeholder_screen.dart';
 import '../../search/presentation/search_screen.dart';
-import '../../splash/presentation/splash_screen.dart';
-import '../../welcome/presentation/welcome_prompt.dart';
 import '../application/shell_tab_provider.dart';
 
 /// Uygulama kabuğu — 5 sekmeli alt menü (docs/01-prd §6.13):
@@ -31,35 +29,9 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
   /// Açılışta 5 ekran yerine 1 ekran kurmak ilk kareyi belirgin hızlandırır.
   final List<bool> _built = <bool>[true, false, false, false, false];
 
-  ProviderSubscription<bool>? _splashSub;
-
-  @override
-  void initState() {
-    super.initState();
-    // İlk açılış karşılaması: "Teknenin markası/boyu?" (bir kez). Uygulama
-    // artık açılış ekranının ARKASINDA kurulduğundan, soru açılış görseli
-    // kaybolduktan SONRA sorulur (splashDoneProvider) — fotoğrafın üstüne
-    // sayfa fırlamasın.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      if (ref.read(splashDoneProvider)) {
-        maybeShowWelcomePrompt(context, ref);
-        return;
-      }
-      _splashSub = ref.listenManual<bool>(splashDoneProvider, (bool? prev, bool next) {
-        if (!next) return;
-        _splashSub?.close();
-        _splashSub = null;
-        if (mounted) maybeShowWelcomePrompt(context, ref);
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _splashSub?.close();
-    super.dispose();
-  }
+  // NOT (Paket 2, 2026-08): eski "teknen kaç metre?" karşılama sorusu emekli
+  // edildi — tekne bilgisi artık onaylı açılış akışında (E3–E4) soruluyor ve
+  // aynı Teknem modeline yazılıyor. Profil → Teknem her zaman açık.
 
   @override
   Widget build(BuildContext context) {

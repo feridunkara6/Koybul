@@ -10,4 +10,12 @@ abstract interface class LaunchStore {
 
   /// Karşılama akışını tamamlandı olarak işaretler.
   Future<void> markDone();
+
+  /// Yarım kalan akışın adımı (0 = karşılama, 1 = tekne tipi, 2 = ölçüler,
+  /// 3 = bölge). Hata/boş → 0. Onaylı iyileştirme: sekmeyi E4'te kapatan
+  /// kullanıcı ertesi gün E4'te açar, başa dönmez.
+  Future<int> step();
+
+  /// Akış adımını cihaza işler (her geçişte çağrılır).
+  Future<void> setStep(int value);
 }
