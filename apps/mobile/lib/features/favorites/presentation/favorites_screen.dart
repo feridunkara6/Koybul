@@ -4,27 +4,73 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
 import '../../detail/presentation/location_detail_screen.dart';
+import '../../route/application/saved_routes_controller.dart';
+import '../../route/domain/saved_route.dart';
+import '../../route/presentation/saved_routes_screen.dart' show SavedRouteCard;
 import '../application/favorites_controller.dart';
 import '../domain/favorite_location.dart';
 
-/// Favoriler sekmesi (misafir/yerel). Kalp ile eklenen limanları listeler;
-/// dokununca detayları açılır. Boşsa nasıl favori eklenir bilgisini gösterir.
+/// Favoriler sekmesi (misafir/yerel). İKİ BÖLÜM (kullanıcı isteği 2026-08):
+/// KAYITLI ROTALAR (haritada yer imiyle kaydedilenler) + FAVORİ YERLER
+/// (kalp ile eklenen limanlar). İkisi de boşsa nasıl eklenir bilgisi.
 class FavoritesScreen extends ConsumerWidget {
   const FavoritesScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
     final List<FavoriteLocation> favorites = ref.watch(favoritesProvider);
+    final List<SavedRoute> routes = ref.watch(savedRoutesProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(ref.watch(l10nProvider).navFavorites)),
-      body: favorites.isEmpty
+      appBar: AppBar(title: Text(t.navFavorites)),
+      body: (favorites.isEmpty && routes.isEmpty)
           ? const _EmptyFavorites()
-          : ListView.separated(
-              itemCount: favorites.length,
-              separatorBuilder: (BuildContext _, int __) => const Divider(height: 1),
-              itemBuilder: (BuildContext context, int i) =>
-                  _FavoriteTile(favorite: favorites[i]),
+          : ListView(
+              padding: const EdgeInsets.only(bottom: 24),
+              children: <Widget>[
+                if (routes.isNotEmpty) ...<Widget>[
+                  _SectionHeader(title: t.savedRoutesTitle),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Column(
+                      children: <Widget>[
+                        for (final SavedRoute r in routes)
+                          SavedRouteCard(route: r),
+                      ],
+                    ),
+                  ),
+                ],
+                if (favorites.isNotEmpty) ...<Widget>[
+                  _SectionHeader(title: t.favSectionPlaces),
+                  for (int i = 0; i < favorites.length; i++) ...<Widget>[
+                    if (i > 0) const Divider(height: 1),
+                    _FavoriteTile(favorite: favorites[i]),
+                  ],
+                ],
+              ],
             ),
+    );
+  }
+}
+
+/// Bölüm başlığı — "Kayıtlı Rotalar" / "Favori yerler".
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 8),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.w800,
+              color: DocklyColors.text2,
+              letterSpacing: 0.3,
+            ),
+      ),
     );
   }
 }

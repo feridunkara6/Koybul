@@ -41,14 +41,16 @@ class SavedRoutesScreen extends ConsumerWidget {
               padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
               itemCount: routes.length,
               itemBuilder: (BuildContext context, int i) =>
-                  _SavedRouteCard(route: routes[i]),
+                  SavedRouteCard(route: routes[i]),
             ),
     );
   }
 }
 
-class _SavedRouteCard extends ConsumerWidget {
-  const _SavedRouteCard({required this.route});
+/// Kayıtlı rota kartı — hem Profil'deki listede hem FAVORİLER sekmesindeki
+/// "Kayıtlı Rotalar" bölümünde kullanılır (kullanıcı isteği 2026-08).
+class SavedRouteCard extends ConsumerWidget {
+  const SavedRouteCard({required this.route, super.key});
 
   final SavedRoute route;
 

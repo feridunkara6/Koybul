@@ -5,20 +5,8 @@ import 'package:dockly_mobile/features/route/domain/sea_trip.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Testte `SavedRoutesStore` yerine geçen sahte (bellek içi).
-class FakeSavedRoutesStore implements SavedRoutesStore {
-  List<SavedRoute> data = <SavedRoute>[];
-  int saveCount = 0;
+import '../../support/saved_routes_fakes.dart';
 
-  @override
-  Future<List<SavedRoute>> load() async => data;
-
-  @override
-  Future<void> save(List<SavedRoute> routes) async {
-    saveCount++;
-    data = routes;
-  }
-}
 
 const SavedRoute _sample = SavedRoute(
   id: 'r1',
@@ -123,5 +111,32 @@ void main() {
     final List<SavedRoute> list = c.read(savedRoutesProvider);
     expect(list, hasLength(2));
     expect(list.first.id, 'r9');
+  });
+  test('YARIŞ KORUMASI (2026-08 hatası): yükleme bitmeden yapılan kayıt '
+      'KAYBOLMAZ — bellek ve disk iki kaydı da içerir', () async {
+    // Gerçek senaryo: kullanıcı uygulamayı açar açmaz rota kaydeder;
+    // sağlayıcı İLK KEZ tam o anda kurulur — diskte eski kayıt vardır.
+    final FakeSavedRoutesStore store = FakeSavedRoutesStore()
+      ..data = <SavedRoute>[_sample]; // diskte eski kayıt (r1)
+    final ProviderContainer c = _container(store);
+    const SavedRoute fresh = SavedRoute(
+      id: 'r2',
+      name: 'Yeni tur',
+      origin: RouteOrigin(pos: GeoPoint(lat: 37.0, lon: 28.0), isDevice: true),
+      waypoints: <RouteWaypoint>[
+        RouteWaypoint(pos: GeoPoint(lat: 36.9, lon: 28.2), id: 'a', name: 'A'),
+      ],
+      distanceNm: 12,
+      savedAtMs: 2000,
+    );
+    // Yüklemeyi BEKLEMEDEN ekle (kuruluş + ekleme yarışı).
+    await c.read(savedRoutesProvider.notifier).add(fresh);
+    final List<String> memory =
+        c.read(savedRoutesProvider).map((SavedRoute r) => r.id).toList();
+    expect(memory, containsAll(<String>['r1', 'r2'])); // bellekte ikisi de
+    expect(memory.first, 'r2'); // yeni kayıt başta
+    final List<String> disk =
+        store.data.map((SavedRoute r) => r.id).toList();
+    expect(disk, containsAll(<String>['r1', 'r2'])); // diskte ikisi de
   });
 }

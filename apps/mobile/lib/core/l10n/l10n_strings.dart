@@ -293,6 +293,7 @@ class L10n {
     required this.locUseBtn,
     required this.locSkipBtn,
     required this.locTrustNote,
+    required this.favSectionPlaces,
   });
 
   final String navExplore, navSearch, navFavorites, navRequests, navProfile;
@@ -445,6 +446,9 @@ class L10n {
   // Konum ön-izin ekranı — E6 (onaylı açılış tasarımı 2026-08).
   final String locTitle, locBenefit1, locBenefit2, locUseBtn, locSkipBtn,
       locTrustNote;
+
+  /// Favoriler sekmesi bölüm başlığı (kayıtlı rotalar ayrı bölüm, 2026-08).
+  final String favSectionPlaces;
 
   String windExposedLabel(String code) => windExposedLabels[code] ?? code;
 
@@ -827,6 +831,7 @@ const L10n _tr = L10n(
   locUseBtn: 'Konumumu kullan',
   locSkipBtn: 'Şimdilik bölgemle devam',
   locTrustNote: 'Konumun cihazında kalır; izin vermezsen hiçbir özellik kilitlenmez.',
+  favSectionPlaces: 'Favori yerler',
 );
 
 const L10n _en = L10n(
@@ -1181,6 +1186,7 @@ const L10n _en = L10n(
   locUseBtn: 'Use my location',
   locSkipBtn: 'Continue with my region for now',
   locTrustNote: 'Your location stays on your device; nothing is locked if you decline.',
+  favSectionPlaces: 'Favorite places',
 );
 
 const L10n _es = L10n(
@@ -1535,6 +1541,7 @@ const L10n _es = L10n(
   locUseBtn: 'Usar mi ubicación',
   locSkipBtn: 'Seguir con mi zona por ahora',
   locTrustNote: 'Tu ubicación queda en tu dispositivo; si no das permiso, nada se bloquea.',
+  favSectionPlaces: 'Lugares favoritos',
 );
 
 const L10n _ru = L10n(
@@ -1889,6 +1896,7 @@ const L10n _ru = L10n(
   locUseBtn: 'Использовать мою позицию',
   locSkipBtn: 'Пока продолжить с моим регионом',
   locTrustNote: 'Позиция остаётся на устройстве; без разрешения ничего не блокируется.',
+  favSectionPlaces: 'Избранные места',
 );
 
 /// Saf eşleme — birim testli.

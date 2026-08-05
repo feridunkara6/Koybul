@@ -395,12 +395,12 @@ class MapController extends Notifier<MapState> {
     if (state.routeWaypoints.any((RouteWaypoint w) => w.id == idOrSlug)) return;
     final List<RouteWaypoint> wps =
         List<RouteWaypoint>.of(state.routeWaypoints);
-    final int idx = bestStopInsertIndex(
-      origin.pos,
-      <GeoPoint>[for (final RouteWaypoint w in wps) w.pos],
-      pos,
-    );
-    wps.insert(idx, RouteWaypoint(pos: pos, id: idOrSlug, name: name));
+    // İŞARETLEME SIRASI = SEYİR SIRASI (kullanıcı kararı 2026-08): yeni durak
+    // SONA eklenir — A ilk işaretlenen, son işaretlenen SON VARIŞTIR. (Eski
+    // davranış en kısa sapmaya göre araya sokuyordu; kullanıcı rotanın
+    // hedefini değiştiremiyordu. bestStopInsertIndex yalnız haritaya dokunma
+    // "ara nokta"larında kullanılmaya devam eder.)
+    wps.add(RouteWaypoint(pos: pos, id: idOrSlug, name: name));
     await _planTrip(origin, wps, editing: true);
   }
 

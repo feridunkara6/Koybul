@@ -626,9 +626,10 @@ void main() {
     MapState s = _state(container);
     expect(s.routeWaypoints, hasLength(2));
     expect(engine.calls, 3); // + iki bacak
-    // Durak, hedeften ÖNCE (başlangıca yakın olduğu bacağa) girdi.
-    expect(s.routeWaypoints.first.name, 'Kille Koyu');
-    expect(s.routeWaypoints.last.id, 'loc-1');
+    // İŞARETLEME SIRASI = SEYİR SIRASI (kullanıcı kararı 2026-08): yeni durak
+    // SONA girer — son eklenen SON VARIŞTIR.
+    expect(s.routeWaypoints.first.id, 'loc-1');
+    expect(s.routeWaypoints.last.name, 'Kille Koyu');
     // Birleşik rota iki bacağın toplamı (sahte planla 2+2 nm).
     expect(s.route!.distanceNm, closeTo(4, 1e-9));
 

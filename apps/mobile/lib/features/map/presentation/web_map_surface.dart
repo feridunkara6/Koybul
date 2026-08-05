@@ -52,6 +52,61 @@ final String _attributionText = _tileKey.isEmpty
     ? '© OpenStreetMap katkıcıları · OpenSeaMap'
     : 'Powered by Esri · © OpenStreetMap katkıcıları · OpenSeaMap';
 
+/// KARO FRENİ — iptal-güvenli kısıcı (CI dersi 2026-08): flutter_map'in hazır
+/// `TileUpdateTransformers.throttle`'ı abonelik kapanınca zamanlayıcısını
+/// İPTAL ETMİYOR; gerçek yüzeyi çizen widget testleri "bekleyen Timer" ile
+/// kırmızı yanıyordu. Bu sürüm aynı işi yapar (ilk olay HEMEN geçer, sonrası
+/// en çok 250 ms'de bir, sondaki olay kaybolmaz) ama abonelik kapanınca
+/// zamanlayıcıyı da söndürür — test/pil güvenli.
+final TileUpdateTransformer _throttledTileUpdates =
+    StreamTransformer<TileUpdateEvent, TileUpdateEvent>.fromBind(
+  (Stream<TileUpdateEvent> input) {
+    const Duration interval = Duration(milliseconds: 250);
+    late StreamController<TileUpdateEvent> out;
+    StreamSubscription<TileUpdateEvent>? sub;
+    Timer? timer;
+    TileUpdateEvent? trailing;
+    void flush() {
+      timer = null;
+      final TileUpdateEvent? t = trailing;
+      trailing = null;
+      if (t != null) {
+        out.add(t);
+        timer = Timer(interval, flush);
+      }
+    }
+
+    out = StreamController<TileUpdateEvent>(
+      sync: true,
+      onListen: () {
+        sub = input.listen(
+          (TileUpdateEvent e) {
+            // Dokunuş kamerayı oynatmaz — hazır kısıcıyla birebir eşitlik
+            // için dokunuş olayları karo yenilemesi tetiklemez.
+            if (e.wasTriggeredByTap()) return;
+            if (timer == null) {
+              out.add(e);
+              timer = Timer(interval, flush);
+            } else {
+              trailing = e; // aralık dolunca EN SON olay işlenir
+            }
+          },
+          onError: out.addError,
+          onDone: out.close,
+        );
+      },
+      onPause: () => sub?.pause(),
+      onResume: () => sub?.resume(),
+      onCancel: () {
+        timer?.cancel();
+        timer = null;
+        return sub?.cancel();
+      },
+    );
+    return out.stream;
+  },
+);
+
 Widget webMapSurfaceBuilder(
   BuildContext context,
   MapSurfaceData data,
@@ -478,8 +533,7 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface>
           //   uçuşundaki karo fırtınası ve gezinme kasması kesilir.
           panBuffer: 0,
           keepBuffer: 4,
-          tileUpdateTransformer:
-              TileUpdateTransformers.throttle(const Duration(milliseconds: 250)),
+          tileUpdateTransformer: _throttledTileUpdates,
         ),
         // Denizcilik katmanı: OpenSeaMap seamark'ları (şamandıra, fener, liman
         // işaretleri) — açık lisanslı, jetonsuz. Şeffaf bindirme. Perf: işaretler

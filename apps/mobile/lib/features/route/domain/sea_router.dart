@@ -322,15 +322,45 @@ GeoPoint? nearestWaterCenter(SeaMask m, GeoPoint p, {int maxR = 10}) {
   return m.centerOf(idx % m.width, idx ~/ m.width);
 }
 
-/// En yakın su hücresi (kare halkalarla, ~5 km'ye kadar). Bulunamazsa null.
+/// GÖLCÜK KAPANI eşiği (hücre): suya oturtma, en az bu büyüklükte bir su
+/// kütlesi ister. Tam çözünürlüklü kıyıda (GSHHG v2, 2026-08) marina içi /
+/// lagün 2-3 hücrelik "gölcük" olarak kalabiliyor; rota oraya bağlanırsa
+/// A* çıkamaz ve rota hiç üretilmezdi (Göcek vakası). ~96 hücre ≈ 24 km²
+/// altındaki kapalı su kütlesi zaten seyir edilebilir deniz değildir.
+const int _kMinWaterBody = 96;
+
+/// Hücre, en az [_kMinWaterBody] hücrelik su kütlesine mi ait? (Sınırlı BFS —
+/// eşiğe ulaşınca hemen true; maliyeti ihmal edilebilir.)
+bool _openWater(SeaMask m, int sx, int sy) {
+  final Set<int> seen = <int>{sy * m.width + sx};
+  final List<int> queue = <int>[sy * m.width + sx];
+  int head = 0;
+  while (head < queue.length) {
+    if (seen.length >= _kMinWaterBody) return true;
+    final int cur = queue[head++];
+    final int cx = cur % m.width, cy = cur ~/ m.width;
+    for (final (int, int) d in const <(int, int)>[(1, 0), (-1, 0), (0, 1), (0, -1)]) {
+      final int nx = cx + d.$1, ny = cy + d.$2;
+      if (!m.isWater(nx, ny)) continue;
+      final int ni = ny * m.width + nx;
+      if (seen.add(ni)) queue.add(ni);
+    }
+  }
+  return seen.length >= _kMinWaterBody;
+}
+
+/// En yakın AÇIK su hücresi (kare halkalarla, ~5 km'ye kadar; gölcük kapanları
+/// atlanır). Bulunamazsa null.
 int? _snapToWater(SeaMask m, int cx, int cy, {int maxR = 10}) {
-  if (m.isWater(cx, cy)) return cy * m.width + cx;
+  if (m.isWater(cx, cy) && _openWater(m, cx, cy)) return cy * m.width + cx;
   for (int r = 1; r <= maxR; r++) {
     for (int dy = -r; dy <= r; dy++) {
       for (int dx = -r; dx <= r; dx++) {
         if (dx.abs() != r && dy.abs() != r) continue; // yalnız halka
         final int nx = cx + dx, ny = cy + dy;
-        if (m.isWater(nx, ny)) return ny * m.width + nx;
+        if (m.isWater(nx, ny) && _openWater(m, nx, ny)) {
+          return ny * m.width + nx;
+        }
       }
     }
   }
