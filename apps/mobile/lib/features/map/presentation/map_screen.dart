@@ -224,7 +224,10 @@ class MapScreen extends ConsumerWidget {
           if (state.isOffline || state.route != null)
             Positioned(
               top: 60,
-              left: 64,
+              // ROTA BİLGİ EKRANI 2.0 (kullanıcı isteği 2026-08): çip artık
+              // ekranın genişliğini kullanır — "küçük kalıyor" düzeltmesi.
+              // Sağda 64: SOS/konum düğme sütunuyla çakışmaz.
+              left: 12,
               right: 64,
               child: SafeArea(
                 child: Column(
@@ -234,18 +237,22 @@ class MapScreen extends ConsumerWidget {
                       const SizedBox(height: 8),
                     if (state.route != null)
                       Center(
-                        child: _RouteChip(
-                          route: state.route!,
-                          wind: state.routeWind,
-                          waypoints: state.routeWaypoints,
-                          origin: state.routeOrigin,
-                          onClear: controller.clearRoute,
-                          onRemoveStop: controller.removeWaypoint,
-                          onSave: () => _saveRouteDialog(context, ref, state),
-                          label: state.routeLabel,
-                          onChangeOrigin: () =>
-                              showRouteOriginMenu(context, ref),
-                          onAddPoint: controller.beginAddPoint,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 480),
+                          child: _RouteChip(
+                            route: state.route!,
+                            wind: state.routeWind,
+                            waypoints: state.routeWaypoints,
+                            origin: state.routeOrigin,
+                            onClear: controller.clearRoute,
+                            onRemoveStop: controller.removeWaypoint,
+                            onSave: () =>
+                                _saveRouteDialog(context, ref, state),
+                            label: state.routeLabel,
+                            onChangeOrigin: () =>
+                                showRouteOriginMenu(context, ref),
+                            onAddPoint: controller.beginAddPoint,
+                          ),
                         ),
                       ),
                   ],
@@ -609,20 +616,24 @@ Future<void> _saveRouteDialog(
   final String name = nameCtrl.text.trim();
   nameCtrl.dispose(); // diyalog kapandı — denetleyici sızdırılmaz
   if (ok != true || !context.mounted) return;
+  final String finalName = name.isEmpty ? originLabel : name;
   final int now = DateTime.now().millisecondsSinceEpoch;
   await ref.read(savedRoutesProvider.notifier).add(SavedRoute(
         id: 'r$now',
-        name: name.isEmpty ? originLabel : name,
+        name: finalName,
         origin: origin,
         waypoints: state.routeWaypoints,
         distanceNm: route.distanceNm,
         savedAtMs: now,
       ));
   if (!context.mounted) return;
+  // İSİM ÇİPE YAZILIR (kullanıcı isteği 2026-08): verilen ad kayıttan hemen
+  // sonra ekrandaki rotanın başlığında görünür — "isimler gözükmüyor" düzeltmesi.
+  ref.read(mapControllerProvider.notifier).setRouteLabel(finalName);
   // GÜNLÜK KISAYOLU (kullanıcı onayı 2026-08): rota kaydedildi → tek
   // dokunuşla günlüğe not düşülür; rota bağlamı kendiliğinden eklenir.
   final LogContext logCtx = LogContext(
-    routeName: name.isEmpty ? originLabel : name,
+    routeName: finalName,
     distanceNm: route.distanceNm,
     stops: state.routeWaypoints.where((RouteWaypoint w) => w.isStop).length,
   );
@@ -880,9 +891,10 @@ class _MapSearchButton extends ConsumerWidget {
   }
 }
 
-/// Deniz rotası bilgi çipi: mesafe + kaba süre + dürüst uyarı notu +
-/// (analiz gelince) rüzgâr satırı ve varış açık-yön uyarısı (Rota v2) +
-/// DURAK LİSTESİ (rota düzenleme 2026-08: sıralı, ✕ ile çıkarılabilir).
+/// Deniz rotası bilgi ekranı 2.0 (kullanıcı isteği 2026-08): başlıkta rota
+/// adı; altında MESAFE / SÜRE / DURAK istatistik satırı (üç eşit sütun —
+/// çok duraklı rotada da süre HER ZAMAN görünür); sonra başlangıç satırı,
+/// durak listesi, dürüst uyarı notu ve (analiz gelince) rüzgâr satırları.
 /// Kapat düğmesi rotayı haritadan kaldırır.
 class _RouteChip extends ConsumerWidget {
   const _RouteChip({
@@ -943,23 +955,20 @@ class _RouteChip extends ConsumerWidget {
     final RouteWindReport? w = wind;
     final int stopCount =
         waypoints.where((RouteWaypoint x) => x.isStop).length;
-    final String metaTitle =
-        '≈ ${_fmtNm(route.distanceNm)} ${t.nmUnit} · ~$eta';
-    // Kayıtlı rota adıyla açıldıysa isim başa gelir: "Datça turu · ≈ 26 nm…"
-    final String title =
-        label == null ? metaTitle : '$label · $metaTitle';
     return Material(
       elevation: 2,
       borderRadius: BorderRadius.circular(14),
       color: theme.colorScheme.surface,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 8, 4, 8),
+        padding: const EdgeInsets.fromLTRB(12, 8, 4, 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            // BAŞLIK (bilgi ekranı 2.0, 2026-08): kayıtlı rota adı — yoksa
+            // genel başlık. Sayılar artık başlıkta sıkışmaz; alttaki
+            // istatistik satırında HER ZAMAN okunur.
             Row(
-              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 const DocklyIcon(
                   DocklyIcons.navigation,
@@ -967,12 +976,11 @@ class _RouteChip extends ConsumerWidget {
                   color: DocklyColors.brandPrimary,
                 ),
                 const SizedBox(width: 6),
-                Flexible(
+                Expanded(
                   child: Text(
-                    stopCount >= 2
-                        ? '${L10n.fmt(t.routeStopsFmt, '$stopCount')} · $title'
-                        : title,
+                    label ?? t.routeChipTitle,
                     style: theme.textTheme.titleSmall,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -997,6 +1005,34 @@ class _RouteChip extends ConsumerWidget {
                   onPressed: onClear,
                 ),
               ],
+            ),
+            // İSTATİSTİK SATIRI: mesafe / süre / durak — üç eşit sütun.
+            // Uzun değer sütununa sığmazsa yazı KÜÇÜLÜR, asla kesilmez
+            // ("toplam süre ekrana sığmıyor" düzeltmesi).
+            Padding(
+              padding: const EdgeInsets.only(top: 2, bottom: 4, right: 8),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: _RouteStat(
+                      caption: t.routeStatDistance,
+                      value: '≈ ${_fmtNm(route.distanceNm)} ${t.nmUnit}',
+                    ),
+                  ),
+                  Expanded(
+                    child: _RouteStat(
+                      caption: t.routeStatDuration,
+                      value: '~$eta',
+                    ),
+                  ),
+                  Expanded(
+                    child: _RouteStat(
+                      caption: t.routeStatStops,
+                      value: '$stopCount',
+                    ),
+                  ),
+                ],
+              ),
             ),
             // BAŞLANGIÇ satırı (rota planlama 2026-08): A noktası + değiştir.
             if (origin != null)
@@ -1156,6 +1192,49 @@ class _RouteChip extends ConsumerWidget {
       if (w.isStop) out.add((i, ++n, w));
     }
     return out;
+  }
+}
+
+/// Rota istatistik hücresi (bilgi ekranı 2.0): küçük başlık + belirgin değer.
+/// Değer sütuna sığmazsa FittedBox ile küçülür — kesilme/taşma olmaz.
+class _RouteStat extends StatelessWidget {
+  const _RouteStat({required this.caption, required this.value});
+
+  final String caption;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            caption,
+            maxLines: 1,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.6,
+            ),
+          ),
+        ),
+        const SizedBox(height: 1),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            value,
+            maxLines: 1,
+            style: theme.textTheme.titleSmall
+                ?.copyWith(fontWeight: FontWeight.w800),
+          ),
+        ),
+      ],
+    );
   }
 }
 

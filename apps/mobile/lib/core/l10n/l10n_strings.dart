@@ -13,6 +13,7 @@ class L10n {
     required this.navExplore,
     required this.navSearch,
     required this.navFavorites,
+    required this.navLogbook,
     required this.navRequests,
     required this.navProfile,
     required this.profileTitle,
@@ -222,6 +223,10 @@ class L10n {
     required this.contactTypeLabels,
     required this.routeAddStop,
     required this.routeStopsFmt,
+    required this.routeChipTitle,
+    required this.routeStatDistance,
+    required this.routeStatDuration,
+    required this.routeStatStops,
     required this.routeStopRemoveTooltip,
     required this.routeEditFail,
     required this.routeViaHint,
@@ -311,7 +316,8 @@ class L10n {
     required this.checklistItems,
   });
 
-  final String navExplore, navSearch, navFavorites, navRequests, navProfile;
+  final String navExplore, navSearch, navFavorites, navLogbook, navRequests,
+      navProfile;
   final String profileTitle, emergencyTitle, emergencySub;
   final String sectionBoat, boatEmptyBody, boatDefineCta;
   final String boatLengthFmt, boatDraftFmt, boatDraftUnknown, editLabel, removeLabel;
@@ -426,6 +432,11 @@ class L10n {
   final String routeAddStop, routeStopsFmt, routeStopRemoveTooltip,
       routeEditFail, routeViaHint;
 
+  // Rota bilgi ekranı 2.0 (kullanıcı isteği 2026-08): büyük istatistik satırı
+  // — mesafe/süre/durak her zaman görünür, çok duraklı rotada da taşmaz.
+  final String routeChipTitle, routeStatDistance, routeStatDuration,
+      routeStatStops;
+
   // Yeni kullanıcı tanıtımı (2026-08, kullanıcı onaylı): karşılama + 6 adımlı
   // spot ışıklı tur + ilk-dokunuş ipuçları.
   final String onbWelcomeTitle, onbWelcomeBody, onbStartTour, onbNotNow,
@@ -506,7 +517,10 @@ class L10n {
 const L10n _tr = L10n(
   navExplore: 'Keşfet',
   navSearch: 'Arama',
-  navFavorites: 'Favoriler',
+  // "Kayıtlarım" (kullanıcı isteği 2026-08): sekme artık favori yerleri VE
+  // kayıtlı rotaları kapsıyor — ad ikisini birden söylemeli.
+  navFavorites: 'Kayıtlarım',
+  navLogbook: 'Günlük',
   navRequests: 'Taleplerim',
   navProfile: 'Profil',
   profileTitle: 'Profil',
@@ -765,6 +779,10 @@ const L10n _tr = L10n(
   },
   routeAddStop: 'Durak ekle',
   routeStopsFmt: '{0} durak',
+  routeChipTitle: 'Rota özeti',
+  routeStatDistance: 'MESAFE',
+  routeStatDuration: 'SÜRE',
+  routeStatStops: 'DURAK',
   routeStopRemoveTooltip: 'Durağı çıkar',
   routeEditFail: 'Buradan geçen deniz rotası bulunamadı — rota değiştirilmedi.',
   routeViaHint: 'Ara noktayı sürükleyerek taşıyabilir, üzerine dokunarak kaldırabilirsin.',
@@ -887,7 +905,8 @@ const L10n _tr = L10n(
 const L10n _en = L10n(
   navExplore: 'Explore',
   navSearch: 'Search',
-  navFavorites: 'Favorites',
+  navFavorites: 'Saved',
+  navLogbook: 'Logbook',
   navRequests: 'Requests',
   navProfile: 'Profile',
   profileTitle: 'Profile',
@@ -1146,6 +1165,10 @@ const L10n _en = L10n(
   },
   routeAddStop: 'Add stop',
   routeStopsFmt: '{0} stops',
+  routeChipTitle: 'Route summary',
+  routeStatDistance: 'DISTANCE',
+  routeStatDuration: 'TIME',
+  routeStatStops: 'STOPS',
   routeStopRemoveTooltip: 'Remove stop',
   routeEditFail: 'No sea route passes through there — the route was not changed.',
   routeViaHint: 'Drag the waypoint to move it, tap it to remove it.',
@@ -1268,7 +1291,8 @@ const L10n _en = L10n(
 const L10n _es = L10n(
   navExplore: 'Explorar',
   navSearch: 'Buscar',
-  navFavorites: 'Favoritos',
+  navFavorites: 'Guardados',
+  navLogbook: 'Diario',
   navRequests: 'Solicitudes',
   navProfile: 'Perfil',
   profileTitle: 'Perfil',
@@ -1527,6 +1551,10 @@ const L10n _es = L10n(
   },
   routeAddStop: 'Añadir parada',
   routeStopsFmt: '{0} paradas',
+  routeChipTitle: 'Resumen de ruta',
+  routeStatDistance: 'DISTANCIA',
+  routeStatDuration: 'TIEMPO',
+  routeStatStops: 'PARADAS',
   routeStopRemoveTooltip: 'Quitar parada',
   routeEditFail: 'No hay ruta marítima por ahí — la ruta no se modificó.',
   routeViaHint: 'Arrastra el punto para moverlo; tócalo para quitarlo.',
@@ -1649,7 +1677,8 @@ const L10n _es = L10n(
 const L10n _ru = L10n(
   navExplore: 'Обзор',
   navSearch: 'Поиск',
-  navFavorites: 'Избранное',
+  navFavorites: 'Сохранённое',
+  navLogbook: 'Журнал',
   navRequests: 'Запросы',
   navProfile: 'Профиль',
   profileTitle: 'Профиль',
@@ -1908,6 +1937,10 @@ const L10n _ru = L10n(
   },
   routeAddStop: 'Добавить остановку',
   routeStopsFmt: 'Остановок: {0}',
+  routeChipTitle: 'Сводка маршрута',
+  routeStatDistance: 'ДИСТАНЦИЯ',
+  routeStatDuration: 'ВРЕМЯ',
+  routeStatStops: 'ОСТАНОВКИ',
   routeStopRemoveTooltip: 'Убрать остановку',
   routeEditFail: 'Морской маршрут через эту точку не найден — маршрут не изменён.',
   routeViaHint: 'Перетащите точку, чтобы переместить её; коснитесь, чтобы убрать.',

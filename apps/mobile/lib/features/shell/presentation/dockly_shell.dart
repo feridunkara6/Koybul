@@ -4,14 +4,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
 import '../../favorites/presentation/favorites_screen.dart';
+import '../../logbook/presentation/logbook_screen.dart';
 import '../../map/presentation/map_screen.dart';
 import '../../profile/presentation/profile_screen.dart';
 import '../../reservation/presentation/reservations_placeholder_screen.dart';
 import '../../search/presentation/search_screen.dart';
 import '../application/shell_tab_provider.dart';
 
-/// Uygulama kabuğu — 5 sekmeli alt menü (docs/01-prd §6.13):
-/// Keşfet (harita) · Arama · Favoriler · Taleplerim · Profil.
+/// Uygulama kabuğu — 6 sekmeli alt menü (kullanıcı isteği 2026-08):
+/// Keşfet (harita) · Arama · Kayıtlarım · Günlük · Taleplerim · Profil.
+///
+/// "Kayıtlarım" favori yerleri VE kayıtlı rotaları kapsar; "Günlük"
+/// (Kaptanın Günlüğü) amatör denizci için bir dokunuşta erişilir olsun diye
+/// alt menüye alındı (Profil içindeki kısayol da durur).
 ///
 /// IndexedStack ile sekmeler arası geçişte durum korunur (harita konumu vb.).
 /// Tüm sekmeler misafir modda çalışır (favoriler/talepler cihazda saklanır);
@@ -26,8 +31,8 @@ class DocklyShell extends ConsumerStatefulWidget {
 class _DocklyShellState extends ConsumerState<DocklyShell> {
   /// PERF (tembel sekmeler): açılışta yalnız Keşfet kurulur; diğer sekmeler
   /// İLK ziyarette kurulur ve sonra durumunu korur (IndexedStack canlı tutar).
-  /// Açılışta 5 ekran yerine 1 ekran kurmak ilk kareyi belirgin hızlandırır.
-  final List<bool> _built = <bool>[true, false, false, false, false];
+  /// Açılışta 6 ekran yerine 1 ekran kurmak ilk kareyi belirgin hızlandırır.
+  final List<bool> _built = <bool>[true, false, false, false, false, false];
 
   // NOT (Paket 2, 2026-08): eski "teknen kaç metre?" karşılama sorusu emekli
   // edildi — tekne bilgisi artık onaylı açılış akışında (E3–E4) soruluyor ve
@@ -54,8 +59,9 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
           const MapScreen(), // her zaman canlı (harita durumu korunur)
           _built[1] ? const SearchScreen() : const SizedBox.shrink(),
           _built[2] ? const FavoritesScreen() : const SizedBox.shrink(),
-          _built[3] ? const ReservationsPlaceholderScreen() : const SizedBox.shrink(),
-          _built[4] ? const ProfileScreen() : const SizedBox.shrink(),
+          _built[3] ? const LogbookScreen() : const SizedBox.shrink(),
+          _built[4] ? const ReservationsPlaceholderScreen() : const SizedBox.shrink(),
+          _built[5] ? const ProfileScreen() : const SizedBox.shrink(),
         ],
       ),
       bottomNavigationBar: Container(
@@ -116,6 +122,13 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
                 icon: const DocklyIcon(DocklyIcons.favoriteBorder),
                 selectedIcon: const DocklyIcon(DocklyIcons.favorite),
                 label: t.navFavorites,
+              ),
+              // KAPTANIN GÜNLÜĞÜ (kullanıcı isteği 2026-08): Kayıtlarım'ın
+              // yanında — günlük bir dokunuş uzağında, Profil'de gömülü değil.
+              NavigationDestination(
+                icon: const DocklyIcon(DocklyIcons.edit),
+                selectedIcon: const DocklyIcon(DocklyIcons.edit),
+                label: t.navLogbook,
               ),
               NavigationDestination(
                 icon: const DocklyIcon(DocklyIcons.eventNoteOutlined),

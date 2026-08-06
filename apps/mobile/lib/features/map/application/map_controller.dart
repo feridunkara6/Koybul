@@ -378,6 +378,14 @@ class MapController extends Notifier<MapState> {
     }
   }
 
+  /// ROTA ADI — KAYIT ANINDA (kullanıcı isteği 2026-08): "Rotayı kaydet" ile
+  /// verilen isim çipin başlığına HEMEN yazılır. Önceden ad yalnız kayıtlı
+  /// rota AÇILINCA görünüyordu; kayıt eden kullanıcı adını hiç göremiyordu.
+  void setRouteLabel(String name) {
+    if (state.route == null || name.isEmpty) return;
+    state = state.copyWith(routeLabel: name);
+  }
+
   /// Yeni başlangıçla: mevcut rota varsa onu, yoksa bekleyen hedefi planlar.
   Future<void> _replanWithOrigin(RouteOrigin origin) async {
     if (state.routeWaypoints.isNotEmpty) {

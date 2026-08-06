@@ -816,6 +816,36 @@ void main() {
     expect(_state(container).routeLabel, isNull);
   });
 
+  test('ROTA ADI — KAYIT ANINDA (2026-08): setRouteLabel adı çipe yazar; '
+      'rota yokken veya ad boşken hiçbir şey yapmaz', () async {
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.70, lon: 27.70), GeoPoint(lat: 36.75, lon: 28.93)],
+      distanceNm: 20,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final container = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: FakeSeaRouteEngine(plan));
+    await _ctrl(container).loadViewport(pinViewport);
+
+    // Rota yokken çağrı sessizce yok sayılır.
+    _ctrl(container).setRouteLabel('Datça turu');
+    expect(_state(container).routeLabel, isNull);
+
+    // Rota kur → "Rotayı kaydet"te verilen ad HEMEN çipe yazılır.
+    _shareLocation(container);
+    await _ctrl(container).routeTo(
+        const GeoPoint(lat: 36.75, lon: 28.93), 'loc-1',
+        name: 'D-Marin Göcek');
+    expect(_state(container).route, isNotNull);
+    _ctrl(container).setRouteLabel('Datça turu');
+    expect(_state(container).routeLabel, 'Datça turu');
+
+    // Boş ad yazılmaz — mevcut etiket korunur.
+    _ctrl(container).setRouteLabel('');
+    expect(_state(container).routeLabel, 'Datça turu');
+  });
+
   test('NOKTA EKLE modu: haritaya dokunuş ara nokta, pine dokunuş DURAK ekler', () async {
     const SeaRoutePlan plan = SeaRoutePlan(
       points: <GeoPoint>[GeoPoint(lat: 36.76, lon: 28.96), GeoPoint(lat: 36.75, lon: 28.93)],
