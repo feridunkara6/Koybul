@@ -105,7 +105,12 @@ void main() {
     await _advance(tester); // → harita ve koylar
     await _advance(tester); // → filtreler (hedef: üstteki çip şeridi)
     expect(find.text('Filtreler'), findsOneWidget);
-    expect(find.byKey(_spotKey), findsOneWidget); // delikli karartma çizildi
+    expect(find.byKey(_spotKey), findsOneWidget); // vurgu (delikli karartma)
+
+    // "İleri" düğmesi de ilerletir (premium v4 — açık eylem düğmesi).
+    await tester.tap(find.text('İleri'));
+    await tester.pumpAndSettle();
+    expect(find.text('Konumum'), findsOneWidget);
   });
 
   testWidgets('Atla: kartlar kapanır, Keşfet\'e dönülür, bir daha açılmaz',
@@ -142,7 +147,7 @@ void main() {
     await _advance(tester);
     expect(_tab(tester), 0);
     expect(find.text('Hazırsın, kaptan!'), findsOneWidget);
-    expect(find.text('Başlamak için ekrana dokun'), findsOneWidget);
+    expect(find.text('Başla'), findsOneWidget); // premium kapanış düğmesi
 
     // Son dokunuş turu bitirir; Keşfet'te kalınır.
     await _advance(tester);

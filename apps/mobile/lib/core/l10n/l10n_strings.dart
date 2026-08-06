@@ -265,6 +265,7 @@ class L10n {
     required this.routeAddPointBanner,
     required this.tourTapHint,
     required this.tourTapHintLast,
+    required this.tourStartBtn,
     required this.launchTitleA,
     required this.launchTitleB,
     required this.launchVal1,
@@ -458,6 +459,9 @@ class L10n {
   // tanıtım kartları.
   final String routeAddPointBtn, routeAddPointBanner, tourTapHint,
       tourTapHintLast;
+
+  /// Tur v4 (premium, 2026-08): son karttaki "Başla" düğmesi.
+  final String tourStartBtn;
 
   // Karşılama ekranı — E2 (onaylı açılış tasarımı 2026-08).
   final String launchTitleA, launchTitleB, launchVal1, launchVal2, launchVal3,
@@ -848,6 +852,7 @@ const L10n _tr = L10n(
   routeAddPointBanner: 'Rotaya nokta ekle — haritada bir yere dokun; koya dokunursan durak olur.',
   tourTapHint: 'Devam etmek için ekrana dokun',
   tourTapHintLast: 'Başlamak için ekrana dokun',
+  tourStartBtn: 'Başla',
   launchTitleA: "Ege ve Akdeniz'in koyları",
   launchTitleB: 'artık cebinde',
   launchVal1: 'Koylar, marinalar, derinlik ve rüzgâr bilgisi',
@@ -1242,6 +1247,7 @@ const L10n _en = L10n(
   routeAddPointBanner: 'Add a point to the route — tap the map; tapping a bay adds it as a stop.',
   tourTapHint: 'Tap the screen to continue',
   tourTapHintLast: 'Tap the screen to start',
+  tourStartBtn: 'Start',
   launchTitleA: 'The coves of the Aegean and Med',
   launchTitleB: 'now in your pocket',
   launchVal1: 'Coves, marinas, depth and wind info',
@@ -1636,6 +1642,7 @@ const L10n _es = L10n(
   routeAddPointBanner: 'Añade un punto a la ruta: toca el mapa; si tocas una cala, será una parada.',
   tourTapHint: 'Toca la pantalla para continuar',
   tourTapHintLast: 'Toca la pantalla para empezar',
+  tourStartBtn: 'Empezar',
   launchTitleA: 'Las calas del Egeo y el Mediterráneo',
   launchTitleB: 'ahora en tu bolsillo',
   launchVal1: 'Calas, puertos, profundidad y viento',
@@ -2030,6 +2037,7 @@ const L10n _ru = L10n(
   routeAddPointBanner: 'Добавьте точку к маршруту — коснитесь карты; касание бухты добавит её как остановку.',
   tourTapHint: 'Коснитесь экрана, чтобы продолжить',
   tourTapHintLast: 'Коснитесь экрана, чтобы начать',
+  tourStartBtn: 'Начать',
   launchTitleA: 'Бухты Эгейского и Средиземного морей',
   launchTitleB: 'теперь у вас в кармане',
   launchVal1: 'Бухты, марины, глубины и ветер',

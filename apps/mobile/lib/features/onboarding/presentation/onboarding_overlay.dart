@@ -10,11 +10,16 @@ import 'tour_targets.dart';
 /// Karartma rengi — marka lacivertinin koyusu.
 const Color _dimColor = Color(0xC7071626);
 
-/// TANITIM TURU v3 (kullanıcı isteği 2026-08): kart, anlattığı bölgeyi SPOT
-/// IŞIĞI + OKLA gösterir; gerekirse SAYFA DEĞİŞİR (Kayıtlarım, Günlük) ve
-/// tanıtım o sayfada devam eder. Ekrana dokunmak ilerletir; son kart
-/// "Hazırsın" der ve Keşfet'e dönülür. Hedef ölçülemezse kart ortada,
-/// spot'suz gösterilir — tur asla kırılmaz (v2 dersi).
+/// TANITIM TURU v4 — PREMIUM (kullanıcı isteği 2026-08): kaba çizgi-ok
+/// yerine, kaliteli uygulama tanıtımlarındaki dil kullanılır —
+///  • anlatılan bölge YUMUŞAK IŞIMALI vurgu halkasıyla aydınlık kalır ve
+///    yerine "oturma" animasyonuyla gelir;
+///  • kart, hedefe KONUŞMA BALONU UCUYLA bağlanır (havada uçan ok yok);
+///  • kartta adım sayacı (3/10), akıcı geçiş animasyonu ve İleri/Başla
+///    düğmesi vardır; ekranın herhangi bir yerine dokunmak da ilerletir;
+///  • tur gerekirse SAYFA DEĞİŞTİRİR (Kayıtlarım, Günlük) ve son kart
+///    "Hazırsın" deyip Keşfet'e döner.
+/// Hedef ölçülemezse kart ortada, vurgusuz gösterilir — tur asla kırılmaz.
 class TourOverlay extends ConsumerStatefulWidget {
   const TourOverlay({required this.step, super.key});
 
@@ -24,7 +29,7 @@ class TourOverlay extends ConsumerStatefulWidget {
   ConsumerState<TourOverlay> createState() => _TourOverlayState();
 }
 
-/// Adım tanımı: hangi sekmede geçer + (varsa) okla gösterilecek hedef + ikon.
+/// Adım tanımı: hangi sekmede geçer + (varsa) vurgulanacak hedef + ikon.
 class _TourStepDef {
   const _TourStepDef({required this.icon, this.tab = 0, this.target});
 
@@ -33,7 +38,7 @@ class _TourStepDef {
   final GlobalKey? target;
 }
 
-/// v3 adımları — sırası l10n `tourTitles`/`tourBodies` ile birebir aynıdır.
+/// v4 adımları — sırası l10n `tourTitles`/`tourBodies` ile birebir aynıdır.
 final List<_TourStepDef> _tourSteps = <_TourStepDef>[
   const _TourStepDef(icon: DocklyIcons.sailing), // ① hoş geldin
   const _TourStepDef(icon: DocklyIcons.place), // ② harita ve koylar
@@ -48,7 +53,7 @@ final List<_TourStepDef> _tourSteps = <_TourStepDef>[
 ];
 
 class _TourOverlayState extends ConsumerState<TourOverlay> {
-  /// Ölçülen hedef dikdörtgeni (genel/ekran koordinatı) — null ise kart ortada.
+  /// Ölçülen hedef dikdörtgeni (ekran koordinatı) — null ise kart ortada.
   Rect? _targetRect;
 
   @override
@@ -65,7 +70,7 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.step != widget.step) {
       // SENKRON ÖLÇÜM (inceleme dersi 2026-08): ölçümü çerçeve sonrasına
-      // bırakmak, oklu adımlarda 1 karelik "ortada kart" titremesi yapardı.
+      // bırakmak, vurgulu adımlarda 1 karelik "ortada kart" titremesi yapardı.
       _targetRect = _measure(_def);
       _sync();
     }
@@ -104,10 +109,33 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
     });
   }
 
+  void _next() =>
+      ref.read(onboardingControllerProvider.notifier).nextStep();
+
   /// "Atla" — tur kapanır; hangi sayfada olursak olalım Keşfet'e dönülür.
   void _skip() {
     ref.read(shellTabProvider.notifier).state = 0;
     ref.read(onboardingControllerProvider.notifier).skipTour();
+  }
+
+  /// Adımlar arası akıcı geçiş: içerik yumuşakça kayarak belirir.
+  Widget _stepSwitcher(Widget child) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 280),
+      switchInCurve: Curves.easeOutCubic,
+      switchOutCurve: Curves.easeIn,
+      transitionBuilder: (Widget c, Animation<double> a) => FadeTransition(
+        opacity: a,
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, 0.03),
+            end: Offset.zero,
+          ).animate(a),
+          child: c,
+        ),
+      ),
+      child: KeyedSubtree(key: ValueKey<int>(widget.step), child: child),
+    );
   }
 
   @override
@@ -121,9 +149,20 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
     final String body = s < t.tourBodies.length ? t.tourBodies[s] : '';
     final Size screen = MediaQuery.sizeOf(context);
     final Rect? spot = _targetRect;
-    // Kart, hedefin BOŞ kalan yarısına konur; ok aradaki boşlukta hedefi
-    // işaret eder (kullanıcı isteği: "okla o bölgeyi göstererek").
+    // Kart, hedefin BOŞ kalan yarısına konur; balon ucu hedefi işaret eder.
     final bool cardBelow = spot != null && spot.center.dy < screen.height / 2;
+    // Kart genişliği/konumu — balon ucunun yatay hizası hedefe göre hesaplanır.
+    final double cardW =
+        (screen.width - 32) < 420 ? (screen.width - 32) : 420.0;
+    // Kart hedefe YATAYDA da yaklaşır (tablet/geniş ekran cilası): balon ucu
+    // hedefin tam altına/üstüne oturur; kart ekran kenarından taşmaz.
+    final double cardLeft = spot == null
+        ? (screen.width - cardW) / 2
+        : (spot.center.dx - cardW / 2)
+            .clamp(16.0, screen.width - 16.0 - cardW);
+    final double tailLeft = spot == null
+        ? 0
+        : (spot.center.dx - cardLeft - 11).clamp(20.0, cardW - 42.0);
     final Widget card = _TourCard(
       step: s,
       last: last,
@@ -131,38 +170,56 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
       body: body,
       icon: _def.icon,
       t: t,
+      onNext: _next,
     );
     return GestureDetector(
       key: ValueKey<String>('onb-tour-step-$s'),
       behavior: HitTestBehavior.opaque,
-      // EKRANA DOKUN → SONRAKİ ADIM (son adımda biter). Alttaki ekran bu
-      // sırada dokunuş almaz (opaque karartma alt menüyü de kapsar).
-      onTap: () =>
-          ref.read(onboardingControllerProvider.notifier).nextStep(),
+      // EKRANA DOKUN → SONRAKİ ADIM (İleri düğmesi de aynı işi yapar).
+      // Alttaki ekran bu sırada dokunuş almaz (karartma alt menüyü de kapsar).
+      onTap: _next,
       child: Stack(
         children: <Widget>[
-          // Karartma: hedef varsa DELİKLİ (spot ışığı + çerçeve), yoksa düz.
+          // Karartma: hedef varsa yumuşak ışımalı VURGU (yerine oturma
+          // animasyonuyla), yoksa düz karartma.
           Positioned.fill(
             child: spot == null
                 ? const ColoredBox(color: _dimColor)
-                : CustomPaint(
-                    key: const ValueKey<String>('onb-tour-spot'),
-                    painter: _SpotDimPainter(hole: spot.inflate(7)),
+                : TweenAnimationBuilder<double>(
+                    key: ValueKey<String>('spot-anim-$s'),
+                    tween: Tween<double>(begin: 0, end: 1),
+                    duration: const Duration(milliseconds: 340),
+                    curve: Curves.easeOutCubic,
+                    builder: (BuildContext context, double v, Widget? _) =>
+                        CustomPaint(
+                      key: const ValueKey<String>('onb-tour-spot'),
+                      painter: _SpotDimPainter(hole: spot.inflate(9), t: v),
+                    ),
                   ),
           ),
-          // ATLA — her an çıkış (karar zaten işlendi; bir daha açılmaz).
+          // ATLA — buzlu cam hap (premium dil); her an çıkış.
           SafeArea(
             child: Align(
               alignment: Alignment.topRight,
               child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: TextButton(
-                  onPressed: _skip,
-                  child: Text(
-                    t.onbSkip,
-                    style: TextStyle(
-                      color: const Color(0xFFFFFFFF).withValues(alpha: 0.85),
-                      fontWeight: FontWeight.w700,
+                padding: const EdgeInsets.all(10),
+                child: Material(
+                  color: const Color(0x26FFFFFF),
+                  borderRadius: BorderRadius.circular(999),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(999),
+                    onTap: _skip,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 7),
+                      child: Text(
+                        t.onbSkip,
+                        style: const TextStyle(
+                          color: Color(0xFFFFFFFF),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -172,46 +229,48 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
           if (spot == null)
             Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 420),
-                  child: card,
+                  constraints: BoxConstraints(maxWidth: cardW),
+                  child: _stepSwitcher(card),
                 ),
               ),
             )
-          else ...<Widget>[
-            // OK: kart ile spot arasındaki boşlukta, hedefi işaret eder.
+          else
+            // Kart + balon ucu: hedefin hemen yanında, ona bağlı görünür.
             Positioned(
-              left: (spot.center.dx - 40).clamp(8.0, screen.width - 88.0),
-              top: cardBelow ? spot.bottom + 10 : null,
-              bottom: cardBelow ? null : screen.height - spot.top + 10,
-              child: IgnorePointer(
-                child: CustomPaint(
-                  size: const Size(80, 44),
-                  painter: _TourArrowPainter(pointsUp: cardBelow),
+              left: cardLeft,
+              width: cardW,
+              top: cardBelow ? spot.bottom + 18 : null,
+              bottom: cardBelow ? null : screen.height - spot.top + 18,
+              child: _stepSwitcher(
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    if (cardBelow)
+                      Padding(
+                        padding: EdgeInsets.only(left: tailLeft),
+                        child: const _CardTail(pointsUp: true),
+                      ),
+                    card,
+                    if (!cardBelow)
+                      Padding(
+                        padding: EdgeInsets.only(left: tailLeft),
+                        child: const _CardTail(pointsUp: false),
+                      ),
+                  ],
                 ),
               ),
             ),
-            Positioned(
-              left: 16,
-              right: 16,
-              top: cardBelow ? spot.bottom + 60 : null,
-              bottom: cardBelow ? null : screen.height - spot.top + 60,
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 420),
-                  child: card,
-                ),
-              ),
-            ),
-          ],
         ],
       ),
     );
   }
 }
 
-/// Tur kartı: ikon + başlık + gövde + ilerleme noktaları + dokunuş ipucu.
+/// Tur kartı (premium): ikon + başlık + adım sayacı hapı + gövde +
+/// animasyonlu ilerleme noktaları + İleri/Başla düğmesi.
 class _TourCard extends StatelessWidget {
   const _TourCard({
     required this.step,
@@ -220,6 +279,7 @@ class _TourCard extends StatelessWidget {
     required this.body,
     required this.icon,
     required this.t,
+    required this.onNext,
   });
 
   final int step;
@@ -228,15 +288,18 @@ class _TourCard extends StatelessWidget {
   final String body;
   final DocklyIconData icon;
   final L10n t;
+  final VoidCallback onNext;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return Material(
-      borderRadius: BorderRadius.circular(20),
+      elevation: 16,
+      shadowColor: const Color(0x59071626),
+      borderRadius: BorderRadius.circular(22),
       color: theme.colorScheme.surface,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 16, 18, 14),
+        padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,24 +333,44 @@ class _TourCard extends StatelessWidget {
                   child: Text(
                     title,
                     style: theme.textTheme.titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w800),
+                        ?.copyWith(fontWeight: FontWeight.w800, height: 1.15),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // ADIM SAYACI (3/10): kullanıcı turda nerede, bilir.
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: DocklyColors.brandPrimary.withValues(alpha: 0.10),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    '${step + 1}/$kTourStepCount',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: DocklyColors.brandPrimary,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             Text(
               body,
-              style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                height: 1.5,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
-            const SizedBox(height: 14),
-            // İlerleme noktaları + dokunuş ipucu ALT ALTA — dar ekranda ve
-            // uzun çevirilerde (RU) taşma olmaz.
+            const SizedBox(height: 16),
             Row(
               children: <Widget>[
                 for (int i = 0; i < kTourStepCount; i++)
-                  Container(
-                    width: i == step ? 16 : 6,
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 220),
+                    curve: Curves.easeOutCubic,
+                    width: i == step ? 18 : 6,
                     height: 6,
                     margin: const EdgeInsets.only(right: 4),
                     decoration: BoxDecoration(
@@ -297,15 +380,20 @@ class _TourCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(3),
                     ),
                   ),
+                const Spacer(),
+                FilledButton(
+                  onPressed: onNext,
+                  style: FilledButton.styleFrom(
+                    minimumSize: const Size(0, 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    textStyle: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  child: Text(last ? t.tourStartBtn : t.onbNext),
+                ),
               ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              last ? t.tourTapHintLast : t.tourTapHint,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: DocklyColors.brandPrimary,
-                fontWeight: FontWeight.w700,
-              ),
             ),
           ],
         ),
@@ -314,69 +402,99 @@ class _TourCard extends StatelessWidget {
   }
 }
 
-/// Delikli karartma: hedefin çevresi aydınlık kalır (spot ışığı) ve ince
-/// beyaz çerçeveyle vurgulanır.
-class _SpotDimPainter extends CustomPainter {
-  const _SpotDimPainter({required this.hole});
+/// Karta bağlı balon ucu: hedefe bakan yumuşak (ucu kavisli) üçgen —
+/// kart hedefe "bağlı" görünür; havada uçan ok yoktur.
+class _CardTail extends StatelessWidget {
+  const _CardTail({required this.pointsUp});
 
-  final Rect hole;
+  /// true → uç yukarıyı (üstteki hedefi) gösterir; false → aşağıyı.
+  final bool pointsUp;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      size: const Size(22, 10),
+      painter: _CardTailPainter(
+        pointsUp: pointsUp,
+        color: Theme.of(context).colorScheme.surface,
+      ),
+    );
+  }
+}
+
+class _CardTailPainter extends CustomPainter {
+  const _CardTailPainter({required this.pointsUp, required this.color});
+
+  final bool pointsUp;
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final RRect r = RRect.fromRectAndRadius(hole, const Radius.circular(14));
+    final double base = pointsUp ? size.height : 0;
+    final double tip = pointsUp ? 0 : size.height;
+    final double bulge = pointsUp ? 2.0 : -2.0;
+    final Path p = Path()
+      ..moveTo(0, base)
+      ..lineTo(size.width * 0.5 - 3, tip + bulge)
+      ..quadraticBezierTo(
+          size.width * 0.5, tip - bulge * 0.5, size.width * 0.5 + 3, tip + bulge)
+      ..lineTo(size.width, base)
+      ..close();
+    canvas.drawPath(p, Paint()..color = color);
+  }
+
+  @override
+  bool shouldRepaint(_CardTailPainter oldDelegate) =>
+      oldDelegate.pointsUp != pointsUp || oldDelegate.color != color;
+}
+
+/// Delikli karartma + yumuşak ışıma: hedefin çevresi aydınlık kalır; halka,
+/// içten dışa incelen turkuaz katmanlarla "ışıldar" (bulanıklaştırma yok —
+/// her cihaz/çizim motorunda birebir aynı görünür). [t] 0→1 yerleşme
+/// animasyonudur: delik hafif geniş başlar, yerine oturur; ışıma belirir.
+class _SpotDimPainter extends CustomPainter {
+  const _SpotDimPainter({required this.hole, required this.t});
+
+  final Rect hole;
+  final double t;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Rect h = hole.inflate((1 - t) * 10);
+    final RRect r = RRect.fromRectAndRadius(h, const Radius.circular(16));
     final Path dim = Path.combine(
       PathOperation.difference,
       Path()..addRect(Offset.zero & size),
       Path()..addRRect(r),
     );
     canvas.drawPath(dim, Paint()..color = _dimColor);
+    const Color glow = Color(0xFF7FE3D9);
+    canvas.drawRRect(
+      r.inflate(5),
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 9
+        ..color = glow.withValues(alpha: 0.10 * t),
+    );
+    canvas.drawRRect(
+      r.inflate(2),
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 4
+        ..color = glow.withValues(alpha: 0.26 * t),
+    );
     canvas.drawRRect(
       r,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 2
-        ..color = const Color(0xFFFFFFFF).withValues(alpha: 0.9),
+        ..strokeWidth = 1.6
+        ..color = const Color(0xFFFFFFFF).withValues(alpha: 0.95 * t),
     );
   }
 
   @override
-  bool shouldRepaint(_SpotDimPainter oldDelegate) => oldDelegate.hole != hole;
-}
-
-/// Karttan hedefe uzanan kıvrımlı ok (uçta V başlık).
-class _TourArrowPainter extends CustomPainter {
-  const _TourArrowPainter({required this.pointsUp});
-
-  /// true → ok yukarıyı (üstteki hedefi) gösterir; false → aşağıyı.
-  final bool pointsUp;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint line = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.6
-      ..strokeCap = StrokeCap.round
-      ..color = const Color(0xFFFFFFFF).withValues(alpha: 0.92);
-    final double tipY = pointsUp ? 3 : size.height - 3;
-    final double tailY = pointsUp ? size.height - 3 : 3;
-    final Offset tip = Offset(size.width / 2, tipY);
-    final Path path = Path()
-      ..moveTo(size.width * 0.78, tailY)
-      ..quadraticBezierTo(
-        size.width * 0.72,
-        (tailY + tipY) / 2,
-        tip.dx,
-        tipY + (pointsUp ? 6 : -6),
-      );
-    canvas.drawPath(path, line);
-    final double d = pointsUp ? 1 : -1;
-    canvas.drawLine(tip, tip + Offset(-6, 8 * d), line);
-    canvas.drawLine(tip, tip + Offset(6, 8 * d), line);
-  }
-
-  @override
-  bool shouldRepaint(_TourArrowPainter oldDelegate) =>
-      oldDelegate.pointsUp != pointsUp;
+  bool shouldRepaint(_SpotDimPainter oldDelegate) =>
+      oldDelegate.hole != hole || oldDelegate.t != t;
 }
 
 /// İLK-DOKUNUŞ İPUCU BALONU: özellik ilk kez kullanılırken tek seferlik küçük
