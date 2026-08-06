@@ -64,6 +64,10 @@ class FakeRouteWindAdvisor extends RouteWindAdvisor {
   final RouteWindReport? report;
   int calls = 0;
 
+  /// Doldurulursa analiz bu kapı tamamlanana dek BEKLER — yavaş ağ taklidi
+  /// (isim-gecikmesi düzeltmesi testi, 2026-08).
+  Completer<void>? gate;
+
   @override
   Future<RouteWindReport?> analyze(
     SeaRoutePlan plan,
@@ -71,6 +75,8 @@ class FakeRouteWindAdvisor extends RouteWindAdvisor {
     DateTime? departure,
   }) async {
     calls++;
+    final Completer<void>? g = gate;
+    if (g != null) await g.future;
     return report;
   }
 }
@@ -814,6 +820,51 @@ void main() {
         name: 'D-Marin Göcek');
     expect(_state(container).route, isNotNull);
     expect(_state(container).routeLabel, isNull);
+  });
+
+  test('İSİM GECİKMEZ (düzeltme 2026-08): kayıtlı rota adı rüzgâr analizi '
+      'BİTMEDEN, rota çizildiği anda görünür', () async {
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.70, lon: 27.70), GeoPoint(lat: 36.75, lon: 28.93)],
+      distanceNm: 20,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    // Gerçek bir rüzgâr raporu ver: analiz bitince raporun geldiğini ve
+    // ismin rapor yazılırken de KORUNDUĞUNU birlikte kanıtlarız.
+    const RouteSample rs = RouteSample(
+      point: GeoPoint(lat: 36.72, lon: 28.3),
+      etaHours: 1,
+      bearingDeg: 0,
+    );
+    final RouteWindReport report = buildRouteWindReport(const <RouteWindSample>[
+      RouteWindSample(sample: rs, windKn: 12, gustKn: null, windDirDeg: 200),
+    ])!;
+    final container = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: FakeSeaRouteEngine(plan), windReport: report);
+    await _ctrl(container).loadViewport(pinViewport);
+    // Danışmanı kur ve kapıda tut — gerçek dünyada yavaş hava-tahmini ağı.
+    container.read(routeWindAdvisorProvider);
+    lastFakeAdvisor!.gate = Completer<void>();
+
+    const RouteOrigin picked =
+        RouteOrigin(pos: GeoPoint(lat: 36.70, lon: 27.70), name: 'Datça');
+    const List<RouteWaypoint> wps = <RouteWaypoint>[
+      RouteWaypoint(pos: GeoPoint(lat: 36.75, lon: 28.93), id: 'loc-1', name: 'D-Marin Göcek'),
+    ];
+    final Future<void> opening =
+        _ctrl(container).openSavedRoute(picked, wps, name: 'Datça turu');
+    // Planlama sahte motorla anında biter; rüzgâr hâlâ kapıda bekliyor.
+    await Future<void>.delayed(Duration.zero);
+    await Future<void>.delayed(Duration.zero);
+    expect(_state(container).route, isNotNull);
+    expect(_state(container).routeWind, isNull); // analiz DAHA BİTMEDİ
+    expect(_state(container).routeLabel, 'Datça turu'); // ama isim EKRANDA
+
+    lastFakeAdvisor!.gate!.complete();
+    await opening;
+    expect(_state(container).routeWind, isNotNull); // rapor SONRADAN geldi
+    expect(_state(container).routeLabel, 'Datça turu'); // isim korundu
   });
 
   test('ROTA ADI — KAYIT ANINDA (2026-08): setRouteLabel adı çipe yazar; '

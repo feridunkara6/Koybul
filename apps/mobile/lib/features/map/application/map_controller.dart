@@ -370,12 +370,11 @@ class MapController extends Notifier<MapState> {
       if (gps == null) return;
       effective = RouteOrigin(pos: gps, isDevice: true);
     }
-    await _planTrip(effective, waypoints, editing: false);
-    // KAYITLI ROTA ADI (kullanıcı isteği 2026-08): verdiği isim çipte
-    // görünsün. Yalnız plan BAŞARILIYSA yazılır.
-    if (name != null && state.route != null) {
-      state = state.copyWith(routeLabel: name);
-    }
+    // KAYITLI ROTA ADI (isim-gecikmesi düzeltmesi 2026-08): ad, planlayıcıya
+    // taşınır ve rota EKRANA GELDİĞİ ANDA yazılır. Önceden ad rüzgâr analizi
+    // (ağ çağrısı!) bittikten SONRA yazılıyordu — yavaş bağlantıda kullanıcı
+    // "isim gözükmüyor" görüyordu. Yalnız plan başarılıysa yazılır.
+    await _planTrip(effective, waypoints, editing: false, label: name);
   }
 
   /// ROTA ADI — KAYIT ANINDA (kullanıcı isteği 2026-08): "Rotayı kaydet" ile
@@ -483,6 +482,7 @@ class MapController extends Notifier<MapState> {
     RouteOrigin origin,
     List<RouteWaypoint> wps, {
     required bool editing,
+    String? label,
   }) async {
     state = state.copyWith(isRouting: true);
     final int req = ++_routeReq; // stale koruması (rota istekleri arasında)
@@ -519,9 +519,11 @@ class MapController extends Notifier<MapState> {
       // Kamera yalnız YENİ rotaya sığdırılır; düzenlemede (tutamaç/durak)
       // kullanıcının baktığı yer değişmez (seq artmaz).
       routeSeq: state.routeSeq + (editing ? 0 : 1),
-      // Yeni rota kuruluşunda eski kayıt adı düşer (openSavedRoute başarı
-      // sonrası adı yeniden yazar); düzenlemede ad korunur.
-      clearRouteLabel: !editing,
+      // KAYIT ADI (isim-gecikmesi düzeltmesi 2026-08): kayıtlı rota adı rota
+      // çizildiği ANDA yazılır — rüzgâr analizi beklenmez. Adsız yeni rotada
+      // eski ad düşer (etiket bayat kalmaz); düzenlemede ad korunur.
+      routeLabel: label,
+      clearRouteLabel: !editing && label == null,
       clearRouteWind: true, // yeni rota → eski rüzgâr raporu geçersiz
     );
     // RÜZGÂR ANALİZİ (Rota v2): arka planda, en iyi çaba — rota çizimi bunu
