@@ -8,3 +8,8 @@ final GlobalKey tourKeyChips = GlobalKey(debugLabel: 'tour-chips');
 final GlobalKey tourKeyLocate = GlobalKey(debugLabel: 'tour-locate');
 final GlobalKey tourKeySos = GlobalKey(debugLabel: 'tour-sos');
 final GlobalKey tourKeySearch = GlobalKey(debugLabel: 'tour-search');
+
+// Örnekli tur v5 (kullanıcı isteği 2026-08): canlı örneklerin hedefleri.
+final GlobalKey tourKeyRouteChip = GlobalKey(debugLabel: 'tour-route-chip');
+final GlobalKey tourKeySavedDemo = GlobalKey(debugLabel: 'tour-saved-demo');
+final GlobalKey tourKeyLogDemo = GlobalKey(debugLabel: 'tour-log-demo');

@@ -1,8 +1,16 @@
+import 'dart:async' show unawaited;
+
+import 'package:dockly_api/dockly_api.dart' show GeoPoint;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../../core/origin_provider.dart';
+import '../../map/application/map_controller.dart';
+import '../../map/domain/map_state.dart';
+import '../../map/domain/map_viewport.dart';
+import '../../route/domain/sea_trip.dart';
 import '../../shell/application/shell_tab_provider.dart';
 import '../application/onboarding_controller.dart';
 import 'tour_targets.dart';
@@ -29,32 +37,76 @@ class TourOverlay extends ConsumerStatefulWidget {
   ConsumerState<TourOverlay> createState() => _TourOverlayState();
 }
 
-/// Adım tanımı: hangi sekmede geçer + (varsa) vurgulanacak hedef + ikon.
+/// Adımın canlı örneği (örnekli tur v5, kullanıcı isteği 2026-08).
+enum _TourDemo { none, pin, route }
+
+/// Pencere vurguları: hedef bir widget değil HARİTANIN KENDİSİYKEN karartma
+/// bu dikdörtgeni aydınlık bırakır (örnek rota / işaretler görünür kalsın).
+Rect _mapWindow(Size s) =>
+    Rect.fromLTRB(12, 108, s.width - 12, s.height * 0.55);
+Rect _routeWindow(Size s) =>
+    Rect.fromLTRB(12, 54, s.width - 12, s.height * 0.52);
+
+/// Adım tanımı: sekme + (varsa) vurgulanacak hedef/pencere + canlı örnek.
 class _TourStepDef {
-  const _TourStepDef({required this.icon, this.tab = 0, this.target});
+  const _TourStepDef({
+    required this.icon,
+    this.tab = 0,
+    this.target,
+    this.window,
+    this.demo = _TourDemo.none,
+  });
 
   final DocklyIconData icon;
   final int tab;
   final GlobalKey? target;
+
+  /// Hedef yoksa aydınlık bırakılacak ekran penceresi (harita örnekleri).
+  final Rect Function(Size screen)? window;
+
+  final _TourDemo demo;
 }
 
-/// v4 adımları — sırası l10n `tourTitles`/`tourBodies` ile birebir aynıdır.
+/// v5 adımları — sırası l10n `tourTitles`/`tourBodies` ile birebir aynıdır.
+/// Örnekli adımlar CANLI içerik gösterir: işaret seçimi, gerçek motorla
+/// çizilen örnek rota, Kayıtlarım/Günlük'te örnek kartlar.
 final List<_TourStepDef> _tourSteps = <_TourStepDef>[
   const _TourStepDef(icon: DocklyIcons.sailing), // ① hoş geldin
-  const _TourStepDef(icon: DocklyIcons.place), // ② harita ve koylar
+  const _TourStepDef( // ② harita ve koylar — örnek işaret seçilir
+      icon: DocklyIcons.place, window: _mapWindow, demo: _TourDemo.pin),
   _TourStepDef(icon: DocklyIcons.checkCircle, target: tourKeyChips), // ③
   _TourStepDef(icon: DocklyIcons.explore, target: tourKeyLocate), // ④
   _TourStepDef(icon: DocklyIcons.errorOutline, target: tourKeySos), // ⑤
-  const _TourStepDef(icon: DocklyIcons.navigation), // ⑥ deniz rotası
-  const _TourStepDef(icon: DocklyIcons.edit), // ⑦ rota düzenle & kaydet
-  const _TourStepDef(icon: DocklyIcons.favorite, tab: 2), // ⑧ Kayıtlarım
-  const _TourStepDef(icon: DocklyIcons.edit, tab: 3), // ⑨ Günlük
+  const _TourStepDef( // ⑥ deniz rotası — örnek rota pencerede canlı çizilir
+      icon: DocklyIcons.navigation,
+      window: _routeWindow,
+      demo: _TourDemo.route),
+  _TourStepDef( // ⑦ rota düzenle & kaydet — örnek rotanın bilgi kartı
+      icon: DocklyIcons.edit,
+      target: tourKeyRouteChip,
+      window: _routeWindow,
+      demo: _TourDemo.route),
+  _TourStepDef( // ⑧ Kayıtlarım — örnek rota kartı (ekranın kendisi gösterir)
+      icon: DocklyIcons.favorite, tab: 2, target: tourKeySavedDemo),
+  _TourStepDef( // ⑨ Günlük — örnek not (ekranın kendisi gösterir)
+      icon: DocklyIcons.edit, tab: 3, target: tourKeyLogDemo),
   const _TourStepDef(icon: DocklyIcons.sailing), // ⑩ hazırsın (Keşfet'te)
 ];
 
 class _TourOverlayState extends ConsumerState<TourOverlay> {
   /// Ölçülen hedef dikdörtgeni (ekran koordinatı) — null ise kart ortada.
   Rect? _targetRect;
+
+  /// Örnek rotayı BİZ çizdiysek true — kullanıcının kendi rotasına asla
+  /// dokunulmaz (rotası varsa örnek hiç başlamaz, temizlik de yapılmaz).
+  bool _demoRoute = false;
+
+  /// Örnek olarak seçtiğimiz işaretin kimliği (temizlikte geri alınır).
+  String? _demoPinId;
+
+  /// Örnek rota çizilmeden ÖNCE bakılan yer — temizlikte kamera geri döner
+  /// (kullanıcı turun sonunda kendi koyuna bakmaya devam etsin).
+  GeoPoint? _preDemoCenter;
 
   @override
   void initState() {
@@ -104,16 +156,84 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
           return;
         }
       }
+      _applyDemos(d);
       final Rect? r = _measure(d);
       if (r != _targetRect) setState(() => _targetRect = r);
     });
   }
 
+  /// CANLI ÖRNEKLER (kullanıcı isteği 2026-08): adım ne anlatıyorsa onu
+  /// gerçekten YAPAR — çerçeve sonrası güvenli evrede çalışır; adım
+  /// değişince örnekler geri alınır (kalıcı hiçbir şey yazılmaz).
+  void _applyDemos(_TourStepDef d) {
+    final MapController map = ref.read(mapControllerProvider.notifier);
+    final MapState ms = ref.read(mapControllerProvider);
+    // ÖRNEK ROTA: gerçek motorla, maskeye karşı doğrulanmış iki su noktası
+    // arasında çizilir (kamera rotaya kendiliğinden uçar).
+    if (d.demo == _TourDemo.route) {
+      if (!_demoRoute && ms.route == null && !ms.isRouting) {
+        _demoRoute = true;
+        // Kamera örnek rotaya uçmadan önceki merkez — dönüş bileti.
+        _preDemoCenter =
+            ref.read(devicePositionProvider) ?? ref.read(originProvider);
+        final L10n t = ref.read(l10nProvider);
+        unawaited(map.openSavedRoute(
+          // "Göcek" özel addır — çevrilmez (koy isimleri kuralı).
+          const RouteOrigin(pos: kTourDemoOrigin, name: 'Göcek'),
+          <RouteWaypoint>[
+            RouteWaypoint(pos: kTourDemoDest, name: t.tourDemoStop),
+          ],
+          name: t.tourDemoRouteName,
+        ));
+      }
+    } else {
+      _clearDemoRoute();
+    }
+    // ÖRNEK İŞARET: koylar yüklüyse biri seçilir — işaret büyür, kullanıcı
+    // bağlama noktası imlecinin SEÇİLİ halini gerçek örnek üstünde görür.
+    if (d.demo == _TourDemo.pin) {
+      if (_demoPinId == null &&
+          ms.selectedPinId == null &&
+          ms.pins.isNotEmpty) {
+        _demoPinId = ms.pins.first.id;
+        map.selectPin(_demoPinId!);
+      }
+    } else {
+      _clearDemoPin();
+    }
+  }
+
+  void _clearDemoRoute() {
+    if (!_demoRoute) return;
+    _demoRoute = false;
+    ref.read(mapControllerProvider.notifier).clearRoute();
+    // KAMERA GERİ DÖNER (inceleme dersi 2026-08): örnek rota kamerayı
+    // Göcek'e uçurmuştu — kullanıcı kendi baktığı yere geri getirilir.
+    final GeoPoint? back = _preDemoCenter;
+    _preDemoCenter = null;
+    if (back != null) {
+      final int nextSeq = (ref.read(mapFocusProvider)?.seq ?? 0) + 1;
+      ref.read(mapFocusProvider.notifier).state =
+          MapFocusRequest(point: back, seq: nextSeq, zoom: 11);
+    }
+  }
+
+  void _clearDemoPin() {
+    final String? id = _demoPinId;
+    if (id == null) return;
+    _demoPinId = null;
+    if (ref.read(mapControllerProvider).selectedPinId == id) {
+      ref.read(mapControllerProvider.notifier).clearSelection();
+    }
+  }
+
   void _next() =>
       ref.read(onboardingControllerProvider.notifier).nextStep();
 
-  /// "Atla" — tur kapanır; hangi sayfada olursak olalım Keşfet'e dönülür.
+  /// "Atla" — tur kapanır; örnekler temizlenir, Keşfet'e dönülür.
   void _skip() {
+    _clearDemoRoute();
+    _clearDemoPin();
     ref.read(shellTabProvider.notifier).state = 0;
     ref.read(onboardingControllerProvider.notifier).skipTour();
   }
@@ -142,13 +262,30 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
   Widget build(BuildContext context) {
     assert(_tourSteps.length == kTourStepCount,
         'adım tanımları l10n listeleriyle aynı boyda olmalı');
+    // Adım dizinleri sabitlerle SENKRON kalsın (ekranlar bu sabitleri okur).
+    assert(_tourSteps[kTourStepMarkers].demo == _TourDemo.pin);
+    assert(_tourSteps[kTourStepRoute].demo == _TourDemo.route);
+    assert(_tourSteps[kTourStepRouteEdit].demo == _TourDemo.route);
+    assert(_tourSteps[kTourStepSaved].tab == 2);
+    assert(_tourSteps[kTourStepLog].tab == 3);
     final L10n t = ref.watch(l10nProvider);
     final int s = widget.step.clamp(0, kTourStepCount - 1);
     final bool last = s == kTourStepCount - 1;
     final String title = s < t.tourTitles.length ? t.tourTitles[s] : '';
     final String body = s < t.tourBodies.length ? t.tourBodies[s] : '';
     final Size screen = MediaQuery.sizeOf(context);
-    final Rect? spot = _targetRect;
+    // CANLI ÖRNEK tetikleyicileri: koylar sonradan yüklenirse işaret seçilir;
+    // örnek rota çizilince çip ölçülür — DÖNGÜSÜZ (yalnız değişimde uyanır).
+    ref.listen<int>(
+      mapControllerProvider.select((MapState s) => s.pins.length),
+      (int? prev, int next) => _sync(),
+    );
+    ref.listen<bool>(
+      mapControllerProvider.select((MapState s) => s.route != null),
+      (bool? prev, bool next) => _sync(),
+    );
+    // Hedef ölçülemediyse pencere vurgusu kullanılır (harita örnekleri).
+    final Rect? spot = _targetRect ?? _def.window?.call(screen);
     // Kart, hedefin BOŞ kalan yarısına konur; balon ucu hedefi işaret eder.
     final bool cardBelow = spot != null && spot.center.dy < screen.height / 2;
     // Kart genişliği/konumu — balon ucunun yatay hizası hedefe göre hesaplanır.
@@ -244,22 +381,35 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
               top: cardBelow ? spot.bottom + 18 : null,
               bottom: cardBelow ? null : screen.height - spot.top + 18,
               child: _stepSwitcher(
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    if (cardBelow)
-                      Padding(
-                        padding: EdgeInsets.only(left: tailLeft),
-                        child: const _CardTail(pointsUp: true),
-                      ),
-                    card,
-                    if (!cardBelow)
-                      Padding(
-                        padding: EdgeInsets.only(left: tailLeft),
-                        child: const _CardTail(pointsUp: false),
-                      ),
-                  ],
+                // KISA EKRAN EMNİYETİ (inceleme dersi 2026-08): kart ekranın
+                // altına sığmazsa içerik kaydırılabilir kalır — İleri düğmesi
+                // asla ekran dışında kaybolmaz.
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: (cardBelow
+                            ? screen.height - spot.bottom - 30
+                            : spot.top - 30)
+                        .clamp(180.0, screen.height),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        if (cardBelow)
+                          Padding(
+                            padding: EdgeInsets.only(left: tailLeft),
+                            child: const _CardTail(pointsUp: true),
+                          ),
+                        card,
+                        if (!cardBelow)
+                          Padding(
+                            padding: EdgeInsets.only(left: tailLeft),
+                            child: const _CardTail(pointsUp: false),
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),

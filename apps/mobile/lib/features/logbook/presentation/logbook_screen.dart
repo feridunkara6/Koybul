@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../onboarding/application/onboarding_controller.dart';
+import '../../onboarding/presentation/tour_targets.dart';
 import '../application/logbook_controller.dart';
 import '../domain/log_entry.dart';
 
@@ -16,6 +18,12 @@ class LogbookScreen extends ConsumerWidget {
     final L10n t = ref.watch(l10nProvider);
     final ThemeData theme = Theme.of(context);
     final List<LogEntry> entries = ref.watch(logbookProvider);
+    // ÖRNEKLİ TUR (kullanıcı isteği 2026-08): turun Günlük adımında ekran
+    // boş kalmaz — ÖRNEK rozetli bir not gösterilir; kalıcı hiçbir şey
+    // yazılmaz, adım geçince not kaybolur.
+    final bool tourDemo = ref.watch(onboardingControllerProvider
+            .select((OnboardingState s) => s.tourStep)) ==
+        kTourStepLog;
     return Scaffold(
       appBar: AppBar(title: Text(t.logbookTitle)),
       floatingActionButton: FloatingActionButton.extended(
@@ -26,7 +34,7 @@ class LogbookScreen extends ConsumerWidget {
         backgroundColor: DocklyColors.brandPrimary,
         foregroundColor: Colors.white,
       ),
-      body: entries.isEmpty
+      body: entries.isEmpty && !tourDemo
           ? Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
@@ -40,10 +48,60 @@ class LogbookScreen extends ConsumerWidget {
             )
           : ListView.builder(
               padding: const EdgeInsets.fromLTRB(12, 12, 12, 96),
-              itemCount: entries.length,
-              itemBuilder: (BuildContext context, int i) =>
-                  _LogEntryCard(entry: entries[i]),
+              itemCount: entries.length + (tourDemo ? 1 : 0),
+              itemBuilder: (BuildContext context, int i) {
+                if (tourDemo && i == 0) {
+                  return KeyedSubtree(
+                    key: tourKeyLogDemo,
+                    child: const _TourDemoLogCard(),
+                  );
+                }
+                return _LogEntryCard(
+                    entry: entries[tourDemo ? i - 1 : i]);
+              },
             ),
+    );
+  }
+}
+
+/// ÖRNEKLİ TUR notu: gerçek not kartına birebir benzer, ÖRNEK rozetlidir ve
+/// dokunulamaz. Kalıcı değildir — depoya yazılmaz, tur geçince kaybolur.
+class _TourDemoLogCard extends ConsumerWidget {
+  const _TourDemoLogCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final LogEntry demo = LogEntry(
+      id: 'tour-demo-log',
+      dateMs: DateTime.now().millisecondsSinceEpoch,
+      text: t.tourDemoLogText,
+      ctxRoute: t.tourDemoRouteName, // rota bağlamı böyle görünür
+    );
+    return Stack(
+      children: <Widget>[
+        IgnorePointer(child: _LogEntryCard(entry: demo)),
+        Positioned(
+          top: 6,
+          right: 14,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            decoration: BoxDecoration(
+              color: DocklyColors.brandPrimary,
+              borderRadius: BorderRadius.circular(999),
+            ),
+            child: Text(
+              t.tourDemoBadge,
+              style: const TextStyle(
+                color: Color(0xFFFFFFFF),
+                fontSize: 9,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.8,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

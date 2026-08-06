@@ -540,6 +540,9 @@ class MapController extends Notifier<MapState> {
 
   /// Çizili rotayı kaldırır (rota çipindeki kapat düğmesi).
   void clearRoute() {
+    // BEKLEYEN PLAN İPTAL (örnekli tur dersi 2026-08): kapat'a basıldığında
+    // hâlâ hesaplanan bir rota varsa bitince "geri gelmesin".
+    ++_routeReq;
     state = state.copyWith(clearRoute: true, isRouting: false);
   }
 

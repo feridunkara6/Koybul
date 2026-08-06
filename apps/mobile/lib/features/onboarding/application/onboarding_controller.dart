@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dockly_api/dockly_api.dart' show GeoPoint;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/shared_prefs_onboarding_store.dart';
@@ -15,6 +16,20 @@ final Provider<OnboardingStore> onboardingStoreProvider =
 /// ⑥ deniz rotası ⑦ rota düzenleme & kaydetme ⑧ Kayıtlarım (sekme 2)
 /// ⑨ Kaptanın Günlüğü (sekme 3) ⑩ "Hazırsın" — Keşfet'e dönülür.
 const int kTourStepCount = 10;
+
+/// ÖRNEKLİ TUR v5 (kullanıcı isteği 2026-08): bu adımlarda ekranlar CANLI
+/// ÖRNEK gösterir — kalıcı hiçbir şey yazılmaz, tur bitince örnekler silinir.
+const int kTourStepMarkers = 1; // bir koy işareti örnek olarak seçilir
+const int kTourStepRoute = 5; // gerçek motorla örnek rota çizilir
+const int kTourStepRouteEdit = 6; // örnek rotanın bilgi kartı anlatılır
+const int kTourStepSaved = 7; // Kayıtlarım: örnek rota kartı görünür
+const int kTourStepLog = 8; // Günlük: örnek not görünür
+
+/// ÖRNEK ROTA uçları — sea_mask'e karşı DOĞRULANMIŞ su noktaları (Göcek
+/// açığı -> 5,1 nm güney; aynı su kütlesi). TEK KAYNAK: hem turdaki canlı
+/// rota hem Kayıtlarım'daki örnek kart bu uçları kullanır.
+const GeoPoint kTourDemoOrigin = GeoPoint(lat: 36.740, lon: 28.935);
+const GeoPoint kTourDemoDest = GeoPoint(lat: 36.660, lon: 28.900);
 
 /// İlk-dokunuş ipucu anahtarları (cihazda kalıcı — bir kez gösterilir).
 const String kHintBottomCard = 'bottom_card';

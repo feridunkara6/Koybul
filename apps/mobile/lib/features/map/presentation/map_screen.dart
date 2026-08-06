@@ -48,7 +48,12 @@ class MapScreen extends ConsumerWidget {
     ref.listen<int>(
       mapControllerProvider.select((MapState s) => s.routeSeq),
       (int? prev, int next) {
-        if (prev != null && next > prev) {
+        // TUR SIRASINDA SORULMAZ (örnekli tur dersi 2026-08): turun örnek
+        // rotası günde-bir kontrol sorusunu tetiklememeli — soru kullanıcının
+        // İLK GERÇEK rotasına saklanır (kalıcı hak yakılmaz).
+        if (prev != null &&
+            next > prev &&
+            !ref.read(onboardingControllerProvider).tourActive) {
           ref.read(checklistProvider.notifier).maybePrompt();
         }
       },
@@ -245,7 +250,11 @@ class MapScreen extends ConsumerWidget {
                       const SizedBox(height: 8),
                     if (state.route != null)
                       Center(
-                        child: ConstrainedBox(
+                        // Tur hedefi (örnekli tur v5): "rotanı düzenle" adımı
+                        // bu bilgi kartını vurgular.
+                        child: KeyedSubtree(
+                          key: tourKeyRouteChip,
+                          child: ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 480),
                           child: _RouteChip(
                             route: state.route!,
@@ -260,6 +269,7 @@ class MapScreen extends ConsumerWidget {
                             onChangeOrigin: () =>
                                 showRouteOriginMenu(context, ref),
                             onAddPoint: controller.beginAddPoint,
+                          ),
                           ),
                         ),
                       ),

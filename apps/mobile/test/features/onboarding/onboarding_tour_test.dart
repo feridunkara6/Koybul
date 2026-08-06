@@ -6,8 +6,13 @@ import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
 import 'package:dockly_mobile/features/onboarding/domain/onboarding_store.dart';
+import 'package:dockly_api/dockly_api.dart' show GeoPoint;
 import 'package:dockly_mobile/features/route/application/saved_routes_controller.dart';
+import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
+import 'package:dockly_mobile/features/route/domain/sea_router.dart';
+import 'package:dockly_mobile/features/route/domain/sea_trip.dart';
 import 'package:dockly_mobile/features/shell/application/shell_tab_provider.dart';
+import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
 import 'package:dockly_mobile/features/shell/presentation/dockly_shell.dart';
 import 'package:dockly_mobile/features/welcome/presentation/welcome_prompt.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +26,34 @@ import '../../support/map_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/onboarding_fakes.dart';
 import '../../support/saved_routes_fakes.dart';
+import '../../support/weather_fakes.dart';
 import '../../support/welcome_fakes.dart';
+
+/// Örnek rota için sahte motor (tur v5): iki nokta arasını dolaysız döner.
+class _FakeRouteEngine implements SeaRouteEngine {
+  @override
+  Future<SeaRoutePlan?> route(GeoPoint from, GeoPoint to) async {
+    return SeaRoutePlan(
+      points: <GeoPoint>[from, to],
+      distanceNm: 5,
+      reachedGoal: true,
+      viaSea: true,
+    );
+  }
+
+  @override
+  Future<SeaTrip?> trip(GeoPoint from, List<GeoPoint> stops) async {
+    final SeaRoutePlan? leg = await route(from, stops.last);
+    if (leg == null) return null;
+    return SeaTrip(
+      legs: <SeaRoutePlan>[leg],
+      combined: combineTripLegs(<SeaRoutePlan>[leg]),
+    );
+  }
+
+  @override
+  Future<GeoPoint?> snapWater(GeoPoint p) async => p;
+}
 
 /// TUR v3 testleri KABUĞU (DocklyShell) pompalar: tur artık sekme
 /// değiştirebildiği için kaplama kabuğun üstünde yaşar.
@@ -39,6 +71,9 @@ Widget _app(FakeOnboardingStore store) {
       favoritesStorageProvider.overrideWithValue(FakeFavoritesStorage()),
       savedRoutesStoreProvider.overrideWithValue(FakeSavedRoutesStore()),
       logbookStoreProvider.overrideWithValue(FakeLogbookStore()),
+      // Örnek rota (tur v5): gerçek motor/ağ yerine sahteler.
+      seaRouteEngineProvider.overrideWithValue(_FakeRouteEngine()),
+      weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
     ],
     child: const MaterialApp(home: DocklyShell()),
   );
@@ -132,16 +167,41 @@ void main() {
     await tester.pumpWidget(
         _app(FakeOnboardingStore(data: const OnboardingData())));
     await tester.pumpAndSettle();
+    final ProviderContainer c = ProviderScope.containerOf(
+        tester.element(find.byType(DocklyShell)));
 
-    // 7 dokunuş → adım 7 (Kayıtlarım): sekme kendiliğinden 2'ye geçer.
-    for (int i = 0; i < 7; i++) {
-      await _advance(tester);
-    }
+    // Adım 1 (işaretler): ÖRNEK koy işareti kendiliğinden seçilir.
+    await _advance(tester);
+    expect(c.read(mapControllerProvider).selectedPinId, 'loc-1');
+
+    // Adım 2'ye geçince örnek seçim geri alınır.
+    await _advance(tester);
+    expect(c.read(mapControllerProvider).selectedPinId, isNull);
+
+    // Adım 5 (deniz rotası): ÖRNEK ROTA motorla çizilir, adıyla görünür.
+    await _advance(tester);
+    await _advance(tester);
+    await _advance(tester);
+    expect(c.read(mapControllerProvider).route, isNotNull);
+    expect(c.read(mapControllerProvider).routeLabel, 'Örnek rota');
+
+    // Adım 6: örnek rota DURUR — bilgi kartı (çip) vurgulanır.
+    await _advance(tester);
+    expect(c.read(mapControllerProvider).route, isNotNull);
+    expect(find.byKey(_spotKey), findsOneWidget);
+
+    // Adım 7 (Kayıtlarım): sekme 2 + ÖRNEK rozetli rota kartı; örnek rota
+    // haritadan TEMİZLENİR (kalıcı hiçbir şey kalmaz).
+    await _advance(tester);
     expect(_tab(tester), 2);
+    expect(find.text('Örnek rota'), findsOneWidget);
+    expect(find.text('ÖRNEK'), findsOneWidget);
+    expect(c.read(mapControllerProvider).route, isNull);
 
-    // → adım 8 (Günlük): sekme 3.
+    // Adım 8 (Günlük): sekme 3 + ÖRNEK not (rota bağlamıyla).
     await _advance(tester);
     expect(_tab(tester), 3);
+    expect(find.text('ÖRNEK'), findsOneWidget);
 
     // → adım 9 (Hazırsın): Keşfet'e dönülür, kapanış kartı.
     await _advance(tester);
@@ -149,10 +209,12 @@ void main() {
     expect(find.text('Hazırsın, kaptan!'), findsOneWidget);
     expect(find.text('Başla'), findsOneWidget); // premium kapanış düğmesi
 
-    // Son dokunuş turu bitirir; Keşfet'te kalınır.
+    // Son dokunuş turu bitirir; Keşfet'te kalınır, örnekler geride kalmaz.
     await _advance(tester);
     expect(find.text('Hazırsın, kaptan!'), findsNothing);
     expect(_tab(tester), 0);
+    expect(c.read(mapControllerProvider).route, isNull);
+    expect(c.read(mapControllerProvider).selectedPinId, isNull);
   });
 
   testWidgets('SAYFADAYKEN ATLA (v3): Günlük adımında Atla → tur kapanır ve '
@@ -170,6 +232,11 @@ void main() {
     expect(find.byKey(_spotKey), findsNothing);
     expect(find.byKey(const ValueKey<String>('onb-tour-step-8')), findsNothing);
     expect(_tab(tester), 0); // ana ekrana dönüldü
+    // Örnekler geride kalmaz (Atla ile de temizlik).
+    final ProviderContainer c = ProviderScope.containerOf(
+        tester.element(find.byType(DocklyShell)));
+    expect(c.read(mapControllerProvider).route, isNull);
+    expect(c.read(mapControllerProvider).selectedPinId, isNull);
   });
 
   testWidgets('İPUCU: ilk pin dokunuşunda koy kartı balonu; "Anladım" bir daha göstermez',
