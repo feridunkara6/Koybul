@@ -14,6 +14,7 @@ import '../../location/presentation/locate_button.dart';
 import '../../nearby/presentation/nearby_sheet.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/presentation/onboarding_overlay.dart';
+import '../../onboarding/presentation/tour_targets.dart';
 import '../../route/application/saved_routes_controller.dart';
 import '../../route/domain/route_wind.dart';
 import '../../route/domain/saved_route.dart';
@@ -182,7 +183,13 @@ class MapScreen extends ConsumerWidget {
             top: 12,
             left: 0,
             right: 0,
-            child: SafeArea(child: _TypeFilterRow(selected: state.types)),
+            child: SafeArea(
+              // Tur hedefi (v3): "Filtreler" adımı bu şeridi okla gösterir.
+              child: KeyedSubtree(
+                key: tourKeyChips,
+                child: _TypeFilterRow(selected: state.types),
+              ),
+            ),
           ),
           // Çip şeridinin HEMEN ALTINDA sağda: "Konumum" (her zaman) +
           // harita↔liste geçişi (yalnız pin/yakın zoom verisi varken).
@@ -194,9 +201,10 @@ class MapScreen extends ConsumerWidget {
                 children: <Widget>[
                   // ACİL DURUM KISAYOLU (UX analizi 2026-08): panik anında tek
                   // dokunuş — Profil'in derinliğinde kalmasın. Üyelik kapısı YOK.
-                  const _SosButton(),
+                  // Tur hedefleri (v3): SOS ve Konumum adımları okla gösterir.
+                  KeyedSubtree(key: tourKeySos, child: const _SosButton()),
                   const SizedBox(height: 8),
-                  const LocateButton(),
+                  KeyedSubtree(key: tourKeyLocate, child: const LocateButton()),
                   const SizedBox(height: 8),
                   // HARİTADA ARAMA (UX analizi 2026-08): sekme değiştirmeden
                   // arama — sonuçtan detay açılır, harita durumu korunur.
@@ -377,10 +385,8 @@ class MapScreen extends ConsumerWidget {
                     ref.read(checklistProvider.notifier).dismissPrompt(),
               ),
             ),
-          // TANITIM KARTLARI v2 (en üstte): ilk açılışta kendiliğinden başlar,
-          // ekrana dokundukça ilerler (kullanıcı isteği 2026-08).
-          if (!isList && onb.tourActive)
-            Positioned.fill(child: TourOverlay(step: onb.tourStep)),
+          // TANITIM TURU v3 (2026-08): kaplama artık KABUKTA (DocklyShell) —
+          // tur sekme değiştirebilir ve karartma alt menüyü de kapsar.
         ],
       ),
     );

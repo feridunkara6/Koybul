@@ -9,10 +9,12 @@ import '../domain/onboarding_store.dart';
 final Provider<OnboardingStore> onboardingStoreProvider =
     Provider<OnboardingStore>((ref) => const SharedPrefsOnboardingStore());
 
-/// Turun adım sayısı (v2, kullanıcı isteği 2026-08 — dokundukça ilerleyen
-/// kartlar): ① hoş geldin ② harita & koylar ③ filtreler ④ Konumum ⑤ SOS
-/// ⑥ deniz rotası ⑦ rota düzenleme & kaydetme.
-const int kTourStepCount = 7;
+/// Turun adım sayısı (v3, kullanıcı isteği 2026-08 — OKLU tur: kart ilgili
+/// bölgeyi spot ışığı + okla gösterir, gerekirse SAYFA DEĞİŞİR):
+/// ① hoş geldin ② harita & koylar ③ filtreler (ok) ④ Konumum (ok) ⑤ SOS (ok)
+/// ⑥ deniz rotası ⑦ rota düzenleme & kaydetme ⑧ Kayıtlarım (sekme 2)
+/// ⑨ Kaptanın Günlüğü (sekme 3) ⑩ "Hazırsın" — Keşfet'e dönülür.
+const int kTourStepCount = 10;
 
 /// İlk-dokunuş ipucu anahtarları (cihazda kalıcı — bir kez gösterilir).
 const String kHintBottomCard = 'bottom_card';
@@ -57,8 +59,8 @@ class OnboardingState {
   }
 }
 
-/// YENİ KULLANICI TANITIMI beyni (2026-08, kullanıcı onaylı): karşılama kartı
-/// + 6 adımlı spot ışıklı tur + ilk-dokunuş ipuçları. Kararlar cihazda saklanır
+/// YENİ KULLANICI TANITIMI beyni (2026-08, kullanıcı onaylı): 10 adımlı OKLU
+/// tur (spot ışığı + sayfa gezintisi) + ilk-dokunuş ipuçları. Kararlar cihazda saklanır
 /// (bir kez gösterme sözü); Profil'den tur yeniden izlenebilir.
 class OnboardingController extends Notifier<OnboardingState> {
   @override

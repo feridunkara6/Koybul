@@ -1,5 +1,7 @@
 import 'package:dockly_mobile/core/l10n/app_locale.dart';
 import 'package:dockly_mobile/core/l10n/l10n_strings.dart';
+import 'package:dockly_mobile/features/checklist/application/checklist_controller.dart';
+import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -118,6 +120,18 @@ void main() {
       expect(l10nOf(AppLocale.ru).compassDir('G'), 'Ю');
       // bilinmeyen kod güvenli düşer
       expect(l10nOf(AppLocale.en).compassDir('X'), 'X');
+    });
+
+    test('TANITIM TURU listeleri her dilde TAM adım sayısında (v3 bekçisi: '
+        'eksik çeviri sessizce BOŞ KART gösterirdi)', () {
+      for (final AppLocale l in AppLocale.values) {
+        expect(l10nOf(l).tourTitles.length, kTourStepCount,
+            reason: '$l tur başlıkları');
+        expect(l10nOf(l).tourBodies.length, kTourStepCount,
+            reason: '$l tur gövdeleri');
+        expect(l10nOf(l).checklistItems.length, kChecklistItemCount,
+            reason: '$l kontrol listesi');
+      }
     });
   });
 }

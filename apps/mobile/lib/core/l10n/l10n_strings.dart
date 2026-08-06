@@ -809,6 +809,10 @@ const L10n _tr = L10n(
     'SOS',
     'Deniz rotası',
     'Rotanı düzenle ve kaydet',
+    // v3 (tanıtım oklu tur 2026-08): Kayıtlarım + Günlük + kapanış.
+    'Kayıtlarım',
+    'Kaptanın Günlüğü',
+    'Hazırsın, kaptan!',
   ],
   tourBodies: <String>[
     'Kısa bir turla en önemli düğmeleri gösterelim. İlerlemek için ekrana dokun.',
@@ -818,6 +822,10 @@ const L10n _tr = L10n(
     'Acil durumda tek dokunuş: koordinatın, telsiz kanalları ve acil numaralar — kapı yok, internetsiz de çalışır.',
     'Bir koya dokun, "Deniz rotası"na bas: karaya değmeyen rota çizilir. Konum iznin yoksa uygulama kendiliğinden sorar; onay verince rota otomatik oluşur.',
     'Çizgideki beyaz noktaları sürükleyerek rotayı bük. Çipteki "Nokta ekle" ile dokunarak nokta ekle — koya dokunursan durak olur. Yer imi simgesi rotayı kaydeder.',
+    // v3 (tanıtım oklu tur 2026-08): Kayıtlarım + Günlük + kapanış.
+    'Favori yerlerin ve kayıtlı rotaların tek yerde. Bir rota kartına dokun — rota haritada anında yeniden kurulur.',
+    'Seyir notların burada. Rota kaydettiğinde tek dokunuşla, rota bilgisi ekli bir günlük notu düşebilirsin.',
+    'Tanıtım bitti. Şimdi haritadan bir koya dokun ve ilk deniz rotanı çiz. İyi seyirler!',
   ],
   cancelLabel: 'Vazgeç',
   saveLabel: 'Kaydet',
@@ -1195,6 +1203,10 @@ const L10n _en = L10n(
     'SOS',
     'Sea route',
     'Edit and save your route',
+    // v3 (tanıtım oklu tur 2026-08): Kayıtlarım + Günlük + kapanış.
+    'Saved',
+    'Captain\'s logbook',
+    'You\'re ready, captain!',
   ],
   tourBodies: <String>[
     'A short tour of the essentials. Tap the screen to continue.',
@@ -1204,6 +1216,10 @@ const L10n _en = L10n(
     'One tap in an emergency: your coordinates, radio channels and emergency numbers — no sign-in, works offline.',
     'Tap a bay, press "Sea route": a land-avoiding route is drawn. If location is off, the app asks automatically; once you allow, the route is created for you.',
     'Drag the white dots to bend the line. Tap "Add point" on the chip to add points by touch — tapping a bay makes it a stop. The bookmark icon saves the route.',
+    // v3 (tanıtım oklu tur 2026-08): Kayıtlarım + Günlük + kapanış.
+    'Your favorite places and saved routes in one place. Tap a route card — it is rebuilt on the map instantly.',
+    'Your sailing notes live here. When you save a route, one tap adds a logbook entry with the route details attached.',
+    'That\'s the tour. Now tap a bay on the map and draw your first sea route. Fair winds!',
   ],
   cancelLabel: 'Cancel',
   saveLabel: 'Save',
@@ -1581,6 +1597,10 @@ const L10n _es = L10n(
     'SOS',
     'Ruta marítima',
     'Edita y guarda tu ruta',
+    // v3 (tanıtım oklu tur 2026-08): Kayıtlarım + Günlük + kapanış.
+    'Guardados',
+    'Diario del capitán',
+    '¡Listo, capitán!',
   ],
   tourBodies: <String>[
     'Un breve recorrido por lo esencial. Toca la pantalla para continuar.',
@@ -1590,6 +1610,10 @@ const L10n _es = L10n(
     'Un toque en emergencia: tus coordenadas, canales de radio y números de emergencia — sin registro, funciona sin internet.',
     'Toca una cala y pulsa "Ruta marítima": se traza una ruta que evita tierra. Si la ubicación está apagada, la app la pide sola; al permitirla, la ruta se crea automáticamente.',
     'Arrastra los puntos blancos para curvar la línea. Con "Añadir punto" del chip añades puntos tocando — tocar una cala la convierte en parada. El marcador guarda la ruta.',
+    // v3 (tanıtım oklu tur 2026-08): Kayıtlarım + Günlük + kapanış.
+    'Tus lugares favoritos y rutas guardadas en un solo sitio. Toca una tarjeta de ruta y se reconstruye al instante en el mapa.',
+    'Tus notas de navegación viven aquí. Al guardar una ruta, un toque añade una entrada con los datos de la ruta.',
+    'Fin del recorrido. Ahora toca una cala en el mapa y traza tu primera ruta marina. ¡Buen viento!',
   ],
   cancelLabel: 'Cancelar',
   saveLabel: 'Guardar',
@@ -1967,6 +1991,10 @@ const L10n _ru = L10n(
     'SOS',
     'Морской маршрут',
     'Редактируйте и сохраняйте маршрут',
+    // v3 (tanıtım oklu tur 2026-08): Kayıtlarım + Günlük + kapanış.
+    'Сохранённое',
+    'Журнал капитана',
+    'Готово, капитан!',
   ],
   tourBodies: <String>[
     'Короткая экскурсия по главному. Касайтесь экрана, чтобы продолжить.',
@@ -1976,6 +2004,10 @@ const L10n _ru = L10n(
     'Одно касание в экстренной ситуации: ваши координаты, радиоканалы и номера служб — без входа, работает офлайн.',
     'Коснитесь бухты и нажмите «Морской маршрут»: путь строится в обход суши. Если геолокация выключена, приложение само попросит доступ; после разрешения маршрут создаётся автоматически.',
     'Тяните белые точки, чтобы изгибать линию. «Добавить точку» на чипе добавляет точки касанием — касание бухты делает её остановкой. Значок закладки сохраняет маршрут.',
+    // v3 (tanıtım oklu tur 2026-08): Kayıtlarım + Günlük + kapanış.
+    'Избранные места и сохранённые маршруты в одном месте. Коснитесь карточки маршрута — он мгновенно строится на карте.',
+    'Здесь ваши заметки о походах. При сохранении маршрута одно касание добавит запись с данными маршрута.',
+    'Тур окончен. Коснитесь бухты на карте и постройте свой первый морской маршрут. Попутного ветра!',
   ],
   cancelLabel: 'Отмена',
   saveLabel: 'Сохранить',

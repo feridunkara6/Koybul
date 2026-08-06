@@ -6,6 +6,8 @@ import '../../../core/l10n/l10n_strings.dart';
 import '../../favorites/presentation/favorites_screen.dart';
 import '../../logbook/presentation/logbook_screen.dart';
 import '../../map/presentation/map_screen.dart';
+import '../../onboarding/application/onboarding_controller.dart';
+import '../../onboarding/presentation/onboarding_overlay.dart';
 import '../../profile/presentation/profile_screen.dart';
 import '../../reservation/presentation/reservations_placeholder_screen.dart';
 import '../../search/presentation/search_screen.dart';
@@ -52,7 +54,13 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
     final Color selected =
         dark ? DocklyColors.brandPrimaryDark : DocklyColors.brandPrimary;
     final Color unselected = dark ? DocklyColors.text2Dark : DocklyColors.text2;
-    return Scaffold(
+    // TANITIM TURU v3 (kullanıcı isteği 2026-08): kaplama KABUĞUN üstünde —
+    // tur sekme değiştirebilir (Kayıtlarım/Günlük adımları) ve karartma alt
+    // menüyü de kapsar. select: kabuk yalnız TUR ADIMI değişince yeniden
+    // kurulur (ipucu işaretlemeleri kabuğu ilgilendirmez).
+    final int tourStep = ref.watch(onboardingControllerProvider
+        .select((OnboardingState s) => s.tourStep));
+    final Widget shell = Scaffold(
       body: IndexedStack(
         index: index,
         children: <Widget>[
@@ -144,6 +152,13 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
           ),
         ),
       ),
+    );
+    return Stack(
+      children: <Widget>[
+        shell,
+        if (tourStep >= 0)
+          Positioned.fill(child: TourOverlay(step: tourStep)),
+      ],
     );
   }
 }
