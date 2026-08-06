@@ -79,7 +79,12 @@ ThemeData buildDocklyTheme(Brightness brightness) {
       style: FilledButton.styleFrom(
         backgroundColor: primary,
         foregroundColor: Colors.white,
-        minimumSize: const Size.fromHeight(52),
+        // SONSUZ GENİŞLİK YASAK (üretim dersi 2026-08): Size.fromHeight →
+        // sonsuz MIN genişlik. Satır (Row) içindeki her düğmeyi sessizce
+        // GÖRÜNMEZ yapıyordu (kayıtlı rota kartı vakası). Tam genişlik
+        // isteyen yerler bunu zaten SizedBox(width: double.infinity) /
+        // stretch ile kendisi istiyor — temada yalnız YÜKSEKLİK sabitlenir.
+        minimumSize: const Size(0, 52),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         elevation: 6,
@@ -90,7 +95,8 @@ ThemeData buildDocklyTheme(Brightness brightness) {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: primary,
-        minimumSize: const Size.fromHeight(52),
+        // Sonsuz genişlik yasak — üstteki filledButtonTheme notuna bak.
+        minimumSize: const Size(0, 52),
         side: BorderSide(color: primary, width: 1.5),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),

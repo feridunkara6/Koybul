@@ -5,6 +5,7 @@ import 'package:dockly_mobile/features/favorites/presentation/favorites_screen.d
 import 'package:dockly_mobile/features/route/application/saved_routes_controller.dart';
 import 'package:dockly_mobile/features/route/domain/saved_route.dart';
 import 'package:dockly_mobile/features/route/domain/sea_trip.dart';
+import 'package:dockly_ui/dockly_ui.dart' show buildDocklyTheme;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,7 +20,14 @@ Widget _app(FakeFavoritesStorage storage, {FakeSavedRoutesStore? routes}) =>
         savedRoutesStoreProvider
             .overrideWithValue(routes ?? FakeSavedRoutesStore()),
       ],
-      child: const MaterialApp(home: FavoritesScreen()),
+      // GERÇEK TEMA (üretim hatası dersi 2026-08): sonsuz-genişlik
+      // OutlinedButton hatası sade temayla GÖRÜNMÜYORDU — kartlı ekran
+      // testleri uygulamanın kendi temasıyla koşar ki yerleşim patlamaları
+      // CI'da kırmızıya dönsün.
+      child: MaterialApp(
+        theme: buildDocklyTheme(Brightness.light),
+        home: const FavoritesScreen(),
+      ),
     );
 
 const SavedRoute _route = SavedRoute(

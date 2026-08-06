@@ -9,6 +9,7 @@ import 'package:dockly_mobile/features/route/domain/sea_trip.dart';
 import 'package:dockly_mobile/features/route/presentation/saved_routes_screen.dart';
 import 'package:dockly_mobile/features/shell/application/shell_tab_provider.dart';
 import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
+import 'package:dockly_ui/dockly_ui.dart' show buildDocklyTheme;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -83,8 +84,11 @@ void main() {
         // Rüzgâr analizi ağa çıkmasın (rota kurulunca tetiklenir).
         weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
       ],
-      child: const MaterialApp(
-        home: Scaffold(body: SavedRouteCard(route: _deviceRoute)),
+      // GERÇEK TEMA (üretim hatası dersi 2026-08): yerleşim patlamaları
+      // yalnız uygulama temasıyla görünür — kart testi gerçek temayla koşar.
+      child: MaterialApp(
+        theme: buildDocklyTheme(Brightness.light),
+        home: const Scaffold(body: SavedRouteCard(route: _deviceRoute)),
       ),
     ));
     await tester.pumpAndSettle();
@@ -117,8 +121,11 @@ void main() {
         // Rüzgâr analizi ağa çıkmasın (rota kurulunca tetiklenir).
         weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
       ],
-      child: const MaterialApp(
-        home: Scaffold(body: SavedRouteCard(route: _deviceRoute)),
+      // GERÇEK TEMA (üretim hatası dersi 2026-08): yerleşim patlamaları
+      // yalnız uygulama temasıyla görünür — kart testi gerçek temayla koşar.
+      child: MaterialApp(
+        theme: buildDocklyTheme(Brightness.light),
+        home: const Scaffold(body: SavedRouteCard(route: _deviceRoute)),
       ),
     ));
     await tester.pumpAndSettle();

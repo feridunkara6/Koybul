@@ -120,6 +120,16 @@ class SavedRouteCard extends ConsumerWidget {
           const SizedBox(width: 6),
           OutlinedButton(
             onPressed: () => _open(context, ref),
+            // SONSUZ GENİŞLİK VAKASI (üretim hatası 2026-08): eski temada
+            // OutlinedButton'ın min genişliği SONSUZDU; satırda (Row) bu,
+            // yerleşimi patlatıp kartta ikondan sonraki HER ŞEYİ — isim
+            // dahil — görünmez yapıyordu. Kök neden temada düzeltildi
+            // (Size(0,52)); burada da kart içi kompakt boy verilir. Kart
+            // testleri artık GERÇEK temayla koşar (CI bu sınıfı yakalar).
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size(0, 40),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+            ),
             child: Text(t.savedOpenBtn),
           ),
           IconButton(
