@@ -52,8 +52,9 @@ Rect _pinWindow(Size s) {
   return Rect.fromCircle(center: c, radius: 92);
 }
 
-Rect _routeWindow(Size s) =>
-    Rect.fromLTRB(24, 60, s.width - 24, s.height * 0.50);
+// Rota adımlarında ŞEKİL YOK (kullanıcı isteği 2026-08: "dikdörtgen
+// istemiyorum"): karartma kenarlardan koyulaşan doğal bir IŞIK HAVUZU olur
+// (vinyet) — rota ve harita, ortadaki aydınlıkta serbestçe görünür.
 
 /// Adım tanımı: sekme + (varsa) vurgulanacak hedef/pencere + canlı örnek.
 class _TourStepDef {
@@ -63,6 +64,7 @@ class _TourStepDef {
     this.target,
     this.window,
     this.circleSpot = false,
+    this.vignette = false,
     this.demo = _TourDemo.none,
   });
 
@@ -75,6 +77,10 @@ class _TourStepDef {
 
   /// true → pencere DAİRE olarak aydınlatılır (yakın plan işaret adımı).
   final bool circleSpot;
+
+  /// true → hedef ölçülemezse şekilsiz IŞIK HAVUZU (vinyet) kullanılır;
+  /// kart ekranın altına iner (harita ortası serbest kalır).
+  final bool vignette;
 
   final _TourDemo demo;
 }
@@ -92,14 +98,14 @@ final List<_TourStepDef> _tourSteps = <_TourStepDef>[
   _TourStepDef(icon: DocklyIcons.checkCircle, target: tourKeyChips), // ③
   _TourStepDef(icon: DocklyIcons.explore, target: tourKeyLocate), // ④
   _TourStepDef(icon: DocklyIcons.errorOutline, target: tourKeySos), // ⑤
-  const _TourStepDef( // ⑥ deniz rotası — örnek rota pencerede canlı çizilir
+  const _TourStepDef( // ⑥ deniz rotası — ışık havuzunda canlı çizilir
       icon: DocklyIcons.navigation,
-      window: _routeWindow,
+      vignette: true,
       demo: _TourDemo.route),
   _TourStepDef( // ⑦ rota düzenle & kaydet — örnek rotanın bilgi kartı
       icon: DocklyIcons.edit,
       target: tourKeyRouteChip,
-      window: _routeWindow,
+      vignette: true,
       demo: _TourDemo.route),
   _TourStepDef( // ⑧ Kayıtlarım — örnek rota kartı (ekranın kendisi gösterir)
       icon: DocklyIcons.favorite, tab: 2, target: tourKeySavedDemo),
@@ -365,6 +371,8 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
             bottomInset > 0)
         ? rawSpot.translate(0, -bottomInset / 2)
         : rawSpot;
+    // IŞIK HAVUZU adımı: şekil çizilmez; kart ekranın altına iner.
+    final bool pool = spot == null && _def.vignette;
     // Kart, hedefin BOŞ kalan yarısına konur; balon ucu hedefi işaret eder.
     final bool cardBelow = spot != null && spot.center.dy < screen.height / 2;
     // Kart genişliği/konumu — balon ucunun yatay hizası hedefe göre hesaplanır.
@@ -397,9 +405,28 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
       child: Stack(
         children: <Widget>[
           // Karartma: hedef varsa yumuşak ışımalı VURGU (yerine oturma
-          // animasyonuyla), yoksa düz karartma.
+          // animasyonuyla); rota adımında şekilsiz IŞIK HAVUZU (vinyet);
+          // diğer durumlarda düz karartma.
           Positioned.fill(
-            child: spot == null
+            child: pool
+                ? TweenAnimationBuilder<double>(
+                    key: ValueKey<String>('pool-anim-$s'),
+                    tween: Tween<double>(begin: 0, end: 1),
+                    duration: const Duration(milliseconds: 380),
+                    curve: Curves.easeOutCubic,
+                    builder: (BuildContext context, double v, Widget? _) =>
+                        CustomPaint(
+                      key: const ValueKey<String>('onb-tour-spot'),
+                      painter: _LightPoolPainter(
+                        center: Offset(
+                          screen.width / 2,
+                          (screen.height - 64 - bottomInset) * 0.40,
+                        ),
+                        t: v,
+                      ),
+                    ),
+                  )
+                : spot == null
                 ? const ColoredBox(color: _dimColor)
                 : TweenAnimationBuilder<double>(
                     key: ValueKey<String>('spot-anim-$s'),
@@ -446,7 +473,21 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
               ),
             ),
           ),
-          if (spot == null)
+          if (pool)
+            // Işık havuzu: kart ALTTA durur — rota/harita yukarıda,
+            // aydınlıkta serbestçe izlenir.
+            Positioned(
+              left: 16,
+              right: 16,
+              bottom: 80 + bottomInset,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: cardW),
+                  child: _stepSwitcher(card),
+                ),
+              ),
+            )
+          else if (spot == null)
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -701,8 +742,14 @@ class _SpotDimPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Rect h = hole.inflate((1 - t) * 10);
-    final Radius rad =
-        circle ? Radius.circular(h.shortestSide / 2) : const Radius.circular(28);
+    // DİKDÖRTGEN YOK (kullanıcı isteği 2026-08): delik her zaman TAM
+    // yuvarlak uçludur — küçük hedefte daire/hap, büyük hedefte yumuşak
+    // kapsül. Köşe hissi veren hiçbir şekil çizilmez.
+    final Radius rad = circle
+        ? Radius.circular(h.shortestSide / 2)
+        : Radius.circular(
+            h.shortestSide / 2 < 34 ? h.shortestSide / 2 : 34,
+          );
     final RRect r = RRect.fromRectAndRadius(h, rad);
     final Path dim = Path.combine(
       PathOperation.difference,
@@ -710,23 +757,38 @@ class _SpotDimPainter extends CustomPainter {
       Path()..addRRect(r),
     );
     canvas.drawPath(dim, Paint()..color = _dimColor);
+    // İÇ IŞIK BANYOSU: deliğin içi hafif beyaz ışıkla YIKANIR — bölge
+    // "karanlık değil" değil, gerçekten AYDINLATILMIŞ görünür.
+    canvas.drawRRect(
+      r,
+      Paint()
+        ..shader = RadialGradient(
+          // Geniş kapsüllerde (çip şeridi) ışık TÜM deliği yıkasın diye
+          // yarıçap en-boy oranıyla ölçeklenir (çizim delik şekliyle kırpılır).
+          radius: (h.longestSide / h.shortestSide) * 0.5,
+          colors: <Color>[
+            const Color(0xFFFFFFFF).withValues(alpha: 0.14 * t),
+            const Color(0xFFFFFFFF).withValues(alpha: 0.0),
+          ],
+        ).createShader(h),
+    );
     // Kenar: karanlığa eriyen yumuşak ışık halesi (bulanık fırça) + çok
     // hafif bir iç parlaklık. Keskin çizgi bilinçli olarak yok.
     canvas.drawRRect(
       r,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 22
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 16)
-        ..color = const Color(0xFFCFF6EF).withValues(alpha: 0.20 * t),
+        ..strokeWidth = 26
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 18)
+        ..color = const Color(0xFFCFF6EF).withValues(alpha: 0.22 * t),
     );
     canvas.drawRRect(
       r,
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = 3
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4)
-        ..color = const Color(0xFFFFFFFF).withValues(alpha: 0.28 * t),
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5)
+        ..color = const Color(0xFFFFFFFF).withValues(alpha: 0.26 * t),
     );
   }
 
@@ -735,6 +797,49 @@ class _SpotDimPainter extends CustomPainter {
       oldDelegate.hole != hole ||
       oldDelegate.t != t ||
       oldDelegate.circle != circle;
+}
+
+/// IŞIK HAVUZU (rota adımları, kullanıcı isteği 2026-08): hiçbir şekil
+/// çizilmez — ekran kenarlardan koyulaşır, ortada fener ışığı gibi doğal
+/// bir aydınlık kalır. Rota ve harita bu havuzun içinde serbestçe görünür.
+class _LightPoolPainter extends CustomPainter {
+  const _LightPoolPainter({required this.center, required this.t});
+
+  /// Havuzun merkezi (harita gövdesinin üst-orta bölgesi).
+  final Offset center;
+
+  /// 0→1 belirme animasyonu.
+  final double t;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double radius =
+        (size.width > size.height ? size.width : size.height) * 0.72;
+    final Rect full = Offset.zero & size;
+    canvas.drawRect(
+      full,
+      Paint()
+        ..shader = RadialGradient(
+          center: Alignment(
+            (center.dx / size.width) * 2 - 1,
+            (center.dy / size.height) * 2 - 1,
+          ),
+          // Flutter kuralı: radius birimi = KISA KENARIN TAMAMI (yarısı
+          // değil) — /2 kullanmak havuzu iki kat büyütüp vinyeti siler.
+          radius: radius / size.shortestSide,
+          colors: <Color>[
+            _dimColor.withValues(alpha: 0.10 * t),
+            _dimColor.withValues(alpha: 0.42 * t),
+            _dimColor.withValues(alpha: 0.80 * t),
+          ],
+          stops: const <double>[0.0, 0.55, 1.0],
+        ).createShader(full),
+    );
+  }
+
+  @override
+  bool shouldRepaint(_LightPoolPainter oldDelegate) =>
+      oldDelegate.center != center || oldDelegate.t != t;
 }
 
 /// İLK-DOKUNUŞ İPUCU BALONU: özellik ilk kez kullanılırken tek seferlik küçük
