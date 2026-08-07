@@ -1,10 +1,12 @@
 import 'package:dockly_mobile/features/boat/presentation/boat_screen.dart';
 import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
 import 'package:dockly_mobile/features/deck/presentation/deck_screen.dart';
+import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
 import 'package:dockly_mobile/features/logbook/application/logbook_controller.dart';
 import 'package:dockly_mobile/features/logbook/presentation/logbook_screen.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
+import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
 import 'package:dockly_mobile/features/route/application/saved_routes_controller.dart';
 import 'package:dockly_mobile/features/shell/presentation/dockly_shell.dart';
@@ -15,9 +17,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/detail_fakes.dart';
 import '../../support/fake_map_surface.dart';
 import '../../support/logbook_fakes.dart';
 import '../../support/map_fakes.dart';
+import '../../support/nearby_fakes.dart';
 import '../../support/onboarding_fakes.dart';
 import '../../support/saved_routes_fakes.dart';
 import '../../support/trip_fakes.dart';
@@ -38,6 +42,10 @@ Widget _app() {
       logbookStoreProvider.overrideWithValue(FakeLogbookStore()),
       tripStoreProvider.overrideWithValue(FakeTripStore()),
       weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
+      // Bugün sekmesi: harita açılışta origin yazdığı için akıllı öneri
+      // bölümü kurulur — motor asla gerçek ağa çıkmasın (inceleme dersi).
+      nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
+      locationDetailGatewayProvider.overrideWithValue(FakeLocationDetailGateway()),
     ],
     child: const MaterialApp(home: DocklyShell()),
   );
