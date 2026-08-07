@@ -25,7 +25,7 @@ const Color _dimColor = Color(0xC7071626);
 ///  • kart, hedefe KONUŞMA BALONU UCUYLA bağlanır (havada uçan ok yok);
 ///  • kartta adım sayacı (3/10), akıcı geçiş animasyonu ve İleri/Başla
 ///    düğmesi vardır; ekranın herhangi bir yerine dokunmak da ilerletir;
-///  • tur gerekirse SAYFA DEĞİŞTİRİR (Kayıtlarım, Günlük) ve son kart
+///  • tur gerekirse SAYFA DEĞİŞTİRİR (Defter, Teknem) ve son kart
 ///    "Hazırsın" deyip Keşfet'e döner.
 /// Hedef ölçülemezse kart ortada, vurgusuz gösterilir — tur asla kırılmaz.
 class TourOverlay extends ConsumerStatefulWidget {
@@ -87,7 +87,7 @@ class _TourStepDef {
 
 /// v5 adımları — sırası l10n `tourTitles`/`tourBodies` ile birebir aynıdır.
 /// Örnekli adımlar CANLI içerik gösterir: işaret seçimi, gerçek motorla
-/// çizilen örnek rota, Kayıtlarım/Günlük'te örnek kartlar.
+/// çizilen örnek rota, Defter'de örnek rota kartı, Teknem'de kimlik kartı.
 final List<_TourStepDef> _tourSteps = <_TourStepDef>[
   const _TourStepDef(icon: DocklyIcons.sailing), // ① hoş geldin
   const _TourStepDef( // ② harita ve koylar — işarete YAKIN PLAN (daire)
@@ -107,10 +107,10 @@ final List<_TourStepDef> _tourSteps = <_TourStepDef>[
       target: tourKeyRouteChip,
       vignette: true,
       demo: _TourDemo.route),
-  _TourStepDef( // ⑧ Kayıtlarım — örnek rota kartı (ekranın kendisi gösterir)
-      icon: DocklyIcons.favorite, tab: 2, target: tourKeySavedDemo),
-  _TourStepDef( // ⑨ Günlük — örnek not (ekranın kendisi gösterir)
-      icon: DocklyIcons.edit, tab: 3, target: tourKeyLogDemo),
+  _TourStepDef( // ⑧ Defter — örnek rota kartı (ekranın kendisi gösterir)
+      icon: DocklyIcons.edit, tab: 2, target: tourKeySavedDemo),
+  _TourStepDef( // ⑨ Teknem — tekne kimlik kartı vurgulanır
+      icon: DocklyIcons.sailing, tab: 3, target: tourKeyBoatCard),
   const _TourStepDef(icon: DocklyIcons.sailing), // ⑩ hazırsın (Keşfet'te)
 ];
 
@@ -191,8 +191,8 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
       if (ref.read(shellTabProvider) != d.tab) {
         ref.read(shellTabProvider.notifier).state = d.tab;
         // Hedefli adım sekme de değiştiriyorsa ölçüm YENİ sekme yerleştikten
-        // sonra yapılmalı — bir sonraki çerçeveye ertelenir (gelecek adımlar
-        // için hazır; bugünkü sekme-değiştiren adımlar hedefsizdir).
+        // sonra yapılmalı — bir sonraki çerçeveye ertelenir (Defter ve
+        // Teknem adımları böyledir: sekme + hedef birlikte gelir).
         if (d.target != null) {
           _sync();
           return;
@@ -342,7 +342,7 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
     assert(_tourSteps[kTourStepRoute].demo == _TourDemo.route);
     assert(_tourSteps[kTourStepRouteEdit].demo == _TourDemo.route);
     assert(_tourSteps[kTourStepSaved].tab == 2);
-    assert(_tourSteps[kTourStepLog].tab == 3);
+    assert(_tourSteps[kTourStepBoat].tab == 3);
     final L10n t = ref.watch(l10nProvider);
     final int s = widget.step.clamp(0, kTourStepCount - 1);
     final bool last = s == kTourStepCount - 1;

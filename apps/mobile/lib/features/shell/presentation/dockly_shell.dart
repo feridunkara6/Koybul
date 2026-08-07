@@ -3,22 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
-import '../../favorites/presentation/favorites_screen.dart';
-import '../../logbook/presentation/logbook_screen.dart';
+import '../../boat/presentation/boat_screen.dart';
+import '../../deck/presentation/deck_screen.dart';
 import '../../map/presentation/map_screen.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/presentation/onboarding_overlay.dart';
 import '../../profile/presentation/profile_screen.dart';
-import '../../reservation/presentation/reservations_placeholder_screen.dart';
-import '../../search/presentation/search_screen.dart';
+import '../../today/presentation/today_screen.dart';
 import '../application/shell_tab_provider.dart';
 
-/// Uygulama kabuğu — 6 sekmeli alt menü (kullanıcı isteği 2026-08):
-/// Keşfet (harita) · Arama · Kayıtlarım · Günlük · Taleplerim · Profil.
+/// Uygulama kabuğu — v2.0 navigasyonu (kurucu onayı 2026-08, 5 sekme):
+/// Keşfet (harita) · Bugün · Defter · Teknem · Profil.
 ///
-/// "Kayıtlarım" favori yerleri VE kayıtlı rotaları kapsar; "Günlük"
-/// (Kaptanın Günlüğü) amatör denizci için bir dokunuşta erişilir olsun diye
-/// alt menüye alındı (Profil içindeki kısayol da durur).
+/// Arama haritanın içindeki arama düğmesine katlandı (aynı işi iki yüzey
+/// yapmasın); Taleplerim ve favori yerler Profil'den erişilir; Günlük,
+/// Defter'in "Notlar" segmenti oldu; rotalar Defter'de yaşar.
 ///
 /// IndexedStack ile sekmeler arası geçişte durum korunur (harita konumu vb.).
 /// Tüm sekmeler misafir modda çalışır (favoriler/talepler cihazda saklanır);
@@ -33,8 +32,8 @@ class DocklyShell extends ConsumerStatefulWidget {
 class _DocklyShellState extends ConsumerState<DocklyShell> {
   /// PERF (tembel sekmeler): açılışta yalnız Keşfet kurulur; diğer sekmeler
   /// İLK ziyarette kurulur ve sonra durumunu korur (IndexedStack canlı tutar).
-  /// Açılışta 6 ekran yerine 1 ekran kurmak ilk kareyi belirgin hızlandırır.
-  final List<bool> _built = <bool>[true, false, false, false, false, false];
+  /// Açılışta 5 ekran yerine 1 ekran kurmak ilk kareyi belirgin hızlandırır.
+  final List<bool> _built = <bool>[true, false, false, false, false];
 
   // NOT (Paket 2, 2026-08): eski "teknen kaç metre?" karşılama sorusu emekli
   // edildi — tekne bilgisi artık onaylı açılış akışında (E3–E4) soruluyor ve
@@ -65,11 +64,10 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
         index: index,
         children: <Widget>[
           const MapScreen(), // her zaman canlı (harita durumu korunur)
-          _built[1] ? const SearchScreen() : const SizedBox.shrink(),
-          _built[2] ? const FavoritesScreen() : const SizedBox.shrink(),
-          _built[3] ? const LogbookScreen() : const SizedBox.shrink(),
-          _built[4] ? const ReservationsPlaceholderScreen() : const SizedBox.shrink(),
-          _built[5] ? const ProfileScreen() : const SizedBox.shrink(),
+          _built[1] ? const TodayScreen() : const SizedBox.shrink(),
+          _built[2] ? const DeckScreen() : const SizedBox.shrink(),
+          _built[3] ? const BoatScreen() : const SizedBox.shrink(),
+          _built[4] ? const ProfileScreen() : const SizedBox.shrink(),
         ],
       ),
       bottomNavigationBar: Container(
@@ -121,27 +119,24 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
                 selectedIcon: const DocklyIcon(DocklyIcons.explore),
                 label: t.navExplore,
               ),
+              // BUGÜN (v2.0): günlük alışkanlık merkezi — hava + kontrol
+              // listesi; akıllı koy önerisi sonraki paketle buraya gelir.
               NavigationDestination(
-                icon: const DocklyIcon(DocklyIcons.search),
-                selectedIcon: const DocklyIcon(DocklyIcons.search),
-                label: t.navSearch,
+                icon: const DocklyIcon(DocklyIcons.starBorder),
+                selectedIcon: const DocklyIcon(DocklyIcons.star),
+                label: t.navToday,
               ),
-              NavigationDestination(
-                icon: const DocklyIcon(DocklyIcons.favoriteBorder),
-                selectedIcon: const DocklyIcon(DocklyIcons.favorite),
-                label: t.navFavorites,
-              ),
-              // KAPTANIN GÜNLÜĞÜ (kullanıcı isteği 2026-08): Kayıtlarım'ın
-              // yanında — günlük bir dokunuş uzağında, Profil'de gömülü değil.
+              // DEFTER: rotalar + notlar (denizcinin arşivi).
               NavigationDestination(
                 icon: const DocklyIcon(DocklyIcons.edit),
                 selectedIcon: const DocklyIcon(DocklyIcons.edit),
-                label: t.navLogbook,
+                label: t.navDeck,
               ),
+              // TEKNEM: teknenin evi (v2.0'da bakım da buraya).
               NavigationDestination(
-                icon: const DocklyIcon(DocklyIcons.eventNoteOutlined),
-                selectedIcon: const DocklyIcon(DocklyIcons.eventNote),
-                label: t.navRequests,
+                icon: const DocklyIcon(DocklyIcons.sailingOutlined),
+                selectedIcon: const DocklyIcon(DocklyIcons.sailing),
+                label: t.navBoat,
               ),
               NavigationDestination(
                 icon: const DocklyIcon(DocklyIcons.personOutline),

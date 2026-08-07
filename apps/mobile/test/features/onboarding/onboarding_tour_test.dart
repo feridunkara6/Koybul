@@ -161,7 +161,7 @@ void main() {
     expect(_tab(tester), 0);
   });
 
-  testWidgets('SAYFA GEZİNTİSİ (v3): tur Kayıtlarım ve Günlük sekmelerine '
+  testWidgets('SAYFA GEZİNTİSİ (v2.0): tur Defter ve Teknem sekmelerine '
       'uğrar; son kart "Hazırsın" der ve Keşfet\'e döner',
       (WidgetTester tester) async {
     await tester.pumpWidget(
@@ -190,7 +190,7 @@ void main() {
     expect(c.read(mapControllerProvider).route, isNotNull);
     expect(find.byKey(_spotKey), findsOneWidget);
 
-    // Adım 7 (Kayıtlarım): sekme 2 + ÖRNEK rozetli rota kartı; örnek rota
+    // Adım 7 (Defter): sekme 2 + ÖRNEK rozetli rota kartı; örnek rota
     // haritadan TEMİZLENİR (kalıcı hiçbir şey kalmaz).
     await _advance(tester);
     expect(_tab(tester), 2);
@@ -198,10 +198,11 @@ void main() {
     expect(find.text('ÖRNEK'), findsOneWidget);
     expect(c.read(mapControllerProvider).route, isNull);
 
-    // Adım 8 (Günlük): sekme 3 + ÖRNEK not (rota bağlamıyla).
+    // Adım 8 (Teknem, v2.0): sekme 3 + tekne kimlik kartı (tekne yok →
+    // dürüst tanımlama daveti görünür).
     await _advance(tester);
     expect(_tab(tester), 3);
-    expect(find.text('ÖRNEK'), findsOneWidget);
+    expect(find.text('Tekneni tanımla'), findsOneWidget);
 
     // → adım 9 (Hazırsın): Keşfet'e dönülür, kapanış kartı.
     await _advance(tester);
@@ -217,14 +218,14 @@ void main() {
     expect(c.read(mapControllerProvider).selectedPinId, isNull);
   });
 
-  testWidgets('SAYFADAYKEN ATLA (v3): Günlük adımında Atla → tur kapanır ve '
+  testWidgets('SAYFADAYKEN ATLA (v3): Teknem adımında Atla → tur kapanır ve '
       'Keşfet\'e dönülür', (WidgetTester tester) async {
     await tester.pumpWidget(
         _app(FakeOnboardingStore(data: const OnboardingData())));
     await tester.pumpAndSettle();
 
     for (int i = 0; i < 8; i++) {
-      await _advance(tester); // adım 8 = Günlük (sekme 3)
+      await _advance(tester); // adım 8 = Teknem (sekme 3)
     }
     expect(_tab(tester), 3);
     await tester.tap(find.text('Atla'));

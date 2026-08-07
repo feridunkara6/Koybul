@@ -12,4 +12,4 @@ final GlobalKey tourKeySearch = GlobalKey(debugLabel: 'tour-search');
 // Örnekli tur v5 (kullanıcı isteği 2026-08): canlı örneklerin hedefleri.
 final GlobalKey tourKeyRouteChip = GlobalKey(debugLabel: 'tour-route-chip');
 final GlobalKey tourKeySavedDemo = GlobalKey(debugLabel: 'tour-saved-demo');
-final GlobalKey tourKeyLogDemo = GlobalKey(debugLabel: 'tour-log-demo');
+final GlobalKey tourKeyBoatCard = GlobalKey(debugLabel: 'tour-boat-card');

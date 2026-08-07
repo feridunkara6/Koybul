@@ -10,7 +10,9 @@ import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
 import '../../emergency/presentation/emergency_screen.dart';
 import '../../onboarding/application/onboarding_controller.dart';
+import '../../favorites/presentation/favorites_screen.dart';
 import '../../logbook/presentation/logbook_screen.dart';
+import '../../reservation/presentation/reservations_placeholder_screen.dart';
 import '../../route/presentation/saved_routes_screen.dart';
 import '../../shell/application/shell_tab_provider.dart';
 
@@ -58,6 +60,28 @@ class ProfileScreen extends ConsumerWidget {
           // DİL — az yer kaplayan tek satır; menü aşağı açılır.
           const _LanguageRow(),
           const SizedBox(height: 16),
+          // KAYITLARIM (v2.0 geçiş dönemi): eski Kayıtlarım sekmesi Profil'e
+          // indi. Ekran şimdilik rotaları da listeler; satır etiketi ekran
+          // başlığıyla AYNI kalır ki kaptan nereye gittiğini bilsin. Favori
+          // yerler ayrı ekrana ayrılınca etiket favSectionPlaces olacak.
+          _NavRow(
+            icon: DocklyIcons.favorite,
+            label: t.navFavorites,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const FavoritesScreen()),
+            ),
+          ),
+          const SizedBox(height: 12),
+          // TALEPLERİM (v2.0): sekmeden Profil'e indi (kullanım sıklığı).
+          _NavRow(
+            icon: DocklyIcons.eventNoteOutlined,
+            label: t.navRequests,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                  builder: (_) => const ReservationsPlaceholderScreen()),
+            ),
+          ),
+          const SizedBox(height: 12),
           // KAYITLI ROTALAR (rota planlama 2026-08): cihazdaki rota kayıtları.
           _NavRow(
             icon: DocklyIcons.navigation,

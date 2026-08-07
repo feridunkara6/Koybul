@@ -10,11 +10,11 @@ import '../domain/onboarding_store.dart';
 final Provider<OnboardingStore> onboardingStoreProvider =
     Provider<OnboardingStore>((ref) => const SharedPrefsOnboardingStore());
 
-/// Turun adım sayısı (v3, kullanıcı isteği 2026-08 — OKLU tur: kart ilgili
-/// bölgeyi spot ışığı + okla gösterir, gerekirse SAYFA DEĞİŞİR):
-/// ① hoş geldin ② harita & koylar ③ filtreler (ok) ④ Konumum (ok) ⑤ SOS (ok)
-/// ⑥ deniz rotası ⑦ rota düzenleme & kaydetme ⑧ Kayıtlarım (sekme 2)
-/// ⑨ Kaptanın Günlüğü (sekme 3) ⑩ "Hazırsın" — Keşfet'e dönülür.
+/// Turun adım sayısı (v2.0 kabuğu, kurucu onayı 2026-08 — tur ilgili bölgeyi
+/// ışıkla gösterir, gerekirse SAYFA DEĞİŞİR):
+/// ① hoş geldin ② harita & koylar ③ filtreler ④ Konumum ⑤ SOS
+/// ⑥ deniz rotası ⑦ rota düzenleme & kaydetme ⑧ Defter (sekme 2)
+/// ⑨ Teknem (sekme 3) ⑩ "Hazırsın" — Keşfet'e dönülür.
 const int kTourStepCount = 10;
 
 /// ÖRNEKLİ TUR v5 (kullanıcı isteği 2026-08): bu adımlarda ekranlar CANLI
@@ -22,12 +22,12 @@ const int kTourStepCount = 10;
 const int kTourStepMarkers = 1; // bir koy işareti örnek olarak seçilir
 const int kTourStepRoute = 5; // gerçek motorla örnek rota çizilir
 const int kTourStepRouteEdit = 6; // örnek rotanın bilgi kartı anlatılır
-const int kTourStepSaved = 7; // Kayıtlarım: örnek rota kartı görünür
-const int kTourStepLog = 8; // Günlük: örnek not görünür
+const int kTourStepSaved = 7; // Defter: örnek rota kartı görünür
+const int kTourStepBoat = 8; // Teknem: tekne kimlik kartı vurgulanır
 
 /// ÖRNEK ROTA uçları — sea_mask'e karşı DOĞRULANMIŞ su noktaları (Göcek
 /// açığı -> 5,1 nm güney; aynı su kütlesi). TEK KAYNAK: hem turdaki canlı
-/// rota hem Kayıtlarım'daki örnek kart bu uçları kullanır.
+/// rota hem Defter'deki örnek kart bu uçları kullanır.
 const GeoPoint kTourDemoOrigin = GeoPoint(lat: 36.740, lon: 28.935);
 const GeoPoint kTourDemoDest = GeoPoint(lat: 36.660, lon: 28.900);
 
