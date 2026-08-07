@@ -364,7 +364,14 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
     // yakın-plan dairesi harita gövdesinin GERÇEK merkezine kaydırılır.
     // (spot FINAL kalır: closure içindeki null-yükseltme bozulmasın.)
     final Rect? rawSpot = _targetRect ?? _def.window?.call(screen);
-    final double bottomInset = MediaQuery.viewPaddingOf(context).bottom;
+    final EdgeInsets viewPad = MediaQuery.viewPaddingOf(context);
+    final double bottomInset = viewPad.bottom;
+    // TELEFON DÜZENİ (kullanıcı isteği 2026-08: "mobilde düzgün gözükmüyor"):
+    // dar ekranda kart hedefin dibine YAPIŞMAZ — anlatılan bölgeyi kapatmasın
+    // diye ekranın hedefe UZAK ucuna kıyılanır (hedef üstteyse kart altta,
+    // alttaysa üstte). Balon ucu yalnız geniş ekranların bitişik düzeninde
+    // kullanılır; telefonda bağlantıyı ışık vurgusu kurar.
+    final bool phone = screen.width < 600;
     final Rect? spot = (rawSpot != null &&
             _targetRect == null &&
             _def.circleSpot &&
@@ -395,6 +402,7 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
       icon: _def.icon,
       t: t,
       onNext: _next,
+      compact: phone, // dar ekranda kart daha az yer kaplar
     );
     return GestureDetector(
       key: ValueKey<String>('onb-tour-step-$s'),
@@ -475,11 +483,12 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
           ),
           if (pool)
             // Işık havuzu: kart ALTTA durur — rota/harita yukarıda,
-            // aydınlıkta serbestçe izlenir.
+            // aydınlıkta serbestçe izlenir. Telefonda kart ekranın dibine
+            // iner (alt menü zaten karartılmıştır) — ışığa daha çok yer.
             Positioned(
               left: 16,
               right: 16,
-              bottom: 80 + bottomInset,
+              bottom: (phone ? 12 : 80) + bottomInset,
               child: Center(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: cardW),
@@ -497,8 +506,40 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
                 ),
               ),
             )
+          else if (phone)
+            // TELEFON: kart hedefe uzak uca KIYILANIR — anlatılan bölge ve
+            // ışık vurgusu tamamen açık kalır (kullanıcı isteği 2026-08:
+            // "kart anlatılan yeri kapatıyor"). Balon ucu yok; sığmazsa
+            // içerik kaydırılır — İleri düğmesi asla kaybolmaz.
+            Positioned(
+              left: 16,
+              right: 16,
+              top: cardBelow ? null : viewPad.top + 56,
+              bottom: cardBelow ? 12 + bottomInset : null,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: cardW,
+                    maxHeight: (cardBelow
+                            ? screen.height -
+                                spot.bottom -
+                                bottomInset -
+                                24
+                            : spot.top - viewPad.top - 56 - 12)
+                        // clamp kuralı: alt sınır üst sınırı AŞAMAZ — aşırı
+                        // ufak pencerede (masaüstünde daraltılmış tarayıcı)
+                        // çökme yerine kart üst üste binmeyi kabul eder.
+                        .clamp(160.0,
+                            screen.height < 160.0 ? 160.0 : screen.height),
+                  ),
+                  child: _stepSwitcher(
+                    SingleChildScrollView(child: card),
+                  ),
+                ),
+              ),
+            )
           else
-            // Kart + balon ucu: hedefin hemen yanında, ona bağlı görünür.
+            // GENİŞ EKRAN: kart + balon ucu hedefin hemen yanında, ona bağlı.
             Positioned(
               left: cardLeft,
               width: cardW,
@@ -512,8 +553,9 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
                   constraints: BoxConstraints(
                     maxHeight: (cardBelow
                             ? screen.height - spot.bottom - 30
-                            : spot.top - 30)
-                        .clamp(180.0, screen.height),
+                            : spot.top - 30 - viewPad.top)
+                        .clamp(180.0,
+                            screen.height < 180.0 ? 180.0 : screen.height),
                   ),
                   child: SingleChildScrollView(
                     child: Column(
@@ -554,6 +596,7 @@ class _TourCard extends StatelessWidget {
     required this.icon,
     required this.t,
     required this.onNext,
+    this.compact = false,
   });
 
   final int step;
@@ -564,16 +607,23 @@ class _TourCard extends StatelessWidget {
   final L10n t;
   final VoidCallback onNext;
 
+  /// true → telefon düzeni: daha dar dolgu/boşluk — kart, ışıkla gösterilen
+  /// bölgeye olabildiğince az girer (kullanıcı isteği 2026-08).
+  final bool compact;
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return Material(
+      key: const ValueKey<String>('onb-tour-card'),
       elevation: 16,
       shadowColor: const Color(0x59071626),
       borderRadius: BorderRadius.circular(22),
       color: theme.colorScheme.surface,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
+        padding: compact
+            ? const EdgeInsets.fromLTRB(16, 14, 16, 12)
+            : const EdgeInsets.fromLTRB(20, 18, 20, 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -629,15 +679,15 @@ class _TourCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: compact ? 10 : 12),
             Text(
               body,
               style: theme.textTheme.bodyMedium?.copyWith(
-                height: 1.5,
+                height: compact ? 1.4 : 1.5,
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: compact ? 12 : 16),
             Row(
               children: <Widget>[
                 for (int i = 0; i < kTourStepCount; i++)

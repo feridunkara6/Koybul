@@ -6,6 +6,7 @@ import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
 import 'package:dockly_mobile/features/onboarding/domain/onboarding_store.dart';
+import 'package:dockly_mobile/features/onboarding/presentation/tour_targets.dart';
 import 'package:dockly_api/dockly_api.dart' show GeoPoint;
 import 'package:dockly_mobile/features/route/application/saved_routes_controller.dart';
 import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
@@ -276,5 +277,43 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey<String>('onb-hint-$kHintBottomCard')),
         findsNothing);
+  });
+
+  testWidgets('TELEFON DÜZENİ (kullanıcı isteği 2026-08): kart anlatılan yeri '
+      'KAPATMAZ; tur baştan sona taşmadan yürür', (WidgetTester tester) async {
+    // 390×844 mantıksal nokta (×3 piksel) — yaygın telefon ekranı.
+    tester.view.physicalSize = const Size(1170, 2532);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+        _app(FakeOnboardingStore(data: const OnboardingData())));
+    await tester.pumpAndSettle();
+
+    Future<void> next() async {
+      await tester.tap(find.text('İleri'));
+      await tester.pumpAndSettle();
+    }
+
+    // Adım 3'e ilerle (filtre çipleri — ekranın ÜSTÜNDE vurgulanır).
+    await next();
+    await next();
+    expect(find.byKey(_spotKey), findsOneWidget);
+    // Telefonda kart hedefin dibine yapışmaz, uzak uca kıyılanır —
+    // vurgulanan çip şeridiyle ASLA çakışmaz.
+    final Rect card = tester
+        .getRect(find.byKey(const ValueKey<String>('onb-tour-card')));
+    final Rect target = tester.getRect(find.byKey(tourKeyChips));
+    expect(card.overlaps(target.inflate(9)), isFalse,
+        reason: 'kart, ışıkla gösterilen bölgeyi kapatmamalı');
+
+    // Kalan adımlar İleri düğmesiyle taşma/hata olmadan biter (taşma olsa
+    // test kendiliğinden kırmızı olurdu).
+    for (int i = 2; i < kTourStepCount - 1; i++) {
+      await next();
+    }
+    expect(find.text('Hazırsın, kaptan!'), findsOneWidget);
+    await tester.tap(find.text('Başla'));
+    await tester.pumpAndSettle();
+    expect(find.text('Hazırsın, kaptan!'), findsNothing);
   });
 }

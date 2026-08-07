@@ -50,7 +50,17 @@ jobs:
           # PWA önbelleği AÇIK (2026-08 hız kararı): motor+uygulama dosyaları
           # cihazda önbelleklenir -> tekrar ziyaretler ANINDA açılır. Yeni sürüm
           # arka planda iner, bir sonraki ziyarette devreye girer.
+          # ÇİZİM MOTORU SABİT (2026-08, "tanıtım mobilde bozuk" düzeltmesi):
+          # bayrak verilmeyince Flutter 3.27 TELEFON tarayıcılarında eski HTML
+          # motoruna düşer — tanıtım turunun ışık efektleri (bulanık kenar,
+          # delikli karartma, ışık havuzu) orada desteklenmez ve yanlış çizilir.
+          # CanvasKit her cihazda aynı sonucu verir; motor dosyası PWA
+          # önbelleğine girdiği için tekrar ziyaretlerde ek maliyeti yoktur.
+          # (--no-web-resources-cdn: motor dosyaları DIŞ CDN'den değil kendi
+          # sitemizden gelir — tek kaynak, PWA çevrimdışı desteğiyle uyumlu.)
           flutter build web --release \
+            --web-renderer canvaskit \
+            --no-web-resources-cdn \
             --no-tree-shake-icons \
             --dart-define=API_BASE_URL=https://dockly-proje.onrender.com \
             --dart-define=ESRI_TILE_KEY=${{ secrets.ESRI_TILE_KEY }} \
