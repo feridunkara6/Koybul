@@ -88,6 +88,31 @@ FavoriteLocation _favoriteFrom(LocationDetail d) {
   return FavoriteLocation(id: d.id, name: d.name, type: d.type, city: city);
 }
 
+/// TİP KİMLİK RENGİ (kullanıcı onayı 2026-08): detay sayfası, HARİTADAKİ
+/// İŞARETLE aynı rengi kuşanır — kullanıcı haritada gördüğü rengi sayfada
+/// bulur. docs/09 §1.4'ün "pin renkleri yalnız haritada" rezervi bu ürün
+/// kararıyla bilinçli olarak genişletildi: pin rengi = tip kimliği.
+Color _identOf(String type) => DocklyMapColors.forType(type);
+
+/// KOYU zemin mürekkebi: kimlik renginin ton koruyarak koyulaştırılmışı —
+/// kapak degradesi ve renkli düğme zemini gibi "renk zeminin kendisi" olan
+/// yerlerde kullanılır (üstündeki metin beyazdır).
+Color _identInkOf(Color c) {
+  final HSLColor h = HSLColor.fromColor(c);
+  return h.withLightness((h.lightness * 0.62).clamp(0.18, 0.42)).toColor();
+}
+
+/// YÜZEY mürekkebi (inceleme dersi 2026-08): ikon/etiket gibi zemin ÜSTÜNDE
+/// duran ögeler için tema-duyarlı ton — açık temada koyulaştırılır (beyaz
+/// zeminde okunur), koyu temada AÇILIR (koyu zeminde okunur). Tek kaynaktan:
+/// karanlık modda koyu-üstüne-koyu görünmezlik yaşanmaz.
+Color _identOnSurfaceOf(BuildContext context, Color ident) {
+  final HSLColor h = HSLColor.fromColor(ident);
+  return Theme.of(context).brightness == Brightness.dark
+      ? h.withLightness((h.lightness * 1.30).clamp(0.60, 0.82)).toColor()
+      : h.withLightness((h.lightness * 0.62).clamp(0.18, 0.42)).toColor();
+}
+
 class _DetailContent extends ConsumerWidget {
   const _DetailContent({required this.detail});
 
@@ -114,6 +139,16 @@ class _DetailContent extends ConsumerWidget {
         _isAnchoringType(detail.type) ? splitAnchorageDescription(ap.rest) : null;
     final String? about = split != null ? split.general : ap.rest;
 
+    // TİP KİMLİĞİ (kullanıcı onayı 2026-08): haritadaki işaret rengi sayfanın
+    // kimliği olur; ikon/etiketlerde temaya göre okunur tonu kullanılır.
+    final Color ident = _identOf(detail.type);
+    final Color ink = _identOnSurfaceOf(context, ident);
+
+    // ÖNEM SIRASI (kullanıcı onayı 2026-08): kimlik → bir bakışta → güvenlik
+    // uyarıları → demirleme notları → rota → DOLULUK → İLETİŞİM (yukarı
+    // alındı: kaptan yer ayırtmak için önce arar) → denizci verileri →
+    // olanak/hizmet → çalışma → hava → tanıtım metni → yorumlar → çevre.
+    // İçerik birebir korunur; yalnız sıra ve giydirme değişti (taslak sözü).
     final Widget list = ListView(
       key: LocationDetailScreen.contentKey,
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
@@ -128,7 +163,8 @@ class _DetailContent extends ConsumerWidget {
         _GlanceStrip(detail: detail),
 
         // RÜZGÂR UYARI BANDI (onaylı B): koyun açık yönünden eşik üstü rüzgâr
-        // bekleniyorsa görünür; veri/tahmin yoksa hiç çizilmez.
+        // bekleniyorsa görünür; veri/tahmin yoksa hiç çizilmez. Uyarılar tip
+        // rengine BOYANMAZ — güvenlik dili evrenseldir (taslak sözü).
         WindWarningBadge(
           exposedDirs: detail.windExposedDirs,
           position: detail.position,
@@ -137,29 +173,41 @@ class _DetailContent extends ConsumerWidget {
         // YAKLAŞMA NOTU (onaylı B): açıklama içinde kaybolmaz, uyarı kartı olur.
         if (ap.note != null) _ApproachNoteCard(note: ap.note!),
 
-        if (about != null && about.trim().isNotEmpty)
-          SectionCard(
-            icon: DocklyIcons.infoOutline,
-            title: t.aboutTitle,
-            child: Text(about, style: theme.textTheme.bodyMedium?.copyWith(height: 1.45)),
-          ),
-
-        // Demirleme tiplerinde koya özel notlar kartı (zemin/derinlik/DİKKAT).
+        // Demirleme tiplerinde koya özel notlar kartı (zemin/derinlik/DİKKAT)
+        // — güvenlik uyarılarının hemen ardından (önem sırası).
         if (split != null)
           Padding(
             padding: const EdgeInsets.only(top: 12),
-            child: _AnchoringNotes(detail: detail, split: split),
+            child: _AnchoringNotes(detail: detail, split: split, accent: ink),
           ),
 
-        _SeaRouteRow(destination: detail.position),
+        _SeaRouteRow(destination: detail.position, accent: ink),
 
-        MaritimeInfoPanel(stats: stats, title: t.maritimeTitle),
+        // DOLULUK yukarıda (kullanıcı isteği 2026-08): "yer var mı?" sorusu
+        // sayfanın dibinde beklemez; DOLULUK BİLDİR düğmesi buradadır.
+        // (Demirleme tiplerinde aynı düğme alttaki yapışkan çubukta.)
+        if (occupancySupported(detail.type) && !_isAnchoringType(detail.type))
+          OccupancyRow(idOrSlug: detail.id, position: detail.position),
+
+        // İLETİŞİM yukarıda (kullanıcı isteği 2026-08): kaptan yer ayırtmak
+        // için önce arar — tek dokunuş kutucukları rotadan hemen sonra.
+        if (detail.contacts.isNotEmpty)
+          SectionCard(
+            icon: DocklyIcons.phone,
+            title: t.sectionContact,
+            accent: ink,
+            child: _ContactTiles(contacts: detail.contacts, accent: ink),
+          ),
+
+        MaritimeInfoPanel(stats: stats, title: t.maritimeTitle, accent: ink),
 
         if (detail.amenities.isNotEmpty)
           SectionCard(
             icon: DocklyIcons.checkCircle,
             title: t.sectionAmenities,
+            accent: ink,
             child: _IconChips(
+              accent: ink,
               items: <(DocklyIconData, String)>[
                 for (final AmenityLabeled a in detail.amenities)
                   (DocklyIcons.forAmenity(a.code), a.label),
@@ -171,7 +219,9 @@ class _DetailContent extends ConsumerWidget {
           SectionCard(
             icon: DocklyIcons.amTool,
             title: t.sectionServices,
+            accent: ink,
             child: _IconChips(
+              accent: ink,
               items: <(DocklyIconData, String)>[
                 for (final ServiceLabeled s in detail.services)
                   (DocklyIcons.forAmenity(s.code), s.label),
@@ -183,27 +233,28 @@ class _DetailContent extends ConsumerWidget {
           hours: detail.hours,
           seasons: detail.seasons,
           is24h: detail.is24h,
+          accent: ink,
         ),
 
         // Rüzgâr & Hava — noktanın 48 saatlik tahmini (MET Norway, atıflı).
-        WeatherCard(position: detail.position),
+        WeatherCard(position: detail.position, accent: ink),
 
-        // İLETİŞİM (onaylı C): satır listesi yerine tek dokunuş kutucukları.
-        if (detail.contacts.isNotEmpty)
+        // HAKKINDA aşağıda (önem sırası 2026-08): tanıtım metni, karar verdiren
+        // verilerden sonra gelir — içerik aynen korunur.
+        if (about != null && about.trim().isNotEmpty)
           SectionCard(
-            icon: DocklyIcons.phone,
-            title: t.sectionContact,
-            child: _ContactTiles(contacts: detail.contacts),
+            icon: DocklyIcons.infoOutline,
+            title: t.aboutTitle,
+            accent: ink,
+            child: Text(about, style: theme.textTheme.bodyMedium?.copyWith(height: 1.45)),
           ),
 
-        // Restoran iskelesi: rezervasyon çubukta, doluluk bildirimi listede
-        // (iki eylem birden çubuğa sığmaz; demirleme tiplerinde doluluk zaten
-        // çubukta olduğundan burada tekrar çizilmez).
-        if (occupancySupported(detail.type) && !_isAnchoringType(detail.type))
-          OccupancyRow(idOrSlug: detail.id, position: detail.position),
-
-        ReviewsSection(idOrSlug: detail.id),
-        NearbyAlternatives(locationId: detail.id, position: detail.position),
+        ReviewsSection(idOrSlug: detail.id, accent: ink),
+        NearbyAlternatives(
+          locationId: detail.id,
+          position: detail.position,
+          accent: ink,
+        ),
       ],
     );
 
@@ -327,15 +378,15 @@ class _HeroCard extends ConsumerWidget {
 
   final LocationDetail detail;
 
-  /// Kart degradesinin açık ucu (marka lacivertinin bir tık aydınlığı).
-  static const Color _heroTop = Color(0xFF0E3052);
-
-  /// Tip çipinin turkuaz mürekkebi (koyu zeminde okunur açık ton).
-  static const Color _chipInk = Color(0xFF7FE3D9);
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final L10n t = ref.watch(l10nProvider);
+    // TİP KİMLİĞİ (2026-08): kapak degradesi tipin rengini taşır — koyu
+    // uçtan renge doğru sakin bir akış; beyaz metin her tipte okunur kalır
+    // (açık renkler koyulaştırılmış tondan başlar).
+    final Color ident = _identOf(detail.type);
+    final Color ink = _identInkOf(ident);
+    final Color heroEnd = Color.lerp(ink, ident, 0.45)!;
     final String coords =
         '${detail.position.lat.toStringAsFixed(4)}, ${detail.position.lon.toStringAsFixed(4)}';
     final String? locLine = _locationLine(detail.geo);
@@ -344,10 +395,10 @@ class _HeroCard extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: <Color>[_heroTop, DocklyColors.brandDeep],
+          colors: <Color>[ink, heroEnd],
         ),
       ),
       child: Column(
@@ -457,6 +508,7 @@ class _HeroCard extends ConsumerWidget {
                         child: Text(
                           t.onbGotIt,
                           style: const TextStyle(
+                            // Koyu zeminde nötr vurgu (kimlikten bağımsız).
                             color: Color(0xFF7FE3D9),
                             fontSize: 11.5,
                             fontWeight: FontWeight.w800,
@@ -535,7 +587,8 @@ class _HeroCard extends ConsumerWidget {
   }
 }
 
-/// Kimlik kartındaki tip/doğrulanmış çipi (turkuaz tonlu).
+/// Kimlik kartındaki tip/doğrulanmış çipi — beyaz saydam hap: HER tip
+/// renginin üstünde aynı kalitede okunur (tip kimliği 2026-08).
 class _TypeChip extends StatelessWidget {
   const _TypeChip({required this.icon, required this.label});
 
@@ -547,14 +600,14 @@ class _TypeChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: DocklyColors.accentTurquoise.withValues(alpha: 0.18),
-        border: Border.all(color: DocklyColors.accentTurquoise.withValues(alpha: 0.5)),
+        color: Colors.white.withValues(alpha: 0.16),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.42)),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          DocklyIcon(icon, size: 13, color: _HeroCard._chipInk),
+          DocklyIcon(icon, size: 13, color: Colors.white),
           const SizedBox(width: 5),
           Flexible(
             child: Text(
@@ -562,7 +615,7 @@ class _TypeChip extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                color: _HeroCard._chipInk,
+                color: Colors.white,
                 fontSize: 11.5,
                 fontWeight: FontWeight.w700,
               ),
@@ -605,11 +658,16 @@ class _GlanceStrip extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final L10n t = ref.watch(l10nProvider);
+    // Tip kimlik mürekkebi (2026-08): kutular tipin temaya göre okunur tonu.
+    final Color ink = _identOnSurfaceOf(context, _identOf(detail.type));
     final List<Widget> tiles = <Widget>[];
 
     final Dimensions d = detail.dimensions;
     if (d.depthMinM != null || d.depthMaxM != null) {
-      tiles.add(_GlanceTile(label: t.statDepth, value: _range(d.depthMinM, d.depthMaxM)));
+      tiles.add(_GlanceTile(
+          label: t.statDepth,
+          value: _range(d.depthMinM, d.depthMaxM),
+          accent: ink));
     }
 
     final AnchorageTypeDetails? a = switch (detail.typeDetails) {
@@ -617,14 +675,17 @@ class _GlanceStrip extends ConsumerWidget {
       _ => null,
     };
     if (a?.holdingType != null) {
-      tiles.add(_GlanceTile(label: t.glanceSeabed, value: _capTr(t.holdingLabel(a!.holdingType!))));
+      tiles.add(_GlanceTile(
+          label: t.glanceSeabed,
+          value: _capTr(t.holdingLabel(a!.holdingType!)),
+          accent: ink));
     }
 
     final String? dirs = detail.windExposedDirs;
     if (dirs != null && dirs.trim().isNotEmpty) {
       final String value =
           dirs.split(',').map((String s) => s.trim()).where((String s) => s.isNotEmpty).join(', ');
-      tiles.add(_GlanceTile(label: t.glanceOpenDir, value: value));
+      tiles.add(_GlanceTile(label: t.glanceOpenDir, value: value, accent: ink));
     }
 
     // Tekne uygunluğu: tekne tanımlıysa otomatik karşılaştırma; değilse
@@ -643,6 +704,7 @@ class _GlanceStrip extends ConsumerWidget {
     tiles.add(_GlanceTile(
       label: t.glanceBoat,
       value: fitValue,
+      accent: ink,
       valueColor: fitColor,
       sub: boat == null
           ? t.boatDefineCta
@@ -689,6 +751,7 @@ class _GlanceTile extends StatelessWidget {
   const _GlanceTile({
     required this.label,
     required this.value,
+    this.accent,
     this.valueColor,
     this.sub,
     this.onTap,
@@ -696,6 +759,10 @@ class _GlanceTile extends StatelessWidget {
 
   final String label;
   final String value;
+
+  /// Tip kimlik mürekkebi (2026-08): kutu zemini/etiketi bu tonu taşır.
+  final Color? accent;
+
   final Color? valueColor;
   final String? sub;
   final VoidCallback? onTap;
@@ -703,6 +770,7 @@ class _GlanceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final bool dark = theme.brightness == Brightness.dark;
     // Maritime stat kutularıyla aynı sabit boy (84) — 3 metin satırı + dolgu
     // gerçek tema metrikleriyle de rahat sığar (taşma payı geniş tutuldu).
     final double height = MediaQuery.textScalerOf(context).scale(84);
@@ -710,8 +778,13 @@ class _GlanceTile extends StatelessWidget {
       height: height,
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        border: Border.all(color: theme.colorScheme.outline),
+        // Tip kimliği: yumuşak renkli zemin (%7 açık / %15 koyu tema).
+        color: accent == null
+            ? theme.colorScheme.surface
+            : accent!.withValues(alpha: dark ? 0.15 : 0.07),
+        border: Border.all(
+          color: accent?.withValues(alpha: 0.32) ?? theme.colorScheme.outline,
+        ),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -722,7 +795,7 @@ class _GlanceTile extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: theme.textTheme.labelSmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
+              color: accent ?? theme.colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.3,
             ),
@@ -814,9 +887,12 @@ class _ApproachNoteCard extends ConsumerWidget {
 /// kuşuçuşu deniz mili + kaba süre. Başlangıç (harita konumu) yoksa gizlenir.
 /// ROTA ÇİZ eylemi artık yapışkan çubukta — her an erişilebilir.
 class _SeaRouteRow extends ConsumerWidget {
-  const _SeaRouteRow({required this.destination});
+  const _SeaRouteRow({required this.destination, this.accent});
 
   final GeoPoint destination;
+
+  /// Tip kimlik mürekkebi (2026-08) — başlık madalyonu + pusula rozeti.
+  final Color? accent;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -826,23 +902,24 @@ class _SeaRouteRow extends ConsumerWidget {
     final SeaRoutePreview route = computeSeaRoute(origin, destination);
     if (route.distanceNm < 0.05) return const SizedBox.shrink();
     final ThemeData theme = Theme.of(context);
+    final Color a = accent ?? DocklyColors.brandPrimary;
     return SectionCard(
       icon: DocklyIcons.navigation,
       title: t.routeSectionTitle,
+      accent: accent,
       child: Row(
         children: <Widget>[
           Container(
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: DocklyColors.brandPrimary.withValues(alpha: 0.10),
+              color: a.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Center(
               child: Transform.rotate(
                 angle: route.bearingDeg * math.pi / 180.0,
-                child: const DocklyIcon(DocklyIcons.navigation,
-                    size: 20, color: DocklyColors.brandPrimary),
+                child: DocklyIcon(DocklyIcons.navigation, size: 20, color: a),
               ),
             ),
           ),
@@ -911,6 +988,14 @@ class _ActionBar extends ConsumerWidget {
       ),
     );
     final bool addStopMode = hasRoute && !inRoute;
+    // Tip kimliği (2026-08): ana eylem düğmesi tipin rengini taşır. Beyaz
+    // etiketin kontrastı 4.5:1'in altında kalacaksa (turkuaz/turuncu gibi
+    // açık renkler) zemin koyulaştırılır — okunurluk her tipte garanti.
+    final Color ident = _identOf(detail.type);
+    final Color btnColor =
+        (1.05 / (ident.computeLuminance() + 0.05)) < 4.5
+            ? _identInkOf(ident)
+            : ident;
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -931,6 +1016,7 @@ class _ActionBar extends ConsumerWidget {
                     child: DocklyButton(
                       label: addStopMode ? t.routeAddStop : t.routeBtn,
                       icon: addStopMode ? DocklyIcons.place : DocklyIcons.navigation,
+                      color: btnColor,
                       onPressed: addStopMode
                           ? () => _addStop(context, ref)
                           : () => _startRoute(context, ref),
@@ -1011,18 +1097,23 @@ class _ActionBar extends ConsumerWidget {
 /// Olanak/hizmet çipleri — her biri tasarım sistemi denizcilik ikonuyla (docs/09,
 /// design §03). İkon marka mavisi; çip kenarlığı temadan gelir.
 class _IconChips extends StatelessWidget {
-  const _IconChips({required this.items});
+  const _IconChips({required this.items, this.accent});
   final List<(DocklyIconData, String)> items;
+
+  /// Tip kimlik mürekkebi (2026-08): çip ikonları ve kenarları bu tonda.
+  final Color? accent;
 
   @override
   Widget build(BuildContext context) {
+    final Color a = accent ?? DocklyColors.brandPrimary;
     return Wrap(
       spacing: 8,
       runSpacing: 4,
       children: <Widget>[
         for (final (DocklyIconData icon, String label) in items)
           Chip(
-            avatar: DocklyIcon(icon, size: 18, color: DocklyColors.brandPrimary),
+            avatar: DocklyIcon(icon, size: 18, color: a),
+            side: accent == null ? null : BorderSide(color: a.withValues(alpha: 0.35)),
             label: Text(label),
           ),
       ],
@@ -1035,9 +1126,12 @@ class _IconChips extends StatelessWidget {
 /// WhatsApp üyelik kapılı, kullanıcı kararı 2026-07); VHF gibi açılamayanlar
 /// bilgi kutusu olarak durur. Numara/değer her zaman görünür (bilgi herkese açık).
 class _ContactTiles extends StatelessWidget {
-  const _ContactTiles({required this.contacts});
+  const _ContactTiles({required this.contacts, this.accent});
 
   final List<Contact> contacts;
+
+  /// Tip kimlik mürekkebi (2026-08) — kutucuk ikon madalyonları.
+  final Color? accent;
 
   @override
   Widget build(BuildContext context) {
@@ -1053,7 +1147,10 @@ class _ContactTiles extends StatelessWidget {
           runSpacing: gap,
           children: <Widget>[
             for (final Contact contact in contacts)
-              SizedBox(width: width, child: _ContactTile(contact: contact)),
+              SizedBox(
+                width: width,
+                child: _ContactTile(contact: contact, accent: accent),
+              ),
           ],
         );
       },
@@ -1062,9 +1159,12 @@ class _ContactTiles extends StatelessWidget {
 }
 
 class _ContactTile extends ConsumerWidget {
-  const _ContactTile({required this.contact});
+  const _ContactTile({required this.contact, this.accent});
 
   final Contact contact;
+
+  /// Tip kimlik mürekkebi (2026-08).
+  final Color? accent;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1084,12 +1184,13 @@ class _ContactTile extends ConsumerWidget {
             width: 30,
             height: 30,
             decoration: BoxDecoration(
-              color: DocklyColors.brandPrimary.withValues(alpha: 0.10),
+              color: (accent ?? DocklyColors.brandPrimary)
+                  .withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(15),
             ),
             child: Center(
               child: DocklyIcon(_iconFor(contact.type),
-                  size: 15, color: DocklyColors.brandPrimary),
+                  size: 15, color: accent ?? DocklyColors.brandPrimary),
             ),
           ),
           const SizedBox(height: 5),
@@ -1240,10 +1341,17 @@ bool _isAnchoringType(String type) =>
 /// ve açıklamada zaten var olan cümleler; koya özel veri hiç yoksa bunu
 /// dürüstçe söyleyen tek satır kalır.
 class _AnchoringNotes extends ConsumerWidget {
-  const _AnchoringNotes({required this.detail, required this.split});
+  const _AnchoringNotes({
+    required this.detail,
+    required this.split,
+    this.accent,
+  });
 
   final LocationDetail detail;
   final AnchorageDescriptionSplit split;
+
+  /// Tip kimlik mürekkebi (2026-08) — başlık ikonu.
+  final Color? accent;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1274,7 +1382,8 @@ class _AnchoringNotes extends ConsumerWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              DocklyIcon(DocklyIcons.amMooring, size: 18, color: theme.colorScheme.primary),
+              DocklyIcon(DocklyIcons.amMooring,
+                  size: 18, color: accent ?? theme.colorScheme.primary),
               const SizedBox(width: 8),
               Text(t.anchorTitle,
                   style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),

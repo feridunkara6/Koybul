@@ -14,6 +14,7 @@ class DocklyButton extends StatelessWidget {
     this.variant = DocklyButtonVariant.primary,
     this.loading = false,
     this.icon,
+    this.color,
     super.key,
   });
 
@@ -22,6 +23,10 @@ class DocklyButton extends StatelessWidget {
   final DocklyButtonVariant variant;
   final bool loading;
   final DocklyIconData? icon;
+
+  /// Birincil varyantın zemin rengi (tip kimliği 2026-08) — null: marka
+  /// mavisi (temadan). İkincil varyantta yok sayılır.
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +41,13 @@ class DocklyButton extends StatelessWidget {
 
     switch (variant) {
       case DocklyButtonVariant.primary:
-        return FilledButton(onPressed: effectiveOnPressed, child: child);
+        return FilledButton(
+          style: color == null
+              ? null
+              : FilledButton.styleFrom(backgroundColor: color),
+          onPressed: effectiveOnPressed,
+          child: child,
+        );
       case DocklyButtonVariant.secondary:
         return OutlinedButton(onPressed: effectiveOnPressed, child: child);
     }

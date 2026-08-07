@@ -11,6 +11,7 @@ class SectionCard extends StatelessWidget {
     required this.title,
     required this.child,
     this.margin = const EdgeInsets.only(top: 12),
+    this.accent,
     super.key,
   });
 
@@ -19,9 +20,14 @@ class SectionCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry margin;
 
+  /// Bölüm kimlik rengi (tip kimliği 2026-08): ikon madalyonu bu renge
+  /// boyanır. null → marka mavisi (eski görünüm; diğer ekranlar değişmez).
+  final Color? accent;
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final Color a = accent ?? DocklyColors.brandPrimary;
     return Container(
       width: double.infinity,
       margin: margin,
@@ -40,11 +46,11 @@ class SectionCard extends StatelessWidget {
                 width: 26,
                 height: 26,
                 decoration: BoxDecoration(
-                  color: DocklyColors.brandPrimary.withValues(alpha: 0.10),
+                  color: a.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Center(
-                  child: DocklyIcon(icon, size: 15, color: DocklyColors.brandPrimary),
+                  child: DocklyIcon(icon, size: 15, color: a),
                 ),
               ),
               const SizedBox(width: 8),

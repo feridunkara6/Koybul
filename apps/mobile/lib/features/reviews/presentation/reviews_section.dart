@@ -13,9 +13,12 @@ import '../application/reviews_controller.dart';
 /// mu, yüklenemedi mi?" belirsizliği yaşamaz. Hata durumunda bölüm gizli kalır
 /// (misafiri teknik hatayla rahatsız etmeme kararı korunur).
 class ReviewsSection extends ConsumerWidget {
-  const ReviewsSection({required this.idOrSlug, super.key});
+  const ReviewsSection({required this.idOrSlug, this.accent, super.key});
 
   final String idOrSlug;
+
+  /// Tip kimlik rengi (2026-08) — başlık madalyonu.
+  final Color? accent;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,6 +40,7 @@ class ReviewsSection extends ConsumerWidget {
         final L10n t = ref.watch(l10nProvider);
         // Bölüm kartı (yeniden tasarım 2026-08): ikonlu başlık + içerik.
         return SectionCard(
+          accent: accent,
           icon: DocklyIcons.chat,
           title: t.reviewsTitle,
           child: items.isEmpty

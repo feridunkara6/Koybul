@@ -23,11 +23,15 @@ class MaritimeInfoPanel extends StatelessWidget {
   const MaritimeInfoPanel({
     required this.stats,
     this.title = 'Denizci Bilgileri',
+    this.accent,
     super.key,
   });
 
   final List<MaritimeStat> stats;
   final String title;
+
+  /// Tip kimlik rengi (2026-08) — başlık madalyonu ve stat ikonları.
+  final Color? accent;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +40,7 @@ class MaritimeInfoPanel extends StatelessWidget {
     return SectionCard(
       icon: DocklyIcons.sailing,
       title: title,
+      accent: accent,
       child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             const double gap = 10;
@@ -56,7 +61,7 @@ class MaritimeInfoPanel extends StatelessWidget {
                     key: ValueKey<String>('stat-${s.label}'),
                     width: tileWidth,
                     height: tileHeight,
-                    child: _StatTile(stat: s),
+                    child: _StatTile(stat: s, accent: accent),
                   ),
               ],
             );
@@ -72,26 +77,33 @@ class MaritimeInfoPanel extends StatelessWidget {
 const double kMaritimeStatTileHeight = 84;
 
 class _StatTile extends StatelessWidget {
-  const _StatTile({required this.stat});
+  const _StatTile({required this.stat, this.accent});
 
   final MaritimeStat stat;
+  final Color? accent;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final bool dark = theme.brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        // Tema-duyarlı: karanlık modda koyu yüzey/çizgi (sabit açık renk DEĞİL).
-        color: theme.colorScheme.surface,
-        border: Border.all(color: theme.colorScheme.outline),
+        // Tip kimliği (2026-08): kutu zemini kimlik renginin çok yumuşak tonu.
+        // Tema-duyarlı: karanlık modda saydamlık artar (renk iki temada okunur).
+        color: accent == null
+            ? theme.colorScheme.surface
+            : accent!.withValues(alpha: dark ? 0.14 : 0.06),
+        border: Border.all(
+          color: accent?.withValues(alpha: 0.30) ?? theme.colorScheme.outline,
+        ),
         borderRadius: BorderRadius.circular(12),
       ),
       // Dikeyde ortala: tek satırlık içerik sabit yükseklikte şık dursun.
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          DocklyIcon(stat.icon, size: 22, color: DocklyColors.brandPrimary),
+          DocklyIcon(stat.icon, size: 22, color: accent ?? DocklyColors.brandPrimary),
           const SizedBox(width: 10),
           Expanded(
             child: Column(

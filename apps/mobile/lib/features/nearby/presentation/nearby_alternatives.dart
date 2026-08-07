@@ -12,10 +12,18 @@ import '../application/nearby_controller.dart';
 /// plan B). Merkez lokasyonun çevresindeki en yakın bağlama noktaları; dokununca
 /// onların detayına gider. Boş/hata durumunda sessizce gizlenir.
 class NearbyAlternatives extends ConsumerWidget {
-  const NearbyAlternatives({required this.locationId, required this.position, super.key});
+  const NearbyAlternatives({
+    required this.locationId,
+    required this.position,
+    this.accent,
+    super.key,
+  });
 
   final String locationId;
   final GeoPoint position;
+
+  /// Tip kimlik rengi (2026-08) — başlık madalyonu.
+  final Color? accent;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,6 +45,7 @@ class NearbyAlternatives extends ConsumerWidget {
         if (items.isEmpty) return const SizedBox.shrink();
         // Bölüm kartı (yeniden tasarım 2026-08): koy doluysa plan B hemen elde.
         return SectionCard(
+          accent: accent,
           icon: DocklyIcons.place,
           title: ref.watch(l10nProvider).nearbyAltTitle,
           child: Column(

@@ -144,6 +144,10 @@ void main() {
     expect(find.text('Yaklaşma notu'), findsOneWidget); // kart başlığı
     expect(find.textContaining('batı burnu açığında resif'), findsOneWidget);
     // Taban metin "Hakkında" kartında ve ÖNEKSİZ (çift gösterim yok).
+    // ÖNEM SIRASI (2026-08): Hakkında artık sayfanın alt yarısında —
+    // tembel liste onu ancak kaydırınca kurar.
+    await tester.scrollUntilVisible(
+        find.textContaining('Çam ormanlarıyla çevrili'), 200);
     expect(find.textContaining('Çam ormanlarıyla çevrili'), findsOneWidget);
     expect(find.textContaining('Yaklaşma notu:'), findsNothing);
   });

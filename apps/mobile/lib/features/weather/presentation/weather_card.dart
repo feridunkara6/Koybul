@@ -15,9 +15,12 @@ import '../application/weather_controller.dart';
 /// - 20+ kn turuncu, 30+ kn kırmızı vurgulanır (tasarım durum renkleri).
 /// - Yüklenirken küçük gösterge; hata/boş → kart sessizce gizlenir.
 class WeatherCard extends ConsumerWidget {
-  const WeatherCard({required this.position, super.key});
+  const WeatherCard({required this.position, this.accent, super.key});
 
   final GeoPoint position;
+
+  /// Tip kimlik rengi (2026-08) — başlık ikonu.
+  final Color? accent;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,7 +57,8 @@ class WeatherCard extends ConsumerWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                DocklyIcon(DocklyIcons.explore, size: 18, color: theme.colorScheme.primary),
+                DocklyIcon(DocklyIcons.explore,
+                    size: 18, color: accent ?? theme.colorScheme.primary),
                 const SizedBox(width: 8),
                 Text(t.wxTitle,
                     style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),

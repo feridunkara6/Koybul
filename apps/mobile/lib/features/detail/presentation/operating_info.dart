@@ -16,12 +16,16 @@ class OperatingInfo extends ConsumerWidget {
     required this.hours,
     required this.seasons,
     required this.is24h,
+    this.accent,
     super.key,
   });
 
   final List<Hour> hours;
   final List<Season> seasons;
   final bool is24h;
+
+  /// Tip kimlik rengi (2026-08) — başlık madalyonu.
+  final Color? accent;
 
   // Hafta görünümü: Pazartesi → Pazar sırası (denizci takvimi).
   static const List<int> _weekOrder = <int>[1, 2, 3, 4, 5, 6, 0];
@@ -61,6 +65,7 @@ class OperatingInfo extends ConsumerWidget {
     if (children.isEmpty) return const SizedBox.shrink();
     // Bölüm kartı (yeniden tasarım 2026-08): ikonlu başlık + satırlar.
     return SectionCard(
+      accent: accent,
       icon: DocklyIcons.amClock,
       title: hasHours ? t.opHoursTitle : t.seasonTitle,
       child: Column(
