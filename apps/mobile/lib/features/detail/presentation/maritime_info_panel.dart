@@ -46,10 +46,14 @@ class MaritimeInfoPanel extends StatelessWidget {
             const double gap = 10;
             // İki sütun; dar ekranlarda taşarsa Wrap alt satıra alır.
             final double tileWidth = (constraints.maxWidth - gap) / 2;
-            // TASARIM KARARI (kullanıcı isteği): kutucukların hepsi AYNI boyda —
-            // içerik uzunluğu ne olursa olsun. Yükseklik 2 satır değer + 1 satır
-            // etiket + iç boşluğu karşılar; cihazın yazı ölçeğiyle birlikte
-            // büyür (erişilebilirlik: büyük yazıda taşma olmasın).
+            // Tam-satır eşiği yazı ölçeğiyle birlikte KÜÇÜLÜR: büyük yazıda
+            // daha kısa değerler de tam satıra alınır (taşma değil, satır).
+            final double fscale =
+                MediaQuery.textScalerOf(context).scale(14) / 14;
+            final int fullRowChars = (24 / fscale).round();
+            // TASARIM KARARI (güncel, kullanıcı isteği 2026-08): kısa
+            // değerli kutular AYNI MIN boyda; uzun değerli kutu TAM SATIRA
+            // alınır ve gerektiği kadar BÜYÜR — bilgi asla kırpılmaz.
             final double tileHeight =
                 MediaQuery.textScalerOf(context).scale(kMaritimeStatTileHeight);
             return Wrap(
@@ -57,10 +61,22 @@ class MaritimeInfoPanel extends StatelessWidget {
               runSpacing: gap,
               children: <Widget>[
                 for (final MaritimeStat s in stats)
-                  SizedBox(
+                  ConstrainedBox(
                     key: ValueKey<String>('stat-${s.label}'),
-                    width: tileWidth,
-                    height: tileHeight,
+                    // TAM GÖRÜNÜRLÜK (kullanıcı isteği 2026-08): sabit boy
+                    // KALKTI — kısa değerlerde kutu aynı boyda kalır (min),
+                    // uzun değerde kutu BÜYÜR ve metin tam okunur. Ayrıca
+                    // uzun değerli kutu tek başına TAM SATIR olur ki iki dar
+                    // sütuna sıkışmasın.
+                    constraints: BoxConstraints(
+                      minWidth: s.value.length > fullRowChars
+                          ? constraints.maxWidth
+                          : tileWidth,
+                      maxWidth: s.value.length > fullRowChars
+                          ? constraints.maxWidth
+                          : tileWidth,
+                      minHeight: tileHeight,
+                    ),
                     child: _StatTile(stat: s, accent: accent),
                   ),
               ],
@@ -71,9 +87,9 @@ class MaritimeInfoPanel extends StatelessWidget {
   }
 }
 
-/// Stat kutusunun SABİT yüksekliği (yazı ölçeği 1.0'da, piksel):
+/// Stat kutusunun MİNİMUM yüksekliği (yazı ölçeği 1.0'da, piksel):
 /// 2 satır değer (~40) + ara (2) + 1 satır etiket (~16) + dikey dolgu (24).
-/// Tüm kutular bu yüksekliği kullanır → içerikten bağımsız eşit boy.
+/// Kısa içerikte tüm kutular bu boyda; uzun içerikte kutu büyür (2026-08).
 const double kMaritimeStatTileHeight = 84;
 
 class _StatTile extends StatelessWidget {
@@ -99,7 +115,7 @@ class _StatTile extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(12),
       ),
-      // Dikeyde ortala: tek satırlık içerik sabit yükseklikte şık dursun.
+      // Dikeyde ortala: kısa içerik min yükseklikli kutuda şık dursun.
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -111,10 +127,10 @@ class _StatTile extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
+                  // Kırpma YOK (kullanıcı isteği 2026-08): değer kaç satır
+                  // tutuyorsa kutu o kadar büyür — bilgi asla "..." olmaz.
                   stat.value,
                   style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
                 Text(

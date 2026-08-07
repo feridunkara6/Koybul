@@ -683,8 +683,14 @@ class _GlanceStrip extends ConsumerWidget {
 
     final String? dirs = detail.windExposedDirs;
     if (dirs != null && dirs.trim().isNotEmpty) {
-      final String value =
-          dirs.split(',').map((String s) => s.trim()).where((String s) => s.isNotEmpty).join(', ');
+      // ÇEVİRİ (kullanıcı isteği 2026-08): pusula kodları seçili dile
+      // çevrilir — İngilizce'de "GB, B" değil "SW, W" görünür.
+      final String value = dirs
+          .split(',')
+          .map((String s) => s.trim())
+          .where((String s) => s.isNotEmpty)
+          .map(t.compassDir)
+          .join(', ');
       tiles.add(_GlanceTile(label: t.glanceOpenDir, value: value, accent: ink));
     }
 
@@ -713,16 +719,20 @@ class _GlanceStrip extends ConsumerWidget {
     ));
 
     if (tiles.isEmpty) return const SizedBox.shrink();
+    // EŞİT BOY (inceleme dersi 2026-08): bir kutu uzayınca sıradaki TÜM
+    // kutular birlikte uzar — şerit hizalı kalır (IntrinsicHeight + stretch).
     return Padding(
       padding: const EdgeInsets.only(top: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          for (int i = 0; i < tiles.length; i++) ...<Widget>[
-            if (i > 0) const SizedBox(width: 8),
-            Expanded(child: tiles[i]),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            for (int i = 0; i < tiles.length; i++) ...<Widget>[
+              if (i > 0) const SizedBox(width: 8),
+              Expanded(child: tiles[i]),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -771,11 +781,11 @@ class _GlanceTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final bool dark = theme.brightness == Brightness.dark;
-    // Maritime stat kutularıyla aynı sabit boy (84) — 3 metin satırı + dolgu
-    // gerçek tema metrikleriyle de rahat sığar (taşma payı geniş tutuldu).
+    // TAM GÖRÜNÜRLÜK (kullanıcı isteği 2026-08): boy artık SABİT değil —
+    // kısa içerikte kutular aynı boyda (min 84), uzun içerikte kutu büyür.
     final double height = MediaQuery.textScalerOf(context).scale(84);
     final Widget inner = Container(
-      height: height,
+      constraints: BoxConstraints(minHeight: height),
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
       decoration: BoxDecoration(
         // Tip kimliği: yumuşak renkli zemin (%7 açık / %15 koyu tema).
@@ -801,22 +811,22 @@ class _GlanceTile extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 3),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              value,
-              maxLines: 1,
-              style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w800,
-                color: valueColor ?? theme.colorScheme.onSurface,
-              ),
+          // Kırpma YOK: değer sığmazsa küçültülmez/"..." olmaz — alt satıra
+          // iner, kutu büyür (kullanıcı isteği 2026-08).
+          Text(
+            value,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.w800,
+              color: valueColor ?? theme.colorScheme.onSurface,
             ),
           ),
           if (sub != null) ...<Widget>[
             const SizedBox(height: 2),
             Text(
               sub!,
-              maxLines: 1,
+              textAlign: TextAlign.center,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.labelSmall
                   ?.copyWith(color: theme.colorScheme.onSurfaceVariant),

@@ -1,6 +1,6 @@
 import 'dart:async' show unawaited;
 
-import 'package:dockly_api/dockly_api.dart' show GeoPoint;
+import 'package:dockly_api/dockly_api.dart' show GeoPoint, LocationPin;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,11 +41,19 @@ class TourOverlay extends ConsumerStatefulWidget {
 enum _TourDemo { none, pin, route }
 
 /// Pencere vurguları: hedef bir widget değil HARİTANIN KENDİSİYKEN karartma
-/// bu dikdörtgeni aydınlık bırakır (örnek rota / işaretler görünür kalsın).
-Rect _mapWindow(Size s) =>
-    Rect.fromLTRB(12, 108, s.width - 12, s.height * 0.55);
+/// bu bölgeyi loş ışıkla aydınlık bırakır (kenarlar yumuşak — sert çerçeve
+/// yok; kullanıcı isteği 2026-08).
+///
+/// İşaret adımı YAKIN PLANDIR: kamera işaretin üstüne uçar (işaret harita
+/// gövdesinin merkezine gelir), loş ışık DAİRESİ tam onu aydınlatır.
+Rect _pinWindow(Size s) {
+  // Harita gövdesi = ekran - alt menü (64); işaret odak uçuşuyla merkezde.
+  final Offset c = Offset(s.width / 2, (s.height - 64) / 2);
+  return Rect.fromCircle(center: c, radius: 92);
+}
+
 Rect _routeWindow(Size s) =>
-    Rect.fromLTRB(12, 54, s.width - 12, s.height * 0.52);
+    Rect.fromLTRB(24, 60, s.width - 24, s.height * 0.50);
 
 /// Adım tanımı: sekme + (varsa) vurgulanacak hedef/pencere + canlı örnek.
 class _TourStepDef {
@@ -54,6 +62,7 @@ class _TourStepDef {
     this.tab = 0,
     this.target,
     this.window,
+    this.circleSpot = false,
     this.demo = _TourDemo.none,
   });
 
@@ -64,6 +73,9 @@ class _TourStepDef {
   /// Hedef yoksa aydınlık bırakılacak ekran penceresi (harita örnekleri).
   final Rect Function(Size screen)? window;
 
+  /// true → pencere DAİRE olarak aydınlatılır (yakın plan işaret adımı).
+  final bool circleSpot;
+
   final _TourDemo demo;
 }
 
@@ -72,8 +84,11 @@ class _TourStepDef {
 /// çizilen örnek rota, Kayıtlarım/Günlük'te örnek kartlar.
 final List<_TourStepDef> _tourSteps = <_TourStepDef>[
   const _TourStepDef(icon: DocklyIcons.sailing), // ① hoş geldin
-  const _TourStepDef( // ② harita ve koylar — örnek işaret seçilir
-      icon: DocklyIcons.place, window: _mapWindow, demo: _TourDemo.pin),
+  const _TourStepDef( // ② harita ve koylar — işarete YAKIN PLAN (daire)
+      icon: DocklyIcons.place,
+      window: _pinWindow,
+      circleSpot: true,
+      demo: _TourDemo.pin),
   _TourStepDef(icon: DocklyIcons.checkCircle, target: tourKeyChips), // ③
   _TourStepDef(icon: DocklyIcons.explore, target: tourKeyLocate), // ④
   _TourStepDef(icon: DocklyIcons.errorOutline, target: tourKeySos), // ⑤
@@ -104,17 +119,38 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
   /// Örnek olarak seçtiğimiz işaretin kimliği (temizlikte geri alınır).
   String? _demoPinId;
 
-  /// Örnek rota çizilmeden ÖNCE bakılan yer — temizlikte kamera geri döner
-  /// (kullanıcı turun sonunda kendi koyuna bakmaya devam etsin).
-  GeoPoint? _preDemoCenter;
+  /// Örnekler kamerayı gezdirdiyse true — tur biterken/atlanırken harita
+  /// AÇILIŞ görünümüne döndürülür (kullanıcı isteği 2026-08: "Türkiye
+  /// haritasının ortasında bırakmasın").
+  bool _cameraTouched = false;
+
+  /// Tur başlarken bakılan yer — kapanışta buraya dönülür (GPS varsa gerçek
+  /// konum, yoksa haritanın o anki merkezi; ikisi de yoksa Göcek sahili).
+  /// İLK AÇILIŞTA harita merkezi tur başladıktan BİR KARE SONRA oluşur —
+  /// bu yüzden değer, kamera ilk kez oynatılana dek her adımda tazelenir.
+  GeoPoint? _startCenter;
+
+  /// Kapanış yakınlaştırması: GPS'li kullanıcı ~konum ölçeğinde (12),
+  /// bölge seçen kullanıcı körfez ölçeğinde (9) başladı — aynı ölçeğe dönülür.
+  double _startZoom = 9;
 
   @override
   void initState() {
     super.initState();
+    _captureStart();
     // Hedef bir önceki karede zaten yerleşmiş — HEMEN ölçmek ilk kareyi de
     // doğru çizer (ortada kart + sıçrama yok). Sekme işi çerçeve sonrasına.
     _targetRect = _measure(_def);
     _sync();
+  }
+
+  void _captureStart() {
+    final GeoPoint? gps = ref.read(devicePositionProvider);
+    final GeoPoint? c = gps ?? ref.read(originProvider);
+    if (c != null) {
+      _startCenter = c;
+      _startZoom = gps != null ? 12 : 9;
+    }
   }
 
   @override
@@ -156,10 +192,39 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
           return;
         }
       }
+      // Açılış merkezi, kamera İLK oynatılana dek tazelenir (ilk açılışta
+      // harita merkezi turdan bir kare sonra oluşur — inceleme dersi).
+      if (!_cameraTouched) _captureStart();
       _applyDemos(d);
+      // KAPANIŞ GÖRÜNÜMÜ (kullanıcı isteği 2026-08): örnekler kamerayı
+      // gezdirdiyse son adımda AÇILIŞTAKİ görünüme dönülür — kullanıcı
+      // turu nerede başlattıysa haritayı orada bulur.
+      if (widget.step >= kTourStepCount - 1 && _cameraTouched) {
+        _cameraTouched = false;
+        _goHome();
+      }
       final Rect? r = _measure(d);
       if (r != _targetRect) setState(() => _targetRect = r);
     });
+  }
+
+  /// Turdan çıkış görünümü: açılıştaki merkeze, açılış ölçeğinde
+  /// (_startZoom: GPS'li kullanıcıda 12, bölge seçende 9). Başlangıç merkezi
+  /// bilinmiyorsa Göcek sahili (deterministik, asla kara ortası değil).
+  void _goHome() {
+    final GeoPoint? home = _startCenter;
+    if (home != null) {
+      _focus(home, zoom: _startZoom);
+    } else {
+      _focus(kTourDemoOrigin, zoom: 11);
+    }
+  }
+
+  /// Kamerayı bir noktaya uçurur ("Konumum" ile aynı mekanizma).
+  void _focus(GeoPoint p, {double? zoom}) {
+    final int nextSeq = (ref.read(mapFocusProvider)?.seq ?? 0) + 1;
+    ref.read(mapFocusProvider.notifier).state =
+        MapFocusRequest(point: p, seq: nextSeq, zoom: zoom);
   }
 
   /// CANLI ÖRNEKLER (kullanıcı isteği 2026-08): adım ne anlatıyorsa onu
@@ -173,9 +238,7 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
     if (d.demo == _TourDemo.route) {
       if (!_demoRoute && ms.route == null && !ms.isRouting) {
         _demoRoute = true;
-        // Kamera örnek rotaya uçmadan önceki merkez — dönüş bileti.
-        _preDemoCenter =
-            ref.read(devicePositionProvider) ?? ref.read(originProvider);
+        _cameraTouched = true; // rota-sığdırma uçuşu kamerayı taşır
         final L10n t = ref.read(l10nProvider);
         unawaited(map.openSavedRoute(
           // "Göcek" özel addır — çevrilmez (koy isimleri kuralı).
@@ -195,8 +258,18 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
       if (_demoPinId == null &&
           ms.selectedPinId == null &&
           ms.pins.isNotEmpty) {
-        _demoPinId = ms.pins.first.id;
+        // KIRMIZI İMLEÇ TERCİHİ (kullanıcı isteği 2026-08): klasik kırmızı
+        // bağlama işareti varsa örnek odur; yoksa ilk işaret.
+        final LocationPin demoPin = ms.pins.firstWhere(
+          (LocationPin p) => p.type == 'mooring_point',
+          orElse: () => ms.pins.first,
+        );
+        _demoPinId = demoPin.id;
         map.selectPin(_demoPinId!);
+        // YAKIN PLAN (kullanıcı isteği 2026-08): kamera işaretin üstüne
+        // uçar — imleç genel görünümde değil, yakından tanıtılır.
+        _cameraTouched = true;
+        _focus(demoPin.position, zoom: 15);
       }
     } else {
       _clearDemoPin();
@@ -207,15 +280,6 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
     if (!_demoRoute) return;
     _demoRoute = false;
     ref.read(mapControllerProvider.notifier).clearRoute();
-    // KAMERA GERİ DÖNER (inceleme dersi 2026-08): örnek rota kamerayı
-    // Göcek'e uçurmuştu — kullanıcı kendi baktığı yere geri getirilir.
-    final GeoPoint? back = _preDemoCenter;
-    _preDemoCenter = null;
-    if (back != null) {
-      final int nextSeq = (ref.read(mapFocusProvider)?.seq ?? 0) + 1;
-      ref.read(mapFocusProvider.notifier).state =
-          MapFocusRequest(point: back, seq: nextSeq, zoom: 11);
-    }
   }
 
   void _clearDemoPin() {
@@ -230,10 +294,15 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
   void _next() =>
       ref.read(onboardingControllerProvider.notifier).nextStep();
 
-  /// "Atla" — tur kapanır; örnekler temizlenir, Keşfet'e dönülür.
+  /// "Atla" — tur kapanır; örnekler temizlenir, Keşfet'e dönülür ve harita
+  /// (kamera gezdirildiyse) sahil görünümünde bırakılır.
   void _skip() {
     _clearDemoRoute();
     _clearDemoPin();
+    if (_cameraTouched) {
+      _cameraTouched = false;
+      _goHome();
+    }
     ref.read(shellTabProvider.notifier).state = 0;
     ref.read(onboardingControllerProvider.notifier).skipTour();
   }
@@ -285,7 +354,17 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
       (bool? prev, bool next) => _sync(),
     );
     // Hedef ölçülemediyse pencere vurgusu kullanılır (harita örnekleri).
-    final Rect? spot = _targetRect ?? _def.window?.call(screen);
+    // Çentikli/jest çubuklu cihazlarda alt menü güvenli alan kadar büyür —
+    // yakın-plan dairesi harita gövdesinin GERÇEK merkezine kaydırılır.
+    // (spot FINAL kalır: closure içindeki null-yükseltme bozulmasın.)
+    final Rect? rawSpot = _targetRect ?? _def.window?.call(screen);
+    final double bottomInset = MediaQuery.viewPaddingOf(context).bottom;
+    final Rect? spot = (rawSpot != null &&
+            _targetRect == null &&
+            _def.circleSpot &&
+            bottomInset > 0)
+        ? rawSpot.translate(0, -bottomInset / 2)
+        : rawSpot;
     // Kart, hedefin BOŞ kalan yarısına konur; balon ucu hedefi işaret eder.
     final bool cardBelow = spot != null && spot.center.dy < screen.height / 2;
     // Kart genişliği/konumu — balon ucunun yatay hizası hedefe göre hesaplanır.
@@ -330,7 +409,11 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
                     builder: (BuildContext context, double v, Widget? _) =>
                         CustomPaint(
                       key: const ValueKey<String>('onb-tour-spot'),
-                      painter: _SpotDimPainter(hole: spot.inflate(9), t: v),
+                      painter: _SpotDimPainter(
+                        hole: spot.inflate(9),
+                        t: v,
+                        circle: _targetRect == null && _def.circleSpot,
+                      ),
                     ),
                   ),
           ),
@@ -598,53 +681,60 @@ class _CardTailPainter extends CustomPainter {
       oldDelegate.pointsUp != pointsUp || oldDelegate.color != color;
 }
 
-/// Delikli karartma + yumuşak ışıma: hedefin çevresi aydınlık kalır; halka,
-/// içten dışa incelen turkuaz katmanlarla "ışıldar" (bulanıklaştırma yok —
-/// her cihaz/çizim motorunda birebir aynı görünür). [t] 0→1 yerleşme
-/// animasyonudur: delik hafif geniş başlar, yerine oturur; ışıma belirir.
+/// Delikli karartma + LOŞ IŞIK (kullanıcı isteği 2026-08): ekran kararır,
+/// anlatılan bölge yumuşak bir ışıkla aydınlık kalır. Sert çizgi/çerçeve
+/// YOKTUR — kenar, karanlığa bulanık bir ışık halesiyle erir (fener ışığı
+/// hissi). [t] 0→1 yerleşme animasyonudur: delik hafif geniş başlar,
+/// yerine oturur; ışık belirir. [circle] yakın-plan işaret adımında delik
+/// tam DAİRE olur.
 class _SpotDimPainter extends CustomPainter {
-  const _SpotDimPainter({required this.hole, required this.t});
+  const _SpotDimPainter({
+    required this.hole,
+    required this.t,
+    this.circle = false,
+  });
 
   final Rect hole;
   final double t;
+  final bool circle;
 
   @override
   void paint(Canvas canvas, Size size) {
     final Rect h = hole.inflate((1 - t) * 10);
-    final RRect r = RRect.fromRectAndRadius(h, const Radius.circular(16));
+    final Radius rad =
+        circle ? Radius.circular(h.shortestSide / 2) : const Radius.circular(28);
+    final RRect r = RRect.fromRectAndRadius(h, rad);
     final Path dim = Path.combine(
       PathOperation.difference,
       Path()..addRect(Offset.zero & size),
       Path()..addRRect(r),
     );
     canvas.drawPath(dim, Paint()..color = _dimColor);
-    const Color glow = Color(0xFF7FE3D9);
+    // Kenar: karanlığa eriyen yumuşak ışık halesi (bulanık fırça) + çok
+    // hafif bir iç parlaklık. Keskin çizgi bilinçli olarak yok.
     canvas.drawRRect(
-      r.inflate(5),
+      r,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 9
-        ..color = glow.withValues(alpha: 0.10 * t),
-    );
-    canvas.drawRRect(
-      r.inflate(2),
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 4
-        ..color = glow.withValues(alpha: 0.26 * t),
+        ..strokeWidth = 22
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 16)
+        ..color = const Color(0xFFCFF6EF).withValues(alpha: 0.20 * t),
     );
     canvas.drawRRect(
       r,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.6
-        ..color = const Color(0xFFFFFFFF).withValues(alpha: 0.95 * t),
+        ..strokeWidth = 3
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4)
+        ..color = const Color(0xFFFFFFFF).withValues(alpha: 0.28 * t),
     );
   }
 
   @override
   bool shouldRepaint(_SpotDimPainter oldDelegate) =>
-      oldDelegate.hole != hole || oldDelegate.t != t;
+      oldDelegate.hole != hole ||
+      oldDelegate.t != t ||
+      oldDelegate.circle != circle;
 }
 
 /// İLK-DOKUNUŞ İPUCU BALONU: özellik ilk kez kullanılırken tek seferlik küçük

@@ -25,10 +25,11 @@ void main() {
     expect(find.text('Bağlama'), findsOneWidget);
   });
 
-  testWidgets('kutucuklar içerikten bağımsız hepsi AYNI boyda (kullanıcı isteği)',
+  testWidgets('kutucuklar içerikten bağımsız kısa kutular AYNI MIN boyda (kullanıcı isteği)',
       (WidgetTester tester) async {
-    // Dar alan: uzun değer ("karışık (kum/çamur/yosun)") 2 satıra sarar —
-    // buna rağmen tüm kutular eşit yükseklikte olmalı.
+    // TAM GÖRÜNÜRLÜK sözleşmesi (kullanıcı isteği 2026-08): 24+ karakterli
+    // değer TAM SATIR kutuya alınır (tek satırda rahat okunur); kısa kutular
+    // aynı min yükseklikte kalır — hepsi 84 (yazı ölçeği 1.0).
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
@@ -61,7 +62,45 @@ void main() {
         tester.getSize(find.byKey(const ValueKey<String>('stat-Ücret'))).height;
     expect(h2, h1);
     expect(h3, h1);
-    expect(h1, kMaritimeStatTileHeight); // yazı ölçeği 1.0'da sabit yükseklik
+    expect(h1, kMaritimeStatTileHeight); // yazı ölçeği 1.0'da min yükseklik
+  });
+
+  testWidgets('ÇOK UZUN değer KIRPILMAZ: kutu büyür, bilgi tam görünür '
+      '(kullanıcı isteği 2026-08)', (WidgetTester tester) async {
+    const String longValue =
+        'Nakit veya kredi kartı; sezon dışında marina ofisini önceden arayın, '
+        'yanaşma ücreti boya göre değişir';
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: SizedBox(
+              width: 320,
+              child: MaritimeInfoPanel(
+                stats: <MaritimeStat>[
+                  MaritimeStat(
+                      icon: DocklyIcons.straighten, value: '7–8 m', label: 'Derinlik'),
+                  MaritimeStat(
+                      icon: DocklyIcons.infoOutline,
+                      value: longValue,
+                      label: 'Ödeme'),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // Uzun değerli kutu SABİT boyu aşar (metin sarar, kutu büyür) — eski
+    // tasarım burada "..." ile kırpıyordu.
+    final double tall =
+        tester.getSize(find.byKey(const ValueKey<String>('stat-Ödeme'))).height;
+    expect(tall, greaterThan(kMaritimeStatTileHeight));
+    // Kısa kutu min boyunda kalır (düzen bozulmaz).
+    final double short =
+        tester.getSize(find.byKey(const ValueKey<String>('stat-Derinlik'))).height;
+    expect(short, kMaritimeStatTileHeight);
   });
 
   testWidgets('stat yoksa panel yer kaplamaz (boş durum)', (WidgetTester tester) async {
