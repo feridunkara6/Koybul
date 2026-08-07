@@ -56,7 +56,11 @@ class _DeckScreenState extends ConsumerState<DeckScreen> {
           : null,
       body: Column(
         children: <Widget>[
-          Padding(
+          // Segment şeridi YATAY KAYDIRILABİLİR (CI dersi 2026-08: üç çip
+          // dar telefon ekranına sığmayıp taşıyordu — RenderFlex overflow).
+          // Kaydırma her dilde/yazı boyutunda taşmayı imkânsız kılar.
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.fromLTRB(12, 10, 12, 2),
             child: Row(
               children: <Widget>[

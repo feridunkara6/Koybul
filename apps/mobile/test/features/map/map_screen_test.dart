@@ -458,6 +458,10 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey<String>('checklist-ready')));
     await tester.pumpAndSettle();
+    // Önceki bildirileri AKIT (CI dersi: ekranda bekleyen eski snackbar,
+    // yenisini kuyruğa atar — "Defter'e işlendi" hiç görünmezdi).
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
 
     // Başlat: süren seyir satırı belirir ve cihaza yazılır.
     await tester.tap(find.byKey(const ValueKey<String>('trip-start')));
@@ -466,12 +470,13 @@ void main() {
     expect(trips.active, isNotNull);
 
     // Bitir: kayıt depoya düşer, onay mesajı görünür, satır sıfırlanır.
+    // (Önce depo doğrulanır — mesaj bulunamazsa neden ayrışsın.)
     await tester.tap(find.byKey(const ValueKey<String>('trip-finish')));
     await tester.pumpAndSettle();
-    expect(find.textContaining('Defter\'e işlendi'), findsOneWidget);
     expect(trips.active, isNull);
     expect(trips.data, hasLength(1));
     expect(trips.data.first.distanceNm, greaterThan(0));
+    expect(find.textContaining('Defter\'e işlendi'), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('trip-start')), findsOneWidget);
 
     // Snackbar zamanlayıcısını akıt.

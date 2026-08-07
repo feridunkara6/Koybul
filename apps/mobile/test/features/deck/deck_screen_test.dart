@@ -74,8 +74,9 @@ void main() {
     expect(find.text('Göcek → Bedri Rahmi'), findsOneWidget);
     expect(find.textContaining('1 sa 30 dk'), findsWidgets); // kart + sezon
     expect(find.text('$year sezonu'), findsOneWidget);
-    // ≈ mesafe hem seyir kartında hem sezon özetinde görünür.
-    expect(find.textContaining('6.2'), findsNWidgets(2));
+    // ≈ mesafe hem seyir kartında hem sezon özetinde görünür. (CI dersi:
+    // çıplak '6.2' araması "1.6.2026" tarihini de yakalıyordu — ≈ ile ara.)
+    expect(find.textContaining('≈ 6.2'), findsNWidgets(2));
   });
 
   testWidgets('SÜREN seyir Defter\'den bitirilebilir: kayıt listeye düşer',
