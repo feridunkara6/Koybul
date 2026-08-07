@@ -1,4 +1,5 @@
 import 'package:dockly_mobile/features/boat/presentation/boat_screen.dart';
+import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
 import 'package:dockly_mobile/features/deck/presentation/deck_screen.dart';
 import 'package:dockly_mobile/features/logbook/application/logbook_controller.dart';
 import 'package:dockly_mobile/features/logbook/presentation/logbook_screen.dart';
@@ -19,6 +20,7 @@ import '../../support/logbook_fakes.dart';
 import '../../support/map_fakes.dart';
 import '../../support/onboarding_fakes.dart';
 import '../../support/saved_routes_fakes.dart';
+import '../../support/trip_fakes.dart';
 import '../../support/weather_fakes.dart';
 import '../../support/welcome_fakes.dart';
 
@@ -34,6 +36,7 @@ Widget _app() {
       // v2.0 sekmeleri: gerçek depolar/ağ yerine bellek içi sahteler.
       savedRoutesStoreProvider.overrideWithValue(FakeSavedRoutesStore()),
       logbookStoreProvider.overrideWithValue(FakeLogbookStore()),
+      tripStoreProvider.overrideWithValue(FakeTripStore()),
       weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
     ],
     child: const MaterialApp(home: DocklyShell()),
@@ -67,8 +70,8 @@ void main() {
     expect(find.byKey(const ValueKey<String>('today-checklist')), findsOneWidget);
   });
 
-  testWidgets('DEFTER sekmesi: Rotalarım açılır; Notlar segmenti Günlük '
-      'gövdesini gösterir', (WidgetTester tester) async {
+  testWidgets('DEFTER sekmesi: Seyirler açılır; Rotalarım ve Notlar '
+      'segmentleri çalışır', (WidgetTester tester) async {
     await tester.pumpWidget(_app());
     await tester.pumpAndSettle();
 
@@ -78,7 +81,11 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex, 2);
     expect(find.byType(DeckScreen), findsOneWidget);
-    // Rota yok → dürüst boş durum.
+    // Seyir yok → dürüst boş durum (varsayılan segment Seyirler).
+    expect(find.textContaining('Henüz seyir kaydı yok'), findsOneWidget);
+
+    await tester.tap(find.text('Rotalarım'));
+    await tester.pumpAndSettle();
     expect(find.textContaining('Henüz kayıtlı rota yok'), findsOneWidget);
 
     await tester.tap(find.text('Notlar'));

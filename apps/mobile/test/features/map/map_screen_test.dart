@@ -5,6 +5,7 @@ import 'package:dockly_core/dockly_core.dart';
 import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
 import 'package:dockly_mobile/features/boat/domain/my_boat.dart';
 import 'package:dockly_mobile/features/checklist/application/checklist_controller.dart';
+import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/domain/map_cache.dart';
 import 'package:dockly_mobile/features/map/presentation/location_bottom_card.dart';
@@ -31,6 +32,7 @@ import '../../support/map_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/onboarding_fakes.dart';
 import '../../support/search_fakes.dart';
+import '../../support/trip_fakes.dart';
 import '../../support/weather_fakes.dart';
 
 /// İkonlar artık SVG tabanlı [DocklyIcon]; ikon verisiyle bulunur.
@@ -71,12 +73,15 @@ Widget _app(
   FakeLocationService? location,
   SeaRouteEngine? routeEngine,
   FakeChecklistStore? checklist,
+  FakeTripStore? trips,
 }) {
   return ProviderScope(
     overrides: <Override>[
       if (location != null) locationServiceProvider.overrideWithValue(location),
       // Kontrol deposu HER ZAMAN sahte (gerçek shared_preferences'a gitmesin).
       checklistStoreProvider.overrideWithValue(checklist ?? FakeChecklistStore()),
+      // Seyir deposu HER ZAMAN sahte (aynı gerekçe).
+      tripStoreProvider.overrideWithValue(trips ?? FakeTripStore()),
       if (routeEngine != null)
         seaRouteEngineProvider.overrideWithValue(routeEngine),
       mapLocationsGatewayProvider.overrideWithValue(gateway),
@@ -431,6 +436,45 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Seyir öncesi kontrollerini yaptın mı?'), findsNothing);
     // Zamanlayıcı artıklarını akıt (snackbar vb.).
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('SEYİR KAYDI (v2.0): rota kartından başlat → bitir; seyir '
+      'depoya işlenir ve onay mesajı çıkar', (WidgetTester tester) async {
+    final FakeTripStore trips = FakeTripStore();
+    await tester.pumpWidget(_app(
+      FakeMapGateway(result: pinResult),
+      location: FakeLocationService(const GeoPoint(lat: 36.76, lon: 28.96)),
+      routeEngine: _FakeRouteEngine(),
+      trips: trips,
+    ));
+    await tester.pumpAndSettle();
+
+    // Rota çiz (pin → "Deniz rotası") ve günlük kontrol şeridini kapat.
+    await tester.tap(find.byKey(_pinKey));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Deniz rotası'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey<String>('checklist-ready')));
+    await tester.pumpAndSettle();
+
+    // Başlat: süren seyir satırı belirir ve cihaza yazılır.
+    await tester.tap(find.byKey(const ValueKey<String>('trip-start')));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Seyir sürüyor'), findsOneWidget);
+    expect(trips.active, isNotNull);
+
+    // Bitir: kayıt depoya düşer, onay mesajı görünür, satır sıfırlanır.
+    await tester.tap(find.byKey(const ValueKey<String>('trip-finish')));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Defter\'e işlendi'), findsOneWidget);
+    expect(trips.active, isNull);
+    expect(trips.data, hasLength(1));
+    expect(trips.data.first.distanceNm, greaterThan(0));
+    expect(find.byKey(const ValueKey<String>('trip-start')), findsOneWidget);
+
+    // Snackbar zamanlayıcısını akıt.
     await tester.pump(const Duration(seconds: 6));
     await tester.pumpAndSettle();
   });

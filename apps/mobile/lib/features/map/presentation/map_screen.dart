@@ -8,6 +8,8 @@ import '../../../core/origin_provider.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
+import '../../deck/application/trip_log_controller.dart';
+import '../../deck/domain/sea_trip_log.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../../emergency/presentation/emergency_screen.dart';
 import '../../location/presentation/locate_button.dart';
@@ -1192,6 +1194,14 @@ class _RouteChip extends ConsumerWidget {
                   ),
                 ),
               ),
+            // SEYİR KAYDI (v2.0 Defter, kurucu onayı 2026-08): "Seyri başlat"
+            // rotanın fotoğrafını alır; "Seyri bitir" seyri gerçek süresiyle
+            // Defter'in Seyirler bölümüne işler. Süren seyir cihaza yazılır —
+            // sayfa yenilense bile Defter'den bitirilebilir.
+            Padding(
+              padding: const EdgeInsets.only(top: 8, right: 8),
+              child: _TripRow(t: t),
+            ),
           ],
         ),
       ),
@@ -1208,6 +1218,78 @@ class _RouteChip extends ConsumerWidget {
       if (w.isStop) out.add((i, ++n, w));
     }
     return out;
+  }
+}
+
+/// SEYİR SATIRI (rota çipinin altı): seyir yoksa "Seyri başlat"; sürüyorsa
+/// başlangıç saati + "Seyri bitir". Bitirince Defter'e işlenir ve kaptana
+/// kısa bir onay mesajı gösterilir.
+class _TripRow extends ConsumerWidget {
+  const _TripRow({required this.t});
+
+  final L10n t;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ThemeData theme = Theme.of(context);
+    final ActiveTrip? active = ref.watch(activeTripProvider);
+    if (active == null) {
+      return Align(
+        alignment: Alignment.centerLeft,
+        child: FilledButton.icon(
+          key: const ValueKey<String>('trip-start'),
+          style: FilledButton.styleFrom(
+            minimumSize: const Size(0, 36),
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            visualDensity: VisualDensity.compact,
+          ),
+          onPressed: () =>
+              ref.read(activeTripProvider.notifier).start(),
+          icon: const DocklyIcon(DocklyIcons.sailing,
+              size: 15, color: Colors.white),
+          label: Text(t.tripStartBtn),
+        ),
+      );
+    }
+    final DateTime s = DateTime.fromMillisecondsSinceEpoch(active.startMs);
+    final String hm = '${s.hour.toString().padLeft(2, '0')}:'
+        '${s.minute.toString().padLeft(2, '0')}';
+    return Row(
+      children: <Widget>[
+        const DocklyIcon(DocklyIcons.sailing,
+            size: 14, color: DocklyColors.brandPrimary),
+        const SizedBox(width: 5),
+        Expanded(
+          child: Text(
+            '${t.tripActiveLabel} · ${L10n.fmt(t.tripStartedFmt, hm)}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.bodySmall?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: DocklyColors.brandPrimary,
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        FilledButton(
+          key: const ValueKey<String>('trip-finish'),
+          style: FilledButton.styleFrom(
+            minimumSize: const Size(0, 36),
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            visualDensity: VisualDensity.compact,
+          ),
+          onPressed: () async {
+            final SeaTripLog? trip =
+                await ref.read(activeTripProvider.notifier).finish();
+            if (trip == null || !context.mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(t.tripSavedSnack)),
+            );
+          },
+          child: Text(t.tripFinishBtn),
+        ),
+      ],
+    );
   }
 }
 

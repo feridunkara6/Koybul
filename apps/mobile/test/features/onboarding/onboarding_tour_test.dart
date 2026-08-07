@@ -5,6 +5,7 @@ import 'package:dockly_mobile/features/map/presentation/map_screen.dart';
 import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
+import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
 import 'package:dockly_mobile/features/onboarding/domain/onboarding_store.dart';
 import 'package:dockly_mobile/features/onboarding/presentation/tour_targets.dart';
 import 'package:dockly_api/dockly_api.dart' show GeoPoint;
@@ -27,6 +28,7 @@ import '../../support/map_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/onboarding_fakes.dart';
 import '../../support/saved_routes_fakes.dart';
+import '../../support/trip_fakes.dart';
 import '../../support/weather_fakes.dart';
 import '../../support/welcome_fakes.dart';
 
@@ -72,6 +74,7 @@ Widget _app(FakeOnboardingStore store) {
       favoritesStorageProvider.overrideWithValue(FakeFavoritesStorage()),
       savedRoutesStoreProvider.overrideWithValue(FakeSavedRoutesStore()),
       logbookStoreProvider.overrideWithValue(FakeLogbookStore()),
+      tripStoreProvider.overrideWithValue(FakeTripStore()),
       // Örnek rota (tur v5): gerçek motor/ağ yerine sahteler.
       seaRouteEngineProvider.overrideWithValue(_FakeRouteEngine()),
       weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
