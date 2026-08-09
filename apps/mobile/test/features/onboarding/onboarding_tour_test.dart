@@ -6,6 +6,7 @@ import 'package:dockly_mobile/features/map/presentation/map_screen.dart';
 import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
+import 'package:dockly_mobile/features/boat/application/maintenance_controller.dart';
 import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
 import 'package:dockly_mobile/features/onboarding/domain/onboarding_store.dart';
 import 'package:dockly_mobile/features/onboarding/presentation/tour_targets.dart';
@@ -25,6 +26,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../support/fake_map_surface.dart';
 import '../../support/favorites_fakes.dart';
 import '../../support/logbook_fakes.dart';
+import '../../support/maintenance_fakes.dart';
 import '../../support/map_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/onboarding_fakes.dart';
@@ -76,6 +78,7 @@ Widget _app(FakeOnboardingStore store, {MapResult mapResult = pinResult}) {
       savedRoutesStoreProvider.overrideWithValue(FakeSavedRoutesStore()),
       logbookStoreProvider.overrideWithValue(FakeLogbookStore()),
       tripStoreProvider.overrideWithValue(FakeTripStore()),
+      maintenanceStoreProvider.overrideWithValue(FakeMaintenanceStore()),
       // Örnek rota (tur v5): gerçek motor/ağ yerine sahteler.
       seaRouteEngineProvider.overrideWithValue(_FakeRouteEngine()),
       weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),

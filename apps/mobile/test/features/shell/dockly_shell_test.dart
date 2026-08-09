@@ -1,3 +1,4 @@
+import 'package:dockly_mobile/features/boat/application/maintenance_controller.dart';
 import 'package:dockly_mobile/features/boat/presentation/boat_screen.dart';
 import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
 import 'package:dockly_mobile/features/deck/presentation/deck_screen.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../support/detail_fakes.dart';
 import '../../support/fake_map_surface.dart';
 import '../../support/logbook_fakes.dart';
+import '../../support/maintenance_fakes.dart';
 import '../../support/map_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/onboarding_fakes.dart';
@@ -46,6 +48,8 @@ Widget _app() {
       // bölümü kurulur — motor asla gerçek ağa çıkmasın (inceleme dersi).
       nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
       locationDetailGatewayProvider.overrideWithValue(FakeLocationDetailGateway()),
+      // Teknem sekmesi: bakım kayıtları bellek içi sahte depodan gelir.
+      maintenanceStoreProvider.overrideWithValue(FakeMaintenanceStore()),
     ],
     child: const MaterialApp(home: DocklyShell()),
   );

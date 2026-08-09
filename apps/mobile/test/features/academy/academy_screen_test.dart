@@ -15,11 +15,14 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
+    // İlk satır açılışta görünür.
     expect(find.byKey(const ValueKey<String>('academy-anchor')), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('academy-mayday')), findsOneWidget);
     expect(find.text('Demir atma'), findsOneWidget);
-    // Dürüstlük notu listenin SONUNDADIR: tembel liste onu ancak kaydırınca
-    // kurar (l10n testinden gelen ders).
+    // TEMBEL LİSTE DERSİ (CI 2026-08): alttaki satırlar ve dürüstlük notu
+    // ancak kaydırınca kurulur — doğrudan aranırsa "0 widget" bulunur.
+    await tester.scrollUntilVisible(
+        find.byKey(const ValueKey<String>('academy-mayday')), 200);
+    expect(find.byKey(const ValueKey<String>('academy-mayday')), findsOneWidget);
     await tester.scrollUntilVisible(
         find.textContaining('resmî eğitimin'), 200);
     expect(find.textContaining('resmî eğitimin'), findsOneWidget);
