@@ -82,6 +82,38 @@ void main() {
     expect(find.byKey(const ValueKey<String>('today-checklist')), findsOneWidget);
   });
 
+  testWidgets('BUGÜN → KEŞFET dönüşü: harita KAYBOLMAZ (beyaz ekran '
+      'regresyonu, saha hatası 2026-08)', (WidgetTester tester) async {
+    await tester.pumpWidget(_app());
+    await tester.pumpAndSettle();
+    // Ölçüm HARİTA YÜZEYİNDEN alınır: hata tam olarak yüzeyi 0×0'a
+    // düşürüyordu (Scaffold'un boyu değişmiyordu — o yüzden Scaffold'u
+    // ölçmek hatayı YAKALAMAZ, inceleme dersi).
+    expect(tester.getSize(find.byType(FakeMapSurface)).height,
+        greaterThan(100));
+
+    // Bugün'e git (haritadaki davet kartı emekli olur) ve geri dön.
+    await tester.tap(
+      find.descendant(of: find.byType(NavigationBar), matching: find.text('Bugün')),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(of: find.byType(NavigationBar), matching: find.text('Keşfet')),
+    );
+    await tester.pumpAndSettle();
+
+    // Harita yüzeyi hâlâ EKRANI KAPLIYOR olmalı. (Hata: Stack'e eklenen
+    // konumlandırılmamış boş bir çocuk, yığını 0×0'a düşürüp haritayı
+    // tamamen gizliyordu.)
+    expect(tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex, 0);
+    expect(find.byKey(const ValueKey<String>('pin-loc-1')), findsOneWidget);
+    final Size surface = tester.getSize(find.byType(FakeMapSurface));
+    expect(surface.height, greaterThan(100));
+    expect(surface.width, greaterThan(100));
+    // Davet kartı Bugün'e gidildikten sonra emekli olur (ısrar etmez).
+    expect(find.byKey(const ValueKey<String>('today-invite')), findsNothing);
+  });
+
   testWidgets('DEFTER sekmesi: Seyirler açılır; Rotalarım ve Notlar '
       'segmentleri çalışır', (WidgetTester tester) async {
     await tester.pumpWidget(_app());

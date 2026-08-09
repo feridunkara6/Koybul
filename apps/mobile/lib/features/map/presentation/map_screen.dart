@@ -154,7 +154,11 @@ class MapScreen extends ConsumerWidget {
         : basePins;
 
     return Scaffold(
+      // fit: expand (saha dersi 2026-08) — YAPISAL KORUMA: ileride biri
+      // Stack'e konumlandırılmamış bir çocuk eklerse yığın O ÇOCUĞA göre
+      // küçülüp haritayı yok edemez; her çocuk ekranı kaplar.
       body: Stack(
+        fit: StackFit.expand,
         children: <Widget>[
           Positioned.fill(
             child: isList
@@ -320,10 +324,21 @@ class MapScreen extends ConsumerWidget {
           // Bugün'e bir kez gidilince bir daha çıkmaz. YAKIN RAYININ ÜSTÜNDE
           // durur (inceleme dersi: Stack'te sonra gelen üstte çizilir ve
           // dokunuşu alır — kart rayın altında kalmamalı).
+          // NOT (CI/saha dersi 2026-08): bu Stack'in TÜM çocukları
+          // Positioned olmalıdır. Konumlandırılmamış tek bir çocuk (boş
+          // SizedBox dahil) Stack'in boyutunu O ÇOCUĞA göre küçültür ve
+          // harita komple KAYBOLUR (beyaz ekran). Bu yüzden kartın
+          // "gösterilmesin" kararı burada verilir, kartın içinde DEĞİL.
           if (state.route == null &&
               selectedPin == null &&
               !isList &&
-              onb.tourStep < 0)
+              onb.tourStep < 0 &&
+              // Hata/boş/yükleme ekranlarının üstüne davet ÇIKMAZ ve yakın
+              // rayı AÇIKKEN kartların dokunuşunu çalmaz (inceleme dersi).
+              state.failure == null &&
+              !state.isEmpty &&
+              ref.watch(nearbySheetCollapsedProvider) &&
+              !ref.watch(todayInviteDismissedProvider))
             const _TodayInviteCard(),
           if (!isList && selectedPin != null)
             Positioned(
@@ -870,9 +885,8 @@ class _TodayInviteCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final L10n t = ref.watch(l10nProvider);
     final ThemeData theme = Theme.of(context);
-    // Bugün sekmesi bir kez ziyaret edildiyse davet gösterilmez.
-    final bool dismissed = ref.watch(todayInviteDismissedProvider);
-    if (dismissed) return const SizedBox.shrink();
+    // GÖRÜNÜRLÜK KARARI ÇAĞIRANDA (yukarıdaki nota bakınız): bu widget her
+    // zaman Positioned döner — Stack'in boyutunu asla bozmaz.
     return Positioned(
       left: 12,
       right: 12,
