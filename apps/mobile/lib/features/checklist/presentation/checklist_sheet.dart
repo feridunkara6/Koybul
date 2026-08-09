@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../academy/presentation/academy_screen.dart';
 import '../application/checklist_controller.dart';
 
 /// SEYİR ÖNCESİ KONTROL LİSTESİ alt sayfası (kullanıcı onayı 2026-08).
@@ -79,6 +80,31 @@ class _ChecklistBody extends ConsumerWidget {
                   ref.read(checklistProvider.notifier).toggle(i),
             ),
           const SizedBox(height: 8),
+          // BAĞLAM KANCASI (Akademi lite 2026-08): "nasıl yapılır?" sorusu
+          // tam burada doğar — kaptan listeden çıkmadan rehberlere geçer.
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              key: const ValueKey<String>('checklist-academy'),
+              style: TextButton.styleFrom(
+                foregroundColor: kAcademyPurple,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+              ),
+              onPressed: () {
+                // Sayfa, alt sayfanın navigator'ı üzerinden açılır: önce
+                // liste kapanır, sonra Akademi gelir (context ölmeden alınır).
+                final NavigatorState nav = Navigator.of(context);
+                nav.pop();
+                nav.push(MaterialPageRoute<void>(
+                  builder: (BuildContext _) => const AcademyScreen(),
+                ));
+              },
+              icon: const DocklyIcon(DocklyIcons.helpOutline,
+                  size: 16, color: kAcademyPurple),
+              label: Text(t.academyHook),
+            ),
+          ),
+          const SizedBox(height: 4),
           if (allDone)
             Container(
               padding:

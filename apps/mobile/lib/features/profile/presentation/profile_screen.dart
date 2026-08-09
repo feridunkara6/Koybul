@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/app_locale.dart';
 import '../../../core/l10n/l10n_strings.dart';
+import '../../academy/presentation/academy_screen.dart';
 import '../../auth/presentation/account_section.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
@@ -97,6 +98,16 @@ class ProfileScreen extends ConsumerWidget {
             label: t.logbookTitle,
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute<void>(builder: (_) => const LogbookScreen()),
+            ),
+          ),
+          const SizedBox(height: 12),
+          // DENİZCİLİK AKADEMİSİ (v2.0, kurucu onayı 2026-08): 10 kısa
+          // rehber — çevrimdışı çalışır, dört dilde yazılmıştır.
+          _NavRow(
+            icon: DocklyIcons.helpOutline,
+            label: t.academyTitle,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const AcademyScreen()),
             ),
           ),
           const SizedBox(height: 12),
