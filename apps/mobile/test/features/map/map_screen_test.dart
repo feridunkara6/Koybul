@@ -485,6 +485,67 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('ROTA ÇİPİ KATLAMA (kullanıcı isteği 2026-08): çok duraklı '
+      'rotada çip kendini toplar; ok düğmesi ayrıntıları açar',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(
+      FakeMapGateway(result: pinResult),
+      routeEngine: _FakeRouteEngine(),
+    ));
+    await tester.pumpAndSettle();
+
+    final ProviderContainer c =
+        ProviderScope.containerOf(tester.element(find.byType(MapScreen)));
+    // İki duraklı kayıtlı rota aç → çip OTOMATİK toplanır.
+    await c.read(mapControllerProvider.notifier).openSavedRoute(
+      const RouteOrigin(pos: GeoPoint(lat: 36.75, lon: 28.93), name: 'Göcek'),
+      const <RouteWaypoint>[
+        RouteWaypoint(
+            pos: GeoPoint(lat: 36.72, lon: 28.92), name: 'Bedri Rahmi'),
+        RouteWaypoint(
+            pos: GeoPoint(lat: 36.70, lon: 28.90), name: 'Boynuz Bükü'),
+      ],
+      name: 'Üç koy turu',
+    );
+    await tester.pumpAndSettle();
+
+    // Başlık ve istatistikler DURUR; durak listesi ve başlangıç satırı gizli.
+    expect(find.text('Üç koy turu'), findsOneWidget);
+    expect(find.text('DURAK'), findsOneWidget);
+    expect(find.text('Bedri Rahmi'), findsNothing);
+    expect(find.text('Boynuz Bükü'), findsNothing);
+    // DÜRÜSTLÜK NOTU katlanmaz: kapalıyken de görünür.
+    expect(find.textContaining('Tahminî deniz rotası'), findsOneWidget);
+
+    // Ok düğmesi ayrıntıları açar.
+    await tester.tap(find.byKey(const ValueKey<String>('route-chip-toggle')));
+    await tester.pumpAndSettle();
+    expect(find.text('Bedri Rahmi'), findsOneWidget);
+    expect(find.text('Boynuz Bükü'), findsOneWidget);
+
+    // Tekrar dokunmak kapatır.
+    await tester.tap(find.byKey(const ValueKey<String>('route-chip-toggle')));
+    await tester.pumpAndSettle();
+    expect(find.text('Bedri Rahmi'), findsNothing);
+
+    // DÜZENLEME SIRASINDA KAPANMAZ (inceleme dersi): kaptan açtıysa, durak
+    // eklense bile açık kalır.
+    await tester.tap(find.byKey(const ValueKey<String>('route-chip-toggle')));
+    await tester.pumpAndSettle();
+    await c.read(mapControllerProvider.notifier).addStop(
+          const GeoPoint(lat: 36.68, lon: 28.88),
+          'loc-x',
+          'Kille Koyu',
+        );
+    await tester.pumpAndSettle();
+    expect(find.text('Kille Koyu'), findsOneWidget);
+    expect(find.text('Bedri Rahmi'), findsOneWidget);
+
+    // Zamanlayıcı artıklarını akıt.
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('ROTA ODAK MODU (2026-08): kayıtlı rota açılınca yalnız '
       'duraklar kalır; rota kapatılınca imleçler geri döner',
       (WidgetTester tester) async {

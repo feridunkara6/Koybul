@@ -54,10 +54,21 @@ class MapScreen extends ConsumerWidget {
         // TUR SIRASINDA SORULMAZ (örnekli tur dersi 2026-08): turun örnek
         // rotası günde-bir kontrol sorusunu tetiklememeli — soru kullanıcının
         // İLK GERÇEK rotasına saklanır (kalıcı hak yakılmaz).
-        if (prev != null &&
-            next > prev &&
-            !ref.read(onboardingControllerProvider).tourActive) {
-          ref.read(checklistProvider.notifier).maybePrompt();
+        if (prev != null && next > prev) {
+          // YENİ ROTA → ayrıntı kararı BİR KEZ burada verilir ve o rota
+          // boyunca sabit kalır. (İnceleme dersi: karar her çizimde yeniden
+          // hesaplansaydı, kaptan 2. durağı eklediği anda çip kapanır ve
+          // "+ Nokta ekle" düğmesi elinden kaçardı.)
+          final int stops = ref
+              .read(mapControllerProvider)
+              .routeWaypoints
+              .where((RouteWaypoint w) => w.isStop)
+              .length;
+          ref.read(routeChipExpandedProvider.notifier).state =
+              stops < kRouteChipAutoCollapseStops;
+          if (!ref.read(onboardingControllerProvider).tourActive) {
+            ref.read(checklistProvider.notifier).maybePrompt();
+          }
         }
       },
     );
@@ -1055,6 +1066,16 @@ class _MapSearchButton extends ConsumerWidget {
   }
 }
 
+/// ROTA ÇİPİ AYRINTI DURUMU (kullanıcı isteği 2026-08: "çok nokta ekleyince
+/// ekranı kaplıyor"). null = OTOMATİK: kısa rotada açık, çok duraklı rotada
+/// kapalı. Kaptan bir kez dokunursa tercihi (true/false) o rota boyunca
+/// korunur; yeni rota çizilince otomatiğe döner.
+final StateProvider<bool?> routeChipExpandedProvider =
+    StateProvider<bool?>((ref) => null);
+
+/// Bu sayıya ULAŞAN durak sayısında (2 ve üzeri) çip kendini toplar.
+const int kRouteChipAutoCollapseStops = 2;
+
 /// Deniz rotası bilgi ekranı 2.0 (kullanıcı isteği 2026-08): başlıkta rota
 /// adı; altında MESAFE / SÜRE / DURAK istatistik satırı (üç eşit sütun —
 /// çok duraklı rotada da süre HER ZAMAN görünür); sonra başlangıç satırı,
@@ -1119,6 +1140,18 @@ class _RouteChip extends ConsumerWidget {
     final RouteWindReport? w = wind;
     final int stopCount =
         waypoints.where((RouteWaypoint x) => x.isStop).length;
+    // AYRINTI KATLAMA (kullanıcı isteği 2026-08: "çok nokta ekleyince ekranı
+    // kaplıyor"). Otomatik kural: 2+ duraklı rotada çip kendini toplar;
+    // kaptan ok düğmesiyle her an açıp kapatabilir. KAPALIYKEN DE görünenler:
+    // rota adı, mesafe/süre/durak ve (varsa) RÜZGÂR UYARISI — güvenlik
+    // bilgisi asla gizlenmez.
+    final bool? override = ref.watch(routeChipExpandedProvider);
+    // null yalnız ilk karede olur (rota kurulurken); o an açık gösterilir.
+    final bool expanded = override ?? true;
+    // Yükseklik tavanı: AYRINTI bölümü ekranın %34'ünü aşamaz (çipin tamamı
+    // başlık+istatistik+seyir satırıyla birlikte ~%52'de kalır); içerik
+    // uzarsa kaydırılır — harita her zaman görünür kalır.
+    final double maxDetail = MediaQuery.sizeOf(context).height * 0.34;
     return Material(
       elevation: 2,
       borderRadius: BorderRadius.circular(14),
@@ -1162,6 +1195,19 @@ class _RouteChip extends ConsumerWidget {
                     visualDensity: VisualDensity.compact,
                     onPressed: onSave,
                   ),
+                // AYRINTI AÇ/KAPA — ok yönü durumu anlatır.
+                IconButton(
+                  key: const ValueKey<String>('route-chip-toggle'),
+                  icon: Transform.rotate(
+                    angle: expanded ? -1.5708 : 1.5708,
+                    child: const DocklyIcon(DocklyIcons.arrowForward, size: 17),
+                  ),
+                  tooltip: expanded ? t.routeChipCollapse : t.routeChipExpand,
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () => ref
+                      .read(routeChipExpandedProvider.notifier)
+                      .state = !expanded,
+                ),
                 IconButton(
                   icon: const DocklyIcon(DocklyIcons.close, size: 18),
                   tooltip: t.routeClearTooltip,
@@ -1198,146 +1244,205 @@ class _RouteChip extends ConsumerWidget {
                 ],
               ),
             ),
-            // BAŞLANGIÇ satırı (rota planlama 2026-08): A noktası + değiştir.
-            if (origin != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 2, right: 8),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Flexible(
-                      child: Text(
-                        L10n.fmt(
-                          t.routeOriginFmt,
-                          origin!.name ??
-                              (origin!.isDevice
-                                  ? t.routeOriginDevice
-                                  : t.routeOriginPicked),
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.bodySmall
-                            ?.copyWith(fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    if (onChangeOrigin != null) ...<Widget>[
-                      const SizedBox(width: 6),
-                      InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: onChangeOrigin,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 2),
+            // DÜRÜSTLÜK NOTU — KATLANMAZ (inceleme dersi 2026-08): mesafe ve
+            // süre görünürken "bu rota tahminîdir / kıyıda biter" uyarısı
+            // gizlenemez. Kapalıyken iki satırla sınırlanır.
+            Padding(
+              padding: const EdgeInsets.only(right: 8, top: 2),
+              child: Text(
+                note,
+                maxLines: expanded ? null : 2,
+                overflow: expanded ? null : TextOverflow.ellipsis,
+                style: theme.textTheme.bodySmall
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              ),
+            ),
+            // AYRINTILAR (katlanabilir): başlangıç, duraklar ve rüzgâr
+            // satırları. Tavanı aşarsa içerik kaydırılır.
+            if (expanded)
+              ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: maxDetail),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                // BAŞLANGIÇ satırı (rota planlama 2026-08): A noktası + değiştir.
+                if (origin != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2, right: 8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Flexible(
                           child: Text(
-                            t.routeOriginChange,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: DocklyColors.brandPrimary,
-                              fontWeight: FontWeight.w800,
+                            L10n.fmt(
+                              t.routeOriginFmt,
+                              origin!.name ??
+                                  (origin!.isDevice
+                                      ? t.routeOriginDevice
+                                      : t.routeOriginPicked),
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodySmall
+                                ?.copyWith(fontWeight: FontWeight.w600),
                           ),
                         ),
-                      ),
-                    ],
-                    // + NOKTA EKLE (kullanıcı isteği 2026-08): dokunarak
-                    // ara nokta/durak ekleme modu — mobilde en kolay yol.
-                    if (onAddPoint != null) ...<Widget>[
-                      const SizedBox(width: 8),
-                      InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: onAddPoint,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 2),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              const DocklyIcon(DocklyIcons.place,
-                                  size: 12, color: DocklyColors.brandPrimary),
-                              const SizedBox(width: 3),
-                              Text(
-                                t.routeAddPointBtn,
+                        if (onChangeOrigin != null) ...<Widget>[
+                          const SizedBox(width: 6),
+                          InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: onChangeOrigin,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 2),
+                              child: Text(
+                                t.routeOriginChange,
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: DocklyColors.brandPrimary,
                                   fontWeight: FontWeight.w800,
                                 ),
                               ),
-                            ],
+                            ),
                           ),
+                        ],
+                        // + NOKTA EKLE (kullanıcı isteği 2026-08): dokunarak
+                        // ara nokta/durak ekleme modu — mobilde en kolay yol.
+                        if (onAddPoint != null) ...<Widget>[
+                          const SizedBox(width: 8),
+                          InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: onAddPoint,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 2),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  const DocklyIcon(DocklyIcons.place,
+                                      size: 12, color: DocklyColors.brandPrimary),
+                                  const SizedBox(width: 3),
+                                  Text(
+                                    t.routeAddPointBtn,
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: DocklyColors.brandPrimary,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                // DURAK LİSTESİ: 2+ durakta sıralı hap listesi; hedef dışındakiler
+                // ✕ ile çıkarılabilir (mesafe/süre tüm bacakların toplamıdır).
+                if (stopCount >= 2)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4, bottom: 4, right: 8),
+                    child: Wrap(
+                      spacing: 6,
+                      runSpacing: 4,
+                      children: <Widget>[
+                        for (final (int wpIndex, int number, RouteWaypoint wp)
+                            in _numberedStops())
+                          _StopPill(
+                            number: number,
+                            name: wp.name ?? '',
+                            isLast: wpIndex == waypoints.length - 1,
+                            removeTooltip: t.routeStopRemoveTooltip,
+                            onRemove: onRemoveStop == null ||
+                                    wpIndex == waypoints.length - 1
+                                ? null
+                                : () => onRemoveStop!(wpIndex),
+                          ),
+                      ],
+                    ),
+                  ),
+                // RÜZGÂR SATIRI (Rota v2): rapor geldiyse — eşik renkleri rüzgâr
+                // rozetiyle aynı (16 kn turuncu, 25 kn kırmızı).
+                if (w != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4, right: 8),
+                    child: Text(
+                      L10n.fmt2(
+                            t.routeWindFmt,
+                            w.worst.windKn.toStringAsFixed(0),
+                            t.windExposedLabel(dir8Tr(w.worst.windDirDeg)),
+                          ) +
+                          (w.anyHeadwind ? ' · ${t.routeWindHeadwind}' : ''),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: w.warn ? FontWeight.w700 : FontWeight.w500,
+                        color: w.strong
+                            ? DocklyColors.error
+                            : (w.warn
+                                ? DocklyColors.warning
+                                : theme.colorScheme.onSurfaceVariant),
+                      ),
+                    ),
+                  ),
+                if (w != null && w.arrival != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4, right: 8),
+                    child: Text(
+                      L10n.fmt2(
+                        t.routeArrivalExposedFmt,
+                        t.windExposedLabel(w.arrival!.dirTr),
+                        w.arrival!.windKn.toStringAsFixed(0),
+                      ),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: w.arrival!.windKn >= kRouteWindStrongKn
+                            ? DocklyColors.error
+                            : DocklyColors.warning,
+                      ),
+                    ),
+                  ),
+                    ],
+                  ),
+                ),
+              )
+            // KAPALIYKEN: güvenlik bilgisi gizlenmez — rüzgâr uyarısı varsa
+            // tek satır olarak durur, gerisi "aç" düğmesinin arkasındadır.
+            else if (w != null && w.warn)
+              Padding(
+                padding: const EdgeInsets.only(top: 2, right: 8),
+                child: Row(
+                  children: <Widget>[
+                    DocklyIcon(
+                      DocklyIcons.errorOutline,
+                      size: 13,
+                      color: w.strong
+                          ? DocklyColors.error
+                          : DocklyColors.warning,
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        L10n.fmt2(
+                              t.routeWindFmt,
+                              w.worst.windKn.toStringAsFixed(0),
+                              t.windExposedLabel(dir8Tr(w.worst.windDirDeg)),
+                            ) +
+                            // Varışta koy rüzgâra açıksa bu, gecenin en
+                            // önemli bilgisidir — kapalıyken de söylenir.
+                            (w.arrival != null
+                                ? ' · ${L10n.fmt2(t.routeArrivalExposedFmt, t.windExposedLabel(w.arrival!.dirTr), w.arrival!.windKn.toStringAsFixed(0))}'
+                                : ''),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: w.strong
+                              ? DocklyColors.error
+                              : DocklyColors.warning,
                         ),
                       ),
-                    ],
+                    ),
                   ],
-                ),
-              ),
-            // DURAK LİSTESİ: 2+ durakta sıralı hap listesi; hedef dışındakiler
-            // ✕ ile çıkarılabilir (mesafe/süre tüm bacakların toplamıdır).
-            if (stopCount >= 2)
-              Padding(
-                padding: const EdgeInsets.only(top: 4, bottom: 4, right: 8),
-                child: Wrap(
-                  spacing: 6,
-                  runSpacing: 4,
-                  children: <Widget>[
-                    for (final (int wpIndex, int number, RouteWaypoint wp)
-                        in _numberedStops())
-                      _StopPill(
-                        number: number,
-                        name: wp.name ?? '',
-                        isLast: wpIndex == waypoints.length - 1,
-                        removeTooltip: t.routeStopRemoveTooltip,
-                        onRemove: onRemoveStop == null ||
-                                wpIndex == waypoints.length - 1
-                            ? null
-                            : () => onRemoveStop!(wpIndex),
-                      ),
-                  ],
-                ),
-              ),
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Text(
-                note,
-                style: theme.textTheme.bodySmall
-                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-              ),
-            ),
-            // RÜZGÂR SATIRI (Rota v2): rapor geldiyse — eşik renkleri rüzgâr
-            // rozetiyle aynı (16 kn turuncu, 25 kn kırmızı).
-            if (w != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 4, right: 8),
-                child: Text(
-                  L10n.fmt2(
-                        t.routeWindFmt,
-                        w.worst.windKn.toStringAsFixed(0),
-                        t.windExposedLabel(dir8Tr(w.worst.windDirDeg)),
-                      ) +
-                      (w.anyHeadwind ? ' · ${t.routeWindHeadwind}' : ''),
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    fontWeight: w.warn ? FontWeight.w700 : FontWeight.w500,
-                    color: w.strong
-                        ? DocklyColors.error
-                        : (w.warn
-                            ? DocklyColors.warning
-                            : theme.colorScheme.onSurfaceVariant),
-                  ),
-                ),
-              ),
-            if (w != null && w.arrival != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 4, right: 8),
-                child: Text(
-                  L10n.fmt2(
-                    t.routeArrivalExposedFmt,
-                    t.windExposedLabel(w.arrival!.dirTr),
-                    w.arrival!.windKn.toStringAsFixed(0),
-                  ),
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: w.arrival!.windKn >= kRouteWindStrongKn
-                        ? DocklyColors.error
-                        : DocklyColors.warning,
-                  ),
                 ),
               ),
             // SEYİR KAYDI (v2.0 Defter, kurucu onayı 2026-08): "Seyri başlat"

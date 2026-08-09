@@ -87,6 +87,8 @@ class L10n {
     required this.todayInviteCta,
     required this.todayInviteDismiss,
     required this.suggestScorePctFmt,
+    required this.routeChipExpand,
+    required this.routeChipCollapse,
     required this.weekdayShort,
     required this.monthShort,
     required this.navRequests,
@@ -427,6 +429,9 @@ class L10n {
   /// Halka içindeki kısa yüzde biçimi (TR "%90", EN "90%").
   final String suggestScorePctFmt;
 
+  /// Rota çipi: ayrıntıları aç/kapa.
+  final String routeChipExpand, routeChipCollapse;
+
   /// Kısa gün adları (Pzt…Paz) ve ay adları (Oca…Ara) — "Bugün"
   /// başlığındaki tarih satırı için (onaylı E2 tasarımı).
   final List<String> weekdayShort;
@@ -714,6 +719,8 @@ const L10n _tr = L10n(
   todayInviteCta: 'Önerileri gör',
   todayInviteDismiss: 'Kapat',
   suggestScorePctFmt: '%{0}',
+  routeChipExpand: 'Ayrıntıları göster',
+  routeChipCollapse: 'Ayrıntıları gizle',
   weekdayShort: <String>['Pzt', 'Sal', 'Çrş', 'Prş', 'Cum', 'Cmt', 'Paz'],
   monthShort: <String>['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'],
   navRequests: 'Taleplerim',
@@ -1186,6 +1193,8 @@ const L10n _en = L10n(
   todayInviteCta: 'See suggestions',
   todayInviteDismiss: 'Dismiss',
   suggestScorePctFmt: '{0}%',
+  routeChipExpand: 'Show details',
+  routeChipCollapse: 'Hide details',
   weekdayShort: <String>['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
   monthShort: <String>['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
   navRequests: 'Requests',
@@ -1658,6 +1667,8 @@ const L10n _es = L10n(
   todayInviteCta: 'Ver sugerencias',
   todayInviteDismiss: 'Cerrar',
   suggestScorePctFmt: '{0}%',
+  routeChipExpand: 'Ver detalles',
+  routeChipCollapse: 'Ocultar detalles',
   weekdayShort: <String>['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
   monthShort: <String>['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
   navRequests: 'Solicitudes',
@@ -2130,6 +2141,8 @@ const L10n _ru = L10n(
   todayInviteCta: 'Посмотреть',
   todayInviteDismiss: 'Закрыть',
   suggestScorePctFmt: '{0}%',
+  routeChipExpand: 'Показать детали',
+  routeChipCollapse: 'Скрыть детали',
   weekdayShort: <String>['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
   monthShort: <String>['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'],
   navRequests: 'Запросы',
