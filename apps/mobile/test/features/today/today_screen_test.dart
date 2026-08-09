@@ -69,18 +69,63 @@ void main() {
     expect(find.text('Bugün Nereye?'), findsOneWidget);
     expect(find.text('Boynuz Bükü'), findsOneWidget);
     expect(find.text('Ekincik Koyu'), findsOneWidget);
-    // Puanlar şeffaf: yakın aday 90 (−10 bilgi eksik), uzak 70 (−10 −20).
-    expect(find.text('%90 uygun'), findsOneWidget);
-    expect(find.text('%70 uygun'), findsOneWidget);
-    // Yakın aday listede ÜSTTE.
+    // Puanlar şeffaf (halka içinde): yakın 90 (−10 bilgi eksik),
+    // uzak 70 (−10 bilgi eksik, −20 mesafe).
+    expect(find.text('%90'), findsOneWidget);
+    expect(find.text('%70'), findsOneWidget);
+    // Yakın aday listede ÜSTTE ve sıra numarası taşır.
     final double yakinY = tester.getTopLeft(find.text('Boynuz Bükü')).dy;
     final double uzakY = tester.getTopLeft(find.text('Ekincik Koyu')).dy;
     expect(yakinY, lessThan(uzakY));
+    expect(find.text('1.'), findsOneWidget);
+    expect(find.text('2.'), findsOneWidget);
     // Dürüst rozetler: açık yön bilgisi yok (iki adayda da) + yakın rozeti.
     expect(find.text('Açık yön bilgisi kayıtlarda yok'), findsNWidgets(2));
     expect(find.textContaining('Yakın · ≈2'), findsOneWidget);
+    // ONAYLI E2 GEREKÇELERİ: süre tahmini + detaydan gelen derinlik.
+    expect(find.textContaining('dnz mili ≈'), findsNWidgets(2));
+    expect(find.textContaining('3-8 m derinlik'), findsNWidgets(2));
+    // Her önerinin "Rota çiz" düğmesi var.
+    expect(find.text('Rota çiz'), findsNWidgets(2));
+    // Tahmin kaynağı ve saati görünür (kaynak gizlenmez).
+    expect(find.textContaining('MET Norway'), findsWidgets);
     // Karar kaptanındır notu her zaman görünür.
     expect(find.textContaining('karar her zaman kaptanındır'), findsOneWidget);
+  });
+
+  testWidgets('GÜNÜN ÖZETİ (onaylı E2): rüzgâr · en iyi saat · deniz kutuları',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(ProviderScope(
+      overrides: <Override>[
+        originProvider.overrideWith(
+            (ref) => const GeoPoint(lat: 36.74, lon: 28.94)),
+        weatherGatewayProvider.overrideWithValue(FakeWeatherGateway(
+            result: sampleForecast(windKn: 8, windDirDeg: 225))),
+        checklistStoreProvider.overrideWithValue(FakeChecklistStore()),
+        nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
+        locationDetailGatewayProvider
+            .overrideWithValue(FakeLocationDetailGateway()),
+      ],
+      child: const MaterialApp(home: TodayScreen()),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('today-summary')), findsOneWidget);
+    expect(find.text('RÜZGÂR'), findsOneWidget);
+    expect(find.text('EN İYİ SAAT'), findsOneWidget);
+    expect(find.text('DENİZ (rüzgâra göre)'), findsOneWidget);
+    // Örnek tahminde tepe rüzgâr 21 kn → "Çırpıntılı"; yön GB.
+    expect(find.text('Çırpıntılı'), findsOneWidget);
+    expect(find.textContaining('kn GB'), findsOneWidget);
+    // Kontrol listesi ilerlemesi kartın üstünde. (Hava kartının yatay
+    // şeridi de bir Scrollable'dır — kaydırma hedefi AÇIKÇA verilir,
+    // yoksa "too many elements" hatası alınır.)
+    await tester.scrollUntilVisible(
+      find.textContaining('0/10 · çıkmadan tamamla'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.textContaining('0/10 · çıkmadan tamamla'), findsOneWidget);
   });
 
   testWidgets('öneri servisi hata verirse dürüst hata metni (bölüm kırılmaz)',

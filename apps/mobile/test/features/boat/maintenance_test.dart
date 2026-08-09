@@ -29,7 +29,7 @@ void main() {
       expect(maintenanceDaysLeft(oil, r, now: now), 335);
     });
 
-    test('son ${kMaintenanceSoonDays} günde "yaklaşıyor"', () {
+    test('son $kMaintenanceSoonDays günde "yaklaşıyor"', () {
       final MaintenanceRecord r = doneDaysAgo(365 - kMaintenanceSoonDays);
       expect(maintenanceStatus(oil, r, now: now), MaintenanceStatus.dueSoon);
       expect(maintenanceDaysLeft(oil, r, now: now), kMaintenanceSoonDays);

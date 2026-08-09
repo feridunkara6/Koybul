@@ -5,7 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../../boat/presentation/boat_screen.dart';
 import '../../deck/presentation/deck_screen.dart';
-import '../../map/presentation/map_screen.dart';
+import '../../map/presentation/map_screen.dart'
+    show MapScreen, todayInviteDismissedProvider;
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/presentation/onboarding_overlay.dart';
 import '../../profile/presentation/profile_screen.dart';
@@ -111,6 +112,11 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
             selectedIndex: index,
             onDestinationSelected: (int i) {
               setState(() => _built[i] = true); // ilk ziyarette kur, canlı tut
+              // Bugün'e bir kez gidildiyse haritadaki davet kartı emekli olur
+              // (onaylı E1: davet ısrar etmez).
+              if (i == 1) {
+                ref.read(todayInviteDismissedProvider.notifier).state = true;
+              }
               ref.read(shellTabProvider.notifier).state = i;
             },
             destinations: <NavigationDestination>[

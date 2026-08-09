@@ -1,5 +1,11 @@
 import 'package:dockly_api/dockly_api.dart'
-    show GeoPoint, LocationSummary, WeatherForecast;
+    show
+        AnchorageTypeDetails,
+        GeoPoint,
+        LocationDetail,
+        LocationSummary,
+        TypeDetails,
+        WeatherForecast;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../boat/application/my_boat_controller.dart';
@@ -57,11 +63,22 @@ final daySuggestionsProvider =
       <WeatherKey, WeatherForecast>{};
   final List<DaySuggestion> scored = <DaySuggestion>[];
   for (final LocationSummary place in pool) {
-    // Açık yön — detay kaydından; alınamazsa null (bilgi yok rozeti).
+    // DETAY KAYDI: açık yön + derinlik + zemin + doluluk (onaylı E2: her
+    // önerinin gerekçesi ekranda). Alınamazsa hepsi null — motor kırılmaz.
     String? dirs;
+    double? depthMin;
+    double? depthMax;
+    String? bottom;
+    String? occupancy;
     try {
-      dirs = (await ref.read(locationDetailGatewayProvider).fetch(place.id))
-          .windExposedDirs;
+      final LocationDetail d =
+          await ref.read(locationDetailGatewayProvider).fetch(place.id);
+      dirs = d.windExposedDirs;
+      depthMin = d.dimensions.depthMinM;
+      depthMax = d.dimensions.depthMaxM;
+      final TypeDetails? td = d.typeDetails;
+      if (td is AnchorageTypeDetails) bottom = td.holdingType;
+      occupancy = d.occupancy?.level;
     } catch (_) {
       dirs = null;
     }
@@ -83,6 +100,10 @@ final daySuggestionsProvider =
       exposedDirs: dirs,
       forecast: forecast,
       boat: ref.read(myBoatProvider),
+      depthMinM: depthMin,
+      depthMaxM: depthMax,
+      bottomCode: bottom,
+      occupancyLevel: occupancy,
     ));
   }
   scored.sort((DaySuggestion a, DaySuggestion b) => b.score - a.score);

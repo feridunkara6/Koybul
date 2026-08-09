@@ -13,6 +13,7 @@ import 'package:dockly_api/dockly_api.dart'
 
 import '../../boat/domain/my_boat.dart';
 import '../../route/domain/route_wind.dart' show angleDiffDeg;
+import '../../route/domain/sea_route.dart' show etaHours;
 import '../../weather/presentation/wind_warning_badge.dart'
     show windSectorHalfDeg, windStrongKn, windWarnKn;
 
@@ -36,15 +37,43 @@ enum SuggestReasonKind {
 
   /// Tekne tanımlı ama koyun bilinen limitini aşıyor.
   boatTooBig,
+
+  /// Tahminî varış süresi ([nm] mesafe, [etaHours] saat) — seyir planı için.
+  eta,
+
+  /// Bilinen derinlik aralığı ([depthMinM]–[depthMaxM] m).
+  depth,
+
+  /// Bilinen zemin türü ([bottomCode]: sand/mud/weed/rock/mixed).
+  bottom,
+
+  /// Son bildirimlere göre kalabalık (doluluk 'full').
+  crowded,
+
+  /// Son bildirimlere göre sakin (doluluk 'empty').
+  quiet,
 }
 
 class SuggestReason {
-  const SuggestReason(this.kind, {this.dir, this.windKn, this.nm});
+  const SuggestReason(
+    this.kind, {
+    this.dir,
+    this.windKn,
+    this.nm,
+    this.etaHours,
+    this.depthMinM,
+    this.depthMaxM,
+    this.bottomCode,
+  });
 
   final SuggestReasonKind kind;
   final String? dir; // exposed: TR pusula kodu ('G', 'GB', ...)
   final double? windKn; // exposed: 24 saatteki tepe rüzgâr (kn)
-  final double? nm; // near: mesafe (deniz mili)
+  final double? nm; // near/eta: mesafe (deniz mili)
+  final double? etaHours; // eta: seyir süresi (saat)
+  final double? depthMinM; // depth: bilinen en sığ
+  final double? depthMaxM; // depth: bilinen en derin
+  final String? bottomCode; // bottom: zemin kodu (sand/mud/...)
 }
 
 /// Tek adayın puanı + NEDEN rozetleri. Puan 0–100 arası ve karşılaştırma
@@ -89,6 +118,12 @@ DaySuggestion scoreCandidate({
   required String? exposedDirs,
   required WeatherForecast? forecast,
   MyBoat? boat,
+  // Detay kaydından gelen EK GERÇEKLER (onaylı E2 tasarımı: "5-8 m kum,
+  // teknen sığar · dün: sakin"). Bilinmeyen alan hiç rozetlenmez.
+  double? depthMinM,
+  double? depthMaxM,
+  String? bottomCode,
+  String? occupancyLevel, // 'empty' | 'moderate' | 'full'
 }) {
   int score = 100;
   final List<SuggestReason> reasons = <SuggestReason>[];
@@ -142,6 +177,14 @@ DaySuggestion scoreCandidate({
     final int cut = ((nm - kSuggestNearNm) * 2).round();
     score -= cut > 30 ? 30 : cut;
   }
+  // SÜRE — mesafe biliniyorsa seyir süresi tahmini (seyir hızı varsayımıyla).
+  if (nm > 0) {
+    reasons.add(SuggestReason(
+      SuggestReasonKind.eta,
+      nm: nm,
+      etaHours: etaHours(nm),
+    ));
+  }
 
   // TEKNE UYUMU — yalnız tekne TANIMLIYSA ve limit BİLİNİYORSA konuşulur.
   final BoatFit fit = computeBoatFit(
@@ -154,6 +197,28 @@ DaySuggestion scoreCandidate({
     reasons.add(const SuggestReason(SuggestReasonKind.boatTooBig));
   } else if (fit == BoatFit.fits) {
     reasons.add(const SuggestReason(SuggestReasonKind.boatFits));
+  }
+
+  // DERİNLİK / ZEMİN — yalnız kayıtta VARSA rozetlenir (puanı etkilemez;
+  // bilgi rozetidir: "5-8 m kum"). Eksik alan hiç çizilmez.
+  if (depthMinM != null || depthMaxM != null) {
+    reasons.add(SuggestReason(
+      SuggestReasonKind.depth,
+      depthMinM: depthMinM,
+      depthMaxM: depthMaxM,
+    ));
+  }
+  if (bottomCode != null && bottomCode.trim().isNotEmpty) {
+    reasons.add(SuggestReason(SuggestReasonKind.bottom, bottomCode: bottomCode));
+  }
+
+  // KALABALIK — denizcilerin son bildirimleri (varsa). "Dolu" küçük bir
+  // kesinti alır; "boş" yalnız rozettir. Bildirim yoksa hiçbir şey denmez.
+  if (occupancyLevel == 'full') {
+    score -= 15;
+    reasons.add(const SuggestReason(SuggestReasonKind.crowded));
+  } else if (occupancyLevel == 'empty') {
+    reasons.add(const SuggestReason(SuggestReasonKind.quiet));
   }
 
   return DaySuggestion(

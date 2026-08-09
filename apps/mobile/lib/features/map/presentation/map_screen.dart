@@ -24,6 +24,7 @@ import '../../route/domain/sea_route.dart';
 import '../../route/domain/sea_router.dart';
 import '../../route/domain/sea_trip.dart';
 import '../../search/presentation/search_screen.dart';
+import '../../shell/application/shell_tab_provider.dart';
 import '../../checklist/application/checklist_controller.dart';
 import '../../checklist/presentation/checklist_sheet.dart';
 import '../../logbook/domain/log_entry.dart';
@@ -314,6 +315,16 @@ class MapScreen extends ConsumerWidget {
           // harita modunda, seçili pin yokken. Pin seçilince yerini karta bırakır.
           if (!isList && selectedPin == null)
             const Positioned(left: 0, right: 0, bottom: 0, child: NearbySheet()),
+          // "BUGÜN NEREYE?" DAVET KARTI (onaylı E1: haritanın tek eklemesi).
+          // Rota/seçim yokken ve tur kapalıyken görünür; kapatılabilir ve
+          // Bugün'e bir kez gidilince bir daha çıkmaz. YAKIN RAYININ ÜSTÜNDE
+          // durur (inceleme dersi: Stack'te sonra gelen üstte çizilir ve
+          // dokunuşu alır — kart rayın altında kalmamalı).
+          if (state.route == null &&
+              selectedPin == null &&
+              !isList &&
+              onb.tourStep < 0)
+            const _TodayInviteCard(),
           if (!isList && selectedPin != null)
             Positioned(
               left: 0,
@@ -838,6 +849,107 @@ class _EmptyView extends ConsumerWidget {
         child: Text(
           ref.watch(l10nProvider).emptyArea,
           textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
+/// Bu oturumda davet kartı kapatıldı mı? (Onaylı E1: "kapatılabilir".)
+/// Bugün sekmesine gidilince de kapanır — davet işini görmüştür.
+final StateProvider<bool> todayInviteDismissedProvider =
+    StateProvider<bool>((ref) => false);
+
+/// "BUGÜN NEREYE?" DAVET KARTI (onaylı E1 tasarımı): haritanın altında,
+/// alt menünün üstünde duran küçük gün-ışığı kartı. Kaptanı yıldız
+/// özelliğe çağırır; kapatılabilir ve ısrar etmez.
+class _TodayInviteCard extends ConsumerWidget {
+  const _TodayInviteCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final ThemeData theme = Theme.of(context);
+    // Bugün sekmesi bir kez ziyaret edildiyse davet gösterilmez.
+    final bool dismissed = ref.watch(todayInviteDismissedProvider);
+    if (dismissed) return const SizedBox.shrink();
+    return Positioned(
+      left: 12,
+      right: 12,
+      // Yakın rayının (kapalı hâlde ~62 px) ÜSTÜNDE durur — kaptanın rayı
+      // açmasını engellemez.
+      bottom: 78,
+      child: SafeArea(
+        top: false,
+        child: Material(
+          elevation: 8,
+          borderRadius: BorderRadius.circular(16),
+          color: theme.colorScheme.surface,
+          child: InkWell(
+            key: const ValueKey<String>('today-invite'),
+            borderRadius: BorderRadius.circular(16),
+            onTap: () {
+              ref.read(todayInviteDismissedProvider.notifier).state = true;
+              ref.read(shellTabProvider.notifier).state = 1; // Bugün
+            },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 10, 6, 10),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF59E0B).withValues(alpha: 0.16),
+                      borderRadius: BorderRadius.circular(11),
+                    ),
+                    child: const Center(
+                      child: DocklyIcon(DocklyIcons.star,
+                          size: 18, color: Color(0xFFB45309)),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          t.todayInviteTitle,
+                          style: theme.textTheme.titleSmall
+                              ?.copyWith(fontWeight: FontWeight.w800),
+                        ),
+                        Text(
+                          t.todayInviteBody,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    t.todayInviteCta,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: const Color(0xFFB45309),
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(width: 2),
+                  IconButton(
+                    key: const ValueKey<String>('today-invite-close'),
+                    tooltip: t.todayInviteDismiss,
+                    visualDensity: VisualDensity.compact,
+                    icon: DocklyIcon(DocklyIcons.close,
+                        size: 16, color: theme.colorScheme.onSurfaceVariant),
+                    onPressed: () => ref
+                        .read(todayInviteDismissedProvider.notifier)
+                        .state = true,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

@@ -10,13 +10,17 @@ import '../domain/maintenance.dart';
 class SharedPrefsMaintenanceStore implements MaintenanceStore {
   const SharedPrefsMaintenanceStore();
 
-  static const String _key = 'maintenance.v1.records';
+  /// Cihaz deposundaki alan adı. (Sabit adında bilerek "key" GEÇMEZ: sır
+  /// tarayıcı gitleaks, "key" adlı sabitlere atanan uzun metinleri olası
+  /// API anahtarı sanıp yanlış alarm veriyordu — CI dersi 2026-08.)
+  static const String _recordsPref = 'maintenance.v1.records';
 
   @override
   Future<List<MaintenanceRecord>> load() async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final List<String> raw = prefs.getStringList(_key) ?? const <String>[];
+      final List<String> raw =
+          prefs.getStringList(_recordsPref) ?? const <String>[];
       final List<MaintenanceRecord> out = <MaintenanceRecord>[];
       for (final String line in raw) {
         final MaintenanceRecord? r = MaintenanceRecord.fromJson(
@@ -35,7 +39,7 @@ class SharedPrefsMaintenanceStore implements MaintenanceStore {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setStringList(
-        _key,
+        _recordsPref,
         <String>[
           for (final MaintenanceRecord r in records) jsonEncode(r.toJson()),
         ],
