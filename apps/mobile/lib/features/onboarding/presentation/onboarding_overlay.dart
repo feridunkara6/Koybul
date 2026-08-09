@@ -16,7 +16,12 @@ import '../application/onboarding_controller.dart';
 import 'tour_targets.dart';
 
 /// Karartma rengi — marka lacivertinin koyusu.
-const Color _dimColor = Color(0xC7071626);
+///
+/// KOYULUK ARTIRILDI (kullanıcı isteği 2026-08: "gösterilen kısmı normal
+/// tutup geri kalanı karartabilirsin"): karartma 0.78 → 0.91 opaklığa çıktı.
+/// Vurgulanan bölge ise artık HİÇ boyanmaz — ekranın geri kalanı koyulaşınca
+/// o bölge kendiliğinden "aydınlatılmış" görünür (gerçek fener etkisi).
+const Color _dimColor = Color(0xE8071626);
 
 /// TANITIM TURU v4 — PREMIUM (kullanıcı isteği 2026-08): kaba çizgi-ok
 /// yerine, kaliteli uygulama tanıtımlarındaki dil kullanılır —
@@ -125,6 +130,12 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
   /// Örnek olarak seçtiğimiz işaretin kimliği (temizlikte geri alınır).
   String? _demoPinId;
 
+  /// İşaret adımı için örnek bölgeye BİR kez uçuldu mu? (Mobil dersi
+  /// 2026-08: açılış Türkiye genelindedir — bu ölçekte işaretler kümelenir
+  /// ve liste boş gelir; imleç gösterilemezdi. Örnek bölgeye yaklaşınca
+  /// işaretler yüklenir, dinleyici adımı yeniden kurar.)
+  bool _pinDemoSought = false;
+
   /// Örnekler kamerayı gezdirdiyse true — tur biterken/atlanırken harita
   /// AÇILIŞ görünümüne döndürülür (kullanıcı isteği 2026-08: "Türkiye
   /// haritasının ortasında bırakmasın").
@@ -151,6 +162,19 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
   }
 
   void _captureStart() {
+    // AÇILIŞ GÖRÜNÜMÜ (kullanıcı isteği 2026-08): haritanın bildirdiği SON
+    // görünüm birebir alınır (merkez + yakınlaştırma) — tur bittiğinde kamera
+    // tam olarak açılıştaki boyuta/görüntüye döner. Görünüm henüz oluşmadıysa
+    // GPS/bölge yedeğine düşülür (eski davranış).
+    final MapViewport? vp = ref.read(lastViewportProvider);
+    if (vp != null) {
+      _startCenter = GeoPoint(
+        lat: (vp.bbox.minLat + vp.bbox.maxLat) / 2,
+        lon: (vp.bbox.minLon + vp.bbox.maxLon) / 2,
+      );
+      _startZoom = vp.zoom.toDouble();
+      return;
+    }
     final GeoPoint? gps = ref.read(devicePositionProvider);
     final GeoPoint? c = gps ?? ref.read(originProvider);
     if (c != null) {
@@ -253,6 +277,9 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
             RouteWaypoint(pos: kTourDemoDest, name: t.tourDemoStop),
           ],
           name: t.tourDemoRouteName,
+          // Turda odak modu KAPALI: koy imleçleri görünür kalır (tur
+          // onları daha yeni tanıttı — sahneden silinmeleri şaşırtır).
+          focus: false,
         ));
       }
     } else {
@@ -261,21 +288,29 @@ class _TourOverlayState extends ConsumerState<TourOverlay> {
     // ÖRNEK İŞARET: koylar yüklüyse biri seçilir — işaret büyür, kullanıcı
     // bağlama noktası imlecinin SEÇİLİ halini gerçek örnek üstünde görür.
     if (d.demo == _TourDemo.pin) {
-      if (_demoPinId == null &&
-          ms.selectedPinId == null &&
-          ms.pins.isNotEmpty) {
-        // KIRMIZI İMLEÇ TERCİHİ (kullanıcı isteği 2026-08): klasik kırmızı
-        // bağlama işareti varsa örnek odur; yoksa ilk işaret.
-        final LocationPin demoPin = ms.pins.firstWhere(
-          (LocationPin p) => p.type == 'mooring_point',
-          orElse: () => ms.pins.first,
-        );
-        _demoPinId = demoPin.id;
-        map.selectPin(_demoPinId!);
-        // YAKIN PLAN (kullanıcı isteği 2026-08): kamera işaretin üstüne
-        // uçar — imleç genel görünümde değil, yakından tanıtılır.
-        _cameraTouched = true;
-        _focus(demoPin.position, zoom: 15);
+      if (_demoPinId == null && ms.selectedPinId == null) {
+        if (ms.pins.isNotEmpty) {
+          // KIRMIZI İMLEÇ TERCİHİ (kullanıcı isteği 2026-08): klasik kırmızı
+          // bağlama işareti varsa örnek odur; yoksa ilk işaret.
+          final LocationPin demoPin = ms.pins.firstWhere(
+            (LocationPin p) => p.type == 'mooring_point',
+            orElse: () => ms.pins.first,
+          );
+          _demoPinId = demoPin.id;
+          map.selectPin(_demoPinId!);
+          // YAKIN PLAN (kullanıcı isteği 2026-08): kamera işaretin üstüne
+          // uçar — imleç genel görünümde değil, yakından tanıtılır.
+          _cameraTouched = true;
+          _focus(demoPin.position, zoom: 15);
+        } else if (!_pinDemoSought) {
+          // MOBİL DÜZELTMESİ (kullanıcı isteği 2026-08): işaret listesi boş
+          // (açılış ölçeğinde kümeler var) — örnek bölgeye (Göcek) uçulur;
+          // işaretler yüklenince pins.length dinleyicisi bu adımı yeniden
+          // kurar ve kırmızı bağlama imleci yakın planda gösterilir.
+          _pinDemoSought = true;
+          _cameraTouched = true;
+          _focus(kTourDemoOrigin, zoom: 13);
+        }
       }
     } else {
       _clearDemoPin();
@@ -807,30 +842,20 @@ class _SpotDimPainter extends CustomPainter {
       Path()..addRRect(r),
     );
     canvas.drawPath(dim, Paint()..color = _dimColor);
-    // İÇ IŞIK BANYOSU: deliğin içi hafif beyaz ışıkla YIKANIR — bölge
-    // "karanlık değil" değil, gerçekten AYDINLATILMIŞ görünür.
-    canvas.drawRRect(
-      r,
-      Paint()
-        ..shader = RadialGradient(
-          // Geniş kapsüllerde (çip şeridi) ışık TÜM deliği yıkasın diye
-          // yarıçap en-boy oranıyla ölçeklenir (çizim delik şekliyle kırpılır).
-          radius: (h.longestSide / h.shortestSide) * 0.5,
-          colors: <Color>[
-            const Color(0xFFFFFFFF).withValues(alpha: 0.14 * t),
-            const Color(0xFFFFFFFF).withValues(alpha: 0.0),
-          ],
-        ).createShader(h),
-    );
-    // Kenar: karanlığa eriyen yumuşak ışık halesi (bulanık fırça) + çok
-    // hafif bir iç parlaklık. Keskin çizgi bilinçli olarak yok.
+    // İÇERİSİ BOYANMAZ (kullanıcı isteği 2026-08): eski beyaz "ışık banyosu"
+    // bölgeyi puslandırıyordu — kaldırıldı. Vurgulanan yer artık uygulamanın
+    // GERÇEK renkleriyle, tam berrak görünür; çevresi koyulaştığı için göz
+    // orayı aydınlık algılar. Delik kenarına yalnız yumuşak hale eklenir.
+    // Kenar: karanlığa eriyen yumuşak ışık halesi (bulanık fırça) + ince bir
+    // parlaklık. Keskin çizgi bilinçli olarak yok. Hale, karartma koyulaştığı
+    // için GÜÇLENDİRİLDİ — sınır kaybolmasın, bölge "ışık altında" dursun.
     canvas.drawRRect(
       r,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 26
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 18)
-        ..color = const Color(0xFFCFF6EF).withValues(alpha: 0.22 * t),
+        ..strokeWidth = 28
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 20)
+        ..color = const Color(0xFFCFF6EF).withValues(alpha: 0.30 * t),
     );
     canvas.drawRRect(
       r,
@@ -838,7 +863,7 @@ class _SpotDimPainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = 3
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5)
-        ..color = const Color(0xFFFFFFFF).withValues(alpha: 0.26 * t),
+        ..color = const Color(0xFFFFFFFF).withValues(alpha: 0.36 * t),
     );
   }
 
@@ -877,12 +902,16 @@ class _LightPoolPainter extends CustomPainter {
           // Flutter kuralı: radius birimi = KISA KENARIN TAMAMI (yarısı
           // değil) — /2 kullanmak havuzu iki kat büyütüp vinyeti siler.
           radius: radius / size.shortestSide,
+          // KONTRAST ARTIRILDI (kullanıcı isteği 2026-08): havuzun ORTASI
+          // artık tamamen berrak (0.0) — rota ve harita hiç örtülmez;
+          // kenarlar belirgin şekilde koyulaşır. Aradaki fark büyüdükçe
+          // "ışık altında" hissi güçlenir.
           colors: <Color>[
-            _dimColor.withValues(alpha: 0.10 * t),
-            _dimColor.withValues(alpha: 0.42 * t),
-            _dimColor.withValues(alpha: 0.80 * t),
+            _dimColor.withValues(alpha: 0.0),
+            _dimColor.withValues(alpha: 0.34 * t),
+            _dimColor.withValues(alpha: 0.92 * t),
           ],
-          stops: const <double>[0.0, 0.55, 1.0],
+          stops: const <double>[0.0, 0.52, 1.0],
         ).createShader(full),
     );
   }

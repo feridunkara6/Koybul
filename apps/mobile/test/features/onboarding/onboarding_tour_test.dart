@@ -1,6 +1,7 @@
 import 'package:dockly_mobile/features/favorites/application/favorites_controller.dart';
 import 'package:dockly_mobile/features/logbook/application/logbook_controller.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
+import 'package:dockly_mobile/features/map/domain/map_viewport.dart';
 import 'package:dockly_mobile/features/map/presentation/map_screen.dart';
 import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
@@ -8,7 +9,7 @@ import 'package:dockly_mobile/features/onboarding/application/onboarding_control
 import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
 import 'package:dockly_mobile/features/onboarding/domain/onboarding_store.dart';
 import 'package:dockly_mobile/features/onboarding/presentation/tour_targets.dart';
-import 'package:dockly_api/dockly_api.dart' show GeoPoint;
+import 'package:dockly_api/dockly_api.dart' show GeoPoint, MapResult;
 import 'package:dockly_mobile/features/route/application/saved_routes_controller.dart';
 import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
 import 'package:dockly_mobile/features/route/domain/sea_router.dart';
@@ -60,10 +61,10 @@ class _FakeRouteEngine implements SeaRouteEngine {
 
 /// TUR v3 testleri KABUĞU (DocklyShell) pompalar: tur artık sekme
 /// değiştirebildiği için kaplama kabuğun üstünde yaşar.
-Widget _app(FakeOnboardingStore store) {
+Widget _app(FakeOnboardingStore store, {MapResult mapResult = pinResult}) {
   return ProviderScope(
     overrides: <Override>[
-      mapLocationsGatewayProvider.overrideWithValue(FakeMapGateway(result: pinResult)),
+      mapLocationsGatewayProvider.overrideWithValue(FakeMapGateway(result: mapResult)),
       mapSurfaceBuilderProvider.overrideWithValue(fakeMapSurfaceBuilder()),
       mapDebounceProvider.overrideWithValue(Duration.zero),
       mapCacheProvider.overrideWithValue(FakeMapCache()),
@@ -220,6 +221,13 @@ void main() {
     expect(_tab(tester), 0);
     expect(c.read(mapControllerProvider).route, isNull);
     expect(c.read(mapControllerProvider).selectedPinId, isNull);
+    // AÇILIŞ GÖRÜNÜMÜNE DÖNÜŞ (kullanıcı isteği 2026-08): kamera, turun
+    // başındaki görünümün merkezine ve AYNI yakınlaştırmaya döndürülür.
+    final MapFocusRequest? home = c.read(mapFocusProvider);
+    expect(home, isNotNull);
+    expect(home!.zoom, pinViewport.zoom.toDouble());
+    expect(home.point.lat, closeTo(36.75, 0.0001)); // testBbox merkezi
+    expect(home.point.lon, closeTo(28.95, 0.0001));
   });
 
   testWidgets('SAYFADAYKEN ATLA (v3): Teknem adımında Atla → tur kapanır ve '
@@ -318,5 +326,31 @@ void main() {
     await tester.tap(find.text('Başla'));
     await tester.pumpAndSettle();
     expect(find.text('Hazırsın, kaptan!'), findsNothing);
+  });
+
+  testWidgets('MOBİL İMLEÇ ADIMI (kullanıcı isteği 2026-08): açılış ölçeğinde '
+      'işaret listesi boşsa tur örnek bölgeye yakınlaşır',
+      (WidgetTester tester) async {
+    // Açılış Türkiye genelinde: sunucu KÜME döndürür, işaret listesi boştur.
+    await tester.pumpWidget(_app(
+      FakeOnboardingStore(data: const OnboardingData()),
+      mapResult: clusterResult,
+    ));
+    await tester.pumpAndSettle();
+
+    // Adım 1 (işaretler): işaret yok → tur örnek bölgeye (Göcek) uçar ki
+    // işaretler yüklensin ve kırmızı bağlama imleci yakın planda görünsün.
+    await _advance(tester);
+    final ProviderContainer c = ProviderScope.containerOf(
+        tester.element(find.byType(DocklyShell)));
+    final MapFocusRequest? focus = c.read(mapFocusProvider);
+    expect(focus, isNotNull);
+    expect(focus!.point.lat, closeTo(36.740, 0.0001)); // kTourDemoOrigin
+    expect(focus.point.lon, closeTo(28.935, 0.0001));
+    expect(focus.zoom, 13);
+
+    // Tur kırılmadan kapatılabilir.
+    await tester.tap(find.text('Atla'));
+    await tester.pumpAndSettle();
   });
 }

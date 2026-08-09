@@ -48,6 +48,13 @@ final StateProvider<bool> mapViewIsListProvider = StateProvider<bool>((ref) => f
 final StateProvider<MapFocusRequest?> mapFocusProvider =
     StateProvider<MapFocusRequest?>((ref) => null);
 
+/// Haritanın SON bildirdiği görünüm (merkez+yakınlaştırma kaynağı).
+/// Tanıtım turu kapanışta kamerayı TAM açılış görünümüne döndürmek için
+/// turun başında bunu okur (kullanıcı isteği 2026-08: "açılıştaki harita
+/// boyutuna ve görüntüsüne geri getirsin").
+final StateProvider<MapViewport?> lastViewportProvider =
+    StateProvider<MapViewport?>((ref) => null);
+
 /// Harita çağrılarının debounce süresi (docs/14 perf — pan/zoom sırasında
 /// gereksiz istek olmasın). Kısa tutulur: harita yüzeyinin kendi debounce'u
 /// (150ms) zaten var; ikisinin toplamı algılanan gecikmeyi belirler.
@@ -103,6 +110,8 @@ class MapController extends Notifier<MapState> {
   /// Eş zamanlı çağrılarda yalnız en son yanıt uygulanır (stale koruması).
   Future<void> loadViewport(MapViewport viewport, {List<String>? types}) async {
     _lastRequested = viewport;
+    // Turun "açılış görünümüne dön" özelliği için son görünüm yayınlanır.
+    ref.read(lastViewportProvider.notifier).state = viewport;
     // Deniz-rota başlangıç noktası = görüntülenen alanın merkezi (P2). İleride
     // GPS ile gerçek konuma yükseltilecek; şimdilik "haritada baktığın yer".
     final Bbox b = viewport.bbox;
@@ -362,6 +371,10 @@ class MapController extends Notifier<MapState> {
     RouteOrigin origin,
     List<RouteWaypoint> waypoints, {
     String? name,
+    // ODAK MODU (kullanıcı isteği 2026-08): kayıtlı rota varsayılan olarak
+    // yalnız kendisi ve duraklarıyla açılır. Tanıtım turunun örnek rotası
+    // false geçer — turda koy imleçleri görünür kalmalıdır.
+    bool focus = true,
   }) async {
     if (state.isRouting || waypoints.isEmpty) return;
     RouteOrigin effective = origin;
@@ -374,7 +387,8 @@ class MapController extends Notifier<MapState> {
     // taşınır ve rota EKRANA GELDİĞİ ANDA yazılır. Önceden ad rüzgâr analizi
     // (ağ çağrısı!) bittikten SONRA yazılıyordu — yavaş bağlantıda kullanıcı
     // "isim gözükmüyor" görüyordu. Yalnız plan başarılıysa yazılır.
-    await _planTrip(effective, waypoints, editing: false, label: name);
+    await _planTrip(effective, waypoints,
+        editing: false, label: name, focus: focus);
   }
 
   /// ROTA ADI — KAYIT ANINDA (kullanıcı isteği 2026-08): "Rotayı kaydet" ile
@@ -483,6 +497,7 @@ class MapController extends Notifier<MapState> {
     List<RouteWaypoint> wps, {
     required bool editing,
     String? label,
+    bool focus = false,
   }) async {
     state = state.copyWith(isRouting: true);
     final int req = ++_routeReq; // stale koruması (rota istekleri arasında)
@@ -524,6 +539,13 @@ class MapController extends Notifier<MapState> {
       // eski ad düşer (etiket bayat kalmaz); düzenlemede ad korunur.
       routeLabel: label,
       clearRouteLabel: !editing && label == null,
+      // ODAK MODU (kullanıcı isteği 2026-08): kayıtlı rota açılışında
+      // yalnız rota+duraklar görünür. Düzenlemede mevcut mod korunur;
+      // yeni (kayıtsız) rota odak modunu KAPATIR.
+      routeFocus: editing ? null : focus,
+      // Odak açılırken eski pin seçimi kapanır — alt kart, haritada artık
+      // çizilmeyen bir imleci anlatmasın (inceleme dersi 2026-08).
+      clearSelection: !editing && focus,
       clearRouteWind: true, // yeni rota → eski rüzgâr raporu geçersiz
     );
     // RÜZGÂR ANALİZİ (Rota v2): arka planda, en iyi çaba — rota çizimi bunu

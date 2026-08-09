@@ -23,6 +23,7 @@ import 'package:dockly_mobile/features/location/application/location_controller.
 import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
 import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
 import 'package:dockly_mobile/features/route/domain/sea_router.dart';
+import 'package:dockly_mobile/features/route/domain/sea_trip.dart';
 import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
 
 import '../../support/fake_map_surface.dart';
@@ -480,6 +481,67 @@ void main() {
     expect(find.byKey(const ValueKey<String>('trip-start')), findsOneWidget);
 
     // Snackbar zamanlayıcısını akıt.
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('ROTA ODAK MODU (2026-08): kayıtlı rota açılınca yalnız '
+      'duraklar kalır; rota kapatılınca imleçler geri döner',
+      (WidgetTester tester) async {
+    const LocationPin second = LocationPin(
+      id: 'loc-2',
+      name: 'Gökkaya Koyu',
+      type: 'mooring_point',
+      position: GeoPoint(lat: 36.72, lon: 28.92),
+      ratingAvg: null,
+      priceTier: 'free',
+    );
+    await tester.pumpWidget(_app(
+      FakeMapGateway(
+        result: const MapResult(
+          clusters: <Cluster>[],
+          locations: <LocationPin>[testPin, second],
+          truncated: false,
+        ),
+      ),
+      routeEngine: _FakeRouteEngine(),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('pin-loc-1')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('pin-loc-2')), findsOneWidget);
+
+    // Önce bir koy seçili olsun — odak açılınca seçim kartı KAPANMALI
+    // (gizlenen imleci anlatan kart kalmasın).
+    await tester.tap(find.byKey(const ValueKey<String>('pin-loc-1')));
+    await tester.pumpAndSettle();
+    final ProviderContainer c =
+        ProviderScope.containerOf(tester.element(find.byType(MapScreen)));
+    expect(c.read(mapControllerProvider).selectedPinId, 'loc-1');
+
+    // Kayıtlı rota açılır (Kayıtlarım'daki "Haritada aç" bu yolu kullanır):
+    // durağı loc-2 olan rota — sahnede yalnız rota ve durağı kalmalı.
+    await c.read(mapControllerProvider.notifier).openSavedRoute(
+      const RouteOrigin(pos: GeoPoint(lat: 36.75, lon: 28.93), name: 'Göcek'),
+      const <RouteWaypoint>[
+        RouteWaypoint(
+            pos: GeoPoint(lat: 36.72, lon: 28.92),
+            id: 'loc-2',
+            name: 'Gökkaya Koyu'),
+      ],
+      name: 'Datça turu',
+    );
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('pin-loc-2')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('pin-loc-1')), findsNothing);
+    expect(c.read(mapControllerProvider).selectedPinId, isNull); // kart kapandı
+
+    // Rota kapatılınca (✕) normal görünüm döner.
+    c.read(mapControllerProvider.notifier).clearRoute();
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('pin-loc-1')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('pin-loc-2')), findsOneWidget);
+
+    // Zamanlayıcı artıklarını akıt (kontrol şeridi/snackbar vb.).
     await tester.pump(const Duration(seconds: 6));
     await tester.pumpAndSettle();
   });

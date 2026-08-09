@@ -31,6 +31,7 @@ class MapState {
     this.addingPoint = false,
     this.originPickFailSeq = 0,
     this.routeLabel,
+    this.routeFocus = false,
   });
 
   final List<LocationPin> pins;
@@ -83,6 +84,11 @@ class MapState {
   /// Açık rotanın kullanıcı adı (KAYITLI ROTA açıldıysa verdiği isim) — çipte
   /// gösterilir. Yeni rota kurulunca temizlenir (kullanıcı isteği 2026-08).
   final String? routeLabel;
+
+  /// ROTA ODAK MODU (kullanıcı isteği 2026-08): kayıtlı rota AÇILDIĞINDA
+  /// haritada yalnız rota ve durakları görünür — diğer tüm imleçler/kümeler
+  /// gizlenir. Rota kapatılınca (✕) normal görünüm döner.
+  final bool routeFocus;
 
   /// BAŞLANGIÇ SEÇ modu: haritaya/koya dokunuş A noktasını belirler; arayüz
   /// üstte lacivert seçim şeridi gösterir.
@@ -145,6 +151,7 @@ class MapState {
     int? originPickFailSeq,
     String? routeLabel,
     bool clearRouteLabel = false,
+    bool? routeFocus,
   }) {
     return MapState(
       pins: pins ?? this.pins,
@@ -176,6 +183,7 @@ class MapState {
       routeLabel: (clearRoute || clearRouteLabel)
           ? null
           : (routeLabel ?? this.routeLabel),
+      routeFocus: clearRoute ? false : (routeFocus ?? this.routeFocus),
     );
   }
 }

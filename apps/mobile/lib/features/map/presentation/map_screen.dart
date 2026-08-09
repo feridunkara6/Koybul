@@ -119,11 +119,29 @@ class MapScreen extends ConsumerWidget {
     final OnboardingState onb = ref.watch(onboardingControllerProvider);
     final bool isList = ref.watch(mapViewIsListProvider);
     final selectedPin = state.selectedPin;
+    // ROTA ODAK MODU (kullanıcı isteği 2026-08): kayıtlı rota açıkken
+    // yalnız rotanın DURAK imleçleri kalır — diğer imleçler ve kümeler
+    // gizlenir; sahnede sadece rota ve durakları vardır. "+ Nokta ekle" ve
+    // "başlangıç seç" modlarında süzgeç GEÇİCİ kalkar (inceleme dersi:
+    // "koya dokunursan durak olur" sözü tutulmalı — koylar görünmeli).
+    final bool focusOn =
+        state.routeFocus && !state.addingPoint && !state.pickingOrigin;
+    final Set<String> focusStopIds = focusOn
+        ? <String>{
+            for (final RouteWaypoint w in state.routeWaypoints)
+              if (w.id != null) w.id!,
+          }
+        : const <String>{};
+    final List<LocationPin> basePins = focusOn
+        ? state.pins
+            .where((LocationPin p) => focusStopIds.contains(p.id))
+            .toList(growable: false)
+        : state.pins;
     // "Teknem sığar" filtresi: SIĞMAYANLAR gizlenir; bilinmeyenler kalır.
     final bool fitOn = ref.watch(mapFitFilterProvider);
     final MyBoat? boat = ref.watch(myBoatProvider);
     final List<LocationPin> visiblePins = (fitOn && boat != null)
-        ? state.pins
+        ? basePins
             .where((LocationPin p) =>
                 computeBoatFit(
                   boat: boat,
@@ -132,7 +150,7 @@ class MapScreen extends ConsumerWidget {
                 ) !=
                 BoatFit.tooBig)
             .toList(growable: false)
-        : state.pins;
+        : basePins;
 
     return Scaffold(
       body: Stack(
@@ -144,7 +162,9 @@ class MapScreen extends ConsumerWidget {
                     context,
                     MapSurfaceData(
                       pins: visiblePins,
-                      clusters: state.clusters,
+                      // Odak modunda kümeler de gizlenir (yalnız rota kalır).
+                      clusters:
+                          focusOn ? const <Cluster>[] : state.clusters,
                       selectedPinId: state.selectedPinId,
                       // Kullanıcının GPS konumu → haritada yelkenli imleç;
                       // "Konumum" isteği → kamera odaklanır (kullanıcı isteği).
