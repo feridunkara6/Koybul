@@ -170,7 +170,9 @@ class _DaySummaryStrip extends ConsumerWidget {
     final L10n t = ref.watch(l10nProvider);
     final AsyncValue<WeatherForecast> wx =
         ref.watch(weatherForecastProvider(weatherKeyFor(pos.lat, pos.lon)));
-    final DaySummary? s = summarizeDay(wx.value);
+    // valueOrNull ŞART (CI dersi 2026-08): AsyncValue.value hata durumunda
+    // hatayı YENİDEN FIRLATIR — ağ yokken bütün Bugün ekranı çökerdi.
+    final DaySummary? s = summarizeDay(wx.valueOrNull);
     if (s == null) return const SizedBox.shrink();
     final String seaLabel = switch (s.sea) {
       SeaState.calm => t.seaCalm,
@@ -366,7 +368,8 @@ class _ForecastSourceLine extends ConsumerWidget {
     final ThemeData theme = Theme.of(context);
     final AsyncValue<WeatherForecast> wx =
         ref.watch(weatherForecastProvider(weatherKeyFor(pos.lat, pos.lon)));
-    final WeatherForecast? f = wx.value;
+    // Aynı ders: hata varsa satır çizilmez, ekran çökmez.
+    final WeatherForecast? f = wx.valueOrNull;
     if (f == null) return const SizedBox.shrink();
     final DateTime at = f.fetchedAt.toLocal();
     final String hm = '${at.hour.toString().padLeft(2, '0')}:'
