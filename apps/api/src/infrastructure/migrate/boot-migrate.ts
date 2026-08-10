@@ -120,9 +120,7 @@ export async function runBootMigrations(
       const ledger = await client.query('SELECT name FROM app_migrations');
       const appliedSet = new Set((ledger.rows as { name: string }[]).map((r) => r.name));
 
-      const exists = await client.query(
-        `SELECT to_regclass('public.locations') IS NOT NULL AS ok`,
-      );
+      const exists = await client.query(`SELECT to_regclass('public.locations') IS NOT NULL AS ok`);
       const schemaExists = (exists.rows as { ok: boolean }[])[0]?.ok === true;
 
       const names = listNames(migrationsDir);
