@@ -10,8 +10,12 @@ const VALID: NodeJS.ProcessEnv = {
   DATABASE_URL: 'postgresql://user:pass@localhost:5432/db',
   REDIS_URL: 'redis://localhost:6379',
   FIREBASE_PROJECT_ID: 'dockly-test',
-  JWT_PRIVATE_KEY_PEM: '-----BEGIN PRIVATE KEY-----\nxx\n-----END PRIVATE KEY-----',
-  JWT_PUBLIC_KEY_PEM: '-----BEGIN PUBLIC KEY-----\nxx\n-----END PUBLIC KEY-----',
+  // Şema yalnız metinde 'BEGIN' geçmesini şart koşar (env.schema.ts:18-19).
+  // GERÇEK PEM BAŞLIK KALIBI BİLEREK KULLANILMIYOR: sahte bile olsa o kalıp
+  // gitleaks'in private-key kuralını tetikler ve güvenlik taramasını kırmızıya
+  // düşürür (10 Ağu 2026'da tam olarak bu oldu). Yorumda bile yazılmamalı.
+  JWT_PRIVATE_KEY_PEM: 'BEGIN sahte ozel anahtar (test fixture)',
+  JWT_PUBLIC_KEY_PEM: 'BEGIN sahte acik anahtar (test fixture)',
 };
 
 describe('validateEnv (fail-fast, docs/24 §16)', () => {
