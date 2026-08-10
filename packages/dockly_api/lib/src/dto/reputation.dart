@@ -72,6 +72,7 @@ class BadgeProgress {
 /// "Denizci Profilim" kartının ve seviye/rozet ekranlarının tek kaynağı.
 class ReputationSummary {
   const ReputationSummary({
+    required this.displayName,
     required this.points,
     required this.levelCode,
     required this.pointsToNext,
@@ -85,6 +86,8 @@ class ReputationSummary {
     required this.badges,
   });
 
+  /// Kaptanın kamuya açık adı — kartın başlığı BUDUR (ürün adı değil).
+  final String displayName;
   final int points;
 
   /// 'new' | 'coastal' | 'guide' | 'master' | 'pilot'.
@@ -108,6 +111,38 @@ class ReputationSummary {
   /// Hiç katkı yok mu — kart "henüz katkın yok" hâlini gösterir.
   bool get isEmpty => points == 0 && approvedCount == 0 && pendingCount == 0;
 
+  /// Avatar için baş harfler ("Feridun Kara" → "FK"). Ad yoksa BOŞ döner ve
+  /// kart genel ikonuna düşer — uydurma harf gösterilmez.
+  String get initials {
+    final List<String> words = displayName
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((String w) => w.isNotEmpty)
+        .toList(growable: false);
+    if (words.isEmpty) return '';
+    final String first = _upperTr(_firstGlyph(words.first));
+    if (words.length == 1) return first;
+    return first + _upperTr(_firstGlyph(words.last));
+  }
+
+  /// Sözcüğün İLK GÖRÜNEN karakteri. `substring(0, 1)` UTF-16 birimi keser ve
+  /// emoji gibi VEKİL ÇİFTİ (surrogate pair) ile başlayan adı ikiye bölüp
+  /// bozuk karakter üretirdi. `package:characters` bu pakette yok, o yüzden
+  /// vekil çifti elle kontrol edilir.
+  static String _firstGlyph(String word) {
+    final int unit = word.codeUnitAt(0);
+    final bool highSurrogate = unit >= 0xD800 && unit <= 0xDBFF;
+    return word.substring(0, highSurrogate && word.length > 1 ? 2 : 1);
+  }
+
+  /// Türkçe'ye duyarlı büyütme: Dart'ın `toUpperCase`'i 'i' harfini 'I' yapar,
+  /// oysa Türkçe'de karşılığı 'İ'dir ("İbrahim" → 'I' değil 'İ').
+  static String _upperTr(String ch) {
+    if (ch == 'i') return 'İ';
+    if (ch == 'ı') return 'I';
+    return ch.toUpperCase();
+  }
+
   List<BadgeProgress> get earnedBadges =>
       badges.where((BadgeProgress b) => b.earned).toList(growable: false);
 
@@ -115,6 +150,7 @@ class ReputationSummary {
       badges.where((BadgeProgress b) => !b.earned).toList(growable: false);
 
   static const ReputationSummary empty = ReputationSummary(
+    displayName: '',
     points: 0,
     levelCode: 'new',
     pointsToNext: null,
@@ -129,6 +165,7 @@ class ReputationSummary {
   );
 
   factory ReputationSummary.fromJson(Map<String, dynamic> json) => ReputationSummary(
+        displayName: json['displayName'] as String? ?? '',
         points: (json['points'] as num?)?.toInt() ?? 0,
         levelCode: json['levelCode'] as String? ?? 'new',
         pointsToNext: (json['pointsToNext'] as num?)?.toInt(),

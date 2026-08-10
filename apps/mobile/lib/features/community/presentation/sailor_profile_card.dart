@@ -7,6 +7,8 @@ import '../../../core/l10n/l10n_strings.dart';
 import '../../deck/application/trip_log_controller.dart';
 import '../../deck/domain/sea_trip_log.dart';
 import '../application/reputation_controller.dart';
+import 'badges_screen.dart';
+import 'reputation_shell.dart';
 import 'sailor_level_screen.dart';
 
 /// TEKNEM sekmesindeki "Denizci Profilim" kartı.
@@ -21,18 +23,15 @@ import 'sailor_level_screen.dart';
 class SailorProfileCard extends ConsumerWidget {
   const SailorProfileCard({super.key});
 
-  static String _fmtNm(double nm) => nm >= 10 ? nm.round().toString() : nm.toStringAsFixed(1);
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (!ref.watch(hasRealAccountProvider)) return const SizedBox.shrink();
 
+    // TÜM izlemeler build içinde yapılır. `onData` geri çağrısı build bittikten
+    // SONRA koşar; oradan ref.watch etmek aboneliği her karede kapatıp yeniden
+    // açardı (Riverpod, build sonunda yenilenmeyen bağımlılıkları kapatır).
     final L10n t = ref.watch(l10nProvider);
-    final ThemeData theme = Theme.of(context);
     final AsyncValue<ReputationSummary> async = ref.watch(reputationSummaryProvider);
-    // valueOrNull ŞART: hata durumunda .value istisnayı YENİDEN FIRLATIR ve
-    // ağ yokken bütün Teknem sekmesi çökerdi (CI dersi 2026-08).
-    final ReputationSummary s = async.valueOrNull ?? ReputationSummary.empty;
 
     // Sezon istatistiği Defter'deki hesabın aynısı — iki ekranda iki farklı
     // sayı görünmesin diye aynı kaynaktan, aynı kuralla.
@@ -45,9 +44,31 @@ class SailorProfileCard extends ConsumerWidget {
       nm += x.distanceNm;
     }
 
+    return Padding(
+      padding: const EdgeInsets.only(top: 18),
+      child: _card(context, t, async, trips, nm),
+    );
+  }
+
+  /// SEYİR ve NM CİHAZDAN gelir — ağ hatası onları GİZLEMEZ. Kart her zaman
+  /// çizilir; yalnız sunucudan gelen bölüm (seviye, puan, bölge, rozet)
+  /// hata/yükleme durumuna göre değişir. Eskiden kartın tamamı kayboluyor ve
+  /// telefonda duran seyir kayıtları da görünmez oluyordu (inceleme bulgusu).
+  Widget _card(
+    BuildContext context,
+    L10n t,
+    AsyncValue<ReputationSummary> async,
+    int trips,
+    double nm,
+  ) {
+    final ThemeData theme = Theme.of(context);
+    final ReputationSummary? data = async.valueOrNull;
+    final ReputationSummary s = data ?? ReputationSummary.empty;
+    final bool failed = data == null && async.hasError;
+    final bool loading = data == null && !async.hasError;
+
     return Container(
       key: const ValueKey<String>('sailor-profile-card'),
-      margin: const EdgeInsets.only(top: 18),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(18),
@@ -74,9 +95,19 @@ class SailorProfileCard extends ConsumerWidget {
                         color: DocklyColors.accentTurquoise.withValues(alpha: 0.16),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Center(
-                        child: DocklyIcon(DocklyIcons.award,
-                            size: 18, color: DocklyColors.accentTurquoise),
+                      // Ad varsa BAŞ HARFLER, yoksa genel rozet ikonu.
+                      // Uydurma harf gösterilmez (0-uydurma kuralı).
+                      child: Center(
+                        child: s.initials.isEmpty
+                            ? const DocklyIcon(DocklyIcons.award,
+                                size: 18, color: DocklyColors.accentTurquoise)
+                            : Text(
+                                s.initials,
+                                style: theme.textTheme.labelLarge?.copyWith(
+                                  color: DocklyColors.accentTurquoise,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -85,15 +116,29 @@ class SailorProfileCard extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            t.sailorProfileTitle,
+                            // Kartın başlığı KAPTANIN ADIDIR; ad gelmediyse
+                            // bölüm adına düşer (onaylı tasarım: "FK · Feridun Kara").
+                            s.displayName.isEmpty ? t.sailorProfileTitle : s.displayName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: theme.textTheme.titleSmall
                                 ?.copyWith(fontWeight: FontWeight.w800),
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            t.levelLabel(s.levelCode),
+                            // Seviye PUANDAN türetilir (sunucunun level_code'u
+                            // ödül yazımından sonra bir an geride kalabiliyor).
+                            // Veri yokken seviye UYDURULMAZ: "Yeni Denizci"
+                            // yazmak 2.840 puanlı kaptana yalan olurdu.
+                            data == null
+                                ? (failed ? t.reputationLoadFailed : '—')
+                                : t.levelLabel(levelForPoints(s.points)),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: DocklyColors.accentTurquoise,
+                              color: failed
+                                  ? theme.colorScheme.onSurfaceVariant
+                                  : DocklyColors.accentTurquoise,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -111,22 +156,29 @@ class SailorProfileCard extends ConsumerWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      Expanded(child: _Stat(caption: t.sailorTripsCap, value: '$trips')),
+                      Expanded(
+                        child: _Stat(caption: t.sailorTripsCap, value: formatCount(t, trips)),
+                      ),
                       Expanded(
                         child: _Stat(
                           caption: t.sailorNmCap,
-                          value: nm > 0 ? '≈ ${_fmtNm(nm)}' : '—',
+                          value: nm > 0 ? '≈ ${formatNm(t, nm)}' : '—',
                         ),
                       ),
                       Expanded(
-                        child: _Stat(caption: t.sailorPointsCap, value: '${s.points}'),
+                        child: _Stat(
+                          caption: t.sailorPointsCap,
+                          // Sunucudan gelmediyse SIFIR YAZILMAZ: "0 puan" ile
+                          // "ulaşamadım" aynı şey değildir.
+                          value: data == null ? '—' : formatCount(t, s.points),
+                        ),
                       ),
                     ],
                   ),
                 ),
                 // Bölgesel uzmanlık: "Fethiye · 22 katkı". Katkı yoksa çizilmez —
                 // boş çip şeridi hiçbir şey anlatmaz.
-                if (s.areas.isNotEmpty) ...<Widget>[
+                if (data != null && s.areas.isNotEmpty) ...<Widget>[
                   const SizedBox(height: 10),
                   Wrap(
                     spacing: 6,
@@ -140,7 +192,8 @@ class SailorProfileCard extends ConsumerWidget {
                             borderRadius: BorderRadius.circular(999),
                           ),
                           child: Text(
-                            '${a.name} · ${L10n.fmt(t.sailorAreaCountFmt, '${a.count}')}',
+                            '${a.name} · '
+                            '${L10n.fmt(t.sailorAreaCountFmt, formatCount(t, a.count))}',
                             style: theme.textTheme.labelSmall?.copyWith(
                               color: theme.colorScheme.primary,
                               fontWeight: FontWeight.w700,
@@ -150,8 +203,32 @@ class SailorProfileCard extends ConsumerWidget {
                     ],
                   ),
                 ],
-                if (s.isEmpty) ...<Widget>[
-                  const SizedBox(height: 10),
+                const SizedBox(height: 10),
+                // ROZETLERİM — onaylı tasarımda karttan DOĞRUDAN açılır.
+                // Seviye ekranının arkasına saklanınca üç dokunuş uzağa
+                // düşüyordu (inceleme bulgusu 2026-08).
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton.icon(
+                    key: const ValueKey<String>('sailor-badges'),
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(builder: (_) => const BadgesScreen()),
+                    ),
+                    icon: const DocklyIcon(DocklyIcons.award, size: 16),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      minimumSize: const Size(0, 34),
+                    ),
+                    label: Text(
+                      s.earnedBadges.isEmpty
+                          ? t.sailorBadgesCta
+                          : '${t.sailorBadgesCta} · ${s.earnedBadges.length}',
+                    ),
+                  ),
+                ),
+                // "Henüz katkın yok" YALNIZ veri GERÇEKTEN geldiyse yazılır.
+                if (data != null && s.isEmpty) ...<Widget>[
+                  const SizedBox(height: 2),
                   Text(
                     t.sailorProfileEmpty,
                     style: theme.textTheme.bodySmall?.copyWith(
@@ -160,6 +237,7 @@ class SailorProfileCard extends ConsumerWidget {
                     ),
                   ),
                 ],
+                if (loading) const LinearProgressIndicator(minHeight: 2),
               ],
             ),
           ),

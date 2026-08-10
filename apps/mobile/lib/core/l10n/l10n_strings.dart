@@ -517,6 +517,12 @@ class L10n {
     required this.nearbyDistanceFmt,
     required this.actionFailed,
     required this.agoDayFmt,
+    required this.reputationLoadFailed,
+    required this.sailorBadgesCta,
+    required this.thousandsSep,
+    required this.decimalSep,
+    required this.noteKindNeedsGps,
+    required this.noteLocateFailed,
     required this.gateNoteMsg,
     required this.levelNew,
     required this.levelCoastal,
@@ -739,6 +745,14 @@ class L10n {
   final String nearbyDistanceFmt;
   final String actionFailed;
   final String agoDayFmt;
+  final String reputationLoadFailed;
+  final String sailorBadgesCta;
+  /// Binlik ve ondalık ayraç — sayılar her dilde o dilin okuduğu gibi yazılır
+  /// (tr: 2.840 / 4,4 · en: 2,840 / 4.4 · ru: 2 840 / 4,4).
+  final String thousandsSep;
+  final String decimalSep;
+  final String noteKindNeedsGps;
+  final String noteLocateFailed;
   final String gateNoteMsg;
   final String levelNew;
   final String levelCoastal;
@@ -1647,6 +1661,12 @@ const L10n _tr = L10n(
   nearbyDistanceFmt: '{0} NM',
   actionFailed: 'İşlem tamamlanamadı. Tekrar dene.',
   agoDayFmt: '{0} gün önce',
+  reputationLoadFailed: 'Bilgilerin şu an yüklenemedi. Bağlantını kontrol et.',
+  sailorBadgesCta: 'Rozetlerim',
+  thousandsSep: '.',
+  decimalSep: ',',
+  noteKindNeedsGps: 'Güncel durum ve uyarı notu, yanlış bilgiyi önlemek için gerçek konumunu ister.',
+  noteLocateFailed: 'Konum alınamadı. Tarayıcı ya da telefon ayarlarından konum iznini açman gerekiyor.',
   gateNoteMsg: 'Not bırakmak için ücretsiz bir hesap gerekir.',
   levelNew: 'Yeni Denizci',
   levelCoastal: 'Kıyı Kaşifi',
@@ -2254,6 +2274,12 @@ const L10n _en = L10n(
   nearbyDistanceFmt: '{0} NM',
   actionFailed: 'Could not complete the action. Try again.',
   agoDayFmt: '{0} d ago',
+  reputationLoadFailed: 'Your details could not be loaded right now. Check your connection.',
+  sailorBadgesCta: 'My badges',
+  thousandsSep: ',',
+  decimalSep: '.',
+  noteKindNeedsGps: 'Status and hazard notes need your real location, to keep the information trustworthy.',
+  noteLocateFailed: 'Could not get your location. Allow location access in your browser or phone settings.',
   gateNoteMsg: 'A free account is required to leave a note.',
   levelNew: 'New Sailor',
   levelCoastal: 'Coastal Explorer',
@@ -2861,6 +2887,12 @@ const L10n _es = L10n(
   nearbyDistanceFmt: '{0} NM',
   actionFailed: 'No se pudo completar la acción. Inténtalo de nuevo.',
   agoDayFmt: 'hace {0} d',
+  reputationLoadFailed: 'No se pudieron cargar tus datos ahora. Revisa tu conexión.',
+  sailorBadgesCta: 'Mis insignias',
+  thousandsSep: '.',
+  decimalSep: ',',
+  noteKindNeedsGps: 'Las notas de estado y aviso necesitan tu ubicación real, para que la información sea fiable.',
+  noteLocateFailed: 'No se pudo obtener tu ubicación. Permite el acceso en el navegador o en los ajustes del teléfono.',
   gateNoteMsg: 'Se requiere una cuenta gratuita para dejar una nota.',
   levelNew: 'Marinero nuevo',
   levelCoastal: 'Explorador costero',
@@ -3468,6 +3500,12 @@ const L10n _ru = L10n(
   nearbyDistanceFmt: '{0} NM',
   actionFailed: 'Не удалось выполнить действие. Попробуйте ещё раз.',
   agoDayFmt: '{0} дн. назад',
+  reputationLoadFailed: 'Не удалось загрузить данные. Проверьте соединение.',
+  sailorBadgesCta: 'Мои значки',
+  thousandsSep: ' ',
+  decimalSep: ',',
+  noteKindNeedsGps: 'Заметки о состоянии и предупреждения требуют вашего реального местоположения — так информация остаётся достоверной.',
+  noteLocateFailed: 'Не удалось определить местоположение. Разрешите доступ в браузере или настройках телефона.',
   gateNoteMsg: 'Для заметки нужна бесплатная учётная запись.',
   levelNew: 'Новый моряк',
   levelCoastal: 'Исследователь побережья',

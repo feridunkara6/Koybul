@@ -49,8 +49,8 @@ void main() {
     expect(find.text('Kızılada'), findsOneWidget);
     expect(find.text('Göcek Bedri Rahmi'), findsOneWidget);
     expect(find.textContaining('Şamandıra ücreti'), findsOneWidget);
-    // 10 NM altı ondalıklı, üstü yuvarlanır.
-    expect(find.textContaining('4.0 NM'), findsOneWidget);
+    // Mesafe biçimi kartlarla AYNI kuralı izler: 4.0 → "4", 12.4 → "12".
+    expect(find.textContaining('4 NM'), findsOneWidget);
     expect(find.textContaining('12 NM'), findsOneWidget);
   });
 

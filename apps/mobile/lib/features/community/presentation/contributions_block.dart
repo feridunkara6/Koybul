@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../application/reputation_controller.dart';
 import 'moderation_screen.dart';
+import 'reputation_shell.dart';
 import 'my_contributions_screen.dart';
 
 /// PROFİL ekranındaki katkı sayaç bloğu: Yayında · İncelemede · Reddedilen.
@@ -20,8 +21,17 @@ class ContributionsBlock extends ConsumerWidget {
     if (!ref.watch(hasRealAccountProvider)) return const SizedBox.shrink();
 
     final L10n t = ref.watch(l10nProvider);
-    final ReputationSummary s =
-        ref.watch(reputationSummaryProvider).valueOrNull ?? ReputationSummary.empty;
+    final AsyncValue<ReputationSummary> async = ref.watch(reputationSummaryProvider);
+    // Sayaçlar okunamadıysa "0" YAZILMAZ: sıfır katkı ile ulaşılamayan sunucu
+    // aynı şey değildir. Uyarı kutusu çıkar, sayaçlar beklemez.
+    if (async.valueOrNull == null && async.hasError) {
+      return const Padding(
+        key: ValueKey<String>('contributions-block'),
+        padding: EdgeInsets.only(top: 12),
+        child: ReputationErrorBox(),
+      );
+    }
+    final ReputationSummary s = async.valueOrNull ?? ReputationSummary.empty;
 
     return Padding(
       key: const ValueKey<String>('contributions-block'),
@@ -29,6 +39,7 @@ class ContributionsBlock extends ConsumerWidget {
       child: Column(
         children: <Widget>[
           _CountRow(
+            t: t,
             icon: DocklyIcons.checkCircle,
             color: DocklyColors.success,
             label: t.contribTabPublished,
@@ -37,6 +48,7 @@ class ContributionsBlock extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           _CountRow(
+            t: t,
             icon: DocklyIcons.amClock,
             color: DocklyColors.warning,
             label: t.contribTabPending,
@@ -45,6 +57,7 @@ class ContributionsBlock extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           _CountRow(
+            t: t,
             icon: DocklyIcons.clear,
             color: DocklyColors.error,
             label: t.contribTabRejected,
@@ -59,6 +72,7 @@ class ContributionsBlock extends ConsumerWidget {
 
 class _CountRow extends StatelessWidget {
   const _CountRow({
+    required this.t,
     required this.icon,
     required this.color,
     required this.label,
@@ -66,6 +80,7 @@ class _CountRow extends StatelessWidget {
     required this.status,
   });
 
+  final L10n t;
   final DocklyIconData icon;
   final Color color;
   final String label;
@@ -98,7 +113,7 @@ class _CountRow extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(child: Text(label, style: theme.textTheme.bodyMedium)),
               Text(
-                '$count',
+                formatCount(t, count),
                 style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
               ),
               const SizedBox(width: 8),

@@ -146,6 +146,15 @@ export class PrismaReputationRepository implements ReputationRepository {
       FROM user_reputation WHERE user_id = ${userId}::uuid
     `);
 
+    // Ad, not kartlarındaki yazar adıyla AYNI kaynaktan gelir (user_profiles).
+    // BURADA VARSAYILAN AD KOYULMAZ: profil satırı henüz yoksa boş döner ve
+    // istemci kendi dilindeki başlığa düşer. Sunucu Türkçe bir yer tutucu
+    // gönderseydi İngilizce uygulamada da o metin görünür, avatar da olmayan
+    // bir addan baş harf uydururdu (inceleme bulgusu 2026-08).
+    const [profile] = await this.prisma.$queryRaw<{ displayName: string | null }[]>(Prisma.sql`
+      SELECT display_name AS "displayName" FROM user_profiles WHERE user_id = ${userId}::uuid
+    `);
+
     const [pending] = await this.prisma.$queryRaw<{ n: number }[]>(Prisma.sql`
       SELECT (
         (SELECT count(*) FROM location_notes
@@ -177,6 +186,7 @@ export class PrismaReputationRepository implements ReputationRepository {
 
     const points = Number(rep?.points ?? 0);
     return {
+      displayName: profile?.displayName ?? '',
       points,
       levelCode: (rep?.levelCode ?? 'new') as LevelCode,
       pointsToNext: pointsToNextLevel(points),

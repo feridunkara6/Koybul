@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
-import '../application/reputation_controller.dart';
+import 'reputation_shell.dart';
 
 /// Rozet koduna karşılık gelen ikon. Bilinmeyen kod (sunucu yeni rozet
 /// eklerse) genel rozet ikonuna düşer — ekran çökmez.
@@ -30,26 +30,28 @@ class BadgesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // t BURADA izlenir: onData geri çağrısı build bittikten sonra koşar ve
+    // oradan ref.watch etmek aboneliği her karede kapatıp yeniden açardı.
     final L10n t = ref.watch(l10nProvider);
+    return Scaffold(
+      appBar: AppBar(title: Text(t.badgesTitle)),
+      body: ReputationScope(
+        loading: const Center(child: ReputationLoadingBox()),
+        error: const Padding(padding: EdgeInsets.all(16), child: ReputationErrorBox()),
+        onData: (ReputationSummary s) => _body(context, t, s),
+      ),
+    );
+  }
+
+  Widget _body(BuildContext context, L10n t, ReputationSummary s) {
     final ThemeData theme = Theme.of(context);
-    final AsyncValue<ReputationSummary> async = ref.watch(reputationSummaryProvider);
-    final ReputationSummary s = async.valueOrNull ?? ReputationSummary.empty;
     final List<BadgeProgress> earned = s.earnedBadges;
     final List<BadgeProgress> locked = s.lockedBadges;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t.badgesTitle)),
-      body: ListView(
+    return ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
         children: <Widget>[
-          if (async.isLoading && s.badges.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 24),
-              child: Center(
-                child: SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2)),
-              ),
-            )
-          else if (earned.isEmpty)
+          if (earned.isEmpty)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
@@ -71,8 +73,7 @@ class BadgesScreen extends ConsumerWidget {
             for (final BadgeProgress b in locked) BadgeRow(badge: b),
           ],
         ],
-      ),
-    );
+      );
   }
 }
 
@@ -170,7 +171,7 @@ class BadgeRow extends ConsumerWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        '${badge.current}/${badge.target}',
+                        '${formatCount(t, badge.current)}/${formatCount(t, badge.target)}',
                         style: theme.textTheme.labelSmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                           fontWeight: FontWeight.w800,

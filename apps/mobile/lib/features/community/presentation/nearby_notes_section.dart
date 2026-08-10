@@ -7,6 +7,7 @@ import '../../../core/l10n/l10n_strings.dart';
 import '../../../core/widgets/section_card.dart';
 import '../application/community_controller.dart';
 import 'note_card.dart';
+import 'reputation_shell.dart';
 
 /// BUGÜN ekranının en altındaki "Yakında paylaşılanlar" kartı.
 ///
@@ -101,7 +102,7 @@ class _NearbyRow extends ConsumerWidget {
                   <String>[
                     if (n.author.displayName.isNotEmpty) n.author.displayName,
                     relativeTime(t, n.createdAt),
-                    L10n.fmt(t.nearbyDistanceFmt, _fmtNm(item.distanceNm)),
+                    L10n.fmt(t.nearbyDistanceFmt, formatNm(t, item.distanceNm)),
                   ].join(' · '),
                   style: theme.textTheme.labelSmall
                       ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
@@ -113,9 +114,6 @@ class _NearbyRow extends ConsumerWidget {
       ),
     );
   }
-
-  static String _fmtNm(double nm) =>
-      nm >= 10 ? nm.round().toString() : nm.toStringAsFixed(1);
 }
 
 /// ISO zaman damgasını "az önce / 12 dk önce / 6 sa önce / 3 gün önce"ye

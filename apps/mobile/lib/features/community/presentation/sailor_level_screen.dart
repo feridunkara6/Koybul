@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
 import '../../../core/widgets/section_card.dart';
-import '../application/reputation_controller.dart';
 import 'badges_screen.dart';
 import 'contribution_points_screen.dart';
+import 'reputation_shell.dart';
 
 /// Seviye eşikleri — SUNUCUDAKİ `LEVELS` ile birebir aynı olmalıdır.
 /// Sunucu yalnız kodu gönderir; eşikleri burada göstermek "bir sonraki seviye
@@ -20,6 +20,27 @@ const List<({String code, int minPoints})> kSailorLevels = <({String code, int m
   (code: 'pilot', minPoints: 4000),
 ];
 
+/// Verilen puanın SEVİYE KODU — sunucudaki `levelForPoints` ile aynı kural.
+String levelForPoints(int points) {
+  String code = kSailorLevels.first.code;
+  for (final ({String code, int minPoints}) l in kSailorLevels) {
+    if (points >= l.minPoints) code = l.code;
+  }
+  return code;
+}
+
+/// Verilen puandan SONRAKİ seviye; en üstteyse null.
+/// Saf ve birim testli: "en üst seviyedesin" yazısının tek karar noktası burası.
+({String code, int minPoints})? nextLevelFor(int points) {
+  // Ceza puanları toplamı eksiye düşürebilir; eksi puanda "sıradaki seviye
+  // Yeni Denizci" demek kaptanın zaten bulunduğu seviyeyi hedef gösterirdi.
+  final int p = points < 0 ? 0 : points;
+  for (final ({String code, int minPoints}) l in kSailorLevels) {
+    if (l.minPoints > p) return l;
+  }
+  return null;
+}
+
 /// "Denizci Seviyem" ekranı — Teknem'deki Denizci Profilim kartından açılır.
 ///
 /// Ekranın TEK işi beklentiyi doğru kurmak: seviye bir ETİKETTİR, ayrıcalık
@@ -29,30 +50,36 @@ class SailorLevelScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // t BURADA izlenir (onData build'den sonra koşuyor — abonelik churn'ü).
     final L10n t = ref.watch(l10nProvider);
-    final ThemeData theme = Theme.of(context);
-    final AsyncValue<ReputationSummary> async = ref.watch(reputationSummaryProvider);
-    final ReputationSummary s = async.valueOrNull ?? ReputationSummary.empty;
-    final int? toNext = s.pointsToNext;
-    final String nextCode = kSailorLevels
-        .firstWhere(
-          (({String code, int minPoints}) l) => l.minPoints > s.points,
-          orElse: () => kSailorLevels.last,
-        )
-        .code;
-
     return Scaffold(
       appBar: AppBar(title: Text(t.levelScreenTitle)),
-      body: ListView(
+      // Hata, boşlukla KARIŞTIRILMAZ: ağ yokken "0 puan / Yeni Denizci"
+      // göstermek yerine dürüst bir uyarı ve "Tekrar dene" çıkar.
+      body: ReputationScope(
+        loading: const Center(child: ReputationLoadingBox()),
+        error: const Padding(padding: EdgeInsets.all(16), child: ReputationErrorBox()),
+        onData: (ReputationSummary s) => _body(context, t, s),
+      ),
+    );
+  }
+
+  Widget _body(BuildContext context, L10n t, ReputationSummary s) {
+    final ThemeData theme = Theme.of(context);
+    // Bir sonraki seviye İSTEMCİDE hesaplanır. Sunucunun `pointsToNext`
+    // alanına GÜVENİLMEZ: yeni hesapta ve ağ hatasında null gelir, o da
+    // "en üst seviyedesin" olarak okunuyordu — 0 puanlı kaptana "en üst
+    // seviyedesin" diyen bir ekran çıkmıştı (hata 2026-08).
+    final ({String code, int minPoints})? next = nextLevelFor(s.points);
+    // Bulunulan seviye de PUANDAN türetilir. Sunucunun `level_code` alanı
+    // ödül yazımından sonra bir an geride kalabiliyor; karışık kaynak
+    // "Yeni Denizci · 2.840 puan" gibi kendi kendiyle çelişen bir ekran
+    // üretirdi (inceleme bulgusu 2026-08).
+    final String levelCode = levelForPoints(s.points);
+
+    return ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
         children: <Widget>[
-          if (async.isLoading && s.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 24),
-              child: Center(
-                child: SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2)),
-              ),
-            ),
           Container(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
             decoration: BoxDecoration(
@@ -72,7 +99,7 @@ class SailorLevelScreen extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        t.levelLabel(s.levelCode),
+                        t.levelLabel(levelCode),
                         style: theme.textTheme.titleMedium?.copyWith(
                           color: const Color(0xFFFFFFFF),
                           fontWeight: FontWeight.w800,
@@ -83,7 +110,7 @@ class SailorLevelScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  L10n.fmt(t.levelPointsFmt, '${s.points}'),
+                  L10n.fmt(t.levelPointsFmt, formatCount(t, s.points)),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: const Color(0xFFEAF6FF),
                     fontWeight: FontWeight.w600,
@@ -91,9 +118,13 @@ class SailorLevelScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  toNext == null
+                  next == null
                       ? t.levelTopReached
-                      : L10n.fmt2(t.levelToNextFmt, t.levelLabel(nextCode), '$toNext'),
+                      : L10n.fmt2(
+                          t.levelToNextFmt,
+                          t.levelLabel(next.code),
+                          formatCount(t, next.minPoints - s.points),
+                        ),
                   style: theme.textTheme.bodySmall?.copyWith(color: const Color(0xFFD7E6F5)),
                 ),
               ],
@@ -113,8 +144,9 @@ class SailorLevelScreen extends ConsumerWidget {
               label: t.levelLabel(l.code),
               // Bulunduğu seviyede eşik yerine "şu an" yazar: kaptan kendini
               // listede bir bakışta bulur.
-              trailing: l.code == s.levelCode ? t.levelCurrentLabel : '${l.minPoints}',
-              current: l.code == s.levelCode,
+              trailing:
+                  l.code == levelCode ? t.levelCurrentLabel : formatCount(t, l.minPoints),
+              current: l.code == levelCode,
               reached: s.points >= l.minPoints,
             ),
           const SizedBox(height: 16),
@@ -134,8 +166,7 @@ class SailorLevelScreen extends ConsumerWidget {
             ),
           ),
         ],
-      ),
-    );
+      );
   }
 }
 

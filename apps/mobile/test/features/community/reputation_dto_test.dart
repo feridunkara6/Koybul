@@ -7,6 +7,7 @@ void main() {
   group('ReputationSummary.fromJson', () {
     test('tam yanıt okunur; rozetler badgeProgress alanından gelir', () {
       final ReputationSummary s = ReputationSummary.fromJson(<String, dynamic>{
+        'displayName': 'Feridun Kara',
         'points': 2840,
         'levelCode': 'master',
         'pointsToNext': 1160,
@@ -38,6 +39,8 @@ void main() {
         ],
       });
 
+      expect(s.displayName, 'Feridun Kara');
+      expect(s.initials, 'FK');
       expect(s.points, 2840);
       expect(s.areas.single.name, 'Fethiye');
       expect(s.earnedBadges.map((BadgeProgress b) => b.code), <String>['lighthouse']);
@@ -47,6 +50,9 @@ void main() {
 
     test('eksik alanlar varsayılana düşer, çökme olmaz', () {
       final ReputationSummary s = ReputationSummary.fromJson(<String, dynamic>{});
+      // Ad gelmezse kart ürün adına düşer; baş harf UYDURULMAZ.
+      expect(s.displayName, '');
+      expect(s.initials, '');
       expect(s.points, 0);
       expect(s.levelCode, 'new');
       expect(s.pointsToNext, isNull);

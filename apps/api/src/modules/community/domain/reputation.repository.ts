@@ -10,6 +10,8 @@ export interface AwardWindow {
 }
 
 export interface ReputationSummary {
+  /** Kaptanın kamuya açık adı — kart "Denizci Profilim" yerine BUNU yazar. */
+  displayName: string;
   points: number;
   levelCode: LevelCode;
   pointsToNext: number | null;

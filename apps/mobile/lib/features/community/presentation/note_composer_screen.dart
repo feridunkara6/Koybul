@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../../core/origin_provider.dart';
+import '../../location/application/location_controller.dart';
 import '../../weather/application/weather_controller.dart';
 import '../application/community_controller.dart';
 import '../application/reputation_controller.dart';
@@ -36,6 +38,19 @@ class NoteComposerScreen extends ConsumerStatefulWidget {
   ConsumerState<NoteComposerScreen> createState() => _NoteComposerScreenState();
 }
 
+/// Bu ekrandan yazılabilen not tipleri.
+///
+/// SEYİR NOTU BURADA YOK: iki nokta ister (nereden → nereye) ve bu ekran tek
+/// bir koydan açılıyor, varış noktasını soracak bir yer yok. Listede duruyordu
+/// ama gönderilince sunucu "seyir notu iki nokta ister" diye geri çeviriyordu —
+/// kaptan yazdığı notu kaybediyordu (hata 2026-08). Varış seçici gelene kadar
+/// seçenek gösterilmiyor; sunucu tarafı olduğu gibi duruyor.
+const List<NoteKind> kComposerKinds = <NoteKind>[
+  NoteKind.status,
+  NoteKind.hazard,
+  NoteKind.experience,
+];
+
 class _NoteComposerScreenState extends ConsumerState<NoteComposerScreen> {
   NoteKind _kind = NoteKind.experience;
   final TextEditingController _body = TextEditingController();
@@ -47,6 +62,23 @@ class _NoteComposerScreenState extends ConsumerState<NoteComposerScreen> {
     super.initState();
     // Kaptan noktanın yanındaysa muhtemelen "şu anki durumu" paylaşacaktır.
     if (widget.devicePosition != null) _kind = NoteKind.status;
+  }
+
+  /// GÜNCEL konum. Yapıcıdan gelen değer yalnız BAŞLANGIÇTIR: kaptan bu ekran
+  /// açıkken "Konumumu kullan"a basarsa izin gelir ve kilitli tipler açılmalı.
+  ///
+  /// `read` KULLANILIR: bu getter `_submit` gibi build DIŞINDAN da çağrılıyor
+  /// ve orada `watch` etmek build'e bağlı olmayan bir abonelik açardı.
+  /// Yeniden çizim `build`'in kendi `watch`'ı ile sağlanır.
+  GeoPoint? get _device => ref.read(devicePositionProvider) ?? widget.devicePosition;
+
+  /// Konum izni ister. Reddedilirse kibar bir açıklama çıkar; ekran kapanmaz,
+  /// kaptan "Deneyim" notu yazmaya devam edebilir.
+  Future<void> _askLocation() async {
+    final L10n t = ref.read(l10nProvider);
+    await ref.read(locationControllerProvider.notifier).locateMe();
+    if (!mounted) return;
+    if (ref.read(devicePositionProvider) == null) _snack(t.noteLocateFailed);
   }
 
   @override
@@ -86,7 +118,7 @@ class _NoteComposerScreenState extends ConsumerState<NoteComposerScreen> {
 
   Future<void> _submit() async {
     final L10n t = ref.read(l10nProvider);
-    if (_needsGps(_kind) && widget.devicePosition == null) {
+    if (_needsGps(_kind) && _device == null) {
       _snack(t.noteNeedLocation);
       return;
     }
@@ -100,7 +132,7 @@ class _NoteComposerScreenState extends ConsumerState<NoteComposerScreen> {
             kind: _kind,
             body: _body.text.trim(),
             observedOn: _ymd(_observed),
-            position: _needsGps(_kind) ? widget.devicePosition : null,
+            position: _needsGps(_kind) ? _device : null,
             wind: _currentWind(),
           );
       if (!mounted) return;
@@ -145,7 +177,14 @@ class _NoteComposerScreenState extends ConsumerState<NoteComposerScreen> {
     final int max = _maxChars(_kind);
     final NoteWind? wind = _currentWind();
     final String body = _body.text.trim();
-    final bool canSend = body.length >= 3 && body.length <= max && !_sending;
+    final GeoPoint? device = ref.watch(devicePositionProvider) ?? widget.devicePosition;
+    final bool locating = ref.watch(locationControllerProvider) == LocationStatus.loading;
+    // Konum eksikse düğme de KAPALIDIR: sebep yukarıda yazıyor, kaptan
+    // yazdıktan sonra reddedilmek yerine baştan görsün.
+    final bool canSend = body.length >= 3 &&
+        body.length <= max &&
+        !_sending &&
+        !(_needsGps(_kind) && device == null);
 
     return Scaffold(
       appBar: AppBar(title: Text(t.noteComposerTitle)),
@@ -153,11 +192,32 @@ class _NoteComposerScreenState extends ConsumerState<NoteComposerScreen> {
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
         children: <Widget>[
           _StepLabel(index: 1, text: t.noteStep1),
-          for (final NoteKind k in NoteKind.values)
+          for (final NoteKind k in kComposerKinds)
             _KindTile(
               kind: k,
               selected: _kind == k,
+              // Konum gerektiren tip, konum yokken SEÇİLEMEZ ve sebebi altta
+              // yazar. Eskiden seçilebiliyordu; kaptan notu yazıyor, ancak
+              // "Gönder"e bastıktan sonra reddediliyordu.
+              locked: _needsGps(k) && device == null,
               onTap: () => setState(() => _kind = k),
+            ),
+          if (device == null)
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    t.noteKindNeedsGps,
+                    style: theme.textTheme.bodySmall
+                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant, height: 1.35),
+                  ),
+                ),
+                TextButton(
+                  key: const ValueKey<String>('note-locate'),
+                  onPressed: locating ? null : _askLocation,
+                  child: Text(t.locUseBtn),
+                ),
+              ],
             ),
           const SizedBox(height: 18),
           _StepLabel(index: 2, text: t.noteStep2),
@@ -198,8 +258,8 @@ class _NoteComposerScreenState extends ConsumerState<NoteComposerScreen> {
           if (_needsGps(_kind))
             _ContextRow(
               icon: DocklyIcons.verified,
-              label: widget.devicePosition != null ? t.noteGpsOk : t.noteNeedLocation,
-              danger: widget.devicePosition == null,
+              label: device != null ? t.noteGpsOk : t.noteNeedLocation,
+              danger: device == null,
             ),
           const SizedBox(height: 14),
           DocklyButton(
@@ -255,11 +315,19 @@ class _StepLabel extends StatelessWidget {
 }
 
 class _KindTile extends ConsumerWidget {
-  const _KindTile({required this.kind, required this.selected, required this.onTap});
+  const _KindTile({
+    required this.kind,
+    required this.selected,
+    required this.onTap,
+    this.locked = false,
+  });
 
   final NoteKind kind;
   final bool selected;
   final VoidCallback onTap;
+
+  /// Konum olmadan seçilemeyen tip: soluk çizilir, dokunuşa yanıt vermez.
+  final bool locked;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -272,42 +340,50 @@ class _KindTile extends ConsumerWidget {
       NoteKind.experience => t.noteKindExperienceHint,
       NoteKind.passage => t.noteKindPassageHint,
     };
-    return InkWell(
-      key: ValueKey<String>('note-kind-${kind.wire}'),
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: selected ? color.withValues(alpha: 0.08) : theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: selected ? color : theme.colorScheme.outline,
-            width: selected ? 1.6 : 1,
-          ),
-        ),
-        child: Row(
-          children: <Widget>[
-            DocklyIcon(noteKindIcon(kind), size: 18, color: color),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    t.noteKindLabel(kind.wire),
-                    style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  Text(
-                    hint,
-                    style: theme.textTheme.bodySmall
-                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                  ),
-                ],
-              ),
+    final bool active = selected && !locked;
+    return Opacity(
+      opacity: locked ? 0.45 : 1,
+      child: InkWell(
+        key: ValueKey<String>('note-kind-${kind.wire}'),
+        onTap: locked ? null : onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: active ? color.withValues(alpha: 0.08) : theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: active ? color : theme.colorScheme.outline,
+              width: active ? 1.6 : 1,
             ),
-          ],
+          ),
+          child: Row(
+            children: <Widget>[
+              DocklyIcon(
+                locked ? DocklyIcons.lockOutline : noteKindIcon(kind),
+                size: 18,
+                color: locked ? theme.colorScheme.onSurfaceVariant : color,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      t.noteKindLabel(kind.wire),
+                      style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                    Text(
+                      hint,
+                      style: theme.textTheme.bodySmall
+                          ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

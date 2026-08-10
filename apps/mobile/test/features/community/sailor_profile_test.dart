@@ -3,6 +3,7 @@ import 'package:dockly_mobile/features/boat/application/maintenance_controller.d
 import 'package:dockly_mobile/features/boat/presentation/boat_screen.dart';
 import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
 import 'package:dockly_mobile/features/community/application/reputation_controller.dart';
+import 'package:dockly_mobile/features/community/presentation/badges_screen.dart';
 import 'package:dockly_mobile/features/community/presentation/sailor_profile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,8 +45,12 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey<String>('sailor-profile-card')), findsOneWidget);
+    // Kartın başlığı KAPTANIN ADI; baş harfler avatar olarak çizilir.
+    expect(find.text('Feridun Kara'), findsOneWidget);
+    expect(find.text('FK'), findsOneWidget);
     expect(find.text('Usta Kaptan'), findsOneWidget);
-    expect(find.text('2840'), findsOneWidget);
+    // Binlik ayraç: 2840 değil 2.840.
+    expect(find.text('2.840'), findsOneWidget);
     expect(find.text('Fethiye · 22 katkı'), findsOneWidget);
     // Mevcut ekranın hiçbir parçası kaybolmadı.
     expect(find.byKey(const ValueKey<String>('boat-edit')), findsOneWidget);
@@ -77,7 +82,7 @@ void main() {
     expect(find.text('—'), findsOneWidget);
   });
 
-  testWidgets('ÖZET YÜKLENEMEZSE kart çökmez: boş özetle çizilir',
+  testWidgets('ÖZET YÜKLENEMEZSE "katkın yok" DEĞİL, dürüst uyarı gösterilir',
       (WidgetTester tester) async {
     await tester.pumpWidget(boat(<Override>[
       signedInAuthOverride(),
@@ -87,9 +92,33 @@ void main() {
     ]));
     await tester.pumpAndSettle();
 
+    // Kart ÇİZİLMEYE DEVAM EDER: seyir ve NM telefonda duruyor, ağ hatası
+    // onları gizlememeli. Yalnız sunucudan gelen kısım "—" olur ve seviye
+    // satırı yerine dürüst uyarı yazar.
     expect(find.byKey(const ValueKey<String>('sailor-profile-card')), findsOneWidget);
+    expect(find.textContaining('yüklenemedi'), findsOneWidget);
+    expect(find.textContaining('Henüz katkın yok'), findsNothing);
+    expect(find.text('Usta Kaptan'), findsNothing);
+    // Ekranın geri kalanı sağlam.
     expect(find.text('Bakım takibi'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('karttan ROZETLERİM doğrudan açılır (tasarımda karttan açılıyor)',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(boat(<Override>[
+      signedInAuthOverride(),
+      reputationGatewayProvider.overrideWithValue(FakeReputationGateway()),
+    ]));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey<String>('sailor-badges')));
+    await tester.pumpAndSettle();
+
+    // Kartın kendi düğmesi de 'Rozetlerim' yazıyor: metne değil EKRANA bakılır,
+    // yoksa dokunuş ıskalasa bile test yeşil kalırdı.
+    expect(find.byType(BadgesScreen), findsOneWidget);
+    expect(find.text('Denizci Seviyem'), findsNothing);
   });
 
   testWidgets('karta dokunmak Denizci Seviyem ekranını açar',
@@ -100,7 +129,9 @@ void main() {
     ]));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const ValueKey<String>('sailor-profile-card')));
+    // Kartın ADINA dokunulur: kartın merkezinde artık "Rozetlerim" düğmesi
+    // var, merkeze dokunmak yanlış ekranı açardı.
+    await tester.tap(find.text('Feridun Kara'));
     await tester.pumpAndSettle();
 
     expect(find.text('Denizci Seviyem'), findsOneWidget);

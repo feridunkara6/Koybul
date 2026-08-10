@@ -184,6 +184,7 @@ class FakeReputationGateway implements ReputationGateway {
 }
 
 ReputationSummary makeSummary({
+  String displayName = 'Feridun Kara',
   int points = 2840,
   String levelCode = 'master',
   int? pointsToNext = 1160,
@@ -195,6 +196,7 @@ ReputationSummary makeSummary({
   List<BadgeProgress>? badges,
 }) {
   return ReputationSummary(
+    displayName: displayName,
     points: points,
     levelCode: levelCode,
     pointsToNext: pointsToNext,

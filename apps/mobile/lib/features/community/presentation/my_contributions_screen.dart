@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../application/reputation_controller.dart';
 import 'note_card.dart';
+import 'reputation_shell.dart';
 
 /// "Katkılarım" ekranı — Profil'deki katkı bloğundan açılır.
 ///
@@ -32,8 +33,13 @@ class _MyContributionsScreenState extends ConsumerState<MyContributionsScreen> {
     final ThemeData theme = Theme.of(context);
     final AsyncValue<List<Note>> async = ref.watch(myNotesProvider(_status));
     final List<Note> notes = async.valueOrNull ?? const <Note>[];
-    final ReputationSummary s =
-        ref.watch(reputationSummaryProvider).valueOrNull ?? ReputationSummary.empty;
+    final AsyncValue<ReputationSummary> summary = ref.watch(reputationSummaryProvider);
+    final ReputationSummary s = summary.valueOrNull ?? ReputationSummary.empty;
+    // Sayaçlar özetten, liste kendi isteğinden gelir: biri düşerse ÖTEKİ
+    // gizlenmez. Sayaç okunamadıysa rakam yerine "—" yazılır — sayısız etiket
+    // "sıfır katkı" gibi okunuyordu (inceleme bulgusu 2026-08).
+    final bool summaryFailed = summary.valueOrNull == null && summary.hasError;
+    final bool listFailed = async.valueOrNull == null && async.hasError;
 
     return Scaffold(
       appBar: AppBar(title: Text(t.contribTitle)),
@@ -48,22 +54,25 @@ class _MyContributionsScreenState extends ConsumerState<MyContributionsScreen> {
             child: Row(
               children: <Widget>[
                 _Seg(
+                  t: t,
                   label: t.contribTabPublished,
-                  count: s.approvedCount,
+                  count: summaryFailed ? null : s.approvedCount,
                   selected: _status == 'approved',
                   onTap: () => setState(() => _status = 'approved'),
                 ),
                 const SizedBox(width: 8),
                 _Seg(
+                  t: t,
                   label: t.contribTabPending,
-                  count: s.pendingCount,
+                  count: summaryFailed ? null : s.pendingCount,
                   selected: _status == 'pending',
                   onTap: () => setState(() => _status = 'pending'),
                 ),
                 const SizedBox(width: 8),
                 _Seg(
+                  t: t,
                   label: t.contribTabRejected,
-                  count: s.rejectedCount,
+                  count: summaryFailed ? null : s.rejectedCount,
                   selected: _status == 'rejected',
                   onTap: () => setState(() => _status = 'rejected'),
                 ),
@@ -71,11 +80,19 @@ class _MyContributionsScreenState extends ConsumerState<MyContributionsScreen> {
             ),
           ),
           Expanded(
-            child: async.isLoading && notes.isEmpty
-                ? const Center(
-                    child: SizedBox(
-                        width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2)),
+            child: listFailed
+                ? Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: ReputationErrorBox(
+                      isRetrying: async.isLoading || summary.isLoading,
+                      onRetry: () {
+                        ref.invalidate(myNotesProvider(_status));
+                        if (summaryFailed) ref.invalidate(reputationSummaryProvider);
+                      },
+                    ),
                   )
+                : async.isLoading && notes.isEmpty
+                ? const Center(child: ReputationLoadingBox())
                 : notes.isEmpty
                     ? Center(
                         child: Padding(
@@ -116,7 +133,8 @@ class _MyContributionsScreenState extends ConsumerState<MyContributionsScreen> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 4, bottom: 10),
                                     child: Text(
-                                      L10n.fmt(t.contribHelpfulFmt, '${n.helpfulCount}'),
+                                      L10n.fmt(
+                                          t.contribHelpfulFmt, formatCount(t, n.helpfulCount)),
                                       style: theme.textTheme.labelSmall?.copyWith(
                                         color: DocklyColors.success,
                                         fontWeight: FontWeight.w700,
@@ -137,14 +155,18 @@ class _MyContributionsScreenState extends ConsumerState<MyContributionsScreen> {
 /// Durum çipi: etiket + sayı rozeti (Defter segmentiyle aynı görsel dil).
 class _Seg extends StatelessWidget {
   const _Seg({
+    required this.t,
     required this.label,
     required this.count,
     required this.selected,
     required this.onTap,
   });
 
+  final L10n t;
   final String label;
-  final int count;
+
+  /// null = sayı OKUNAMADI (etiketin yanında "—" çıkar); 0 = gerçekten sıfır.
+  final int? count;
   final bool selected;
   final VoidCallback onTap;
 
@@ -166,7 +188,9 @@ class _Seg extends StatelessWidget {
             ),
           ),
           child: Text(
-            count > 0 ? '$label $count' : label,
+            count == null
+                ? '$label —'
+                : (count! > 0 ? '$label ${formatCount(t, count!)}' : label),
             style: theme.textTheme.labelMedium?.copyWith(
               fontWeight: FontWeight.w800,
               color: selected ? Colors.white : theme.colorScheme.onSurface,

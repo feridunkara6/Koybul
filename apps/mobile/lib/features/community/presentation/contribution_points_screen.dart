@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
 import '../application/reputation_controller.dart';
+import 'reputation_shell.dart';
 
 /// "Katkı puanı" dökümü — hangi davranış kaç puan getirdi.
 ///
@@ -19,20 +20,37 @@ class ContributionPointsScreen extends ConsumerWidget {
     final L10n t = ref.watch(l10nProvider);
     final ThemeData theme = Theme.of(context);
     final AsyncValue<List<ContributionItem>> async = ref.watch(contributionsProvider);
+    final AsyncValue<ReputationSummary> summary = ref.watch(reputationSummaryProvider);
     final List<ContributionItem> items = async.valueOrNull ?? const <ContributionItem>[];
-    final ReputationSummary s =
-        ref.watch(reputationSummaryProvider).valueOrNull ?? ReputationSummary.empty;
+    final ReputationSummary s = summary.valueOrNull ?? ReputationSummary.empty;
+    // Her sayı KENDİ kaynağının durumuna bakar: döküm düşse bile özet
+    // geldiyse puan gösterilir, tersi de doğrudur. İkisini tek bayrağa
+    // bağlamak sağlam veriyi de gizliyordu (inceleme bulgusu 2026-08).
+    final bool summaryFailed = summary.valueOrNull == null && summary.hasError;
+    final bool listFailed = async.valueOrNull == null && async.hasError;
 
     return Scaffold(
       appBar: AppBar(title: Text(t.pointsTitle)),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
         children: <Widget>[
+          if (summaryFailed || listFailed) ...<Widget>[
+            ReputationErrorBox(
+              isRetrying: summary.isLoading || async.isLoading,
+              // Düşen İSTEK tazelenir; yalnız özeti yenilemek düğmeyi
+              // çalışmıyormuş gibi gösterirdi.
+              onRetry: () {
+                if (summaryFailed) ref.invalidate(reputationSummaryProvider);
+                if (listFailed) ref.invalidate(contributionsProvider);
+              },
+            ),
+            const SizedBox(height: 12),
+          ],
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Text(
-                '${s.points}',
+                summaryFailed ? '—' : formatCount(t, s.points),
                 style: theme.textTheme.headlineMedium
                     ?.copyWith(fontWeight: FontWeight.w800),
               ),
@@ -52,19 +70,14 @@ class ContributionPointsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            L10n.fmt(t.pointsTrustFmt, s.trustScore.toStringAsFixed(2)),
+            L10n.fmt(t.pointsTrustFmt, summaryFailed ? '—' : s.trustScore.toStringAsFixed(2)),
             style: theme.textTheme.bodySmall
                 ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
           ),
           const SizedBox(height: 12),
           if (async.isLoading && items.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 24),
-              child: Center(
-                child: SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2)),
-              ),
-            )
-          else if (items.isEmpty)
+            const ReputationLoadingBox()
+          else if (items.isEmpty && !listFailed)
             Text(
               t.pointsEmpty,
               style: theme.textTheme.bodyMedium
@@ -129,7 +142,9 @@ class _PointRow extends ConsumerWidget {
           Text(
             // 0 puanlı olay da listelenir (tavan dolduysa). "+0" yerine düz 0
             // yazılır: kaptan katkısının kaydedildiğini görsün.
-            item.points > 0 ? '+${item.points}' : '${item.points}',
+            item.points > 0
+                ? '+${formatCount(t, item.points)}'
+                : formatCount(t, item.points),
             style: theme.textTheme.titleSmall?.copyWith(
               color: item.points == 0 ? theme.colorScheme.onSurfaceVariant : tint,
               fontWeight: FontWeight.w800,
