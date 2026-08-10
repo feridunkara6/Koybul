@@ -24,6 +24,7 @@ import '../../onboarding/application/onboarding_controller.dart';
 import '../../route/domain/sea_trip.dart';
 import '../../nearby/presentation/nearby_alternatives.dart';
 import '../../reservation/presentation/reservation_sheet.dart';
+import '../../community/presentation/notes_section.dart';
 import '../../reviews/presentation/reviews_section.dart';
 import '../../route/domain/sea_route.dart';
 import '../../occupancy/application/occupancy_controller.dart';
@@ -170,6 +171,10 @@ class _DetailContent extends ConsumerWidget {
           position: detail.position,
         ),
 
+        // KAPTAN UYARILARI (2026-08 topluluk paketi): açık emniyet uyarıları
+        // rüzgâr bandının hemen ardında; liste kartının içinde kaybolmaz.
+        HazardNotesBand(locationId: detail.id),
+
         // YAKLAŞMA NOTU (onaylı B): açıklama içinde kaybolmaz, uyarı kartı olur.
         if (ap.note != null) _ApproachNoteCard(note: ap.note!),
 
@@ -239,6 +244,15 @@ class _DetailContent extends ConsumerWidget {
         // Rüzgâr & Hava — noktanın 48 saatlik tahmini (MET Norway, atıflı).
         WeatherCard(position: detail.position, accent: ink),
 
+        // KAPTAN NOTLARI (2026-08): denizcilerin bıraktığı tarihli, tipli bilgi.
+        // Yorumlardan AYRI: yorum değerlendirmedir, not bilgidir.
+        NotesSection(
+          locationId: detail.id,
+          locationName: detail.name,
+          position: detail.position,
+          accent: ink,
+        ),
+
         // HAKKINDA aşağıda (önem sırası 2026-08): tanıtım metni, karar verdiren
         // verilerden sonra gelir — içerik aynen korunur.
         if (about != null && about.trim().isNotEmpty)
@@ -249,7 +263,7 @@ class _DetailContent extends ConsumerWidget {
             child: Text(about, style: theme.textTheme.bodyMedium?.copyWith(height: 1.45)),
           ),
 
-        ReviewsSection(idOrSlug: detail.id, accent: ink),
+        ReviewsSection(idOrSlug: detail.id, locationName: detail.name, accent: ink),
         NearbyAlternatives(
           locationId: detail.id,
           position: detail.position,

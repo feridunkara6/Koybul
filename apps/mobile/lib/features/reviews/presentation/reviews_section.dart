@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
 import '../../../core/widgets/section_card.dart';
+import '../../community/presentation/review_composer_screen.dart';
 import '../application/reviews_controller.dart';
 
 /// Detay ekranında "Yorumlar" bölümü (S-09). Onaylı yorumları okuma — misafir
@@ -13,9 +14,17 @@ import '../application/reviews_controller.dart';
 /// mu, yüklenemedi mi?" belirsizliği yaşamaz. Hata durumunda bölüm gizli kalır
 /// (misafiri teknik hatayla rahatsız etmeme kararı korunur).
 class ReviewsSection extends ConsumerWidget {
-  const ReviewsSection({required this.idOrSlug, this.accent, super.key});
+  const ReviewsSection({
+    required this.idOrSlug,
+    this.locationName = '',
+    this.accent,
+    super.key,
+  });
 
   final String idOrSlug;
+
+  /// Yorum yazma ekranında başlık olarak gösterilir.
+  final String locationName;
 
   /// Tip kimlik rengi (2026-08) — başlık madalyonu.
   final Color? accent;
@@ -43,19 +52,40 @@ class ReviewsSection extends ConsumerWidget {
           accent: accent,
           icon: DocklyIcons.chat,
           title: t.reviewsTitle,
-          child: items.isEmpty
-              ? Text(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              if (items.isEmpty)
+                Text(
                   t.revEmpty,
                   style: theme.textTheme.bodyMedium
                       ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                 )
-              : Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    for (final Review r in items) _ReviewCard(review: r),
-                  ],
+              else
+                for (final Review r in items) _ReviewCard(review: r),
+              // YORUM YAZMA (2026-08): bölüm artık yalnız okuma değil.
+              // Üyelik kapısı eylem anında çıkar, gezinmeyi engellemez.
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  key: const ValueKey<String>('review-write'),
+                  onPressed: () => openReviewComposer(
+                    context,
+                    ref,
+                    idOrSlug: idOrSlug,
+                    locationName: locationName,
+                  ),
+                  icon: const DocklyIcon(DocklyIcons.edit, size: 18),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  label: Text(t.reviewWriteCta),
                 ),
+              ),
+            ],
+          ),
         );
       },
     );

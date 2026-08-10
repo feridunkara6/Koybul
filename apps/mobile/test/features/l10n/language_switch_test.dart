@@ -10,8 +10,10 @@ import 'package:dockly_mobile/features/search/application/search_controller.dart
 import 'package:dockly_mobile/features/search/presentation/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dockly_mobile/features/community/application/community_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/community_fakes.dart';
 import '../../support/detail_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/reviews_fakes.dart';
@@ -21,6 +23,7 @@ import '../../support/weather_fakes.dart';
 Widget _app({AppLocale? locale}) {
   return ProviderScope(
     overrides: <Override>[
+      communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
       if (locale != null)
         appLocaleProvider.overrideWith(() => AppLocaleController(locale)),
     ],
@@ -94,6 +97,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: <Override>[
+      communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
           appLocaleProvider.overrideWith(() => AppLocaleController(AppLocale.es)),
           searchGatewayProvider.overrideWithValue(FakeSearchGateway()),
           searchDebounceProvider.overrideWithValue(Duration.zero),
@@ -114,6 +118,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: <Override>[
+      communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
           appLocaleProvider.overrideWith(() => AppLocaleController(AppLocale.ru)),
           searchGatewayProvider.overrideWithValue(FakeSearchGateway()),
           searchDebounceProvider.overrideWithValue(Duration.zero),
@@ -132,6 +137,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: <Override>[
+      communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
           appLocaleProvider.overrideWith(() => AppLocaleController(AppLocale.es)),
           locationDetailGatewayProvider
               .overrideWithValue(FakeLocationDetailGateway(result: sampleAnchorageDetail)),
@@ -155,6 +161,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: <Override>[
+      communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
           appLocaleProvider.overrideWith(() => AppLocaleController(AppLocale.en)),
         ],
         child: const MaterialApp(home: EmergencyScreen()),

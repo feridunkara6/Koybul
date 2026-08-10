@@ -396,6 +396,57 @@ class L10n {
     required this.checklistAllDone,
     required this.checklistTooltip,
     required this.checklistItems,
+    required this.noteGpsOk,
+    required this.noteSectionTitle,
+    required this.noteOnlyHazards,
+    required this.noteSectionEmpty,
+    required this.noteAddCta,
+    required this.noteAllCta,
+    required this.noteCountFmt,
+    required this.noteKindStatus,
+    required this.noteKindHazard,
+    required this.noteKindExperience,
+    required this.noteKindPassage,
+    required this.noteKindStatusHint,
+    required this.noteKindHazardHint,
+    required this.noteKindExperienceHint,
+    required this.noteKindPassageHint,
+    required this.noteComposerTitle,
+    required this.noteStep1,
+    required this.noteStep2,
+    required this.noteStep3,
+    required this.noteAutoFilled,
+    required this.noteBodyHint,
+    required this.noteObservedLabel,
+    required this.noteWindLabel,
+    required this.noteSubmit,
+    required this.noteModerationNotice,
+    required this.noteSubmitted,
+    required this.notePublished,
+    required this.noteNeedLocation,
+    required this.noteTooFar,
+    required this.noteHelpful,
+    required this.noteConfirm,
+    required this.noteDispute,
+    required this.noteConfirmedFmt,
+    required this.noteOwnVote,
+    required this.noteDelete,
+    required this.noteDeleted,
+    required this.noteRecordedWindFmt,
+    required this.noteStatusPending,
+    required this.noteStatusRejected,
+    required this.gateNoteMsg,
+    required this.levelNew,
+    required this.levelCoastal,
+    required this.levelGuide,
+    required this.levelMaster,
+    required this.levelPilot,
+    required this.reviewWriteCta,
+    required this.reviewRatingLabel,
+    required this.reviewBodyHint,
+    required this.reviewSubmitted,
+    required this.reviewDuplicate,
+    required this.gateReviewMsg,
   });
 
   final String navExplore, navSearch, navFavorites, navLogbook, navRequests,
@@ -483,6 +534,59 @@ class L10n {
   // --- Paket 3b: saatler/hava/yorumlar/acil durum ---
   /// TR pusula kısaltması (K/KD/D/GD/G/GB/B/KB) → yerel kısaltma.
   final Map<String, String> compassDirs;
+
+  // ── Topluluk (Kaptan Notları, yorum yazma, denizci seviyeleri) ──
+  final String noteGpsOk;
+  final String noteSectionTitle;
+  final String noteOnlyHazards;
+  final String noteSectionEmpty;
+  final String noteAddCta;
+  final String noteAllCta;
+  final String noteCountFmt;
+  final String noteKindStatus;
+  final String noteKindHazard;
+  final String noteKindExperience;
+  final String noteKindPassage;
+  final String noteKindStatusHint;
+  final String noteKindHazardHint;
+  final String noteKindExperienceHint;
+  final String noteKindPassageHint;
+  final String noteComposerTitle;
+  final String noteStep1;
+  final String noteStep2;
+  final String noteStep3;
+  final String noteAutoFilled;
+  final String noteBodyHint;
+  final String noteObservedLabel;
+  final String noteWindLabel;
+  final String noteSubmit;
+  final String noteModerationNotice;
+  final String noteSubmitted;
+  final String notePublished;
+  final String noteNeedLocation;
+  final String noteTooFar;
+  final String noteHelpful;
+  final String noteConfirm;
+  final String noteDispute;
+  final String noteConfirmedFmt;
+  final String noteOwnVote;
+  final String noteDelete;
+  final String noteDeleted;
+  final String noteRecordedWindFmt;
+  final String noteStatusPending;
+  final String noteStatusRejected;
+  final String gateNoteMsg;
+  final String levelNew;
+  final String levelCoastal;
+  final String levelGuide;
+  final String levelMaster;
+  final String levelPilot;
+  final String reviewWriteCta;
+  final String reviewRatingLabel;
+  final String reviewBodyHint;
+  final String reviewSubmitted;
+  final String reviewDuplicate;
+  final String gateReviewMsg;
 
   /// Gün adları, Pazar=0 … Cumartesi=6 (Postgres/JS düzeni).
   final List<String> dayNames;
@@ -611,6 +715,37 @@ class L10n {
   final List<String> checklistItems;
 
   String windExposedLabel(String code) => windExposedLabels[code] ?? code;
+
+  /// Kaptan Notu tipinin etiketi (sunucudaki `note_kind` kodu).
+  String noteKindLabel(String code) {
+    switch (code) {
+      case 'status':
+        return noteKindStatus;
+      case 'hazard':
+        return noteKindHazard;
+      case 'passage':
+        return noteKindPassage;
+      default:
+        return noteKindExperience;
+    }
+  }
+
+  /// Denizci seviyesinin etiketi. Etiketler İSTEMCİDE yaşar (bakım kataloğu
+  /// deseni) — sunucu yalnız kodu tutar.
+  String levelLabel(String code) {
+    switch (code) {
+      case 'coastal':
+        return levelCoastal;
+      case 'guide':
+        return levelGuide;
+      case 'master':
+        return levelMaster;
+      case 'pilot':
+        return levelPilot;
+      default:
+        return levelNew;
+    }
+  }
 
   /// Doluluk düzey kodu → seçili dildeki etiket.
   String occupancyLabel(String code) {
@@ -1113,6 +1248,57 @@ const L10n _tr = L10n(
     'Rota ve alternatif limanlar gözden geçirildi.',
     'Kıyıdaki bir kişiye seyir planı bildirildi.',
   ],
+  noteGpsOk: 'Konumun doğrulandı',
+  noteSectionTitle: 'Kaptan Notları',
+  noteOnlyHazards: 'Bu noktadaki uyarılar yukarıda listelendi.',
+  noteSectionEmpty: 'Bu noktaya henüz not bırakılmamış — ilkini sen yazabilirsin.',
+  noteAddCta: 'Not bırak',
+  noteAllCta: 'Tümü',
+  noteCountFmt: '{0} not',
+  noteKindStatus: 'Güncel durum',
+  noteKindHazard: 'Uyarı',
+  noteKindExperience: 'Deneyim',
+  noteKindPassage: 'Seyir notu',
+  noteKindStatusHint: 'Buradasın — bugünkü durumu paylaş',
+  noteKindHazardHint: 'Emniyet: kaya, ağ, sığlık',
+  noteKindExperienceHint: 'Demirleme, marina, restoran',
+  noteKindPassageHint: 'İki nokta arası geçiş',
+  noteComposerTitle: 'Not bırak',
+  noteStep1: 'Ne paylaşmak istiyorsun?',
+  noteStep2: 'Notun',
+  noteStep3: 'Bağlam',
+  noteAutoFilled: 'otomatik dolduruldu',
+  noteBodyHint: 'Başka bir kaptanın işine yarayacak şeyi yaz…',
+  noteObservedLabel: 'Ne zaman oradaydın',
+  noteWindLabel: 'O anki koşul',
+  noteSubmit: 'Gönder',
+  noteModerationNotice: 'Notun incelendikten sonra yayınlanacak.',
+  noteSubmitted: 'Notun alındı. İncelendikten sonra yayınlanacak.',
+  notePublished: 'Notun yayında. Teşekkürler kaptan.',
+  noteNeedLocation: 'Bu not tipi için konumunu paylaşman gerekiyor.',
+  noteTooFar: 'Yanlış bilgiyi önlemek için yalnız yakınında olduğun noktalar için paylaşabilirsin.',
+  noteHelpful: 'Faydalı',
+  noteConfirm: 'Ben de gördüm',
+  noteDispute: 'Artık yok',
+  noteConfirmedFmt: '{0} denizci doğruladı',
+  noteOwnVote: 'Kendi notuna oy veremezsin.',
+  noteDelete: 'Notu sil',
+  noteDeleted: 'Notun silindi.',
+  noteRecordedWindFmt: 'O gün: {0}',
+  noteStatusPending: 'İncelemede',
+  noteStatusRejected: 'Reddedildi',
+  gateNoteMsg: 'Not bırakmak için ücretsiz bir hesap gerekir.',
+  levelNew: 'Yeni Denizci',
+  levelCoastal: 'Kıyı Kaşifi',
+  levelGuide: 'Yol Gösteren',
+  levelMaster: 'Usta Kaptan',
+  levelPilot: 'Deniz Rehberi',
+  reviewWriteCta: 'Yorum yaz',
+  reviewRatingLabel: 'Genel puan',
+  reviewBodyHint: 'Bağlama nasıldı? Elektrik, su, personel…',
+  reviewSubmitted: 'Yorumun incelendikten sonra yayınlanacak.',
+  reviewDuplicate: 'Bu noktaya zaten yorumun var.',
+  gateReviewMsg: 'Yorum yazmak için ücretsiz bir hesap gerekir.',
 );
 
 const L10n _en = L10n(
@@ -1587,6 +1773,57 @@ const L10n _en = L10n(
     'Route and alternative harbors reviewed.',
     'Voyage plan shared with someone ashore.',
   ],
+  noteGpsOk: 'Your location is verified',
+  noteSectionTitle: 'Captain’s Notes',
+  noteOnlyHazards: 'Hazards for this place are listed above.',
+  noteSectionEmpty: 'No notes here yet — you can leave the first one.',
+  noteAddCta: 'Leave a note',
+  noteAllCta: 'See all',
+  noteCountFmt: '{0} notes',
+  noteKindStatus: 'Current status',
+  noteKindHazard: 'Hazard',
+  noteKindExperience: 'Experience',
+  noteKindPassage: 'Passage note',
+  noteKindStatusHint: 'You are here — share today’s situation',
+  noteKindHazardHint: 'Safety: rock, net, shallows',
+  noteKindExperienceHint: 'Anchoring, marina, restaurant',
+  noteKindPassageHint: 'Passage between two points',
+  noteComposerTitle: 'Leave a note',
+  noteStep1: 'What do you want to share?',
+  noteStep2: 'Your note',
+  noteStep3: 'Context',
+  noteAutoFilled: 'filled automatically',
+  noteBodyHint: 'Write what another skipper would find useful…',
+  noteObservedLabel: 'When were you there',
+  noteWindLabel: 'Conditions then',
+  noteSubmit: 'Send',
+  noteModerationNotice: 'Your note will be published after review.',
+  noteSubmitted: 'Note received. It will be published after review.',
+  notePublished: 'Your note is live. Thanks, skipper.',
+  noteNeedLocation: 'This note type needs your location.',
+  noteTooFar: 'To keep information accurate, you can only post for places you are near.',
+  noteHelpful: 'Helpful',
+  noteConfirm: 'I saw it too',
+  noteDispute: 'Not there anymore',
+  noteConfirmedFmt: 'confirmed by {0} sailors',
+  noteOwnVote: 'You cannot vote on your own note.',
+  noteDelete: 'Delete note',
+  noteDeleted: 'Your note was deleted.',
+  noteRecordedWindFmt: 'That day: {0}',
+  noteStatusPending: 'In review',
+  noteStatusRejected: 'Rejected',
+  gateNoteMsg: 'A free account is required to leave a note.',
+  levelNew: 'New Sailor',
+  levelCoastal: 'Coastal Explorer',
+  levelGuide: 'Wayfinder',
+  levelMaster: 'Master Skipper',
+  levelPilot: 'Sea Guide',
+  reviewWriteCta: 'Write a review',
+  reviewRatingLabel: 'Overall rating',
+  reviewBodyHint: 'How was the berth? Power, water, staff…',
+  reviewSubmitted: 'Your review will be published after review.',
+  reviewDuplicate: 'You already have a review for this place.',
+  gateReviewMsg: 'A free account is required to write a review.',
 );
 
 const L10n _es = L10n(
@@ -2061,6 +2298,57 @@ const L10n _es = L10n(
     'Ruta y puertos alternativos revisados.',
     'Plan de navegación comunicado a alguien en tierra.',
   ],
+  noteGpsOk: 'Tu ubicación está verificada',
+  noteSectionTitle: 'Notas del capitán',
+  noteOnlyHazards: 'Los peligros de este lugar están arriba.',
+  noteSectionEmpty: 'Aún no hay notas aquí — puedes dejar la primera.',
+  noteAddCta: 'Dejar una nota',
+  noteAllCta: 'Ver todo',
+  noteCountFmt: '{0} notas',
+  noteKindStatus: 'Situación actual',
+  noteKindHazard: 'Peligro',
+  noteKindExperience: 'Experiencia',
+  noteKindPassage: 'Nota de travesía',
+  noteKindStatusHint: 'Estás aquí — comparte la situación de hoy',
+  noteKindHazardHint: 'Seguridad: roca, red, bajo',
+  noteKindExperienceHint: 'Fondeo, marina, restaurante',
+  noteKindPassageHint: 'Travesía entre dos puntos',
+  noteComposerTitle: 'Dejar una nota',
+  noteStep1: '¿Qué quieres compartir?',
+  noteStep2: 'Tu nota',
+  noteStep3: 'Contexto',
+  noteAutoFilled: 'rellenado automáticamente',
+  noteBodyHint: 'Escribe lo que le serviría a otro patrón…',
+  noteObservedLabel: 'Cuándo estuviste allí',
+  noteWindLabel: 'Condiciones entonces',
+  noteSubmit: 'Enviar',
+  noteModerationNotice: 'Tu nota se publicará tras la revisión.',
+  noteSubmitted: 'Nota recibida. Se publicará tras la revisión.',
+  notePublished: 'Tu nota está publicada. Gracias, patrón.',
+  noteNeedLocation: 'Este tipo de nota necesita tu ubicación.',
+  noteTooFar: 'Para mantener la información precisa, solo puedes publicar en lugares cercanos.',
+  noteHelpful: 'Útil',
+  noteConfirm: 'Yo también lo vi',
+  noteDispute: 'Ya no está',
+  noteConfirmedFmt: 'confirmado por {0} navegantes',
+  noteOwnVote: 'No puedes votar tu propia nota.',
+  noteDelete: 'Eliminar nota',
+  noteDeleted: 'Tu nota fue eliminada.',
+  noteRecordedWindFmt: 'Ese día: {0}',
+  noteStatusPending: 'En revisión',
+  noteStatusRejected: 'Rechazada',
+  gateNoteMsg: 'Se requiere una cuenta gratuita para dejar una nota.',
+  levelNew: 'Marinero nuevo',
+  levelCoastal: 'Explorador costero',
+  levelGuide: 'Guía',
+  levelMaster: 'Patrón experto',
+  levelPilot: 'Guía del mar',
+  reviewWriteCta: 'Escribir reseña',
+  reviewRatingLabel: 'Valoración general',
+  reviewBodyHint: '¿Qué tal el amarre? Electricidad, agua, personal…',
+  reviewSubmitted: 'Tu reseña se publicará tras la revisión.',
+  reviewDuplicate: 'Ya tienes una reseña de este lugar.',
+  gateReviewMsg: 'Se requiere una cuenta gratuita para escribir una reseña.',
 );
 
 const L10n _ru = L10n(
@@ -2535,6 +2823,57 @@ const L10n _ru = L10n(
     'Маршрут и запасные гавани просмотрены.',
     'План похода сообщён кому-то на берегу.',
   ],
+  noteGpsOk: 'Ваше местоположение подтверждено',
+  noteSectionTitle: 'Заметки капитана',
+  noteOnlyHazards: 'Опасности этого места перечислены выше.',
+  noteSectionEmpty: 'Здесь пока нет заметок — вы можете оставить первую.',
+  noteAddCta: 'Оставить заметку',
+  noteAllCta: 'Все',
+  noteCountFmt: '{0} заметок',
+  noteKindStatus: 'Текущая обстановка',
+  noteKindHazard: 'Опасность',
+  noteKindExperience: 'Опыт',
+  noteKindPassage: 'Заметка о переходе',
+  noteKindStatusHint: 'Вы здесь — расскажите об обстановке',
+  noteKindHazardHint: 'Безопасность: камень, сеть, мель',
+  noteKindExperienceHint: 'Якорная стоянка, марина, ресторан',
+  noteKindPassageHint: 'Переход между двумя точками',
+  noteComposerTitle: 'Оставить заметку',
+  noteStep1: 'Чем хотите поделиться?',
+  noteStep2: 'Ваша заметка',
+  noteStep3: 'Контекст',
+  noteAutoFilled: 'заполнено автоматически',
+  noteBodyHint: 'Напишите то, что пригодится другому шкиперу…',
+  noteObservedLabel: 'Когда вы там были',
+  noteWindLabel: 'Условия тогда',
+  noteSubmit: 'Отправить',
+  noteModerationNotice: 'Ваша заметка будет опубликована после проверки.',
+  noteSubmitted: 'Заметка принята. Будет опубликована после проверки.',
+  notePublished: 'Ваша заметка опубликована. Спасибо, капитан.',
+  noteNeedLocation: 'Для этого типа заметки нужна ваша геопозиция.',
+  noteTooFar: 'Чтобы информация была точной, публиковать можно только рядом с местом.',
+  noteHelpful: 'Полезно',
+  noteConfirm: 'Я тоже это видел',
+  noteDispute: 'Больше нет',
+  noteConfirmedFmt: 'подтвердили {0} моряка',
+  noteOwnVote: 'Нельзя голосовать за свою заметку.',
+  noteDelete: 'Удалить заметку',
+  noteDeleted: 'Ваша заметка удалена.',
+  noteRecordedWindFmt: 'В тот день: {0}',
+  noteStatusPending: 'На проверке',
+  noteStatusRejected: 'Отклонена',
+  gateNoteMsg: 'Для заметки нужна бесплатная учётная запись.',
+  levelNew: 'Новый моряк',
+  levelCoastal: 'Исследователь побережья',
+  levelGuide: 'Проводник',
+  levelMaster: 'Опытный капитан',
+  levelPilot: 'Морской лоцман',
+  reviewWriteCta: 'Написать отзыв',
+  reviewRatingLabel: 'Общая оценка',
+  reviewBodyHint: 'Как стоянка? Электричество, вода, персонал…',
+  reviewSubmitted: 'Ваш отзыв будет опубликован после проверки.',
+  reviewDuplicate: 'У вас уже есть отзыв об этом месте.',
+  gateReviewMsg: 'Для отзыва нужна бесплатная учётная запись.',
 );
 
 /// Saf eşleme — birim testli.

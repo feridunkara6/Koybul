@@ -36,6 +36,12 @@ final Provider<LocationsApi> locationsApiProvider = Provider<LocationsApi>((ref)
   return LocationsApi(ref.watch(docklyClientProvider).dio);
 });
 
+/// Topluluk (Kaptan Notları, yorum yazma, şikâyet) API istemcisi.
+/// Okuma uçları anonim; yazma uçları access token ister.
+final Provider<CommunityApi> communityApiProvider = Provider<CommunityApi>((ref) {
+  return CommunityApi(ref.watch(docklyClientProvider).dio);
+});
+
 /// Rüzgâr/hava tahmini API istemcisi — anonim uç (MET Norway, sunucu proksili).
 final Provider<WeatherApi> weatherApiProvider = Provider<WeatherApi>((ref) {
   return WeatherApi(ref.watch(docklyClientProvider).dio);

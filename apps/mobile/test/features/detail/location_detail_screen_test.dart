@@ -10,8 +10,10 @@ import 'package:dockly_mobile/features/weather/application/weather_controller.da
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dockly_mobile/features/community/application/community_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/community_fakes.dart';
 import '../../support/auth_fakes.dart';
 import '../../support/detail_fakes.dart';
 import '../../support/nearby_fakes.dart';
@@ -29,6 +31,7 @@ Finder _docklyIcon(DocklyIconData d) =>
 Widget _app(LocationDetailGateway gateway, {bool signedIn = false}) {
   return ProviderScope(
     overrides: <Override>[
+      communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
       locationDetailGatewayProvider.overrideWithValue(gateway),
       nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
       reviewsGatewayProvider.overrideWithValue(FakeReviewsGateway()),
@@ -69,6 +72,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: <Override>[
+      communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
           locationDetailGatewayProvider.overrideWithValue(FakeLocationDetailGateway()),
           nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
           reviewsGatewayProvider.overrideWithValue(FakeReviewsGateway()),
