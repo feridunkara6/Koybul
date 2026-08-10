@@ -5,6 +5,7 @@ import { EnvService } from '../../../config/env.service';
 import { TokenSigner } from '../../../infrastructure/jwt/token.signer';
 import {
   FIREBASE_TOKEN_VERIFIER,
+  FirebaseIdentity,
   FirebaseTokenVerifier,
 } from '../../../infrastructure/firebase/firebase-token.verifier';
 import { JtiBlacklistService } from '../../../infrastructure/redis/jti-blacklist.service';
@@ -13,6 +14,7 @@ import { Principal } from '../../../core/auth/principal';
 import { RequestMeta, SessionBundle, UserAccount } from '../domain/auth.types';
 import { SESSION_REPOSITORY, SessionRepository } from '../domain/session.repository';
 import { USER_ACCOUNT_REPOSITORY, UserAccountRepository } from '../domain/user-account.repository';
+import { parseModeratorEmails, shouldPromoteToModerator } from '../domain/moderator-allowlist';
 
 const REFRESH_TOKEN_PREFIX = 'rt_';
 const REFRESH_TOKEN_BYTES = 32;
@@ -27,6 +29,8 @@ const MAX_ACTIVE_FAMILIES = 5;
 export class SessionService {
   private readonly logger = new Logger(SessionService.name);
   private readonly refreshTtlMs: number;
+  /** MODERATOR_EMAILS — açılışta bir kez ayrıştırılır (her girişte değil). */
+  private readonly moderatorEmails: string[];
 
   constructor(
     @Inject(FIREBASE_TOKEN_VERIFIER) private readonly firebase: FirebaseTokenVerifier,
@@ -37,13 +41,67 @@ export class SessionService {
     env: EnvService,
   ) {
     this.refreshTtlMs = env.get('REFRESH_TOKEN_TTL_DAYS') * 24 * 60 * 60 * 1000;
+    this.moderatorEmails = parseModeratorEmails(env.get('MODERATOR_EMAILS'));
   }
 
   /** Kayıt + giriş + misafir tek uç (docs/23 §3.4). Yeni oturum = yeni aile. */
   async createSession(firebaseIdToken: string, meta: RequestMeta): Promise<SessionBundle> {
     const identity = await this.firebase.verify(firebaseIdToken);
-    const account = await this.users.upsertFromIdentity(uuidv7(), identity);
+    const upserted = await this.users.upsertFromIdentity(uuidv7(), identity);
+    const account = await this.applyModeratorAllowlist(upserted, identity);
     return this.issueBundle(account, uuidv7(), meta);
+  }
+
+  /**
+   * MODERATOR_EMAILS listesindeki hesabı, GİRİŞ ANINDA moderatöre yükseltir.
+   *
+   * Neden burada: rol JWT'nin içine yazılır. Yükseltme token üretilmeden ÖNCE
+   * olmazsa kullanıcı bir kez daha çıkıp girmek zorunda kalırdı. Yükseltme
+   * veritabanına yazıldığı için sonraki oturumlarda tekrar sorgulanmaz.
+   *
+   * Yükseltme BAŞARISIZ olursa giriş düşmez: kaptan uygulamaya girebilmeli,
+   * yalnız Moderasyon ekranını görmez. Sessiz kalmaz — log'a yazılır.
+   */
+  private async applyModeratorAllowlist(
+    account: UserAccount,
+    identity: Pick<FirebaseIdentity, 'email' | 'emailVerified' | 'provider'>,
+  ): Promise<UserAccount> {
+    if (
+      !shouldPromoteToModerator({
+        email: identity.email,
+        emailVerified: identity.emailVerified,
+        provider: identity.provider,
+        isGuest: account.isGuest,
+        role: account.role,
+        list: this.moderatorEmails,
+      })
+    ) {
+      return account;
+    }
+    try {
+      const role = await this.users.promoteToModerator(account.id);
+      if (role !== 'moderator') {
+        // UPDATE hiçbir satıra dokunmadı (hesap askıya alınmış, silinmiş ya da
+        // `roles` tablosu eksik). BAŞARI GİBİ LOGLANMAZ: yetki verildiğini
+        // söyleyen bir kayıt, verilmediği hâlde en yanıltıcı iz olurdu.
+        this.logger.warn(
+          { event: 'server_error', scope: 'moderator_promote', userId: account.id, role },
+          'Moderatör yükseltmesi uygulanmadı',
+        );
+        return account;
+      }
+      this.logger.log(
+        { event: 'role_promoted', userId: account.id, role },
+        'Hesap moderatöre yükseltildi (MODERATOR_EMAILS)',
+      );
+      return { ...account, role };
+    } catch (err) {
+      this.logger.error(
+        { event: 'server_error', scope: 'moderator_promote', userId: account.id, err: String(err) },
+        'Moderatör yükseltmesi yapılamadı',
+      );
+      return account;
+    }
   }
 
   /** Rotating refresh: eski token iptal, yenisi aynı ailede üretilir. */

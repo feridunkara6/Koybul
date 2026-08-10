@@ -1,5 +1,6 @@
 import { generateKeyPairSync } from 'node:crypto';
 import { AppProblem } from '../../src/common/problem/problem';
+import { RoleCode } from '../../src/core/auth/principal';
 import { FirebaseIdentity } from '../../src/infrastructure/firebase/firebase-token.verifier';
 import {
   CreateSessionInput,
@@ -136,4 +137,18 @@ export class InMemoryUserAccountRepository implements UserAccountRepository {
     }
     return null;
   }
+
+  /** Gerçek SQL gibi: yalnız `user` rolü yükseltilir, üstü DOKUNULMAZ. */
+  async promoteToModerator(userId: string): Promise<RoleCode> {
+    for (const account of this.byFirebaseUid.values()) {
+      if (account.id !== userId) continue;
+      if (account.role === 'user' && !account.isGuest) account.role = 'moderator';
+      this.promoted.push(userId);
+      return account.role;
+    }
+    return 'user';
+  }
+
+  /** Yükseltme çağrılarının kaydı — testler bunu doğrular. */
+  readonly promoted: string[] = [];
 }

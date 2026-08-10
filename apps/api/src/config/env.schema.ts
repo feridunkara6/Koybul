@@ -37,6 +37,21 @@ export const envSchema = z.object({
    */
   SENTRY_DSN: z.string().url().optional(),
   SENTRY_ENVIRONMENT: z.enum(['development', 'staging', 'production', 'test']).optional(),
+  /**
+   * MODERATÖR LİSTESİ — virgülle ayrılmış e-posta adresleri.
+   *
+   * NEDEN VAR: `roles` tablosunda moderatör rolü baştan beri tanımlı ama onu
+   * kimseye VEREN bir yol yoktu; herkes `user` olarak kaydoluyordu. Sonuç:
+   * incelemeye düşen not sonsuza kadar orada kalıyor ve Moderasyon ekranı
+   * hiç kimseye açılmıyordu (bulgu 2026-08, topluluk adım 4 sonrası).
+   *
+   * Buradaki adresle GİRİŞ YAPILDIĞI AN hesap moderatöre yükseltilir; rol
+   * veritabanına yazılır, yani listeden sonradan çıkarılsa bile geri
+   * düşmez (yetki alma işi bilinçli olarak elle yapılır).
+   *
+   * Boş bırakılabilir: o zaman kimse otomatik yükseltilmez.
+   */
+  MODERATOR_EMAILS: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
