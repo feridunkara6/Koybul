@@ -52,6 +52,7 @@ enum ModerationEntity {
   review
   suggested_location
   location_report
+  note
 
   @@map("moderation_entity")
 }
@@ -68,6 +69,7 @@ enum ReservationRequestStatus {
 }
 
 enum ReportReason {
+  abuse
   wrong_info
   closed_permanently
   wrong_photo
@@ -127,6 +129,9 @@ enum ActorType {
 }
 
 enum NotificationType {
+  helpful_received
+  hazard_disputed
+  level_up
   booking_status
   new_photo
   new_review
@@ -162,6 +167,23 @@ enum ContributionType {
   report_confirmed
 
   @@map("contribution_type")
+  occupancy_reported
+  note_approved
+  hazard_confirmed
+  helpful_received
+  content_rejected
+  trip_shared
+}
+
+/// Kaptan Notu tipi (0008_community). Her tipin ömrü, GPS şartı ve
+/// moderasyon kuralı farklıdır — tek serbest "gönderi" tipi bilinçli olarak yok.
+enum NoteKind {
+  status
+  hazard
+  experience
+  passage
+
+  @@map("note_kind")
 }
 
 // ---------------------------------------------------------------------
@@ -490,6 +512,12 @@ model User {
 
   contributionEvents               ContributionEvent[]
 
+  notesWritten                     LocationNote[]          @relation("LocationNoteAuthor")
+  notesDeleted                     LocationNote[]          @relation("LocationNoteDeletedBy")
+  noteReactions                    NoteReaction[]
+  reputation                       UserReputation?
+  badges                           UserBadge[]
+
   moderationTasksAssigned          ModerationTask[]       @relation("ModerationAssignedTo")
   moderationTasksDecided           ModerationTask[]       @relation("ModerationDecidedBy")
 
@@ -658,6 +686,7 @@ model Boat {
   reviews             Review[]
   reservationRequests ReservationRequest[]
   boatMedia           BoatMedia[]
+  notes               LocationNote[]
 
   @@map("boats")
 }
@@ -732,6 +761,9 @@ model Location {
   locationReports         LocationReport[]
   reservationRequests     ReservationRequest[]
   userProfilesHomePort    UserProfile[]
+  notes                   LocationNote[]  @relation("LocationNoteTarget")
+  notesFrom               LocationNote[]  @relation("LocationNoteFrom")
+  notesTo                 LocationNote[]  @relation("LocationNoteTo")
 
   @@map("locations")
 }
@@ -1101,12 +1133,132 @@ model ContributionEvent {
   type        ContributionType
   entityType  String?           @map("entity_type")
   entityId    String?           @map("entity_id") @db.Uuid
-  points      Int               @default(0) @db.SmallInt
+  points      Int               @default(0)
   createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
 
   user User @relation(fields: [userId], references: [id])
 
+  @@index([userId, createdAt(sort: Desc)], map: "ix_contribution_events_user_time")
   @@map("contribution_events")
+}
+
+/// Kaptan Notu — konuma bağlı, tarihli, tipli kullanıcı bilgisi (0008_community).
+/// Yorum'dan farkı: yıldız yoktur, sınırsız sayıda olabilir, tazeliği vardır.
+model LocationNote {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  locationId     String?          @map("location_id") @db.Uuid
+  fromLocationId String?          @map("from_location_id") @db.Uuid
+  toLocationId   String?          @map("to_location_id") @db.Uuid
+  userId         String           @map("user_id") @db.Uuid
+  boatId         String?          @map("boat_id") @db.Uuid
+  kind           NoteKind
+  title          String?
+  body           String
+  /// "Ne zaman oradaydın" — created_at DEĞİL; okuyucu için anlamlı olan tarih.
+  observedOn     DateTime         @map("observed_on") @db.Date
+  /// Bildirim anındaki gerçek GPS (status/hazard için zorunlu — DB CHECK).
+  reportedFrom   Unsupported("geography(Point, 4326)")? @map("reported_from")
+  gpsVerified    Boolean          @default(false) @map("gps_verified")
+  /// Not yazılırken dondurulan hava özeti {kn, dirTr} — sonradan sorgulanmaz.
+  windSummary    Json?            @map("wind_summary")
+  status         ModerationStatus @default(pending)
+  helpfulCount   Int              @default(0) @map("helpful_count")
+  confirmCount   Int              @default(0) @map("confirm_count")
+  disputeCount   Int              @default(0) @map("dispute_count")
+  /// status tipinde öne çıkma sonu (48 saat); diğerlerinde NULL = süresiz.
+  expiresAt      DateTime?        @map("expires_at") @db.Timestamptz(6)
+  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime?        @map("deleted_at") @db.Timestamptz(6)
+  deletedBy      String?          @map("deleted_by") @db.Uuid
+
+  location      Location? @relation("LocationNoteTarget", fields: [locationId], references: [id], onDelete: Cascade)
+  fromLocation  Location? @relation("LocationNoteFrom", fields: [fromLocationId], references: [id])
+  toLocation    Location? @relation("LocationNoteTo", fields: [toLocationId], references: [id])
+  user          User      @relation("LocationNoteAuthor", fields: [userId], references: [id], onDelete: Cascade)
+  deletedByUser User?     @relation("LocationNoteDeletedBy", fields: [deletedBy], references: [id])
+  boat          Boat?     @relation(fields: [boatId], references: [id])
+
+  reactions NoteReaction[]
+
+  /// NOT: SQL'deki karşılıkları KISMİ indekstir (WHERE deleted_at IS NULL) ve
+  /// ayrıca GIST/kısmi indeksler vardır (ix_location_notes_geo, _hazard_open).
+  /// Prisma bunları ifade edemez; kaynak doğruluk migration.sql'dir.
+  @@index([locationId, status, observedOn(sort: Desc)], map: "ix_location_notes_location_status_observed")
+  @@index([userId, createdAt(sort: Desc)], map: "ix_location_notes_user_created")
+  @@index([status, createdAt], map: "ix_location_notes_status_created")
+  @@index([fromLocationId], map: "ix_location_notes_from_location")
+  @@index([toLocationId], map: "ix_location_notes_to_location")
+  @@index([boatId], map: "ix_location_notes_boat")
+  @@index([deletedBy], map: "ix_location_notes_deleted_by")
+  @@map("location_notes")
+}
+
+/// Not tepkileri: faydalı / doğrulama / çelişki.
+/// Bileşik PK aynı tepkinin tekrarını, uygulama katmanı da kendi notuna oyu engeller.
+model NoteReaction {
+  noteId    String   @map("note_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  /// 'helpful' | 'confirm' | 'dispute' (DB CHECK)
+  reaction  String
+  /// Oy anındaki güven katsayısı DONDURULUR — geçmiş yeniden hesaplanmaz.
+  weight    Decimal  @default(1.00) @db.Decimal(3, 2)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  note LocationNote @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  user User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([noteId, userId, reaction])
+  @@index([userId], map: "ix_note_reactions_user")
+  @@map("note_reactions")
+}
+
+/// Denizci itibarı — TÜRETİLMİŞ özet. Kaynak `contribution_events` (append-only);
+/// bu tablo kaybolsa yeniden üretilebilir, hız için vardır.
+model UserReputation {
+  userId               String    @id @map("user_id") @db.Uuid
+  points               Int       @default(0)
+  /// 'new' | 'coastal' | 'guide' | 'master' | 'pilot' (DB CHECK)
+  levelCode            String    @default("new") @map("level_code")
+  /// 0.00–1.50 — kazanılan puanı ve oy ağırlığını çarpar.
+  trustScore           Decimal   @default(1.00) @map("trust_score") @db.Decimal(3, 2)
+  approvedCount        Int       @default(0) @map("approved_count")
+  rejectedCount        Int       @default(0) @map("rejected_count")
+  helpfulReceived      Int       @default(0) @map("helpful_received")
+  reportsAgainst       Int       @default(0) @map("reports_against")
+  /// docs/12 §8.2: 3 doğrulanmış ihlal → 30 gün içerik üretimi kısıtı.
+  writeRestrictedUntil DateTime? @map("write_restricted_until") @db.Timestamptz(6)
+  lastRecalcAt         DateTime  @default(now()) @map("last_recalc_at") @db.Timestamptz(6)
+  createdAt            DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_reputation")
+}
+
+/// Rozet sahipliği. Etiket/açıklama metinleri İSTEMCİDE (4 dil) yaşar —
+/// bakım kataloğu ve akademi içeriğiyle aynı desen.
+///
+/// TEKİLLİK: SQL'de İKİ KISMİ eşsiz indeks var (ux_user_badges_scoped /
+/// ux_user_badges_global), çünkü Postgres NULL'ları birbirinden farklı sayar ve
+/// düz bir UNIQUE global rozetleri tekilleştirmez. Prisma kısmi indeksi ifade
+/// edemediği için burada @@unique YOKTUR — rozet verme `INSERT ... ON CONFLICT
+/// DO NOTHING` ham SQL'iyle yapılır (Faz 4).
+model UserBadge {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  badgeCode String    @map("badge_code")
+  /// Bölgesel rozetler: 'admin_area' + admin_areas.id
+  scopeType String?   @map("scope_type")
+  scopeId   String?   @map("scope_id") @db.Uuid
+  awardedAt DateTime  @default(now()) @map("awarded_at") @db.Timestamptz(6)
+  /// Suistimalde geri alınır — satır silinmez, iz kalır.
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_badges")
 }
 
 model ModerationTask {

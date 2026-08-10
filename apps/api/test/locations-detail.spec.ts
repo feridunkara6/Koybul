@@ -4,6 +4,7 @@ import {
   DetailData,
   LocationsRepository,
 } from '../src/modules/locations/domain/locations.repository';
+import { OccupancySummary } from '../src/modules/locations/domain/location.types';
 
 const SAMPLE: DetailData = {
   id: 'loc-1',
@@ -79,7 +80,7 @@ class FakeRepo implements LocationsRepository {
   findPinsInBbox(): Promise<never[]> {
     return Promise.resolve([]);
   }
-  reportOccupancy(): Promise<'too-far' | 'unsupported' | null> {
+  reportOccupancy(): Promise<OccupancySummary | 'too-far' | 'unsupported' | null> {
     return Promise.resolve(null);
   }
   findNearby(): Promise<never[]> {
@@ -93,6 +94,14 @@ class FakeRepo implements LocationsRepository {
     if (idOrSlug === 'bare') return Promise.resolve(BARE);
     if (idOrSlug === 'covered') return Promise.resolve(WITHCOVER);
     return Promise.resolve(null);
+  }
+  // Arayüz büyüdüğünde sahte de büyümeli — eksik kalırsa PAKET DERLENMEZ
+  // (2026-08'de tam olarak bu oldu: findSearch/findReviews eklendi, sahte kalmadı).
+  findSearch(): Promise<never[]> {
+    return Promise.resolve([]);
+  }
+  findReviews(): Promise<never[]> {
+    return Promise.resolve([]);
   }
 }
 
@@ -129,7 +138,7 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
       ],
     };
     class EsRepo extends FakeRepo {
-      findDetail(): Promise<DetailData> {
+      override findDetail(): Promise<DetailData> {
         return Promise.resolve(withEs);
       }
     }
@@ -147,7 +156,7 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
       occupancy: { level: 'full', reportedAt: '2026-07-15T10:00:00.000Z', reportCount: 3 },
     };
     class OccRepo extends FakeRepo {
-      findDetail(): Promise<DetailData> {
+      override findDetail(): Promise<DetailData> {
         return Promise.resolve(withOcc);
       }
     }
@@ -165,7 +174,7 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
 
     const withWind: DetailData = { ...SAMPLE, windExposedDirs: 'G,GD' };
     class WindRepo extends FakeRepo {
-      findDetail(): Promise<DetailData> {
+      override findDetail(): Promise<DetailData> {
         return Promise.resolve(withWind);
       }
     }
@@ -176,12 +185,12 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
   it('doluluk bildirimi: bilinmeyen lokasyon → not-found', async () => {
     await expect(
       service.reportOccupancy('yok-boyle-koy', 'user-1', 'full', { lat: 36.75, lon: 28.95 }),
-    ).rejects.toMatchObject({ code: 'not-found' });
+    ).rejects.toMatchObject({ problemType: 'not-found' });
   });
 
   it('doluluk bildirimi: koydan uzak konum → validation-error (too_far)', async () => {
     class FarRepo extends FakeRepo {
-      reportOccupancy(): Promise<'too-far'> {
+      override reportOccupancy(): Promise<'too-far'> {
         return Promise.resolve('too-far' as const);
       }
     }
@@ -190,12 +199,12 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
         lat: 41.0,
         lon: 29.0,
       }),
-    ).rejects.toMatchObject({ code: 'validation-error' });
+    ).rejects.toMatchObject({ problemType: 'validation-error' });
   });
 
   it('doluluk bildirimi: desteklenmeyen tür (marina/liman) → validation-error', async () => {
     class UnsupportedRepo extends FakeRepo {
-      reportOccupancy(): Promise<'unsupported'> {
+      override reportOccupancy(): Promise<'unsupported'> {
         return Promise.resolve('unsupported' as const);
       }
     }
@@ -204,12 +213,16 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
         lat: 36.75,
         lon: 28.95,
       }),
-    ).rejects.toMatchObject({ code: 'validation-error' });
+    ).rejects.toMatchObject({ problemType: 'validation-error' });
   });
 
   it('doluluk bildirimi: özet döner', async () => {
     class ReportRepo extends FakeRepo {
-      reportOccupancy(): Promise<{ level: 'moderate'; reportedAt: string; reportCount: number }> {
+      override reportOccupancy(): Promise<{
+        level: 'moderate';
+        reportedAt: string;
+        reportCount: number;
+      }> {
         return Promise.resolve({
           level: 'moderate' as const,
           reportedAt: '2026-07-15T11:00:00.000Z',

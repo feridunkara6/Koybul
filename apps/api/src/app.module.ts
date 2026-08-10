@@ -4,6 +4,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { AppConfigModule } from './config/config.module';
 import { EnvService } from './config/env.service';
 import { RequestContextMiddleware } from './common/context/request-context.middleware';
+import { RateLimitMiddleware } from './common/rate-limit/rate-limit.middleware';
 import { currentRequestId } from './common/context/request-context';
 import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { RedisModule } from './infrastructure/redis/redis.module';
@@ -59,10 +60,13 @@ export class AppModule implements NestModule {
     // JSON API çapraz-köken tüketildiği için CORP 'cross-origin' — misafir web
     // önizlemesini (farklı köken) engellemez. Modülde tanımlı → üretimde VE
     // e2e testlerinde aynı şekilde uygulanır.
+    // Sıra önemlidir: bağlam (requestId) hız sınırından ÖNCE kurulur ki 429
+    // yanıtı da izlenebilir bir requestId taşısın.
     consumer
       .apply(
         helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }),
         RequestContextMiddleware,
+        RateLimitMiddleware,
       )
       .forRoutes('*');
   }

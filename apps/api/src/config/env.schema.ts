@@ -24,6 +24,13 @@ export const envSchema = z.object({
   /** /auth uçları IP başına dakikalık tavan (docs/30 §1). */
   AUTH_RATE_LIMIT_PER_MIN: z.coerce.number().int().min(1).default(10),
   /**
+   * Genel hız sınırları — IP başına dakikalık tavan (bulgu 2026-08: 26 uçtan
+   * yalnız 2'si sınırlıydı; /weather açık bir vekildi). Okuma cömert, yazma
+   * dar: harita gezinmesi çok istek üretir, içerik gönderimi üretmez.
+   */
+  READ_RATE_LIMIT_PER_MIN: z.coerce.number().int().min(1).default(300),
+  WRITE_RATE_LIMIT_PER_MIN: z.coerce.number().int().min(1).default(60),
+  /**
    * İzleme (monitoring) — OPSİYONEL (Faz A.6 iskeleti, docs/implementation/monitoring-kurulum-rehberi.md).
    * DSN verilmezse Sentry devre dışı; hata izleme ara çözümü log tabanlı alarmdır
    * (5xx logları `event: 'server_error'` etiketiyle akar). SDK bağlanınca burası okunur.
