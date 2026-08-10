@@ -15,6 +15,7 @@ import { BoatsModule } from './modules/boats/boats.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
 import { LocationsModule } from './modules/locations/locations.module';
 import { WeatherModule } from './modules/weather/weather.module';
+import { CommunityModule } from './modules/community/community.module';
 
 /** PII redaksiyon listesi (docs/24 §12, docs/29 SEC-04). */
 const REDACT_PATHS = [
@@ -51,6 +52,7 @@ const REDACT_PATHS = [
     CatalogModule,
     LocationsModule,
     WeatherModule,
+    CommunityModule,
   ],
 })
 export class AppModule implements NestModule {
