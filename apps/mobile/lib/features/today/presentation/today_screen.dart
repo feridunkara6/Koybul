@@ -8,6 +8,7 @@ import '../../../core/origin_provider.dart';
 import '../../../core/widgets/section_card.dart';
 import '../../checklist/application/checklist_controller.dart';
 import '../../checklist/presentation/checklist_sheet.dart';
+import '../../community/presentation/nearby_notes_section.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../../map/presentation/route_origin_menu.dart' show startSeaRoute;
 import '../../shell/application/shell_tab_provider.dart';
@@ -93,6 +94,10 @@ class TodayScreen extends ConsumerWidget {
             // Seyir öncesi kontrol listesi — onaylı E2: ilerleme (0/10) ve
             // "çıkmadan tamamla" uyarısı kartın üstünde görünür.
             const _ChecklistCard(),
+            // YAKINDA PAYLAŞILANLAR (topluluk 2026-08): listenin EN ALTINA
+            // eklenir; üstündeki hiçbir kart yer değiştirmez. Konum yoksa ya
+            // da yakında not yoksa kart hiç çizilmez (0-uydurma).
+            if (pos != null) NearbyNotesSection(position: pos),
           ],
         ),
       ),

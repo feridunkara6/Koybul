@@ -9,6 +9,7 @@ import '../../auth/presentation/account_section.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
+import '../../community/presentation/contributions_block.dart';
 import '../../emergency/presentation/emergency_screen.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../favorites/presentation/favorites_screen.dart';
@@ -57,6 +58,12 @@ class ProfileScreen extends ConsumerWidget {
           const SizedBox(height: 8),
           // Giriş/kayıt (paket 1): oturum yoksa giriş kartı, varsa hesap kartı.
           const AccountSection(),
+          // KATKILARIM (topluluk 2026-08): hesap kartının HEMEN ALTINDA üç
+          // sayaç. Hesap yoksa hiç çizilmez — misafirin Profil ekranı
+          // bugünküyle birebir aynı kalır.
+          const ContributionsBlock(),
+          // MODERASYON (topluluk 2026-08): yalnız moderatör rolüne görünür.
+          const ModerationRow(),
           const SizedBox(height: 16),
           // DİL — az yer kaplayan tek satır; menü aşağı açılır.
           const _LanguageRow(),

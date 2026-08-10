@@ -1,4 +1,5 @@
 import { AppProblem } from '../src/common/problem/problem';
+import { EarnedBadge, emptyBadgeStats } from '../src/modules/community/domain/badges';
 import { Principal } from '../src/core/auth/principal';
 import { NotesService } from '../src/modules/community/application/notes.service';
 import { ReputationService } from '../src/modules/community/application/reputation.service';
@@ -93,6 +94,7 @@ class FakeNotes implements NotesRepository {
 }
 
 class FakeRep implements ReputationRepository {
+  granted: string[] = [];
   state: AuthorState = { trustScore: 1, approvedCount: 5, writeRestrictedUntil: null };
   awards: { userId: string; action: string; base: number }[] = [];
   alreadyAwarded = false;
@@ -122,6 +124,13 @@ class FakeRep implements ReputationRepository {
   }
   recomputeTrust() {
     return Promise.resolve(1);
+  }
+  badgeStats() {
+    return Promise.resolve(emptyBadgeStats());
+  }
+  grantBadges(_userId: string, badges: EarnedBadge[]) {
+    this.granted.push(...badges.map((b) => b.code));
+    return Promise.resolve(badges);
   }
   authorState() {
     return Promise.resolve(this.state);

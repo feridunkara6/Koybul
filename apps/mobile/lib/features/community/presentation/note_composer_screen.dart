@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../../weather/application/weather_controller.dart';
 import '../application/community_controller.dart';
+import '../application/reputation_controller.dart';
 import 'note_card.dart';
 
 /// NOT BIRAKMA — 3 adım, ama kullanıcı yalnız İKİSİNİ doldurur.
@@ -104,6 +105,9 @@ class _NoteComposerScreenState extends ConsumerState<NoteComposerScreen> {
           );
       if (!mounted) return;
       ref.read(noteOverridesProvider.notifier).prepend(widget.locationId, note);
+      // Katkı sayaçları (Profil bloğu, Teknem kartı, Katkılarım) yeni notu
+      // hemen göstersin: özet bir sonraki okumada sunucudan tazelenir.
+      ref.invalidate(reputationSummaryProvider);
       Navigator.of(context).pop(true);
       messenger
         ..clearSnackBars()

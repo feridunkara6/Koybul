@@ -24,6 +24,25 @@ final notesForLocationProvider =
   return ref.watch(communityGatewayProvider).notesForLocation(locationId);
 });
 
+/// "Yakında paylaşılanlar" sorgu anahtarı. GeoPoint'in `==`'i YOKTUR: aynı
+/// konum için her karede YENİ bir aile üyesi doğar ve istek sonsuz tekrarlanır.
+/// Bu yüzden hava tahminindeki desenin aynısı kullanılır — koordinat
+/// yuvarlanmış bir KAYITA (record) çevrilir. 0,1 derece ≈ 11 km: 50 deniz
+/// millik yarıçap için fazlasıyla yeterli, tekne kıpırdadıkça yeniden
+/// sorgulanmaz.
+typedef NearbyNotesKey = ({double lat, double lon});
+
+NearbyNotesKey nearbyNotesKeyFor(double lat, double lon) =>
+    (lat: (lat * 10).roundToDouble() / 10, lon: (lon * 10).roundToDouble() / 10);
+
+/// Son 48 saatte 50 deniz mili içinde bırakılan notlar. Anonim okuma.
+final nearbyNotesProvider =
+    FutureProvider.autoDispose.family<List<NearbyNote>, NearbyNotesKey>((ref, NearbyNotesKey key) {
+  return ref
+      .watch(communityGatewayProvider)
+      .nearbyNotes(GeoPoint(lat: key.lat, lon: key.lon));
+});
+
 /// Yazma sonrası yerel tazeleme. Sunucu GET'i 300 sn CDN önbelleğinde olabilir;
 /// kendi katkısını YAZAN kullanıcı sonucu HEMEN görmelidir (occupancy deseni).
 class NoteOverrides extends Notifier<Map<String, List<Note>>> {

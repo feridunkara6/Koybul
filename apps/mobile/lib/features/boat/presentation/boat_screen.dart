@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/app_locale.dart';
 import '../../../core/l10n/l10n_strings.dart';
+import '../../community/presentation/sailor_profile_card.dart';
 import '../../onboarding/presentation/tour_targets.dart';
 import '../application/maintenance_controller.dart';
 import '../application/my_boat_controller.dart';
@@ -105,6 +106,10 @@ class BoatScreen extends ConsumerWidget {
               ),
             ),
           ),
+          // DENİZCİ PROFİLİM (topluluk 2026-08): kimlik kartı ile bakım
+          // takibi ARASINA girer. Hesap yoksa kendini çizmez — misafirin
+          // Teknem sekmesi bugünküyle birebir aynı kalır.
+          const SailorProfileCard(),
           const SizedBox(height: 18),
           // BAKIM TAKİBİ (v2.0): kaptanın girdiği kayıtlara göre hatırlatma.
           const _MaintenanceSection(),

@@ -8,6 +8,7 @@ import {
   ReputationRepository,
   ReputationSummary,
 } from '../domain/reputation.repository';
+import { BadgeStats, EarnedBadge, WINTER_MONTHS, badgeProgress } from '../domain/badges';
 import {
   ContributionAction,
   LevelCode,
@@ -163,23 +164,16 @@ export class PrismaReputationRepository implements ReputationRepository {
     `);
 
     // Bölgesel uzmanlık: onaylı NOTLARIN bağlı olduğu ilçe/il bazında sayım.
-    const areas = await this.prisma.$queryRaw<
-      { adminAreaId: string; name: string; count: number }[]
-    >(
-      Prisma.sql`
-        SELECT a.id AS "adminAreaId",
-               COALESCE(i.name, a.slug) AS name,
-               count(*)::int AS count
-        FROM location_notes n
-        JOIN locations l ON l.id = n.location_id
-        JOIN admin_areas a ON a.id = l.admin_area_id
-        LEFT JOIN admin_area_i18n i ON i.admin_area_id = a.id AND i.locale = 'tr'
-        WHERE n.user_id = ${userId}::uuid AND n.status = 'approved' AND n.deleted_at IS NULL
-        GROUP BY a.id, i.name, a.slug
-        ORDER BY count DESC
-        LIMIT 3
-      `,
-    );
+    // Rozet ilerlemesi de aynı sayımı kullanır — iki yerde iki farklı sayı
+    // görünmesin diye TEK sorgudan beslenir.
+    const stats = await this.badgeStats(userId);
+    const areas = stats.areaApproved.slice(0, 3);
+
+    const held = badges.map((b) => ({
+      code: b.code,
+      scopeId: b.scopeId,
+      awardedAt: b.awardedAt.toISOString(),
+    }));
 
     const points = Number(rep?.points ?? 0);
     return {
@@ -192,13 +186,138 @@ export class PrismaReputationRepository implements ReputationRepository {
       rejectedCount: Number(rep?.rejectedCount ?? 0),
       helpfulReceived: Number(rep?.helpfulReceived ?? 0),
       writeRestrictedUntil: rep?.restrictedUntil ? rep.restrictedUntil.toISOString() : null,
-      badges: badges.map((b) => ({
-        code: b.code,
-        scopeId: b.scopeId,
-        awardedAt: b.awardedAt.toISOString(),
-      })),
-      areas: areas.map((a) => ({ ...a, count: Number(a.count) })),
+      badges: held,
+      areas,
+      badgeProgress: badgeProgress(stats, held),
     };
+  }
+
+  /**
+   * Rozet sayaçları — üç bağımsız sorgu, PARALEL koşar. Karar `badges.ts`'te
+   * verilir; burada yalnız ham sayı toplanır (SQL'de iş kuralı tutulmaz).
+   */
+  async badgeStats(userId: string): Promise<BadgeStats> {
+    const [areas, one, winter, regions] = await Promise.all([
+      this.approvedByArea(userId),
+
+      // "Fener": TEK bir içeriğin aldığı en yüksek "faydalı" oyu.
+      // status = 'approved' ŞART: reddedilen içerik rozet kazandırmamalı —
+      // aksi halde bir moderasyon REDDİ, kararın hemen ardından koşan
+      // syncBadges yüzünden rozetin sebebi olurdu (inceleme bulgusu).
+      this.prisma.$queryRaw<{ maxHelpful: number; hazards: number }[]>(
+        Prisma.sql`
+        SELECT
+          GREATEST(
+            COALESCE((SELECT MAX(helpful_count) FROM location_notes
+                       WHERE user_id = ${userId}::uuid
+                         AND status = 'approved' AND deleted_at IS NULL), 0),
+            COALESCE((SELECT MAX(helpful_count) FROM reviews
+                       WHERE user_id = ${userId}::uuid
+                         AND status = 'approved' AND deleted_at IS NULL), 0)
+          )::int AS "maxHelpful",
+          (SELECT count(*) FROM location_notes
+            WHERE user_id = ${userId}::uuid AND kind = 'hazard'::note_kind
+              AND status = 'approved' AND deleted_at IS NULL AND confirm_count > 0)::int
+            AS hazards
+      `,
+      ),
+
+      // "Kış Denizcisi": Kasım–Mart arasında ÜRETİLEN katkı.
+      // - Ay, Türkiye saatine göre hesaplanır: timestamptz'ın UTC ayı 1 Kasım
+      //   00:30'da hâlâ Ekim'dir (sınırda kayma).
+      // - `helpful_received` SAYILMAZ: o satırı BAŞKASININ oyu doğurur;
+      //   kışın oy alan yaz katkısı "kış denizciliği" değildir.
+      // - Her ay parametresi AÇIKÇA int'e çevrilir: çıplak parametrenin tipini
+      //   PostgreSQL bazı bağlamlarda çözemiyor ("could not determine data type").
+      this.prisma.$queryRaw<{ n: number }[]>(Prisma.sql`
+        SELECT count(*)::int AS n FROM contribution_events
+        WHERE user_id = ${userId}::uuid AND points > 0
+          AND type IN ('note_approved'::contribution_type,
+                       'occupancy_reported'::contribution_type,
+                       'hazard_confirmed'::contribution_type,
+                       'review_created'::contribution_type,
+                       'photo_approved'::contribution_type,
+                       'suggestion_approved'::contribution_type,
+                       'trip_shared'::contribution_type)
+          AND EXTRACT(MONTH FROM created_at AT TIME ZONE 'Europe/Istanbul')::int
+              IN (${Prisma.join(WINTER_MONTHS.map((m) => Prisma.sql`${m}::int`))})
+      `),
+
+      // "Gezgin": kaç FARKLI bölgede katkı var. `approvedByArea`'nın uzunluğu
+      // KULLANILAMAZ — o sorgu LIMIT'lidir ve seyir notlarını (location_id
+      // NULL, yalnız from/to dolu) dışarıda bırakırdı.
+      this.prisma.$queryRaw<{ n: number }[]>(Prisma.sql`
+        SELECT count(DISTINCT l.admin_area_id)::int AS n
+        FROM location_notes n
+        JOIN locations l ON l.id = COALESCE(n.location_id, n.from_location_id)
+        WHERE n.user_id = ${userId}::uuid AND n.status = 'approved'
+          AND n.deleted_at IS NULL AND l.admin_area_id IS NOT NULL
+      `),
+    ]);
+
+    return {
+      areaApproved: areas,
+      maxHelpfulOnOneNote: Number(one[0]?.maxHelpful ?? 0),
+      confirmedHazards: Number(one[0]?.hazards ?? 0),
+      winterContributions: Number(winter[0]?.n ?? 0),
+      distinctRegions: Number(regions[0]?.n ?? 0),
+    };
+  }
+
+  async grantBadges(userId: string, badges: EarnedBadge[]): Promise<EarnedBadge[]> {
+    const granted: EarnedBadge[] = [];
+    for (const b of badges) {
+      // Kapsamlı/kapsamsız iki AYRI kısmi tekil indeks var; ON CONFLICT bir
+      // indeks (ya da eşleşen kısmi koşul) ister. "Yoksa ekle" bu yüzden
+      // NOT EXISTS ile yazılır.
+      //
+      // DİKKAT: kontrol `revoked_at`'e BAKMAZ. İndeksler de bakmıyor — geri
+      // alınmış satır indeks yerini tutmaya devam eder. Kontrole
+      // `revoked_at IS NULL` eklenirse geri alınan her rozet, bir sonraki
+      // eşitlemede 23505 (duplicate key) üretir ve o kullanıcının SONRAKİ
+      // bütün rozetleri sessizce yazılamaz olurdu (inceleme bulgusu).
+      // Yani: geri alınan rozet geri alınmış KALIR — zaten istenen budur.
+      const n = await this.prisma.$executeRaw(Prisma.sql`
+        INSERT INTO user_badges (user_id, badge_code, scope_type, scope_id)
+        SELECT ${userId}::uuid, ${b.code}::text, ${b.scopeType}::text, ${b.scopeId}::uuid
+        WHERE NOT EXISTS (
+          SELECT 1 FROM user_badges
+          WHERE user_id = ${userId}::uuid AND badge_code = ${b.code}::text
+            AND scope_id IS NOT DISTINCT FROM ${b.scopeId}::uuid
+        )
+      `);
+      if (Number(n) > 0) granted.push(b);
+    }
+    return granted;
+  }
+
+  /**
+   * Bölge bazında onaylı katkı sayısı — hem özet hem rozet bunu kullanır.
+   * Seyir notunda `location_id` NULL'dur (0008 ck_location_notes_target):
+   * bu yüzden başlangıç noktası üzerinden bağlanır, yoksa çok gezen kaptan
+   * hiçbir bölgede görünmezdi.
+   */
+  private approvedByArea(
+    userId: string,
+    limit = 50,
+  ): Promise<{ adminAreaId: string; name: string; count: number }[]> {
+    return this.prisma
+      .$queryRaw<{ adminAreaId: string; name: string; count: number }[]>(
+        Prisma.sql`
+        SELECT a.id AS "adminAreaId",
+               COALESCE(i.name, a.name, a.slug) AS name,
+               count(*)::int AS count
+        FROM location_notes n
+        JOIN locations l ON l.id = COALESCE(n.location_id, n.from_location_id)
+        JOIN admin_areas a ON a.id = l.admin_area_id
+        LEFT JOIN admin_area_i18n i ON i.admin_area_id = a.id AND i.locale = 'tr'
+        WHERE n.user_id = ${userId}::uuid AND n.status = 'approved' AND n.deleted_at IS NULL
+        GROUP BY a.id, i.name, a.name, a.slug
+        ORDER BY count DESC
+        LIMIT ${limit}
+      `,
+      )
+      .then((rows) => rows.map((a) => ({ ...a, count: Number(a.count) })));
   }
 
   async contributions(userId: string, limit: number): Promise<ContributionItem[]> {

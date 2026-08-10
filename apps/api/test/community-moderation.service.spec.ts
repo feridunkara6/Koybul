@@ -1,4 +1,5 @@
 import { Principal } from '../src/core/auth/principal';
+import { EarnedBadge, emptyBadgeStats } from '../src/modules/community/domain/badges';
 import { ModerationService } from '../src/modules/community/application/moderation.service';
 import { ReputationService } from '../src/modules/community/application/reputation.service';
 import {
@@ -34,6 +35,7 @@ class FakeMod implements ModerationRepository {
 }
 
 class FakeRep implements ReputationRepository {
+  granted: string[] = [];
   awards: { userId: string; action: string; base: number }[] = [];
   recomputed: string[] = [];
   throwOnAward = false;
@@ -65,6 +67,13 @@ class FakeRep implements ReputationRepository {
   recomputeTrust(userId: string) {
     this.recomputed.push(userId);
     return Promise.resolve(1);
+  }
+  badgeStats() {
+    return Promise.resolve(emptyBadgeStats());
+  }
+  grantBadges(_userId: string, badges: EarnedBadge[]) {
+    this.granted.push(...badges.map((b) => b.code));
+    return Promise.resolve(badges);
   }
   authorState(): Promise<AuthorState> {
     return Promise.resolve({ trustScore: 1, approvedCount: 1, writeRestrictedUntil: null });

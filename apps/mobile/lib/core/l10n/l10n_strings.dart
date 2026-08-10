@@ -435,6 +435,88 @@ class L10n {
     required this.noteRecordedWindFmt,
     required this.noteStatusPending,
     required this.noteStatusRejected,
+    required this.sailorProfileTitle,
+    required this.sailorProfileEmpty,
+    required this.sailorPointsCap,
+    required this.sailorTripsCap,
+    required this.sailorNmCap,
+    required this.sailorAreaCountFmt,
+    required this.levelScreenTitle,
+    required this.levelPointsFmt,
+    required this.levelToNextFmt,
+    required this.levelWhatTitle,
+    required this.levelWhatBody,
+    required this.levelCurrentLabel,
+    required this.levelTopReached,
+    required this.badgesTitle,
+    required this.badgesEmpty,
+    required this.badgesLockedTitle,
+    required this.badgeSoon,
+    required this.badgeAreaExpert,
+    required this.badgeAreaExpertFmt,
+    required this.badgeAreaExpertDescFmt,
+    required this.badgeLighthouse,
+    required this.badgeLighthouseDescFmt,
+    required this.badgeSafetyWatch,
+    required this.badgeSafetyWatchDescFmt,
+    required this.badgeWinterSailor,
+    required this.badgeWinterSailorDescFmt,
+    required this.badgeRegionTraveler,
+    required this.badgeRegionTravelerDescFmt,
+    required this.badgeFirstExplorer,
+    required this.badgeFirstExplorerDesc,
+    required this.badgeReliableReporter,
+    required this.badgeReliableReporterDesc,
+    required this.badgeVerifiedBoat,
+    required this.badgeVerifiedBoatDesc,
+    required this.contribTitle,
+    required this.contribTabPublished,
+    required this.contribTabPending,
+    required this.contribTabRejected,
+    required this.contribEmpty,
+    required this.contribPendingHint,
+    required this.contribHelpfulFmt,
+    required this.pointsTitle,
+    required this.pointsEmpty,
+    required this.pointsCapNote,
+    required this.pointsTrustFmt,
+    required this.contribTypeOccupancy,
+    required this.contribTypeNote,
+    required this.contribTypeHazard,
+    required this.contribTypeHelpful,
+    required this.contribTypeReview,
+    required this.contribTypePhoto,
+    required this.contribTypeSuggestion,
+    required this.contribTypeReport,
+    required this.contribTypeTrip,
+    required this.contribTypeRejected,
+    required this.navModeration,
+    required this.modEmpty,
+    required this.modApprove,
+    required this.modReject,
+    required this.modApproved,
+    required this.modRejected,
+    required this.modReasonTitle,
+    required this.modReasonOffTopic,
+    required this.modReasonNotVerifiable,
+    required this.modReasonDuplicate,
+    required this.modReasonPersonalData,
+    required this.modReasonOffensive,
+    required this.modReasonWrongLocation,
+    required this.modReasonOther,
+    required this.modApprovalRateFmt,
+    required this.modEntityNote,
+    required this.modEntityReview,
+    required this.modEntityMedia,
+    required this.modEntitySuggestion,
+    required this.modEntityReport,
+    required this.modAll,
+    required this.modGpsVerified,
+    required this.nearbyNotesTitle,
+    required this.nearbyNotesLead,
+    required this.nearbyDistanceFmt,
+    required this.actionFailed,
+    required this.agoDayFmt,
     required this.gateNoteMsg,
     required this.levelNew,
     required this.levelCoastal,
@@ -575,6 +657,88 @@ class L10n {
   final String noteRecordedWindFmt;
   final String noteStatusPending;
   final String noteStatusRejected;
+  final String sailorProfileTitle;
+  final String sailorProfileEmpty;
+  final String sailorPointsCap;
+  final String sailorTripsCap;
+  final String sailorNmCap;
+  final String sailorAreaCountFmt;
+  final String levelScreenTitle;
+  final String levelPointsFmt;
+  final String levelToNextFmt;
+  final String levelWhatTitle;
+  final String levelWhatBody;
+  final String levelCurrentLabel;
+  final String levelTopReached;
+  final String badgesTitle;
+  final String badgesEmpty;
+  final String badgesLockedTitle;
+  final String badgeSoon;
+  final String badgeAreaExpert;
+  final String badgeAreaExpertFmt;
+  final String badgeAreaExpertDescFmt;
+  final String badgeLighthouse;
+  final String badgeLighthouseDescFmt;
+  final String badgeSafetyWatch;
+  final String badgeSafetyWatchDescFmt;
+  final String badgeWinterSailor;
+  final String badgeWinterSailorDescFmt;
+  final String badgeRegionTraveler;
+  final String badgeRegionTravelerDescFmt;
+  final String badgeFirstExplorer;
+  final String badgeFirstExplorerDesc;
+  final String badgeReliableReporter;
+  final String badgeReliableReporterDesc;
+  final String badgeVerifiedBoat;
+  final String badgeVerifiedBoatDesc;
+  final String contribTitle;
+  final String contribTabPublished;
+  final String contribTabPending;
+  final String contribTabRejected;
+  final String contribEmpty;
+  final String contribPendingHint;
+  final String contribHelpfulFmt;
+  final String pointsTitle;
+  final String pointsEmpty;
+  final String pointsCapNote;
+  final String pointsTrustFmt;
+  final String contribTypeOccupancy;
+  final String contribTypeNote;
+  final String contribTypeHazard;
+  final String contribTypeHelpful;
+  final String contribTypeReview;
+  final String contribTypePhoto;
+  final String contribTypeSuggestion;
+  final String contribTypeReport;
+  final String contribTypeTrip;
+  final String contribTypeRejected;
+  final String navModeration;
+  final String modEmpty;
+  final String modApprove;
+  final String modReject;
+  final String modApproved;
+  final String modRejected;
+  final String modReasonTitle;
+  final String modReasonOffTopic;
+  final String modReasonNotVerifiable;
+  final String modReasonDuplicate;
+  final String modReasonPersonalData;
+  final String modReasonOffensive;
+  final String modReasonWrongLocation;
+  final String modReasonOther;
+  final String modApprovalRateFmt;
+  final String modEntityNote;
+  final String modEntityReview;
+  final String modEntityMedia;
+  final String modEntitySuggestion;
+  final String modEntityReport;
+  final String modAll;
+  final String modGpsVerified;
+  final String nearbyNotesTitle;
+  final String nearbyNotesLead;
+  final String nearbyDistanceFmt;
+  final String actionFailed;
+  final String agoDayFmt;
   final String gateNoteMsg;
   final String levelNew;
   final String levelCoastal;
@@ -764,6 +928,120 @@ class L10n {
   String typeLabel(String code) => typeLabels[code] ?? typeLabels['mooring_point']!;
   String amenityLabel(String code) => amenityLabels[code] ?? code;
   String holdingLabel(String code) => holdingLabels[code] ?? code;
+
+  /// Rozet adı. Bölgesel rozet, kapsam adıyla kişiselleşir ("Fethiye
+  /// Bilirkişisi"); kapsam yoksa genel ad kullanılır.
+  String badgeName(String code, {String? scopeName}) {
+    switch (code) {
+      case 'area_expert':
+        return scopeName == null ? badgeAreaExpert : L10n.fmt(badgeAreaExpertFmt, scopeName);
+      case 'lighthouse':
+        return badgeLighthouse;
+      case 'safety_watch':
+        return badgeSafetyWatch;
+      case 'winter_sailor':
+        return badgeWinterSailor;
+      case 'region_traveler':
+        return badgeRegionTraveler;
+      case 'first_explorer':
+        return badgeFirstExplorer;
+      case 'reliable_reporter':
+        return badgeReliableReporter;
+      case 'verified_boat':
+        return badgeVerifiedBoat;
+      default:
+        return code;
+    }
+  }
+
+  /// Rozetin kazanma koşulu. Eşik SUNUCUDAN gelir — metne gömülmez ki eşik
+  /// değişince açıklama yalan söylemesin.
+  String badgeDesc(String code, int target) {
+    switch (code) {
+      case 'area_expert':
+        return L10n.fmt(badgeAreaExpertDescFmt, '$target');
+      case 'lighthouse':
+        return L10n.fmt(badgeLighthouseDescFmt, '$target');
+      case 'safety_watch':
+        return L10n.fmt(badgeSafetyWatchDescFmt, '$target');
+      case 'winter_sailor':
+        return L10n.fmt(badgeWinterSailorDescFmt, '$target');
+      case 'region_traveler':
+        return L10n.fmt(badgeRegionTravelerDescFmt, '$target');
+      case 'first_explorer':
+        return badgeFirstExplorerDesc;
+      case 'reliable_reporter':
+        return badgeReliableReporterDesc;
+      case 'verified_boat':
+        return badgeVerifiedBoatDesc;
+      default:
+        return '';
+    }
+  }
+
+  /// Katkı olayının etiketi (sunucudaki `contribution_type` kodu).
+  String contributionLabel(String code) {
+    switch (code) {
+      case 'occupancy_reported':
+        return contribTypeOccupancy;
+      case 'note_approved':
+        return contribTypeNote;
+      case 'hazard_confirmed':
+        return contribTypeHazard;
+      case 'helpful_received':
+        return contribTypeHelpful;
+      case 'review_created':
+        return contribTypeReview;
+      case 'photo_approved':
+        return contribTypePhoto;
+      case 'suggestion_approved':
+        return contribTypeSuggestion;
+      case 'report_confirmed':
+        return contribTypeReport;
+      case 'trip_shared':
+        return contribTypeTrip;
+      case 'content_rejected':
+        return contribTypeRejected;
+      default:
+        return code;
+    }
+  }
+
+  /// Moderasyon kuyruğundaki varlık türünün etiketi.
+  String moderationEntityLabel(String code) {
+    switch (code) {
+      case 'review':
+        return modEntityReview;
+      case 'media':
+        return modEntityMedia;
+      case 'suggested_location':
+        return modEntitySuggestion;
+      case 'location_report':
+        return modEntityReport;
+      default:
+        return modEntityNote;
+    }
+  }
+
+  /// Red sebebinin etiketi (sunucudaki `REJECT_REASONS` kodu).
+  String rejectReasonLabel(String code) {
+    switch (code) {
+      case 'off_topic':
+        return modReasonOffTopic;
+      case 'not_verifiable':
+        return modReasonNotVerifiable;
+      case 'duplicate':
+        return modReasonDuplicate;
+      case 'personal_data':
+        return modReasonPersonalData;
+      case 'offensive':
+        return modReasonOffensive;
+      case 'wrong_location':
+        return modReasonWrongLocation;
+      default:
+        return modReasonOther;
+    }
+  }
 
   /// İki yer tutuculu şablon: fmt2('{0} nm · ~{1}', '12', '1 h') → '12 nm · ~1 h'.
   static String fmt2(String template, String a, String b) =>
@@ -1287,6 +1565,88 @@ const L10n _tr = L10n(
   noteRecordedWindFmt: 'O gün: {0}',
   noteStatusPending: 'İncelemede',
   noteStatusRejected: 'Reddedildi',
+  sailorProfileTitle: 'Denizci Profilim',
+  sailorProfileEmpty: 'Henüz katkın yok. İlk notunla burası dolmaya başlar.',
+  sailorPointsCap: 'KATKI PUANI',
+  sailorTripsCap: 'SEYİR',
+  sailorNmCap: 'TOPLAM NM',
+  sailorAreaCountFmt: '{0} katkı',
+  levelScreenTitle: 'Denizci Seviyem',
+  levelPointsFmt: '{0} katkı puanı',
+  levelToNextFmt: '{0} · {1} puan kaldı',
+  levelWhatTitle: 'Seviye ne işe yarar?',
+  levelWhatBody: 'Notlarının yanında görünür ve okuyan kaptana ne kadar deneyimli birinden bilgi aldığını gösterir. Ayrıcalık ya da ödül vermez.',
+  levelCurrentLabel: 'şu an',
+  levelTopReached: 'En üst seviyedesin.',
+  badgesTitle: 'Rozetlerim',
+  badgesEmpty: 'Henüz rozetin yok — aşağıda nasıl kazanıldıkları yazıyor.',
+  badgesLockedTitle: 'Henüz kazanılmayan',
+  badgeSoon: 'yakında',
+  badgeAreaExpert: 'Bölge Bilirkişisi',
+  badgeAreaExpertFmt: '{0} Bilirkişisi',
+  badgeAreaExpertDescFmt: 'Bir bölgede {0} onaylı katkı',
+  badgeLighthouse: 'Fener',
+  badgeLighthouseDescFmt: 'Bir notun {0} kaptana faydalı geldi',
+  badgeSafetyWatch: 'Emniyet Gözcüsü',
+  badgeSafetyWatchDescFmt: '{0} uyarı notun doğrulandı',
+  badgeWinterSailor: 'Kış Denizcisi',
+  badgeWinterSailorDescFmt: 'Kasım–Mart arasında {0} katkı',
+  badgeRegionTraveler: 'Gezgin',
+  badgeRegionTravelerDescFmt: '{0} farklı bölgede katkı',
+  badgeFirstExplorer: 'İlk Kâşif',
+  badgeFirstExplorerDesc: 'Önerdiğin bir nokta haritaya eklendi',
+  badgeReliableReporter: 'Güvenilir Bildirimci',
+  badgeReliableReporterDesc: '30 yer durumu bildirimi, tutarlılık %90 üstü',
+  badgeVerifiedBoat: 'Doğrulanmış Tekne',
+  badgeVerifiedBoatDesc: 'Tekne bilgin bir fotoğrafla doğrulandı',
+  contribTitle: 'Katkılarım',
+  contribTabPublished: 'Yayında',
+  contribTabPending: 'İncelemede',
+  contribTabRejected: 'Reddedilen',
+  contribEmpty: 'Burada henüz bir şey yok.',
+  contribPendingHint: 'Genelde 24 saat içinde sonuçlanır.',
+  contribHelpfulFmt: '{0} kişi faydalı buldu',
+  pointsTitle: 'Katkı puanı',
+  pointsEmpty: 'Henüz puan kazandıran bir katkın yok.',
+  pointsCapNote: 'Günlük ve haftalık tavan vardır: amaç çok katkı değil, doğru katkı.',
+  pointsTrustFmt: 'Güven katsayısı {0}',
+  contribTypeOccupancy: 'Yer durumu',
+  contribTypeNote: 'Kaptan notu',
+  contribTypeHazard: 'Uyarı doğrulama',
+  contribTypeHelpful: 'Faydalı oyu',
+  contribTypeReview: 'Yorum',
+  contribTypePhoto: 'Fotoğraf',
+  contribTypeSuggestion: 'Nokta önerisi',
+  contribTypeReport: 'Şikâyet',
+  contribTypeTrip: 'Seyir paylaşımı',
+  contribTypeRejected: 'Reddedilen içerik',
+  navModeration: 'Moderasyon',
+  modEmpty: 'Kuyruk boş. Teşekkürler kaptan.',
+  modApprove: 'Onayla',
+  modReject: 'Reddet',
+  modApproved: 'Onaylandı.',
+  modRejected: 'Reddedildi.',
+  modReasonTitle: 'Red sebebi',
+  modReasonOffTopic: 'Konu dışı',
+  modReasonNotVerifiable: 'Doğrulanamıyor',
+  modReasonDuplicate: 'Tekrar',
+  modReasonPersonalData: 'Kişisel veri',
+  modReasonOffensive: 'Hakaret',
+  modReasonWrongLocation: 'Yanlış nokta',
+  modReasonOther: 'Diğer',
+  modApprovalRateFmt: 'onay oranı %{0}',
+  modEntityNote: 'Not',
+  modEntityReview: 'Yorum',
+  modEntityMedia: 'Fotoğraf',
+  modEntitySuggestion: 'Nokta önerisi',
+  modEntityReport: 'Şikâyet',
+  modAll: 'Tümü',
+  modGpsVerified: 'GPS doğrulandı',
+  nearbyNotesTitle: 'Yakında paylaşılanlar',
+  nearbyNotesLead: 'Son 48 saatte 50 deniz mili içinde bırakılan notlar.',
+  nearbyDistanceFmt: '{0} NM',
+  actionFailed: 'İşlem tamamlanamadı. Tekrar dene.',
+  agoDayFmt: '{0} gün önce',
   gateNoteMsg: 'Not bırakmak için ücretsiz bir hesap gerekir.',
   levelNew: 'Yeni Denizci',
   levelCoastal: 'Kıyı Kaşifi',
@@ -1812,6 +2172,88 @@ const L10n _en = L10n(
   noteRecordedWindFmt: 'That day: {0}',
   noteStatusPending: 'In review',
   noteStatusRejected: 'Rejected',
+  sailorProfileTitle: 'My Sailor Profile',
+  sailorProfileEmpty: 'No contributions yet. Your first note fills this in.',
+  sailorPointsCap: 'POINTS',
+  sailorTripsCap: 'TRIPS',
+  sailorNmCap: 'TOTAL NM',
+  sailorAreaCountFmt: '{0} contributions',
+  levelScreenTitle: 'My Sailor Level',
+  levelPointsFmt: '{0} contribution points',
+  levelToNextFmt: '{0} · {1} points to go',
+  levelWhatTitle: 'What does the level do?',
+  levelWhatBody: 'It appears next to your notes so other skippers can see how experienced the author is. It grants no privileges and no rewards.',
+  levelCurrentLabel: 'now',
+  levelTopReached: 'You are at the top level.',
+  badgesTitle: 'My Badges',
+  badgesEmpty: 'No badges yet — below is how each one is earned.',
+  badgesLockedTitle: 'Not earned yet',
+  badgeSoon: 'soon',
+  badgeAreaExpert: 'Local Expert',
+  badgeAreaExpertFmt: '{0} Expert',
+  badgeAreaExpertDescFmt: '{0} approved contributions in one area',
+  badgeLighthouse: 'Lighthouse',
+  badgeLighthouseDescFmt: 'One of your notes helped {0} skippers',
+  badgeSafetyWatch: 'Safety Watch',
+  badgeSafetyWatchDescFmt: '{0} of your hazard notes were confirmed',
+  badgeWinterSailor: 'Winter Sailor',
+  badgeWinterSailorDescFmt: '{0} contributions between November and March',
+  badgeRegionTraveler: 'Voyager',
+  badgeRegionTravelerDescFmt: 'Contributions in {0} different areas',
+  badgeFirstExplorer: 'First Explorer',
+  badgeFirstExplorerDesc: 'A place you suggested was added to the map',
+  badgeReliableReporter: 'Reliable Reporter',
+  badgeReliableReporterDesc: '30 occupancy reports with over 90% consistency',
+  badgeVerifiedBoat: 'Verified Boat',
+  badgeVerifiedBoatDesc: 'Your boat details were verified with a photo',
+  contribTitle: 'My Contributions',
+  contribTabPublished: 'Published',
+  contribTabPending: 'In review',
+  contribTabRejected: 'Rejected',
+  contribEmpty: 'Nothing here yet.',
+  contribPendingHint: 'Usually resolved within 24 hours.',
+  contribHelpfulFmt: '{0} found it helpful',
+  pointsTitle: 'Contribution points',
+  pointsEmpty: 'No point-earning contributions yet.',
+  pointsCapNote: 'Daily and weekly caps apply: the goal is accurate contributions, not many.',
+  pointsTrustFmt: 'Trust factor {0}',
+  contribTypeOccupancy: 'Occupancy report',
+  contribTypeNote: 'Skipper note',
+  contribTypeHazard: 'Hazard confirmation',
+  contribTypeHelpful: 'Helpful vote',
+  contribTypeReview: 'Review',
+  contribTypePhoto: 'Photo',
+  contribTypeSuggestion: 'Place suggestion',
+  contribTypeReport: 'Report',
+  contribTypeTrip: 'Shared trip',
+  contribTypeRejected: 'Rejected content',
+  navModeration: 'Moderation',
+  modEmpty: 'The queue is empty. Thanks, skipper.',
+  modApprove: 'Approve',
+  modReject: 'Reject',
+  modApproved: 'Approved.',
+  modRejected: 'Rejected.',
+  modReasonTitle: 'Rejection reason',
+  modReasonOffTopic: 'Off topic',
+  modReasonNotVerifiable: 'Not verifiable',
+  modReasonDuplicate: 'Duplicate',
+  modReasonPersonalData: 'Personal data',
+  modReasonOffensive: 'Offensive',
+  modReasonWrongLocation: 'Wrong place',
+  modReasonOther: 'Other',
+  modApprovalRateFmt: '{0}% approval rate',
+  modEntityNote: 'Note',
+  modEntityReview: 'Review',
+  modEntityMedia: 'Photo',
+  modEntitySuggestion: 'Place suggestion',
+  modEntityReport: 'Report',
+  modAll: 'All',
+  modGpsVerified: 'GPS verified',
+  nearbyNotesTitle: 'Shared nearby',
+  nearbyNotesLead: 'Notes left within 50 nautical miles in the last 48 hours.',
+  nearbyDistanceFmt: '{0} NM',
+  actionFailed: 'Could not complete the action. Try again.',
+  agoDayFmt: '{0} d ago',
   gateNoteMsg: 'A free account is required to leave a note.',
   levelNew: 'New Sailor',
   levelCoastal: 'Coastal Explorer',
@@ -2337,6 +2779,88 @@ const L10n _es = L10n(
   noteRecordedWindFmt: 'Ese día: {0}',
   noteStatusPending: 'En revisión',
   noteStatusRejected: 'Rechazada',
+  sailorProfileTitle: 'Mi perfil de navegante',
+  sailorProfileEmpty: 'Aún no hay aportes. Tu primera nota lo llenará.',
+  sailorPointsCap: 'PUNTOS',
+  sailorTripsCap: 'TRAVESÍAS',
+  sailorNmCap: 'NM TOTAL',
+  sailorAreaCountFmt: '{0} aportes',
+  levelScreenTitle: 'Mi nivel de navegante',
+  levelPointsFmt: '{0} puntos de aporte',
+  levelToNextFmt: '{0} · faltan {1} puntos',
+  levelWhatTitle: '¿Para qué sirve el nivel?',
+  levelWhatBody: 'Aparece junto a tus notas para que otros patrones sepan la experiencia del autor. No da privilegios ni premios.',
+  levelCurrentLabel: 'ahora',
+  levelTopReached: 'Estás en el nivel más alto.',
+  badgesTitle: 'Mis insignias',
+  badgesEmpty: 'Aún sin insignias: abajo se explica cómo se ganan.',
+  badgesLockedTitle: 'Aún no ganadas',
+  badgeSoon: 'pronto',
+  badgeAreaExpert: 'Experto local',
+  badgeAreaExpertFmt: 'Experto de {0}',
+  badgeAreaExpertDescFmt: '{0} aportes aprobados en una zona',
+  badgeLighthouse: 'Faro',
+  badgeLighthouseDescFmt: 'Una de tus notas ayudó a {0} patrones',
+  badgeSafetyWatch: 'Vigía de seguridad',
+  badgeSafetyWatchDescFmt: '{0} de tus avisos fueron confirmados',
+  badgeWinterSailor: 'Navegante de invierno',
+  badgeWinterSailorDescFmt: '{0} aportes entre noviembre y marzo',
+  badgeRegionTraveler: 'Viajero',
+  badgeRegionTravelerDescFmt: 'Aportes en {0} zonas distintas',
+  badgeFirstExplorer: 'Primer explorador',
+  badgeFirstExplorerDesc: 'Un lugar que sugeriste se añadió al mapa',
+  badgeReliableReporter: 'Informante fiable',
+  badgeReliableReporterDesc: '30 informes de ocupación con más del 90% de coherencia',
+  badgeVerifiedBoat: 'Barco verificado',
+  badgeVerifiedBoatDesc: 'Los datos de tu barco se verificaron con una foto',
+  contribTitle: 'Mis aportes',
+  contribTabPublished: 'Publicados',
+  contribTabPending: 'En revisión',
+  contribTabRejected: 'Rechazados',
+  contribEmpty: 'Aquí todavía no hay nada.',
+  contribPendingHint: 'Suele resolverse en 24 horas.',
+  contribHelpfulFmt: '{0} lo encontraron útil',
+  pointsTitle: 'Puntos de aporte',
+  pointsEmpty: 'Aún no hay aportes que den puntos.',
+  pointsCapNote: 'Hay límites diarios y semanales: el objetivo es aportar bien, no mucho.',
+  pointsTrustFmt: 'Factor de confianza {0}',
+  contribTypeOccupancy: 'Informe de ocupación',
+  contribTypeNote: 'Nota de patrón',
+  contribTypeHazard: 'Confirmación de aviso',
+  contribTypeHelpful: 'Voto útil',
+  contribTypeReview: 'Reseña',
+  contribTypePhoto: 'Foto',
+  contribTypeSuggestion: 'Sugerencia de lugar',
+  contribTypeReport: 'Reporte',
+  contribTypeTrip: 'Travesía compartida',
+  contribTypeRejected: 'Contenido rechazado',
+  navModeration: 'Moderación',
+  modEmpty: 'La cola está vacía. Gracias, patrón.',
+  modApprove: 'Aprobar',
+  modReject: 'Rechazar',
+  modApproved: 'Aprobado.',
+  modRejected: 'Rechazado.',
+  modReasonTitle: 'Motivo del rechazo',
+  modReasonOffTopic: 'Fuera de tema',
+  modReasonNotVerifiable: 'No verificable',
+  modReasonDuplicate: 'Duplicado',
+  modReasonPersonalData: 'Datos personales',
+  modReasonOffensive: 'Ofensivo',
+  modReasonWrongLocation: 'Lugar incorrecto',
+  modReasonOther: 'Otro',
+  modApprovalRateFmt: 'tasa de aprobación {0}%',
+  modEntityNote: 'Nota',
+  modEntityReview: 'Reseña',
+  modEntityMedia: 'Foto',
+  modEntitySuggestion: 'Sugerencia',
+  modEntityReport: 'Reporte',
+  modAll: 'Todos',
+  modGpsVerified: 'GPS verificado',
+  nearbyNotesTitle: 'Compartido cerca',
+  nearbyNotesLead: 'Notas dejadas en 50 millas náuticas en las últimas 48 horas.',
+  nearbyDistanceFmt: '{0} NM',
+  actionFailed: 'No se pudo completar la acción. Inténtalo de nuevo.',
+  agoDayFmt: 'hace {0} d',
   gateNoteMsg: 'Se requiere una cuenta gratuita para dejar una nota.',
   levelNew: 'Marinero nuevo',
   levelCoastal: 'Explorador costero',
@@ -2862,6 +3386,88 @@ const L10n _ru = L10n(
   noteRecordedWindFmt: 'В тот день: {0}',
   noteStatusPending: 'На проверке',
   noteStatusRejected: 'Отклонена',
+  sailorProfileTitle: 'Мой профиль моряка',
+  sailorProfileEmpty: 'Пока нет вкладов. Первая заметка заполнит этот раздел.',
+  sailorPointsCap: 'БАЛЛЫ',
+  sailorTripsCap: 'РЕЙСЫ',
+  sailorNmCap: 'ВСЕГО МИЛЬ',
+  sailorAreaCountFmt: '{0} вкладов',
+  levelScreenTitle: 'Мой уровень',
+  levelPointsFmt: '{0} баллов за вклад',
+  levelToNextFmt: '{0} · осталось {1}',
+  levelWhatTitle: 'Зачем нужен уровень?',
+  levelWhatBody: 'Он показывается рядом с вашими заметками, чтобы читатель понимал опыт автора. Никаких привилегий и наград он не даёт.',
+  levelCurrentLabel: 'сейчас',
+  levelTopReached: 'Вы на высшем уровне.',
+  badgesTitle: 'Мои значки',
+  badgesEmpty: 'Значков пока нет — ниже показано, как их получить.',
+  badgesLockedTitle: 'Ещё не получены',
+  badgeSoon: 'скоро',
+  badgeAreaExpert: 'Знаток района',
+  badgeAreaExpertFmt: 'Знаток: {0}',
+  badgeAreaExpertDescFmt: '{0} одобренных вкладов в одном районе',
+  badgeLighthouse: 'Маяк',
+  badgeLighthouseDescFmt: 'Одна из ваших заметок помогла {0} шкиперам',
+  badgeSafetyWatch: 'Дозор безопасности',
+  badgeSafetyWatchDescFmt: '{0} ваших предупреждений подтверждены',
+  badgeWinterSailor: 'Зимний моряк',
+  badgeWinterSailorDescFmt: '{0} вкладов с ноября по март',
+  badgeRegionTraveler: 'Путешественник',
+  badgeRegionTravelerDescFmt: 'Вклады в {0} разных районах',
+  badgeFirstExplorer: 'Первопроходец',
+  badgeFirstExplorerDesc: 'Предложенное вами место добавлено на карту',
+  badgeReliableReporter: 'Надёжный наблюдатель',
+  badgeReliableReporterDesc: '30 отчётов о занятости с точностью выше 90%',
+  badgeVerifiedBoat: 'Подтверждённая лодка',
+  badgeVerifiedBoatDesc: 'Данные лодки подтверждены фотографией',
+  contribTitle: 'Мои вклады',
+  contribTabPublished: 'Опубликовано',
+  contribTabPending: 'На проверке',
+  contribTabRejected: 'Отклонено',
+  contribEmpty: 'Здесь пока пусто.',
+  contribPendingHint: 'Обычно решается в течение 24 часов.',
+  contribHelpfulFmt: '{0} сочли полезным',
+  pointsTitle: 'Баллы за вклад',
+  pointsEmpty: 'Пока нет вкладов, приносящих баллы.',
+  pointsCapNote: 'Действуют дневные и недельные лимиты: важна точность, а не количество.',
+  pointsTrustFmt: 'Коэффициент доверия {0}',
+  contribTypeOccupancy: 'Отчёт о занятости',
+  contribTypeNote: 'Заметка шкипера',
+  contribTypeHazard: 'Подтверждение опасности',
+  contribTypeHelpful: 'Голос «полезно»',
+  contribTypeReview: 'Отзыв',
+  contribTypePhoto: 'Фото',
+  contribTypeSuggestion: 'Предложение места',
+  contribTypeReport: 'Жалоба',
+  contribTypeTrip: 'Опубликованный рейс',
+  contribTypeRejected: 'Отклонённый контент',
+  navModeration: 'Модерация',
+  modEmpty: 'Очередь пуста. Спасибо, шкипер.',
+  modApprove: 'Одобрить',
+  modReject: 'Отклонить',
+  modApproved: 'Одобрено.',
+  modRejected: 'Отклонено.',
+  modReasonTitle: 'Причина отклонения',
+  modReasonOffTopic: 'Не по теме',
+  modReasonNotVerifiable: 'Нельзя проверить',
+  modReasonDuplicate: 'Дубликат',
+  modReasonPersonalData: 'Личные данные',
+  modReasonOffensive: 'Оскорбление',
+  modReasonWrongLocation: 'Не то место',
+  modReasonOther: 'Другое',
+  modApprovalRateFmt: 'одобрено {0}%',
+  modEntityNote: 'Заметка',
+  modEntityReview: 'Отзыв',
+  modEntityMedia: 'Фото',
+  modEntitySuggestion: 'Предложение',
+  modEntityReport: 'Жалоба',
+  modAll: 'Все',
+  modGpsVerified: 'GPS подтверждён',
+  nearbyNotesTitle: 'Рядом поделились',
+  nearbyNotesLead: 'Заметки в радиусе 50 морских миль за последние 48 часов.',
+  nearbyDistanceFmt: '{0} NM',
+  actionFailed: 'Не удалось выполнить действие. Попробуйте ещё раз.',
+  agoDayFmt: '{0} дн. назад',
   gateNoteMsg: 'Для заметки нужна бесплатная учётная запись.',
   levelNew: 'Новый моряк',
   levelCoastal: 'Исследователь побережья',

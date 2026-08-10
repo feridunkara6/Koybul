@@ -1,7 +1,8 @@
-import 'package:dockly_api/dockly_api.dart' show GeoPoint, LocationSummary;
+import 'package:dockly_api/dockly_api.dart' show GeoPoint, LocationSummary, NearbyNote;
 import 'package:dockly_core/dockly_core.dart' show NetworkFailure;
 import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/checklist/application/checklist_controller.dart';
+import 'package:dockly_mobile/features/community/application/community_controller.dart';
 import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:dockly_mobile/features/today/presentation/today_screen.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/checklist_fakes.dart';
+import '../../support/community_fakes.dart';
 import '../../support/detail_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/search_fakes.dart' show sampleSummary;
@@ -25,6 +27,7 @@ void main() {
       overrides: <Override>[
         weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
         checklistStoreProvider.overrideWithValue(FakeChecklistStore()),
+        communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
       ],
       child: const MaterialApp(home: TodayScreen()),
     ));
@@ -58,6 +61,7 @@ void main() {
         weatherGatewayProvider.overrideWithValue(
             FakeWeatherGateway(result: sampleForecast(windKn: 20, windDirDeg: 0))),
         checklistStoreProvider.overrideWithValue(FakeChecklistStore()),
+        communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
         nearbyGatewayProvider.overrideWithValue(nearby),
         locationDetailGatewayProvider
             .overrideWithValue(FakeLocationDetailGateway()),
@@ -102,6 +106,7 @@ void main() {
         weatherGatewayProvider.overrideWithValue(FakeWeatherGateway(
             result: sampleForecast(windKn: 8, windDirDeg: 225))),
         checklistStoreProvider.overrideWithValue(FakeChecklistStore()),
+        communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
         nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
         locationDetailGatewayProvider
             .overrideWithValue(FakeLocationDetailGateway()),
@@ -137,6 +142,7 @@ void main() {
         weatherGatewayProvider.overrideWithValue(
             FakeWeatherGateway(result: sampleForecast())),
         checklistStoreProvider.overrideWithValue(FakeChecklistStore()),
+        communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
         nearbyGatewayProvider.overrideWithValue(
             FakeNearbyGateway(error: const NetworkFailure())),
         locationDetailGatewayProvider
@@ -147,5 +153,39 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.textContaining('Öneriler şu an hazırlanamadı'), findsOneWidget);
+  });
+
+  testWidgets('YAKINDA PAYLAŞILANLAR: not varsa kart en altta çizilir; '
+      'mevcut kartların hiçbiri kaybolmaz', (WidgetTester tester) async {
+    await tester.pumpWidget(ProviderScope(
+      overrides: <Override>[
+        originProvider.overrideWith(
+            (ref) => const GeoPoint(lat: 36.74, lon: 28.94)),
+        weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
+        checklistStoreProvider.overrideWithValue(FakeChecklistStore()),
+        // Öneri bölümü de kurulur: sahtesi verilmezse gerçek ağ yığını
+        // kurulmaya çalışılır ve kart sessizce hata durumunda çizilir.
+        nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
+        locationDetailGatewayProvider.overrideWithValue(FakeLocationDetailGateway()),
+        communityGatewayProvider.overrideWithValue(
+          FakeCommunityGateway(nearby: <NearbyNote>[makeNearbyNote()]),
+        ),
+      ],
+      child: const MaterialApp(home: TodayScreen()),
+    ));
+    await tester.pumpAndSettle();
+
+    // Mevcut kartlar yerinde.
+    expect(find.byKey(const ValueKey<String>('today-checklist')), findsOneWidget);
+    // Yeni kart en altta; görünür olması için kaydırılır. Kaydırma yüzeyi
+    // `Scrollable.first`: hava kartı da bir liste içerebilir, byType(ListView)
+    // iki eşleşme verip drag'i patlatırdı.
+    await tester.dragUntilVisible(
+      find.byKey(const ValueKey<String>('nearby-notes')),
+      find.byType(Scrollable).first,
+      const Offset(0, -200),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('nearby-notes')), findsOneWidget);
   });
 }

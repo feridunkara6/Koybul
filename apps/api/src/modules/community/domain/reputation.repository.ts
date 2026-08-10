@@ -1,3 +1,4 @@
+import { BadgeProgress, BadgeStats, EarnedBadge } from './badges';
 import { ContributionAction, LevelCode } from './scoring';
 
 /** Puan yazımı için gereken sayaçlar — tek sorguda toplanır. */
@@ -21,6 +22,8 @@ export interface ReputationSummary {
   badges: { code: string; scopeId: string | null; awardedAt: string }[];
   /** Bölgesel uzmanlık: en çok katkı verilen ilk 3 idari bölge. */
   areas: { adminAreaId: string; name: string; count: number }[];
+  /** Rozet ekranının tamamı: kazanılanlar + kazanılmayanların ilerlemesi. */
+  badgeProgress: BadgeProgress[];
 }
 
 /** Yazma öncesi bakılan asgari yazar durumu. */
@@ -60,6 +63,14 @@ export interface ReputationRepository {
   contributions(userId: string, limit: number): Promise<ContributionItem[]>;
   /** Güven katsayısını yeniden hesaplar ve yazar (moderasyon kararından sonra). */
   recomputeTrust(userId: string): Promise<number>;
+  /** Rozet sayaçları (saf değerlendirme `badges.ts`'te yapılır). */
+  badgeStats(userId: string): Promise<BadgeStats>;
+  /**
+   * Hak edilen rozetleri yazar; zaten varsa hiçbir şey yapmaz.
+   * ALTYAPI YOLU: rozeti SİSTEM verir, kullanıcı değil (0008 RLS notu).
+   * Dönen liste YENİ verilenlerdir (bildirim/kutlama için).
+   */
+  grantBadges(userId: string, badges: EarnedBadge[]): Promise<EarnedBadge[]>;
   /**
    * Yazma ucunun ilk adımı: kısıt + otomatik yayın kararı için gereken
    * asgari durum. Tam özet (summary) yerine bu kullanılır — daha ucuz.

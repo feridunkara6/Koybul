@@ -42,6 +42,12 @@ final Provider<CommunityApi> communityApiProvider = Provider<CommunityApi>((ref)
   return CommunityApi(ref.watch(docklyClientProvider).dio);
 });
 
+/// Denizci profili (seviye, puan, rozet, katkı dökümü) ve moderasyon
+/// istemcisi. TÜM uçları hesap ister; misafirde çağrılmaz.
+final Provider<ReputationApi> reputationApiProvider = Provider<ReputationApi>((ref) {
+  return ReputationApi(ref.watch(docklyClientProvider).dio);
+});
+
 /// Rüzgâr/hava tahmini API istemcisi — anonim uç (MET Norway, sunucu proksili).
 final Provider<WeatherApi> weatherApiProvider = Provider<WeatherApi>((ref) {
   return WeatherApi(ref.watch(docklyClientProvider).dio);

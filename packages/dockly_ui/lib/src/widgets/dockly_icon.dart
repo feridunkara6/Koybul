@@ -159,6 +159,33 @@ abstract final class DocklyIcons {
     '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>'
     '<path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
   );
+
+  // Denizci itibarı (topluluk 2026-08): rozet, emniyet, kış, gezgin, faydalı,
+  // bayrak. Yalnız EKLEME — mevcut ikonların hiçbiri değişmedi.
+  static const DocklyIconData award = DocklyIconData(
+    '<circle cx="12" cy="8" r="6"/>'
+    '<polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>',
+  );
+  static const DocklyIconData shield = DocklyIconData(
+    '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  );
+  static const DocklyIconData snowflake = DocklyIconData(
+    '<line x1="12" y1="2" x2="12" y2="22"/>'
+    '<line x1="3.34" y1="7" x2="20.66" y2="17"/>'
+    '<line x1="3.34" y1="17" x2="20.66" y2="7"/>',
+  );
+  static const DocklyIconData compass = DocklyIconData(
+    '<circle cx="12" cy="12" r="10"/>'
+    '<polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+  );
+  static const DocklyIconData thumbUp = DocklyIconData(
+    '<path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3z"/>'
+    '<path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>',
+  );
+  static const DocklyIconData flag = DocklyIconData(
+    '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>'
+    '<line x1="4" y1="22" x2="4" y2="15"/>',
+  );
   static const DocklyIconData imageOff = DocklyIconData(
     '<line x1="2" y1="2" x2="22" y2="22"/>'
     '<path d="M10.41 10.41a2 2 0 1 1-2.83-2.83"/>'

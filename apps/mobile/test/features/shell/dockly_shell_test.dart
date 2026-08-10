@@ -1,5 +1,6 @@
 import 'package:dockly_mobile/features/boat/application/maintenance_controller.dart';
 import 'package:dockly_mobile/features/boat/presentation/boat_screen.dart';
+import 'package:dockly_mobile/features/community/application/community_controller.dart';
 import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
 import 'package:dockly_mobile/features/deck/presentation/deck_screen.dart';
 import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
@@ -18,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/community_fakes.dart';
 import '../../support/detail_fakes.dart';
 import '../../support/fake_map_surface.dart';
 import '../../support/logbook_fakes.dart';
@@ -48,6 +50,8 @@ Widget _app() {
       // bölümü kurulur — motor asla gerçek ağa çıkmasın (inceleme dersi).
       nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
       locationDetailGatewayProvider.overrideWithValue(FakeLocationDetailGateway()),
+      // Bugün sekmesi: "Yakında paylaşılanlar" da ağ geçidi ister.
+      communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
       // Teknem sekmesi: bakım kayıtları bellek içi sahte depodan gelir.
       maintenanceStoreProvider.overrideWithValue(FakeMaintenanceStore()),
     ],

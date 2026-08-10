@@ -13,6 +13,7 @@ import {
   awardablePoints,
   isWriteRestricted,
 } from '../domain/scoring';
+import { earnedBadges } from '../domain/badges';
 
 /**
  * Puan yazımının tek kapısı. Hiçbir controller doğrudan puan yazamaz; her yol
@@ -91,15 +92,47 @@ export class ReputationService {
         'Puan yazılamadı',
       );
       return 0;
+    } finally {
+      // ROZET EŞİTLEMESİ TAVANLARDAN BAĞIMSIZDIR — bu yüzden `finally`.
+      // Yukarıdaki erken çıkışlar "puan yazılmadı" der, "davranış olmadı"
+      // demez: 25 faydalı oy alan bir not, 10. oydan sonra puan üretmez ama
+      // "Fener" rozetini tam da o aralıkta hak eder. Eşitleme try içinde
+      // olsaydı, rozet ancak kullanıcı başka bir yerden puan kazanınca
+      // verilirdi (inceleme bulgusu 2026-08). `syncBadges` istisna fırlatmaz,
+      // dolayısıyla asıl dönüş değerini ya da hatayı yutmaz.
+      await this.syncBadges(userId);
     }
   }
 
-  /** Moderasyon kararından sonra güven katsayısını tazeler. */
+  /**
+   * Moderasyon kararından sonra güven katsayısını tazeler.
+   * Rozet eşitlemesi BURADA YAPILMAZ: her karar yolu önce `award`'dan geçer
+   * ve orada `finally` içinde zaten eşitlenir — iki kez koşmak aynı sonucu
+   * üretmek için altı sorgu daha demekti.
+   */
   async refreshTrust(userId: string): Promise<void> {
     try {
       await this.repo.recomputeTrust(userId);
     } catch (err) {
       this.logger.warn({ err: String(err), userId }, 'Güven katsayısı güncellenemedi');
+    }
+  }
+
+  /**
+   * Hak edilen rozetleri yazar. Puan yazımıyla aynı ilke: ROZET, KATKIDAN
+   * DAHA AZ ÖNEMLİDİR — patlarsa loglanır, akış devam eder. Rozet geri
+   * ALINMAZ burada: suistimal tespitinde elle `revoked_at` yazılır ve o satır
+   * bir daha yeniden verilmez (`grantBadges` notu).
+   */
+  async syncBadges(userId: string): Promise<void> {
+    try {
+      const stats = await this.repo.badgeStats(userId);
+      const granted = await this.repo.grantBadges(userId, earnedBadges(stats));
+      for (const b of granted) {
+        this.logger.log({ event: 'badge_granted', userId, badge: b.code }, 'Rozet verildi');
+      }
+    } catch (err) {
+      this.logger.warn({ err: String(err), userId }, 'Rozetler güncellenemedi');
     }
   }
 

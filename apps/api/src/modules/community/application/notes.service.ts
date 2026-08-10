@@ -159,6 +159,11 @@ export class NotesService {
           type: 'note',
           id: noteId,
         });
+        // "Emniyet Gözcüsü" rozeti NOTUN SAHİBİNİN doğrulanmış uyarılarını
+        // sayar. Puan oy verene yazıldığı için sahip hiç eşitlenmezdi: 5.
+        // doğrulama geldiğinde rozet, sahip başka bir yerden puan kazanana
+        // dek verilmezdi (inceleme bulgusu 2026-08).
+        await this.reputation.syncBadges(res.ownerUserId);
       }
     }
 
