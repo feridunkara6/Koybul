@@ -76,8 +76,11 @@ final daySuggestionsProvider =
       dirs = d.windExposedDirs;
       depthMin = d.dimensions.depthMinM;
       depthMax = d.dimensions.depthMaxM;
+      // Zemin ÜST DÜZEY alandan okunur (veri turu 2026-08): balıkçı barınağı
+      // ve belediye limanı gibi demirleme-dışı tiplerde de dolu olabilir.
+      // `typeDetails` yedeği eski sunucu sürümü için durur.
       final TypeDetails? td = d.typeDetails;
-      if (td is AnchorageTypeDetails) bottom = td.holdingType;
+      bottom = d.seabed ?? (td is AnchorageTypeDetails ? td.holdingType : null);
       occupancy = d.occupancy?.level;
     } catch (_) {
       dirs = null;

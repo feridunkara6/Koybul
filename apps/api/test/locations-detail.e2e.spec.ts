@@ -139,6 +139,14 @@ runIf('Location detail API (e2e — gerçek DB)', () => {
       SELECT l.id, 'sand', 4, 2, true FROM locations l WHERE l.slug = 'e2e-detail-anchorage'
       ON CONFLICT (location_id) DO NOTHING;
     `);
+    // Belediye limanı: zemin DOLU ama tip demirleme DEĞİL (0009_seabed).
+    await prisma.$executeRawUnsafe(`
+      INSERT INTO locations (id, slug, location_type_id, status, country_code, name, position,
+        seabed_holding_type)
+      VALUES (gen_random_uuid(), 'e2e-detail-pier-seabed', 3, 'published', 'TR', 'E2E Barınak',
+        ST_SetSRID(ST_MakePoint(28.98, 36.78), 4326)::geography, 'mud')
+      ON CONFLICT (slug) DO NOTHING;
+    `);
     // 404 için taslak
     await prisma.$executeRawUnsafe(`
       INSERT INTO locations (id, slug, location_type_id, status, country_code, name, position)
@@ -245,6 +253,17 @@ runIf('Location detail API (e2e — gerçek DB)', () => {
     expect(res.body.typeDetails.holdingType).toBe('sand');
     expect(res.body.typeDetails.protectionN).toBe(4);
     expect(res.body.typeDetails.isFree).toBe(true);
+    // Zemin AYNI ZAMANDA üst düzeyde de gelir (istemci tek yerden okur).
+    expect(res.body.seabed).toBe('sand');
+  });
+
+  it('belediye limanında zemin gelir ama demirleme kartı (isFree) UYDURULMAZ', async () => {
+    // Regresyon: zemin bilgisi anchorage_details'e yazılsaydı API bu limanı
+    // "Ücretsiz demirleme" gibi gösterirdi (is_free NOT NULL DEFAULT true).
+    // 0009_seabed ile zemin locations sütununda durur; typeDetails boş kalır.
+    const res = await request(http).get('/v1/locations/e2e-detail-pier-seabed').expect(200);
+    expect(res.body.seabed).toBe('mud');
+    expect(res.body.typeDetails).toBeNull();
   });
 
   it('taslak lokasyon → 404', async () => {

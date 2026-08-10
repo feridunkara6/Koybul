@@ -152,6 +152,7 @@ export class LocationsService {
       media: { cover: d.cover, count: d.photoCount },
       occupancy: d.occupancy ?? null,
       windExposedDirs: d.windExposedDirs ?? null,
+      seabed: d.seabed ?? null,
       userContext: null,
       counts: { reviews: d.reviewCount, photos: d.photoCount },
     };

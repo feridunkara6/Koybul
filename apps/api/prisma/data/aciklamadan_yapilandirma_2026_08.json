@@ -1,0 +1,318 @@
+{
+ "kaynak": "2026-08 açıklamadan yapılandırma turu: YENİ ARAŞTIRMA YOK. Bu partideki her değer, veri tabanındaki KENDİ kayıtlı açıklamamızın içinde zaten bulunan ve kaynağı daha önce doğrulanmış cümlelerden yapılandırıldı; 'alinti' alanı o cümlenin birebir kopyasıdır, 'kaynak' alanı o cümlenin geldiği kaydın orijinal URL'idir. Serbest metinde saklı olan bilgi, aranabilir/filtrelenebilir kolonlara taşınmıştır.",
+ "not": "Zemin kodları: sand|mud|weed|rock|mixed. Yalnız BOŞ alanlar doldurulur (COALESCE) — mevcut veri asla ezilmez. ELENENLER (uydurma riski): 'kumsal/çakıl plaj' (plaj tanımı, dip değil), 'kayalıklarla çevrili' (kıyı tanımı), 'Kum Ada' (yer adı), 300-650 m 'açıkta' (mesafe), '350-400 m falez' (yükseklik), 'derinlik 4 m ve üzeri' (üst sınır yok), 'derinlik 4 m'ye kadar' (alt sınır yok), iskele kökünde SIĞ su uyarısı olan yerde tek derinlik değeri, marina dışındaki demirleme derinliğinin marinaya yazılması, tehlike sığlığı derinliğinin demirleme derinliği sanılması. Zemin kaydı artık belediye limanı/barınak gibi demirleme-DIŞI tiplere de yazılır; 'Ücretsiz' rozeti üretmemesi için API'de kind='anchorage' kartı yalnız gerçek demirleme tiplerinde çıkacak biçimde ayrıldı (ANCHORAGE_KIND_TYPES). kalekoy-simena-restoran-pontonlari ve kizilada-fener-restorani bulguları demirleme_bilgileri.json'da zaten aynı değerle kayıtlı olduğu için bu dosyadan çıkarıldı — tek kaynak ilkesi (değerler birbirini doğruluyordu).",
+ "veriler": {
+  "yalikavak-balikci-limani": {
+   "zemin": "weed",
+   "alinti": "dip yosunlu — demiri iyi kontrol edin.",
+   "kaynak": [
+    "https://turkeymarinas.blogspot.com/2016/07/yalikavak-fishing-port.html"
+   ],
+   "parti": "batch28_tr_tur15.json"
+  },
+  "golturkbuku-balikci-barinagi": {
+   "zemin": "weed",
+   "alinti": "ortada 12-18 m ve yosunlu dip.",
+   "kaynak": [
+    "https://turkeymarinas.blogspot.com/2016/08/golturkbuku-fish-harbour.html"
+   ],
+   "parti": "batch28_tr_tur15.json"
+  },
+  "torba-balikci-barinagi": {
+   "zemin": "sand",
+   "alinti": "koyda 5-10 m kumlu zemine demirlenir.",
+   "kaynak": [
+    "https://turkeymarinas.blogspot.com/2016/08/torba-cove-fish-harbour.html"
+   ],
+   "parti": "batch28_tr_tur15.json"
+  },
+  "gulluk-marina": {
+   "zemin": "mixed",
+   "alinti": "Dönüş alanında 7-8 m, kum-çamur zeminde iyi tutuş;",
+   "kaynak": [
+    "https://turkeymarinas.blogspot.com/2016/08/gulluk-marina.html",
+    "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf (UAB resmî listesi — işletmeci Egesu Marina A.Ş.)"
+   ],
+   "parti": "batch28_tr_tur15.json"
+  },
+  "kiyikislacik-balikci-limani": {
+   "zemin": "mixed",
+   "alinti": "limanda 4 m'ye demirleme önerilir — çamur ve kum zemin iyi tutar.",
+   "kaynak": [
+    "https://turkeymarinas.blogspot.com/2016/08/kiyikislacik-iasos-fish-harbour.html",
+    "https://www.tarimorman.gov.tr/BSGM/Belgeler/Icerikler/Su%20Ürünleri%20Altyapıları/Balıkçı%20Barınakları.pdf (Bakanlık balıkçı barınağı listesi, Şubat 2026 — tesis kayıtlı)"
+   ],
+   "parti": "batch29_ege_tur16.json"
+  },
+  "guvercinlik-balikci-barinagi": {
+   "zemin": "sand",
+   "alinti": "Köy önünde 4-9 m'ye kum zemine demirlenir;",
+   "kaynak": [
+    "https://turkeymarinas.blogspot.com/2016/08/guvercinlik-cove-fisher-harbour.html"
+   ],
+   "parti": "batch29_ege_tur16.json"
+  },
+  "pythagorio-limani-samos": {
+   "zemin": "mud",
+   "alinti": "çamur zemin, 25 m zincirle iyi tutar.",
+   "kaynak": [
+    "https://www.cruiserswiki.org/wiki/Pythagorio"
+   ],
+   "parti": "batch32_gr_tur19.json"
+  },
+  "naoussa-limani-paros": {
+   "zemin": "mixed",
+   "alinti": "çamur-kum-yosun zemin iyi tutar;",
+   "kaynak": [
+    "https://www.sea-seek.com/en/Port-Naoussa-Paros-"
+   ],
+   "parti": "batch32_gr_tur19.json"
+  },
+  "hydra-limani": {
+   "zemin": "mixed",
+   "alinti": "DİKKAT: zemin ot-kaya-çamur karışımı ve TUTUŞ ZAYIFTIR;",
+   "kaynak": [
+    "https://www.sea-seek.com/en/Port-d-Hydra-Grece-"
+   ],
+   "parti": "batch32_gr_tur19.json"
+  },
+  "aegina-limani": {
+   "zemin": "mixed",
+   "alinti": "zemin kaya+çamur.",
+   "kaynak": [
+    "https://www.sea-seek.com/en/Port-Aegina-N-Aeginia-Grece-"
+   ],
+   "parti": "batch32_gr_tur19.json"
+  },
+  "spetses-baltiza-limani": {
+   "zemin": "mud",
+   "alinti": "İç havza çamur zeminde iyi tutar ve TAM korunak sağlar;",
+   "kaynak": [
+    "https://www.sea-seek.com/en/Vieux-Port-Spetses-crique-de-Baltiza-Grece-"
+   ],
+   "parti": "batch32_gr_tur19.json"
+  },
+  "aydincik-balikci-limani": {
+   "zemin": "mixed",
+   "alinti": "kum-çamur zemin.",
+   "kaynak": [
+    "https://turkeymarinas.blogspot.com/2016/03/aydincik-fisher-harbour.html",
+    "https://www.mersinaydincik.bel.tr/sayfa/iletisim (belediye resmî sitesi — 2026-07 teyit)"
+   ],
+   "parti": "batch33_iskele_tur20.json"
+  },
+  "poros-limani": {
+   "zemin": "mud",
+   "alinti": "zemin ÇAMUR.",
+   "kaynak": [
+    "https://www.sea-seek.com/en/Port-Poros-N-Poros-Greece-"
+   ],
+   "parti": "batch37_gr_tur24.json"
+  },
+  "adamas-limani-milos": {
+   "zemin": "mixed",
+   "alinti": "Zemin ot-kaya-çamur karışıktır.",
+   "kaynak": [
+    "https://www.sea-seek.com/en/Port-Adamas-Milos-Greece-"
+   ],
+   "parti": "batch37_gr_tur24.json"
+  },
+  "fiskardo-limani": {
+   "zemin": "mixed",
+   "alinti": "zemin kum-kaya.",
+   "kaynak": [
+    "https://www.sea-seek.com/en/Port-Fiskardho-Kefalonia-"
+   ],
+   "parti": "batch37_gr_tur24.json"
+  },
+  "gaios-limani-paksos": {
+   "zemin": "mud",
+   "alinti": "Zemin çamur, tutuş iyidir.",
+   "kaynak": [
+    "https://www.sea-seek.com/en/Gaios-Paxos-"
+   ],
+   "parti": "batch37_gr_tur24.json"
+  },
+  "saraylar-limani": {
+   "zemin": "mud",
+   "alinti": "Çamur zeminde tutuş iyi, korunma çok iyidir.",
+   "kaynak": [
+    "https://turkeymarinas.blogspot.com/2016/12/saraylar-fishing-harbour.html",
+    "https://www.cruiserswiki.org/wiki/Marmara_Islands",
+    "https://www.marmara.bel.tr/sayfalar/onemli-telefonlar (belediye resmî telefon listesi — 2026-07 doğrulama)"
+   ],
+   "parti": "batch5_expansion.json"
+  },
+  "yigitler-limani-avsa": {
+   "zemin": "sand",
+   "alinti": "Kum zeminde tutuş iyi, doğu havuzunda korunma iyidir.",
+   "kaynak": [
+    "https://www.cruiserswiki.org/wiki/Marmara_Islands"
+   ],
+   "parti": "batch5_expansion.json"
+  },
+  "candarli-limani": {
+   "zemin": "mud",
+   "alinti": "Kale önündeki demirleme alanında 4-8 m derinlikte çamur zemine demirlenir;",
+   "kaynak": [
+    "https://turkeymarinas.blogspot.com/2016/10/candarli-port.html",
+    "https://www.izmir-dikili.bel.tr/iletisim (belediye çözüm hattı — 2026-07 teyit)"
+   ],
+   "parti": "batch5_expansion.json"
+  },
+  "agios-prokopios-naxos": {
+   "kaynak": [
+    "https://grecosailor.com/skippers/cyclades/naxos/anchorages/"
+   ],
+   "parti": "batch21_gr_tur9.json",
+   "derinlik_min": 10,
+   "alinti": "~10 m, kum dip."
+  },
+  "agiou-panteleimonos-girit": {
+   "kaynak": [
+    "https://grecosailor.com/skippers/crete/agios-nikolaos/"
+   ],
+   "parti": "batch27_gr_tur14.json",
+   "derinlik_min": 5,
+   "alinti": "5 m kuma 20 m kaloma ile."
+  },
+  "ahmetbeyli-claros-demirleme": {
+   "kaynak": [
+    "https://www.cruiserswiki.org/wiki/Kusadasi"
+   ],
+   "parti": "batch5_expansion.json",
+   "derinlik_max": 5,
+   "alinti": "Yaklaşık 5 m derinlikte kum zemin;"
+  },
+  "black-kavos-girit": {
+   "kaynak": [
+    "https://grecosailor.com/skippers/crete/sitia/"
+   ],
+   "parti": "batch27_gr_tur14.json",
+   "derinlik_min": 6,
+   "alinti": "~6 m'ye 20 m kaloma, tutuş iyi."
+  },
+  "kamari-iskelesi-kefalos": {
+   "kaynak": [
+    "https://grecosailor.com/skippers/dodecanese/kos/"
+   ],
+   "parti": "batch16_gr_tur4.json",
+   "derinlik_min": 4,
+   "alinti": "~4 m derinlik."
+  },
+  "kardamena-limani": {
+   "kaynak": [
+    "https://grecosailor.com/skippers/dodecanese/kos/"
+   ],
+   "parti": "batch16_gr_tur4.json",
+   "derinlik_min": 2,
+   "alinti": "DİKKAT: derinlik ~2 m — derin su çeken tekneler için uygun değil."
+  },
+  "kastellorizo-meis-rihtimi": {
+   "kaynak": [
+    "https://www.litando.gr/kastellorizo-island-megisti/ (resmî liman idaresi — 82 m rıhtım, -6,30 m, iletişim)",
+    "https://www.predictwind.com/marinas/greece/south-aegean/kastellorizo-port (koordinat, olanaklar, giriş limanı)"
+   ],
+   "parti": "batch11_yunanistan_koylar.json",
+   "derinlik_min": 6.3,
+   "alinti": "82 m iskele, -6,3 m derinlik."
+  },
+  "kos-eski-liman-mandraki": {
+   "kaynak": [
+    "https://grecosailor.com/skippers/dodecanese/kos/"
+   ],
+   "parti": "batch16_gr_tur4.json",
+   "derinlik_min": 4,
+   "alinti": "~4 m derinlik;"
+  },
+  "lakki-marina-leros": {
+   "kaynak": [
+    "https://grecosailor.com/skippers/dodecanese/leros/"
+   ],
+   "parti": "batch15_gr_tur3.json",
+   "derinlik_min": 7,
+   "alinti": "Derinlik ~7 m."
+  },
+  "lipsi-limani": {
+   "kaynak": [
+    "https://grecosailor.com/skippers/dodecanese/lipsi/"
+   ],
+   "parti": "batch16_gr_tur4.json",
+   "derinlik_min": 3,
+   "alinti": "~3 m derinlik."
+  },
+  "maden-adasi-demirleme": {
+   "kaynak": [
+    "https://www.cruiserswiki.org/wiki/Ayvalik"
+   ],
+   "parti": "batch5_expansion.json",
+   "derinlik_min": 5,
+   "alinti": "Yaklaşık 5 m derinlikte kum zemine demirlenir, tutuş iyidir."
+  },
+  "nisyros-mandraki-limani": {
+   "kaynak": [
+    "https://grecosailor.com/skippers/dodecanese/nisyros/"
+   ],
+   "parti": "batch16_gr_tur4.json",
+   "derinlik_min": 5,
+   "alinti": "baş demiri + kıç halatıyla bağlanılır, ~5 m derinlik."
+  },
+  "ornos-koyu-mykonos": {
+   "kaynak": [
+    "https://grecosailor.com/skippers/cyclades/mykonos/anchorages/"
+   ],
+   "parti": "batch23_gr_tur11.json",
+   "derinlik_min": 14,
+   "alinti": "~14 m, kum/çamur dip — rehber 30 knot üzeri rüzgârda bile tuttuğunu aktarıyor."
+  },
+  "patmos-skala-rihtimi": {
+   "kaynak": [
+    "https://grecosailor.com/skippers/dodecanese/patmos/"
+   ],
+   "parti": "batch15_gr_tur3.json",
+   "derinlik_min": 5.5,
+   "alinti": "kıçtankara bağlama, ~5,5 m derinlik."
+  },
+  "plaka-plaji-naxos": {
+   "kaynak": [
+    "https://grecosailor.com/skippers/cyclades/naxos/anchorages/"
+   ],
+   "parti": "batch21_gr_tur9.json",
+   "derinlik_min": 7.9,
+   "alinti": "~7,9 m, kum/kaya karışık dip."
+  },
+  "pyrgaki-plaji-naxos": {
+   "kaynak": [
+    "https://grecosailor.com/skippers/cyclades/naxos/anchorages/"
+   ],
+   "parti": "batch21_gr_tur9.json",
+   "derinlik_min": 6.5,
+   "alinti": "~6,5 m, kum/kaya karışık dip."
+  },
+  "sarpdere-limani-demirleme": {
+   "kaynak": [
+    "https://www.cruiserswiki.org/wiki/Sigacik_Region"
+   ],
+   "parti": "batch5_expansion.json",
+   "derinlik_max": 4,
+   "alinti": "tutuş iyidir, yaklaşık 4 m derinlik."
+  },
+  "skala-kallonis-demirleme": {
+   "kaynak": [
+    "https://grecosailor.com/skippers/eastern-sporades/lesvos/anchorages/"
+   ],
+   "parti": "batch18_tr_gr_tur6.json",
+   "derinlik_min": 5,
+   "alinti": "~5 m, kum/çamur dip — rehber 'mükemmel tutuş' ve kuzey rüzgârlarına iyi korunma aktarıyor."
+  },
+  "tilos-livadia-rihtimi": {
+   "kaynak": [
+    "https://www.litando.gr/tilos-island/ (resmî liman idaresi — 35 tekne, su+elektrik, iskele ölçüleri, -8 m)",
+    "https://www.marinatips.com/catalog/port-livadia-livadia-south-aegean-tilos-greece (koordinat; su+elektrik çapraz teyit)"
+   ],
+   "parti": "batch11_yunanistan_koylar.json",
+   "derinlik_min": 8,
+   "alinti": "İskele güney kolu ~50 m, kullanılabilir derinlik -8 m."
+  }
+ }
+}

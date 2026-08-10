@@ -47,6 +47,47 @@ const LocationDetail sampleMarinaDetail = LocationDetail(
   counts: Counts(reviews: 12, photos: 0),
 );
 
+/// Balıkçı barınağı detayı — ZEMİN var ama tip demirleme DEĞİL.
+///
+/// 2026-08 veri turunun regresyon koruması: zemin artık üst düzey `seabed`
+/// alanından gelir, `typeDetails` demirleme kartı OLMADAN da gösterilmelidir.
+/// Aynı kayıt "Ücretsiz" rozetinin sızmadığını da kanıtlar: barınağın ücret
+/// durumu bilinmiyor, `anchorage_details.is_free` varsayılanı buraya akmamalı.
+const LocationDetail samplePierWithSeabedDetail = LocationDetail(
+  id: 'loc-barinak',
+  slug: 'guvercinlik-balikci-barinagi',
+  type: 'municipal_pier',
+  status: 'published',
+  name: 'Güvercinlik Balıkçı Barınağı',
+  description: 'Köy önünde kum zemine demirlenir; tutuş iyidir.',
+  position: GeoPoint(lat: 37.08, lon: 27.55),
+  geo: GeoInfo(
+    countryCode: 'TR',
+    adminArea: AdminAreaRef(id: 'a1', name: 'Bodrum', province: 'Muğla'),
+    waterBody: null,
+  ),
+  dimensions: Dimensions(
+    maxBoatLengthM: null,
+    maxDraftM: null,
+    depthMinM: 4,
+    depthMaxM: 9,
+    capacity: null,
+  ),
+  priceTier: 'unknown',
+  is24h: false,
+  verifiedAt: null,
+  rating: Rating(avg: null, count: 0, dimensions: <RatingDimension>[]),
+  amenities: <AmenityLabeled>[],
+  services: <ServiceLabeled>[],
+  contacts: <Contact>[],
+  hours: <Hour>[],
+  seasons: <Season>[],
+  typeDetails: null,
+  media: MediaInfo(cover: null, count: 0),
+  counts: Counts(reviews: 0, photos: 0),
+  seabed: 'sand',
+);
+
 /// Testte `LocationDetailGateway` yerine geçen sahte.
 class FakeLocationDetailGateway implements LocationDetailGateway {
   FakeLocationDetailGateway({this.result = sampleMarinaDetail, this.error});

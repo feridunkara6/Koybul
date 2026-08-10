@@ -16,6 +16,7 @@ import {
   OccupancyLevel,
   OccupancySummary,
   OCCUPANCY_SUPPORTED_TYPES,
+  ANCHORAGE_KIND_TYPES,
 } from '../domain/location.types';
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -527,7 +528,10 @@ export class PrismaLocationsRepository implements LocationsRepository {
         minSpendPolicy: rd.minSpendPolicy ?? null,
         reservationRecommended: rd.reservationRecommended ?? null,
       };
-    } else if (loc.anchorageDetails) {
+    } else if (loc.anchorageDetails && ANCHORAGE_KIND_TYPES.includes(loc.locationType.code)) {
+      // Zemin satırı bir belediye limanına da yazılabilir (kaptan orada da
+      // demir atar); ama "Ücretsiz" rozetini basan demirleme kartı YALNIZ
+      // gerçek demirleme tiplerinde çıkar — bkz. ANCHORAGE_KIND_TYPES.
       const a = loc.anchorageDetails;
       typeDetails = {
         kind: 'anchorage',
@@ -554,6 +558,12 @@ export class PrismaLocationsRepository implements LocationsRepository {
       i18n: loc.i18n.map((t) => ({ locale: t.locale, name: t.name, description: t.description })),
       occupancy: await this.occupancySummary(loc.id),
       windExposedDirs: loc.windExposedDirs ?? null,
+      // Zemin ÜST DÜZEYDE taşınır: `typeDetails` marina/yakıt/restoran
+      // dalına girse bile kaptan dibin cinsini görebilsin. İKİ KAYNAK
+      // birleşir — demirleme koylarının zemini tarihsel olarak
+      // `anchorage_details`'te, diğer tiplerinki `locations` sütununda durur
+      // (0009_seabed; tetikleyici o tabloya barınak satırı yazdırmıyor).
+      seabed: loc.seabedHoldingType ?? loc.anchorageDetails?.holdingType ?? null,
       lat,
       lon,
       countryCode: loc.countryCode,

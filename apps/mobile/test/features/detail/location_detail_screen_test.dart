@@ -235,4 +235,29 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Hoş geldin, kaptan'), findsOneWidget); // SignInSheetBody
   });
+
+  testWidgets(
+      'demirleme OLMAYAN tipte zemin gösterilir, sahte "Ücretsiz" rozeti çıkmaz',
+      (WidgetTester tester) async {
+    // Ekran uzun; tembel liste görünmeyen çocukları kurmaz — yüzeyi büyüt.
+    tester.view.physicalSize = const Size(1000, 2600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      _app(FakeLocationDetailGateway(result: samplePierWithSeabedDetail)),
+    );
+    await tester.pumpAndSettle();
+
+    // "Bir Bakışta" şeridi zemini üst düzey `seabed` alanından okur.
+    expect(find.text('Zemin'), findsOneWidget);
+    expect(find.text('Kum'), findsOneWidget);
+    // Derinlik de aynı şeritte (veri turunda dolan ikinci alan). Aynı metin
+    // tekne uygunluğu kutusunda da geçebildiği için "en az bir" aranır.
+    expect(find.text('4–9 m'), findsWidgets);
+    // KRİTİK: barınağın ücret durumu bilinmiyor. Zemin kaydı eklendi diye
+    // demirleme kartının "Ücretsiz" rozeti sızmamalı (API ayrımı: yalnız
+    // mooring_point/buoy/guest_mooring kind='anchorage' üretir).
+    expect(find.text('Ücretsiz'), findsNothing);
+  });
 }

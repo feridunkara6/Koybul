@@ -684,14 +684,18 @@ class _GlanceStrip extends ConsumerWidget {
           accent: ink));
     }
 
+    // Zemin ÜST DÜZEY `seabed` alanından okunur: balıkçı barınağı ve belediye
+    // limanı gibi demirleme-dışı tiplerde de dolu olabilir (veri turu 2026-08).
+    // `typeDetails` yedeği eski sunucu sürümü için durur.
     final AnchorageTypeDetails? a = switch (detail.typeDetails) {
       final AnchorageTypeDetails x => x,
       _ => null,
     };
-    if (a?.holdingType != null) {
+    final String? seabed = detail.seabed ?? a?.holdingType;
+    if (seabed != null) {
       tiles.add(_GlanceTile(
           label: t.glanceSeabed,
-          value: _capTr(t.holdingLabel(a!.holdingType!)),
+          value: _capTr(t.holdingLabel(seabed)),
           accent: ink));
     }
 
@@ -1385,8 +1389,8 @@ class _AnchoringNotes extends ConsumerWidget {
       final AnchorageTypeDetails t => t,
       _ => null,
     };
-    final String? zemin =
-        a?.holdingType == null ? null : _capTr(t.holdingLabel(a!.holdingType!));
+    final String? holding = detail.seabed ?? a?.holdingType;
+    final String? zemin = holding == null ? null : _capTr(t.holdingLabel(holding));
     final String? depth = _depthText(detail.dimensions);
     final bool hasSpecific = zemin != null ||
         depth != null ||

@@ -35,6 +35,8 @@ export interface DetailData {
   occupancy?: OccupancySummary | null;
   /** Rüzgâra açık yönler (TR pusula, virgüllü) — uyarı rozeti verisi. */
   windExposedDirs?: string | null;
+  /** Deniz dibi tutuş cinsi — tipten bağımsız (bkz. ANCHORAGE_KIND_TYPES). */
+  seabed?: string | null;
   lat: number;
   lon: number;
   countryCode: string;

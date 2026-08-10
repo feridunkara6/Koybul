@@ -14,6 +14,23 @@ export const OCCUPANCY_SUPPORTED_TYPES: readonly string[] = [
   'restaurant_pier',
 ];
 
+/**
+ * `typeDetails.kind = 'anchorage'` ÜRETİLEBİLECEK tipler.
+ *
+ * NEDEN GEREKLİ (veri turu 2026-08): zemin (holding_type) fiziksel olarak
+ * `anchorage_details` tablosunda durur, ama zemin bilgisi bir BALIKÇI
+ * BARINAĞI ya da belediye limanı için de geçerlidir — kaptan orada da demir
+ * atar. Satırı o limanlara da yazmak istiyoruz; ancak `anchorage_details`
+ * satırının varlığı eskiden doğrudan `kind: 'anchorage'` üretiyordu ve o kart
+ * `isFree` alanını "Ücretsiz" rozeti olarak basıyordu. `is_free` kolonu
+ * NOT NULL DEFAULT true olduğundan, ücretli bir belediye limanı sırf zemin
+ * bilgisi eklendi diye "Ücretsiz" görünecekti — sahte iddia.
+ *
+ * Çözüm: `kind: 'anchorage'` YALNIZ gerçek demirleme tiplerinde üretilir;
+ * zemin ise tipten bağımsız olarak üst düzey `seabed` alanıyla taşınır.
+ */
+export const ANCHORAGE_KIND_TYPES: readonly string[] = ['mooring_point', 'buoy', 'guest_mooring'];
+
 /** Koy doluluk düzeyi (2026-07 ayrıştırma paketi ①). */
 export type OccupancyLevel = 'empty' | 'moderate' | 'full';
 
@@ -298,6 +315,12 @@ export interface LocationDetail {
   occupancy: OccupancySummary | null;
   /** Rüzgâra AÇIK yönler (TR pusula kodları, virgüllü: 'G,GD'); yoksa null. */
   windExposedDirs: string | null;
+  /**
+   * Deniz dibi tutuş cinsi: 'sand' | 'mud' | 'weed' | 'rock' | 'mixed'.
+   * TİPTEN BAĞIMSIZDIR — balıkçı barınağında da demir atılır, bu yüzden
+   * `typeDetails.kind` 'anchorage' olmasa da doludur.
+   */
+  seabed: string | null;
   userContext: null;
   counts: { reviews: number; photos: number };
 }

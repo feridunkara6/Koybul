@@ -346,6 +346,7 @@ def emit_demirleme(here, records):
         "-- =====================================================================",
     ]
     atlanlar = []
+    kurtarilan = []
     for slug, v in sorted(data["veriler"].items()):
         dmin, dmax = v.get("derinlik_min"), v.get("derinlik_max")
         if dmin is not None or dmax is not None:
@@ -355,9 +356,16 @@ def emit_demirleme(here, records):
             )
         if v.get("zemin") is not None:
             if type_by_slug.get(slug) not in ANCHORAGE_TYPES:
-                # DB tetikleyicisi bu tipe anchorage satırı YASAKLAR — zemin
-                # bulgusu JSON arşivinde kalır, SQL üretilmez (CI dersi #2).
-                atlanlar.append(f"{slug} ({type_by_slug.get(slug)})")
+                # DB tetikleyicisi bu tipe anchorage satırı YASAKLAR (CI dersi
+                # #2). 0009_seabed'e kadar bu bulgular JSON arşivinde kalıyor,
+                # hiçbir yere yazılamıyordu; artık locations.seabed_holding_type
+                # sütununa akıyorlar — kaptan restoran iskelesinde de dibin
+                # cinsini görüyor, "Ücretsiz" rozeti riski doğmuyor.
+                kurtarilan.append(slug)
+                out.append(
+                    "UPDATE locations SET seabed_holding_type = "
+                    f"COALESCE(seabed_holding_type, {q(v['zemin'])}) WHERE slug = {q(slug)};"
+                )
                 continue
             out.append(
                 # is_free BİLEREK yok: NOT NULL DEFAULT true — NULL yazılamaz;
@@ -370,8 +378,93 @@ def emit_demirleme(here, records):
     if atlanlar:
         print(f"demirleme: {len(atlanlar)} zemin ATLANDI (tip anchorage değil): "
               + ", ".join(atlanlar))
+    if kurtarilan:
+        print(f"demirleme: {len(kurtarilan)} zemin locations.seabed_holding_type'a "
+              "yazıldı (demirleme dışı tip): " + ", ".join(kurtarilan))
     print(f"demirleme: {len(data['veriler'])} nokta işlendi")
     return "\n".join(out) + "\n"
+
+
+def emit_yapilandirma(here, records):
+    """AÇIKLAMADAN YAPILANDIRMA TURU (2026-08): yeni araştırma YOK.
+
+    Bu bölümdeki her değer, veri tabanındaki KENDİ kayıtlı açıklamamızın
+    içinde zaten geçen ve kaynağı daha önce doğrulanmış bir cümleden
+    yapılandırıldı (JSON'daki 'alinti' alanı o cümlenin birebir kopyası,
+    'kaynak' alanı o cümlenin geldiği kaydın URL'i). Serbest metinde saklı
+    bilgi, aranabilir/filtrelenebilir kolonlara taşınır.
+
+    ZEMİN NEREYE YAZILIR: demirleme tiplerinde (mooring_point/buoy/
+    guest_mooring) tarihsel yer olan anchorage_details.holding_type'a;
+    diğer tiplerde (balıkçı barınağı, belediye limanı, marina, restoran
+    iskelesi) locations.seabed_holding_type sütununa (0009_seabed).
+    Tetikleyici trg_anchorage_details_check_type o tablolara barınak satırı
+    yazdırmadığı için ikinci yol açıldı; API iki kaynağı birleştirir.
+
+    Yalnız BOŞ alanlar doldurulur (COALESCE) — mevcut veri asla ezilmez.
+    """
+    f = here / "aciklamadan_yapilandirma_2026_08.json"
+    if not f.exists():
+        return ""
+    data = json.loads(f.read_text(encoding="utf-8"))["veriler"]
+    slugs = {r["slug"] for r in records}
+    type_by_slug = {r["slug"]: r["typeCode"] for r in records}
+    ANCHORAGE_TYPES = {"mooring_point", "buoy", "guest_mooring"}
+    errors = []
+    for slug, v in sorted(data.items()):
+        if slug not in slugs:
+            errors.append(f"yapilandirma: bilinmeyen slug {slug}")
+            continue
+        z = v.get("zemin")
+        if z is not None and z not in HOLDING_TYPES:
+            errors.append(f"yapilandirma {slug}: gecersiz zemin {z}")
+        dmin, dmax = v.get("derinlik_min"), v.get("derinlik_max")
+        for d in (dmin, dmax):
+            if d is not None and not (0 < float(d) <= 60):
+                errors.append(f"yapilandirma {slug}: mantiksiz derinlik {d}")
+        if dmin is not None and dmax is not None and float(dmin) > float(dmax):
+            errors.append(f"yapilandirma {slug}: derinlik_min > derinlik_max")
+        if z is None and dmin is None and dmax is None:
+            errors.append(f"yapilandirma {slug}: bos kayit")
+        # Kaynak zinciri zorunlu: alintisiz/kaynaksiz deger bu turda YASAK.
+        if not v.get("alinti"):
+            errors.append(f"yapilandirma {slug}: alinti yok")
+        if not v.get("kaynak"):
+            errors.append(f"yapilandirma {slug}: kaynak yok")
+    if errors:
+        for e in errors:
+            print(f"HATA: {e}", file=sys.stderr)
+        sys.exit(1)
+    out = ["", "-- " + "=" * 70,
+           "-- ACIKLAMADAN YAPILANDIRMA (2026-08) — kendi kaynakli metnimizden",
+           "-- cikarilan zemin/derinlik; yeni arastirma yok, yalnizca bos alanlar."]
+    n_z = n_d = 0
+    for slug, v in sorted(data.items()):
+        dmin, dmax = v.get("derinlik_min"), v.get("derinlik_max")
+        if dmin is not None or dmax is not None:
+            n_d += 1
+            out.append(
+                f"UPDATE locations SET depth_min_m = COALESCE(depth_min_m, {num(dmin)}), "
+                f"depth_max_m = COALESCE(depth_max_m, {num(dmax)}) WHERE slug = {q(slug)};"
+            )
+        z = v.get("zemin")
+        if z is not None:
+            n_z += 1
+            if type_by_slug.get(slug) in ANCHORAGE_TYPES:
+                out.append(
+                    "INSERT INTO anchorage_details (location_id, holding_type, swell_exposure)\n"
+                    f"SELECT id, {q(z)}, NULL FROM locations WHERE slug = {q(slug)}\n"
+                    "ON CONFLICT (location_id) DO UPDATE SET holding_type = "
+                    "COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);"
+                )
+            else:
+                out.append(
+                    "UPDATE locations SET seabed_holding_type = "
+                    f"COALESCE(seabed_holding_type, {q(z)}) WHERE slug = {q(slug)};"
+                )
+    print(f"yapilandirma: {n_z} zemin + {n_d} derinlik islendi")
+    out.append("")
+    return "\n".join(out)
 
 
 def emit_i18n(here, records):
@@ -629,6 +722,7 @@ def main():
     sql = emit(records, data)
     sql += emit_wind(here, records)
     sql += emit_demirleme(here, records)
+    sql += emit_yapilandirma(here, records)
     sql += emit_i18n(here, records)
     # yaklaşma, i18n'den SONRA: birleşik (notlu) metin taban çeviriyi ezmeli.
     sql += emit_yaklasma(here, records)

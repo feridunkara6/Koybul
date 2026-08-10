@@ -28,6 +28,7 @@ class LocationDetail {
     required this.counts,
     this.occupancy,
     this.windExposedDirs,
+    this.seabed,
   });
 
   final String id;
@@ -58,6 +59,11 @@ class LocationDetail {
   /// Rüzgâra AÇIK yönler (TR pusula kodları, virgüllü: 'G,GD'); yoksa null.
   /// Uyarı rozeti bu alanla canlı tahmini birleştirir (geriye uyumlu).
   final String? windExposedDirs;
+
+  /// Deniz dibi tutuş cinsi ('sand'|'mud'|'weed'|'rock'|'mixed'); yoksa null.
+  /// TİPTEN BAĞIMSIZ: balıkçı barınağında ve belediye limanında da dolabilir,
+  /// çünkü kaptan oralarda da demir atar (geriye uyumlu — eski sunucu null).
+  final String? seabed;
 
   factory LocationDetail.fromJson(Map<String, dynamic> json) {
     List<T> list<T>(String key, T Function(Map<String, dynamic>) fromJson) =>
@@ -92,6 +98,7 @@ class LocationDetail {
       counts: Counts.fromJson(json['counts'] as Map<String, dynamic>),
       occupancy: OccupancySummary.fromJsonNullable(json['occupancy']),
       windExposedDirs: json['windExposedDirs'] as String?,
+      seabed: json['seabed'] as String?,
     );
   }
 }

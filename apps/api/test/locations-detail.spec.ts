@@ -182,6 +182,25 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
     expect(d2.windExposedDirs).toBe('G,GD');
   });
 
+  it('zemin (seabed): tipten bağımsız üst düzey alan — yoksa null, varsa geçer', async () => {
+    // 2026-08 veri turu: zemin artık `typeDetails` içine gömülü değil. Marina
+    // detayı dönen bir kayıtta bile dolu olabilmeli, çünkü kaptan marinanın
+    // demir sahasında da dibin cinsini bilmek ister.
+    const d = await service.detail('d-marin', 'tr');
+    expect(d.seabed).toBeNull();
+
+    const withSeabed: DetailData = { ...SAMPLE, seabed: 'sand' };
+    class SeabedRepo extends FakeRepo {
+      override findDetail(): Promise<DetailData> {
+        return Promise.resolve(withSeabed);
+      }
+    }
+    const d2 = await new LocationsService(new SeabedRepo()).detail('d-marin', 'tr');
+    expect(d2.seabed).toBe('sand');
+    // Zemin dolu diye demirleme kartı UYDURULMAZ: typeDetails değişmez.
+    expect(d2.typeDetails).toEqual(SAMPLE.typeDetails);
+  });
+
   it('doluluk bildirimi: bilinmeyen lokasyon → not-found', async () => {
     await expect(
       service.reportOccupancy('yok-boyle-koy', 'user-1', 'full', { lat: 36.75, lon: 28.95 }),
