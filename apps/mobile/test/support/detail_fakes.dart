@@ -128,6 +128,46 @@ const LocationDetail sampleAllRoundShelterDetail = LocationDetail(
   shelteredDirs: 'K,KD,D,GD,G,GB,B,KB',
 );
 
+/// Hem AÇIK yönü hem KORUNAKLI yönü olan koy (gerçek kayıt: Ornos, Mykonos —
+/// kaynak "open to the S" ve ayrıca "shelter in northerlies" diyor). Şeritte
+/// beş kutu birden çıkar: derinlik + zemin + açık yön + kapalı yön + tekne.
+const LocationDetail sampleBothWindDetail = LocationDetail(
+  id: 'loc-ornos',
+  slug: 'ornos-koyu-mykonos',
+  type: 'mooring_point',
+  status: 'published',
+  name: 'Ornos Koyu (Mykonos)',
+  description: 'Mykonos\'un güneyinde kumsal önü demirleme.',
+  position: GeoPoint(lat: 37.41, lon: 25.32),
+  geo: GeoInfo(
+    countryCode: 'GR',
+    adminArea: AdminAreaRef(id: 'a1', name: 'Mykonos', province: 'Kiklad'),
+    waterBody: null,
+  ),
+  dimensions: Dimensions(
+    maxBoatLengthM: null,
+    maxDraftM: null,
+    depthMinM: 14,
+    depthMaxM: 14,
+    capacity: null,
+  ),
+  priceTier: 'free',
+  is24h: false,
+  verifiedAt: null,
+  rating: Rating(avg: null, count: 0, dimensions: <RatingDimension>[]),
+  amenities: <AmenityLabeled>[],
+  services: <ServiceLabeled>[],
+  contacts: <Contact>[],
+  hours: <Hour>[],
+  seasons: <Season>[],
+  typeDetails: null,
+  media: MediaInfo(cover: null, count: 0),
+  counts: Counts(reviews: 0, photos: 0),
+  windExposedDirs: 'G',
+  seabed: 'mixed',
+  shelteredDirs: 'K',
+);
+
 /// Testte `LocationDetailGateway` yerine geçen sahte.
 class FakeLocationDetailGateway implements LocationDetailGateway {
   FakeLocationDetailGateway({this.result = sampleMarinaDetail, this.error});

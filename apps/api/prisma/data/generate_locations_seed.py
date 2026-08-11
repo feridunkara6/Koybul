@@ -613,12 +613,26 @@ def emit_wind(here, records):
     f = here / "ruzgar_yonleri.json"
     if not f.exists():
         return ""
-    data = json.loads(f.read_text(encoding="utf-8"))["yonler"]
+    raw = json.loads(f.read_text(encoding="utf-8"))
+    data = raw["yonler"]
+    # Kaynak zinciri: 2026-08 turundan itibaren eklenen her kayıt için birebir
+    # alıntı + URL tutulur. Eski 120 kaydın arşivi dosyanın "kaynak" metnindedir;
+    # bu yüzden provenans BURADA global olarak zorunlu kılınamaz — ama var olan
+    # provenans kayıtlarının BOŞ ya da öksüz olmadığı denetlenir. (Denetim
+    # bulgusu 2026-08: eklenen alıntı bloğu hiçbir kod tarafından okunmuyordu.)
+    prov = raw.get("kaynaklar_2026_08", {})
     by = {r["slug"] for r in records}
     out = ["", "-- " + "=" * 70,
            "-- RÜZGÂRA AÇIK YÖNLER — uyarı rozeti verisi (açıklamalardan, elle onaylı)."]
     errors = []
-    GECERLI = {"K", "KD", "D", "GD", "G", "GB", "B", "KB"}
+    GECERLI = ["K", "KD", "D", "GD", "G", "GB", "B", "KB"]
+    for slug, v in sorted(prov.items()):
+        if slug not in data:
+            errors.append(f"ruzgar provenans: {slug} 'yonler' icinde yok (oksuz alinti)")
+        if not v.get("alinti"):
+            errors.append(f"ruzgar provenans {slug}: alinti yok")
+        if not v.get("kaynak"):
+            errors.append(f"ruzgar provenans {slug}: kaynak yok")
     for slug, dirs in sorted(data.items()):
         if slug not in by:
             errors.append(f"rüzgâr: bilinmeyen slug {slug}")
@@ -627,7 +641,13 @@ def emit_wind(here, records):
         if bad:
             errors.append(f"rüzgâr {slug}: geçersiz yön {bad}")
             continue
-        csv = ",".join(dirs)
+        if len(set(dirs)) != len(dirs):
+            errors.append(f"rüzgâr {slug}: yön tekrarı")
+            continue
+        # KANONİK SIRA: pusula sırası (K'dan saat yönünde), kayıt sırası değil.
+        # Korunak bölümü de aynı sırayı kullanır; iki kutu yan yana okununca
+        # "K, KD" ile "KD, K" gibi tutarsızlık çıkmasın (denetim bulgusu 2026-08).
+        csv = ",".join([x for x in GECERLI if x in dirs])
         out.append(
             f"UPDATE locations SET wind_exposed_dirs = {q(csv)} WHERE slug = {q(slug)};"
         )

@@ -694,9 +694,14 @@ class _GlanceStrip extends ConsumerWidget {
     };
     final String? seabed = detail.seabed ?? a?.holdingType;
     if (seabed != null) {
+      // Kutuda KISA ad: 'mixed' etiketi dört dilde de "karışık (kum/çamur/
+      // yosun)" gibi parantezli açılım taşıyor ve şeritte beş kutu olduğunda
+      // 360 dp'lik telefonda altı satıra iniyor — IntrinsicHeight yüzünden
+      // tüm kutuları birlikte uzatıyordu. Parantezli tam hâli "Demirleme
+      // Notları" kartında zaten duruyor (denetim bulgusu 2026-08).
       tiles.add(_GlanceTile(
           label: t.glanceSeabed,
-          value: _capTr(t.holdingLabel(seabed)),
+          value: _capTr(t.holdingLabel(seabed).split(' (').first),
           accent: ink));
     }
 
@@ -841,8 +846,14 @@ class _GlanceTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
+            // İKİ SATIR: şeritte beş kutu olabiliyor (derinlik + zemin + açık
+            // yön + kapalı yön + tekne). 360 dp'lik telefonda kutu başına
+            // ~47 dp metin genişliği kalır ve "Kapalı yön" tek satıra sığmaz;
+            // tek satırda kalsaydı "Kapalı yö…" diye kırpılırdı. Değer için
+            // zaten "kırpma yok, kutu büyür" kuralı geçerli (aşağıdaki not) —
+            // etiket de aynı kurala uyar (veri turu 2026-08).
             label,
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: theme.textTheme.labelSmall?.copyWith(
               color: accent ?? theme.colorScheme.onSurfaceVariant,

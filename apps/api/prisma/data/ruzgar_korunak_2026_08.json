@@ -1,6 +1,6 @@
 {
  "kaynak": "2026-08 rüzgâr korunağı kaynak turu: eksik 96 demirleme noktasının KAYITLI kaynak sayfalarının tamamı (80 benzersiz sayfa; turkeymarinas, grecosailor, cruiserswiki, sailingissues, navily, yerel/resmî sayfalar) tarandı. Her değer o sayfadaki birebir cümleden ('alinti') alındı ve elle doğrulandı.",
- "not": "BU DOSYA KORUNAKLI YÖNLERİ TUTAR, AÇIK YÖNLERİ DEĞİL. Kılavuzlar bilgiyi 'sheltered from northerly winds' / 'kuzey rüzgârlarına kapalı' diye yazar; bu ifade 'güneye açıktır' DEMEK DEĞİLDİR ve wind_exposed_dirs'e çevrilemez — çevrilseydi uygulama kaptana tam tersini gösterirdi. Sekiz yönün tamamı = kaynak 'all round shelter' demiştir. Kısmi liste, yazılmayan yönlerin açık olduğu anlamına GELMEZ. ELENENLER (12 nokta): tek kişilik gezi raporları ('bu koy harikaydı, 40 knotta rahattık'), pusula yönü içermeyen 'meltemiye karşı korunaklı' ifadeleri, dağdan inen katabatik hamle uyarıları (maruziyet değil), bir bölümü doğuya açık ama güney bölümü tam korunaklı olan Karaöz gibi tek alana sığmayan yerler, ve 'east-southeast' gibi 8 yöne oturmayan ara yönler (Analoukas'ta yalnız açıkça yazan KD alındı). 60 noktada sayfa var ama korunak cümlesi yok. SONRADAN ELENEN 2 KAYIT: buyuk-boncuklu-koyu ve kucuk-boncuklu-koyu. Kaynak cümlesi 'naturally protected small bay ... rarely suffers from severe windy weather conditions' diyor; bu GENEL SAKİNLİK ifadesidir, 'her yönden korunaklı' değildir — diğer 10 tam-korunak kaydının hepsinde açık ifade var ('all round shelter', 'protected against all winds', 'totally landlocked'). Ayrıca tek cümle iki ayrı koya atfediliyordu. Kaptana 'hangi rüzgârda olursa olsun güvenli' demek için bu dayanak yetmez.",
+ "not": "BU DOSYA KORUNAKLI YÖNLERİ TUTAR, AÇIK YÖNLERİ DEĞİL. Kılavuzlar bilgiyi 'sheltered from northerly winds' / 'kuzey rüzgârlarına kapalı' diye yazar; bu ifade 'güneye açıktır' DEMEK DEĞİLDİR ve wind_exposed_dirs'e çevrilemez — çevrilseydi uygulama kaptana tam tersini gösterirdi. Sekiz yönün tamamı = kaynak 'all round shelter' demiştir. Kısmi liste, yazılmayan yönlerin açık olduğu anlamına GELMEZ. ELENENLER (12 nokta): tek kişilik gezi raporları ('bu koy harikaydı, 40 knotta rahattık'), pusula yönü içermeyen 'meltemiye karşı korunaklı' ifadeleri, dağdan inen katabatik hamle uyarıları (maruziyet değil), bir bölümü doğuya açık ama güney bölümü tam korunaklı olan Karaöz gibi tek alana sığmayan yerler, ve 'east-southeast' gibi 8 yöne oturmayan ara yönler (Analoukas'ta yalnız açıkça yazan KD alındı). 60 noktada sayfa var ama korunak cümlesi yok. SONRADAN ELENEN 2 KAYIT: buyuk-boncuklu-koyu ve kucuk-boncuklu-koyu. Kaynak cümlesi 'naturally protected small bay ... rarely suffers from severe windy weather conditions' diyor; bu GENEL SAKİNLİK ifadesidir, 'her yönden korunaklı' değildir — diğer 10 tam-korunak kaydının hepsinde açık ifade var ('all round shelter', 'protected against all winds', 'totally landlocked'). Ayrıca tek cümle iki ayrı koya atfediliyordu. Kaptana 'hangi rüzgârda olursa olsun güvenli' demek için bu dayanak yetmez. 2. TUR (2026-08): kayıtlı sayfa dışında da arandı; 2 nokta eklendi. ELENENLER ve gerekçeleri: yedi-adalar-demirleme — 'her denize liman' takımadanın ÇOK SAYIDA koyu için söylenmiş; bizim kaydımız tek nokta — Boncuklu dersi; bencik-koyu — korunak yalnız koyun 'iç kısımları' için; dış kısımda demirleyen kaptan yanılır (alt-bölge niteleyicisi); gobun-samandira-sahasi — üç kaynak üç ayrı tablo çiziyor (her yöne güvenli / K+B korunaklı / KB'ya açık ada) — çelişki çözülmeden yazılmaz; sovalye-adasi-demirleme — 'Güney-Doğu tarafı' adanın YAKASI, rüzgâr yönü değil; korunak 'meltem'e karşı, pusula yönü yok; tuzla-koyu-gokova — tarif edilen güvenli köşe hedef noktadan 3,4 km doğuda; yanlış yere işaret ederdi; karacaoren-adasi-demirleme — 'hakim rüzgar karayeldir' bölge geneli; ayrıca sayfa ADA değil anakaradaki Karacaören KOYU. 2026-08 2. tur GERİ ALINAN: uzun-liman-hisaronu — kaynak 'The BEACH SIDE affords all-round shelter' diyor, yani koyun BİR BÖLÜMÜ için; bencik-koyu'nu tam da bu gerekçeyle elemiştik, tutarlılık için bu da elendi (alıntı arşivde: The beach side affords all-round shelter.).",
  "veriler": {
   "adabogazi-akvaryum-demirleme": {
    "yonler": [
@@ -142,6 +142,21 @@
    "alinti": "Kuzbükü is a large and open bay, lying on S of Koca Ada and SE of Kargacık Burnu. A bight which is squeezed between two finger points with its sheer shoreline covered with a few pine trees, provides relative sheltering from westerlies.",
    "kaynak": "https://turkeymarinas.blogspot.com/2016/05/kuzbuku-anchorage.html"
   },
+  "longoz-koyu": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "alinti": "Karanın içerisine doğru uzanan, her havaya kapalı bir koy.",
+   "kaynak": "https://www.wikiderya.org/wiki/longoz",
+   "tam_korunak": true
+  },
   "maltezi-plaji-amorgos": {
    "yonler": [
     "K"
@@ -201,6 +216,13 @@
    "alinti": "Okluk Bay provides all-round shelter.",
    "kaynak": "https://turkeymarinas.blogspot.com/2016/06/okluk-cove.html"
   },
+  "ornos-koyu-mykonos": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "Ornos offers shelter in northerlies.",
+   "kaynak": "https://grecosailor.com/skippers/cyclades/mykonos/"
+  },
   "serce-limani": {
    "yonler": [
     "K",
@@ -222,21 +244,6 @@
    ],
    "alinti": "The anchorage offers good protection from northerly winds, and we experienced no waves.",
    "kaynak": "https://grecosailor.com/skippers/eastern-sporades/lesvos/anchorages/"
-  },
-  "uzun-liman-hisaronu": {
-   "yonler": [
-    "K",
-    "KD",
-    "D",
-    "GD",
-    "G",
-    "GB",
-    "B",
-    "KB"
-   ],
-   "tam_korunak": true,
-   "alinti": "The beach side affords all-round shelter.",
-   "kaynak": "https://turkeymarinas.blogspot.com/2016/06/uzun-liman-anchorage.html"
   }
  }
 }

@@ -284,4 +284,32 @@ void main() {
     // Sekiz kısaltmanın yan yana dizildiği ham liste GÖSTERİLMEZ.
     expect(find.text('K, KD, D, GD, G, GB, B, KB'), findsNothing);
   });
+
+  testWidgets('açık yön ve kapalı yön AYNI ANDA, birbirinden bağımsız çıkar',
+      (WidgetTester tester) async {
+    // Gerçek kayıt: kaynak Ornos için hem "open to the S" hem "shelter in
+    // northerlies" diyor. İkisi birbirinin tersi olmadığı için ikisi de ayrı
+    // kutuda görünmeli — biri diğerinden TÜRETİLMEZ.
+    // Genişlik bilerek 360 dp (gerçek telefon), çünkü şeritte beş kutu birden
+    // çıkıyor. NOT: burada taşma İSTİSNASI aramanın anlamı yok — kutular
+    // `Expanded` olduğu için yatay taşma yapısal olarak imkânsız, etiket de
+    // `ellipsis` ile sessizce kırpılır. Ölçülen şey, iki alanın birbirinden
+    // bağımsız çıkması ve zeminin kutuya sığan KISA adla yazılması.
+    tester.view.physicalSize = const Size(360, 2600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      _app(FakeLocationDetailGateway(result: sampleBothWindDetail)),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Açık yön'), findsOneWidget);
+    expect(find.text('G'), findsOneWidget);
+    expect(find.text('Kapalı yön'), findsOneWidget);
+    expect(find.text('K'), findsOneWidget);
+    // Zemin kutuda KISA yazılır; parantezli açılım kutuyu altı satır uzatırdı.
+    expect(find.text('Karışık'), findsOneWidget);
+    expect(find.text('Karışık (kum/çamur/yosun)'), findsNothing);
+  });
 }
