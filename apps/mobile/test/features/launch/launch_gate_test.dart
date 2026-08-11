@@ -2,10 +2,13 @@ import 'package:dockly_api/dockly_api.dart' show GeoPoint;
 import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/auth/presentation/sign_in_screen.dart';
 import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
+import 'package:dockly_mobile/features/launch/domain/launch_store.dart';
 import 'package:dockly_mobile/features/launch/presentation/launch_gate.dart';
 import 'package:dockly_mobile/features/location/application/location_controller.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/domain/map_viewport.dart';
+import 'package:dockly_mobile/features/splash/presentation/splash_screen.dart'
+    show appReadyProvider;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -233,4 +236,62 @@ void main() {
     expect(find.text('Denizcilerin yorumları ve gerçek deneyimleri'),
         findsOneWidget);
   });
+
+  // ===========================================================================
+  // FAZ 1 (hız): kapı iki cihaz okumasını AYNI ANDA yapıyor ve bitince açılış
+  // ekranına "hazır" diyor. İki yeni sözleşme:
+  // ===========================================================================
+
+  testWidgets('karar verilince AÇILIŞ EKRANINA hazır sinyali gider',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeLaunchStore(done: true)));
+    await tester.pumpAndSettle();
+
+    expect(find.text('KABUK'), findsOneWidget);
+    final ProviderContainer c = ProviderScope.containerOf(
+      tester.element(find.byType(LaunchGate)),
+      listen: false,
+    );
+    expect(c.read(appReadyProvider), isTrue);
+  });
+
+  testWidgets('depo FIRLATIRSA boş ekranda kilitlenmez — haritaya girilir',
+      (WidgetTester tester) async {
+    // Paralelleştirmenin yan etkisi: `step()` artık dönen kullanıcıda da
+    // çağrılıyor. Fırlatırsa eski kodda `_done` sonsuza dek null kalır ve
+    // kullanıcı boş bir ekranda kalırdı. Sözleşme (LaunchStore): bozuk
+    // depoda "tamamlandı" varsayılır.
+    await tester.pumpWidget(ProviderScope(
+      overrides: <Override>[
+        launchStoreProvider.overrideWithValue(_ThrowingLaunchStore()),
+        boatStorageProvider.overrideWithValue(FakeBoatStorage()),
+        locationServiceProvider.overrideWithValue(FakeLocationService(null)),
+      ],
+      child: const MaterialApp(home: LaunchGate(child: Text('KABUK'))),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('KABUK'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('launch-welcome')), findsNothing);
+    final ProviderContainer c = ProviderScope.containerOf(
+      tester.element(find.byType(LaunchGate)),
+      listen: false,
+    );
+    expect(c.read(appReadyProvider), isTrue, reason: 'açılış yine çekilmeli');
+  });
+}
+
+/// Bozuk cihaz deposu benzetimi (gerçek depo yutar; bu test kalkanı sınar).
+class _ThrowingLaunchStore implements LaunchStore {
+  @override
+  Future<bool> isDone() async => throw StateError('bozuk depo');
+
+  @override
+  Future<void> markDone() async {}
+
+  @override
+  Future<int> step() async => throw StateError('bozuk depo');
+
+  @override
+  Future<void> setStep(int value) async {}
 }

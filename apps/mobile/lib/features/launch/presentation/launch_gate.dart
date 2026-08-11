@@ -8,6 +8,7 @@ import '../../boat/domain/my_boat.dart';
 import '../../location/application/location_controller.dart';
 import '../../map/application/map_controller.dart';
 import '../../map/domain/map_viewport.dart';
+import '../../splash/presentation/splash_screen.dart' show appReadyProvider;
 import '../data/shared_prefs_launch_store.dart';
 import '../domain/launch_answers.dart';
 import '../domain/launch_store.dart';
@@ -56,15 +57,38 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
     super.initState();
     Future<void>(() async {
       final LaunchStore store = ref.read(launchStoreProvider);
-      final bool done = await store.isDone();
+      // İKİ okuma AYNI ANDA (Faz 1 — hız). Eskiden biri bitmeden diğeri
+      // başlamıyordu; ikisi de aynı cihaz deposundan okuduğu için sıraya
+      // girmelerinin hiçbir karşılığı yoktu.
       // Yarım kalan akış kaldığı adımdan sürer (onaylı iyileştirme).
-      final int step = done ? 0 : (await store.step()).clamp(0, 4);
-      if (mounted) {
-        setState(() {
-          _done = done;
-          _step = step;
-        });
+      //
+      // HATA KALKANI: paralelleştirme yan etki getirir — eskiden `step()`
+      // yalnız ilk açılışta çağrılıyordu, artık her açılışta çağrılıyor.
+      // Depo bir gün fırlatırsa DÖNEN kullanıcı da etkilenirdi ve `_done`
+      // sonsuza dek null kalıp uygulamayı BOŞ EKRANDA kilitlerdi. Bozuk
+      // depoda doğru davranış "akışı tamamlanmış say"dır: kullanıcı
+      // karşılamaya hapsedilmez, doğrudan haritaya girer.
+      bool done = true;
+      int step = 0;
+      try {
+        final List<Object> both = await Future.wait<Object>(
+            <Future<Object>>[store.isDone(), store.step()]);
+        done = both[0] as bool;
+        step = done ? 0 : (both[1] as int).clamp(0, 4);
+      } catch (_) {
+        done = true;
+        step = 0;
       }
+      if (!mounted) return;
+      setState(() {
+        _done = done;
+        _step = step;
+      });
+      // AÇILIŞ EKRANINA HABER VER: gösterilecek doğru ekran artık belli.
+      // Bundan sonra beklemenin karşılığı yok — marka yüzeyi çekilebilir.
+      // (Kapı ağaçtan kalktıysa `ref` kullanılamaz; o durumda açılış kendi
+      // tavan süresiyle zaten kapanır.)
+      ref.read(appReadyProvider.notifier).state = true;
     });
   }
 

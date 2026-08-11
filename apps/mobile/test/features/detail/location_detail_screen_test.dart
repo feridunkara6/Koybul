@@ -202,14 +202,19 @@ void main() {
     expect(find.textContaining('tek dokunuşla aramak'), findsOneWidget);
   });
 
-  testWidgets('HESAPSIZ: favori kalbine dokununca kapı; favori eklenmez',
+  testWidgets('HESAPSIZ: favori KAPISIZ çalışır (yanlış vaat kaldırıldı)',
       (WidgetTester tester) async {
+    // Faz 1 kararı: favoriler yalnız cihazda saklandığı için "giriş yap,
+    // listen her cihazında seninle olur" sözü yanlıştı. Kapı kalktı; bu test
+    // birinin onu sessizce geri koymasını engeller.
     await tester.pumpWidget(_app(FakeLocationDetailGateway()));
     await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('Favorilere ekle'));
+    await tester.pump();
+    expect(find.text('Hesap gerekli'), findsNothing);
+    expect(find.text('Favorilere eklendi'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 3));
     await tester.pumpAndSettle();
-    expect(find.text('Hesap gerekli'), findsOneWidget);
-    expect(find.text('Favorilere eklendi'), findsNothing);
   });
 
   testWidgets('HESAPLI: favori kalbi çalışır (SnackBar onayı)',
@@ -227,9 +232,14 @@ void main() {
 
   testWidgets('kapıdan "Giriş yap veya kayıt ol" → giriş sayfası açılır',
       (WidgetTester tester) async {
+    // Kapı örneği olarak TELEFON satırı kullanılır (favori kapısı Faz 1'de
+    // kaldırıldı; kalan kapılar aynı bileşeni paylaşıyor).
     await tester.pumpWidget(_app(FakeLocationDetailGateway()));
     await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Favorilere ekle'));
+    await tester.scrollUntilVisible(find.text('+902526451234'), 300);
+    await tester.ensureVisible(find.text('+902526451234'));
+    await tester.pump();
+    await tester.tap(find.text('+902526451234'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Giriş yap veya kayıt ol'));
     await tester.pumpAndSettle();

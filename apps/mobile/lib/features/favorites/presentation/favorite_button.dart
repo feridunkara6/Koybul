@@ -3,14 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
-import '../../auth/presentation/account_gate.dart';
 import '../application/favorites_controller.dart';
 import '../domain/favorite_location.dart';
 
 /// Bir lokasyonu favorilere ekleyip çıkaran kalp düğmesi (detay ekranı başlığı).
 /// Favoriyse dolu kırmızı kalp, değilse çizgi kalp gösterir.
-/// ÜYELİK KAPISI (kullanıcı kararı 2026-07): favoriye EKLEME hesap ister;
-/// çıkarma serbesttir (kullanıcının eski seçimini silmesi engellenmez).
+///
+/// ÜYELİK KAPISI KALDIRILDI (Faz 1, denetim bulgusu). Eski davranış bir söz
+/// veriyordu: "giriş yap, listen her cihazında seninle olur". Bu söz doğru
+/// değildi — favoriler yalnızca telefonda, `favorites.v1` anahtarında
+/// duruyor; sunucuya hiç gönderilmiyor (gizlilik metnimiz de bunu böyle
+/// yazıyor). Yani kullanıcı hiç almadığı bir şeyin bedelini ödüyordu ve bunu
+/// ilk iki dakikada, en kritik anda ödüyordu.
+///
+/// Doğrusu ikisinden biriydi: ya sözü tut (sunucuya taşı), ya kapıyı kaldır.
+/// Sunucuya taşımak Faz 4 işi (hesap-veri göçü); kapıyı kaldırmak bugün
+/// doğru olan. Favori artık hesapsız çalışır ve arayüz cihazda kaldığını
+/// açıkça söyler.
 class FavoriteButton extends ConsumerWidget {
   const FavoriteButton({required this.favorite, super.key});
 
@@ -46,18 +55,7 @@ class FavoriteButton extends ConsumerWidget {
         isFav ? DocklyIcons.favorite : DocklyIcons.favoriteBorder,
         color: isFav ? DocklyColors.error : null,
       ),
-      onPressed: () {
-        if (isFav) {
-          toggleAndNotify(); // çıkarma kapısız
-          return;
-        }
-        requireAccount(
-          context,
-          ref,
-          message: ref.read(l10nProvider).gateFavMsg,
-          onAllowed: toggleAndNotify,
-        );
-      },
+      onPressed: toggleAndNotify,
     );
   }
 }

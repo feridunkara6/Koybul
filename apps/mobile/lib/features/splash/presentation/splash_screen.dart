@@ -18,20 +18,41 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// beklemez; SplashGate açılışta false yapar, bitince true'ya çevirir.
 final StateProvider<bool> splashDoneProvider = StateProvider<bool>((ref) => true);
 
+/// UYGULAMA HAZIR sinyali (Faz 1 — hız). Açılış ekranı artık sabit bir süre
+/// SAYMAZ; arkadaki uygulama gerçekten hazır olur olmaz çekilir.
+///
+/// Kim doğru yapar: [LaunchGate] cihaz deposunu okur okumaz true yapar —
+/// yani "ilk açılış akışı mı, harita mı" kararı verildiği an. O ana kadar
+/// gösterilecek doğru ekran BİLİNMEZ; ondan sonra beklemenin bir karşılığı
+/// yoktur.
+///
+/// Varsayılan FALSE: sinyali kimse vermezse [SplashGate] tavan süreyle
+/// kendini kapatır (aşağıya bak) — yani bu sağlayıcıyı unutmak uygulamayı
+/// açılış ekranında KİLİTLEYEMEZ.
+final StateProvider<bool> appReadyProvider = StateProvider<bool>((ref) => false);
+
 class SplashGate extends ConsumerStatefulWidget {
   const SplashGate({
     required this.child,
-    // 1500ms: kullanıcı isteği (açılış hızlansın) — marka animasyonu korunur
-    // ama bekletmez.
-    this.duration = const Duration(milliseconds: 1500),
+    // TAVAN süre. Hazır sinyali hiç gelmezse (beklenmedik bir takılma)
+    // kullanıcı burada tutulmaz; en geç bu sürede harita açılır.
+    this.duration = const Duration(milliseconds: 2200),
+    // TABAN süre: marka yüzeyi bir "flaş" gibi çakıp kaybolmasın. Cihaz
+    // deposu okuması tipik olarak 10-50 ms sürdüğü için pratikte açılışı
+    // belirleyen değer budur.
+    this.minDuration = const Duration(milliseconds: 600),
     this.now,
     super.key,
   });
 
   final Widget child;
 
-  /// Açılış ekranının minimum görünme süresi (testte kısaltılır).
+  /// Açılış ekranının EN GEÇ kapanma süresi (testte kısaltılır).
   final Duration duration;
+
+  /// Açılış ekranının en az görünme süresi. [duration]'dan büyükse
+  /// [duration] kazanır — tavan her zaman bağlayıcıdır.
+  final Duration minDuration;
 
   /// Saat kaynağı — testte sabitlenir; null → [DateTime.now].
   final DateTime Function()? now;
@@ -44,10 +65,17 @@ class SplashGate extends ConsumerStatefulWidget {
 bool splashIsNight(DateTime t) => t.hour >= 19 || t.hour < 7;
 
 class _SplashGateState extends ConsumerState<SplashGate> {
-  Timer? _timer;
+  Timer? _floorTimer;
+  Timer? _ceilingTimer;
   Timer? _removeTimer;
-  bool _done = false; // süre doldu → kararma başlar
+  bool _floorPassed = false; // taban süre doldu
+  bool _done = false; // açılış kapandı → kararma başlar
   bool _gone = false; // kararma bitti → açılış ağaçtan kalkar
+
+  /// Taban, tavanı aşamaz: testler kısa bir [duration] verdiğinde taban
+  /// onu uzatmamalı.
+  Duration get _floor =>
+      widget.minDuration < widget.duration ? widget.minDuration : widget.duration;
 
   @override
   void initState() {
@@ -58,27 +86,47 @@ class _SplashGateState extends ConsumerState<SplashGate> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) ref.read(splashDoneProvider.notifier).state = false;
     });
-    _timer = Timer(widget.duration, () {
-      if (!mounted) return;
-      setState(() => _done = true);
-      ref.read(splashDoneProvider.notifier).state = true;
-      // Kararma animasyonu bitince açılış katmanı tamamen kaldırılır
-      // (animasyon denetleyicileri dursun — arka planda boşa iş yapmasın).
-      _removeTimer = Timer(const Duration(milliseconds: 500), () {
-        if (mounted) setState(() => _gone = true);
-      });
+    _floorTimer = Timer(_floor, () {
+      _floorPassed = true;
+      _finishIfReady();
+    });
+    // TAVAN: hazır sinyali gelmese bile kullanıcı burada bırakılmaz.
+    _ceilingTimer = Timer(widget.duration, _finish);
+  }
+
+  void _finishIfReady() {
+    if (!mounted || _done) return;
+    if (!_floorPassed) return;
+    if (!ref.read(appReadyProvider)) return;
+    _finish();
+  }
+
+  void _finish() {
+    if (!mounted || _done) return;
+    setState(() => _done = true);
+    ref.read(splashDoneProvider.notifier).state = true;
+    // Kararma animasyonu bitince açılış katmanı tamamen kaldırılır
+    // (animasyon denetleyicileri dursun — arka planda boşa iş yapmasın).
+    _removeTimer = Timer(const Duration(milliseconds: 500), () {
+      if (mounted) setState(() => _gone = true);
     });
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _floorTimer?.cancel();
+    _ceilingTimer?.cancel();
     _removeTimer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // Hazır sinyali taban süreden ÖNCE de gelebilir; o yüzden burada da
+    // dinlenir (dinleme build içinde olmalı — Riverpod kuralı).
+    ref.listen<bool>(appReadyProvider, (bool? _, bool ready) {
+      if (ready) _finishIfReady();
+    });
     final DateTime t = (widget.now ?? DateTime.now)();
     final bool night = splashIsNight(t);
     // TEK-RESSAM KURALI (kullanıcı kararı 2026-08): WEB'de açılışı yalnız

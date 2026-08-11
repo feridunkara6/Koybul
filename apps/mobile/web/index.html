@@ -164,11 +164,15 @@
       if (!(h >= 19 || h < 7)) s.classList.add('gunduz');
       // TEK-RESSAM KURALI (2026-08): web'in açılışı YALNIZ bu katmandır —
       // Flutter web'de ikinci bir açılış çizmez. Katman, uygulamanın ilk
-      // karesi çizilene VE en az 1800ms marka süresi dolana kadar durur;
-      // sonra doğrudan hazır haritaya yumuşakça açılır. Logo tek kez
+      // karesi çizilene VE en az MIN_SURE kadar marka süresi dolana kadar
+      // durur; sonra doğrudan hazır haritaya yumuşakça açılır. Logo tek kez
       // çizildiği için oynaması/boyut değiştirmesi imkânsızdır.
+      //
+      // FAZ 1 (hız): taban süre 1800 → 600 ms. Asıl bekleme zaten
+      // 'flutter-first-frame' olayıdır; taban yalnız markanın bir flaş gibi
+      // çakıp kaybolmasını önler. Hızlı bağlantıda açılış ~1,2 sn kısalır.
       var t0 = Date.now();
-      var MIN_SURE = 1800;
+      var MIN_SURE = 600;
       function kaldir() {
         s.style.opacity = '0';
         setTimeout(function () { s.remove(); }, 500);

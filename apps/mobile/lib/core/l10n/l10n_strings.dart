@@ -192,7 +192,6 @@ class L10n {
     required this.gateFreeNote,
     required this.gateReservationMsg,
     required this.gateCallMsg,
-    required this.gateFavMsg,
     required this.rezTitle,
     required this.rezIntro,
     required this.rezNoContact,
@@ -626,7 +625,7 @@ class L10n {
   final Map<String, String> holdingLabels;
 
   final String gateTitle, gateNotNow, gateFreeNote, gateReservationMsg,
-      gateCallMsg, gateFavMsg;
+      gateCallMsg;
   final String rezTitle, rezIntro, rezNoContact, linkFailed;
   final String nearbySheetTitle, nearbyAltTitle;
   final String favRemoveTooltip, favAdded, favRemoved, favEmpty;
@@ -1301,7 +1300,6 @@ const L10n _tr = L10n(
   gateFreeNote: 'Hesap ücretsizdir; koy ve liman bilgilerine bakmak için gerekmez.',
   gateReservationMsg: 'Rezervasyon talebi göndermek için hesabınla giriş yap — marina talebinin kime ait olduğunu bilsin.',
   gateCallMsg: 'Marinayı uygulamadan tek dokunuşla aramak için hesabınla giriş yap.',
-  gateFavMsg: 'Favori limanlarını kaydetmek için hesabınla giriş yap — listen her cihazında seninle olur.',
   rezTitle: 'Rezervasyon Talebi',
   rezIntro: 'Marinayla doğrudan iletişime geç. WhatsApp ya da e-posta seçersen tekne bilgin hazır mesaja eklenir.',
   rezNoContact: 'Bu lokasyon için kayıtlı iletişim bilgisi yok. En kısa sürede ekleyeceğiz. Bu arada haritadan komşu noktaları deneyebilirsin.',
@@ -1928,7 +1926,6 @@ const L10n _en = L10n(
   gateFreeNote: 'Accounts are free; browsing coves and harbors never requires one.',
   gateReservationMsg: 'Sign in to send a reservation request — so the marina knows who it belongs to.',
   gateCallMsg: 'Sign in to call the marina with one tap from the app.',
-  gateFavMsg: 'Sign in to save your favorite harbors — your list follows you on every device.',
   rezTitle: 'Reservation Request',
   rezIntro: 'Contact the marina directly. Choose WhatsApp or email and your boat info is added to a ready-made message.',
   rezNoContact: 'No contact info recorded for this location yet. We\'ll add it soon — meanwhile try the neighboring spots on the map.',
@@ -2555,7 +2552,6 @@ const L10n _es = L10n(
   gateFreeNote: 'La cuenta es gratis; para ver calas y puertos no hace falta.',
   gateReservationMsg: 'Inicia sesión para enviar una solicitud de reserva: así el puerto sabe de quién es.',
   gateCallMsg: 'Inicia sesión para llamar al puerto con un toque desde la app.',
-  gateFavMsg: 'Inicia sesión para guardar tus puertos favoritos: tu lista te sigue en todos tus dispositivos.',
   rezTitle: 'Solicitud de reserva',
   rezIntro: 'Contacta directamente con el puerto. Si eliges WhatsApp o correo, los datos de tu barco se añaden a un mensaje listo.',
   rezNoContact: 'Aún no hay datos de contacto para este punto. Los añadiremos pronto; mientras tanto prueba los puntos vecinos del mapa.',
@@ -3182,7 +3178,6 @@ const L10n _ru = L10n(
   gateFreeNote: 'Аккаунт бесплатный; для просмотра бухт и гаваней он не нужен.',
   gateReservationMsg: 'Войдите, чтобы отправить запрос на бронирование — марина должна знать, чей это запрос.',
   gateCallMsg: 'Войдите, чтобы звонить в марину в одно касание из приложения.',
-  gateFavMsg: 'Войдите, чтобы сохранять избранные гавани — список будет с вами на всех устройствах.',
   rezTitle: 'Запрос на бронирование',
   rezIntro: 'Свяжитесь с мариной напрямую. Выберите WhatsApp или почту — данные лодки добавятся в готовое сообщение.',
   rezNoContact: 'Для этой точки пока нет контактов. Мы скоро их добавим — а пока попробуйте соседние точки на карте.',
