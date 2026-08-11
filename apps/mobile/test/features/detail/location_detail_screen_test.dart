@@ -261,7 +261,7 @@ void main() {
     expect(find.text('Ücretsiz'), findsNothing);
 
     // KORUNAKLI yönler kendi kutusunda çıkar…
-    expect(find.text('Korunaklı'), findsOneWidget);
+    expect(find.text('Kapalı yön'), findsOneWidget);
     expect(find.text('K, GB'), findsOneWidget);
     // …ve "Açık yön" kutusu ÇIKMAZ: korunak ifadesi açık yöne çevrilmedi.
     // Bu satır ters çevirme hatasının nöbetçisidir.
@@ -279,7 +279,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Korunaklı'), findsOneWidget);
+    expect(find.text('Kapalı yön'), findsOneWidget);
     expect(find.text('Her yönden'), findsOneWidget);
     // Sekiz kısaltmanın yan yana dizildiği ham liste GÖSTERİLMEZ.
     expect(find.text('K, KD, D, GD, G, GB, B, KB'), findsNothing);

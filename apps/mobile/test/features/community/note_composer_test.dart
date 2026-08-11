@@ -28,6 +28,15 @@ void main() {
   /// "Found 0 widgets" ve `ensureVisible` → "Bad state: No element"
   /// hatalarının ikisi de budur (2026-08). Yüzeyi büyütmek hepsini boyama
   /// alanına sokar. NOT: `cacheExtent` büyütmek bu sorunu ÇÖZMEZ.
+  ///
+  /// DEGISMEZ KURAL: form bu yuzeye SIGMALI (bugun ~760 / 2344 px — uc kat
+  /// pay). Buraya kaydirma yardimcisi KOYMAYIN; ikisi de denendi, ikisi de
+  /// CI'yi kirdi: `ensureVisible` sahne disi widget'ta "No element" atar;
+  /// `scrollUntilVisible` ise varsayilan `find.byType(Scrollable)` adayini
+  /// `Iterable.single` ile tekillestirdigi icin "Too many elements" atar —
+  /// agacta ListView'in yani sira cok satirli TextField'in kendi kaydiricisi
+  /// da vardir. Form bir gun tasarsa dogru duzeltme asagidaki 2400'u
+  /// buyutmektir.
   void tallSurface(WidgetTester tester) {
     tester.view.physicalSize = const Size(1000, 2400);
     tester.view.devicePixelRatio = 1.0;
@@ -111,13 +120,6 @@ void main() {
     await tester.enterText(
         find.byKey(const ValueKey<String>('note-body')), 'Batı girişinde yüzer ağ var.');
     await tester.pumpAndSettle();
-    // Düzen ileride uzarsa test kendi kendini kurtarsın. `ensureVisible`
-    // BİLEREK kullanılmadı: o, offstage widget'ta tam da kaçındığımız
-    // "Bad state: No element" hatasını fırlatır. `scrollUntilVisible`
-    // görünür olana dek kaydırır; zaten görünürse hiçbir şey yapmaz.
-    await tester.scrollUntilVisible(
-        find.byKey(const ValueKey<String>('note-submit')), 300);
-    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey<String>('note-submit')));
     await tester.pumpAndSettle();
 
@@ -172,13 +174,6 @@ void main() {
 
     await tester.enterText(
         find.byKey(const ValueKey<String>('note-body')), 'Kuzey ucunda kum, tutuş iyi.');
-    await tester.pumpAndSettle();
-    // Düzen ileride uzarsa test kendi kendini kurtarsın. `ensureVisible`
-    // BİLEREK kullanılmadı: o, offstage widget'ta tam da kaçındığımız
-    // "Bad state: No element" hatasını fırlatır. `scrollUntilVisible`
-    // görünür olana dek kaydırır; zaten görünürse hiçbir şey yapmaz.
-    await tester.scrollUntilVisible(
-        find.byKey(const ValueKey<String>('note-submit')), 300);
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey<String>('note-submit')));
     await tester.pumpAndSettle();
