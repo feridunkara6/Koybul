@@ -28,11 +28,13 @@ const double kHeadwindHalfDeg = 45;
 /// daha uzağa düşen örnek dürüstçe atlanır.
 const double kMaxForecastGapHours = 3;
 
-/// 8-yön Türkçe kod (K/KD/D/GD/G/GB/B/KB) — `windExposedDirs` verisiyle ve
-/// l10n `windExposedLabel` ile aynı kod alanı.
-const List<String> _dir8 = <String>['K', 'KD', 'D', 'GD', 'G', 'GB', 'B', 'KB'];
+/// 8 yönlü TR pusula kodları (K/KD/D/GD/G/GB/B/KB) — `wind_exposed_dirs` ve
+/// `wind_sheltered_dirs` verisinin ve l10n `windExposedLabel` etiketlerinin
+/// aynı kod alanı. Yön→derece çeviren tablolar (rüzgâr rozeti, öneri motoru,
+/// not bırakma) hâlâ kendi eşlemelerini tutar; bu liste yalnız KOD DİZİSİDİR.
+const List<String> kDir8 = <String>['K', 'KD', 'D', 'GD', 'G', 'GB', 'B', 'KB'];
 
-String dir8Tr(int deg) => _dir8[(((deg % 360) + 360) % 360 / 45.0).round() % 8];
+String dir8Tr(int deg) => kDir8[(((deg % 360) + 360) % 360 / 45.0).round() % 8];
 
 /// İki açı arasındaki en küçük fark (0-180).
 double angleDiffDeg(double a, double b) {

@@ -321,6 +321,13 @@ export interface LocationDetail {
    * `typeDetails.kind` 'anchorage' olmasa da doludur.
    */
   seabed: string | null;
+  /**
+   * Rüzgâra KARŞI KORUNAKLI yönler (TR pusula kodları, virgüllü: 'K,GB').
+   * `windExposedDirs`'in tersi DEĞİLDİR ve ondan türetilemez: kılavuzlar
+   * korunağı ("sheltered from northerlies") ayrı bir bilgi olarak yazar.
+   * Sekiz yön de doluysa kaynak "her yönden korunaklı" demiştir.
+   */
+  shelteredDirs: string | null;
   userContext: null;
   counts: { reviews: number; photos: number };
 }

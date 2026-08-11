@@ -43,6 +43,38 @@ void main() {
     expect(s.score, 40);
   });
 
+  test('HER YÖNDEN korunaklı kayıt belirsizlik cezasını kaldırır', () {
+    // Detay sayfası "Kapalı yön: Her yönden" derken Bugün kartının
+    // "açık yön bilgisi yok" deyip 10 puan kırması çelişkiydi (2026-08).
+    final DaySuggestion s = scoreCandidate(
+      place: sampleSummary('okluk', 'Okluk Koyu'),
+      exposedDirs: null,
+      shelteredDirs: 'K,KD,D,GD,G,GB,B,KB',
+      forecast: sampleForecast(windKn: 30, windDirDeg: 0),
+    );
+    expect(s.score, 100);
+    expect(s.reasons.map((SuggestReason r) => r.kind),
+        contains(SuggestReasonKind.sheltered));
+    expect(s.reasons.map((SuggestReason r) => r.kind),
+        isNot(contains(SuggestReasonKind.exposureUnknown)));
+  });
+
+  test('KISMİ korunak belirsizliği KALDIRMAZ — açık yönün tersi değildir', () {
+    // "Kuzeyden korunaklı" bilgisi, koyun güneye açık olduğunu göstermez;
+    // rüzgâr uyumu hâlâ değerlendirilemez, ceza durur.
+    final DaySuggestion s = scoreCandidate(
+      place: sampleSummary('kargi', 'Kargı Koyu'),
+      exposedDirs: null,
+      shelteredDirs: 'K,GB',
+      forecast: sampleForecast(),
+    );
+    expect(s.score, 90);
+    expect(s.reasons.map((SuggestReason r) => r.kind),
+        contains(SuggestReasonKind.exposureUnknown));
+    expect(s.reasons.map((SuggestReason r) => r.kind),
+        isNot(contains(SuggestReasonKind.sheltered)));
+  });
+
   test('açık yön bilgisi yoksa küçük belirsizlik kesintisi (−10) + dürüst rozet',
       () {
     final DaySuggestion s = scoreCandidate(

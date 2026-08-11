@@ -37,6 +37,8 @@ export interface DetailData {
   windExposedDirs?: string | null;
   /** Deniz dibi tutuş cinsi — tipten bağımsız (bkz. ANCHORAGE_KIND_TYPES). */
   seabed?: string | null;
+  /** Rüzgâra KARŞI korunaklı yönler (TR pusula, virgüllü) — açık yönlerin tersi değil. */
+  shelteredDirs?: string | null;
   lat: number;
   lon: number;
   countryCode: string;

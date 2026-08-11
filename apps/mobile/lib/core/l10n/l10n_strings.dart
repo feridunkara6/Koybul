@@ -288,6 +288,8 @@ class L10n {
     required this.routeArrivalExposedFmt,
     required this.verifiedLabel,
     required this.glanceSeabed,
+    required this.glanceShelter,
+    required this.shelterAllRound,
     required this.glanceOpenDir,
     required this.glanceBoat,
     required this.fitShortYes,
@@ -819,6 +821,7 @@ class L10n {
 
   // Detay sayfası yeniden tasarımı (2026-08, kullanıcı onaylı A+B+C+D):
   // kimlik kartı + "Bir Bakışta" şeridi + uyarı kartları + bölüm kartları.
+  final String glanceShelter, shelterAllRound;
   final String verifiedLabel, glanceSeabed, glanceOpenDir, glanceBoat,
       fitShortYes, fitShortNo, approachTitle, aboutTitle, routeSectionTitle,
       wwBandNote, coordsCopied;
@@ -1392,6 +1395,8 @@ const L10n _tr = L10n(
   routeArrivalExposedFmt: 'Varışta koy {0} rüzgârına açık olabilir ({1} kn) — korunaklı alternatif düşünün.',
   verifiedLabel: 'Doğrulanmış',
   glanceSeabed: 'Zemin',
+  glanceShelter: 'Kapalı yön',
+  shelterAllRound: 'Her yönden',
   glanceOpenDir: 'Açık yön',
   glanceBoat: 'Teknem',
   fitShortYes: 'Sığar',
@@ -2005,6 +2010,8 @@ const L10n _en = L10n(
   routeArrivalExposedFmt: 'On arrival the bay may be open to the {0} wind ({1} kn) — consider a sheltered alternative.',
   verifiedLabel: 'Verified',
   glanceSeabed: 'Seabed',
+  glanceShelter: 'Shelter',
+  shelterAllRound: 'All round',
   glanceOpenDir: 'Exposed',
   glanceBoat: 'My boat',
   fitShortYes: 'Fits',
@@ -2618,6 +2625,8 @@ const L10n _es = L10n(
   routeArrivalExposedFmt: 'A la llegada, la cala puede estar expuesta al viento del {0} ({1} kn) — considere una alternativa abrigada.',
   verifiedLabel: 'Verificado',
   glanceSeabed: 'Fondo',
+  glanceShelter: 'Abrigo',
+  shelterAllRound: 'Todo alrededor',
   glanceOpenDir: 'Expuesto',
   glanceBoat: 'Mi barco',
   fitShortYes: 'Cabe',
@@ -3231,6 +3240,8 @@ const L10n _ru = L10n(
   routeArrivalExposedFmt: 'По прибытии бухта может быть открыта ветру {0} ({1} узлов) — рассмотрите защищённую альтернативу.',
   verifiedLabel: 'Проверено',
   glanceSeabed: 'Грунт',
+  glanceShelter: 'Защита',
+  shelterAllRound: 'Со всех сторон',
   glanceOpenDir: 'Открыт к',
   glanceBoat: 'Моя лодка',
   fitShortYes: 'Подходит',

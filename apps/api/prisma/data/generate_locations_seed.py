@@ -345,7 +345,6 @@ def emit_demirleme(here, records):
         "-- DEMİRLEME BİLGİLERİ (2026-08 turu — birebir alıntılı, elle doğrulandı)",
         "-- =====================================================================",
     ]
-    atlanlar = []
     kurtarilan = []
     for slug, v in sorted(data["veriler"].items()):
         dmin, dmax = v.get("derinlik_min"), v.get("derinlik_max")
@@ -375,9 +374,6 @@ def emit_demirleme(here, records):
                 "ON CONFLICT (location_id) DO UPDATE SET holding_type = "
                 "COALESCE(anchorage_details.holding_type, EXCLUDED.holding_type);"
             )
-    if atlanlar:
-        print(f"demirleme: {len(atlanlar)} zemin ATLANDI (tip anchorage değil): "
-              + ", ".join(atlanlar))
     if kurtarilan:
         print(f"demirleme: {len(kurtarilan)} zemin locations.seabed_holding_type'a "
               "yazıldı (demirleme dışı tip): " + ", ".join(kurtarilan))
@@ -643,6 +639,79 @@ def emit_wind(here, records):
     return "\n".join(out)
 
 
+def emit_korunak(here, records):
+    """RÜZGÂR KORUNAĞI TURU (2026-08) → locations.wind_sheltered_dirs.
+
+    DİKKAT — BU ALAN `wind_exposed_dirs` DEĞİLDİR ve onun tersi de değildir.
+    Kılavuzlar korunağı ayrı yazar ("provides good shelter from northerly
+    winds", "kuzey rüzgârlarına kapalı"). "Kuzeyden korunaklı" ifadesi
+    "güneye açık" DEMEK DEĞİLDİR: koy doğuya da açık olabilir, hiçbir yöne
+    açık olmayabilir. Bu yüzden korunak ifadesi ASLA wind_exposed_dirs'e
+    çevrilmez — çevrilseydi arayüz kaptana tam tersini gösterirdi.
+
+    Sekiz yönün TAMAMI = kaynak "all round shelter" demiştir; arayüz bunu
+    "Her yönden" etiketine indirir. Kısmi liste yazılmayan yönlerin AÇIK
+    olduğu anlamına gelmez, yalnızca kaynağın sustuğu anlamına gelir.
+
+    Yalnız BOŞ alan doldurulur (COALESCE); mevcut veri asla ezilmez.
+    """
+    f = here / "ruzgar_korunak_2026_08.json"
+    if not f.exists():
+        return ""
+    data = json.loads(f.read_text(encoding="utf-8"))["veriler"]
+    slugs = {r["slug"] for r in records}
+    GECERLI = ["K", "KD", "D", "GD", "G", "GB", "B", "KB"]
+    # ÇELİŞKİ NÖBETÇİSİ: aynı nokta bir yöne hem "açık" hem "korunaklı"
+    # olamaz. Bugün iki küme ayrık, ama ileride biri diğerine dokunursa
+    # detay sayfası "Açık yön: G" ile "Kapalı yön: G" yan yana çıkardı.
+    wf = here / "ruzgar_yonleri.json"
+    acik = json.loads(wf.read_text(encoding="utf-8"))["yonler"] if wf.exists() else {}
+    errors = []
+    for slug, v in sorted(data.items()):
+        if slug not in slugs:
+            errors.append(f"korunak: bilinmeyen slug {slug}")
+            continue
+        dirs = v.get("yonler") or []
+        bad = [x for x in dirs if x not in GECERLI]
+        if bad:
+            errors.append(f"korunak {slug}: gecersiz yon {bad}")
+        if len(set(dirs)) != len(dirs):
+            errors.append(f"korunak {slug}: yon tekrari")
+        if not dirs:
+            errors.append(f"korunak {slug}: bos kayit")
+        # Kaynak zinciri zorunlu: alintisiz deger bu turda YASAK.
+        if not v.get("alinti"):
+            errors.append(f"korunak {slug}: alinti yok")
+        if not v.get("kaynak"):
+            errors.append(f"korunak {slug}: kaynak yok")
+        # "tam_korunak" iddiasi ile 8 yon birbirini tutmali.
+        tam = bool(v.get("tam_korunak"))
+        if tam != (len(set(dirs)) == 8):
+            errors.append(f"korunak {slug}: tam_korunak bayragi 8 yon ile tutarsiz")
+        cakisan = sorted(set(dirs) & set(acik.get(slug, [])))
+        if cakisan:
+            errors.append(
+                f"korunak {slug}: {cakisan} yonu hem acik hem korunakli yazilmis")
+    if errors:
+        for e in errors:
+            print(f"HATA: {e}", file=sys.stderr)
+        sys.exit(1)
+    out = ["", "-- " + "=" * 70,
+           "-- RUZGAR KORUNAGI (2026-08 kaynak turu) — KORUNAKLI yonler.",
+           "-- Bu alan wind_exposed_dirs'in TERSI DEGILDIR; kilavuz cumlesinden",
+           "-- birebir alindi. Sekiz yon = kaynak 'all round shelter' demistir."]
+    for slug, v in sorted(data.items()):
+        # Kanonik sira: pusula sirasi (K'dan saat yonunde) — kayit sirasi degil.
+        csv = ",".join([d for d in GECERLI if d in v["yonler"]])
+        out.append(
+            "UPDATE locations SET wind_sheltered_dirs = "
+            f"COALESCE(wind_sheltered_dirs, {q(csv)}) WHERE slug = {q(slug)};"
+        )
+    print(f"korunak: {len(data)} nokta islendi")
+    out.append("")
+    return "\n".join(out)
+
+
 def emit_corrections(here, records):
     """Doğrulama turu düzeltmeleri (corrections_*.json) → idempotent SQL.
 
@@ -723,6 +792,7 @@ def main():
     sql += emit_wind(here, records)
     sql += emit_demirleme(here, records)
     sql += emit_yapilandirma(here, records)
+    sql += emit_korunak(here, records)
     sql += emit_i18n(here, records)
     # yaklaşma, i18n'den SONRA: birleşik (notlu) metin taban çeviriyi ezmeli.
     sql += emit_yaklasma(here, records)

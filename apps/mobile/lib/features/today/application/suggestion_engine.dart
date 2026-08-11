@@ -69,6 +69,7 @@ final daySuggestionsProvider =
     double? depthMin;
     double? depthMax;
     String? bottom;
+    String? shelter;
     String? occupancy;
     try {
       final LocationDetail d =
@@ -81,6 +82,7 @@ final daySuggestionsProvider =
       // `typeDetails` yedeği eski sunucu sürümü için durur.
       final TypeDetails? td = d.typeDetails;
       bottom = d.seabed ?? (td is AnchorageTypeDetails ? td.holdingType : null);
+      shelter = d.shelteredDirs;
       occupancy = d.occupancy?.level;
     } catch (_) {
       dirs = null;
@@ -106,6 +108,7 @@ final daySuggestionsProvider =
       depthMinM: depthMin,
       depthMaxM: depthMax,
       bottomCode: bottom,
+      shelteredDirs: shelter,
       occupancyLevel: occupancy,
     ));
   }

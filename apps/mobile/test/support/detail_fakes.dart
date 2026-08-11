@@ -86,6 +86,46 @@ const LocationDetail samplePierWithSeabedDetail = LocationDetail(
   media: MediaInfo(cover: null, count: 0),
   counts: Counts(reviews: 0, photos: 0),
   seabed: 'sand',
+  // Kaynak "kuzey ve güneybatı rüzgârlarına kapalı" diyor. AÇIK yön alanı
+  // bilerek BOŞ: korunak ifadesi açık yöne çevrilemez (veri turu 2026-08).
+  shelteredDirs: 'K,GB',
+);
+
+/// Her yönden korunaklı koy — kaynak "all round shelter" demiş.
+/// Sekiz yönün tamamı yazılır; arayüz bunu tek etikete indirmeli.
+const LocationDetail sampleAllRoundShelterDetail = LocationDetail(
+  id: 'loc-tam',
+  slug: 'okluk-koyu',
+  type: 'mooring_point',
+  status: 'published',
+  name: 'Okluk Koyu',
+  description: 'Gökova körfezinde çam ormanıyla çevrili koy.',
+  position: GeoPoint(lat: 36.99, lon: 28.25),
+  geo: GeoInfo(
+    countryCode: 'TR',
+    adminArea: AdminAreaRef(id: 'a1', name: 'Marmaris', province: 'Muğla'),
+    waterBody: null,
+  ),
+  dimensions: Dimensions(
+    maxBoatLengthM: null,
+    maxDraftM: null,
+    depthMinM: null,
+    depthMaxM: null,
+    capacity: null,
+  ),
+  priceTier: 'free',
+  is24h: false,
+  verifiedAt: null,
+  rating: Rating(avg: null, count: 0, dimensions: <RatingDimension>[]),
+  amenities: <AmenityLabeled>[],
+  services: <ServiceLabeled>[],
+  contacts: <Contact>[],
+  hours: <Hour>[],
+  seasons: <Season>[],
+  typeDetails: null,
+  media: MediaInfo(cover: null, count: 0),
+  counts: Counts(reviews: 0, photos: 0),
+  shelteredDirs: 'K,KD,D,GD,G,GB,B,KB',
 );
 
 /// Testte `LocationDetailGateway` yerine geçen sahte.

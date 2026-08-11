@@ -147,6 +147,32 @@ runIf('Location detail API (e2e — gerçek DB)', () => {
         ST_SetSRID(ST_MakePoint(28.98, 36.78), 4326)::geography, 'mud')
       ON CONFLICT (slug) DO NOTHING;
     `);
+    // Öksüz demirleme satırı: anchorage_details YAZILIRKEN tip 8'dir (tetikleyici
+    // trg_anchorage_details_check_type yalnız buna izin verir), sonra tip 3'e
+    // çevrilir. Kürasyon sırasında gerçekten olabilen durum — ve
+    // ANCHORAGE_KIND_TYPES kapısını çalıştıran TEK senaryo.
+    await prisma.$executeRawUnsafe(`
+      INSERT INTO locations (id, slug, location_type_id, status, country_code, name, position)
+      VALUES (gen_random_uuid(), 'e2e-detail-orphan-anchorage', 8, 'published', 'TR', 'E2E Oksuz',
+        ST_SetSRID(ST_MakePoint(29.01, 36.81), 4326)::geography)
+      ON CONFLICT (slug) DO NOTHING;
+    `);
+    await prisma.$executeRawUnsafe(`
+      INSERT INTO anchorage_details (location_id, holding_type, is_free)
+      SELECT l.id, 'sand', true FROM locations l WHERE l.slug = 'e2e-detail-orphan-anchorage'
+      ON CONFLICT (location_id) DO NOTHING;
+    `);
+    await prisma.$executeRawUnsafe(`
+      UPDATE locations SET location_type_id = 3 WHERE slug = 'e2e-detail-orphan-anchorage';
+    `);
+    // Korunaklı yönler: açık yön alanı BOŞ kalırken korunak dolu (0010_shelter).
+    await prisma.$executeRawUnsafe(`
+      INSERT INTO locations (id, slug, location_type_id, status, country_code, name, position,
+        wind_sheltered_dirs)
+      VALUES (gen_random_uuid(), 'e2e-detail-shelter', 8, 'published', 'TR', 'E2E Korunak',
+        ST_SetSRID(ST_MakePoint(28.99, 36.79), 4326)::geography, 'K,GB')
+      ON CONFLICT (slug) DO NOTHING;
+    `);
     // 404 için taslak
     await prisma.$executeRawUnsafe(`
       INSERT INTO locations (id, slug, location_type_id, status, country_code, name, position)
@@ -255,6 +281,21 @@ runIf('Location detail API (e2e — gerçek DB)', () => {
     expect(res.body.typeDetails.isFree).toBe(true);
     // Zemin AYNI ZAMANDA üst düzeyde de gelir (istemci tek yerden okur).
     expect(res.body.seabed).toBe('sand');
+  });
+
+  it('korunaklı yönler gelir; açık yön alanı UYDURULMAZ (biri diğerinin tersi değil)', async () => {
+    const res = await request(http).get('/v1/locations/e2e-detail-shelter').expect(200);
+    expect(res.body.shelteredDirs).toBe('K,GB');
+    expect(res.body.windExposedDirs).toBeNull();
+  });
+
+  it('öksüz demirleme satırı: zemin gelir, demirleme kartı ÜRETİLMEZ (tip kapısı)', async () => {
+    // Bu kayıtta anchorage_details satırı VARDIR; kapı olmasaydı API
+    // kind='anchorage' + isFree:true döner, ücretli bir belediye limanına
+    // "Ücretsiz" rozeti basılırdı. Kapı yalnız bu senaryoda çalışır.
+    const res = await request(http).get('/v1/locations/e2e-detail-orphan-anchorage').expect(200);
+    expect(res.body.seabed).toBe('sand');
+    expect(res.body.typeDetails).toBeNull();
   });
 
   it('belediye limanında zemin gelir ama demirleme kartı (isFree) UYDURULMAZ', async () => {

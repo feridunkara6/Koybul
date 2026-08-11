@@ -1,0 +1,24 @@
+-- ============================================================================
+-- 0010_shelter — rüzgâra KARŞI KORUNAKLI yönler
+--
+-- NEDEN AYRI BİR SÜTUN: elimizde zaten `wind_exposed_dirs` var ve o, koyun
+-- rüzgâra AÇIK olduğu yönleri tutar. Denizcilik kılavuzları ise bilgiyi
+-- neredeyse her zaman tersinden yazar: "provides good shelter from northerly
+-- winds", "kuzey ve güneybatı rüzgârlarına kapalı". Bu iki ifade birbirinin
+-- MANTIKSAL TERSİ DEĞİLDİR — "kuzeyden korunaklı", "güneye açık" demek
+-- değildir; koy doğuya da açık olabilir, hiçbir yöne açık olmayabilir.
+-- Korunak ifadesini `wind_exposed_dirs` sütununa çevirip yazmak, uygulamada
+-- kaptana TAM TERSİNİ göstermek olurdu (2026-08 kaynak turu bulgusu).
+--
+-- DEĞER BİÇİMİ: `wind_exposed_dirs` ile birebir aynı — TR pusula kodlarıyla
+-- virgüllü liste (K, KD, D, GD, G, GB, B, KB). Sekiz yönün TAMAMI yazılıysa
+-- kaynak "her yönden korunaklı" (all-round shelter) demiştir; arayüz bunu tek
+-- bir "Her yönden" etiketine indirir. Kısmi liste, yazılmayan yönlerin AÇIK
+-- olduğu anlamına GELMEZ — yalnızca kaynağın o yönler için bir şey
+-- söylemediği anlamına gelir.
+--
+-- ADDITIVE + GERİYE UYUMLU: tek NULLABLE sütun; mevcut satırlar etkilenmez.
+-- IF NOT EXISTS ile idempotent (CI seed'i iki kez koşar).
+-- ============================================================================
+
+ALTER TABLE locations ADD COLUMN IF NOT EXISTS wind_sheltered_dirs text;

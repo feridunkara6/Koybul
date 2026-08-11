@@ -63,6 +63,11 @@ Map<String, dynamic> _detailJson() => <String, dynamic>{
       'media': <String, dynamic>{'cover': null, 'count': 24},
       'userContext': null,
       'counts': <String, dynamic>{'reviews': 50, 'photos': 24},
+      // Veri turu 2026-08 alanları — TEL ÜZERİNDEKİ adları burada kilitlenir.
+      // Bunlar olmadan sunucu anahtarı yeniden adlandırsa istemci sessizce
+      // null okur ve bütün paket yeşil kalırdı.
+      'seabed': 'mud',
+      'shelteredDirs': 'K,GB',
     };
 
 void main() {
@@ -95,6 +100,10 @@ void main() {
     expect(d.seasons.single.opensOn, '05-01');
     expect(d.media.cover, isNull);
     expect(d.counts.reviews, 50);
+    expect(d.seabed, 'mud');
+    // Korunak AYRI alandır: açık yön anahtarı gelmediği için null KALMALI.
+    expect(d.shelteredDirs, 'K,GB');
+    expect(d.windExposedDirs, isNull);
 
     expect(adapter.received.single.path, '/v1/locations/d-marin-gocek');
   });

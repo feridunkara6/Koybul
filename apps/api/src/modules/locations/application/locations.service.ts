@@ -153,6 +153,7 @@ export class LocationsService {
       occupancy: d.occupancy ?? null,
       windExposedDirs: d.windExposedDirs ?? null,
       seabed: d.seabed ?? null,
+      shelteredDirs: d.shelteredDirs ?? null,
       userContext: null,
       counts: { reviews: d.reviewCount, photos: d.photoCount },
     };

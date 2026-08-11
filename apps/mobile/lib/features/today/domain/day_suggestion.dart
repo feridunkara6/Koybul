@@ -124,6 +124,9 @@ DaySuggestion scoreCandidate({
   double? depthMaxM,
   String? bottomCode,
   String? occupancyLevel, // 'empty' | 'moderate' | 'full'
+  // KORUNAKLI yönler (veri turu 2026-08). AÇIK yönlerin tersi DEĞİLDİR ve
+  // ondan türetilmez; ayrı bir kayıttır.
+  String? shelteredDirs,
 }) {
   int score = 100;
   final List<SuggestReason> reasons = <SuggestReason>[];
@@ -135,7 +138,22 @@ DaySuggestion scoreCandidate({
       for (final String raw in exposedDirs.split(','))
         if (_dirDeg.containsKey(raw.trim())) raw.trim(),
   ];
-  if (openCodes.isEmpty || forecast == null || forecast.points.isEmpty) {
+  // "HER YÖNDEN KORUNAKLI" kaydı, açık yön bilgisinin yokluğunu telafi eder:
+  // kaynak zaten "hangi rüzgâr olursa olsun" demiştir, o yüzden belirsizlik
+  // cezası haksız kalır (detay sayfası "Her yönden" derken Bugün kartının
+  // "açık yön bilgisi yok" deyip 10 puan kırması çelişkiydi — 2026-08).
+  // KISMİ korunak telafi ETMEZ: koyun hangi yöne açık olduğunu hâlâ
+  // bilmiyoruz; korunak, açık yönün tersi değildir.
+  final List<String> shelterCodes = <String>[
+    if (shelteredDirs != null)
+      for (final String raw in shelteredDirs.split(','))
+        if (_dirDeg.containsKey(raw.trim())) raw.trim(),
+  ];
+  final bool allRoundShelter = _dirDeg.keys.every(shelterCodes.contains);
+
+  if (openCodes.isEmpty && allRoundShelter) {
+    reasons.add(const SuggestReason(SuggestReasonKind.sheltered));
+  } else if (openCodes.isEmpty || forecast == null || forecast.points.isEmpty) {
     score -= 10;
     reasons.add(const SuggestReason(SuggestReasonKind.exposureUnknown));
   } else {

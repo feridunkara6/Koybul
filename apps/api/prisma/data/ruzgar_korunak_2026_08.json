@@ -1,0 +1,242 @@
+{
+ "kaynak": "2026-08 rüzgâr korunağı kaynak turu: eksik 96 demirleme noktasının KAYITLI kaynak sayfalarının tamamı (80 benzersiz sayfa; turkeymarinas, grecosailor, cruiserswiki, sailingissues, navily, yerel/resmî sayfalar) tarandı. Her değer o sayfadaki birebir cümleden ('alinti') alındı ve elle doğrulandı.",
+ "not": "BU DOSYA KORUNAKLI YÖNLERİ TUTAR, AÇIK YÖNLERİ DEĞİL. Kılavuzlar bilgiyi 'sheltered from northerly winds' / 'kuzey rüzgârlarına kapalı' diye yazar; bu ifade 'güneye açıktır' DEMEK DEĞİLDİR ve wind_exposed_dirs'e çevrilemez — çevrilseydi uygulama kaptana tam tersini gösterirdi. Sekiz yönün tamamı = kaynak 'all round shelter' demiştir. Kısmi liste, yazılmayan yönlerin açık olduğu anlamına GELMEZ. ELENENLER (12 nokta): tek kişilik gezi raporları ('bu koy harikaydı, 40 knotta rahattık'), pusula yönü içermeyen 'meltemiye karşı korunaklı' ifadeleri, dağdan inen katabatik hamle uyarıları (maruziyet değil), bir bölümü doğuya açık ama güney bölümü tam korunaklı olan Karaöz gibi tek alana sığmayan yerler, ve 'east-southeast' gibi 8 yöne oturmayan ara yönler (Analoukas'ta yalnız açıkça yazan KD alındı). 60 noktada sayfa var ama korunak cümlesi yok. SONRADAN ELENEN 2 KAYIT: buyuk-boncuklu-koyu ve kucuk-boncuklu-koyu. Kaynak cümlesi 'naturally protected small bay ... rarely suffers from severe windy weather conditions' diyor; bu GENEL SAKİNLİK ifadesidir, 'her yönden korunaklı' değildir — diğer 10 tam-korunak kaydının hepsinde açık ifade var ('all round shelter', 'protected against all winds', 'totally landlocked'). Ayrıca tek cümle iki ayrı koya atfediliyordu. Kaptana 'hangi rüzgârda olursa olsun güvenli' demek için bu dayanak yetmez.",
+ "veriler": {
+  "adabogazi-akvaryum-demirleme": {
+   "yonler": [
+    "B"
+   ],
+   "alinti": "The cove has crystal-clear water with different hues of blues and provides adequate shelter from westerlies.",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/07/adabogazi-akvaryum-cove-achorage.html"
+  },
+  "analoukas-koyu-girit": {
+   "yonler": [
+    "KD"
+   ],
+   "alinti": "This abandoned vacation village offered excellent shelter from the prevailing winds, particularly those coming from the east-southeast and northeast.",
+   "kaynak": "https://grecosailor.com/skippers/crete/sitia/"
+  },
+  "aspat-koyu-demirleme": {
+   "yonler": [
+    "KB"
+   ],
+   "alinti": "Those who come with their yachts love this region as it is closed to the north west winds. Aspat Bay is very popular mainly with private yacht owners as it is naturally protected from strong winds",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/07/aspat-cove-achorage.html"
+  },
+  "cam-limani-koyu-heybeliada": {
+   "yonler": [
+    "K",
+    "KD"
+   ],
+   "alinti": "There are several anchorages around the islands which can be used as lunch stops or overnight in settled weather, but only one properly sheltered anchorage, Çam Limani on the south coast of Heybeliada, which is safe in the prevailing N/NE winds. Çam Limani lies roughly in the centre of the south coast of Heybeliada or Halki and is the only protected anchorage in the Princes' Islands. In settled weather, there is often a SW seabreeze in the mornings, which turns NE in early afternoon.",
+   "kaynak": "https://www.cruiserswiki.org/wiki/Princes_Islands"
+  },
+  "ciplak-ada-demirleme": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "The bay on the southern part of the island provides good shelter from northerly winds.",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/10/ciplak-ada-anchorage.html"
+  },
+  "ekincik-koyu-demirleme": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "It affords sheltering from the northerlies. The NE cove is the most crowded but it also affords the best protection from the meltemi.",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/05/ekincik-cove-anchorage.html"
+  },
+  "gok-liman-kokar-demirleme": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "tam_korunak": true,
+   "alinti": "Gök Liman affords all round shelter.",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/09/gok-liman-kokar-cove-anchorage.html"
+  },
+  "gokkaya-koyu-kekova": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "tam_korunak": true,
+   "alinti": "Gökkaya Limanı is the largest bay in Kekova, providing all round shelter.",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/04/gokkaya-koyu-anchorage.html"
+  },
+  "kargi-koyu-datca-demirleme": {
+   "yonler": [
+    "K",
+    "GB"
+   ],
+   "alinti": "Kuzey ve güneybatı rüzgarlarına kapalı olan koyun doğal güzelliği ve sakinliği çekici.",
+   "kaynak": "https://www.datca.gov.tr/turizm"
+  },
+  "katapola-guney-demirleme": {
+   "yonler": [
+    "G"
+   ],
+   "alinti": "In the deep bay there are two safe anchorages west of the port: ... in southerlies between the Katapola port and Panagia Church.",
+   "kaynak": "https://sailingissues.com/greekislands/amorgos.html"
+  },
+  "keci-buku-demirleme": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "tam_korunak": true,
+   "alinti": "Keçibükü is well protected against all winds.",
+   "kaynak": "https://gotosailing.com/en/orhaniye-keci-buku-hisaronu"
+  },
+  "kumru-koyu-demirleme": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "tam_korunak": true,
+   "alinti": "A totally landlocked and very attractive anchorage.",
+   "kaynak": "https://www.cruiserswiki.org/wiki/Ayvalik"
+  },
+  "kuyucakbuku-demirleme": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "tam_korunak": true,
+   "alinti": "This is a natural harbour in the East of Güllük Korfezi surrounded by Salih Adası and Kimse Burnu. It is sheltered from all winds. ... One can anchor in the middle of the waterway and it is possible to find shelter in every type of weather.",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/08/kuyucakbuku-anchorage.html"
+  },
+  "kuzbuku-demirleme": {
+   "yonler": [
+    "B"
+   ],
+   "alinti": "Kuzbükü is a large and open bay, lying on S of Koca Ada and SE of Kargacık Burnu. A bight which is squeezed between two finger points with its sheer shoreline covered with a few pine trees, provides relative sheltering from westerlies.",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/05/kuzbuku-anchorage.html"
+  },
+  "maltezi-plaji-amorgos": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "In the deep bay there are two safe anchorages west of the port: in northerlies at Maltezi beach (west of Panteleimonas Church)",
+   "kaynak": "https://sailingissues.com/greekislands/amorgos.html"
+  },
+  "mercimek-buku-demirleme": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "tam_korunak": true,
+   "alinti": "Mercimek Bükü extends 1/2 Nm on E of Tavşanbükü Island. It offers all-round shelter, but there is space only for two boats.",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/05/mercimek-buku-anchorage_28.html"
+  },
+  "mersin-korfezi-demirleme-cesme": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "tam_korunak": true,
+   "alinti": "Good protection all around.",
+   "kaynak": "https://www.cruiserswiki.org/wiki/Sigacik_Region"
+  },
+  "moska-adasi-demirleme": {
+   "yonler": [
+    "G"
+   ],
+   "alinti": "The anchorage is at the southern end of the channel between Moska or Mosko Adasi and Alibey Adasi. It is good shelter from the southerlies.",
+   "kaynak": "https://www.cruiserswiki.org/wiki/Ayvalik"
+  },
+  "okluk-koyu": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "tam_korunak": true,
+   "alinti": "Okluk Bay provides all-round shelter.",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/06/okluk-cove.html"
+  },
+  "serce-limani": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "tam_korunak": true,
+   "alinti": "Serçe Limanı provides all-round shelter. When prevailing wind blows strong, it pushes swell into the bay.",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/05/serce-limani-anchorage.html"
+  },
+  "skala-kallonis-demirleme": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "The anchorage offers good protection from northerly winds, and we experienced no waves.",
+   "kaynak": "https://grecosailor.com/skippers/eastern-sporades/lesvos/anchorages/"
+  },
+  "uzun-liman-hisaronu": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "tam_korunak": true,
+   "alinti": "The beach side affords all-round shelter.",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/06/uzun-liman-anchorage.html"
+  }
+ }
+}

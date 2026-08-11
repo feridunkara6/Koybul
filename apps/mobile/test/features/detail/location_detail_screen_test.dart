@@ -259,5 +259,29 @@ void main() {
     // demirleme kartının "Ücretsiz" rozeti sızmamalı (API ayrımı: yalnız
     // mooring_point/buoy/guest_mooring kind='anchorage' üretir).
     expect(find.text('Ücretsiz'), findsNothing);
+
+    // KORUNAKLI yönler kendi kutusunda çıkar…
+    expect(find.text('Korunaklı'), findsOneWidget);
+    expect(find.text('K, GB'), findsOneWidget);
+    // …ve "Açık yön" kutusu ÇIKMAZ: korunak ifadesi açık yöne çevrilmedi.
+    // Bu satır ters çevirme hatasının nöbetçisidir.
+    expect(find.text('Açık yön'), findsNothing);
+  });
+
+  testWidgets('her yönden korunaklı koy tek etikete iner (sekiz kısaltma değil)',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1000, 2600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      _app(FakeLocationDetailGateway(result: sampleAllRoundShelterDetail)),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Korunaklı'), findsOneWidget);
+    expect(find.text('Her yönden'), findsOneWidget);
+    // Sekiz kısaltmanın yan yana dizildiği ham liste GÖSTERİLMEZ.
+    expect(find.text('K, KD, D, GD, G, GB, B, KB'), findsNothing);
   });
 }

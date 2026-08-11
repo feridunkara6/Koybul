@@ -564,6 +564,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
       // `anchorage_details`'te, diğer tiplerinki `locations` sütununda durur
       // (0009_seabed; tetikleyici o tabloya barınak satırı yazdırmıyor).
       seabed: loc.seabedHoldingType ?? loc.anchorageDetails?.holdingType ?? null,
+      shelteredDirs: loc.windShelteredDirs ?? null,
       lat,
       lon,
       countryCode: loc.countryCode,

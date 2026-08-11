@@ -11268,6 +11268,33 @@ UPDATE locations SET seabed_holding_type = COALESCE(seabed_holding_type, 'weed')
 UPDATE locations SET seabed_holding_type = COALESCE(seabed_holding_type, 'sand') WHERE slug = 'yigitler-limani-avsa';
 
 -- ======================================================================
+-- RUZGAR KORUNAGI (2026-08 kaynak turu) — KORUNAKLI yonler.
+-- Bu alan wind_exposed_dirs'in TERSI DEGILDIR; kilavuz cumlesinden
+-- birebir alindi. Sekiz yon = kaynak 'all round shelter' demistir.
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'B') WHERE slug = 'adabogazi-akvaryum-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'KD') WHERE slug = 'analoukas-koyu-girit';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'KB') WHERE slug = 'aspat-koyu-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD') WHERE slug = 'cam-limani-koyu-heybeliada';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K') WHERE slug = 'ciplak-ada-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K') WHERE slug = 'ekincik-koyu-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'gok-liman-kokar-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'gokkaya-koyu-kekova';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,GB') WHERE slug = 'kargi-koyu-datca-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'G') WHERE slug = 'katapola-guney-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'keci-buku-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'kumru-koyu-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'kuyucakbuku-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'B') WHERE slug = 'kuzbuku-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K') WHERE slug = 'maltezi-plaji-amorgos';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'mercimek-buku-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'mersin-korfezi-demirleme-cesme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'G') WHERE slug = 'moska-adasi-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'okluk-koyu';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'serce-limani';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K') WHERE slug = 'skala-kallonis-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'uzun-liman-hisaronu';
+
+-- ======================================================================
 -- VERİ ÇEVİRİLERİ — koy açıklamaları EN/ES/RU (adlar çevrilmez).
 -- Kaynak: i18n_*.json; yeniden koşmak çeviriyi tazeler (DO UPDATE).
 -- --- i18n_tur1.json (i18n-tur1) ---

@@ -201,6 +201,23 @@ describe('LocationsService.detail (docs/23 §11.3)', () => {
     expect(d2.typeDetails).toEqual(SAMPLE.typeDetails);
   });
 
+  it('korunaklı yönler: açık yönlerden AYRI alan, biri diğerini türetmez', async () => {
+    const d = await service.detail('d-marin', 'tr');
+    expect(d.shelteredDirs).toBeNull();
+
+    // Kaynak "kuzeyden korunaklı" diyor. Bu ifade "güneye açık" DEMEK DEĞİL:
+    // windExposedDirs boş KALMALI, yoksa kaptana tersi gösterilir.
+    const sheltered: DetailData = { ...SAMPLE, shelteredDirs: 'K' };
+    class ShelterRepo extends FakeRepo {
+      override findDetail(): Promise<DetailData> {
+        return Promise.resolve(sheltered);
+      }
+    }
+    const d2 = await new LocationsService(new ShelterRepo()).detail('d-marin', 'tr');
+    expect(d2.shelteredDirs).toBe('K');
+    expect(d2.windExposedDirs).toBeNull();
+  });
+
   it('doluluk bildirimi: bilinmeyen lokasyon → not-found', async () => {
     await expect(
       service.reportOccupancy('yok-boyle-koy', 'user-1', 'full', { lat: 36.75, lon: 28.95 }),

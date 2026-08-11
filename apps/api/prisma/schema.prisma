@@ -716,6 +716,10 @@ model Location {
   /// Rüzgâra AÇIK yönler — TR pusula kodlarıyla virgüllü liste (ör. 'G,GD').
   /// Uyarı rozeti verisi (2026-07); kaynak: açıklamalardaki onaylı ifadeler.
   windExposedDirs   String?         @map("wind_exposed_dirs")
+  /// Rüzgâra KARŞI KORUNAKLI yönler — TR pusula kodları, virgüllü (0010).
+  /// `windExposedDirs`'in tersi DEĞİLDİR: kılavuzlar korunağı ayrı yazar.
+  /// Sekiz yön de yazılıysa "her yönden korunaklı" demektir.
+  windShelteredDirs String?         @map("wind_sheltered_dirs")
   /// Deniz dibi tutuş cinsi — sand|mud|weed|rock|mixed (0009_seabed).
   /// TİPTEN BAĞIMSIZ: barınak/limanda da dolar. Demirleme koylarında değer
   /// `anchorage_details.holding_type`'ta kalır; API ikisini birleştirir.

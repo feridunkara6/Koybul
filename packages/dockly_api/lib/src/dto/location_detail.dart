@@ -29,6 +29,7 @@ class LocationDetail {
     this.occupancy,
     this.windExposedDirs,
     this.seabed,
+    this.shelteredDirs,
   });
 
   final String id;
@@ -65,6 +66,12 @@ class LocationDetail {
   /// çünkü kaptan oralarda da demir atar (geriye uyumlu — eski sunucu null).
   final String? seabed;
 
+  /// Rüzgâra KARŞI KORUNAKLI yönler (TR pusula kodları, virgüllü: 'K,GB').
+  /// [windExposedDirs]'in tersi DEĞİLDİR ve ondan türetilemez — kılavuzlar
+  /// korunağı ayrı yazar ("kuzeyliye korunaklı"), açık yönü değil. Sekiz yön
+  /// de doluysa kaynak "her yönden korunaklı" demiştir (geriye uyumlu: null).
+  final String? shelteredDirs;
+
   factory LocationDetail.fromJson(Map<String, dynamic> json) {
     List<T> list<T>(String key, T Function(Map<String, dynamic>) fromJson) =>
         (json[key] as List<dynamic>? ?? const <dynamic>[])
@@ -99,6 +106,7 @@ class LocationDetail {
       occupancy: OccupancySummary.fromJsonNullable(json['occupancy']),
       windExposedDirs: json['windExposedDirs'] as String?,
       seabed: json['seabed'] as String?,
+      shelteredDirs: json['shelteredDirs'] as String?,
     );
   }
 }

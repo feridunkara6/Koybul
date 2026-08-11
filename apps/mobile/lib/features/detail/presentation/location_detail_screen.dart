@@ -26,6 +26,7 @@ import '../../nearby/presentation/nearby_alternatives.dart';
 import '../../reservation/presentation/reservation_sheet.dart';
 import '../../community/presentation/notes_section.dart';
 import '../../reviews/presentation/reviews_section.dart';
+import '../../route/domain/route_wind.dart' show kDir8;
 import '../../route/domain/sea_route.dart';
 import '../../occupancy/application/occupancy_controller.dart';
 import '../../occupancy/presentation/occupancy_row.dart';
@@ -710,6 +711,27 @@ class _GlanceStrip extends ConsumerWidget {
           .map(t.compassDir)
           .join(', ');
       tiles.add(_GlanceTile(label: t.glanceOpenDir, value: value, accent: ink));
+    }
+
+    // KORUNAKLI YÖNLER (veri turu 2026-08) — "açık yön"ün TERSİ DEĞİLDİR ve
+    // ondan türetilmez. Denizcilik kılavuzları bilgiyi neredeyse hep böyle
+    // yazar ("kuzeyliye korunaklı"); iki alan ayrı ayrı dolar, biri diğerini
+    // ima etmez. Sekiz yönün tamamı yazılıysa kaynak "her yönden korunaklı"
+    // demiştir; kutuya sekiz kısaltma sığmaz, tek etikete indirilir.
+    final List<String> sheltered = (detail.shelteredDirs ?? '')
+        .split(',')
+        .map((String s) => s.trim())
+        .where((String s) => s.isNotEmpty)
+        .toList(growable: false);
+    if (sheltered.isNotEmpty) {
+      final bool allRound = kDir8.every(sheltered.contains);
+      tiles.add(_GlanceTile(
+        label: t.glanceShelter,
+        value: allRound
+            ? t.shelterAllRound
+            : sheltered.map(t.compassDir).join(', '),
+        accent: ink,
+      ));
     }
 
     // Tekne uygunluğu: tekne tanımlıysa otomatik karşılaştırma; değilse
