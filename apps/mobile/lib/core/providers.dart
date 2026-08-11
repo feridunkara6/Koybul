@@ -48,6 +48,11 @@ final Provider<ReputationApi> reputationApiProvider = Provider<ReputationApi>((r
   return ReputationApi(ref.watch(docklyClientProvider).dio);
 });
 
+/// Hesap yönetimi istemcisi — şimdilik yalnız hesap silme. Hesap ister.
+final Provider<UsersApi> usersApiProvider = Provider<UsersApi>((ref) {
+  return UsersApi(ref.watch(docklyClientProvider).dio);
+});
+
 /// Rüzgâr/hava tahmini API istemcisi — anonim uç (MET Norway, sunucu proksili).
 final Provider<WeatherApi> weatherApiProvider = Provider<WeatherApi>((ref) {
   return WeatherApi(ref.watch(docklyClientProvider).dio);

@@ -59,4 +59,34 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Tekneni tanımla'), findsOneWidget); // alt sayfa başlığı
   });
+
+  testWidgets('YASAL satırı var ve yasal metinlere götürür (Faz 0)',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 2600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(_app());
+    await tester.pumpAndSettle();
+
+    expect(find.text('Gizlilik ve yasal metinler'), findsOneWidget);
+    await tester.tap(find.text('Gizlilik ve yasal metinler'));
+    await tester.pumpAndSettle();
+    expect(find.text('Gizlilik Politikası'), findsOneWidget);
+    expect(find.text('KVKK Aydınlatma Metni'), findsOneWidget);
+  });
+
+  testWidgets('BOŞ "Taleplerim" ekranı kaldırıldı (mağaza ret riski)',
+      (WidgetTester tester) async {
+    // İçi "yakında" yazan bir menü girişiydi; Apple olmayan özelliği duyuran
+    // uygulamayı reddediyor. Geri gelirse bu test kırılsın.
+    tester.view.physicalSize = const Size(800, 2600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(_app());
+    await tester.pumpAndSettle();
+
+    expect(find.text('Taleplerim'), findsNothing);
+  });
 }

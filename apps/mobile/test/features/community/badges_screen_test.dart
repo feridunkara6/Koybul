@@ -49,8 +49,12 @@ void main() {
     expect(find.text('5 uyarı notun doğrulandı'), findsOneWidget);
   });
 
-  testWidgets('altyapısı olmayan rozet "yakında" der ve ilerleme çubuğu ÇİZMEZ',
+  testWidgets('altyapısı olmayan rozet HİÇ GÖSTERİLMEZ (Faz 0)',
       (WidgetTester tester) async {
+    // Kazanılması imkânsız bir rozeti "yakında" diye listelemek hem kaptanı
+    // boşuna uğraştırır hem de Apple'ın "olmayan özelliği duyurma" kuralına
+    // takılır. Altyapı gelince sunucu automatic:true yapar ve rozet
+    // kendiliğinden görünür.
     await tester.pumpWidget(wrap(
       const BadgesScreen(),
       FakeReputationGateway(
@@ -61,10 +65,27 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
-    expect(find.text('Doğrulanmış Tekne'), findsOneWidget);
-    expect(find.text('yakında'), findsOneWidget);
+    expect(find.text('Doğrulanmış Tekne'), findsNothing);
+    expect(find.text('yakında'), findsNothing);
     expect(find.byType(LinearProgressIndicator), findsNothing);
-    expect(find.text('0/1'), findsNothing);
+    // Listede gösterilecek rozet kalmadığı için dürüst boş metin çıkar.
+    expect(find.textContaining('Henüz rozetin yok'), findsOneWidget);
+  });
+
+  testWidgets('elle verilmiş (altyapısız ama KAZANILMIŞ) rozet normal görünür',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(wrap(
+      const BadgesScreen(),
+      FakeReputationGateway(
+        summary: makeSummary(badges: <BadgeProgress>[
+          makeBadge(code: 'verified_boat', earned: true, automatic: false),
+        ]),
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Doğrulanmış Tekne'), findsOneWidget);
+    expect(find.text('yakında'), findsNothing);
   });
 
   testWidgets('hiç rozet yoksa açıklama gösterilir, ekran boş kalmaz',

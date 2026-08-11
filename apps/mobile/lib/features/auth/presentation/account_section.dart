@@ -7,6 +7,7 @@ import '../../../core/l10n/l10n_strings.dart';
 import '../application/auth_controller.dart';
 import '../domain/auth_gateway.dart';
 import '../domain/auth_state.dart';
+import '../../legal/presentation/legal_screen.dart';
 
 /// Profil sekmesindeki "Hesap" bölümü (paket 1 — giriş/kayıt, kullanıcı onayı
 /// 2026-07). Oturum yoksa giriş kartı, varsa hesap kartı gösterir. Misafir
@@ -19,10 +20,21 @@ class AccountSection extends ConsumerWidget {
     final AuthState state = ref.watch(authControllerProvider);
     final L10n t = ref.watch(l10nProvider);
     if (state is Authenticated && !state.isGuest) {
-      return _SignedInCard(
-        t: t,
-        email: ref.watch(authGatewayProvider).currentEmail,
-        onSignOut: () => ref.read(authControllerProvider.notifier).logout(),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          _SignedInCard(
+            t: t,
+            email: ref.watch(authGatewayProvider).currentEmail,
+            onSignOut: () => ref.read(authControllerProvider.notifier).logout(),
+          ),
+          // HESAP SİLME (Faz 0): Apple ve Google, hesap açtıran uygulamadan
+          // uygulama İÇİNDE silme yolu ister; KVKK 11. madde de silme hakkını
+          // tanır. Sunucu ucu vardı, buton yoktu — hak kâğıt üzerinde
+          // kalıyordu. Kart ALTINDA, ayrı ve sönük: yanlışlıkla basılmasın.
+          const SizedBox(height: 8),
+          const DeleteAccountRow(),
+        ],
       );
     }
     return _SignInCard(t: t, onSignIn: () => showSignInSheet(context));
@@ -121,6 +133,105 @@ class _SignedInCard extends StatelessWidget {
           ),
           TextButton(onPressed: onSignOut, child: Text(t.signOut)),
         ],
+      ),
+    );
+  }
+}
+
+/// "Hesabımı sil" satırı — onay penceresi açar.
+///
+/// TASARIM: tek dokunuşla silinmez, ama gizli de değildir. Apple'ın istediği
+/// "kolay bulunabilir" ile ürünün istediği "yanlışlıkla basılmaz" arasındaki
+/// denge: hesap kartının hemen altında, sönük renkte, onaylı.
+class DeleteAccountRow extends ConsumerStatefulWidget {
+  const DeleteAccountRow({super.key});
+
+  @override
+  ConsumerState<DeleteAccountRow> createState() => _DeleteAccountRowState();
+}
+
+class _DeleteAccountRowState extends ConsumerState<DeleteAccountRow> {
+  bool _busy = false;
+
+  Future<void> _confirmAndDelete() async {
+    final L10n t = ref.read(l10nProvider);
+    final bool? yes = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext ctx) => AlertDialog(
+        title: Text(t.accDeleteTitle),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(t.accDeleteBody),
+              const SizedBox(height: 12),
+              Text(
+                t.accDeleteKeep,
+                style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(ctx).colorScheme.onSurfaceVariant,
+                      height: 1.4,
+                    ),
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            key: const ValueKey<String>('acc-delete-cancel'),
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(t.accDeleteCancel),
+          ),
+          TextButton(
+            key: const ValueKey<String>('acc-delete-confirm'),
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: TextButton.styleFrom(foregroundColor: DocklyColors.error),
+            child: Text(t.accDeleteConfirm),
+          ),
+        ],
+      ),
+    );
+    if (yes != true) return;
+    // İki AYRI ifade: birleşik koşul da doğrudur ama `use_build_context_synchronously`
+    // için depodaki diğer 15 kullanımla aynı biçimi tutmak şüpheyi sıfırlar.
+    if (!mounted) return;
+
+    // Messenger ÖNCEDEN yakalanır: silme sonrası ağaç değişebilir.
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    setState(() => _busy = true);
+    try {
+      await ref.read(authControllerProvider.notifier).deleteAccount();
+      // Başarıda oturum Unauthenticated olur ve bu satır ağaçtan kalkar; yine
+      // de _busy sıfırlanır — o değişmez bir gün değişirse düğme sonsuza dek
+      // kilitli kalmasın (inceleme notu).
+      if (mounted) setState(() => _busy = false);
+      messenger
+        ..clearSnackBars()
+        ..showSnackBar(SnackBar(content: Text(t.accDeleteDone)));
+    } on AppFailure {
+      // Sunucu silemedi → oturum DURUYOR. Dürüst mesaj, sahte başarı yok.
+      if (mounted) setState(() => _busy = false);
+      messenger
+        ..clearSnackBars()
+        ..showSnackBar(SnackBar(content: Text(t.accDeleteError)));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final L10n t = ref.watch(l10nProvider);
+    final ThemeData theme = Theme.of(context);
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: TextButton.icon(
+        key: const ValueKey<String>('acc-delete'),
+        onPressed: _busy ? null : _confirmAndDelete,
+        icon: DocklyIcon(DocklyIcons.deleteOutline,
+            size: 18, color: theme.colorScheme.onSurfaceVariant),
+        label: Text(t.accDelete),
+        style: TextButton.styleFrom(
+          foregroundColor: theme.colorScheme.onSurfaceVariant,
+        ),
       ),
     );
   }
@@ -296,6 +407,26 @@ class _SignInSheetBodyState extends ConsumerState<SignInSheetBody> {
             label: t.googleBtn,
             variant: DocklyButtonVariant.secondary,
             onPressed: _busy ? null : _submitGoogle,
+          ),
+          // YASAL BİLGİLENDİRME (Faz 0): hesap açma anında koşullara ve
+          // gizlilik metnine erişim. Mağaza incelemesinin baktığı yer burası;
+          // ayrıca kaptanın neyi kabul ettiğini görme hakkı var.
+          const SizedBox(height: 16),
+          Text(
+            t.signInLegal,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 4),
+          TextButton(
+            key: const ValueKey<String>('sign-in-legal'),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const LegalScreen()),
+            ),
+            child: Text(t.legalRow),
           ),
         ],
       ),

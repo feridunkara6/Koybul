@@ -23,8 +23,11 @@ DocklyIconData badgeIcon(String code) => switch (code) {
 /// "Rozetlerim" ekranı — Denizci Seviyem'den açılır.
 ///
 /// Kazanılmayan rozetler GİZLENMEZ: nasıl kazanıldığı ve nerede kalındığı
-/// yazar. Altyapısı henüz olmayan rozetler "yakında" etiketiyle dürüstçe
-/// işaretlenir — sessizce çıkarmak, kaptanı boşuna uğraştırmak olurdu.
+/// yazar. TEK İSTİSNA (Faz 0): altyapısı henüz olmayan rozetler hiç
+/// listelenmez. Önceden "yakında" etiketiyle gösteriliyorlardı; ama
+/// kazanılması imkânsız bir hedef göstermek kaptanı boşuna uğraştırıyor,
+/// üstelik Apple olmayan özelliği duyuran uygulamayı reddediyor. Altyapı
+/// gelince sunucu `automatic: true` yapar ve rozet kendiliğinden görünür.
 class BadgesScreen extends ConsumerWidget {
   const BadgesScreen({super.key});
 
@@ -46,7 +49,14 @@ class BadgesScreen extends ConsumerWidget {
   Widget _body(BuildContext context, L10n t, ReputationSummary s) {
     final ThemeData theme = Theme.of(context);
     final List<BadgeProgress> earned = s.earnedBadges;
-    final List<BadgeProgress> locked = s.lockedBadges;
+    // ALTYAPISI OLMAYAN ROZET GÖSTERİLMEZ (Faz 0). Sunucu katalogda
+    // `automatic: false` rozetleri de gönderiyor; bunlar hiçbir koşulla
+    // kazanılamıyor ve ekranda "yakında" etiketiyle duruyordu. Apple,
+    // olmayan özelliği duyuran uygulamayı reddediyor — ve kaptana asla
+    // ulaşamayacağı bir hedef göstermek zaten dürüst değil. Altyapı gelince
+    // sunucu `automatic: true` yapar, rozet kendiliğinden görünür.
+    final List<BadgeProgress> locked =
+        s.lockedBadges.where((BadgeProgress b) => b.automatic).toList(growable: false);
 
     return ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
@@ -126,9 +136,12 @@ class BadgeRow extends ConsumerWidget {
                             ?.copyWith(fontWeight: FontWeight.w800),
                       ),
                     ),
-                    // Altyapısı olmayan rozet: "yakında". Kaptan boşuna
-                    // uğraşmasın diye SÖYLENİR, gizlenmez.
-                    if (!badge.automatic) ...<Widget>[
+                    // Altyapısı olmayan ama ELLE VERİLMİŞ rozet olabilir;
+                    // o kazanılmıştır ve normal çizilir. "yakında" etiketi
+                    // yalnız kazanılmamış+altyapısız duruma kalır — ekran
+                    // bunları zaten listelemiyor (bkz. _body), etiket
+                    // rozet satırı tek başına kullanılırsa diye durur.
+                    if (!badge.automatic && !badge.earned) ...<Widget>[
                       const SizedBox(width: 6),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),

@@ -7,6 +7,7 @@ export 'src/locations_api.dart';
 export 'src/weather_api.dart';
 export 'src/community_api.dart';
 export 'src/reputation_api.dart';
+export 'src/users_api.dart';
 export 'src/dto/session.dart';
 export 'src/dto/geo.dart';
 export 'src/dto/map_result.dart';

@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>dockly_mobile</string>
+	<string>Koybul</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -34,7 +34,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Konumun, sana en yakin koylari gostermek ve doluluk bildirimini bulundugun koyla sinirlamak icin kullanilir.</string>
+	<string>Konumun; sana en yakın koyları sıralamak, haritada teknenin yerini göstermek, rota başlangıcını belirlemek ve bulunduğun yerin hava tahminini almak için kullanılır. Uyarı notu yazarsan, notun oradan yazıldığını doğrulamak için konumun notla birlikte kaydedilir. Arka planda konum takibi yapılmaz.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

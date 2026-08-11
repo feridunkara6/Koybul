@@ -17,11 +17,12 @@ import '../application/shell_tab_provider.dart';
 /// Keşfet (harita) · Bugün · Defter · Teknem · Profil.
 ///
 /// Arama haritanın içindeki arama düğmesine katlandı (aynı işi iki yüzey
-/// yapmasın); Taleplerim ve favori yerler Profil'den erişilir; Günlük,
-/// Defter'in "Notlar" segmenti oldu; rotalar Defter'de yaşar.
+/// yapmasın); favori yerler Profil'den erişilir; Günlük, Defter'in "Notlar"
+/// segmenti oldu; rotalar Defter'de yaşar. "Taleplerim" ekranı Faz 0'da
+/// KALDIRILDI: içi boş bir "yakında" sayfasıydı.
 ///
 /// IndexedStack ile sekmeler arası geçişte durum korunur (harita konumu vb.).
-/// Tüm sekmeler misafir modda çalışır (favoriler/talepler cihazda saklanır);
+/// Tüm sekmeler misafir modda çalışır (favoriler cihazda saklanır);
 /// hesap/giriş geldiğinde bunlar buluta senkronlanacak.
 class DocklyShell extends ConsumerStatefulWidget {
   const DocklyShell({super.key});

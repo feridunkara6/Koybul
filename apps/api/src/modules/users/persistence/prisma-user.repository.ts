@@ -29,7 +29,7 @@ export class PrismaUserRepository implements UserRepository {
       // Rıza zamanları kayıt anındaki kabule dayanır (S-03 KVKK metni — docs/21).
       if (!user.profile) {
         await tx.userProfile.create({
-          data: { userId, displayName: this.defaultDisplayName(user.email) },
+          data: { userId, displayName: this.defaultDisplayName(userId) },
         });
       }
       if (!user.settings) {
@@ -162,9 +162,27 @@ export class PrismaUserRepository implements UserRepository {
     };
   }
 
-  private defaultDisplayName(email: string | null): string {
-    if (!email) return DEFAULT_DISPLAY_NAME;
-    const local = email.split('@')[0].trim();
-    return local.length >= 2 ? local.slice(0, 50) : DEFAULT_DISPLAY_NAME;
+  /**
+   * Varsayılan görünen ad — E-POSTADAN TÜRETİLMEZ.
+   *
+   * Eskiden e-postanın yerel kısmı kullanılıyordu: `ahmet.yilmaz@gmail.com`
+   * ile giren kaptanın adı her notunun ve yorumunun yanında "ahmet.yilmaz"
+   * olarak HERKESE görünüyordu — kullanıcı hiç sorulmadan, üstelik yaygın
+   * alan adı tahmin edilerek adresi geri bulunabilecek şekilde. KVKK
+   * açısından açık bir sorun (denetim bulgusu 2026-08, Faz 0).
+   *
+   * Yerine: "Kaptan" + kullanıcı kimliğinden türeyen kısa, kararlı bir sonek.
+   * Sonek kişisel veri DEĞİLDİR (kimliğin rastgele parçası) ve `authorId`
+   * olarak yanıtlarda zaten görünür; ama iki kaptanı birbirinden ayırmaya
+   * yetiyor, yani topluluk ve moderasyon kullanılabilir kalıyor.
+   *
+   * SON dört hane alınır, İLK dört değil: kimlikler uuidv7'dir ve onun ilk
+   * 12 hanesi ZAMAN DAMGASIDIR — baştan dört hane yaklaşık 50 günde bir
+   * değişir, yani aynı dönemde kaydolan herkes "Kaptan 019F" olurdu
+   * (inceleme bulgusu 2026-08). Son haneler rastgele bölümden gelir.
+   */
+  private defaultDisplayName(userId: string): string {
+    const suffix = userId.replace(/-/g, '').slice(-4).toUpperCase();
+    return suffix.length === 4 ? `${DEFAULT_DISPLAY_NAME} ${suffix}` : DEFAULT_DISPLAY_NAME;
   }
 }

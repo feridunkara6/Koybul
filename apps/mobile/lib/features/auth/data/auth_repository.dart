@@ -25,18 +25,28 @@ abstract interface class AuthRepository {
 
   /// Çıkış: sunucuda aile iptali (best-effort) + yerel temizlik.
   Future<void> logout();
+
+  /// HESAP SİLME (Faz 0 — mağaza ve KVKK şartı).
+  ///
+  /// Çıkıştan farkı: sunucu hatası YUTULMAZ. Silme başarısızsa yerel oturum
+  /// da korunur — yoksa kaptan hesabı sildiğini sanır, oysa hesap durmaya
+  /// devam eder. Sunucu 204 dönerse yerel temizlik çıkışla aynıdır.
+  Future<void> deleteAccount();
 }
 
 class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
     required AuthApi api,
+    required UsersApi usersApi,
     required AuthGateway gateway,
     required TokenStore store,
   })  : _api = api,
+        _usersApi = usersApi,
         _gateway = gateway,
         _store = store;
 
   final AuthApi _api;
+  final UsersApi _usersApi;
   final AuthGateway _gateway;
   final TokenStore _store;
 
@@ -103,6 +113,23 @@ class AuthRepositoryImpl implements AuthRepository {
       await _store.clear();
       return null;
     }
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    // Geçerli access token ŞART: yoksa sunucuya silme isteği gönderemeyiz ve
+    // sessizce "silindi" demek yalan olur.
+    final String? token = await validAccessToken();
+    if (token == null) {
+      throw const AuthFailure('Oturum bulunamadı. Tekrar giriş yapıp dene.');
+    }
+    // Hata bilerek YUKARI FIRLAR — ekran mesajı gösterir, oturum korunur.
+    await _usersApi.deleteMe(token);
+    // Sunucu sildi: yerelde çıkışla aynı temizlik.
+    await _store.clear();
+    _accessToken = null;
+    _accessExpiresAt = null;
+    await _gateway.signOutProvider();
   }
 
   @override

@@ -37,6 +37,12 @@ class FakeAuthRepository implements AuthRepository {
       <({String email, bool register})>[];
   bool loggedOut = false;
 
+  /// Hesap silme çağrıldı mı (Faz 0).
+  bool deleted = false;
+
+  /// Ayarlanırsa `deleteAccount` bu hatayla düşer — oturum KORUNMALI.
+  AppFailure? deleteError;
+
   @override
   Future<SessionUser> signIn(AuthProviderKind kind) async {
     signInCalls.add(kind);
@@ -66,5 +72,12 @@ class FakeAuthRepository implements AuthRepository {
   @override
   Future<void> logout() async {
     loggedOut = true;
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    final AppFailure? error = deleteError;
+    if (error != null) throw error;
+    deleted = true;
   }
 }

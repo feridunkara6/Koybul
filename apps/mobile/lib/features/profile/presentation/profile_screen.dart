@@ -14,7 +14,7 @@ import '../../emergency/presentation/emergency_screen.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../favorites/presentation/favorites_screen.dart';
 import '../../logbook/presentation/logbook_screen.dart';
-import '../../reservation/presentation/reservations_placeholder_screen.dart';
+import '../../legal/presentation/legal_screen.dart';
 import '../../route/presentation/saved_routes_screen.dart';
 import '../../shell/application/shell_tab_provider.dart';
 
@@ -80,16 +80,6 @@ class ProfileScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 12),
-          // TALEPLERİM (v2.0): sekmeden Profil'e indi (kullanım sıklığı).
-          _NavRow(
-            icon: DocklyIcons.eventNoteOutlined,
-            label: t.navRequests,
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                  builder: (_) => const ReservationsPlaceholderScreen()),
-            ),
-          ),
-          const SizedBox(height: 12),
           // KAYITLI ROTALAR (rota planlama 2026-08): cihazdaki rota kayıtları.
           _NavRow(
             icon: DocklyIcons.navigation,
@@ -121,6 +111,17 @@ class ProfileScreen extends ConsumerWidget {
           // TANITIM TURU (2026-08): tur istendiği an yeniden izlenebilir —
           // dokununca Keşfet sekmesine dönülür ve tur başlar.
           const _TourReplayRow(),
+          const SizedBox(height: 12),
+          // YASAL METİNLER (Faz 0): gizlilik, KVKK aydınlatma, kullanım
+          // koşulları. Mağaza şartı ve KVKK yükümlülüğü; içerik uygulamanın
+          // içinde, çevrimdışı okunur.
+          _NavRow(
+            icon: DocklyIcons.shield,
+            label: t.legalRow,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const LegalScreen()),
+            ),
+          ),
         ],
       ),
     );

@@ -57,7 +57,12 @@ runIf('Users API (e2e — gerçek DB+Redis)', () => {
       .get('/v1/users/me')
       .set('Authorization', `Bearer ${access}`)
       .expect(200);
-    expect(res.body.profile.displayName).toBe('me-user-1');
+    // GÖRÜNEN AD E-POSTADAN TÜRETİLMEZ (Faz 0, KVKK). E-posta
+    // 'me-user-1@e2e.dev' olmasına rağmen ad "Kaptan XXXX" biçimindedir ve
+    // e-postanın yerel kısmını ASLA içermez — bu ad anonim uçlarda herkese
+    // görünüyor.
+    expect(res.body.profile.displayName).toMatch(/^Kaptan [0-9A-F]{4}$/);
+    expect(res.body.profile.displayName).not.toContain('me-user-1');
     expect(res.body.settings).toEqual({
       theme: 'system',
       units: 'metric',
@@ -149,6 +154,45 @@ runIf('Users API (e2e — gerçek DB+Redis)', () => {
       .get('/v1/users/me')
       .set('Authorization', `Bearer ${second.access}`)
       .expect(200);
-    expect(res.body.profile.displayName).toBe('me-user-del');
+    expect(res.body.profile.displayName).toMatch(/^Kaptan [0-9A-F]{4}$/);
+    expect(res.body.profile.displayName).not.toContain('me-user-del');
+  });
+
+  it('görünen ad kullanıcı kimliğinden türer; iki kaptan birbirinden ayrılır', async () => {
+    // Ad e-postadan gelmiyor ama tamamen aynı da olmamalı: moderasyon ve
+    // topluluk, iki kaptanı ayırt edebilmeli.
+    const a = await login('me-name-a');
+    const b = await login('me-name-b');
+    const ra = await request(http)
+      .get('/v1/users/me')
+      .set('Authorization', `Bearer ${a.access}`)
+      .expect(200);
+    const rb = await request(http)
+      .get('/v1/users/me')
+      .set('Authorization', `Bearer ${b.access}`)
+      .expect(200);
+    const na = ra.body.profile.displayName as string;
+    const nb = rb.body.profile.displayName as string;
+    expect(na).toMatch(/^Kaptan [0-9A-F]{4}$/);
+    expect(nb).toMatch(/^Kaptan [0-9A-F]{4}$/);
+    expect(na).not.toBe(nb);
+    // Sonek kimliğin SON dört hanesidir. İlk haneler uuidv7'de zaman
+    // damgasıdır ve aynı dönemde kaydolan herkeste aynı çıkar — bu test tam
+    // olarak o hatayı yakalamak için iki hesabı arka arkaya açıyor.
+    expect(na.split(' ')[1]).toBe(a.userId.replace(/-/g, '').slice(-4).toUpperCase());
+  });
+
+  it('kullanıcı adını kendisi belirleyebilir; varsayılan üstüne yazılır', async () => {
+    const { access } = await login('me-name-c');
+    await request(http)
+      .patch('/v1/users/me')
+      .set('Authorization', `Bearer ${access}`)
+      .send({ profile: { displayName: 'Poyraz Kaptan' } })
+      .expect(200);
+    const res = await request(http)
+      .get('/v1/users/me')
+      .set('Authorization', `Bearer ${access}`)
+      .expect(200);
+    expect(res.body.profile.displayName).toBe('Poyraz Kaptan');
   });
 });

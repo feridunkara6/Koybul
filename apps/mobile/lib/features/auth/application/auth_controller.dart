@@ -20,6 +20,7 @@ final Provider<TokenStore> tokenStoreProvider =
 final Provider<AuthRepository> authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepositoryImpl(
     api: ref.watch(authApiProvider),
+    usersApi: ref.watch(usersApiProvider),
     gateway: ref.watch(authGatewayProvider),
     store: ref.watch(tokenStoreProvider),
   );
@@ -58,6 +59,13 @@ class AuthController extends Notifier<AuthState> {
 
   Future<void> logout() async {
     await _repo.logout();
+    state = const Unauthenticated();
+  }
+
+  /// Hesabı siler. Başarısızlıkta AppFailure fırlatır ve OTURUM KORUNUR —
+  /// kaptan hesabının silindiğini sanmasın (Faz 0).
+  Future<void> deleteAccount() async {
+    await _repo.deleteAccount();
     state = const Unauthenticated();
   }
 }
