@@ -29,12 +29,22 @@ fi
 
 cd "$CI_PRIMARY_REPOSITORY_PATH/apps/mobile"
 
+# Sunucu adresi ve ortam etiketi. Xcode Cloud workflow ayarindan
+# degistirilebilir; verilmezse asagidaki varsayilan kullanilir. Yanlis ya da
+# yerel bir adresle paket URETILMEZ — denetim derlemeyi durdurur.
+: "${API_BASE_URL:=https://dockly-proje.onrender.com}"
+: "${FLAVOR:=staging}"
+
+echo "== Yayin yapilandirmasi denetimi =="
+sh tool/check_release_config.sh "$API_BASE_URL" "$FLAVOR"
+
 echo "== Bağımlılıklar =="
 flutter pub get
 
 echo "== Xcode yapılandırması (dart-define sabitleriyle) =="
 flutter build ios --release --config-only \
-  --dart-define=API_BASE_URL=https://dockly-proje.onrender.com \
+  --dart-define=API_BASE_URL="$API_BASE_URL" \
+  --dart-define=FLAVOR="$FLAVOR" \
   --dart-define=MAPBOX_ACCESS_TOKEN="${MAPBOX_ACCESS_TOKEN:-}"
 
 echo "== CocoaPods =="

@@ -1,15 +1,26 @@
+import 'package:flutter/foundation.dart' show kReleaseMode;
+import 'package:flutter/widgets.dart';
+
 import 'bootstrap.dart';
+import 'config/config_error_app.dart';
 import 'config/flavor.dart';
 
-/// API adresi — `--dart-define=API_BASE_URL=https://...` ile gelir (web/prod
-/// derlemesinde sunucu adresi); verilmezse yerel geliştirme varsayılanı.
-const String _apiBaseUrl = String.fromEnvironment(
-  'API_BASE_URL',
-  defaultValue: 'http://localhost:3000',
-);
-
-/// Varsayılan giriş (dev). Flavor'a özel main_dev/main_stg/main_prod girişleri
-/// build yapılandırmasıyla (docs/26 §17) bir sonraki alt fazda eklenecek.
-Future<void> main() {
-  return bootstrap(const AppConfig(flavor: Flavor.dev, apiBaseUrl: _apiBaseUrl));
+/// Uygulama girişi.
+///
+/// Açılıştan ÖNCE tek bir soru sorulur: bu yayın derlemesi gerçek bir sunucuyu
+/// gösteriyor mu? Göstermiyorsa uygulama başlatılmaz; yerine sebebi ve
+/// çözümü yazan tam ekran bir uyarı çıkar (bkz. config/flavor.dart başlığı).
+/// Geliştirme derlemesinde denetim çalışmaz — orada localhost doğru adrestir.
+Future<void> main() async {
+  final ConfigProblem? problem = configProblem(
+    rawApiBaseUrl: kRawApiBaseUrl,
+    rawFlavor: kRawFlavor,
+    releaseMode: kReleaseMode,
+  );
+  if (problem != null) {
+    WidgetsFlutterBinding.ensureInitialized();
+    runApp(ConfigErrorApp(problem: problem, rawApiBaseUrl: kRawApiBaseUrl));
+    return;
+  }
+  return bootstrap(AppConfig.fromEnvironment());
 }

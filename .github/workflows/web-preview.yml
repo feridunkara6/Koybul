@@ -58,11 +58,19 @@ jobs:
           # önbelleğine girdiği için tekrar ziyaretlerde ek maliyeti yoktur.
           # (--no-web-resources-cdn: motor dosyaları DIŞ CDN'den değil kendi
           # sitemizden gelir — tek kaynak, PWA çevrimdışı desteğiyle uyumlu.)
+          # YAYIN YAPILANDIRMASI DENETIMI: yanlis/yerel sunucu adresiyle web
+          # paketi uretilmesin (ayni kural uygulamanin icinde de var —
+          # lib/config/flavor.dart). Adres Settings > Variables altindaki
+          # API_BASE_URL degiskeninden gelir; yoksa asagidaki varsayilan.
+          export API_BASE_URL="${{ vars.API_BASE_URL || 'https://dockly-proje.onrender.com' }}"
+          export FLAVOR="${{ vars.FLAVOR || 'staging' }}"
+          sh tool/check_release_config.sh "$API_BASE_URL" "$FLAVOR"
           flutter build web --release \
             --web-renderer canvaskit \
             --no-web-resources-cdn \
             --no-tree-shake-icons \
-            --dart-define=API_BASE_URL=https://dockly-proje.onrender.com \
+            --dart-define=API_BASE_URL="$API_BASE_URL" \
+            --dart-define=FLAVOR="$FLAVOR" \
             --dart-define=ESRI_TILE_KEY=${{ secrets.ESRI_TILE_KEY }} \
             --dart-define=ESRI_TILE_STYLE=${{ vars.ESRI_TILE_STYLE || 'arcgis/community' }} \
             --base-href="/"  # ozel alan adi (koybul.com) kok dizinde servis eder

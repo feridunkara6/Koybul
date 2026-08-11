@@ -32,7 +32,16 @@ workflows:
         bundle_identifier: com.moorira.app
       groups:
         - mapbox
+      vars:
+        # SUNUCU ADRESI — yayin derlemesinin konusacagi tek adres.
+        # Codemagic panelinden degistirilebilir; degistirmeden prod'a cikmak
+        # ASLA sessiz kalmaz: asagidaki denetim ve uygulamanin icindeki kural
+        # (lib/config/flavor.dart) yanlis adresi gurultuyle durdurur.
+        API_BASE_URL: https://dockly-proje.onrender.com
+        FLAVOR: staging
     scripts:
+      - name: Yayin yapilandirmasi denetimi (yanlis sunucu adresiyle paket uretme)
+        script: sh tool/check_release_config.sh "$API_BASE_URL" "$FLAVOR"
       - name: Mapbox indirme kimliği (pod kaynağı)
         script: |
           cat > ~/.netrc <<NETRC
@@ -52,7 +61,8 @@ workflows:
           flutter build ipa --release \
             --build-name=1.0.0 \
             --build-number=$BUILD_NUMBER \
-            --dart-define=API_BASE_URL=https://dockly-proje.onrender.com \
+            --dart-define=API_BASE_URL="$API_BASE_URL" \
+            --dart-define=FLAVOR="$FLAVOR" \
             --dart-define=MAPBOX_ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN \
             --export-options-plist=/Users/builder/export_options.plist
     artifacts:
