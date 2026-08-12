@@ -1,1053 +1,1068 @@
 {
- "batch": "5.2-municipal",
- "collectedAt": "2026-07-08",
- "method": "Belediye/kamu tesisleri: resmî belediye ve iştirak siteleri (MUTTAŞ, İZDENİZ, İSPARK, BURULAŞ), TKYGM resmi yat limanı envanteri (PDF), denizcilik rehberleri. 3 bölgesel araştırma + 1 koordinat doğrulama turu. Tahmin yok; koordinatı kaynaklanamayan tesis DB'ye girmez (excluded listesinde bekler).",
- "notes": [
-  "priceTier yalnız ücret tarifesi kaynaklıysa 'paid'; aksi halde 'unknown'.",
-  "confidence=low → status=draft (haritada görünmez).",
-  "izmir-marina, batch1'deki levent-marina-izmir taslağının doğrulanmış halefidir (o taslak arşiv olarak kalır)."
- ],
- "records": [
-  {
-   "slug": "izmir-marina",
-   "name": "İzmir Marina",
-   "operator": "İZDENİZ A.Ş. (İzmir Büyükşehir Belediyesi iştiraki)",
-   "status": "published",
-   "typeCode": "municipal_marina",
-   "provinceSlug": "izmir",
-   "districtSlug": "izmir-balcova",
-   "lat": 38.4056,
-   "lon": 27.066,
-   "coordSource": "izmirmarina.com iletişim sayfası (gömülü harita)",
-   "descriptionTr": "Eski Levent Marina, İzmir Büyükşehir Belediyesi iştiraki İZDENİZ A.Ş. tarafından devralınarak İzmir Marina adıyla işletilmektedir. Balçova'daki tesiste 7/24 elektrik-su, güvenlik, dalgıç ve tekne yıkama hizmetleri bulunmaktadır.",
-   "berthCount": 71,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": 5,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": true,
-   "priceTier": "paid",
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant",
-    "shower",
-    "laundry",
-    "wifi",
-    "security",
-    "wc"
-   ],
-   "services": [
-    "mooring_assist",
-    "diver",
-    "boat_wash",
-    "winter_storage"
-   ],
-   "contacts": [
+  "batch": "5.2-municipal",
+  "collectedAt": "2026-07-08",
+  "method": "Belediye/kamu tesisleri: resmî belediye ve iştirak siteleri (MUTTAŞ, İZDENİZ, İSPARK, BURULAŞ), TKYGM resmi yat limanı envanteri (PDF), denizcilik rehberleri. 3 bölgesel araştırma + 1 koordinat doğrulama turu. Tahmin yok; koordinatı kaynaklanamayan tesis DB'ye girmez (excluded listesinde bekler).",
+  "notes": [
+    "priceTier yalnız ücret tarifesi kaynaklıysa 'paid'; aksi halde 'unknown'.",
+    "confidence=low → status=draft (haritada görünmez).",
+    "izmir-marina, batch1'deki levent-marina-izmir taslağının doğrulanmış halefidir (o taslak arşiv olarak kalır)."
+  ],
+  "records": [
     {
-     "type": "phone",
-     "value": "+902322598920",
-     "primary": true
+      "slug": "izmir-marina",
+      "name": "İzmir Marina",
+      "operator": "İZDENİZ A.Ş. (İzmir Büyükşehir Belediyesi iştiraki)",
+      "status": "published",
+      "typeCode": "municipal_marina",
+      "provinceSlug": "izmir",
+      "districtSlug": "izmir-balcova",
+      "lat": 38.4056,
+      "lon": 27.066,
+      "coordSource": "izmirmarina.com iletişim sayfası (gömülü harita)",
+      "descriptionTr": "Eski Levent Marina, İzmir Büyükşehir Belediyesi iştiraki İZDENİZ A.Ş. tarafından devralınarak İzmir Marina adıyla işletilmektedir. Balçova'daki tesiste 7/24 elektrik-su, güvenlik, dalgıç ve tekne yıkama hizmetleri bulunmaktadır.",
+      "berthCount": 71,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": 5,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": true,
+      "priceTier": "paid",
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant",
+        "shower",
+        "laundry",
+        "wifi",
+        "security",
+        "wc"
+      ],
+      "services": [
+        "mooring_assist",
+        "diver",
+        "boat_wash",
+        "winter_storage"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902322598920",
+          "primary": true
+        },
+        {
+          "type": "phone",
+          "value": "+905520358830"
+        },
+        {
+          "type": "email",
+          "value": "izmirmarina@izdeniz.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://www.izmirmarina.com/"
+        },
+        {
+          "type": "instagram",
+          "value": "https://www.instagram.com/marineizmir/"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.izmirmarina.com/tr/hizmetlerimiz/4/82",
+        "https://www.izmirmarina.com/tr/iletisim/4/151",
+        "https://www.izmir.bel.tr/tr/Haberler/levent-marina-izdenizin-oldu/43721/156"
+      ],
+      "confidence": "high",
+      "missingNotes": "Kapasite resmi sitede 71, visitizmir'de 60 — resmi esas alındı. VHF/LOA/draft yayınlanmamış; 5 m marina içi maks. derinlik. batch1 levent-marina-izmir taslağının halefi."
     },
     {
-     "type": "phone",
-     "value": "+905520358830"
+      "slug": "foca-buyukdeniz-rihtimi",
+      "name": "Foça Büyükdeniz Rıhtımı",
+      "operator": "Foça Belediyesi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "izmir",
+      "districtSlug": "izmir-foca",
+      "lat": 38.6697,
+      "lon": 26.7539,
+      "coordSource": "feribotseferleri.com.tr Foça iskele sayfası",
+      "descriptionTr": "Foça Belediyesi tarafından 1994'ten bu yana işletilen Büyükdeniz Rıhtımı'nda özel ve ticari yatlar sözleşmeyle bağlanmakta, misafir teknelere günlük konaklama ile elektrik ve su bağlantısı sağlanmaktadır.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "paid",
+      "amenities": [
+        "electricity",
+        "water"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "website",
+          "value": "https://foca.bel.tr/hizmetler/tekne-baglama-hizmetleri-ve-ucretleri"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.foca.bel.tr/hizmetlerimiz-12-TEKNE_BA%C4%9ELAMA_VE_H%C4%B0ZMET_%C3%9CCRETLER%C4%B0.aspx",
+        "https://www.feribotseferleri.com.tr/iskeleler/foca"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Kapasite/telefon/VHF yayınlanmamış; işletme belediye yönetmeliğiyle teyitli."
     },
     {
-     "type": "email",
-     "value": "izmirmarina@izdeniz.com.tr"
+      "slug": "bozburun-yat-yanasma-yeri",
+      "name": "Bozburun Yat Yanaşma Yeri",
+      "operator": "Marmaris Belediyesi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-marmaris",
+      "lat": 36.692,
+      "lon": 28.0425,
+      "coordSource": "navily.com/port/bozburun",
+      "descriptionTr": "Marmaris Belediyesi'nin ücret tarifesinde yer alan Bozburun Yat Yanaşma Yeri'nde sezonluk ve günlük bağlama hizmeti verilmektedir. 80 tekne kapasiteli tesiste elektrik ve su, ön ödemeli kartlı sistemle sağlanmakta, servis botu bulunmaktadır.",
+      "berthCount": 80,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "paid",
+      "amenities": [
+        "electricity",
+        "water"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "website",
+          "value": "https://www.marmaris.bel.tr/?Page=Ucret_Tarifeleri"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.marmaris.bel.tr/?Page=Ucret_Tarifeleri",
+        "https://www.navily.com/port/bozburun/1649"
+      ],
+      "confidence": "high",
+      "missingNotes": "VHF/telefon yayınlanmamış. Selimiye/Orhaniye için tarife kaydı bulunamadı (Selimiye 450 yatlık iskele henüz proje aşamasında)."
     },
     {
-     "type": "website",
-     "value": "https://www.izmirmarina.com/"
+      "slug": "marmaris-limani",
+      "name": "Marmaris Limanı",
+      "operator": "MUTTAŞ (Muğla Büyükşehir Belediyesi iştiraki)",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-marmaris",
+      "lat": 36.849968,
+      "lon": 28.273902,
+      "coordSource": "muttas.com.tr liman sayfası (gömülü harita)",
+      "descriptionTr": "Muğla Büyükşehir Belediyesi iştiraki MUTTAŞ'ın işlettiği Marmaris Limanı'nda yaklaşık 1.700 metrelik rıhtımda 200 tekneye yanaşma hizmeti verilmektedir. Yatlara su, elektrik, atık alımı, güvenlik ve palamar hizmetleri sunulur; kruvaziyer trafiğiyle karma kullanımlıdır.",
+      "berthCount": 200,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "paid",
+      "amenities": [
+        "electricity",
+        "water",
+        "security",
+        "pump_out"
+      ],
+      "services": [
+        "mooring_assist"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902524120265",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@muttas.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://muttas.com.tr/limanlar/"
+        }
+      ],
+      "sourceUrls": [
+        "https://muttas.com.tr/limanlar/",
+        "https://muttas.com.tr/marmaris-limani/"
+      ],
+      "confidence": "high",
+      "missingNotes": "VHF yayınlanmamış. Netsel Marmaris Marina'dan (~300 m) ayrı tesistir — mükerrer kontrolünden geçti."
     },
     {
-     "type": "instagram",
-     "value": "https://www.instagram.com/marineizmir/"
+      "slug": "icmeler-iskelesi",
+      "name": "İçmeler İskelesi",
+      "operator": "MUTTAŞ (Muğla Büyükşehir Belediyesi iştiraki)",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-marmaris",
+      "lat": 36.800371,
+      "lon": 28.238995,
+      "coordSource": "muttas.com.tr liman sayfası",
+      "descriptionTr": "Marmaris İçmeler'de MUTTAŞ tarafından işletilen iskelede 220 metrelik rıhtım ve 142 metrelik iskelede yaklaşık 40 tekneye yanaşma hizmeti verilmektedir. Atık su alım hizmeti bulunmaktadır.",
+      "berthCount": 40,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "paid",
+      "amenities": [
+        "pump_out"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902524120265",
+          "primary": true
+        },
+        {
+          "type": "phone",
+          "value": "+905382330352"
+        },
+        {
+          "type": "email",
+          "value": "info@muttas.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://muttas.com.tr/limanlar/"
+        }
+      ],
+      "sourceUrls": [
+        "https://muttas.com.tr/limanlar/"
+      ],
+      "confidence": "medium",
+      "missingNotes": "VHF ve elektrik-su detayı doğrulanamadı."
+    },
+    {
+      "slug": "turunc-iskelesi",
+      "name": "Turunç İskelesi",
+      "operator": "MUTTAŞ (Muğla Büyükşehir Belediyesi iştiraki)",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-marmaris",
+      "lat": 36.772146,
+      "lon": 28.249443,
+      "coordSource": "muttas.com.tr liman sayfası",
+      "descriptionTr": "Marmaris Turunç Cumhuriyet Meydanı'ndaki 183 metrelik iskelede MUTTAŞ tarafından yaklaşık 30 tekneye yanaşma hizmeti verilmektedir. Su, atık alımı, güvenlik ve palamar hizmeti sunulmaktadır.",
+      "berthCount": 30,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "paid",
+      "amenities": [
+        "water",
+        "security",
+        "pump_out"
+      ],
+      "services": [
+        "mooring_assist"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902524120265",
+          "primary": true
+        },
+        {
+          "type": "phone",
+          "value": "+905332502289"
+        },
+        {
+          "type": "email",
+          "value": "info@muttas.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://muttas.com.tr/limanlar/"
+        }
+      ],
+      "sourceUrls": [
+        "https://muttas.com.tr/limanlar/"
+      ],
+      "confidence": "medium",
+      "missingNotes": "VHF ve elektrik doğrulanamadı."
+    },
+    {
+      "slug": "bodrum-limani",
+      "name": "Bodrum Limanı",
+      "operator": "MUTTAŞ (Muğla Büyükşehir Belediyesi iştiraki)",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-bodrum",
+      "lat": 37.031991,
+      "lon": 27.426232,
+      "coordSource": "muttas.com.tr liman sayfası",
+      "descriptionTr": "Bodrum Barış Meydanı'ndaki liman MUTTAŞ tarafından işletilmekte olup 960 metrelik rıhtım ve 140 metrelik yüzer iskelede yaklaşık 230 tekneye yanaşma hizmeti verilmektedir. Kos'a uluslararası feribot kapısıdır.",
+      "berthCount": 230,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "paid",
+      "amenities": [
+        "water",
+        "security"
+      ],
+      "services": [
+        "mooring_assist"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902523169772",
+          "primary": true
+        },
+        {
+          "type": "phone",
+          "value": "+905332510157"
+        },
+        {
+          "type": "email",
+          "value": "info@muttas.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://muttas.com.tr/limanlar/"
+        }
+      ],
+      "sourceUrls": [
+        "https://muttas.com.tr/limanlar/"
+      ],
+      "confidence": "high",
+      "missingNotes": "VHF/elektrik doğrulanamadı. Milta Bodrum Marina'dan (~280 m) ayrı tesistir — mükerrer kontrolünden geçti."
+    },
+    {
+      "slug": "gumbet-iskelesi",
+      "name": "Gümbet İskelesi",
+      "operator": "MUTTAŞ (Muğla Büyükşehir Belediyesi iştiraki)",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-bodrum",
+      "lat": 37.023076,
+      "lon": 27.401812,
+      "coordSource": "muttas.com.tr liman sayfası",
+      "descriptionTr": "Bodrum Gümbet'te MUTTAŞ tarafından işletilen, toplam 595 metre uzunluğunda üç iskeleden oluşan tesiste yaklaşık 200 tekneye bağlama hizmeti verilmektedir. Su, güvenlik ve palamar hizmeti sunulmaktadır.",
+      "berthCount": 200,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "paid",
+      "amenities": [
+        "water",
+        "security"
+      ],
+      "services": [
+        "mooring_assist"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902523169772",
+          "primary": true
+        },
+        {
+          "type": "phone",
+          "value": "+905332510157"
+        },
+        {
+          "type": "email",
+          "value": "info@muttas.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://muttas.com.tr/limanlar/"
+        }
+      ],
+      "sourceUrls": [
+        "https://muttas.com.tr/limanlar/"
+      ],
+      "confidence": "medium",
+      "missingNotes": "VHF ve elektrik doğrulanamadı."
+    },
+    {
+      "slug": "fethiye-limani",
+      "name": "Fethiye Limanı",
+      "operator": "MUTTAŞ (Muğla Büyükşehir Belediyesi iştiraki)",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.622984,
+      "lon": 29.106163,
+      "coordSource": "muttas.com.tr liman sayfası",
+      "descriptionTr": "Fethiye Karagözler'de MUTTAŞ tarafından işletilen limanda yaklaşık 50 tekneye yanaşma hizmeti verilmekte; su, atık alımı, güvenlik ve palamar hizmetleri sunulmaktadır. Rodos'a uluslararası feribot kapısıdır.",
+      "berthCount": 50,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "paid",
+      "amenities": [
+        "water",
+        "security",
+        "pump_out"
+      ],
+      "services": [
+        "mooring_assist"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902526127557",
+          "primary": true
+        },
+        {
+          "type": "phone",
+          "value": "+905332505739"
+        },
+        {
+          "type": "email",
+          "value": "info@muttas.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://muttas.com.tr/limanlar/"
+        }
+      ],
+      "sourceUrls": [
+        "https://muttas.com.tr/limanlar/"
+      ],
+      "confidence": "high",
+      "missingNotes": "VHF/elektrik doğrulanamadı. wikiderya'daki 'Belediye Limanı Fethiye' kaydı (~150 m) büyük olasılıkla aynı tesis — mükerrer riski nedeniyle tek kayıt tutuldu."
+    },
+    {
+      "slug": "gocek-belediye-iskelesi",
+      "name": "MUÇEV Göcek Marina",
+      "operator": "MUÇEV",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.754444,
+      "lon": 28.946667,
+      "coordSource": "yatvitrini.com Göcek belediye marina sayfası",
+      "descriptionTr": "Göcek köyiçindeki iskele 1989'da inşa edilmiş olup bugün MUÇEV tarafından MUÇEV Göcek Marina adıyla işletilmektedir (eski adıyla Göcek Belediye İskelesi). 40-50 metre boyundaki yatlara hizmet verebilmektedir; VHF kanalı 13'tür.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "paid",
+      "amenities": [],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902526452122",
+          "primary": true
+        },
+        {
+          "type": "phone",
+          "value": "+905373206886"
+        },
+        {
+          "type": "vhf",
+          "value": "13"
+        },
+        {
+          "type": "website",
+          "value": "https://www.marinagocek.com"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.yatvitrini.com/gocek-belediye-marina?pageID=155",
+        "https://panel.mugla.bel.tr/uploads/mecliskarartr/1-%C3%A7-Fethiye%20Bld.%202025%20Y%C4%B1l%C4%B1%20B%C3%BCt%C3%A7e%20ve%20Gelir%20Tarifesi.pdf",
+        "https://www.marinagocek.com/hakkimizda-tr",
+        "https://www.wikiderya.org/wiki/mucev-gocek-marina"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Kapasite/VHF/donanım yayınlanmamış; bazı rıhtımların MUÇEV işletmesinde olduğu haberleri var, işletme sınırı teyide muhtaç. | FAZ2 GOCEK TURU: işletme Fethiye Belediyesi'nden MUÇEV'e geçti (İmece Deniz Ansiklopedisi: 'Eski Göcek Belediye İskelesi artık MUÇEV Göcek Marina'). Telefon ve VHF 13 işletmecinin kendi sitesinden (marinagocek.com/hakkimizda-tr), wikiderya aynı numaraları bağımsız veriyor. maxLoa YAZILMADI: site '40 - 50 metre ... hizmet verebilmektedir. Özel hazırlık ile 70 metreye kadar' diyor — koşullu üst sınır tek sayıya indirgenemez."
+    },
+    {
+      "slug": "canakkale-yat-limani",
+      "name": "Çanakkale Yat Limanı",
+      "operator": "Çanakkale Belediyesi",
+      "status": "published",
+      "typeCode": "municipal_marina",
+      "provinceSlug": "canakkale",
+      "districtSlug": "canakkale-merkez",
+      "lat": 40.1534,
+      "lon": 26.406,
+      "coordSource": "TKYGM yat limanı envanteri + rehber kaynaklar",
+      "descriptionTr": "Çanakkale kent merkezindeki kordonda yer alan, belediye tarafından işletilen 120 yat kapasiteli limandır. Geçici hudut kapısı statüsüyle transitlog işlemleri yapılabilmektedir.",
+      "berthCount": 120,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73/16",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "paid",
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "shower",
+        "wc",
+        "laundry",
+        "wifi",
+        "security"
+      ],
+      "services": [
+        "mooring_assist"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902862128453",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "bilgi@canakkalebelediyesimarina.com"
+        }
+      ],
+      "sourceUrls": [
+        "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf",
+        "https://marinalar.com/canakkale-marina-belediye-yat-limani"
+      ],
+      "confidence": "high",
+      "missingNotes": "LOA/draft yayınlanmamış; resmi marina sitesi kontrol anında park halindeydi, iletişim dizin kaynaklı."
+    },
+    {
+      "slug": "gelibolu-yat-limani",
+      "name": "Gelibolu Yat Limanı",
+      "operator": null,
+      "status": "draft",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "canakkale",
+      "districtSlug": "canakkale-gelibolu",
+      "lat": 40.405,
+      "lon": 26.6694,
+      "coordSource": "rehber kaynaklar",
+      "descriptionTr": "Gelibolu'da kuzey rüzgarlarına kapalı doğal limanın iç kısmı yatların bağlanmasına uygundur; barınakta akaryakıt pompası bulunmaktadır.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "unknown",
+      "amenities": [
+        "fuel"
+      ],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://www.sualtigazetesi.com/gelibolu-limani/"
+      ],
+      "confidence": "low",
+      "missingNotes": "Güncel işletmeci resmi kaynakla doğrulanamadı; TKYGM envanterinde yok. Doğrulanana dek taslak."
+    },
+    {
+      "slug": "erdek-yat-limani",
+      "name": "Erdek Yat Limanı",
+      "operator": null,
+      "status": "draft",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "balikesir",
+      "districtSlug": "balikesir-erdek",
+      "lat": 40.3933,
+      "lon": 27.7892,
+      "coordSource": "rehber kaynaklar",
+      "descriptionTr": "Erdek merkezdeki iskele ve liman yerel tekneler ile kotra ve yatların bağlanmasında kullanılmaktadır; Balıkesir Büyükşehir Belediyesi iskelenin yat limanına dönüştürülmesini planladığını açıklamıştır.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "unknown",
+      "amenities": [],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://www.denizhaber.net/erdek-iskelesi-yat-limanina-donusturulecek-haber-85294.htm"
+      ],
+      "confidence": "low",
+      "missingNotes": "Güncel işletmeci ve dönüşüm durumu doğrulanamadı. Doğrulanana dek taslak."
+    },
+    {
+      "slug": "guzelyali-yat-limani",
+      "name": "Güzelyalı Yat Limanı",
+      "operator": "BURULAŞ A.Ş. (Bursa Büyükşehir Belediyesi iştiraki)",
+      "status": "published",
+      "typeCode": "municipal_marina",
+      "provinceSlug": "bursa",
+      "districtSlug": "bursa-mudanya",
+      "lat": 40.356167,
+      "lon": 28.932167,
+      "coordSource": "navily.com/port/guzelyali-marina",
+      "descriptionTr": "Mudanya Güzelyalı'daki liman 2020'den bu yana Bursa Büyükşehir Belediyesi iştiraki BURULAŞ tarafından işletilmektedir. 58 yat ve 60 balıkçı teknesi kapasiteli tesis 7/24 güvenlik ve kamera sistemiyle izlenmektedir.",
+      "berthCount": 58,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "paid",
+      "amenities": [
+        "security"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902244525244",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "burulas@burulas.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://www.burulas.com.tr/hizmetler/yat-limani"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.burulas.com.tr/hizmetler/yat-limani",
+        "https://www.burulas.com.tr/bursa-guzelyali-yat-limani/iletisim/"
+      ],
+      "confidence": "high",
+      "missingNotes": "LOA/draft/VHF yayınlanmamış; telefon BURULAŞ genel hattı."
+    },
+    {
+      "slug": "ispark-istinye-tekne-park",
+      "name": "İSPARK İstinye Tekne Park",
+      "operator": "İSPARK A.Ş. (İstanbul Büyükşehir Belediyesi iştiraki)",
+      "status": "published",
+      "typeCode": "municipal_marina",
+      "provinceSlug": "istanbul",
+      "districtSlug": "istanbul-sariyer",
+      "lat": 41.113667,
+      "lon": 29.057167,
+      "coordSource": "navily.com/port/istinye-ispark",
+      "descriptionTr": "İstinye Koyu'nda İBB iştiraki İSPARK tarafından işletilen, yüzer iskeleli 180 tekne kapasiteli tekne parktır. Su, elektrik, WC ve güvenlik hizmetleri sunulmakta; günlükten yıllığa abonelik uygulanmaktadır.",
+      "berthCount": 180,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "paid",
+      "amenities": [
+        "electricity",
+        "water",
+        "wc",
+        "security"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902166350045",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "istinye.marina@ispark.istanbul"
+        },
+        {
+          "type": "website",
+          "value": "https://istmarin.ispark.istanbul"
+        }
+      ],
+      "sourceUrls": [
+        "https://ispark.istanbul/projeler/istanbul-tekne-parklar/",
+        "https://www.wikiderya.org/wiki/istinye-tekne-park",
+        "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf"
+      ],
+      "confidence": "high",
+      "missingNotes": "LOA/draft yayınlanmamış; kapasite TKYGM envanteriyle çapraz doğrulandı."
+    },
+    {
+      "slug": "ispark-tarabya-tekne-park",
+      "name": "İSPARK Tarabya Tekne Park",
+      "operator": "İSPARK A.Ş. (İstanbul Büyükşehir Belediyesi iştiraki)",
+      "status": "published",
+      "typeCode": "municipal_marina",
+      "provinceSlug": "istanbul",
+      "districtSlug": "istanbul-sariyer",
+      "lat": 41.138466,
+      "lon": 29.057901,
+      "coordSource": "wikiderya.org/wiki/tarabya-tekne-park",
+      "descriptionTr": "Tarabya Koyu'nda İBB iştiraki İSPARK tarafından işletilen yüzer iskeleli tekne parktır; işletmeci 265 tekne kapasitesi bildirmektedir. Su, elektrik, WC ve güvenlik hizmetleri sunulmaktadır.",
+      "berthCount": 265,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "paid",
+      "amenities": [
+        "electricity",
+        "water",
+        "wc",
+        "security"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902166350045",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "tarabya.marina@ispark.istanbul"
+        },
+        {
+          "type": "website",
+          "value": "https://istmarin.ispark.istanbul"
+        }
+      ],
+      "sourceUrls": [
+        "https://ispark.istanbul/projeler/istanbul-tekne-parklar/",
+        "https://www.wikiderya.org/wiki/tarabya-tekne-park",
+        "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf"
+      ],
+      "confidence": "high",
+      "missingNotes": "Kapasite çelişkili: İSPARK 265, TKYGM 210 — işletmeci esas alındı."
+    },
+    {
+      "slug": "antalya-kaleici-yat-limani",
+      "name": "Antalya Kaleiçi Yat Limanı",
+      "operator": "Antalya Ulaşım A.Ş. (Antalya Büyükşehir Belediyesi şirketi)",
+      "status": "published",
+      "typeCode": "municipal_marina",
+      "provinceSlug": "antalya",
+      "districtSlug": "antalya-muratpasa",
+      "lat": 36.883833,
+      "lon": 30.703,
+      "coordSource": "navily.com/port/antalya-kaleci-marina",
+      "descriptionTr": "Antalya'nın tarihi Kaleiçi eski limanında yer alan, büyükşehir belediyesi şirketi tarafından işletilen 65 yat kapasiteli limandır. 24 saat palamar ve güvenlik hizmeti verilmekte, günübirlik gezi tekneleri de limanı yoğun kullanmaktadır.",
+      "berthCount": 65,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "16/73",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "paid",
+      "amenities": [
+        "electricity",
+        "water",
+        "restaurant",
+        "security"
+      ],
+      "services": [
+        "mooring_assist",
+        "diver"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902422484530",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "iletisim@antalyaulasim.com.tr"
+        }
+      ],
+      "sourceUrls": [
+        "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf",
+        "https://www.antalya.bel.tr/Content/UserFiles/Files/Birimler_Mevzuatlar_Yeni/Kalei%C3%A7i%20Yat%20Liman%C4%B1n%C4%B1%20Kullanan%20G%C3%BCn%C3%BCbirlik%20Gezi%20Tekneleri%20Y%C3%B6netmeli%C4%9Fi.pdf"
+      ],
+      "confidence": "high",
+      "missingNotes": "LOA/draft yayınlanmamış."
+    },
+    {
+      "slug": "kas-belediye-limani",
+      "name": "Kaş Belediye Limanı",
+      "operator": "Kaş Belediyesi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "antalya",
+      "districtSlug": "antalya-kas",
+      "lat": 36.1993,
+      "lon": 29.6404,
+      "coordSource": "rehber kaynaklar (wikiderya/TKYGM)",
+      "descriptionTr": "Kaş ilçe merkezinin yanındaki eski liman yaklaşık 100 tekne kapasitelidir; yerel gezi-dalış tekneleri ile uğrak yatlar kullanmaktadır. Bağlama tonoz zinciriyle yapılmakta, çevrede ücretli duş-WC ve çamaşırhane bulunmaktadır.",
+      "berthCount": 100,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "unknown",
+      "amenities": [
+        "shower",
+        "wc",
+        "laundry"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+905325032673",
+          "label": "Liman görevlisi (wikiderya)",
+          "primary": true
+        },
+        {
+          "type": "phone",
+          "value": "+905337295131",
+          "label": "Liman görevlisi (wikiderya)"
+        }
+      ],
+      "sourceUrls": [
+        "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf",
+        "https://www.wikiderya.org/wiki/kas-belediye-limani"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Telefonlar topluluk kaynaklı görevli hatları; VHF/LOA/draft yayınlanmamış. Setur Kaş Marina'dan (~1.6 km) ayrı tesistir."
+    },
+    {
+      "slug": "kalkan-belediye-limani",
+      "name": "Kalkan Belediye Limanı",
+      "operator": null,
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "antalya",
+      "districtSlug": "antalya-kas",
+      "lat": 36.2611,
+      "lon": 29.4151,
+      "coordSource": "rehber kaynaklar",
+      "descriptionTr": "Kalkan'daki yaklaşık 50 tekne kapasiteli liman ve balıkçı barınağı yerel tekneler ile uğrak yatlara hizmet vermektedir. 2023'te zemin yenileme, çekek yeri ve bağlama halkaları yenileme çalışmaları tamamlanmıştır.",
+      "berthCount": 50,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "unknown",
+      "amenities": [],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902428443131",
+          "primary": true
+        }
+      ],
+      "sourceUrls": [
+        "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf",
+        "https://www.kas.bel.tr/haber/kalkan-balikci-barinagi-zemin-yenileme-calismasi-tamamlandi-6065"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Kalkan belediyesi 2014'te kapandığı için güncel işletici (muhtemelen Kaş Belediyesi) açıkça teyit edilemedi — boş bırakıldı."
+    },
+    {
+      "slug": "ucagiz-iskelesi",
+      "name": "Üçağız İskelesi",
+      "operator": "Anatolia Grubu (2024 ihalesiyle; hukuki süreç devam ediyor)",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "antalya",
+      "districtSlug": "antalya-demre",
+      "lat": 36.195387,
+      "lon": 29.846849,
+      "coordSource": "sea-seek.com/en/Ucagiz-Limani",
+      "descriptionTr": "Kekova bölgesindeki Üçağız köy iskelesi yıllarca Demre Belediyesi tarafından işletilmiş, Haziran 2024'te bakanlık ihalesiyle 10 yıllığına özel bir gruba kiralanmıştır. Demre Belediyesi ihalenin iptali için hukuki süreç başlatmıştır.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "unknown",
+      "amenities": [],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://gazeteoksijen.com/yazarlar/ali-boratav/bu-ihale-kekovayi-degistirir-215217",
+        "https://www.sea-seek.com/en/Ucagiz-Limani"
+      ],
+      "confidence": "medium",
+      "missingNotes": "İşletme statüsü (2026 itibarıyla dava sonucu) doğrulanamadı; kapasite/iletişim yayınlanmamış."
+    },
+    {
+      "slug": "demre-yat-limani",
+      "name": "Demre Yat Limanı",
+      "operator": null,
+      "status": "published",
+      "typeCode": "municipal_marina",
+      "provinceSlug": "antalya",
+      "districtSlug": "antalya-demre",
+      "lat": 36.223,
+      "lon": 29.942,
+      "coordSource": "navily.com/port/demre-yatlimani",
+      "descriptionTr": "Ulaştırma ve Altyapı Bakanlığı'nca Çayağzı mevkiinde yaptırılan Demre Yat Limanı 26 Temmuz 2025'te hizmete açılmıştır. 64.000 m² kara ve 120.000 m² korunaklı su alanına sahip tesisin 12 ay hizmet vermesi planlanmaktadır.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": true,
+      "priceTier": "unknown",
+      "amenities": [],
+      "services": [
+        "winter_storage"
+      ],
+      "contacts": [],
+      "sourceUrls": [
+        "https://www.uab.gov.tr/haberler/yat-turizmine-yeni-destinasyon",
+        "https://www.navily.com/port/demre-yatlimani/18863"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Kapasite kaynaklarda çelişkili (deniz 400-700 arası, kara dahil 750'ye kadar) — boş bırakıldı. Açılış sonrası işletmeci hiçbir kaynakta belirtilmemiş."
+    },
+    {
+      "slug": "tasucu-limani",
+      "name": "Taşucu Limanı",
+      "operator": null,
+      "status": "draft",
+      "typeCode": "municipal_pier",
+      "provinceSlug": "mersin",
+      "districtSlug": "mersin-silifke",
+      "lat": 36.3158,
+      "lon": 33.8811,
+      "coordSource": "rehber kaynaklar",
+      "descriptionTr": "Taşucu'nda uğrak teknelerin ve balıkçı teknelerinin bağlandığı kasaba limanıdır. Mevcut alanda 100 yat + 76 balıkçı teknesi kapasiteli yat limanı ve barınak projesi yürütülmektedir.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "priceTier": "unknown",
+      "amenities": [],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://tasinmazhaber.com/tasucu-yat-limani-projesi-ne-sunuyor-kapasite-176-tekneye-cikiyor/"
+      ],
+      "confidence": "low",
+      "missingNotes": "Mevcut rıhtımın işletmecisi ve kapasitesi doğrulanamadı; 176 rakamı gelecekteki proje kapasitesidir. Doğrulanana dek taslak."
     }
-   ],
-   "sourceUrls": [
-    "https://www.izmirmarina.com/tr/hizmetlerimiz/4/82",
-    "https://www.izmirmarina.com/tr/iletisim/4/151",
-    "https://www.izmir.bel.tr/tr/Haberler/levent-marina-izdenizin-oldu/43721/156"
-   ],
-   "confidence": "high",
-   "missingNotes": "Kapasite resmi sitede 71, visitizmir'de 60 — resmi esas alındı. VHF/LOA/draft yayınlanmamış; 5 m marina içi maks. derinlik. batch1 levent-marina-izmir taslağının halefi."
-  },
-  {
-   "slug": "foca-buyukdeniz-rihtimi",
-   "name": "Foça Büyükdeniz Rıhtımı",
-   "operator": "Foça Belediyesi",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "izmir",
-   "districtSlug": "izmir-foca",
-   "lat": 38.6697,
-   "lon": 26.7539,
-   "coordSource": "feribotseferleri.com.tr Foça iskele sayfası",
-   "descriptionTr": "Foça Belediyesi tarafından 1994'ten bu yana işletilen Büyükdeniz Rıhtımı'nda özel ve ticari yatlar sözleşmeyle bağlanmakta, misafir teknelere günlük konaklama ile elektrik ve su bağlantısı sağlanmaktadır.",
-   "berthCount": null,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "paid",
-   "amenities": [
-    "electricity",
-    "water"
-   ],
-   "services": [],
-   "contacts": [
+  ],
+  "excluded": [
     {
-     "type": "website",
-     "value": "https://foca.bel.tr/hizmetler/tekne-baglama-hizmetleri-ve-ucretleri"
+      "name": "Foça Küçükdeniz Rıhtımı",
+      "reason": "Koordinat kaynaklanamadı (konum zorunlu alan). Tesis belediye yönetmeliğiyle doğrulanmış — koordinat bulununca eklenecek."
+    },
+    {
+      "name": "Bitez Belediye Limanı (Bodrum)",
+      "reason": "Koordinat yok + misafir tekne kabulü doğrulanamadı (yıllık bağlama ağırlıklı)."
+    },
+    {
+      "name": "Fethiye Belediye İskelesi (kordon)",
+      "reason": "MUTTAŞ Fethiye Limanı ile ~150 m — büyük olasılıkla aynı tesis; mükerrer riski nedeniyle birleştirildi."
+    },
+    {
+      "name": "Amasra limanı",
+      "reason": "İşletmeci ve misafir bağlama doğrulanamadı; koordinat kaynaklanamadı."
+    },
+    {
+      "name": "Trabzon Ganita-Faroz",
+      "reason": "Özel işletme (belediye değil) + düşük güven; kapsam dışı."
+    },
+    {
+      "name": "Kurupelit Yat Limanı (Samsun)",
+      "reason": "Güncel işletme durumu belirsiz (atıl olduğu yönünde haberler) + koordinat kaynaklanamadı."
+    },
+    {
+      "name": "Side balıkçı barınağı",
+      "reason": "Misafir yat bağlaması doğrulanamadı (günübirlik tekneler ağırlıklı)."
     }
-   ],
-   "sourceUrls": [
-    "https://www.foca.bel.tr/hizmetlerimiz-12-TEKNE_BA%C4%9ELAMA_VE_H%C4%B0ZMET_%C3%9CCRETLER%C4%B0.aspx",
-    "https://www.feribotseferleri.com.tr/iskeleler/foca"
-   ],
-   "confidence": "medium",
-   "missingNotes": "Kapasite/telefon/VHF yayınlanmamış; işletme belediye yönetmeliğiyle teyitli."
-  },
-  {
-   "slug": "bozburun-yat-yanasma-yeri",
-   "name": "Bozburun Yat Yanaşma Yeri",
-   "operator": "Marmaris Belediyesi",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-marmaris",
-   "lat": 36.692,
-   "lon": 28.0425,
-   "coordSource": "navily.com/port/bozburun",
-   "descriptionTr": "Marmaris Belediyesi'nin ücret tarifesinde yer alan Bozburun Yat Yanaşma Yeri'nde sezonluk ve günlük bağlama hizmeti verilmektedir. 80 tekne kapasiteli tesiste elektrik ve su, ön ödemeli kartlı sistemle sağlanmakta, servis botu bulunmaktadır.",
-   "berthCount": 80,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "paid",
-   "amenities": [
-    "electricity",
-    "water"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "website",
-     "value": "https://www.marmaris.bel.tr/?Page=Ucret_Tarifeleri"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.marmaris.bel.tr/?Page=Ucret_Tarifeleri",
-    "https://www.navily.com/port/bozburun/1649"
-   ],
-   "confidence": "high",
-   "missingNotes": "VHF/telefon yayınlanmamış. Selimiye/Orhaniye için tarife kaydı bulunamadı (Selimiye 450 yatlık iskele henüz proje aşamasında)."
-  },
-  {
-   "slug": "marmaris-limani",
-   "name": "Marmaris Limanı",
-   "operator": "MUTTAŞ (Muğla Büyükşehir Belediyesi iştiraki)",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-marmaris",
-   "lat": 36.849968,
-   "lon": 28.273902,
-   "coordSource": "muttas.com.tr liman sayfası (gömülü harita)",
-   "descriptionTr": "Muğla Büyükşehir Belediyesi iştiraki MUTTAŞ'ın işlettiği Marmaris Limanı'nda yaklaşık 1.700 metrelik rıhtımda 200 tekneye yanaşma hizmeti verilmektedir. Yatlara su, elektrik, atık alımı, güvenlik ve palamar hizmetleri sunulur; kruvaziyer trafiğiyle karma kullanımlıdır.",
-   "berthCount": 200,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "paid",
-   "amenities": [
-    "electricity",
-    "water",
-    "security",
-    "pump_out"
-   ],
-   "services": [
-    "mooring_assist"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902524120265",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "info@muttas.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://muttas.com.tr/limanlar/"
-    }
-   ],
-   "sourceUrls": [
-    "https://muttas.com.tr/limanlar/",
-    "https://muttas.com.tr/marmaris-limani/"
-   ],
-   "confidence": "high",
-   "missingNotes": "VHF yayınlanmamış. Netsel Marmaris Marina'dan (~300 m) ayrı tesistir — mükerrer kontrolünden geçti."
-  },
-  {
-   "slug": "icmeler-iskelesi",
-   "name": "İçmeler İskelesi",
-   "operator": "MUTTAŞ (Muğla Büyükşehir Belediyesi iştiraki)",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-marmaris",
-   "lat": 36.800371,
-   "lon": 28.238995,
-   "coordSource": "muttas.com.tr liman sayfası",
-   "descriptionTr": "Marmaris İçmeler'de MUTTAŞ tarafından işletilen iskelede 220 metrelik rıhtım ve 142 metrelik iskelede yaklaşık 40 tekneye yanaşma hizmeti verilmektedir. Atık su alım hizmeti bulunmaktadır.",
-   "berthCount": 40,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "paid",
-   "amenities": [
-    "pump_out"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902524120265",
-     "primary": true
-    },
-    {
-     "type": "phone",
-     "value": "+905382330352"
-    },
-    {
-     "type": "email",
-     "value": "info@muttas.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://muttas.com.tr/limanlar/"
-    }
-   ],
-   "sourceUrls": [
-    "https://muttas.com.tr/limanlar/"
-   ],
-   "confidence": "medium",
-   "missingNotes": "VHF ve elektrik-su detayı doğrulanamadı."
-  },
-  {
-   "slug": "turunc-iskelesi",
-   "name": "Turunç İskelesi",
-   "operator": "MUTTAŞ (Muğla Büyükşehir Belediyesi iştiraki)",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-marmaris",
-   "lat": 36.772146,
-   "lon": 28.249443,
-   "coordSource": "muttas.com.tr liman sayfası",
-   "descriptionTr": "Marmaris Turunç Cumhuriyet Meydanı'ndaki 183 metrelik iskelede MUTTAŞ tarafından yaklaşık 30 tekneye yanaşma hizmeti verilmektedir. Su, atık alımı, güvenlik ve palamar hizmeti sunulmaktadır.",
-   "berthCount": 30,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "paid",
-   "amenities": [
-    "water",
-    "security",
-    "pump_out"
-   ],
-   "services": [
-    "mooring_assist"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902524120265",
-     "primary": true
-    },
-    {
-     "type": "phone",
-     "value": "+905332502289"
-    },
-    {
-     "type": "email",
-     "value": "info@muttas.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://muttas.com.tr/limanlar/"
-    }
-   ],
-   "sourceUrls": [
-    "https://muttas.com.tr/limanlar/"
-   ],
-   "confidence": "medium",
-   "missingNotes": "VHF ve elektrik doğrulanamadı."
-  },
-  {
-   "slug": "bodrum-limani",
-   "name": "Bodrum Limanı",
-   "operator": "MUTTAŞ (Muğla Büyükşehir Belediyesi iştiraki)",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-bodrum",
-   "lat": 37.031991,
-   "lon": 27.426232,
-   "coordSource": "muttas.com.tr liman sayfası",
-   "descriptionTr": "Bodrum Barış Meydanı'ndaki liman MUTTAŞ tarafından işletilmekte olup 960 metrelik rıhtım ve 140 metrelik yüzer iskelede yaklaşık 230 tekneye yanaşma hizmeti verilmektedir. Kos'a uluslararası feribot kapısıdır.",
-   "berthCount": 230,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "paid",
-   "amenities": [
-    "water",
-    "security"
-   ],
-   "services": [
-    "mooring_assist"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902523169772",
-     "primary": true
-    },
-    {
-     "type": "phone",
-     "value": "+905332510157"
-    },
-    {
-     "type": "email",
-     "value": "info@muttas.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://muttas.com.tr/limanlar/"
-    }
-   ],
-   "sourceUrls": [
-    "https://muttas.com.tr/limanlar/"
-   ],
-   "confidence": "high",
-   "missingNotes": "VHF/elektrik doğrulanamadı. Milta Bodrum Marina'dan (~280 m) ayrı tesistir — mükerrer kontrolünden geçti."
-  },
-  {
-   "slug": "gumbet-iskelesi",
-   "name": "Gümbet İskelesi",
-   "operator": "MUTTAŞ (Muğla Büyükşehir Belediyesi iştiraki)",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-bodrum",
-   "lat": 37.023076,
-   "lon": 27.401812,
-   "coordSource": "muttas.com.tr liman sayfası",
-   "descriptionTr": "Bodrum Gümbet'te MUTTAŞ tarafından işletilen, toplam 595 metre uzunluğunda üç iskeleden oluşan tesiste yaklaşık 200 tekneye bağlama hizmeti verilmektedir. Su, güvenlik ve palamar hizmeti sunulmaktadır.",
-   "berthCount": 200,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "paid",
-   "amenities": [
-    "water",
-    "security"
-   ],
-   "services": [
-    "mooring_assist"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902523169772",
-     "primary": true
-    },
-    {
-     "type": "phone",
-     "value": "+905332510157"
-    },
-    {
-     "type": "email",
-     "value": "info@muttas.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://muttas.com.tr/limanlar/"
-    }
-   ],
-   "sourceUrls": [
-    "https://muttas.com.tr/limanlar/"
-   ],
-   "confidence": "medium",
-   "missingNotes": "VHF ve elektrik doğrulanamadı."
-  },
-  {
-   "slug": "fethiye-limani",
-   "name": "Fethiye Limanı",
-   "operator": "MUTTAŞ (Muğla Büyükşehir Belediyesi iştiraki)",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-fethiye",
-   "lat": 36.622984,
-   "lon": 29.106163,
-   "coordSource": "muttas.com.tr liman sayfası",
-   "descriptionTr": "Fethiye Karagözler'de MUTTAŞ tarafından işletilen limanda yaklaşık 50 tekneye yanaşma hizmeti verilmekte; su, atık alımı, güvenlik ve palamar hizmetleri sunulmaktadır. Rodos'a uluslararası feribot kapısıdır.",
-   "berthCount": 50,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "paid",
-   "amenities": [
-    "water",
-    "security",
-    "pump_out"
-   ],
-   "services": [
-    "mooring_assist"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902526127557",
-     "primary": true
-    },
-    {
-     "type": "phone",
-     "value": "+905332505739"
-    },
-    {
-     "type": "email",
-     "value": "info@muttas.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://muttas.com.tr/limanlar/"
-    }
-   ],
-   "sourceUrls": [
-    "https://muttas.com.tr/limanlar/"
-   ],
-   "confidence": "high",
-   "missingNotes": "VHF/elektrik doğrulanamadı. wikiderya'daki 'Belediye Limanı Fethiye' kaydı (~150 m) büyük olasılıkla aynı tesis — mükerrer riski nedeniyle tek kayıt tutuldu."
-  },
-  {
-   "slug": "gocek-belediye-iskelesi",
-   "name": "Göcek Belediye İskelesi",
-   "operator": "Fethiye Belediyesi",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-fethiye",
-   "lat": 36.754444,
-   "lon": 28.946667,
-   "coordSource": "yatvitrini.com Göcek belediye marina sayfası",
-   "descriptionTr": "Göcek köyiçindeki belediye iskelesi 1989'da inşa edilmiş olup bugün Fethiye Belediyesi tarafından işletilmektedir. Bağlama ücretleri belediye gelir tarifesinde metre başına belirlenmektedir.",
-   "berthCount": null,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "paid",
-   "amenities": [],
-   "services": [],
-   "contacts": [
-    {
-     "type": "website",
-     "value": "https://www.fethiye.bel.tr/"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.yatvitrini.com/gocek-belediye-marina?pageID=155",
-    "https://panel.mugla.bel.tr/uploads/mecliskarartr/1-%C3%A7-Fethiye%20Bld.%202025%20Y%C4%B1l%C4%B1%20B%C3%BCt%C3%A7e%20ve%20Gelir%20Tarifesi.pdf"
-   ],
-   "confidence": "medium",
-   "missingNotes": "Kapasite/VHF/donanım yayınlanmamış; bazı rıhtımların MUÇEV işletmesinde olduğu haberleri var, işletme sınırı teyide muhtaç."
-  },
-  {
-   "slug": "canakkale-yat-limani",
-   "name": "Çanakkale Yat Limanı",
-   "operator": "Çanakkale Belediyesi",
-   "status": "published",
-   "typeCode": "municipal_marina",
-   "provinceSlug": "canakkale",
-   "districtSlug": "canakkale-merkez",
-   "lat": 40.1534,
-   "lon": 26.406,
-   "coordSource": "TKYGM yat limanı envanteri + rehber kaynaklar",
-   "descriptionTr": "Çanakkale kent merkezindeki kordonda yer alan, belediye tarafından işletilen 120 yat kapasiteli limandır. Geçici hudut kapısı statüsüyle transitlog işlemleri yapılabilmektedir.",
-   "berthCount": 120,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73/16",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "paid",
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "shower",
-    "wc",
-    "laundry",
-    "wifi",
-    "security"
-   ],
-   "services": [
-    "mooring_assist"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902862128453",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "bilgi@canakkalebelediyesimarina.com"
-    }
-   ],
-   "sourceUrls": [
-    "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf",
-    "https://marinalar.com/canakkale-marina-belediye-yat-limani"
-   ],
-   "confidence": "high",
-   "missingNotes": "LOA/draft yayınlanmamış; resmi marina sitesi kontrol anında park halindeydi, iletişim dizin kaynaklı."
-  },
-  {
-   "slug": "gelibolu-yat-limani",
-   "name": "Gelibolu Yat Limanı",
-   "operator": null,
-   "status": "draft",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "canakkale",
-   "districtSlug": "canakkale-gelibolu",
-   "lat": 40.405,
-   "lon": 26.6694,
-   "coordSource": "rehber kaynaklar",
-   "descriptionTr": "Gelibolu'da kuzey rüzgarlarına kapalı doğal limanın iç kısmı yatların bağlanmasına uygundur; barınakta akaryakıt pompası bulunmaktadır.",
-   "berthCount": null,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "unknown",
-   "amenities": [
-    "fuel"
-   ],
-   "services": [],
-   "contacts": [],
-   "sourceUrls": [
-    "https://www.sualtigazetesi.com/gelibolu-limani/"
-   ],
-   "confidence": "low",
-   "missingNotes": "Güncel işletmeci resmi kaynakla doğrulanamadı; TKYGM envanterinde yok. Doğrulanana dek taslak."
-  },
-  {
-   "slug": "erdek-yat-limani",
-   "name": "Erdek Yat Limanı",
-   "operator": null,
-   "status": "draft",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "balikesir",
-   "districtSlug": "balikesir-erdek",
-   "lat": 40.3933,
-   "lon": 27.7892,
-   "coordSource": "rehber kaynaklar",
-   "descriptionTr": "Erdek merkezdeki iskele ve liman yerel tekneler ile kotra ve yatların bağlanmasında kullanılmaktadır; Balıkesir Büyükşehir Belediyesi iskelenin yat limanına dönüştürülmesini planladığını açıklamıştır.",
-   "berthCount": null,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "unknown",
-   "amenities": [],
-   "services": [],
-   "contacts": [],
-   "sourceUrls": [
-    "https://www.denizhaber.net/erdek-iskelesi-yat-limanina-donusturulecek-haber-85294.htm"
-   ],
-   "confidence": "low",
-   "missingNotes": "Güncel işletmeci ve dönüşüm durumu doğrulanamadı. Doğrulanana dek taslak."
-  },
-  {
-   "slug": "guzelyali-yat-limani",
-   "name": "Güzelyalı Yat Limanı",
-   "operator": "BURULAŞ A.Ş. (Bursa Büyükşehir Belediyesi iştiraki)",
-   "status": "published",
-   "typeCode": "municipal_marina",
-   "provinceSlug": "bursa",
-   "districtSlug": "bursa-mudanya",
-   "lat": 40.356167,
-   "lon": 28.932167,
-   "coordSource": "navily.com/port/guzelyali-marina",
-   "descriptionTr": "Mudanya Güzelyalı'daki liman 2020'den bu yana Bursa Büyükşehir Belediyesi iştiraki BURULAŞ tarafından işletilmektedir. 58 yat ve 60 balıkçı teknesi kapasiteli tesis 7/24 güvenlik ve kamera sistemiyle izlenmektedir.",
-   "berthCount": 58,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "paid",
-   "amenities": [
-    "security"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902244525244",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "burulas@burulas.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://www.burulas.com.tr/hizmetler/yat-limani"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.burulas.com.tr/hizmetler/yat-limani",
-    "https://www.burulas.com.tr/bursa-guzelyali-yat-limani/iletisim/"
-   ],
-   "confidence": "high",
-   "missingNotes": "LOA/draft/VHF yayınlanmamış; telefon BURULAŞ genel hattı."
-  },
-  {
-   "slug": "ispark-istinye-tekne-park",
-   "name": "İSPARK İstinye Tekne Park",
-   "operator": "İSPARK A.Ş. (İstanbul Büyükşehir Belediyesi iştiraki)",
-   "status": "published",
-   "typeCode": "municipal_marina",
-   "provinceSlug": "istanbul",
-   "districtSlug": "istanbul-sariyer",
-   "lat": 41.113667,
-   "lon": 29.057167,
-   "coordSource": "navily.com/port/istinye-ispark",
-   "descriptionTr": "İstinye Koyu'nda İBB iştiraki İSPARK tarafından işletilen, yüzer iskeleli 180 tekne kapasiteli tekne parktır. Su, elektrik, WC ve güvenlik hizmetleri sunulmakta; günlükten yıllığa abonelik uygulanmaktadır.",
-   "berthCount": 180,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "paid",
-   "amenities": [
-    "electricity",
-    "water",
-    "wc",
-    "security"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902166350045",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "istinye.marina@ispark.istanbul"
-    },
-    {
-     "type": "website",
-     "value": "https://istmarin.ispark.istanbul"
-    }
-   ],
-   "sourceUrls": [
-    "https://ispark.istanbul/projeler/istanbul-tekne-parklar/",
-    "https://www.wikiderya.org/wiki/istinye-tekne-park",
-    "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf"
-   ],
-   "confidence": "high",
-   "missingNotes": "LOA/draft yayınlanmamış; kapasite TKYGM envanteriyle çapraz doğrulandı."
-  },
-  {
-   "slug": "ispark-tarabya-tekne-park",
-   "name": "İSPARK Tarabya Tekne Park",
-   "operator": "İSPARK A.Ş. (İstanbul Büyükşehir Belediyesi iştiraki)",
-   "status": "published",
-   "typeCode": "municipal_marina",
-   "provinceSlug": "istanbul",
-   "districtSlug": "istanbul-sariyer",
-   "lat": 41.138466,
-   "lon": 29.057901,
-   "coordSource": "wikiderya.org/wiki/tarabya-tekne-park",
-   "descriptionTr": "Tarabya Koyu'nda İBB iştiraki İSPARK tarafından işletilen yüzer iskeleli tekne parktır; işletmeci 265 tekne kapasitesi bildirmektedir. Su, elektrik, WC ve güvenlik hizmetleri sunulmaktadır.",
-   "berthCount": 265,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "paid",
-   "amenities": [
-    "electricity",
-    "water",
-    "wc",
-    "security"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902166350045",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "tarabya.marina@ispark.istanbul"
-    },
-    {
-     "type": "website",
-     "value": "https://istmarin.ispark.istanbul"
-    }
-   ],
-   "sourceUrls": [
-    "https://ispark.istanbul/projeler/istanbul-tekne-parklar/",
-    "https://www.wikiderya.org/wiki/tarabya-tekne-park",
-    "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf"
-   ],
-   "confidence": "high",
-   "missingNotes": "Kapasite çelişkili: İSPARK 265, TKYGM 210 — işletmeci esas alındı."
-  },
-  {
-   "slug": "antalya-kaleici-yat-limani",
-   "name": "Antalya Kaleiçi Yat Limanı",
-   "operator": "Antalya Ulaşım A.Ş. (Antalya Büyükşehir Belediyesi şirketi)",
-   "status": "published",
-   "typeCode": "municipal_marina",
-   "provinceSlug": "antalya",
-   "districtSlug": "antalya-muratpasa",
-   "lat": 36.883833,
-   "lon": 30.703,
-   "coordSource": "navily.com/port/antalya-kaleci-marina",
-   "descriptionTr": "Antalya'nın tarihi Kaleiçi eski limanında yer alan, büyükşehir belediyesi şirketi tarafından işletilen 65 yat kapasiteli limandır. 24 saat palamar ve güvenlik hizmeti verilmekte, günübirlik gezi tekneleri de limanı yoğun kullanmaktadır.",
-   "berthCount": 65,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "16/73",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "paid",
-   "amenities": [
-    "electricity",
-    "water",
-    "restaurant",
-    "security"
-   ],
-   "services": [
-    "mooring_assist",
-    "diver"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902422484530",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "iletisim@antalyaulasim.com.tr"
-    }
-   ],
-   "sourceUrls": [
-    "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf",
-    "https://www.antalya.bel.tr/Content/UserFiles/Files/Birimler_Mevzuatlar_Yeni/Kalei%C3%A7i%20Yat%20Liman%C4%B1n%C4%B1%20Kullanan%20G%C3%BCn%C3%BCbirlik%20Gezi%20Tekneleri%20Y%C3%B6netmeli%C4%9Fi.pdf"
-   ],
-   "confidence": "high",
-   "missingNotes": "LOA/draft yayınlanmamış."
-  },
-  {
-   "slug": "kas-belediye-limani",
-   "name": "Kaş Belediye Limanı",
-   "operator": "Kaş Belediyesi",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "antalya",
-   "districtSlug": "antalya-kas",
-   "lat": 36.1993,
-   "lon": 29.6404,
-   "coordSource": "rehber kaynaklar (wikiderya/TKYGM)",
-   "descriptionTr": "Kaş ilçe merkezinin yanındaki eski liman yaklaşık 100 tekne kapasitelidir; yerel gezi-dalış tekneleri ile uğrak yatlar kullanmaktadır. Bağlama tonoz zinciriyle yapılmakta, çevrede ücretli duş-WC ve çamaşırhane bulunmaktadır.",
-   "berthCount": 100,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "unknown",
-   "amenities": [
-    "shower",
-    "wc",
-    "laundry"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+905325032673",
-     "label": "Liman görevlisi (wikiderya)",
-     "primary": true
-    },
-    {
-     "type": "phone",
-     "value": "+905337295131",
-     "label": "Liman görevlisi (wikiderya)"
-    }
-   ],
-   "sourceUrls": [
-    "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf",
-    "https://www.wikiderya.org/wiki/kas-belediye-limani"
-   ],
-   "confidence": "medium",
-   "missingNotes": "Telefonlar topluluk kaynaklı görevli hatları; VHF/LOA/draft yayınlanmamış. Setur Kaş Marina'dan (~1.6 km) ayrı tesistir."
-  },
-  {
-   "slug": "kalkan-belediye-limani",
-   "name": "Kalkan Belediye Limanı",
-   "operator": null,
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "antalya",
-   "districtSlug": "antalya-kas",
-   "lat": 36.2611,
-   "lon": 29.4151,
-   "coordSource": "rehber kaynaklar",
-   "descriptionTr": "Kalkan'daki yaklaşık 50 tekne kapasiteli liman ve balıkçı barınağı yerel tekneler ile uğrak yatlara hizmet vermektedir. 2023'te zemin yenileme, çekek yeri ve bağlama halkaları yenileme çalışmaları tamamlanmıştır.",
-   "berthCount": 50,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "unknown",
-   "amenities": [],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902428443131",
-     "primary": true
-    }
-   ],
-   "sourceUrls": [
-    "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf",
-    "https://www.kas.bel.tr/haber/kalkan-balikci-barinagi-zemin-yenileme-calismasi-tamamlandi-6065"
-   ],
-   "confidence": "medium",
-   "missingNotes": "Kalkan belediyesi 2014'te kapandığı için güncel işletici (muhtemelen Kaş Belediyesi) açıkça teyit edilemedi — boş bırakıldı."
-  },
-  {
-   "slug": "ucagiz-iskelesi",
-   "name": "Üçağız İskelesi",
-   "operator": "Anatolia Grubu (2024 ihalesiyle; hukuki süreç devam ediyor)",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "antalya",
-   "districtSlug": "antalya-demre",
-   "lat": 36.195387,
-   "lon": 29.846849,
-   "coordSource": "sea-seek.com/en/Ucagiz-Limani",
-   "descriptionTr": "Kekova bölgesindeki Üçağız köy iskelesi yıllarca Demre Belediyesi tarafından işletilmiş, Haziran 2024'te bakanlık ihalesiyle 10 yıllığına özel bir gruba kiralanmıştır. Demre Belediyesi ihalenin iptali için hukuki süreç başlatmıştır.",
-   "berthCount": null,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "unknown",
-   "amenities": [],
-   "services": [],
-   "contacts": [],
-   "sourceUrls": [
-    "https://gazeteoksijen.com/yazarlar/ali-boratav/bu-ihale-kekovayi-degistirir-215217",
-    "https://www.sea-seek.com/en/Ucagiz-Limani"
-   ],
-   "confidence": "medium",
-   "missingNotes": "İşletme statüsü (2026 itibarıyla dava sonucu) doğrulanamadı; kapasite/iletişim yayınlanmamış."
-  },
-  {
-   "slug": "demre-yat-limani",
-   "name": "Demre Yat Limanı",
-   "operator": null,
-   "status": "published",
-   "typeCode": "municipal_marina",
-   "provinceSlug": "antalya",
-   "districtSlug": "antalya-demre",
-   "lat": 36.223,
-   "lon": 29.942,
-   "coordSource": "navily.com/port/demre-yatlimani",
-   "descriptionTr": "Ulaştırma ve Altyapı Bakanlığı'nca Çayağzı mevkiinde yaptırılan Demre Yat Limanı 26 Temmuz 2025'te hizmete açılmıştır. 64.000 m² kara ve 120.000 m² korunaklı su alanına sahip tesisin 12 ay hizmet vermesi planlanmaktadır.",
-   "berthCount": null,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": true,
-   "priceTier": "unknown",
-   "amenities": [],
-   "services": [
-    "winter_storage"
-   ],
-   "contacts": [],
-   "sourceUrls": [
-    "https://www.uab.gov.tr/haberler/yat-turizmine-yeni-destinasyon",
-    "https://www.navily.com/port/demre-yatlimani/18863"
-   ],
-   "confidence": "medium",
-   "missingNotes": "Kapasite kaynaklarda çelişkili (deniz 400-700 arası, kara dahil 750'ye kadar) — boş bırakıldı. Açılış sonrası işletmeci hiçbir kaynakta belirtilmemiş."
-  },
-  {
-   "slug": "tasucu-limani",
-   "name": "Taşucu Limanı",
-   "operator": null,
-   "status": "draft",
-   "typeCode": "municipal_pier",
-   "provinceSlug": "mersin",
-   "districtSlug": "mersin-silifke",
-   "lat": 36.3158,
-   "lon": 33.8811,
-   "coordSource": "rehber kaynaklar",
-   "descriptionTr": "Taşucu'nda uğrak teknelerin ve balıkçı teknelerinin bağlandığı kasaba limanıdır. Mevcut alanda 100 yat + 76 balıkçı teknesi kapasiteli yat limanı ve barınak projesi yürütülmektedir.",
-   "berthCount": null,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "priceTier": "unknown",
-   "amenities": [],
-   "services": [],
-   "contacts": [],
-   "sourceUrls": [
-    "https://tasinmazhaber.com/tasucu-yat-limani-projesi-ne-sunuyor-kapasite-176-tekneye-cikiyor/"
-   ],
-   "confidence": "low",
-   "missingNotes": "Mevcut rıhtımın işletmecisi ve kapasitesi doğrulanamadı; 176 rakamı gelecekteki proje kapasitesidir. Doğrulanana dek taslak."
-  }
- ],
- "excluded": [
-  {
-   "name": "Foça Küçükdeniz Rıhtımı",
-   "reason": "Koordinat kaynaklanamadı (konum zorunlu alan). Tesis belediye yönetmeliğiyle doğrulanmış — koordinat bulununca eklenecek."
-  },
-  {
-   "name": "Bitez Belediye Limanı (Bodrum)",
-   "reason": "Koordinat yok + misafir tekne kabulü doğrulanamadı (yıllık bağlama ağırlıklı)."
-  },
-  {
-   "name": "Fethiye Belediye İskelesi (kordon)",
-   "reason": "MUTTAŞ Fethiye Limanı ile ~150 m — büyük olasılıkla aynı tesis; mükerrer riski nedeniyle birleştirildi."
-  },
-  {
-   "name": "Amasra limanı",
-   "reason": "İşletmeci ve misafir bağlama doğrulanamadı; koordinat kaynaklanamadı."
-  },
-  {
-   "name": "Trabzon Ganita-Faroz",
-   "reason": "Özel işletme (belediye değil) + düşük güven; kapsam dışı."
-  },
-  {
-   "name": "Kurupelit Yat Limanı (Samsun)",
-   "reason": "Güncel işletme durumu belirsiz (atıl olduğu yönünde haberler) + koordinat kaynaklanamadı."
-  },
-  {
-   "name": "Side balıkçı barınağı",
-   "reason": "Misafir yat bağlaması doğrulanamadı (günübirlik tekneler ağırlıklı)."
-  }
- ]
+  ]
 }

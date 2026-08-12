@@ -732,6 +732,74 @@ def emit_korunak(here, records):
     return "\n".join(out)
 
 
+def emit_tamamlama(here, records):
+    """Tamamlama turları (gocek_tamamlama_*.json vb.) → UPDATE SQL.
+
+    Ana bölüm ON CONFLICT DO NOTHING olduğundan, MEVCUT veritabanlarındaki
+    satırlara alan güncellemeleri oradan AKMAZ; bu bölüm onları açıkça
+    UPDATE eder. Desteklenen alanlar:
+    - maxLoaM → locations.max_boat_length_m  (işletmeci beyanı dizinden üstün;
+      bilinçli olarak KOŞULSUZ yazılır — yanlış eski değeri düzeltebilmeli)
+    - name    → locations.name  (işletmeci değişimleri; i18n 'tr' adı ana
+      emit'teki DO UPDATE ile zaten aynı parti verisinden güncellenir)
+
+    Tutarlılık: dosyadaki değer, parti kaydındaki değerle AYNI olmalı —
+    taze kurulum ile güncellenen canlı veritabanı birbirinden ayrışamaz.
+    """
+    files = sorted(here.glob("*_tamamlama_*.json"))
+    out_all = []
+    errors = []
+    by = {r["slug"]: r for r in records}
+    for f in files:
+        data = json.loads(f.read_text(encoding="utf-8"))
+        entries = data.get("veriler", {})
+        if not entries:
+            continue
+        out = ["", "-- " + "=" * 70,
+               f"-- TAMAMLAMA TURU — {f.name} (mevcut veritabanlarına akar, idempotent)."]
+        for slug in sorted(entries):
+            v = entries[slug]
+            r = by.get(slug)
+            if r is None:
+                errors.append(f"tamamlama {f.name}: bilinmeyen slug {slug}")
+                continue
+            loa = v.get("maxLoaM")
+            if loa:
+                val = loa.get("deger")
+                if not isinstance(val, (int, float)) or isinstance(val, bool) or val <= 0:
+                    errors.append(f"tamamlama {slug}: maxLoaM.deger pozitif sayı olmalı")
+                elif r.get("maxLoaM") != val:
+                    errors.append(
+                        f"tamamlama {slug}: maxLoaM={val} ama parti kaydında {r.get('maxLoaM')} — ikisi aynı olmalı")
+                else:
+                    out.append(
+                        f"UPDATE locations SET max_boat_length_m = {num(val)}\n"
+                        f"WHERE slug = {q(slug)} AND max_boat_length_m IS DISTINCT FROM {num(val)}; "
+                        f"-- {loa.get('kaynak', '')}"
+                    )
+            nm_ = v.get("name")
+            if nm_:
+                val = (nm_.get("deger") or "").strip()
+                if not val:
+                    errors.append(f"tamamlama {slug}: name.deger boş")
+                elif r.get("name") != val:
+                    errors.append(
+                        f"tamamlama {slug}: name={val!r} ama parti kaydında {r.get('name')!r} — ikisi aynı olmalı")
+                else:
+                    out.append(
+                        f"UPDATE locations SET name = {q(val)}\n"
+                        f"WHERE slug = {q(slug)} AND name <> {q(val)}; "
+                        f"-- {nm_.get('kaynak', '')}"
+                    )
+        out.append("")
+        out_all.append("\n".join(out))
+    if errors:
+        for e in errors:
+            print(f"HATA: {e}", file=sys.stderr)
+        sys.exit(1)
+    return "".join(out_all)
+
+
 def emit_media(here, records):
     """Kapak fotoğrafları (kapak_fotograflari.json) → media + location_media.
 
@@ -917,6 +985,7 @@ def main():
     # yaklaşma, i18n'den SONRA: birleşik (notlu) metin taban çeviriyi ezmeli.
     sql += emit_yaklasma(here, records)
     sql += emit_corrections(here, records)
+    sql += emit_tamamlama(here, records)
     sql += emit_media(here, records)
     (here.parent / "seed_locations.sql").write_text(sql, encoding="utf-8")
     published = sum(1 for r in records if r["status"] == "published")

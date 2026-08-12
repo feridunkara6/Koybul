@@ -1,0 +1,41 @@
+{
+  "kaynak": "2026-08 Göcek tamamlama turu: eksik/yanlış alanlar işletmecilerin KENDİ sayfalarından ve yerleşik dizinlerden dolduruldu. Her değerin birebir alıntısı ve URL'i yanında. Tahmin/uydurma YOK.",
+  "not": "Bu dosyadaki değerler mevcut veritabanlarına UPDATE ile AKAR (ana bölüm ON CONFLICT DO NOTHING olduğundan yeni kurulumla sınırlı kalmasın diye). maxLoaM için işletmecinin kendi tesisi hakkındaki beyanı, üçüncü taraf dizinden ÜSTÜNDÜR — d-marin-gocek'te 70→85 düzeltmesinin dayanağı bu kuraldır. name güncellemeleri işletmeci değişimlerini yansıtır; location_i18n'deki 'tr' adı da parti dosyasındaki adla birlikte güncellenir (DO UPDATE).",
+  "veriler": {
+    "d-marin-gocek": {
+      "maxLoaM": {
+        "deger": 85,
+        "alinti": "388 berthing capacity for yachts up to 85 meters in length",
+        "kaynak": "https://www.d-marin.com/en/marinas/gocek/"
+      }
+    },
+    "gocek-village-port-marina": {
+      "maxLoaM": {
+        "deger": 50,
+        "alinti": "50m.",
+        "kaynak": "https://marinalar.com/gocek-village-port-marina"
+      }
+    },
+    "club-marina-gocek": {
+      "maxLoaM": {
+        "deger": 80,
+        "alinti": "Bu bölüme 80 metre uzunluğa kadar yatlar yanaşabiliyor.",
+        "kaynak": "https://hurriyet.com.tr/gocek-koyu-nun-ilk-marinasi-club-marina-7150580"
+      }
+    },
+    "marinturk-gocek-exclusive": {
+      "name": {
+        "deger": "Göcek Exclusive Marina",
+        "alinti": "Göcek Village Port Marina ve Göcek Exclusive Port Marina'nın kara ve deniz alanlarıyla marinalara bağlı otellerin işletmelerini artık Setur Marinaları üstlenecek.",
+        "kaynak": "https://www.seturmarinas.com/bizden-haberler/setur-marinalari-gocekte-yeni-bir-donem-baslatiyor"
+      }
+    },
+    "gocek-belediye-iskelesi": {
+      "name": {
+        "deger": "MUÇEV Göcek Marina",
+        "alinti": "Eski Göcek Belediye İskelesi artık MUÇEV Göcek Marina",
+        "kaynak": "https://www.wikiderya.org/wiki/mucev-gocek-marina"
+      }
+    }
+  }
+}

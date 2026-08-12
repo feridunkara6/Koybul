@@ -1,123 +1,129 @@
 {
- "batch": "8-ege-marina-tamamlama",
- "collectedAt": "2026-07-11",
- "method": "İMEAK Deniz Ticaret Odası resmi marina listesi (Ege bölgesi) ile mevcut kayıtların farkı alındı; yeni marinalar resmi liste + denizcilik dizinleriyle (marinakedisi) çapraz doğrulandı. Koordinatlar DDM/DMS→ondalık. DTO listesindeki koordinatı bozuk/çelişkili kayıtlar (Adaköy 35°49, Yat Lift 00'72\", Gökova Ören = Milta ile aynı kopya-koordinat, koordinatsızlar) ALINMADI. Tahmin yok; doğrulanamayan alan null.",
- "notes": [
-  "Mevcut Ege marinaları tekrar EKLENMEDİ (D-Marin Göcek/Turgutreis, Milta, Yalıkavak, Netsel, Martı, Skopea, Club Marina, Göcek Village Port, Çeşme/Setur/Teos/Port Alaçatı, Kuşadası/Didim vb.).",
-  "DTO'daki 'Göcek Belediye Marina' = mevcut 'Göcek Belediye İskelesi' kabul edilip atlandı. 'Marintürk Göcek Village Port' zaten var; bu partideki 'Exclusive' farklı (Poruklu Koyu).",
-  "Marmara (İstanbul hariç) ve Karadeniz'de DTO listesinde eklenecek yeni marina çıkmadı (Setur Yalova zaten var).",
-  "Kairos üç değere kadar çapraz doğrulandı (yüksek). Marintürk Göcek Exclusive ve Aganlar koordinatı tek resmî kaynaktan (DTO) ama ilçeyle tutarlı → orta güven."
- ],
- "records": [
-  {
-   "slug": "kairos-marina",
-   "name": "Kairos Marina",
-   "operator": "Kairos Marina",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-datca",
-   "lat": 36.7718,
-   "lon": 27.6195,
-   "coordSource": "marinakedisi.com (36.771838, 27.619487) + İMEAK DTO (36°46'.22N 27°37'.07E) — çapraz doğrulandı",
-   "descriptionTr": "Datça'da 246 deniz ve 256 kara kapasiteli özel marina.",
-   "berthCount": 246,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [],
-   "services": [],
-   "contacts": [
+  "batch": "8-ege-marina-tamamlama",
+  "collectedAt": "2026-07-11",
+  "method": "İMEAK Deniz Ticaret Odası resmi marina listesi (Ege bölgesi) ile mevcut kayıtların farkı alındı; yeni marinalar resmi liste + denizcilik dizinleriyle (marinakedisi) çapraz doğrulandı. Koordinatlar DDM/DMS→ondalık. DTO listesindeki koordinatı bozuk/çelişkili kayıtlar (Adaköy 35°49, Yat Lift 00'72\", Gökova Ören = Milta ile aynı kopya-koordinat, koordinatsızlar) ALINMADI. Tahmin yok; doğrulanamayan alan null.",
+  "notes": [
+    "Mevcut Ege marinaları tekrar EKLENMEDİ (D-Marin Göcek/Turgutreis, Milta, Yalıkavak, Netsel, Martı, Skopea, Club Marina, Göcek Village Port, Çeşme/Setur/Teos/Port Alaçatı, Kuşadası/Didim vb.).",
+    "DTO'daki 'Göcek Belediye Marina' = mevcut 'Göcek Belediye İskelesi' kabul edilip atlandı. 'Marintürk Göcek Village Port' zaten var; bu partideki 'Exclusive' farklı (Poruklu Koyu).",
+    "Marmara (İstanbul hariç) ve Karadeniz'de DTO listesinde eklenecek yeni marina çıkmadı (Setur Yalova zaten var).",
+    "Kairos üç değere kadar çapraz doğrulandı (yüksek). Marintürk Göcek Exclusive ve Aganlar koordinatı tek resmî kaynaktan (DTO) ama ilçeyle tutarlı → orta güven."
+  ],
+  "records": [
     {
-     "type": "phone",
-     "value": "+905320642648",
-     "primary": true
-    }
-   ],
-   "sourceUrls": [
-    "https://marinakedisi.com/marinalar/antalya/kairos-marina/",
-    "https://www.denizticaretodasi.org.tr/tr/deniz-turizmi/marinalar"
-   ],
-   "confidence": "high",
-   "missingNotes": "Azami boy/su çekimi ve olanaklar kaynakta yayınlanmadı (null); e-posta/web sitesi bulunamadı."
-  },
-  {
-   "slug": "marinturk-gocek-exclusive",
-   "name": "Marintürk Göcek Exclusive Marina",
-   "operator": "Marintürk",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-fethiye",
-   "lat": 36.7557,
-   "lon": 28.9237,
-   "coordSource": "İMEAK DTO (36°45'.34N 28°55'.42E → 36.7557, 28.9237); tek kaynak, Poruklu Koyu/Göcek ile tutarlı",
-   "descriptionTr": "Göcek Poruklu Koyu'nda Marintürk tarafından işletilen özel marina.",
-   "berthCount": null,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "69/73",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [],
-   "services": [],
-   "contacts": [
+      "slug": "kairos-marina",
+      "name": "Kairos Marina",
+      "operator": "Kairos Marina",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-datca",
+      "lat": 36.7718,
+      "lon": 27.6195,
+      "coordSource": "marinakedisi.com (36.771838, 27.619487) + İMEAK DTO (36°46'.22N 27°37'.07E) — çapraz doğrulandı",
+      "descriptionTr": "Datça'da 246 deniz ve 256 kara kapasiteli özel marina.",
+      "berthCount": 246,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+905320642648",
+          "primary": true
+        }
+      ],
+      "sourceUrls": [
+        "https://marinakedisi.com/marinalar/antalya/kairos-marina/",
+        "https://www.denizticaretodasi.org.tr/tr/deniz-turizmi/marinalar"
+      ],
+      "confidence": "high",
+      "missingNotes": "Azami boy/su çekimi ve olanaklar kaynakta yayınlanmadı (null); e-posta/web sitesi bulunamadı."
+    },
     {
-     "type": "phone",
-     "value": "+902169991480",
-     "primary": true
-    }
-   ],
-   "sourceUrls": [
-    "https://www.denizticaretodasi.org.tr/tr/deniz-turizmi/marinalar",
-    "https://marinalar.com/marinturk/"
-   ],
-   "confidence": "medium",
-   "missingNotes": "Koordinat tek resmî kaynaktan (DTO), ikinci kaynakta koordinat bulunamadı; kapasite/boy yayınlanmadı (null)."
-  },
-  {
-   "slug": "aganlar-marina-bodrum",
-   "name": "Aganlar Marina",
-   "operator": "Aganlar Marina",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-bodrum",
-   "lat": 37.0136,
-   "lon": 27.4512,
-   "coordSource": "İMEAK DTO (37°00'49.10N 27°27'04.44E → 37.0136, 27.4512); tek kaynak, Bodrum ile tutarlı",
-   "descriptionTr": "Bodrum'da marina ve yat çekek yeri.",
-   "berthCount": null,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "72/16",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [],
-   "services": [],
-   "contacts": [
+      "slug": "marinturk-gocek-exclusive",
+      "name": "Göcek Exclusive Marina",
+      "operator": "Setur Marinas",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.7557,
+      "lon": 28.9237,
+      "coordSource": "İMEAK DTO (36°45'.34N 28°55'.42E → 36.7557, 28.9237); tek kaynak, Poruklu Koyu/Göcek ile tutarlı",
+      "descriptionTr": "Göcek Poruklu Koyu'nda Setur Marinas tarafından işletilen özel marina (eski adıyla Marintürk Göcek Exclusive).",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "69/73",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902522771012",
+          "primary": true
+        },
+        {
+          "type": "website",
+          "value": "https://www.seturmarinas.com/marinalar/gocek-exclusive"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.denizticaretodasi.org.tr/tr/deniz-turizmi/marinalar",
+        "https://marinalar.com/marinturk/",
+        "https://www.seturmarinas.com/marinalar/gocek-exclusive",
+        "https://www.seturmarinas.com/bizden-haberler/setur-marinalari-gocekte-yeni-bir-donem-baslatiyor"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Koordinat tek resmî kaynaktan (DTO), ikinci kaynakta koordinat bulunamadı; kapasite/boy yayınlanmadı (null). | FAZ2 GOCEK TURU: işletme Setur Marinas'a geçti (Setur haber sayfası: 'Göcek Village Port Marina ve Göcek Exclusive Port Marina'nın kara ve deniz alanlarıyla marinalara bağlı otellerin işletmelerini artık Setur Marinaları üstlenecek.'). Eski Marintürk İstanbul santrali (+90 216 999 14 80) kaldırıldı (216 = İstanbul; işletmeci değişti). Yeni hat Setur'un Göcek sayfasından; Village Port ile AYNI numara — ortak santral olabilir. maxLoa kaynaklarda yalnız ALT sınır olarak geçiyor ('18 metre ve üzeri') — üst sınır yazılamadı, boş kaldı."
+    },
     {
-     "type": "phone",
-     "value": "+902524444808",
-     "primary": true
+      "slug": "aganlar-marina-bodrum",
+      "name": "Aganlar Marina",
+      "operator": "Aganlar Marina",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-bodrum",
+      "lat": 37.0136,
+      "lon": 27.4512,
+      "coordSource": "İMEAK DTO (37°00'49.10N 27°27'04.44E → 37.0136, 27.4512); tek kaynak, Bodrum ile tutarlı",
+      "descriptionTr": "Bodrum'da marina ve yat çekek yeri.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "72/16",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902524444808",
+          "primary": true
+        }
+      ],
+      "sourceUrls": [
+        "https://www.denizticaretodasi.org.tr/tr/deniz-turizmi/marinalar"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Koordinat/iletişim tek resmî kaynaktan (DTO); kapasite/boy yok (null); marina + çekek yeri."
     }
-   ],
-   "sourceUrls": [
-    "https://www.denizticaretodasi.org.tr/tr/deniz-turizmi/marinalar"
-   ],
-   "confidence": "medium",
-   "missingNotes": "Koordinat/iletişim tek resmî kaynaktan (DTO); kapasite/boy yok (null); marina + çekek yeri."
-  }
- ]
+  ]
 }

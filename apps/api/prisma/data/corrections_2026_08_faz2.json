@@ -8,5 +8,25 @@
     "slug": "adrasan-koyu-demirleme",
     "setStatus": "draft",
     "reason": "Koordinat Wikipedia'daki köy merkezi; demirleme kaydı için tehlikeli. Doğrulanmış koy koordinatı bulunana dek yayından çekildi."
+  },
+  {
+    "slug": "marinturk-gocek-exclusive",
+    "removeContacts": [
+      {
+        "type": "phone",
+        "value": "+902169991480"
+      }
+    ],
+    "reason": "Eski Marintürk İstanbul santrali; işletme Setur Marinas'a geçti (seturmarinas.com haber sayfası)."
+  },
+  {
+    "slug": "gocek-belediye-iskelesi",
+    "removeContacts": [
+      {
+        "type": "website",
+        "value": "https://www.fethiye.bel.tr/"
+      }
+    ],
+    "reason": "İşletme MUÇEV Göcek Marina'ya geçti; belediye sitesi artık işletmeci değil (marinagocek.com)."
   }
 ]

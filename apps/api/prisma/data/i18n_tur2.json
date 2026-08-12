@@ -1,526 +1,526 @@
 {
- "round": "i18n-tur2",
- "note": "Veri çevirisi TUR 2 — batch5(genişleme)+batch6(İstanbul)+batch7(Doğu Akdeniz)+batch8(Ege marina)+batch9(Yunanistan)+batch10(Symi)+batch11(GR koylar)+batch12(TR tamamlama), 104 nokta × EN/ES/RU. Kural: adlar çevrilmez; rakamlar TR kaynakla birebir (üretici doğrular).",
- "translations": {
-  "poyrazkoy-balikci-barinagi": {
-   "en": "A harbour 1,5 miles from the Black Sea exit of the İstanbul Boğazı, protected by a 470 m main breakwater; boats anchor behind the breakwater or moor to the quay. Holding is good and it is sheltered from all directions. Fuel can reportedly be brought in on request, and minor repair facilities are reported.",
-   "es": "Refugio a 1,5 millas de la salida del İstanbul Boğazı al mar Negro, protegido por un rompeolas principal de 470 m; las embarcaciones fondean tras el rompeolas o se amarran al muelle. El agarre es bueno y está abrigado de todas las direcciones. Se informa de que se puede traer combustible bajo pedido y de que hay posibilidad de pequeñas reparaciones.",
-   "ru": "Гавань в 1,5 мили от черноморского выхода İstanbul Boğazı, защищённая главным молом длиной 470 м; суда встают на якорь за молом или швартуются к причалу. Якорь держит хорошо, укрытие со всех направлений. Сообщается, что по запросу можно доставить топливо и выполнить мелкий ремонт."
-  },
-  "cam-limani-koyu-heybeliada": {
-   "en": "On the southwest of Heybeliada, the only natural anchorage genuinely sheltered from the prevailing north/northeast winds of the Adalar. Holding is good on a sand and weed bottom; on weekends it hosts the 50-60 boats that come from İstanbul.",
-   "es": "En el suroeste de Heybeliada, el único fondeadero natural realmente abrigado de los vientos dominantes del norte/nordeste de las Adalar. El agarre es bueno sobre fondo de arena y algas; los fines de semana acoge 50-60 embarcaciones procedentes de İstanbul.",
-   "ru": "На юго-западе Heybeliada — единственная естественная якорная стоянка, по-настоящему укрытая от господствующих северных/северо-восточных ветров Adalar. Якорь держит хорошо на песчаном дне с водорослями; по выходным принимает 50-60 судов, приходящих из İstanbul."
-  },
-  "buyukada-kuzey-demirleme": {
-   "en": "Anchorage area on the north coast of Büyükada, west of the ferry pier, in 3-5 m depth over a sand and weed bottom. As it is exposed to the prevailing north/northeast winds, it is suitable only in calm weather; overnight stays are not recommended.",
-   "es": "Zona de fondeo en la costa norte de Büyükada, al oeste del embarcadero de los ferris, con 3-5 m de sonda sobre fondo de arena y algas. Al estar expuesta a los vientos dominantes del norte/nordeste, solo es adecuada con tiempo en calma; no se recomienda pernoctar.",
-   "ru": "Якорная стоянка у северного берега Büyükada, к западу от паромного причала, на глубине 3-5 м, дно — песок с водорослями. Открыта господствующим северным/северо-восточным ветрам, поэтому подходит только в тихую погоду; ночёвка не рекомендуется."
-  },
-  "burgazada-restoran-samandiralari": {
-   "en": "South of the eastern pier on Burgazada there are about 15 mooring buoys laid by the shoreside restaurants; in the lee of the pier there is reasonable shelter. Except in very calm weather it is not suitable for overnight stays; it is mainly a lunch stop.",
-   "es": "Al sur del embarcadero oriental de Burgazada hay unas 15 boyas de amarre instaladas por los restaurantes de la costa; a sotavento del embarcadero ofrece un abrigo razonable. Salvo con tiempo muy en calma no es adecuado para pernoctar; es sobre todo una parada para almorzar.",
-   "ru": "К югу от восточного пирса Burgazada выставлено около 15 швартовных буёв, установленных прибрежными ресторанами; с подветренной стороны пирса укрытие приемлемое. Кроме совсем тихой погоды для ночёвки не подходит — это в основном остановка на обед."
-  },
-  "buyukada-balikci-barinagi": {
-   "en": "Harbour on Büyükada with a capacity of about 80 boats and a 115 m breakwater; electricity, water and fuel are reported to be available. It is used mainly by local and fishing boats.",
-   "es": "Refugio en Büyükada con capacidad para unas 80 embarcaciones y un rompeolas de 115 m; se informa de que dispone de electricidad, agua y combustible. Lo utilizan sobre todo embarcaciones locales y pesqueros.",
-   "ru": "Гавань на Büyükada вместимостью около 80 судов с молом длиной 115 м; сообщается о наличии электричества, воды и топлива. Используется в основном местными и рыбацкими судами."
-  },
-  "marmara-adasi-limani": {
-   "en": "Municipal harbour in the main settlement of Marmara Adası; capacity is about 125 boats, and 6-8 visiting yachts can berth bows-to/stern-to on the north quay. Shelter is good in the prevailing north/northeast winds, though squally gusts can come down off the mountain. Depths alongside the quay are 1,5-2,5 m; deep-draught boats should anchor off the quay.",
-   "es": "Puerto municipal en el núcleo principal de Marmara Adası; tiene capacidad para unas 125 embarcaciones y en el muelle norte pueden amarrarse de proa/popa 6-8 yates visitantes. El abrigo es bueno con los vientos dominantes del norte/nordeste, aunque pueden bajar rachas violentas desde la montaña. La sonda junto al muelle es de 1,5-2,5 m; los barcos de mucho calado deben fondear frente al muelle.",
-   "ru": "Муниципальный порт в главном посёлке Marmara Adası; вместимость около 125 судов, на северном причале 6-8 гостевых яхт могут швартоваться носом/кормой к причалу. Укрытие хорошее при господствующих северных/северо-восточных ветрах, но с горы могут срываться шквалистые порывы. Глубины у причала 1,5-2,5 м; судам с большой осадкой следует встать на якорь напротив причала."
-  },
-  "saraylar-limani": {
-   "en": "Municipal harbour on the north of Marmara Adası, built of marble blocks; about 50 yachts (maximum 15 m) can berth alongside or stern-to on the eastern breakwater. Holding is good in the mud bottom and shelter is very good. The western quay is shallow (~1,5 m).",
-   "es": "Refugio municipal en el norte de Marmara Adası, construido con bloques de mármol; unos 50 yates (máximo 15 m) pueden amarrarse abarloados o de popa al rompeolas oriental. El agarre es bueno en fondo de fango y el abrigo es muy bueno. El muelle occidental es poco profundo (~1,5 m).",
-   "ru": "Муниципальная гавань на севере Marmara Adası, построенная из мраморных блоков; около 50 яхт (максимум 15 м) могут швартоваться лагом или кормой к восточному молу. Илистое дно держит якорь хорошо, укрытие очень хорошее. Западный причал мелководный (~1,5 м)."
-  },
-  "yigitler-limani-avsa": {
-   "en": "Harbour of the village of Yiğitler on the east coast of Avşa Adası; visiting boats berth stern-to on the west wall of the eastern basin or come alongside with two anchors, and a municipal official collects the mooring fee. Holding is good in the sand bottom, and shelter in the eastern basin is good.",
-   "es": "Puerto del pueblo de Yiğitler, en la costa este de Avşa Adası; las embarcaciones visitantes se amarran de popa al muro oeste de la dársena oriental o se atracan con dos anclas, y un empleado municipal cobra la tarifa de amarre. El agarre es bueno en fondo de arena y el abrigo en la dársena oriental es bueno.",
-   "ru": "Порт деревни Yiğitler на восточном берегу Avşa Adası; гостевые суда швартуются кормой к западной стенке восточного бассейна или подходят на двух якорях, плату за стоянку взимает служащий муниципалитета. Песчаное дно держит якорь хорошо, укрытие в восточном бассейне хорошее."
-  },
-  "avsa-turkeli-demirleme": {
-   "en": "Anchorage area off the main settlement of Türkeli on the west coast of Avşa Adası; the town offers a wide range of markets, restaurants and guesthouses. There are sea bus/ferry connections to İstanbul. It is exposed to winds from the western sector.",
-   "es": "Zona de fondeo frente al núcleo principal de Türkeli, en la costa oeste de Avşa Adası; el pueblo ofrece una amplia oferta de supermercados, restaurantes y pensiones. Hay conexiones de catamarán rápido/ferri con İstanbul. Está expuesta a los vientos del sector oeste.",
-   "ru": "Якорная стоянка напротив главного посёлка Türkeli на западном берегу Avşa Adası; в городке широкий выбор магазинов, ресторанов и пансионов. Есть сообщение морским автобусом/паромом с İstanbul. Стоянка открыта ветрам западного сектора."
-  },
-  "ekinlik-adasi-demirleme": {
-   "en": "Anchorage area over a sand bottom off Ekinlik (Koutali) Adası, northwest of Avşa; anchoring is free. Ashore there are a small snack bar and a beach; there is no water and no pier service.",
-   "es": "Zona de fondeo sobre fondo de arena frente a Ekinlik (Koutali) Adası, al noroeste de Avşa; el fondeo es libre. En tierra hay un pequeño quiosco y una playa; no hay agua ni servicio de muelle.",
-   "ru": "Якорная стоянка с песчаным дном у Ekinlik (Koutali) Adası, к северо-западу от Avşa; якорная стоянка свободная. На берегу есть небольшой киоск и пляж; воды и причального сервиса нет."
-  },
-  "pasalimani-adasi-demirleme": {
-   "en": "Open anchorage off Paşalimanı Adası in 5-10 m over a sand and weed bottom; once the anchor sets in the bottom, holding is good. Ashore there are a restaurant and a bakery.",
-   "es": "Fondeadero abierto frente a Paşalimanı Adası, en 5-10 m sobre fondo de arena y algas; una vez que el ancla agarra en el fondo, el agarre es bueno. En tierra hay un restaurante y una panadería.",
-   "ru": "Открытая якорная стоянка у Paşalimanı Adası на глубине 5-10 м, дно — песок с водорослями; когда якорь заберёт за грунт, держит хорошо. На берегу есть ресторан и пекарня."
-  },
-  "karabiga-limani": {
-   "en": "Harbour at Karabiga, in the district of Biga, working as a fishing and dry-cargo pier; yachts usually berth stern-to on the outer face of the fishing quay, and if necessary the commercial quay to the north is used. In east/northeast winds an uncomfortable swell enters, and anchor holding is reported to be poor. There is no water or electricity.",
-   "es": "Puerto de Karabiga, dependiente de Biga, que funciona como muelle pesquero y de carga seca; los yates suelen amarrarse de popa a la cara exterior del muelle pesquero y, si es necesario, se utiliza el muelle comercial del norte. Con vientos del este/nordeste entra una marejada incómoda y se ha informado de que el agarre del ancla es deficiente. No hay agua ni electricidad.",
-   "ru": "Порт в Karabiga (район Biga), работающий как рыбацкий и сухогрузный причал; яхты обычно швартуются кормой к внешней стороне рыбацкого причала, при необходимости используется коммерческий причал севернее. При восточных/северо-восточных ветрах заходит неприятная зыбь; сообщается, что якорь держит плохо. Воды и электричества нет."
-  },
-  "cakilkoy-balikci-barinagi": {
-   "en": "Large harbour with a 695 m breakwater on the east coast of the Kapıdağ Yarımadası, 6 miles northeast of Bandırma; as the quay is full of trawlers, visiting boats anchor at the northern end of the harbour. Holding is good and it is a sheltered stopover point.",
-   "es": "Gran refugio con un rompeolas de 695 m en la costa este de la Kapıdağ Yarımadası, 6 millas al nordeste de Bandırma; como el muelle está lleno de arrastreros, las embarcaciones visitantes fondean en el extremo norte del refugio. El agarre es bueno y es un punto de escala abrigado.",
-   "ru": "Большая гавань с молом длиной 695 м на восточном берегу Kapıdağ Yarımadası, в 6 милях к северо-востоку от Bandırma; причал занят траулерами, поэтому гостевые суда встают на якорь в северной части гавани. Якорь держит хорошо, это укрытая промежуточная стоянка."
-  },
-  "sarkoy-limani": {
-   "en": "Harbour in the district centre of Şarköy; visiting boats can berth stern-to or alongside. Electricity, water, showers, WC and fuel (diesel/petrol) are reported to be available.",
-   "es": "Puerto en el centro del municipio de Şarköy; las embarcaciones visitantes pueden amarrarse de popa o abarloadas. Se informa de que dispone de electricidad, agua, duchas, WC y combustible (diésel/gasolina).",
-   "ru": "Порт в центре района Şarköy; гостевые суда могут швартоваться кормой или лагом. Сообщается о наличии электричества, воды, душа, туалета и топлива (дизель/бензин)."
-  },
-  "bozcaada-limani": {
-   "en": "The main harbour in the northeast of Bozcaada, at the foot of the castle. Visiting boats berth stern-to or alongside along the breakwater; ground chain tackle is laid ~40 m off the shore. It provides adequate shelter from all directions except east-southeast winds. There are 13 water/electricity points on the quay. The official yacht capacity is 30 (TKYGM list); together with fishing boats it holds ~125 vessels in total. Maximum draught ~3 m. Fuel supply by tanker, slipway/haul-out, ice and rope supply are reported.",
-   "es": "El puerto principal del nordeste de Bozcaada, al pie del castillo. Las embarcaciones visitantes se amarran de popa o abarloadas a lo largo del rompeolas; hay una cadena madre fondeada a ~40 m de la costa. Ofrece abrigo suficiente de todas las direcciones salvo de los vientos del este-sudeste. En el muelle hay 13 tomas de agua/electricidad. La capacidad oficial para yates es de 30 (lista TKYGM); junto con los pesqueros alberga en total ~125 embarcaciones. Calado máximo ~3 m. Se informa de suministro de combustible por camión cisterna, rampa/varadero, hielo y suministro de cabos.",
-   "ru": "Главный порт на северо-востоке Bozcaada, у подножия крепости. Гостевые суда швартуются кормой или лагом вдоль волнолома; в ~40 м от берега проложена донная цепь для швартовки. Обеспечивает достаточное укрытие со всех направлений, кроме восточно-юго-восточных ветров. На причале 13 точек воды/электричества. Официальная вместимость для яхт — 30 (список TKYGM); вместе с рыбацкими судами всего вмещает ~125 судов. Максимальная осадка ~3 м. Сообщается о заправке топливом с автоцистерны, слипе/подъёме судов, льде и продаже швартовных концов."
-  },
-  "gokceada-kalekoy-limani": {
-   "en": "The new harbour on the north coast of Gökçeada; the most suitable berthing place for yachts on the island. Boats berth alongside the north breakwater; if it is full, you may have to go alongside fishing boats. Depths are 5,0-5,5 m at the entrance and 3,0-3,5 m at the north quay; at the entrance beware of the sand shoal off the end of the north breakwater. Excellent shelter from all directions. There are water and electricity points along the quay and fish restaurants ashore; there is no fuel. A minibus leaves for the centre every hour.",
-   "es": "El puerto nuevo de la costa norte de Gökçeada; el lugar de amarre más adecuado para los yates en la isla. Se amarra abarloado al rompeolas norte; si está lleno, puede ser necesario abarloarse a los pesqueros. La sonda es de 5,0-5,5 m en la entrada y de 3,0-3,5 m en el muelle norte; en la entrada hay que prestar atención al bajo de arena junto al extremo del rompeolas norte. Abrigo excelente de todas las direcciones. A lo largo del muelle hay tomas de agua y electricidad y en la costa hay restaurantes de pescado; no hay combustible. Cada hora sale un microbús hacia el centro.",
-   "ru": "Новый порт на северном берегу Gökçeada; самое удобное место швартовки для яхт на острове. Швартуются лагом вдоль северного волнолома; если занято, возможно, придётся вставать лагом к рыбацким судам. Глубины 5,0-5,5 м на входе и 3,0-3,5 м у северного причала; на входе остерегайтесь песчаной отмели у оконечности северного волнолома. Отличное укрытие со всех направлений. Вдоль причала — точки воды и электричества, на берегу — рыбные рестораны; топлива нет. Каждый час в центр отправляется маршрутка."
-  },
-  "gokceada-kuzu-limani": {
-   "en": "The old main harbour and ferry pier at the northeastern tip of the island, operated by TDİ. It is a cramped harbour with limited facilities for yachts, but it gives good shelter, especially in north-northeast winds, and is used as a harbour of refuge in bad weather. It may be full of local boats. Water supply is limited and there is no fuel station. Kaleköy, 3 miles away, is a better alternative.",
-   "es": "El antiguo puerto principal y embarcadero del ferri en el extremo nordeste de la isla, gestionado por TDİ. Es un puerto angosto con instalaciones limitadas para yates, pero ofrece buen abrigo, sobre todo con vientos del norte-nordeste, y se utiliza como puerto de refugio con mal tiempo. Puede estar lleno de embarcaciones locales. El suministro de agua es limitado y no hay estación de combustible. Kaleköy, a 3 millas, es una alternativa mejor.",
-   "ru": "Старый главный порт и паромный причал на северо-восточной оконечности острова; находится в ведении TDİ. Тесный порт с ограниченными возможностями для яхт, но даёт хорошее укрытие, особенно при северо-северо-восточных ветрах; в плохую погоду используется как порт-убежище. Может быть занят местными судами. Снабжение водой ограничено, топливной станции нет. Kaleköy в 3 милях — лучшая альтернатива."
-  },
-  "behramkale-assos-limani": {
-   "en": "A small historic stone harbour below the ancient city of Assos; fish restaurants line the quay and visiting boats moor in front of the restaurants. Capacity ~50 boats (mostly local/excursion boats). The breakwaters shut out the north winds; as the entrance is narrow, care is needed on a night approach. It can be uncomfortable in winds from the southwest sector. Electricity, drinking water and WC are available.",
-   "es": "Pequeño puerto histórico de piedra bajo la ciudad antigua de Assos; los restaurantes de pescado se alinean a lo largo del muelle y las embarcaciones visitantes se amarran frente a los restaurantes. Capacidad ~50 embarcaciones (la mayoría barcos locales/de excursión). Los rompeolas cierran el paso a los vientos del norte; como la entrada es estrecha, hay que tener cuidado en la aproximación nocturna. Puede resultar incómodo con vientos del sector sudoeste. Hay electricidad, agua potable y WC.",
-   "ru": "Маленький исторический каменный порт под античным городом Assos; вдоль причала выстроились рыбные рестораны, и гостевые суда швартуются перед ресторанами. Вместимость ~50 судов (в основном местные/экскурсионные). Волноломы закрывают от северных ветров; вход узкий, поэтому при ночном подходе нужна осторожность. При ветрах юго-западного сектора может быть некомфортно. Есть электричество, питьевая вода и туалет."
-  },
-  "kucukkuyu-limani": {
-   "en": "The breakwater-protected harbour of the town of Küçükkuyu on the northern shore of the Edremit Körfezi, at the foot of Kazdağı. Although it is mainly a shelter for fishing and excursion boats, it is possible to berth at the pier/quay. It is sheltered in winds from the northern sector. Markets and restaurants in the town are within walking distance.",
-   "es": "Puerto protegido por rompeolas de la localidad de Küçükkuyu, en la costa norte del Edremit Körfezi, a los pies del Kazdağı. Aunque es sobre todo un refugio de pesqueros y barcos de excursión, es posible amarrarse al embarcadero/muelle. Está abrigado con vientos del sector norte. Los supermercados y restaurantes del pueblo quedan a poca distancia a pie.",
-   "ru": "Защищённый волноломом порт посёлка Küçükkuyu на северном берегу Edremit Körfezi, у подножия Kazdağı. Хотя это в основном стоянка рыбацких и прогулочных судов, швартовка к пирсу/причалу возможна. Укрыт при ветрах северного сектора. Магазины и рестораны посёлка — в пешей доступности."
-  },
-  "burhaniye-oren-yat-limani": {
-   "en": "Municipally operated yacht harbour and adjoining fishing shelter at Burhaniye İskele/Ören, in the southeast of the Edremit Körfezi. Capacity ~250 boats; the entrance is straightforward and depths inside the harbour are 3-4 m. The main breakwater is 537 m; there is a slipway. Winds from the northern sector prevail in the area, and it is advisable to get assistance when mooring. Renovation works were carried out in 2023-24 and a coastal facility operating licence was obtained. Fuel can be supplied by tanker, and there is a yacht chandlery in the area.",
-   "es": "Puerto deportivo de gestión municipal y refugio pesquero contiguo en Burhaniye İskele/Ören, en el sudeste del Edremit Körfezi. Capacidad ~250 embarcaciones; la entrada no presenta problemas y la sonda dentro del puerto es de 3-4 m. El rompeolas principal mide 537 m; hay rampa de varada. En la zona predominan los vientos del sector norte y se recomienda pedir ayuda al amarrar. En 2023-24 se realizaron obras de renovación y se obtuvo la licencia de explotación de instalación costera. Se puede repostar combustible mediante camión cisterna y en los alrededores hay una tienda de efectos navales.",
-   "ru": "Яхтенный порт под управлением муниципалитета и прилегающая рыбацкая гавань в местечке Burhaniye İskele/Ören, на юго-востоке Edremit Körfezi. Вместимость ~250 судов; вход несложный, глубины в порту 3-4 м. Главный волнолом — 537 м; есть слип. В районе преобладают ветры северного сектора, при швартовке рекомендуется брать помощь. В 2023-24 годах проведены работы по реконструкции и получена лицензия на эксплуатацию берегового объекта. Возможна заправка топливом с автоцистерны, поблизости есть магазин яхтенного снаряжения."
-  },
-  "alibey-cunda-adasi-limani": {
-   "en": "Town quay of Cunda (Alibey) island, in the northwest of the Ayvalık inner sea. For visiting yachts there are 15 ready laid stern moorings tied to the quay plus additional buoys; the quay front is lined with restaurants. Depths inside the harbour are 2-3 m, the anchorage south of the pier is ~5 m and holding is good. Capacity ~145 boats. Being in the inner sea, it is well sheltered from all directions. Haul-out for boats up to 25 m and fuel supply by tanker are reported.",
-   "es": "Muelle del pueblo de la isla de Cunda (Alibey), en el noroeste del mar interior de Ayvalık. Para los yates visitantes hay 15 muertos ya instalados con guías al muelle y boyas adicionales; el frente del muelle está rodeado de restaurantes. La sonda dentro del puerto es de 2-3 m, el fondeadero al sur del embarcadero tiene ~5 m y el agarre es bueno. Capacidad ~145 embarcaciones. Al estar en el mar interior, está bien abrigado de todas las direcciones. Se informa de varadero para esloras de hasta 25 m y de suministro de combustible por camión cisterna.",
-   "ru": "Городской причал острова Cunda (Alibey) на северо-западе внутреннего моря Ayvalık. Для гостевых яхт есть 15 готовых мёртвых якорей с оттяжками к причалу и дополнительные буи; набережная у причала окружена ресторанами. Глубины в порту 2-3 м, якорная стоянка южнее пирса ~5 м, якорь держит хорошо. Вместимость ~145 судов. Благодаря расположению во внутреннем море хорошо укрыт со всех направлений. Сообщается о подъёме судов длиной до 25 м и заправке топливом с автоцистерны."
-  },
-  "patrica-koyu": {
-   "en": "A large, well-sheltered anchorage bay on the north of Cunda (Alibey) island; in pilot sources it appears as Patricia Liman / Gökçeliman, and locally it is known as Patriça bay. It lies within a natural protected area; there are no facilities ashore, and day-trip boats and yachts anchor here. It is close to the entrance of the Ayvalık inner sea.",
-   "es": "Amplia cala de fondeo bien abrigada en el norte de la isla de Cunda (Alibey); en las fuentes de derrotero figura como Patricia Liman / Gökçeliman y localmente se conoce como cala de Patriça. Se encuentra dentro de un área natural protegida; no hay instalaciones en tierra, y fondean aquí barcos de excursión y yates. Está cerca de la entrada del mar interior de Ayvalık.",
-   "ru": "Просторная, хорошо укрытая якорная бухта на севере острова Cunda (Alibey); в лоцманских источниках фигурирует как Patricia Liman / Gökçeliman, у местных известна как бухта Patriça. Находится в границах природоохранной зоны; на берегу нет никакой инфраструктуры, на якорь встают прогулочные суда и яхты. Расположена недалеко от входа во внутреннее море Ayvalık."
-  },
-  "maden-adasi-demirleme": {
-   "en": "Anchorage bay on Maden Adası, northwest of Ayvalık, giving good shelter from the meltemi. You anchor in about 5 m on a sand bottom, and holding is good. There is a shoal at the entrance of the bay, so approach with care. There are no facilities ashore.",
-   "es": "Cala de fondeo en Maden Adası, al noroeste de Ayvalık, que ofrece buen abrigo frente al meltemi. Se fondea en unos 5 m sobre fondo de arena y el agarre es bueno. Hay un bajo en la entrada de la cala, por lo que hay que aproximarse con cuidado. No hay instalaciones en tierra.",
-   "ru": "Якорная бухта на Maden Adası к северо-западу от Ayvalık, дающая хорошее укрытие от мельтеми. Встают на якорь на глубине около 5 м на песчаном дне, якорь держит хорошо. У входа в бухту есть отмель, подходить следует осторожно. На берегу инфраструктуры нет."
-  },
-  "moska-adasi-demirleme": {
-   "en": "Anchorage in the Ayvalık inner sea, at the southern end of the channel between Moska island and Alibey island. It gives good shelter in winds from the southern sector. There are no facilities ashore; it is used for daytime and overnight anchoring.",
-   "es": "Fondeadero en el mar interior de Ayvalık, en el extremo sur del canal entre la isla de Moska y la isla de Alibey. Ofrece buen abrigo con vientos del sector sur. No hay instalaciones en tierra; se utiliza para fondear de día y para pernoctar.",
-   "ru": "Якорная стоянка во внутреннем море Ayvalık, у южного конца пролива между островами Moska и Alibey. Даёт хорошее укрытие при ветрах южного сектора. На берегу инфраструктуры нет; используется для дневной и ночной якорной стоянки."
-  },
-  "kumru-koyu-demirleme": {
-   "en": "A very attractive anchorage bay in the south of the Ayvalık inner sea, completely enclosed by land. It gives shelter from all directions. There are no facilities ashore.",
-   "es": "Una cala de fondeo muy atractiva en el sur del mar interior de Ayvalık, completamente rodeada de tierra. Ofrece abrigo de todas las direcciones. No hay instalaciones en tierra.",
-   "ru": "Очень привлекательная якорная бухта на юге внутреннего моря Ayvalık, полностью окружённая сушей. Даёт укрытие со всех направлений. На берегу инфраструктуры нет."
-  },
-  "camlik-koyu-demirleme-ayvalik": {
-   "en": "Anchorage bay at Çamlık, south of Ayvalık, with a view of Çanak Tepe. It gives good shelter except in wind blowing from the south. There is a restaurant ashore; as its own jetty could not be confirmed, you anchor and go ashore by dinghy.",
-   "es": "Cala de fondeo en Çamlık, al sur de Ayvalık, con vistas a Çanak Tepe. Ofrece buen abrigo salvo con viento del sur. En la costa hay un restaurante; como no se ha podido confirmar que tenga embarcadero propio, se fondea y se desembarca con el auxiliar.",
-   "ru": "Якорная бухта в местечке Çamlık к югу от Ayvalık с видом на Çanak Tepe. Даёт хорошее укрытие, кроме ветра, дующего с юга. На берегу есть ресторан; наличие собственного причала не подтверждено, поэтому встают на якорь и высаживаются на тузике."
-  },
-  "dikili-limani": {
-   "en": "District harbour of Dikili, opposite the island of Midilli; in the shelter section next to the commercial pier there is room for 6-7 visiting yachts. You drop anchor and berth stern-to/bows-to the quay; there are no ready laid moorings. Depths inside the harbour are 4-5 m; the approach is clear and easy. Electricity, drinking water and fuel are available on the quay; there are fish restaurants along the waterfront. Total capacity ~160 boats.",
-   "es": "Puerto del municipio de Dikili, frente a la isla de Midilli; en la zona de refugio junto al muelle comercial hay sitio para 6-7 yates visitantes. Se fondea el ancla y se amarra de popa/proa al muelle; no hay muertos instalados. La sonda dentro del puerto es de 4-5 m; la aproximación es limpia y fácil. En el muelle se puede obtener electricidad, agua potable y combustible; en el paseo marítimo hay restaurantes de pescado. Capacidad total ~160 embarcaciones.",
-   "ru": "Порт района Dikili напротив острова Midilli; в гаванной части рядом с коммерческим пирсом есть место для 6-7 гостевых яхт. Отдают якорь и швартуются кормой/носом к причалу; готовых мёртвых якорей нет. Глубины в порту 4-5 м; подход свободный и лёгкий. На причале можно взять электричество, питьевую воду и топливо; на набережной — рыбные рестораны. Общая вместимость ~160 судов."
-  },
-  "bademli-deniz-ilicasi-koyu": {
-   "en": "Anchorage bay on the Bademli coast of Dikili, just north of Kalem Adası. You anchor on a mixed sand and rock bottom; lines can be taken ashore. It has a beach that can be reached by dinghy; there are no facilities, water or pier ashore. It is known for its shallow thermal springs.",
-   "es": "Cala de fondeo en la costa de Bademli, en Dikili, justo al norte de Kalem Adası. Se fondea sobre un fondo mixto de arena y roca; se pueden dar cabos a tierra. Tiene una playa a la que se llega con el auxiliar; en tierra no hay instalaciones, agua ni embarcadero. Es conocida por sus manantiales termales someros.",
-   "ru": "Якорная бухта у побережья Bademli в районе Dikili, сразу к северу от Kalem Adası. Встают на якорь на смешанном песчано-каменистом дне; можно завести концы на берег. Есть пляж, доступный на тузике; на берегу нет инфраструктуры, воды и причала. Известна мелководными термальными источниками."
-  },
-  "kalem-adasi-koyu": {
-   "en": "Anchorage bay of the privately run Kalem Adası, ~450 m off the mainland, off Bademli in Dikili; it is referred to as the 'Maldives of the Aegean'. Different sides of the island offer different shelter; the west side faces the open sea. On the island there are a hotel, a beach club and a restaurant (going ashore is subject to the operator's permission). Markets and restaurants can be reached in the village of Bademli.",
-   "es": "Cala de fondeo de Kalem Adası, isla de gestión privada situada a ~450 m de tierra firme, frente a Bademli, en Dikili; se la conoce como las 'Maldivas del Egeo'. Las distintas caras de la isla ofrecen distinto abrigo; la cara oeste mira al mar abierto. En la isla hay un hotel, un club de playa y un restaurante (el desembarco está sujeto al permiso del operador). En el pueblo de Bademli se puede acceder a supermercados y restaurantes.",
-   "ru": "Якорная бухта частного острова Kalem Adası, в ~450 м от материка, напротив Bademli в районе Dikili; его называют 'Мальдивами Эгейского моря'. Разные стороны острова дают разное укрытие; западная сторона обращена к открытому морю. На острове есть отель, пляжный клуб и ресторан (высадка на берег — с разрешения администрации). В деревне Bademli доступны магазины и рестораны."
-  },
-  "candarli-limani": {
-   "en": "Town harbour in the Çandarlı Körfezi, at the foot of the famous Genoese castle. In the anchorage off the castle you anchor in 4-8 m on a mud bottom; holding is very good, though plough-type anchors may drag in the soft mud. It gives shelter from all directions except the southern sector; the prevailing northerlies do not raise a sea. Electricity, pressurised water, drinking water and fuel are available on the quay; in the town there are restaurants, markets, repair workshops, a diving centre and a sailing club.",
-   "es": "Puerto del pueblo en el Çandarlı Körfezi, al pie del famoso castillo genovés. En el fondeadero frente al castillo se fondea en 4-8 m sobre fondo de fango; el agarre es muy bueno, aunque las anclas de tipo arado pueden garrear en el fango blando. Ofrece abrigo de todas las direcciones salvo del sector sur; los vientos dominantes del norte no levantan mar. En el muelle hay electricidad, agua a presión, agua potable y combustible; en el pueblo hay restaurantes, supermercados, talleres de reparación, un centro de buceo y un club de vela.",
-   "ru": "Городской порт в Çandarlı Körfezi, у подножия знаменитой генуэзской крепости. На якорной стоянке перед крепостью встают на якорь на глубине 4-8 м на илистом дне; держит очень хорошо, но в мягком иле плуговые якоря могут ползти. Даёт укрытие со всех направлений, кроме южного сектора; господствующие северные ветры волну не разводят. На причале есть электричество, вода под давлением, питьевая вода и топливо; в городке — рестораны, магазины, ремонтные мастерские, дайвинг-центр и парусный клуб."
-  },
-  "mordogan-yeni-limani": {
-   "en": "The new harbour of Mordoğan, built in 2003; the old harbour is for fishing boats, and although the new harbour is unfinished it can be used for shelter. It provides protection behind the breakwater. There are numerous reefs on the approach between the harbour and the town of Mordoğan, so approach carefully. No electricity or water services are reported.",
-   "es": "El nuevo refugio de Mordoğan, construido en 2003; el puerto viejo es para los pesqueros y, aunque el puerto nuevo está sin terminar, puede utilizarse para abrigarse. Ofrece protección tras el rompeolas. En la aproximación entre el puerto y el pueblo de Mordoğan hay numerosos arrecifes, por lo que hay que aproximarse con cuidado. No se informa de servicios de electricidad ni de agua.",
-   "ru": "Новая гавань Mordoğan, построенная в 2003 году; старый порт предназначен для рыбацких судов, а новая гавань, хотя и не достроена, пригодна для укрытия. Защиту даёт мол. На подходе между гаванью и посёлком Mordoğan множество рифов, подходить следует осторожно. Об электричестве и воде не сообщается."
-  },
-  "egri-liman-demirleme": {
-   "en": "Natural anchorage bay on the west coast of the Karaburun peninsula, at the mouth of the Gerence Körfezi. It gives shelter from almost every direction, including the meltemi; however, in strong north and south winds swell can enter the bay. The entrance is about 300 m wide, with 20 m depth at the entrance; there are reefs around and three rocky islets offshore, so a night entry is not recommended. The bottom is mud and weed; the bottom shelves steeply, so beware of the sudden change in depth.",
-   "es": "Cala de fondeo natural en la costa oeste de la península de Karaburun, en la boca del Gerence Körfezi. Ofrece abrigo de casi todas las direcciones, incluido el meltemi; sin embargo, con vientos fuertes del norte y del sur puede entrar marejada en la cala. La entrada tiene unos 300 m de ancho, con 20 m de sonda en la entrada; alrededor hay arrecifes y, mar afuera, tres islotes rocosos, por lo que no se recomienda entrar de noche. El fondo es de fango y algas; la pendiente del fondo es pronunciada: atención al cambio brusco de profundidad.",
-   "ru": "Естественная якорная бухта на западном берегу полуострова Karaburun, у входа в Gerence Körfezi. Даёт укрытие почти со всех направлений, включая мельтеми; однако при сильных северных и южных ветрах в бухту может заходить зыбь. Вход шириной около 300 м, глубина на входе 20 м; вокруг рифы, а мористее — три скалистых островка, ночной заход не рекомендуется. Дно — ил и водоросли; свал глубин крутой, остерегайтесь резкого изменения глубины."
-  },
-  "oasis-marina-yeni-foca": {
-   "en": "A private marina that has come into service in the old yacht harbour at Yeni Foça; it serves boats from 8-30 m. It offers 7/24 mooring assistance, electricity and water, security/CCTV, showers-WC, laundry, fuel and waste-water station, haul-out and maintenance services. It has sea border gate (Port of Entry) status. The bay is open to the west; the marina is sheltered inside the breakwater.",
-   "es": "Puerto deportivo privado que ha entrado en servicio en el antiguo puerto de yates de Yeni Foça; atiende embarcaciones de 8-30 m. Dispone de servicio de amarradores 7/24, electricidad y agua, seguridad/cámaras, duchas-WC, lavandería, estación de combustible y de aguas residuales, varadero y servicios de mantenimiento. Tiene estatus de puesto fronterizo marítimo (Port of Entry). La cala está abierta al oeste; el puerto deportivo queda abrigado dentro del rompeolas.",
-   "ru": "Частная марина, открывшаяся в старом яхтенном порту Yeni Foça; обслуживает суда длиной 8-30 м. Есть швартовная команда 7/24, электричество и вода, охрана/видеонаблюдение, душ и туалет, прачечная, топливная станция и приём сточных вод, подъём судов и сервисное обслуживание. Имеет статус морского пункта пропуска (Port of Entry). Бухта открыта к западу; марина укрыта за молом."
-  },
-  "yeni-foca-halk-plaji-demirleme": {
-   "en": "Anchorage area off the public beach in the bay of Yeni Foça. The bottom is a mix of sand and seagrass; avoid the weed bands and anchor in the sandy patches. The town centre and the snack bars can be reached by dinghy. The bay is open to the west-southwest; in the meltemi the part close inshore is relatively calm.",
-   "es": "Zona de fondeo frente a la playa pública en la cala de Yeni Foça. El fondo es una mezcla de arena y praderas marinas; hay que evitar las franjas de algas y fondear en las manchas de arena. Al centro del pueblo y a los quioscos se llega con el auxiliar. La cala está abierta al oeste-sudoeste; con meltemi la zona más cercana a la costa queda relativamente tranquila.",
-   "ru": "Якорная стоянка перед общественным пляжем в бухте Yeni Foça. Дно — смесь песка и морской травы; полос травы следует избегать, вставая на якорь на песчаных пятнах. До центра посёлка и киосков можно добраться на тузике. Бухта открыта к западу-юго-западу; при мельтеми участок ближе к берегу относительно спокоен."
-  },
-  "urla-iskele-limani": {
-   "en": "Harbour in the İskele quarter of Urla, south of Karantina Adası and the Çiçek Adaları. It is used by fishing boats and local boat owners; it is usually full every season and finding a free berth is difficult. Beware of the shoals in the passage between the islands and the mainland. There are restaurants and cafes around it.",
-   "es": "Puerto en el barrio de İskele de Urla, al sur de Karantina Adası y de las Çiçek Adaları. Lo utilizan pesqueros y propietarios de embarcaciones locales; suele estar lleno todas las temporadas y es difícil encontrar sitio libre. Hay que prestar atención a los bajos en el paso entre las islas y tierra firme. En los alrededores hay restaurantes y cafeterías.",
-   "ru": "Порт в квартале İskele города Urla, к югу от Karantina Adası и островов Çiçek Adaları. Используется рыбацкими судами и местными владельцами; обычно каждый сезон заполнен, свободное место найти трудно. В проходе между островами и материком остерегайтесь отмелей. Вокруг есть рестораны и кафе."
-  },
-  "dalyankoy-koyu-demirleme": {
-   "en": "Anchorage with a sand bottom in Dalyanköy bay, north of Çeşme; it lies near Alev Adası. The beach and snack bars can be reached by dinghy. The bay is open to the north-northwest sector; its inner part provides reasonable shelter in the meltemi. Dalyanköy's fish restaurants are on the shore.",
-   "es": "Fondeadero de fondo de arena en la cala de Dalyanköy, al norte de Çeşme; se encuentra cerca de Alev Adası. Se puede llegar a la playa y a los chiringuitos en bote auxiliar. La cala está abierta al sector norte-noroeste; su parte interior ofrece una protección razonable con el meltemi. Los restaurantes de pescado de Dalyanköy están en la orilla.",
-   "ru": "Якорная стоянка с песчаным дном в бухте Dalyanköy к северу от Çeşme; расположена рядом с Alev Adası. До пляжа и закусочных можно добраться на тузике. Бухта открыта северо-северо-западному сектору; её внутренняя часть даёт умеренную защиту при мельтеми. Рыбные рестораны Dalyanköy находятся на берегу."
-  },
-  "dalyankoy-yat-limani": {
-   "en": "Small yacht harbour at Dalyanköy; boats moor to the quay/pier, and anchoring inside the harbour is prohibited. Water and pier services are available; there are restaurants on the shore. Entry is through the narrow fish-weir (dalyan) channel; the inner harbour is sheltered.",
-   "es": "Pequeño puerto deportivo en Dalyanköy; se amarra al muelle/pantalán y está prohibido fondear dentro del puerto. Hay agua y servicio de pantalán; en la orilla hay restaurantes. Se entra por el estrecho canal del dalyan (pesquera fija); el interior del puerto está abrigado.",
-   "ru": "Небольшая яхтенная гавань в Dalyanköy; швартовка к причалу/пирсу, якорная стоянка внутри гавани запрещена. Есть вода и причальный сервис; на берегу — рестораны. Вход через узкий проход далиана (рыбной запруды); внутренняя акватория гавани хорошо укрыта."
-  },
-  "mersin-korfezi-demirleme-cesme": {
-   "en": "Mersin Körfezi, on the southern coast of the Çeşme peninsula, east of the entrance to Alaçatı bay. A natural anchorage offering good shelter from all directions; it is safe in the meltemi. There are no facilities ashore.",
-   "es": "Mersin Körfezi, en la costa sur de la península de Çeşme, al este de la entrada de la cala de Alaçatı. Es un fondeadero natural bien protegido de todas las direcciones; es seguro con el meltemi. No hay servicios en tierra.",
-   "ru": "Mersin Körfezi на южном берегу полуострова Çeşme, к востоку от входа в бухту Alaçatı. Естественная якорная стоянка с хорошей защитой со всех направлений; безопасна при мельтеми. На берегу нет инфраструктуры."
-  },
-  "sarpdere-limani-demirleme": {
-   "en": "A natural harbour of three arms (west cove, east cove and Nergis) on the Zeytineli coast of Urla. The bottom is sand with occasional weed patches; holding is good, depth about 4 m. It gives good shelter in the meltemi; in strong northerly winds an uncomfortable short chop can build up in the Nergis arm. There are no facilities ashore.",
-   "es": "Puerto natural de tres brazos (cala oeste, cala este y Nergis) en la costa de Zeytineli, en Urla. El fondo es de arena con algunas manchas de algas; el agarre es bueno, con unos 4 m de profundidad. Ofrece buena protección con el meltemi; con vientos fuertes del norte puede formarse en el brazo de Nergis una ola corta e incómoda. No hay servicios en tierra.",
-   "ru": "Естественная гавань из трёх рукавов (западная бухта, восточная бухта и Nergis) на побережье Zeytineli в Urla. Дно песчаное, местами пятна водорослей; якорь держит хорошо, глубина около 4 м. Даёт хорошую защиту при мельтеми; при сильных северных ветрах в рукаве Nergis может подниматься неприятная короткая волна. На берегу нет инфраструктуры."
-  },
-  "kirkdilim-limani-demirleme": {
-   "en": "A deeply indented natural harbour on the southern coast between Çeşme and Sığacık (Zeytineli shore). Anchor in about 7 m; holding is good. It gives very good shelter from the meltemi. There are no facilities ashore.",
-   "es": "Puerto natural de entrada profunda en la costa sur entre Çeşme y Sığacık (litoral de Zeytineli). Se fondea en unos 7 m; el agarre es bueno. Ofrece muy buena protección del meltemi. No hay servicios en tierra.",
-   "ru": "Глубоко врезанная естественная гавань на южном берегу между Çeşme и Sığacık (побережье Zeytineli). Якорь отдают на глубине около 7 м; держит хорошо. Очень хорошая защита от мельтеми. На берегу нет инфраструктуры."
-  },
-  "teos-limani-demirleme": {
-   "en": "The natural harbour of the ancient city of Teos, south of Sığacık. It gives excellent shelter from the meltemi but is open to the south. The bottom is dense posidonia meadow; holding is good when anchored on the sand patches. The eastern part of the bay shoals. It is 1-2 miles from Teos Marina.",
-   "es": "El puerto natural de la antigua ciudad de Teos, al sur de Sığacık. Ofrece una protección excelente del meltemi, pero está abierto al sur. El fondo es una densa pradera de posidonia; el agarre es bueno si se fondea en las manchas de arena. La parte oriental de la cala pierde profundidad. Está a 1-2 millas de Teos Marina.",
-   "ru": "Естественная гавань античного города Teos к югу от Sığacık. Отличная защита от мельтеми, но стоянка открыта югу. Дно — густые луга посидонии; якорь держит хорошо, если встать на песчаные пятна. Восточная часть бухты мелеет. До Teos Marina 1-2 мили."
-  },
-  "ahmetbeyli-claros-demirleme": {
-   "en": "Ahmetbeyli bay (the shore of the ancient city of Claros), about 5 miles northwest of Kuşadası. It gives shelter from the northerly meltemi and from the westerly swell, but is open to the south. Sand bottom in about 5 m; the sand is hard, and several attempts may be needed for the anchor to bite. It is the main anchorage usable by boat along the Gümüldür-Özdere coastal strip.",
-   "es": "La cala de Ahmetbeyli (el litoral de la antigua ciudad de Claros), a unas 5 millas al noroeste de Kuşadası. Protege del meltemi del norte y de la mar de fondo del oeste, pero está abierta al sur. Fondo de arena en unos 5 m; la arena es dura y pueden hacer falta varios intentos para que el ancla agarre. Es el principal fondeadero utilizable por embarcaciones en la franja costera de Gümüldür-Özdere.",
-   "ru": "Бухта Ahmetbeyli (берег античного города Claros) примерно в 5 милях к северо-западу от Kuşadası. Защищает от северного мельтеми и от западной зыби, открыта югу. Песчаное дно на глубине около 5 м; песок плотный, и якорю может понадобиться несколько попыток, чтобы забрать. Это главная пригодная для судов якорная стоянка на прибрежной полосе Gümüldür-Özdere."
-  },
-  "kusadasi-sahil-demirleme": {
-   "en": "A natural anchorage off the Kuşadası town waterfront, north of Güvercinada; it is recorded as a natural harbour for anchoring only, with no pier moorings. It is open to the west-southwest. The main port is for cruise ships and fishing boats and is closed to yachts; yachts use Setur Marina. When approaching from the south, beware of the reefs off Yılancı Burnu.",
-   "es": "Fondeadero natural frente al litoral urbano de Kuşadası, al norte de Güvercinada; figura registrado como puerto natural solo para fondear, sin amarres de pantalán. Está abierto al oeste-suroeste. El puerto principal es para cruceros y barcos de pesca y está cerrado a los yates; los yates utilizan Setur Marina. Al aproximarse desde el sur hay que prestar atención a los arrecifes frente a Yılancı Burnu.",
-   "ru": "Естественная якорная стоянка у городской набережной Kuşadası, к северу от Güvercinada; числится как естественная гавань только для якорной стоянки, без швартовки к пирсу. Открыта западу-юго-западу. Главный порт предназначен для круизных и рыболовных судов и закрыт для яхт; яхты используют Setur Marina. При подходе с юга следует остерегаться рифов у Yılancı Burnu."
-  },
-  "port-saint-paul-saint-nikolo": {
-   "en": "Two historic natural anchorages on the southern shore of the western tip of the Dilek Peninsula (Samsun Dağı); of the two, Saint Nikolo gives the better shelter. The area lies within the marine zone of the Dilek Yarımadası-Büyük Menderes Deltası National Park; the anchoring/entry conditions for private boats (fees, permits, mooring-buoy arrangements) could not be verified from official sources — confirm with the National Park directorate before using them.",
-   "es": "Dos fondeaderos naturales históricos en la costa sur del extremo occidental de la península de Dilek (Samsun Dağı); de los dos, Saint Nikolo ofrece mejor protección. La zona se encuentra dentro del área marina del Parque Nacional Dilek Yarımadası-Büyük Menderes Deltası; las condiciones de fondeo/acceso para embarcaciones privadas (tarifas, permisos, sistema de boyas) no han podido verificarse en fuentes oficiales — deben confirmarse con la dirección del Parque Nacional antes de utilizarlos.",
-   "ru": "Две исторические естественные якорные стоянки на южном берегу западной оконечности полуострова Dilek (Samsun Dağı); из двух лучшую защиту даёт Saint Nikolo. Район находится в морской зоне национального парка Dilek Yarımadası-Büyük Menderes Deltası; условия якорной стоянки и захода для частных судов (плата, разрешения, буйковая система) не удалось подтвердить по официальным источникам — перед использованием следует уточнить в дирекции национального парка."
-  },
-  "didim-akbuk-marina": {
-   "en": "A small marina and mooring facility inside Akbük bay (north of the Mandalya/Güllük gulf); it offers anchor plus stern-to quay berthing, and berths can be reserved. Akbük bay is sheltered in northerly winds and open to the southern sector.",
-   "es": "Pequeño puerto deportivo e instalación de amarre dentro de la cala de Akbük (al norte del golfo de Mandalya/Güllük); ofrece amarre de popa al muelle con ancla, y se pueden reservar plazas. La cala de Akbük está abrigada con vientos del norte y abierta al sector sur.",
-   "ru": "Небольшая марина и стояночный комплекс в бухте Akbük (север залива Mandalya/Güllük); швартовка кормой к причалу с отдачей якоря, места можно бронировать. Бухта Akbük укрыта при северных ветрах и открыта южному сектору."
-  },
-  "guzelce-marina": {
-   "en": "Private marina at Büyükçekmece; with a capacity of 250 wet berths and 120 dry-storage places, it accepts yachts up to 60 m.",
-   "es": "Puerto deportivo privado en Büyükçekmece; con capacidad para 250 amarres en agua y 120 plazas en tierra, admite yates de hasta 60 m.",
-   "ru": "Частная марина в Büyükçekmece; вместимость 250 мест на воде и 120 на берегу, принимает яхты длиной до 60 м."
-  },
-  "kiyi-istanbul-marina": {
-   "en": "A private marina located in the Kıyı İstanbul complex at Büyükçekmece.",
-   "es": "Puerto deportivo privado situado en el complejo Kıyı İstanbul, en Büyükçekmece.",
-   "ru": "Частная марина в комплексе Kıyı İstanbul в Büyükçekmece."
-  },
-  "kumkuyu-marina": {
-   "en": "Private marina at Kumkuyu, Erdemli, with a capacity of 200 boats; it has an 80-ton travel lift and technical service workshops.",
-   "es": "Puerto deportivo privado en Kumkuyu, Erdemli, con capacidad para 200 embarcaciones; dispone de un travel lift de 80 toneladas y talleres de servicio técnico.",
-   "ru": "Частная марина в Kumkuyu (Erdemli) вместимостью 200 судов; есть травел-лифт грузоподъёмностью 80 тонн и мастерские технического сервиса."
-  },
-  "gazipasa-gold-marina": {
-   "en": "A newly opened private marina at Gazipaşa; near the ancient city of Selinus.",
-   "es": "Puerto deportivo privado recién inaugurado en Gazipaşa; cerca de la antigua ciudad de Selinus.",
-   "ru": "Недавно открывшаяся частная марина в Gazipaşa; рядом с античным городом Selinus."
-  },
-  "kairos-marina": {
-   "en": "Private marina at Datça with a capacity of 246 wet berths and 256 dry-storage places.",
-   "es": "Puerto deportivo privado en Datça con capacidad para 246 amarres en agua y 256 plazas en tierra.",
-   "ru": "Частная марина в Datça вместимостью 246 мест на воде и 256 на берегу."
-  },
-  "marinturk-gocek-exclusive": {
-   "en": "A private marina operated by Marintürk in Poruklu Koyu, Göcek.",
-   "es": "Puerto deportivo privado gestionado por Marintürk en Poruklu Koyu, Göcek.",
-   "ru": "Частная марина под управлением Marintürk в бухте Poruklu Koyu, Göcek."
-  },
-  "aganlar-marina-bodrum": {
-   "en": "Marina and yacht boatyard (haul-out yard) in Bodrum.",
-   "es": "Puerto deportivo y varadero de yates en Bodrum.",
-   "ru": "Марина и верфь для подъёма и берегового хранения яхт в Bodrum."
-  },
-  "gouvia-marina": {
-   "en": "Large marina on Korfu with 1.235 berths and a dry-storage capacity of 520; it accepts yachts up to 80 m.",
-   "es": "Gran puerto deportivo en Korfu con 1.235 amarres y capacidad para 520 plazas en tierra; admite yates de hasta 80 m.",
-   "ru": "Крупная марина на Korfu: 1.235 стояночных мест и 520 мест на берегу; принимает яхты длиной до 80 м."
-  },
-  "kleopatra-marina": {
-   "en": "Marina at Aktion-Preveza with a huge boatyard with a capacity of 1.000; a winter lay-up centre.",
-   "es": "Puerto deportivo en Aktion-Preveza con un enorme varadero con capacidad para 1.000 embarcaciones; centro de invernaje.",
-   "ru": "Марина в Aktion-Preveza и огромная площадка берегового хранения вместимостью 1.000 судов; центр зимней стоянки."
-  },
-  "lefkas-marina": {
-   "en": "Marina on Lefkada with 620 berths and 280 dry-storage places.",
-   "es": "Puerto deportivo en Lefkada con 620 amarres y 280 plazas en tierra.",
-   "ru": "Марина на Lefkada: 620 стояночных мест на воде и 280 на берегу."
-  },
-  "mesolongi-marina": {
-   "en": "A growing marina in the Mesolongi lagoon; dry-storage capacity of 230.",
-   "es": "Puerto deportivo en expansión en la laguna de Mesolongi; capacidad de 230 plazas en tierra.",
-   "ru": "Растущая марина в лагуне Mesolongi; вместимость берегового хранения — 230 мест."
-  },
-  "kalamata-marina": {
-   "en": "Marina in the south of Mora, adjacent to the city centre of Kalamata.",
-   "es": "Puerto deportivo en el sur de Mora, contiguo al centro de la ciudad de Kalamata.",
-   "ru": "Марина на юге Mora, примыкающая к центру города Kalamata."
-  },
-  "zea-marina": {
-   "en": "The historic marina of Pire; 670 berths, stern-to up to 80 m and alongside up to 150 m.",
-   "es": "El puerto deportivo histórico de Pire; 670 amarres, de popa hasta 80 m y de costado hasta 150 m.",
-   "ru": "Историческая марина Pire; 670 стояночных мест, кормой к причалу — до 80 м, лагом — до 150 м."
-  },
-  "athens-marina": {
-   "en": "A marina at Neo Faliro dedicated to mega and super yachts; up to 130 m.",
-   "es": "Puerto deportivo en Neo Faliro dedicado a megayates y superyates; hasta 130 m.",
-   "ru": "Марина в Neo Faliro, предназначенная для мега- и суперъяхт; до 130 м."
-  },
-  "flisvos-marina": {
-   "en": "A megayacht-focused marina at Paleo Faliro; half of its capacity is reserved for yachts over 35 m.",
-   "es": "Puerto deportivo orientado a megayates en Paleo Faliro; la mitad de su capacidad está reservada a yates de más de 35 m.",
-   "ru": "Марина в Paleo Faliro, ориентированная на мегаяхты; половина мест отведена яхтам длиной более 35 м."
-  },
-  "alimos-marina": {
-   "en": "One of the largest marinas in Atina and in all of Greece; 1.080 berths, 600 dry-storage places.",
-   "es": "Uno de los mayores puertos deportivos de Atina y de toda Grecia; 1.080 amarres y 600 plazas en tierra.",
-   "ru": "Одна из крупнейших марин Atina и всей Греции; 1.080 мест на воде, 600 на берегу."
-  },
-  "agios-kosmas-marina": {
-   "en": "Marina at Elliniko (the old airport waterfront) with a capacity of 337 berths; up to 80 m.",
-   "es": "Puerto deportivo en Elliniko (el litoral del antiguo aeropuerto) con capacidad para 337 amarres; hasta 80 m.",
-   "ru": "Марина в Elliniko (побережье бывшего аэропорта) на 337 стояночных мест; до 80 м."
-  },
-  "vouliagmeni-marina": {
-   "en": "The prestigious cove marina of the Atina Riviera.",
-   "es": "El prestigioso puerto deportivo de cala de la Riviera de Atina.",
-   "ru": "Престижная марина в бухте на Ривьере Atina."
-  },
-  "olympic-marine": {
-   "en": "A large marina and boatyard centre at Lavrio/Sounio with 680 berths and a dry-storage capacity of 700.",
-   "es": "Gran puerto deportivo y centro de varada en Lavrio/Sounio, con 680 amarres y capacidad para 700 plazas en tierra.",
-   "ru": "Крупная марина и центр берегового хранения в Lavrio/Sounio: 680 мест на воде и 700 на берегу."
-  },
-  "selanik-aretsou-marina": {
-   "en": "A city marina at Kalamaria, Selanik.",
-   "es": "Puerto deportivo urbano en Kalamaria, Selanik.",
-   "ru": "Городская марина в Kalamaria, Selanik."
-  },
-  "sani-marina": {
-   "en": "A boutique marina within the Sani Resort at Kassandra, Halkidiki.",
-   "es": "Puerto deportivo boutique dentro del Sani Resort en Kassandra, Halkidiki.",
-   "ru": "Бутик-марина при курорте Sani Resort в Kassandra, Halkidiki."
-  },
-  "porto-carras-marina": {
-   "en": "A resort marina at Neos Marmaras, Sithonia; it accepts yachts up to 55 m.",
-   "es": "Puerto deportivo de resort en Neos Marmaras, Sithonia; admite yates de hasta 55 m.",
-   "ru": "Курортная марина в Neos Marmaras, Sithonia; принимает яхты длиной до 55 м."
-  },
-  "midilli-marina": {
-   "en": "Marina on the island of Midilli (Lesvos); on the shore opposite Ayvalık.",
-   "es": "Puerto deportivo en la isla de Midilli (Lesvos); en la costa situada frente a Ayvalık.",
-   "ru": "Марина на острове Midilli (Lesvos); на берегу напротив Ayvalık."
-  },
-  "samos-marina": {
-   "en": "Marina at Pythagorio (Samos) with 260 berths and 170 dry-storage places; opposite Kuşadası.",
-   "es": "Puerto deportivo en Pythagorio (Samos) con 260 amarres y 170 plazas en tierra; frente a Kuşadası.",
-   "ru": "Марина в Pythagorio (Samos): 260 мест на воде и 170 на берегу; напротив Kuşadası."
-  },
-  "leros-marina": {
-   "en": "Marina in the natural harbour of Lakki (Leros) with a boatyard with a capacity of 500; 160-ton lift.",
-   "es": "Puerto deportivo en el puerto natural de Lakki (Leros) con un varadero con capacidad para 500 embarcaciones; grúa de 160 toneladas.",
-   "ru": "Марина в естественной гавани Lakki (Leros) и площадка берегового хранения на 500 судов; подъёмник грузоподъёмностью 160 тонн."
-  },
-  "kos-marina": {
-   "en": "Fully equipped marina on the island of Kos (İstanköy); the coast opposite Bodrum. 100-ton travel lift.",
-   "es": "Puerto deportivo totalmente equipado en la isla de Kos (İstanköy); la costa frente a Bodrum. Travel-lift de 100 toneladas.",
-   "ru": "Полностью оборудованная марина на острове Kos (İstanköy); берег напротив Bodrum. Травел-лифт на 100 тонн."
-  },
-  "rodos-marina": {
-   "en": "Marina on the island of Rodos with a capacity of 600 berths; accepts mega yachts.",
-   "es": "Puerto deportivo en la isla de Rodos con capacidad para 600 amarres; admite megayates.",
-   "ru": "Марина на острове Rodos на 600 стояночных мест; принимает мегаяхты."
-  },
-  "marina-symi-pedi": {
-   "en": "Marina opened in 2021 in Pedi bay on the island of Symi; 2 km from Gialos. Electricity and water connection at every mooring berth, free Wi-Fi, showers/WC. Opposite the Datça-Bozburun coast.",
-   "es": "Puerto deportivo inaugurado en 2021 en la cala de Pedi, en la isla de Symi; a 2 km de Gialos. Conexión de electricidad y agua en cada amarre, Wi-Fi gratuito, duchas/WC. Frente a la costa de Datça-Bozburun.",
-   "ru": "Марина, открытая в 2021 году в бухте Pedi на острове Symi; 2 км до Gialos. На каждом стояночном месте подключение электричества и воды, бесплатный Wi-Fi, душ/туалет. Напротив побережья Datça-Bozburun."
-  },
-  "symi-gialos-rihtimi": {
-   "en": "Town quay in Gialos, Symi's iconic main harbour; stern-to mooring, the harbour attendant directs you to a berth. Watch out for the ferry wash. There are water/electricity points on the quay, but availability varies — confirm on arrival.",
-   "es": "Muelle del pueblo en Gialos, el icónico puerto principal de Symi; amarre de popa, el encargado del puerto indica el sitio. Atención a la marejada de los ferris. Hay puntos de agua/electricidad en el muelle, pero su disponibilidad es variable — confírmelo a la llegada.",
-   "ru": "Городская набережная в Gialos, знаменитой главной гавани Symi; швартовка кормой, место указывает служащий порта. Остерегайтесь волны от паромов. На причале есть точки воды/электричества, но их доступность непостоянна — уточняйте по прибытии."
-  },
-  "symi-panormitis-iskelesi": {
-   "en": "In the sheltered bay of the famous Panormitis Monastery in the south of Symi, a C-shaped pier (70 m) and a quay (120 m). Calm berthing for yachts and sailboats; depth up to 5 m at the pier head.",
-   "es": "En la cala protegida del famoso Monasterio de Panormitis, al sur de Symi, un pantalán en forma de C (70 m) y un muelle (120 m). Atraque tranquilo para yates y veleros; profundidad de hasta 5 m en la cabecera del pantalán.",
-   "ru": "В защищённой бухте знаменитого монастыря Panormitis на юге Symi — пирс C-образной формы (70 м) и причал (120 м). Спокойная стоянка для яхт и парусников; глубина у оконечности пирса до 5 м."
-  },
-  "rodos-mandraki-limani": {
-   "en": "The historic yacht harbour of Rodos — on the site of the ancient Kolossos, with a view of three windmills. Stern-to mooring; water + 220V on the quay, fuel by tanker truck, WC/hot showers next to the office. Reserving a berth at least 48 hours in advance is recommended; there are old mooring lines on the bottom, so leave plenty of scope.",
-   "es": "El histórico puerto de yates de Rodos — en el emplazamiento del antiguo Kolossos, con vistas a tres molinos de viento. Amarre de popa; agua + 220V en el muelle, combustible por camión cisterna, WC/duchas de agua caliente junto a la oficina. Se recomienda reservar plaza con al menos 48 horas de antelación; en el fondo hay antiguas líneas de amarre, así que deje bastante cadena.",
-   "ru": "Исторический яхтенный порт Rodos — на месте античного Kolossos, с видом на три ветряные мельницы. Швартовка кормой; на причале вода + 220V, топливо с автоцистерны, туалет/горячий душ рядом с офисом. Рекомендуется бронировать место минимум за 48 часов; на дне лежат старые муринги, поэтому потравите побольше цепи."
-  },
-  "kastellorizo-meis-rihtimi": {
-   "en": "The colourful town quay of Meis island, 2 nautical miles across from Kaş; 82 m pier, -6,3 m depth. It is a PORT OF ENTRY into Greece (customs/passport formalities are handled) — the first stop for boats crossing over from Turkey. Electricity, water, Wi-Fi, showers/WC on the quay.",
-   "es": "El colorido muelle del pueblo de la isla de Meis, a 2 millas náuticas frente a Kaş; pantalán de 82 m, profundidad de -6,3 m. Es PUERTO DE ENTRADA a Grecia (se realizan trámites de aduana/pasaporte) — primera escala para las embarcaciones que cruzan desde Turquía. Electricidad, agua, Wi-Fi, duchas/WC en el muelle.",
-   "ru": "Колоритная городская набережная острова Meis в 2 морских милях напротив Kaş; пирс 82 м, глубина -6,3 м. Это ПОРТ ВХОДА в Грецию (оформляются таможенные/паспортные формальности) — первая остановка для судов, идущих из Турции. На причале электричество, вода, Wi-Fi, душ/туалет."
-  },
-  "tilos-livadia-rihtimi": {
-   "en": "Municipal quay in Livadia, the main harbour of the island of Tilos; room for up to 35 boats, fresh water and electricity connection. The south arm of the pier is ~50 m, usable depth -8 m. Well sheltered inside the harbour wall; space for berthing alongside is limited.",
-   "es": "Muelle municipal en Livadia, el puerto principal de la isla de Tilos; sitio para hasta 35 embarcaciones, agua dulce y conexión eléctrica. El brazo sur del pantalán mide ~50 m, con una profundidad utilizable de -8 m. Bien protegido dentro del muro del puerto; el espacio para atracar de costado es limitado.",
-   "ru": "Муниципальный причал в Livadia, главной гавани острова Tilos; места до 35 судов, пресная вода и подключение электричества. Южное плечо пирса ~50 м, рабочая глубина -8 м. Внутри портовой стены хорошая защита; мест для швартовки лагом мало."
-  },
-  "lindos-koyu": {
-   "en": "Anchorage bay below the acropolis of Lindos, the symbol of Rodos — described in the pilot guide as 'one of the most special stops of the Dodecanese'. Sheltered, with a matchless view; can get crowded in the summer months.",
-   "es": "Fondeadero bajo la acrópolis de Lindos, símbolo de Rodos — la guía náutica lo describe como 'una de las escalas más especiales del Dodecaneso'. Protegido, con vistas incomparables; puede estar concurrido en los meses de verano.",
-   "ru": "Якорная бухта под акрополем Lindos, символом Rodos — в лоции значится как 'одна из самых особенных стоянок Додеканеса'. Защищённая, с несравненным видом; в летние месяцы может быть многолюдно."
-  },
-  "anthony-quinn-koyu": {
-   "en": "Small bay on the east coast of Rodos, famous for its turquoise waters and rocky arms; it takes its name from the actor who shot a film here in 1961. Anchor in 8-10 m on sand; plenty of scope is recommended.",
-   "es": "Pequeña cala en la costa este de Rodos, famosa por sus aguas turquesas y sus brazos rocosos; toma su nombre del actor que rodó aquí una película en 1961. Se fondea en 8-10 m sobre arena; se recomienda dar bastante cadena.",
-   "ru": "Небольшая бухта на восточном берегу Rodos, знаменитая бирюзовой водой и скалистыми мысами; названа в честь актёра, снимавшего здесь фильм в 1961 году. Якорь отдают на 8-10 м на песке; рекомендуется потравить побольше цепи."
-  },
-  "simi-nanou-koyu": {
-   "en": "Quiet anchorage bay on the east coast of Symi, surrounded by high cliffs; noted in the pilot guide as a 'privacy spot'. A seasonal taverna may be found ashore.",
-   "es": "Tranquilo fondeadero en la costa este de Symi, rodeado de altos acantilados; la guía lo menciona como un 'rincón de privacidad'. En la orilla puede haber una taberna de temporada.",
-   "ru": "Тихая якорная бухта на восточном берегу Symi, окружённая высокими скалами; в лоции упоминается как 'место уединения'. На берегу может работать сезонная таверна."
-  },
-  "simi-marathounta-koyu": {
-   "en": "Secluded anchorage bay with a pebble beach in the southeast of Symi; a short boat ride from Pedi and Gialos.",
-   "es": "Fondeadero solitario con playa de guijarros en el sureste de Symi; a corta distancia en barco de Pedi y Gialos.",
-   "ru": "Уединённая якорная бухта с галечным пляжем на юго-востоке Symi; в нескольких минутах хода на лодке от Pedi и Gialos."
-  },
-  "simi-emporios-koyu": {
-   "en": "Emporios (Nimborios) bay to the northwest of Gialos — within walking distance of the main harbour, a quieter anchoring alternative.",
-   "es": "La cala de Emporios (Nimborios), al noroeste de Gialos — a poca distancia a pie del puerto principal, una alternativa de fondeo más tranquila.",
-   "ru": "Бухта Emporios (Nimborios) к северо-западу от Gialos — в пешей доступности от главной гавани, более спокойная альтернатива для якорной стоянки."
-  },
-  "simi-agios-vasileios-koyu": {
-   "en": "Sheltered anchorage bay on the west coast of Symi, known for its small chapel; caution is needed in westerly winds.",
-   "es": "Fondeadero protegido en la costa oeste de Symi, conocido por su pequeña capilla; hay que tener precaución con los vientos del oeste.",
-   "ru": "Защищённая якорная бухта на западном берегу Symi, известная своей маленькой часовней; при западных ветрах следует соблюдать осторожность."
-  },
-  "istinye-tekne-park-yakit": {
-   "en": "Fuel jetty (Türk Petrol) inside İstmarin Tekne Park in İstinye bay on the Bosphorus.",
-   "es": "Pantalán de combustible (Türk Petrol) dentro de İstmarin Tekne Park, en la cala de İstinye, en el Bósforo.",
-   "ru": "Топливный причал (Türk Petrol) на территории İstmarin Tekne Park в бухте İstinye на Босфоре."
-  },
-  "setur-kusadasi-yakit": {
-   "en": "OPET fuel jetty inside Setur Kuşadası Marina.",
-   "es": "Pantalán de combustible OPET dentro de Setur Kuşadası Marina.",
-   "ru": "Топливный причал OPET на территории Setur Kuşadası Marina."
-  },
-  "ecesaray-fethiye-yakit": {
-   "en": "OPET fuel jetty inside Ece Saray Marina in Fethiye.",
-   "es": "Pantalán de combustible OPET dentro de Ece Saray Marina, en Fethiye.",
-   "ru": "Топливный причал OPET на территории Ece Saray Marina в Fethiye."
-  },
-  "setur-kalamis-yakit": {
-   "en": "OPET fuel jetty inside Setur Kalamış-Fenerbahçe Marina.",
-   "es": "Pantalán de combustible OPET dentro de Setur Kalamış-Fenerbahçe Marina.",
-   "ru": "Топливный причал OPET на территории Setur Kalamış-Fenerbahçe Marina."
-  },
-  "netsel-marmaris-yakit": {
-   "en": "OPET fuel jetty inside Netsel Marina in Marmaris.",
-   "es": "Pantalán de combustible OPET dentro de Netsel Marina, en Marmaris.",
-   "ru": "Топливный причал OPET на территории Netsel Marina в Marmaris."
-  },
-  "setur-ayvalik-yakit": {
-   "en": "OPET fuel jetty inside Setur Ayvalık Marina.",
-   "es": "Pantalán de combustible OPET dentro de Setur Ayvalık Marina.",
-   "ru": "Топливный причал OPET на территории Setur Ayvalık Marina."
-  },
-  "setur-yalova-yakit": {
-   "en": "OPET fuel jetty inside Setur Yalova Marina.",
-   "es": "Pantalán de combustible OPET dentro de Setur Yalova Marina.",
-   "ru": "Топливный причал OPET на территории Setur Yalova Marina."
-  },
-  "kas-marina-yakit": {
-   "en": "OPET fuel jetty inside Kaş Marina — the fuelling point of the Meis/Kekova route.",
-   "es": "Pantalán de combustible OPET dentro de Kaş Marina — el punto de repostaje de la ruta Meis/Kekova.",
-   "ru": "Топливный причал OPET на территории Kaş Marina — пункт заправки на маршруте Meis/Kekova."
-  },
-  "finike-marina-yakit": {
-   "en": "OPET fuel jetty inside Setur Finike Marina.",
-   "es": "Pantalán de combustible OPET dentro de Setur Finike Marina.",
-   "ru": "Топливный причал OPET на территории Setur Finike Marina."
-  },
-  "mersin-yat-limani-yakit": {
-   "en": "OPET fuel jetty inside Mersin Yat Limanı — one of the main fuelling points of the Eastern Mediterranean.",
-   "es": "Pantalán de combustible OPET dentro de Mersin Yat Limanı — uno de los principales puntos de repostaje del Mediterráneo oriental.",
-   "ru": "Топливный причал OPET на территории Mersin Yat Limanı — один из главных пунктов заправки Восточного Средиземноморья."
-  },
-  "oren-gokova-yakit": {
-   "en": "OPET fuel jetty inside Gökova Ören Marina — on the northern shore of the Gulf of Gökova.",
-   "es": "Pantalán de combustible OPET dentro de Gökova Ören Marina — en la costa norte del golfo de Gökova.",
-   "ru": "Топливный причал OPET на территории Gökova Ören Marina — северный берег залива Gökova."
-  },
-  "atakoy-marina-yakit": {
-   "en": "Moil Deniz fuel jetty inside Ataköy Marina.",
-   "es": "Pantalán de combustible Moil Deniz dentro de Ataköy Marina.",
-   "ru": "Топливный причал Moil Deniz на территории Ataköy Marina."
-  },
-  "city-port-kartal-yakit": {
-   "en": "Shell fuel jetty inside Kartal City Port Marina.",
-   "es": "Pantalán de combustible Shell dentro de Kartal City Port Marina.",
-   "ru": "Топливный причал Shell на территории Kartal City Port Marina."
-  },
-  "yalikavak-marina-yakit": {
-   "en": "Lukoil fuel jetty inside Yalıkavak Marina in Bodrum — with mega-yacht capacity.",
-   "es": "Pantalán de combustible Lukoil dentro de Yalıkavak Marina, en Bodrum — con capacidad para megayates.",
-   "ru": "Топливный причал Lukoil на территории Yalıkavak Marina в Bodrum — принимает мегаяхты."
-  },
-  "teos-marina-yakit": {
-   "en": "Petrol Ofisi fuel jetty inside Teos Marina in Sığacık.",
-   "es": "Pantalán de combustible Petrol Ofisi dentro de Teos Marina, en Sığacık.",
-   "ru": "Топливный причал Petrol Ofisi на территории Teos Marina в Sığacık."
-  },
-  "milta-bodrum-yakit": {
-   "en": "Petrol Ofisi fuel station inside Milta Bodrum Marina. Petrol Ofisi opened its seventh marina station in Muğla and sixteenth across Türkiye here in August 2025 (the previous operator was Aytemiz).",
-   "es": "Estación de combustible Petrol Ofisi dentro de Milta Bodrum Marina. Petrol Ofisi abrió aquí en agosto de 2025 su séptima estación de marina en Muğla y la decimosexta de Türkiye (el operador anterior era Aytemiz).",
-   "ru": "Топливная станция Petrol Ofisi в марине Milta Bodrum. В августе 2025 года Petrol Ofisi открыла здесь свою седьмую маринную станцию в Muğla и шестнадцатую по Türkiye (прежним оператором была Aytemiz)."
-  },
-  "gokkaya-koyu-kekova": {
-   "en": "The largest bay of Kekova; sheltered from all directions. Anchor in 7-8 m on mud, the holding is good. There are restaurants in the bay; the Smugglers Inn at the head of the narrow channel offers a pick-up service from your boat. Caution: an isolated rock with 3,5 m of water over it lies west of the islets.",
-   "es": "La cala más grande de Kekova; protegida de todas las direcciones. Se fondea en 7-8 m sobre fango, con buen agarre. Hay restaurantes en la cala; el Smugglers Inn, al comienzo del paso estrecho, ofrece servicio de recogida desde el barco. Atención: al oeste de los islotes hay una roca aislada con 3,5 m de agua por encima.",
-   "ru": "Самая большая бухта Kekova; защищена со всех направлений. Якорь отдают на 7-8 м, илистое дно, держит хорошо. В бухте есть рестораны; Smugglers Inn у входа в узкий пролив забирает гостей прямо с лодки. Внимание: к западу от островков лежит одиночная скала, над которой 3,5 м воды."
-  },
-  "kalekoy-simena-restoran-pontonlari": {
-   "en": "Three restaurant pontoons at Kaleköy, below the castle of Simena (Likya, Hasan's Roma, Hassan Deniz) — each ~50 m, taking 2-3 yachts on each side. Water, electricity and Wi-Fi on the pontoons; laundry service available. Depths at the pontoons are 4,5-14 m. When anchoring, the holding is poor (rock under mud/weed) and strong westerly winds send in swell — mooring to a pontoon, or anchoring at Üçağız and coming over by dinghy, is recommended. Kaleköy is a popular stop for the day-trip boats out of Kaş/Üçağız/Demre — it is busy during daytime hours.",
-   "es": "Tres pontones de restaurante en Kaleköy, bajo el castillo de Simena (Likya, Hasan's Roma, Hassan Deniz) — cada uno de ~50 m, con capacidad para 2-3 yates por banda. Agua, electricidad y Wi-Fi en los pontones; hay servicio de lavandería. Las profundidades en los pontones son de 4,5-14 m. Al fondear, el agarre es pobre (roca bajo fango/algas) y el viento fuerte del oeste mete marejada — se recomienda amarrar a un pontón o fondear en Üçağız y acercarse en la auxiliar. Kaleköy es una escala popular de las embarcaciones de excursión que salen de Kaş/Üçağız/Demre — está muy animado durante las horas del día.",
-   "ru": "Три ресторанных понтона в Kaleköy под крепостью Simena (Likya, Hasan's Roma, Hassan Deniz) — каждый ~50 м, принимает по 2-3 яхты с каждой стороны. На понтонах вода, электричество и Wi-Fi; есть услуга стирки. Глубины у понтонов 4,5-14 м. На якоре держит плохо (скала под слоем ила/водорослей), а сильный западный ветер нагоняет волну — рекомендуется швартоваться к понтону либо встать на якорь в Üçağız и подойти на тузике. Kaleköy — популярная остановка прогулочных судов из Kaş/Üçağız/Demre — в дневные часы здесь оживлённо."
-  },
-  "kekova-tersane-koyu": {
-   "en": "Sheltered bay in the northwest of Kekova Island, with the ruins of a Byzantine church at the head of the bay. Anchor in 4-5 m on sand, good holding; there are rope holes in the rocks for stern lines. In season, day-trip boat traffic is heavy between 09:00-20:00 — plan your arrival/departure times accordingly.",
-   "es": "Cala protegida en el noroeste de la isla de Kekova, con las ruinas de una iglesia bizantina al fondo de la cala. Se fondea en 4-5 m sobre arena, con buen agarre; en las rocas hay orificios para pasar los cabos de popa. En temporada el tráfico de barcos de excursión es intenso entre las 09:00-20:00 — planifique la hora de llegada/salida en consecuencia.",
-   "ru": "Защищённая бухта на северо-западе острова Kekova с руинами византийской церкви в вершине бухты. Якорь отдают на 4-5 м на песке, держит хорошо; в скалах есть отверстия для кормовых концов. В сезон с 09:00 до 20:00 интенсивное движение прогулочных судов — планируйте время прихода/ухода с учётом этого."
-  },
-  "karaloz-limani-kekova": {
-   "en": "A hidden fjord on the south side of Kekova Island (Port Saint Stefano), completely landlocked and sheltered from all four directions. 8-10 m at the entrance, 7-14 m in the southern part; mud/weed bottom, good holding. Stern lines are recommended; gusty squalls of wind can occur. It is completely deserted.",
-   "es": "Un fiordo escondido en el sur de la isla de Kekova (Port Saint Stefano), completamente rodeado de tierra y protegido de las cuatro direcciones. 8-10 m en la entrada, 7-14 m en la parte sur; fondo de fango/algas, buen agarre. Se recomiendan cabos de popa; puede haber rachas violentas de viento. Está completamente deshabitado.",
-   "ru": "Скрытый фьорд на юге острова Kekova (Port Saint Stefano), полностью окружённый сушей и защищённый со всех четырёх сторон. На входе 8-10 м, в южной части 7-14 м; дно ил/водоросли, держит хорошо. Рекомендуются кормовые концы; возможны шквалистые порывы ветра. Совершенно безлюдно."
+  "round": "i18n-tur2",
+  "note": "Veri çevirisi TUR 2 — batch5(genişleme)+batch6(İstanbul)+batch7(Doğu Akdeniz)+batch8(Ege marina)+batch9(Yunanistan)+batch10(Symi)+batch11(GR koylar)+batch12(TR tamamlama), 104 nokta × EN/ES/RU. Kural: adlar çevrilmez; rakamlar TR kaynakla birebir (üretici doğrular).",
+  "translations": {
+    "poyrazkoy-balikci-barinagi": {
+      "en": "A harbour 1,5 miles from the Black Sea exit of the İstanbul Boğazı, protected by a 470 m main breakwater; boats anchor behind the breakwater or moor to the quay. Holding is good and it is sheltered from all directions. Fuel can reportedly be brought in on request, and minor repair facilities are reported.",
+      "es": "Refugio a 1,5 millas de la salida del İstanbul Boğazı al mar Negro, protegido por un rompeolas principal de 470 m; las embarcaciones fondean tras el rompeolas o se amarran al muelle. El agarre es bueno y está abrigado de todas las direcciones. Se informa de que se puede traer combustible bajo pedido y de que hay posibilidad de pequeñas reparaciones.",
+      "ru": "Гавань в 1,5 мили от черноморского выхода İstanbul Boğazı, защищённая главным молом длиной 470 м; суда встают на якорь за молом или швартуются к причалу. Якорь держит хорошо, укрытие со всех направлений. Сообщается, что по запросу можно доставить топливо и выполнить мелкий ремонт."
+    },
+    "cam-limani-koyu-heybeliada": {
+      "en": "On the southwest of Heybeliada, the only natural anchorage genuinely sheltered from the prevailing north/northeast winds of the Adalar. Holding is good on a sand and weed bottom; on weekends it hosts the 50-60 boats that come from İstanbul.",
+      "es": "En el suroeste de Heybeliada, el único fondeadero natural realmente abrigado de los vientos dominantes del norte/nordeste de las Adalar. El agarre es bueno sobre fondo de arena y algas; los fines de semana acoge 50-60 embarcaciones procedentes de İstanbul.",
+      "ru": "На юго-западе Heybeliada — единственная естественная якорная стоянка, по-настоящему укрытая от господствующих северных/северо-восточных ветров Adalar. Якорь держит хорошо на песчаном дне с водорослями; по выходным принимает 50-60 судов, приходящих из İstanbul."
+    },
+    "buyukada-kuzey-demirleme": {
+      "en": "Anchorage area on the north coast of Büyükada, west of the ferry pier, in 3-5 m depth over a sand and weed bottom. As it is exposed to the prevailing north/northeast winds, it is suitable only in calm weather; overnight stays are not recommended.",
+      "es": "Zona de fondeo en la costa norte de Büyükada, al oeste del embarcadero de los ferris, con 3-5 m de sonda sobre fondo de arena y algas. Al estar expuesta a los vientos dominantes del norte/nordeste, solo es adecuada con tiempo en calma; no se recomienda pernoctar.",
+      "ru": "Якорная стоянка у северного берега Büyükada, к западу от паромного причала, на глубине 3-5 м, дно — песок с водорослями. Открыта господствующим северным/северо-восточным ветрам, поэтому подходит только в тихую погоду; ночёвка не рекомендуется."
+    },
+    "burgazada-restoran-samandiralari": {
+      "en": "South of the eastern pier on Burgazada there are about 15 mooring buoys laid by the shoreside restaurants; in the lee of the pier there is reasonable shelter. Except in very calm weather it is not suitable for overnight stays; it is mainly a lunch stop.",
+      "es": "Al sur del embarcadero oriental de Burgazada hay unas 15 boyas de amarre instaladas por los restaurantes de la costa; a sotavento del embarcadero ofrece un abrigo razonable. Salvo con tiempo muy en calma no es adecuado para pernoctar; es sobre todo una parada para almorzar.",
+      "ru": "К югу от восточного пирса Burgazada выставлено около 15 швартовных буёв, установленных прибрежными ресторанами; с подветренной стороны пирса укрытие приемлемое. Кроме совсем тихой погоды для ночёвки не подходит — это в основном остановка на обед."
+    },
+    "buyukada-balikci-barinagi": {
+      "en": "Harbour on Büyükada with a capacity of about 80 boats and a 115 m breakwater; electricity, water and fuel are reported to be available. It is used mainly by local and fishing boats.",
+      "es": "Refugio en Büyükada con capacidad para unas 80 embarcaciones y un rompeolas de 115 m; se informa de que dispone de electricidad, agua y combustible. Lo utilizan sobre todo embarcaciones locales y pesqueros.",
+      "ru": "Гавань на Büyükada вместимостью около 80 судов с молом длиной 115 м; сообщается о наличии электричества, воды и топлива. Используется в основном местными и рыбацкими судами."
+    },
+    "marmara-adasi-limani": {
+      "en": "Municipal harbour in the main settlement of Marmara Adası; capacity is about 125 boats, and 6-8 visiting yachts can berth bows-to/stern-to on the north quay. Shelter is good in the prevailing north/northeast winds, though squally gusts can come down off the mountain. Depths alongside the quay are 1,5-2,5 m; deep-draught boats should anchor off the quay.",
+      "es": "Puerto municipal en el núcleo principal de Marmara Adası; tiene capacidad para unas 125 embarcaciones y en el muelle norte pueden amarrarse de proa/popa 6-8 yates visitantes. El abrigo es bueno con los vientos dominantes del norte/nordeste, aunque pueden bajar rachas violentas desde la montaña. La sonda junto al muelle es de 1,5-2,5 m; los barcos de mucho calado deben fondear frente al muelle.",
+      "ru": "Муниципальный порт в главном посёлке Marmara Adası; вместимость около 125 судов, на северном причале 6-8 гостевых яхт могут швартоваться носом/кормой к причалу. Укрытие хорошее при господствующих северных/северо-восточных ветрах, но с горы могут срываться шквалистые порывы. Глубины у причала 1,5-2,5 м; судам с большой осадкой следует встать на якорь напротив причала."
+    },
+    "saraylar-limani": {
+      "en": "Municipal harbour on the north of Marmara Adası, built of marble blocks; about 50 yachts (maximum 15 m) can berth alongside or stern-to on the eastern breakwater. Holding is good in the mud bottom and shelter is very good. The western quay is shallow (~1,5 m).",
+      "es": "Refugio municipal en el norte de Marmara Adası, construido con bloques de mármol; unos 50 yates (máximo 15 m) pueden amarrarse abarloados o de popa al rompeolas oriental. El agarre es bueno en fondo de fango y el abrigo es muy bueno. El muelle occidental es poco profundo (~1,5 m).",
+      "ru": "Муниципальная гавань на севере Marmara Adası, построенная из мраморных блоков; около 50 яхт (максимум 15 м) могут швартоваться лагом или кормой к восточному молу. Илистое дно держит якорь хорошо, укрытие очень хорошее. Западный причал мелководный (~1,5 м)."
+    },
+    "yigitler-limani-avsa": {
+      "en": "Harbour of the village of Yiğitler on the east coast of Avşa Adası; visiting boats berth stern-to on the west wall of the eastern basin or come alongside with two anchors, and a municipal official collects the mooring fee. Holding is good in the sand bottom, and shelter in the eastern basin is good.",
+      "es": "Puerto del pueblo de Yiğitler, en la costa este de Avşa Adası; las embarcaciones visitantes se amarran de popa al muro oeste de la dársena oriental o se atracan con dos anclas, y un empleado municipal cobra la tarifa de amarre. El agarre es bueno en fondo de arena y el abrigo en la dársena oriental es bueno.",
+      "ru": "Порт деревни Yiğitler на восточном берегу Avşa Adası; гостевые суда швартуются кормой к западной стенке восточного бассейна или подходят на двух якорях, плату за стоянку взимает служащий муниципалитета. Песчаное дно держит якорь хорошо, укрытие в восточном бассейне хорошее."
+    },
+    "avsa-turkeli-demirleme": {
+      "en": "Anchorage area off the main settlement of Türkeli on the west coast of Avşa Adası; the town offers a wide range of markets, restaurants and guesthouses. There are sea bus/ferry connections to İstanbul. It is exposed to winds from the western sector.",
+      "es": "Zona de fondeo frente al núcleo principal de Türkeli, en la costa oeste de Avşa Adası; el pueblo ofrece una amplia oferta de supermercados, restaurantes y pensiones. Hay conexiones de catamarán rápido/ferri con İstanbul. Está expuesta a los vientos del sector oeste.",
+      "ru": "Якорная стоянка напротив главного посёлка Türkeli на западном берегу Avşa Adası; в городке широкий выбор магазинов, ресторанов и пансионов. Есть сообщение морским автобусом/паромом с İstanbul. Стоянка открыта ветрам западного сектора."
+    },
+    "ekinlik-adasi-demirleme": {
+      "en": "Anchorage area over a sand bottom off Ekinlik (Koutali) Adası, northwest of Avşa; anchoring is free. Ashore there are a small snack bar and a beach; there is no water and no pier service.",
+      "es": "Zona de fondeo sobre fondo de arena frente a Ekinlik (Koutali) Adası, al noroeste de Avşa; el fondeo es libre. En tierra hay un pequeño quiosco y una playa; no hay agua ni servicio de muelle.",
+      "ru": "Якорная стоянка с песчаным дном у Ekinlik (Koutali) Adası, к северо-западу от Avşa; якорная стоянка свободная. На берегу есть небольшой киоск и пляж; воды и причального сервиса нет."
+    },
+    "pasalimani-adasi-demirleme": {
+      "en": "Open anchorage off Paşalimanı Adası in 5-10 m over a sand and weed bottom; once the anchor sets in the bottom, holding is good. Ashore there are a restaurant and a bakery.",
+      "es": "Fondeadero abierto frente a Paşalimanı Adası, en 5-10 m sobre fondo de arena y algas; una vez que el ancla agarra en el fondo, el agarre es bueno. En tierra hay un restaurante y una panadería.",
+      "ru": "Открытая якорная стоянка у Paşalimanı Adası на глубине 5-10 м, дно — песок с водорослями; когда якорь заберёт за грунт, держит хорошо. На берегу есть ресторан и пекарня."
+    },
+    "karabiga-limani": {
+      "en": "Harbour at Karabiga, in the district of Biga, working as a fishing and dry-cargo pier; yachts usually berth stern-to on the outer face of the fishing quay, and if necessary the commercial quay to the north is used. In east/northeast winds an uncomfortable swell enters, and anchor holding is reported to be poor. There is no water or electricity.",
+      "es": "Puerto de Karabiga, dependiente de Biga, que funciona como muelle pesquero y de carga seca; los yates suelen amarrarse de popa a la cara exterior del muelle pesquero y, si es necesario, se utiliza el muelle comercial del norte. Con vientos del este/nordeste entra una marejada incómoda y se ha informado de que el agarre del ancla es deficiente. No hay agua ni electricidad.",
+      "ru": "Порт в Karabiga (район Biga), работающий как рыбацкий и сухогрузный причал; яхты обычно швартуются кормой к внешней стороне рыбацкого причала, при необходимости используется коммерческий причал севернее. При восточных/северо-восточных ветрах заходит неприятная зыбь; сообщается, что якорь держит плохо. Воды и электричества нет."
+    },
+    "cakilkoy-balikci-barinagi": {
+      "en": "Large harbour with a 695 m breakwater on the east coast of the Kapıdağ Yarımadası, 6 miles northeast of Bandırma; as the quay is full of trawlers, visiting boats anchor at the northern end of the harbour. Holding is good and it is a sheltered stopover point.",
+      "es": "Gran refugio con un rompeolas de 695 m en la costa este de la Kapıdağ Yarımadası, 6 millas al nordeste de Bandırma; como el muelle está lleno de arrastreros, las embarcaciones visitantes fondean en el extremo norte del refugio. El agarre es bueno y es un punto de escala abrigado.",
+      "ru": "Большая гавань с молом длиной 695 м на восточном берегу Kapıdağ Yarımadası, в 6 милях к северо-востоку от Bandırma; причал занят траулерами, поэтому гостевые суда встают на якорь в северной части гавани. Якорь держит хорошо, это укрытая промежуточная стоянка."
+    },
+    "sarkoy-limani": {
+      "en": "Harbour in the district centre of Şarköy; visiting boats can berth stern-to or alongside. Electricity, water, showers, WC and fuel (diesel/petrol) are reported to be available.",
+      "es": "Puerto en el centro del municipio de Şarköy; las embarcaciones visitantes pueden amarrarse de popa o abarloadas. Se informa de que dispone de electricidad, agua, duchas, WC y combustible (diésel/gasolina).",
+      "ru": "Порт в центре района Şarköy; гостевые суда могут швартоваться кормой или лагом. Сообщается о наличии электричества, воды, душа, туалета и топлива (дизель/бензин)."
+    },
+    "bozcaada-limani": {
+      "en": "The main harbour in the northeast of Bozcaada, at the foot of the castle. Visiting boats berth stern-to or alongside along the breakwater; ground chain tackle is laid ~40 m off the shore. It provides adequate shelter from all directions except east-southeast winds. There are 13 water/electricity points on the quay. The official yacht capacity is 30 (TKYGM list); together with fishing boats it holds ~125 vessels in total. Maximum draught ~3 m. Fuel supply by tanker, slipway/haul-out, ice and rope supply are reported.",
+      "es": "El puerto principal del nordeste de Bozcaada, al pie del castillo. Las embarcaciones visitantes se amarran de popa o abarloadas a lo largo del rompeolas; hay una cadena madre fondeada a ~40 m de la costa. Ofrece abrigo suficiente de todas las direcciones salvo de los vientos del este-sudeste. En el muelle hay 13 tomas de agua/electricidad. La capacidad oficial para yates es de 30 (lista TKYGM); junto con los pesqueros alberga en total ~125 embarcaciones. Calado máximo ~3 m. Se informa de suministro de combustible por camión cisterna, rampa/varadero, hielo y suministro de cabos.",
+      "ru": "Главный порт на северо-востоке Bozcaada, у подножия крепости. Гостевые суда швартуются кормой или лагом вдоль волнолома; в ~40 м от берега проложена донная цепь для швартовки. Обеспечивает достаточное укрытие со всех направлений, кроме восточно-юго-восточных ветров. На причале 13 точек воды/электричества. Официальная вместимость для яхт — 30 (список TKYGM); вместе с рыбацкими судами всего вмещает ~125 судов. Максимальная осадка ~3 м. Сообщается о заправке топливом с автоцистерны, слипе/подъёме судов, льде и продаже швартовных концов."
+    },
+    "gokceada-kalekoy-limani": {
+      "en": "The new harbour on the north coast of Gökçeada; the most suitable berthing place for yachts on the island. Boats berth alongside the north breakwater; if it is full, you may have to go alongside fishing boats. Depths are 5,0-5,5 m at the entrance and 3,0-3,5 m at the north quay; at the entrance beware of the sand shoal off the end of the north breakwater. Excellent shelter from all directions. There are water and electricity points along the quay and fish restaurants ashore; there is no fuel. A minibus leaves for the centre every hour.",
+      "es": "El puerto nuevo de la costa norte de Gökçeada; el lugar de amarre más adecuado para los yates en la isla. Se amarra abarloado al rompeolas norte; si está lleno, puede ser necesario abarloarse a los pesqueros. La sonda es de 5,0-5,5 m en la entrada y de 3,0-3,5 m en el muelle norte; en la entrada hay que prestar atención al bajo de arena junto al extremo del rompeolas norte. Abrigo excelente de todas las direcciones. A lo largo del muelle hay tomas de agua y electricidad y en la costa hay restaurantes de pescado; no hay combustible. Cada hora sale un microbús hacia el centro.",
+      "ru": "Новый порт на северном берегу Gökçeada; самое удобное место швартовки для яхт на острове. Швартуются лагом вдоль северного волнолома; если занято, возможно, придётся вставать лагом к рыбацким судам. Глубины 5,0-5,5 м на входе и 3,0-3,5 м у северного причала; на входе остерегайтесь песчаной отмели у оконечности северного волнолома. Отличное укрытие со всех направлений. Вдоль причала — точки воды и электричества, на берегу — рыбные рестораны; топлива нет. Каждый час в центр отправляется маршрутка."
+    },
+    "gokceada-kuzu-limani": {
+      "en": "The old main harbour and ferry pier at the northeastern tip of the island, operated by TDİ. It is a cramped harbour with limited facilities for yachts, but it gives good shelter, especially in north-northeast winds, and is used as a harbour of refuge in bad weather. It may be full of local boats. Water supply is limited and there is no fuel station. Kaleköy, 3 miles away, is a better alternative.",
+      "es": "El antiguo puerto principal y embarcadero del ferri en el extremo nordeste de la isla, gestionado por TDİ. Es un puerto angosto con instalaciones limitadas para yates, pero ofrece buen abrigo, sobre todo con vientos del norte-nordeste, y se utiliza como puerto de refugio con mal tiempo. Puede estar lleno de embarcaciones locales. El suministro de agua es limitado y no hay estación de combustible. Kaleköy, a 3 millas, es una alternativa mejor.",
+      "ru": "Старый главный порт и паромный причал на северо-восточной оконечности острова; находится в ведении TDİ. Тесный порт с ограниченными возможностями для яхт, но даёт хорошее укрытие, особенно при северо-северо-восточных ветрах; в плохую погоду используется как порт-убежище. Может быть занят местными судами. Снабжение водой ограничено, топливной станции нет. Kaleköy в 3 милях — лучшая альтернатива."
+    },
+    "behramkale-assos-limani": {
+      "en": "A small historic stone harbour below the ancient city of Assos; fish restaurants line the quay and visiting boats moor in front of the restaurants. Capacity ~50 boats (mostly local/excursion boats). The breakwaters shut out the north winds; as the entrance is narrow, care is needed on a night approach. It can be uncomfortable in winds from the southwest sector. Electricity, drinking water and WC are available.",
+      "es": "Pequeño puerto histórico de piedra bajo la ciudad antigua de Assos; los restaurantes de pescado se alinean a lo largo del muelle y las embarcaciones visitantes se amarran frente a los restaurantes. Capacidad ~50 embarcaciones (la mayoría barcos locales/de excursión). Los rompeolas cierran el paso a los vientos del norte; como la entrada es estrecha, hay que tener cuidado en la aproximación nocturna. Puede resultar incómodo con vientos del sector sudoeste. Hay electricidad, agua potable y WC.",
+      "ru": "Маленький исторический каменный порт под античным городом Assos; вдоль причала выстроились рыбные рестораны, и гостевые суда швартуются перед ресторанами. Вместимость ~50 судов (в основном местные/экскурсионные). Волноломы закрывают от северных ветров; вход узкий, поэтому при ночном подходе нужна осторожность. При ветрах юго-западного сектора может быть некомфортно. Есть электричество, питьевая вода и туалет."
+    },
+    "kucukkuyu-limani": {
+      "en": "The breakwater-protected harbour of the town of Küçükkuyu on the northern shore of the Edremit Körfezi, at the foot of Kazdağı. Although it is mainly a shelter for fishing and excursion boats, it is possible to berth at the pier/quay. It is sheltered in winds from the northern sector. Markets and restaurants in the town are within walking distance.",
+      "es": "Puerto protegido por rompeolas de la localidad de Küçükkuyu, en la costa norte del Edremit Körfezi, a los pies del Kazdağı. Aunque es sobre todo un refugio de pesqueros y barcos de excursión, es posible amarrarse al embarcadero/muelle. Está abrigado con vientos del sector norte. Los supermercados y restaurantes del pueblo quedan a poca distancia a pie.",
+      "ru": "Защищённый волноломом порт посёлка Küçükkuyu на северном берегу Edremit Körfezi, у подножия Kazdağı. Хотя это в основном стоянка рыбацких и прогулочных судов, швартовка к пирсу/причалу возможна. Укрыт при ветрах северного сектора. Магазины и рестораны посёлка — в пешей доступности."
+    },
+    "burhaniye-oren-yat-limani": {
+      "en": "Municipally operated yacht harbour and adjoining fishing shelter at Burhaniye İskele/Ören, in the southeast of the Edremit Körfezi. Capacity ~250 boats; the entrance is straightforward and depths inside the harbour are 3-4 m. The main breakwater is 537 m; there is a slipway. Winds from the northern sector prevail in the area, and it is advisable to get assistance when mooring. Renovation works were carried out in 2023-24 and a coastal facility operating licence was obtained. Fuel can be supplied by tanker, and there is a yacht chandlery in the area.",
+      "es": "Puerto deportivo de gestión municipal y refugio pesquero contiguo en Burhaniye İskele/Ören, en el sudeste del Edremit Körfezi. Capacidad ~250 embarcaciones; la entrada no presenta problemas y la sonda dentro del puerto es de 3-4 m. El rompeolas principal mide 537 m; hay rampa de varada. En la zona predominan los vientos del sector norte y se recomienda pedir ayuda al amarrar. En 2023-24 se realizaron obras de renovación y se obtuvo la licencia de explotación de instalación costera. Se puede repostar combustible mediante camión cisterna y en los alrededores hay una tienda de efectos navales.",
+      "ru": "Яхтенный порт под управлением муниципалитета и прилегающая рыбацкая гавань в местечке Burhaniye İskele/Ören, на юго-востоке Edremit Körfezi. Вместимость ~250 судов; вход несложный, глубины в порту 3-4 м. Главный волнолом — 537 м; есть слип. В районе преобладают ветры северного сектора, при швартовке рекомендуется брать помощь. В 2023-24 годах проведены работы по реконструкции и получена лицензия на эксплуатацию берегового объекта. Возможна заправка топливом с автоцистерны, поблизости есть магазин яхтенного снаряжения."
+    },
+    "alibey-cunda-adasi-limani": {
+      "en": "Town quay of Cunda (Alibey) island, in the northwest of the Ayvalık inner sea. For visiting yachts there are 15 ready laid stern moorings tied to the quay plus additional buoys; the quay front is lined with restaurants. Depths inside the harbour are 2-3 m, the anchorage south of the pier is ~5 m and holding is good. Capacity ~145 boats. Being in the inner sea, it is well sheltered from all directions. Haul-out for boats up to 25 m and fuel supply by tanker are reported.",
+      "es": "Muelle del pueblo de la isla de Cunda (Alibey), en el noroeste del mar interior de Ayvalık. Para los yates visitantes hay 15 muertos ya instalados con guías al muelle y boyas adicionales; el frente del muelle está rodeado de restaurantes. La sonda dentro del puerto es de 2-3 m, el fondeadero al sur del embarcadero tiene ~5 m y el agarre es bueno. Capacidad ~145 embarcaciones. Al estar en el mar interior, está bien abrigado de todas las direcciones. Se informa de varadero para esloras de hasta 25 m y de suministro de combustible por camión cisterna.",
+      "ru": "Городской причал острова Cunda (Alibey) на северо-западе внутреннего моря Ayvalık. Для гостевых яхт есть 15 готовых мёртвых якорей с оттяжками к причалу и дополнительные буи; набережная у причала окружена ресторанами. Глубины в порту 2-3 м, якорная стоянка южнее пирса ~5 м, якорь держит хорошо. Вместимость ~145 судов. Благодаря расположению во внутреннем море хорошо укрыт со всех направлений. Сообщается о подъёме судов длиной до 25 м и заправке топливом с автоцистерны."
+    },
+    "patrica-koyu": {
+      "en": "A large, well-sheltered anchorage bay on the north of Cunda (Alibey) island; in pilot sources it appears as Patricia Liman / Gökçeliman, and locally it is known as Patriça bay. It lies within a natural protected area; there are no facilities ashore, and day-trip boats and yachts anchor here. It is close to the entrance of the Ayvalık inner sea.",
+      "es": "Amplia cala de fondeo bien abrigada en el norte de la isla de Cunda (Alibey); en las fuentes de derrotero figura como Patricia Liman / Gökçeliman y localmente se conoce como cala de Patriça. Se encuentra dentro de un área natural protegida; no hay instalaciones en tierra, y fondean aquí barcos de excursión y yates. Está cerca de la entrada del mar interior de Ayvalık.",
+      "ru": "Просторная, хорошо укрытая якорная бухта на севере острова Cunda (Alibey); в лоцманских источниках фигурирует как Patricia Liman / Gökçeliman, у местных известна как бухта Patriça. Находится в границах природоохранной зоны; на берегу нет никакой инфраструктуры, на якорь встают прогулочные суда и яхты. Расположена недалеко от входа во внутреннее море Ayvalık."
+    },
+    "maden-adasi-demirleme": {
+      "en": "Anchorage bay on Maden Adası, northwest of Ayvalık, giving good shelter from the meltemi. You anchor in about 5 m on a sand bottom, and holding is good. There is a shoal at the entrance of the bay, so approach with care. There are no facilities ashore.",
+      "es": "Cala de fondeo en Maden Adası, al noroeste de Ayvalık, que ofrece buen abrigo frente al meltemi. Se fondea en unos 5 m sobre fondo de arena y el agarre es bueno. Hay un bajo en la entrada de la cala, por lo que hay que aproximarse con cuidado. No hay instalaciones en tierra.",
+      "ru": "Якорная бухта на Maden Adası к северо-западу от Ayvalık, дающая хорошее укрытие от мельтеми. Встают на якорь на глубине около 5 м на песчаном дне, якорь держит хорошо. У входа в бухту есть отмель, подходить следует осторожно. На берегу инфраструктуры нет."
+    },
+    "moska-adasi-demirleme": {
+      "en": "Anchorage in the Ayvalık inner sea, at the southern end of the channel between Moska island and Alibey island. It gives good shelter in winds from the southern sector. There are no facilities ashore; it is used for daytime and overnight anchoring.",
+      "es": "Fondeadero en el mar interior de Ayvalık, en el extremo sur del canal entre la isla de Moska y la isla de Alibey. Ofrece buen abrigo con vientos del sector sur. No hay instalaciones en tierra; se utiliza para fondear de día y para pernoctar.",
+      "ru": "Якорная стоянка во внутреннем море Ayvalık, у южного конца пролива между островами Moska и Alibey. Даёт хорошее укрытие при ветрах южного сектора. На берегу инфраструктуры нет; используется для дневной и ночной якорной стоянки."
+    },
+    "kumru-koyu-demirleme": {
+      "en": "A very attractive anchorage bay in the south of the Ayvalık inner sea, completely enclosed by land. It gives shelter from all directions. There are no facilities ashore.",
+      "es": "Una cala de fondeo muy atractiva en el sur del mar interior de Ayvalık, completamente rodeada de tierra. Ofrece abrigo de todas las direcciones. No hay instalaciones en tierra.",
+      "ru": "Очень привлекательная якорная бухта на юге внутреннего моря Ayvalık, полностью окружённая сушей. Даёт укрытие со всех направлений. На берегу инфраструктуры нет."
+    },
+    "camlik-koyu-demirleme-ayvalik": {
+      "en": "Anchorage bay at Çamlık, south of Ayvalık, with a view of Çanak Tepe. It gives good shelter except in wind blowing from the south. There is a restaurant ashore; as its own jetty could not be confirmed, you anchor and go ashore by dinghy.",
+      "es": "Cala de fondeo en Çamlık, al sur de Ayvalık, con vistas a Çanak Tepe. Ofrece buen abrigo salvo con viento del sur. En la costa hay un restaurante; como no se ha podido confirmar que tenga embarcadero propio, se fondea y se desembarca con el auxiliar.",
+      "ru": "Якорная бухта в местечке Çamlık к югу от Ayvalık с видом на Çanak Tepe. Даёт хорошее укрытие, кроме ветра, дующего с юга. На берегу есть ресторан; наличие собственного причала не подтверждено, поэтому встают на якорь и высаживаются на тузике."
+    },
+    "dikili-limani": {
+      "en": "District harbour of Dikili, opposite the island of Midilli; in the shelter section next to the commercial pier there is room for 6-7 visiting yachts. You drop anchor and berth stern-to/bows-to the quay; there are no ready laid moorings. Depths inside the harbour are 4-5 m; the approach is clear and easy. Electricity, drinking water and fuel are available on the quay; there are fish restaurants along the waterfront. Total capacity ~160 boats.",
+      "es": "Puerto del municipio de Dikili, frente a la isla de Midilli; en la zona de refugio junto al muelle comercial hay sitio para 6-7 yates visitantes. Se fondea el ancla y se amarra de popa/proa al muelle; no hay muertos instalados. La sonda dentro del puerto es de 4-5 m; la aproximación es limpia y fácil. En el muelle se puede obtener electricidad, agua potable y combustible; en el paseo marítimo hay restaurantes de pescado. Capacidad total ~160 embarcaciones.",
+      "ru": "Порт района Dikili напротив острова Midilli; в гаванной части рядом с коммерческим пирсом есть место для 6-7 гостевых яхт. Отдают якорь и швартуются кормой/носом к причалу; готовых мёртвых якорей нет. Глубины в порту 4-5 м; подход свободный и лёгкий. На причале можно взять электричество, питьевую воду и топливо; на набережной — рыбные рестораны. Общая вместимость ~160 судов."
+    },
+    "bademli-deniz-ilicasi-koyu": {
+      "en": "Anchorage bay on the Bademli coast of Dikili, just north of Kalem Adası. You anchor on a mixed sand and rock bottom; lines can be taken ashore. It has a beach that can be reached by dinghy; there are no facilities, water or pier ashore. It is known for its shallow thermal springs.",
+      "es": "Cala de fondeo en la costa de Bademli, en Dikili, justo al norte de Kalem Adası. Se fondea sobre un fondo mixto de arena y roca; se pueden dar cabos a tierra. Tiene una playa a la que se llega con el auxiliar; en tierra no hay instalaciones, agua ni embarcadero. Es conocida por sus manantiales termales someros.",
+      "ru": "Якорная бухта у побережья Bademli в районе Dikili, сразу к северу от Kalem Adası. Встают на якорь на смешанном песчано-каменистом дне; можно завести концы на берег. Есть пляж, доступный на тузике; на берегу нет инфраструктуры, воды и причала. Известна мелководными термальными источниками."
+    },
+    "kalem-adasi-koyu": {
+      "en": "Anchorage bay of the privately run Kalem Adası, ~450 m off the mainland, off Bademli in Dikili; it is referred to as the 'Maldives of the Aegean'. Different sides of the island offer different shelter; the west side faces the open sea. On the island there are a hotel, a beach club and a restaurant (going ashore is subject to the operator's permission). Markets and restaurants can be reached in the village of Bademli.",
+      "es": "Cala de fondeo de Kalem Adası, isla de gestión privada situada a ~450 m de tierra firme, frente a Bademli, en Dikili; se la conoce como las 'Maldivas del Egeo'. Las distintas caras de la isla ofrecen distinto abrigo; la cara oeste mira al mar abierto. En la isla hay un hotel, un club de playa y un restaurante (el desembarco está sujeto al permiso del operador). En el pueblo de Bademli se puede acceder a supermercados y restaurantes.",
+      "ru": "Якорная бухта частного острова Kalem Adası, в ~450 м от материка, напротив Bademli в районе Dikili; его называют 'Мальдивами Эгейского моря'. Разные стороны острова дают разное укрытие; западная сторона обращена к открытому морю. На острове есть отель, пляжный клуб и ресторан (высадка на берег — с разрешения администрации). В деревне Bademli доступны магазины и рестораны."
+    },
+    "candarli-limani": {
+      "en": "Town harbour in the Çandarlı Körfezi, at the foot of the famous Genoese castle. In the anchorage off the castle you anchor in 4-8 m on a mud bottom; holding is very good, though plough-type anchors may drag in the soft mud. It gives shelter from all directions except the southern sector; the prevailing northerlies do not raise a sea. Electricity, pressurised water, drinking water and fuel are available on the quay; in the town there are restaurants, markets, repair workshops, a diving centre and a sailing club.",
+      "es": "Puerto del pueblo en el Çandarlı Körfezi, al pie del famoso castillo genovés. En el fondeadero frente al castillo se fondea en 4-8 m sobre fondo de fango; el agarre es muy bueno, aunque las anclas de tipo arado pueden garrear en el fango blando. Ofrece abrigo de todas las direcciones salvo del sector sur; los vientos dominantes del norte no levantan mar. En el muelle hay electricidad, agua a presión, agua potable y combustible; en el pueblo hay restaurantes, supermercados, talleres de reparación, un centro de buceo y un club de vela.",
+      "ru": "Городской порт в Çandarlı Körfezi, у подножия знаменитой генуэзской крепости. На якорной стоянке перед крепостью встают на якорь на глубине 4-8 м на илистом дне; держит очень хорошо, но в мягком иле плуговые якоря могут ползти. Даёт укрытие со всех направлений, кроме южного сектора; господствующие северные ветры волну не разводят. На причале есть электричество, вода под давлением, питьевая вода и топливо; в городке — рестораны, магазины, ремонтные мастерские, дайвинг-центр и парусный клуб."
+    },
+    "mordogan-yeni-limani": {
+      "en": "The new harbour of Mordoğan, built in 2003; the old harbour is for fishing boats, and although the new harbour is unfinished it can be used for shelter. It provides protection behind the breakwater. There are numerous reefs on the approach between the harbour and the town of Mordoğan, so approach carefully. No electricity or water services are reported.",
+      "es": "El nuevo refugio de Mordoğan, construido en 2003; el puerto viejo es para los pesqueros y, aunque el puerto nuevo está sin terminar, puede utilizarse para abrigarse. Ofrece protección tras el rompeolas. En la aproximación entre el puerto y el pueblo de Mordoğan hay numerosos arrecifes, por lo que hay que aproximarse con cuidado. No se informa de servicios de electricidad ni de agua.",
+      "ru": "Новая гавань Mordoğan, построенная в 2003 году; старый порт предназначен для рыбацких судов, а новая гавань, хотя и не достроена, пригодна для укрытия. Защиту даёт мол. На подходе между гаванью и посёлком Mordoğan множество рифов, подходить следует осторожно. Об электричестве и воде не сообщается."
+    },
+    "egri-liman-demirleme": {
+      "en": "Natural anchorage bay on the west coast of the Karaburun peninsula, at the mouth of the Gerence Körfezi. It gives shelter from almost every direction, including the meltemi; however, in strong north and south winds swell can enter the bay. The entrance is about 300 m wide, with 20 m depth at the entrance; there are reefs around and three rocky islets offshore, so a night entry is not recommended. The bottom is mud and weed; the bottom shelves steeply, so beware of the sudden change in depth.",
+      "es": "Cala de fondeo natural en la costa oeste de la península de Karaburun, en la boca del Gerence Körfezi. Ofrece abrigo de casi todas las direcciones, incluido el meltemi; sin embargo, con vientos fuertes del norte y del sur puede entrar marejada en la cala. La entrada tiene unos 300 m de ancho, con 20 m de sonda en la entrada; alrededor hay arrecifes y, mar afuera, tres islotes rocosos, por lo que no se recomienda entrar de noche. El fondo es de fango y algas; la pendiente del fondo es pronunciada: atención al cambio brusco de profundidad.",
+      "ru": "Естественная якорная бухта на западном берегу полуострова Karaburun, у входа в Gerence Körfezi. Даёт укрытие почти со всех направлений, включая мельтеми; однако при сильных северных и южных ветрах в бухту может заходить зыбь. Вход шириной около 300 м, глубина на входе 20 м; вокруг рифы, а мористее — три скалистых островка, ночной заход не рекомендуется. Дно — ил и водоросли; свал глубин крутой, остерегайтесь резкого изменения глубины."
+    },
+    "oasis-marina-yeni-foca": {
+      "en": "A private marina that has come into service in the old yacht harbour at Yeni Foça; it serves boats from 8-30 m. It offers 7/24 mooring assistance, electricity and water, security/CCTV, showers-WC, laundry, fuel and waste-water station, haul-out and maintenance services. It has sea border gate (Port of Entry) status. The bay is open to the west; the marina is sheltered inside the breakwater.",
+      "es": "Puerto deportivo privado que ha entrado en servicio en el antiguo puerto de yates de Yeni Foça; atiende embarcaciones de 8-30 m. Dispone de servicio de amarradores 7/24, electricidad y agua, seguridad/cámaras, duchas-WC, lavandería, estación de combustible y de aguas residuales, varadero y servicios de mantenimiento. Tiene estatus de puesto fronterizo marítimo (Port of Entry). La cala está abierta al oeste; el puerto deportivo queda abrigado dentro del rompeolas.",
+      "ru": "Частная марина, открывшаяся в старом яхтенном порту Yeni Foça; обслуживает суда длиной 8-30 м. Есть швартовная команда 7/24, электричество и вода, охрана/видеонаблюдение, душ и туалет, прачечная, топливная станция и приём сточных вод, подъём судов и сервисное обслуживание. Имеет статус морского пункта пропуска (Port of Entry). Бухта открыта к западу; марина укрыта за молом."
+    },
+    "yeni-foca-halk-plaji-demirleme": {
+      "en": "Anchorage area off the public beach in the bay of Yeni Foça. The bottom is a mix of sand and seagrass; avoid the weed bands and anchor in the sandy patches. The town centre and the snack bars can be reached by dinghy. The bay is open to the west-southwest; in the meltemi the part close inshore is relatively calm.",
+      "es": "Zona de fondeo frente a la playa pública en la cala de Yeni Foça. El fondo es una mezcla de arena y praderas marinas; hay que evitar las franjas de algas y fondear en las manchas de arena. Al centro del pueblo y a los quioscos se llega con el auxiliar. La cala está abierta al oeste-sudoeste; con meltemi la zona más cercana a la costa queda relativamente tranquila.",
+      "ru": "Якорная стоянка перед общественным пляжем в бухте Yeni Foça. Дно — смесь песка и морской травы; полос травы следует избегать, вставая на якорь на песчаных пятнах. До центра посёлка и киосков можно добраться на тузике. Бухта открыта к западу-юго-западу; при мельтеми участок ближе к берегу относительно спокоен."
+    },
+    "urla-iskele-limani": {
+      "en": "Harbour in the İskele quarter of Urla, south of Karantina Adası and the Çiçek Adaları. It is used by fishing boats and local boat owners; it is usually full every season and finding a free berth is difficult. Beware of the shoals in the passage between the islands and the mainland. There are restaurants and cafes around it.",
+      "es": "Puerto en el barrio de İskele de Urla, al sur de Karantina Adası y de las Çiçek Adaları. Lo utilizan pesqueros y propietarios de embarcaciones locales; suele estar lleno todas las temporadas y es difícil encontrar sitio libre. Hay que prestar atención a los bajos en el paso entre las islas y tierra firme. En los alrededores hay restaurantes y cafeterías.",
+      "ru": "Порт в квартале İskele города Urla, к югу от Karantina Adası и островов Çiçek Adaları. Используется рыбацкими судами и местными владельцами; обычно каждый сезон заполнен, свободное место найти трудно. В проходе между островами и материком остерегайтесь отмелей. Вокруг есть рестораны и кафе."
+    },
+    "dalyankoy-koyu-demirleme": {
+      "en": "Anchorage with a sand bottom in Dalyanköy bay, north of Çeşme; it lies near Alev Adası. The beach and snack bars can be reached by dinghy. The bay is open to the north-northwest sector; its inner part provides reasonable shelter in the meltemi. Dalyanköy's fish restaurants are on the shore.",
+      "es": "Fondeadero de fondo de arena en la cala de Dalyanköy, al norte de Çeşme; se encuentra cerca de Alev Adası. Se puede llegar a la playa y a los chiringuitos en bote auxiliar. La cala está abierta al sector norte-noroeste; su parte interior ofrece una protección razonable con el meltemi. Los restaurantes de pescado de Dalyanköy están en la orilla.",
+      "ru": "Якорная стоянка с песчаным дном в бухте Dalyanköy к северу от Çeşme; расположена рядом с Alev Adası. До пляжа и закусочных можно добраться на тузике. Бухта открыта северо-северо-западному сектору; её внутренняя часть даёт умеренную защиту при мельтеми. Рыбные рестораны Dalyanköy находятся на берегу."
+    },
+    "dalyankoy-yat-limani": {
+      "en": "Small yacht harbour at Dalyanköy; boats moor to the quay/pier, and anchoring inside the harbour is prohibited. Water and pier services are available; there are restaurants on the shore. Entry is through the narrow fish-weir (dalyan) channel; the inner harbour is sheltered.",
+      "es": "Pequeño puerto deportivo en Dalyanköy; se amarra al muelle/pantalán y está prohibido fondear dentro del puerto. Hay agua y servicio de pantalán; en la orilla hay restaurantes. Se entra por el estrecho canal del dalyan (pesquera fija); el interior del puerto está abrigado.",
+      "ru": "Небольшая яхтенная гавань в Dalyanköy; швартовка к причалу/пирсу, якорная стоянка внутри гавани запрещена. Есть вода и причальный сервис; на берегу — рестораны. Вход через узкий проход далиана (рыбной запруды); внутренняя акватория гавани хорошо укрыта."
+    },
+    "mersin-korfezi-demirleme-cesme": {
+      "en": "Mersin Körfezi, on the southern coast of the Çeşme peninsula, east of the entrance to Alaçatı bay. A natural anchorage offering good shelter from all directions; it is safe in the meltemi. There are no facilities ashore.",
+      "es": "Mersin Körfezi, en la costa sur de la península de Çeşme, al este de la entrada de la cala de Alaçatı. Es un fondeadero natural bien protegido de todas las direcciones; es seguro con el meltemi. No hay servicios en tierra.",
+      "ru": "Mersin Körfezi на южном берегу полуострова Çeşme, к востоку от входа в бухту Alaçatı. Естественная якорная стоянка с хорошей защитой со всех направлений; безопасна при мельтеми. На берегу нет инфраструктуры."
+    },
+    "sarpdere-limani-demirleme": {
+      "en": "A natural harbour of three arms (west cove, east cove and Nergis) on the Zeytineli coast of Urla. The bottom is sand with occasional weed patches; holding is good, depth about 4 m. It gives good shelter in the meltemi; in strong northerly winds an uncomfortable short chop can build up in the Nergis arm. There are no facilities ashore.",
+      "es": "Puerto natural de tres brazos (cala oeste, cala este y Nergis) en la costa de Zeytineli, en Urla. El fondo es de arena con algunas manchas de algas; el agarre es bueno, con unos 4 m de profundidad. Ofrece buena protección con el meltemi; con vientos fuertes del norte puede formarse en el brazo de Nergis una ola corta e incómoda. No hay servicios en tierra.",
+      "ru": "Естественная гавань из трёх рукавов (западная бухта, восточная бухта и Nergis) на побережье Zeytineli в Urla. Дно песчаное, местами пятна водорослей; якорь держит хорошо, глубина около 4 м. Даёт хорошую защиту при мельтеми; при сильных северных ветрах в рукаве Nergis может подниматься неприятная короткая волна. На берегу нет инфраструктуры."
+    },
+    "kirkdilim-limani-demirleme": {
+      "en": "A deeply indented natural harbour on the southern coast between Çeşme and Sığacık (Zeytineli shore). Anchor in about 7 m; holding is good. It gives very good shelter from the meltemi. There are no facilities ashore.",
+      "es": "Puerto natural de entrada profunda en la costa sur entre Çeşme y Sığacık (litoral de Zeytineli). Se fondea en unos 7 m; el agarre es bueno. Ofrece muy buena protección del meltemi. No hay servicios en tierra.",
+      "ru": "Глубоко врезанная естественная гавань на южном берегу между Çeşme и Sığacık (побережье Zeytineli). Якорь отдают на глубине около 7 м; держит хорошо. Очень хорошая защита от мельтеми. На берегу нет инфраструктуры."
+    },
+    "teos-limani-demirleme": {
+      "en": "The natural harbour of the ancient city of Teos, south of Sığacık. It gives excellent shelter from the meltemi but is open to the south. The bottom is dense posidonia meadow; holding is good when anchored on the sand patches. The eastern part of the bay shoals. It is 1-2 miles from Teos Marina.",
+      "es": "El puerto natural de la antigua ciudad de Teos, al sur de Sığacık. Ofrece una protección excelente del meltemi, pero está abierto al sur. El fondo es una densa pradera de posidonia; el agarre es bueno si se fondea en las manchas de arena. La parte oriental de la cala pierde profundidad. Está a 1-2 millas de Teos Marina.",
+      "ru": "Естественная гавань античного города Teos к югу от Sığacık. Отличная защита от мельтеми, но стоянка открыта югу. Дно — густые луга посидонии; якорь держит хорошо, если встать на песчаные пятна. Восточная часть бухты мелеет. До Teos Marina 1-2 мили."
+    },
+    "ahmetbeyli-claros-demirleme": {
+      "en": "Ahmetbeyli bay (the shore of the ancient city of Claros), about 5 miles northwest of Kuşadası. It gives shelter from the northerly meltemi and from the westerly swell, but is open to the south. Sand bottom in about 5 m; the sand is hard, and several attempts may be needed for the anchor to bite. It is the main anchorage usable by boat along the Gümüldür-Özdere coastal strip.",
+      "es": "La cala de Ahmetbeyli (el litoral de la antigua ciudad de Claros), a unas 5 millas al noroeste de Kuşadası. Protege del meltemi del norte y de la mar de fondo del oeste, pero está abierta al sur. Fondo de arena en unos 5 m; la arena es dura y pueden hacer falta varios intentos para que el ancla agarre. Es el principal fondeadero utilizable por embarcaciones en la franja costera de Gümüldür-Özdere.",
+      "ru": "Бухта Ahmetbeyli (берег античного города Claros) примерно в 5 милях к северо-западу от Kuşadası. Защищает от северного мельтеми и от западной зыби, открыта югу. Песчаное дно на глубине около 5 м; песок плотный, и якорю может понадобиться несколько попыток, чтобы забрать. Это главная пригодная для судов якорная стоянка на прибрежной полосе Gümüldür-Özdere."
+    },
+    "kusadasi-sahil-demirleme": {
+      "en": "A natural anchorage off the Kuşadası town waterfront, north of Güvercinada; it is recorded as a natural harbour for anchoring only, with no pier moorings. It is open to the west-southwest. The main port is for cruise ships and fishing boats and is closed to yachts; yachts use Setur Marina. When approaching from the south, beware of the reefs off Yılancı Burnu.",
+      "es": "Fondeadero natural frente al litoral urbano de Kuşadası, al norte de Güvercinada; figura registrado como puerto natural solo para fondear, sin amarres de pantalán. Está abierto al oeste-suroeste. El puerto principal es para cruceros y barcos de pesca y está cerrado a los yates; los yates utilizan Setur Marina. Al aproximarse desde el sur hay que prestar atención a los arrecifes frente a Yılancı Burnu.",
+      "ru": "Естественная якорная стоянка у городской набережной Kuşadası, к северу от Güvercinada; числится как естественная гавань только для якорной стоянки, без швартовки к пирсу. Открыта западу-юго-западу. Главный порт предназначен для круизных и рыболовных судов и закрыт для яхт; яхты используют Setur Marina. При подходе с юга следует остерегаться рифов у Yılancı Burnu."
+    },
+    "port-saint-paul-saint-nikolo": {
+      "en": "Two historic natural anchorages on the southern shore of the western tip of the Dilek Peninsula (Samsun Dağı); of the two, Saint Nikolo gives the better shelter. The area lies within the marine zone of the Dilek Yarımadası-Büyük Menderes Deltası National Park; the anchoring/entry conditions for private boats (fees, permits, mooring-buoy arrangements) could not be verified from official sources — confirm with the National Park directorate before using them.",
+      "es": "Dos fondeaderos naturales históricos en la costa sur del extremo occidental de la península de Dilek (Samsun Dağı); de los dos, Saint Nikolo ofrece mejor protección. La zona se encuentra dentro del área marina del Parque Nacional Dilek Yarımadası-Büyük Menderes Deltası; las condiciones de fondeo/acceso para embarcaciones privadas (tarifas, permisos, sistema de boyas) no han podido verificarse en fuentes oficiales — deben confirmarse con la dirección del Parque Nacional antes de utilizarlos.",
+      "ru": "Две исторические естественные якорные стоянки на южном берегу западной оконечности полуострова Dilek (Samsun Dağı); из двух лучшую защиту даёт Saint Nikolo. Район находится в морской зоне национального парка Dilek Yarımadası-Büyük Menderes Deltası; условия якорной стоянки и захода для частных судов (плата, разрешения, буйковая система) не удалось подтвердить по официальным источникам — перед использованием следует уточнить в дирекции национального парка."
+    },
+    "didim-akbuk-marina": {
+      "en": "A small marina and mooring facility inside Akbük bay (north of the Mandalya/Güllük gulf); it offers anchor plus stern-to quay berthing, and berths can be reserved. Akbük bay is sheltered in northerly winds and open to the southern sector.",
+      "es": "Pequeño puerto deportivo e instalación de amarre dentro de la cala de Akbük (al norte del golfo de Mandalya/Güllük); ofrece amarre de popa al muelle con ancla, y se pueden reservar plazas. La cala de Akbük está abrigada con vientos del norte y abierta al sector sur.",
+      "ru": "Небольшая марина и стояночный комплекс в бухте Akbük (север залива Mandalya/Güllük); швартовка кормой к причалу с отдачей якоря, места можно бронировать. Бухта Akbük укрыта при северных ветрах и открыта южному сектору."
+    },
+    "guzelce-marina": {
+      "en": "Private marina at Büyükçekmece; with a capacity of 250 wet berths and 120 dry-storage places, it accepts yachts up to 60 m.",
+      "es": "Puerto deportivo privado en Büyükçekmece; con capacidad para 250 amarres en agua y 120 plazas en tierra, admite yates de hasta 60 m.",
+      "ru": "Частная марина в Büyükçekmece; вместимость 250 мест на воде и 120 на берегу, принимает яхты длиной до 60 м."
+    },
+    "kiyi-istanbul-marina": {
+      "en": "A private marina located in the Kıyı İstanbul complex at Büyükçekmece.",
+      "es": "Puerto deportivo privado situado en el complejo Kıyı İstanbul, en Büyükçekmece.",
+      "ru": "Частная марина в комплексе Kıyı İstanbul в Büyükçekmece."
+    },
+    "kumkuyu-marina": {
+      "en": "Private marina at Kumkuyu, Erdemli, with a capacity of 200 boats; it has an 80-ton travel lift and technical service workshops.",
+      "es": "Puerto deportivo privado en Kumkuyu, Erdemli, con capacidad para 200 embarcaciones; dispone de un travel lift de 80 toneladas y talleres de servicio técnico.",
+      "ru": "Частная марина в Kumkuyu (Erdemli) вместимостью 200 судов; есть травел-лифт грузоподъёмностью 80 тонн и мастерские технического сервиса."
+    },
+    "gazipasa-gold-marina": {
+      "en": "A newly opened private marina at Gazipaşa; near the ancient city of Selinus.",
+      "es": "Puerto deportivo privado recién inaugurado en Gazipaşa; cerca de la antigua ciudad de Selinus.",
+      "ru": "Недавно открывшаяся частная марина в Gazipaşa; рядом с античным городом Selinus."
+    },
+    "kairos-marina": {
+      "en": "Private marina at Datça with a capacity of 246 wet berths and 256 dry-storage places.",
+      "es": "Puerto deportivo privado en Datça con capacidad para 246 amarres en agua y 256 plazas en tierra.",
+      "ru": "Частная марина в Datça вместимостью 246 мест на воде и 256 на берегу."
+    },
+    "marinturk-gocek-exclusive": {
+      "en": "A private marina in Poruklu Koyu, Göcek, operated by Setur Marinas (formerly Marintürk Göcek Exclusive).",
+      "es": "Puerto deportivo privado en Poruklu Koyu, Göcek, gestionado por Setur Marinas (antes Marintürk Göcek Exclusive).",
+      "ru": "Частная марина в бухте Poruklu Koyu, Göcek, под управлением Setur Marinas (ранее Marintürk Göcek Exclusive)."
+    },
+    "aganlar-marina-bodrum": {
+      "en": "Marina and yacht boatyard (haul-out yard) in Bodrum.",
+      "es": "Puerto deportivo y varadero de yates en Bodrum.",
+      "ru": "Марина и верфь для подъёма и берегового хранения яхт в Bodrum."
+    },
+    "gouvia-marina": {
+      "en": "Large marina on Korfu with 1.235 berths and a dry-storage capacity of 520; it accepts yachts up to 80 m.",
+      "es": "Gran puerto deportivo en Korfu con 1.235 amarres y capacidad para 520 plazas en tierra; admite yates de hasta 80 m.",
+      "ru": "Крупная марина на Korfu: 1.235 стояночных мест и 520 мест на берегу; принимает яхты длиной до 80 м."
+    },
+    "kleopatra-marina": {
+      "en": "Marina at Aktion-Preveza with a huge boatyard with a capacity of 1.000; a winter lay-up centre.",
+      "es": "Puerto deportivo en Aktion-Preveza con un enorme varadero con capacidad para 1.000 embarcaciones; centro de invernaje.",
+      "ru": "Марина в Aktion-Preveza и огромная площадка берегового хранения вместимостью 1.000 судов; центр зимней стоянки."
+    },
+    "lefkas-marina": {
+      "en": "Marina on Lefkada with 620 berths and 280 dry-storage places.",
+      "es": "Puerto deportivo en Lefkada con 620 amarres y 280 plazas en tierra.",
+      "ru": "Марина на Lefkada: 620 стояночных мест на воде и 280 на берегу."
+    },
+    "mesolongi-marina": {
+      "en": "A growing marina in the Mesolongi lagoon; dry-storage capacity of 230.",
+      "es": "Puerto deportivo en expansión en la laguna de Mesolongi; capacidad de 230 plazas en tierra.",
+      "ru": "Растущая марина в лагуне Mesolongi; вместимость берегового хранения — 230 мест."
+    },
+    "kalamata-marina": {
+      "en": "Marina in the south of Mora, adjacent to the city centre of Kalamata.",
+      "es": "Puerto deportivo en el sur de Mora, contiguo al centro de la ciudad de Kalamata.",
+      "ru": "Марина на юге Mora, примыкающая к центру города Kalamata."
+    },
+    "zea-marina": {
+      "en": "The historic marina of Pire; 670 berths, stern-to up to 80 m and alongside up to 150 m.",
+      "es": "El puerto deportivo histórico de Pire; 670 amarres, de popa hasta 80 m y de costado hasta 150 m.",
+      "ru": "Историческая марина Pire; 670 стояночных мест, кормой к причалу — до 80 м, лагом — до 150 м."
+    },
+    "athens-marina": {
+      "en": "A marina at Neo Faliro dedicated to mega and super yachts; up to 130 m.",
+      "es": "Puerto deportivo en Neo Faliro dedicado a megayates y superyates; hasta 130 m.",
+      "ru": "Марина в Neo Faliro, предназначенная для мега- и суперъяхт; до 130 м."
+    },
+    "flisvos-marina": {
+      "en": "A megayacht-focused marina at Paleo Faliro; half of its capacity is reserved for yachts over 35 m.",
+      "es": "Puerto deportivo orientado a megayates en Paleo Faliro; la mitad de su capacidad está reservada a yates de más de 35 m.",
+      "ru": "Марина в Paleo Faliro, ориентированная на мегаяхты; половина мест отведена яхтам длиной более 35 м."
+    },
+    "alimos-marina": {
+      "en": "One of the largest marinas in Atina and in all of Greece; 1.080 berths, 600 dry-storage places.",
+      "es": "Uno de los mayores puertos deportivos de Atina y de toda Grecia; 1.080 amarres y 600 plazas en tierra.",
+      "ru": "Одна из крупнейших марин Atina и всей Греции; 1.080 мест на воде, 600 на берегу."
+    },
+    "agios-kosmas-marina": {
+      "en": "Marina at Elliniko (the old airport waterfront) with a capacity of 337 berths; up to 80 m.",
+      "es": "Puerto deportivo en Elliniko (el litoral del antiguo aeropuerto) con capacidad para 337 amarres; hasta 80 m.",
+      "ru": "Марина в Elliniko (побережье бывшего аэропорта) на 337 стояночных мест; до 80 м."
+    },
+    "vouliagmeni-marina": {
+      "en": "The prestigious cove marina of the Atina Riviera.",
+      "es": "El prestigioso puerto deportivo de cala de la Riviera de Atina.",
+      "ru": "Престижная марина в бухте на Ривьере Atina."
+    },
+    "olympic-marine": {
+      "en": "A large marina and boatyard centre at Lavrio/Sounio with 680 berths and a dry-storage capacity of 700.",
+      "es": "Gran puerto deportivo y centro de varada en Lavrio/Sounio, con 680 amarres y capacidad para 700 plazas en tierra.",
+      "ru": "Крупная марина и центр берегового хранения в Lavrio/Sounio: 680 мест на воде и 700 на берегу."
+    },
+    "selanik-aretsou-marina": {
+      "en": "A city marina at Kalamaria, Selanik.",
+      "es": "Puerto deportivo urbano en Kalamaria, Selanik.",
+      "ru": "Городская марина в Kalamaria, Selanik."
+    },
+    "sani-marina": {
+      "en": "A boutique marina within the Sani Resort at Kassandra, Halkidiki.",
+      "es": "Puerto deportivo boutique dentro del Sani Resort en Kassandra, Halkidiki.",
+      "ru": "Бутик-марина при курорте Sani Resort в Kassandra, Halkidiki."
+    },
+    "porto-carras-marina": {
+      "en": "A resort marina at Neos Marmaras, Sithonia; it accepts yachts up to 55 m.",
+      "es": "Puerto deportivo de resort en Neos Marmaras, Sithonia; admite yates de hasta 55 m.",
+      "ru": "Курортная марина в Neos Marmaras, Sithonia; принимает яхты длиной до 55 м."
+    },
+    "midilli-marina": {
+      "en": "Marina on the island of Midilli (Lesvos); on the shore opposite Ayvalık.",
+      "es": "Puerto deportivo en la isla de Midilli (Lesvos); en la costa situada frente a Ayvalık.",
+      "ru": "Марина на острове Midilli (Lesvos); на берегу напротив Ayvalık."
+    },
+    "samos-marina": {
+      "en": "Marina at Pythagorio (Samos) with 260 berths and 170 dry-storage places; opposite Kuşadası.",
+      "es": "Puerto deportivo en Pythagorio (Samos) con 260 amarres y 170 plazas en tierra; frente a Kuşadası.",
+      "ru": "Марина в Pythagorio (Samos): 260 мест на воде и 170 на берегу; напротив Kuşadası."
+    },
+    "leros-marina": {
+      "en": "Marina in the natural harbour of Lakki (Leros) with a boatyard with a capacity of 500; 160-ton lift.",
+      "es": "Puerto deportivo en el puerto natural de Lakki (Leros) con un varadero con capacidad para 500 embarcaciones; grúa de 160 toneladas.",
+      "ru": "Марина в естественной гавани Lakki (Leros) и площадка берегового хранения на 500 судов; подъёмник грузоподъёмностью 160 тонн."
+    },
+    "kos-marina": {
+      "en": "Fully equipped marina on the island of Kos (İstanköy); the coast opposite Bodrum. 100-ton travel lift.",
+      "es": "Puerto deportivo totalmente equipado en la isla de Kos (İstanköy); la costa frente a Bodrum. Travel-lift de 100 toneladas.",
+      "ru": "Полностью оборудованная марина на острове Kos (İstanköy); берег напротив Bodrum. Травел-лифт на 100 тонн."
+    },
+    "rodos-marina": {
+      "en": "Marina on the island of Rodos with a capacity of 600 berths; accepts mega yachts.",
+      "es": "Puerto deportivo en la isla de Rodos con capacidad para 600 amarres; admite megayates.",
+      "ru": "Марина на острове Rodos на 600 стояночных мест; принимает мегаяхты."
+    },
+    "marina-symi-pedi": {
+      "en": "Marina opened in 2021 in Pedi bay on the island of Symi; 2 km from Gialos. Electricity and water connection at every mooring berth, free Wi-Fi, showers/WC. Opposite the Datça-Bozburun coast.",
+      "es": "Puerto deportivo inaugurado en 2021 en la cala de Pedi, en la isla de Symi; a 2 km de Gialos. Conexión de electricidad y agua en cada amarre, Wi-Fi gratuito, duchas/WC. Frente a la costa de Datça-Bozburun.",
+      "ru": "Марина, открытая в 2021 году в бухте Pedi на острове Symi; 2 км до Gialos. На каждом стояночном месте подключение электричества и воды, бесплатный Wi-Fi, душ/туалет. Напротив побережья Datça-Bozburun."
+    },
+    "symi-gialos-rihtimi": {
+      "en": "Town quay in Gialos, Symi's iconic main harbour; stern-to mooring, the harbour attendant directs you to a berth. Watch out for the ferry wash. There are water/electricity points on the quay, but availability varies — confirm on arrival.",
+      "es": "Muelle del pueblo en Gialos, el icónico puerto principal de Symi; amarre de popa, el encargado del puerto indica el sitio. Atención a la marejada de los ferris. Hay puntos de agua/electricidad en el muelle, pero su disponibilidad es variable — confírmelo a la llegada.",
+      "ru": "Городская набережная в Gialos, знаменитой главной гавани Symi; швартовка кормой, место указывает служащий порта. Остерегайтесь волны от паромов. На причале есть точки воды/электричества, но их доступность непостоянна — уточняйте по прибытии."
+    },
+    "symi-panormitis-iskelesi": {
+      "en": "In the sheltered bay of the famous Panormitis Monastery in the south of Symi, a C-shaped pier (70 m) and a quay (120 m). Calm berthing for yachts and sailboats; depth up to 5 m at the pier head.",
+      "es": "En la cala protegida del famoso Monasterio de Panormitis, al sur de Symi, un pantalán en forma de C (70 m) y un muelle (120 m). Atraque tranquilo para yates y veleros; profundidad de hasta 5 m en la cabecera del pantalán.",
+      "ru": "В защищённой бухте знаменитого монастыря Panormitis на юге Symi — пирс C-образной формы (70 м) и причал (120 м). Спокойная стоянка для яхт и парусников; глубина у оконечности пирса до 5 м."
+    },
+    "rodos-mandraki-limani": {
+      "en": "The historic yacht harbour of Rodos — on the site of the ancient Kolossos, with a view of three windmills. Stern-to mooring; water + 220V on the quay, fuel by tanker truck, WC/hot showers next to the office. Reserving a berth at least 48 hours in advance is recommended; there are old mooring lines on the bottom, so leave plenty of scope.",
+      "es": "El histórico puerto de yates de Rodos — en el emplazamiento del antiguo Kolossos, con vistas a tres molinos de viento. Amarre de popa; agua + 220V en el muelle, combustible por camión cisterna, WC/duchas de agua caliente junto a la oficina. Se recomienda reservar plaza con al menos 48 horas de antelación; en el fondo hay antiguas líneas de amarre, así que deje bastante cadena.",
+      "ru": "Исторический яхтенный порт Rodos — на месте античного Kolossos, с видом на три ветряные мельницы. Швартовка кормой; на причале вода + 220V, топливо с автоцистерны, туалет/горячий душ рядом с офисом. Рекомендуется бронировать место минимум за 48 часов; на дне лежат старые муринги, поэтому потравите побольше цепи."
+    },
+    "kastellorizo-meis-rihtimi": {
+      "en": "The colourful town quay of Meis island, 2 nautical miles across from Kaş; 82 m pier, -6,3 m depth. It is a PORT OF ENTRY into Greece (customs/passport formalities are handled) — the first stop for boats crossing over from Turkey. Electricity, water, Wi-Fi, showers/WC on the quay.",
+      "es": "El colorido muelle del pueblo de la isla de Meis, a 2 millas náuticas frente a Kaş; pantalán de 82 m, profundidad de -6,3 m. Es PUERTO DE ENTRADA a Grecia (se realizan trámites de aduana/pasaporte) — primera escala para las embarcaciones que cruzan desde Turquía. Electricidad, agua, Wi-Fi, duchas/WC en el muelle.",
+      "ru": "Колоритная городская набережная острова Meis в 2 морских милях напротив Kaş; пирс 82 м, глубина -6,3 м. Это ПОРТ ВХОДА в Грецию (оформляются таможенные/паспортные формальности) — первая остановка для судов, идущих из Турции. На причале электричество, вода, Wi-Fi, душ/туалет."
+    },
+    "tilos-livadia-rihtimi": {
+      "en": "Municipal quay in Livadia, the main harbour of the island of Tilos; room for up to 35 boats, fresh water and electricity connection. The south arm of the pier is ~50 m, usable depth -8 m. Well sheltered inside the harbour wall; space for berthing alongside is limited.",
+      "es": "Muelle municipal en Livadia, el puerto principal de la isla de Tilos; sitio para hasta 35 embarcaciones, agua dulce y conexión eléctrica. El brazo sur del pantalán mide ~50 m, con una profundidad utilizable de -8 m. Bien protegido dentro del muro del puerto; el espacio para atracar de costado es limitado.",
+      "ru": "Муниципальный причал в Livadia, главной гавани острова Tilos; места до 35 судов, пресная вода и подключение электричества. Южное плечо пирса ~50 м, рабочая глубина -8 м. Внутри портовой стены хорошая защита; мест для швартовки лагом мало."
+    },
+    "lindos-koyu": {
+      "en": "Anchorage bay below the acropolis of Lindos, the symbol of Rodos — described in the pilot guide as 'one of the most special stops of the Dodecanese'. Sheltered, with a matchless view; can get crowded in the summer months.",
+      "es": "Fondeadero bajo la acrópolis de Lindos, símbolo de Rodos — la guía náutica lo describe como 'una de las escalas más especiales del Dodecaneso'. Protegido, con vistas incomparables; puede estar concurrido en los meses de verano.",
+      "ru": "Якорная бухта под акрополем Lindos, символом Rodos — в лоции значится как 'одна из самых особенных стоянок Додеканеса'. Защищённая, с несравненным видом; в летние месяцы может быть многолюдно."
+    },
+    "anthony-quinn-koyu": {
+      "en": "Small bay on the east coast of Rodos, famous for its turquoise waters and rocky arms; it takes its name from the actor who shot a film here in 1961. Anchor in 8-10 m on sand; plenty of scope is recommended.",
+      "es": "Pequeña cala en la costa este de Rodos, famosa por sus aguas turquesas y sus brazos rocosos; toma su nombre del actor que rodó aquí una película en 1961. Se fondea en 8-10 m sobre arena; se recomienda dar bastante cadena.",
+      "ru": "Небольшая бухта на восточном берегу Rodos, знаменитая бирюзовой водой и скалистыми мысами; названа в честь актёра, снимавшего здесь фильм в 1961 году. Якорь отдают на 8-10 м на песке; рекомендуется потравить побольше цепи."
+    },
+    "simi-nanou-koyu": {
+      "en": "Quiet anchorage bay on the east coast of Symi, surrounded by high cliffs; noted in the pilot guide as a 'privacy spot'. A seasonal taverna may be found ashore.",
+      "es": "Tranquilo fondeadero en la costa este de Symi, rodeado de altos acantilados; la guía lo menciona como un 'rincón de privacidad'. En la orilla puede haber una taberna de temporada.",
+      "ru": "Тихая якорная бухта на восточном берегу Symi, окружённая высокими скалами; в лоции упоминается как 'место уединения'. На берегу может работать сезонная таверна."
+    },
+    "simi-marathounta-koyu": {
+      "en": "Secluded anchorage bay with a pebble beach in the southeast of Symi; a short boat ride from Pedi and Gialos.",
+      "es": "Fondeadero solitario con playa de guijarros en el sureste de Symi; a corta distancia en barco de Pedi y Gialos.",
+      "ru": "Уединённая якорная бухта с галечным пляжем на юго-востоке Symi; в нескольких минутах хода на лодке от Pedi и Gialos."
+    },
+    "simi-emporios-koyu": {
+      "en": "Emporios (Nimborios) bay to the northwest of Gialos — within walking distance of the main harbour, a quieter anchoring alternative.",
+      "es": "La cala de Emporios (Nimborios), al noroeste de Gialos — a poca distancia a pie del puerto principal, una alternativa de fondeo más tranquila.",
+      "ru": "Бухта Emporios (Nimborios) к северо-западу от Gialos — в пешей доступности от главной гавани, более спокойная альтернатива для якорной стоянки."
+    },
+    "simi-agios-vasileios-koyu": {
+      "en": "Sheltered anchorage bay on the west coast of Symi, known for its small chapel; caution is needed in westerly winds.",
+      "es": "Fondeadero protegido en la costa oeste de Symi, conocido por su pequeña capilla; hay que tener precaución con los vientos del oeste.",
+      "ru": "Защищённая якорная бухта на западном берегу Symi, известная своей маленькой часовней; при западных ветрах следует соблюдать осторожность."
+    },
+    "istinye-tekne-park-yakit": {
+      "en": "Fuel jetty (Türk Petrol) inside İstmarin Tekne Park in İstinye bay on the Bosphorus.",
+      "es": "Pantalán de combustible (Türk Petrol) dentro de İstmarin Tekne Park, en la cala de İstinye, en el Bósforo.",
+      "ru": "Топливный причал (Türk Petrol) на территории İstmarin Tekne Park в бухте İstinye на Босфоре."
+    },
+    "setur-kusadasi-yakit": {
+      "en": "OPET fuel jetty inside Setur Kuşadası Marina.",
+      "es": "Pantalán de combustible OPET dentro de Setur Kuşadası Marina.",
+      "ru": "Топливный причал OPET на территории Setur Kuşadası Marina."
+    },
+    "ecesaray-fethiye-yakit": {
+      "en": "OPET fuel jetty inside Ece Saray Marina in Fethiye.",
+      "es": "Pantalán de combustible OPET dentro de Ece Saray Marina, en Fethiye.",
+      "ru": "Топливный причал OPET на территории Ece Saray Marina в Fethiye."
+    },
+    "setur-kalamis-yakit": {
+      "en": "OPET fuel jetty inside Setur Kalamış-Fenerbahçe Marina.",
+      "es": "Pantalán de combustible OPET dentro de Setur Kalamış-Fenerbahçe Marina.",
+      "ru": "Топливный причал OPET на территории Setur Kalamış-Fenerbahçe Marina."
+    },
+    "netsel-marmaris-yakit": {
+      "en": "OPET fuel jetty inside Netsel Marina in Marmaris.",
+      "es": "Pantalán de combustible OPET dentro de Netsel Marina, en Marmaris.",
+      "ru": "Топливный причал OPET на территории Netsel Marina в Marmaris."
+    },
+    "setur-ayvalik-yakit": {
+      "en": "OPET fuel jetty inside Setur Ayvalık Marina.",
+      "es": "Pantalán de combustible OPET dentro de Setur Ayvalık Marina.",
+      "ru": "Топливный причал OPET на территории Setur Ayvalık Marina."
+    },
+    "setur-yalova-yakit": {
+      "en": "OPET fuel jetty inside Setur Yalova Marina.",
+      "es": "Pantalán de combustible OPET dentro de Setur Yalova Marina.",
+      "ru": "Топливный причал OPET на территории Setur Yalova Marina."
+    },
+    "kas-marina-yakit": {
+      "en": "OPET fuel jetty inside Kaş Marina — the fuelling point of the Meis/Kekova route.",
+      "es": "Pantalán de combustible OPET dentro de Kaş Marina — el punto de repostaje de la ruta Meis/Kekova.",
+      "ru": "Топливный причал OPET на территории Kaş Marina — пункт заправки на маршруте Meis/Kekova."
+    },
+    "finike-marina-yakit": {
+      "en": "OPET fuel jetty inside Setur Finike Marina.",
+      "es": "Pantalán de combustible OPET dentro de Setur Finike Marina.",
+      "ru": "Топливный причал OPET на территории Setur Finike Marina."
+    },
+    "mersin-yat-limani-yakit": {
+      "en": "OPET fuel jetty inside Mersin Yat Limanı — one of the main fuelling points of the Eastern Mediterranean.",
+      "es": "Pantalán de combustible OPET dentro de Mersin Yat Limanı — uno de los principales puntos de repostaje del Mediterráneo oriental.",
+      "ru": "Топливный причал OPET на территории Mersin Yat Limanı — один из главных пунктов заправки Восточного Средиземноморья."
+    },
+    "oren-gokova-yakit": {
+      "en": "OPET fuel jetty inside Gökova Ören Marina — on the northern shore of the Gulf of Gökova.",
+      "es": "Pantalán de combustible OPET dentro de Gökova Ören Marina — en la costa norte del golfo de Gökova.",
+      "ru": "Топливный причал OPET на территории Gökova Ören Marina — северный берег залива Gökova."
+    },
+    "atakoy-marina-yakit": {
+      "en": "Moil Deniz fuel jetty inside Ataköy Marina.",
+      "es": "Pantalán de combustible Moil Deniz dentro de Ataköy Marina.",
+      "ru": "Топливный причал Moil Deniz на территории Ataköy Marina."
+    },
+    "city-port-kartal-yakit": {
+      "en": "Shell fuel jetty inside Kartal City Port Marina.",
+      "es": "Pantalán de combustible Shell dentro de Kartal City Port Marina.",
+      "ru": "Топливный причал Shell на территории Kartal City Port Marina."
+    },
+    "yalikavak-marina-yakit": {
+      "en": "Lukoil fuel jetty inside Yalıkavak Marina in Bodrum — with mega-yacht capacity.",
+      "es": "Pantalán de combustible Lukoil dentro de Yalıkavak Marina, en Bodrum — con capacidad para megayates.",
+      "ru": "Топливный причал Lukoil на территории Yalıkavak Marina в Bodrum — принимает мегаяхты."
+    },
+    "teos-marina-yakit": {
+      "en": "Petrol Ofisi fuel jetty inside Teos Marina in Sığacık.",
+      "es": "Pantalán de combustible Petrol Ofisi dentro de Teos Marina, en Sığacık.",
+      "ru": "Топливный причал Petrol Ofisi на территории Teos Marina в Sığacık."
+    },
+    "milta-bodrum-yakit": {
+      "en": "Petrol Ofisi fuel station inside Milta Bodrum Marina. Petrol Ofisi opened its seventh marina station in Muğla and sixteenth across Türkiye here in August 2025 (the previous operator was Aytemiz).",
+      "es": "Estación de combustible Petrol Ofisi dentro de Milta Bodrum Marina. Petrol Ofisi abrió aquí en agosto de 2025 su séptima estación de marina en Muğla y la decimosexta de Türkiye (el operador anterior era Aytemiz).",
+      "ru": "Топливная станция Petrol Ofisi в марине Milta Bodrum. В августе 2025 года Petrol Ofisi открыла здесь свою седьмую маринную станцию в Muğla и шестнадцатую по Türkiye (прежним оператором была Aytemiz)."
+    },
+    "gokkaya-koyu-kekova": {
+      "en": "The largest bay of Kekova; sheltered from all directions. Anchor in 7-8 m on mud, the holding is good. There are restaurants in the bay; the Smugglers Inn at the head of the narrow channel offers a pick-up service from your boat. Caution: an isolated rock with 3,5 m of water over it lies west of the islets.",
+      "es": "La cala más grande de Kekova; protegida de todas las direcciones. Se fondea en 7-8 m sobre fango, con buen agarre. Hay restaurantes en la cala; el Smugglers Inn, al comienzo del paso estrecho, ofrece servicio de recogida desde el barco. Atención: al oeste de los islotes hay una roca aislada con 3,5 m de agua por encima.",
+      "ru": "Самая большая бухта Kekova; защищена со всех направлений. Якорь отдают на 7-8 м, илистое дно, держит хорошо. В бухте есть рестораны; Smugglers Inn у входа в узкий пролив забирает гостей прямо с лодки. Внимание: к западу от островков лежит одиночная скала, над которой 3,5 м воды."
+    },
+    "kalekoy-simena-restoran-pontonlari": {
+      "en": "Three restaurant pontoons at Kaleköy, below the castle of Simena (Likya, Hasan's Roma, Hassan Deniz) — each ~50 m, taking 2-3 yachts on each side. Water, electricity and Wi-Fi on the pontoons; laundry service available. Depths at the pontoons are 4,5-14 m. When anchoring, the holding is poor (rock under mud/weed) and strong westerly winds send in swell — mooring to a pontoon, or anchoring at Üçağız and coming over by dinghy, is recommended. Kaleköy is a popular stop for the day-trip boats out of Kaş/Üçağız/Demre — it is busy during daytime hours.",
+      "es": "Tres pontones de restaurante en Kaleköy, bajo el castillo de Simena (Likya, Hasan's Roma, Hassan Deniz) — cada uno de ~50 m, con capacidad para 2-3 yates por banda. Agua, electricidad y Wi-Fi en los pontones; hay servicio de lavandería. Las profundidades en los pontones son de 4,5-14 m. Al fondear, el agarre es pobre (roca bajo fango/algas) y el viento fuerte del oeste mete marejada — se recomienda amarrar a un pontón o fondear en Üçağız y acercarse en la auxiliar. Kaleköy es una escala popular de las embarcaciones de excursión que salen de Kaş/Üçağız/Demre — está muy animado durante las horas del día.",
+      "ru": "Три ресторанных понтона в Kaleköy под крепостью Simena (Likya, Hasan's Roma, Hassan Deniz) — каждый ~50 м, принимает по 2-3 яхты с каждой стороны. На понтонах вода, электричество и Wi-Fi; есть услуга стирки. Глубины у понтонов 4,5-14 м. На якоре держит плохо (скала под слоем ила/водорослей), а сильный западный ветер нагоняет волну — рекомендуется швартоваться к понтону либо встать на якорь в Üçağız и подойти на тузике. Kaleköy — популярная остановка прогулочных судов из Kaş/Üçağız/Demre — в дневные часы здесь оживлённо."
+    },
+    "kekova-tersane-koyu": {
+      "en": "Sheltered bay in the northwest of Kekova Island, with the ruins of a Byzantine church at the head of the bay. Anchor in 4-5 m on sand, good holding; there are rope holes in the rocks for stern lines. In season, day-trip boat traffic is heavy between 09:00-20:00 — plan your arrival/departure times accordingly.",
+      "es": "Cala protegida en el noroeste de la isla de Kekova, con las ruinas de una iglesia bizantina al fondo de la cala. Se fondea en 4-5 m sobre arena, con buen agarre; en las rocas hay orificios para pasar los cabos de popa. En temporada el tráfico de barcos de excursión es intenso entre las 09:00-20:00 — planifique la hora de llegada/salida en consecuencia.",
+      "ru": "Защищённая бухта на северо-западе острова Kekova с руинами византийской церкви в вершине бухты. Якорь отдают на 4-5 м на песке, держит хорошо; в скалах есть отверстия для кормовых концов. В сезон с 09:00 до 20:00 интенсивное движение прогулочных судов — планируйте время прихода/ухода с учётом этого."
+    },
+    "karaloz-limani-kekova": {
+      "en": "A hidden fjord on the south side of Kekova Island (Port Saint Stefano), completely landlocked and sheltered from all four directions. 8-10 m at the entrance, 7-14 m in the southern part; mud/weed bottom, good holding. Stern lines are recommended; gusty squalls of wind can occur. It is completely deserted.",
+      "es": "Un fiordo escondido en el sur de la isla de Kekova (Port Saint Stefano), completamente rodeado de tierra y protegido de las cuatro direcciones. 8-10 m en la entrada, 7-14 m en la parte sur; fondo de fango/algas, buen agarre. Se recomiendan cabos de popa; puede haber rachas violentas de viento. Está completamente deshabitado.",
+      "ru": "Скрытый фьорд на юге острова Kekova (Port Saint Stefano), полностью окружённый сушей и защищённый со всех четырёх сторон. На входе 8-10 м, в южной части 7-14 м; дно ил/водоросли, держит хорошо. Рекомендуются кормовые концы; возможны шквалистые порывы ветра. Совершенно безлюдно."
+    }
   }
- }
 }

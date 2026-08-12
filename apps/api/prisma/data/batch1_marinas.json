@@ -1,2067 +1,2075 @@
 {
- "batch": "5.1-marinas",
- "collectedAt": "2026-07-07",
- "method": "Resmi web siteleri + denizcilik dizinleri (web araştırması, 3 paralel araştırma; tahmin/uydurma yok, doğrulanamayan alanlar null)",
- "notes": [
-  "maxDraftM yalnız kaynakta açıkça 'draft' olarak yayınlandıysa dolu; 'maximum depth' olarak yayınlanan değerler depthMaxM alanına taşındı.",
-  "confidence=low kayıtlar seed'de status=draft ile yüklenir (haritada görünmez, doğrulama bekler).",
-  "Telefonlar +90XXXXXXXXXX biçimine normalize edildi; sosyal medya değerleri tam URL'ye çevrildi."
- ],
- "records": [
-  {
-   "slug": "setur-kalamis-fenerbahce-marina",
-   "name": "Setur Kalamış & Fenerbahçe Marina",
-   "operator": "Setur Marinas",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "istanbul",
-   "districtSlug": "istanbul-kadikoy",
-   "lat": 40.9769,
-   "lon": 29.0358,
-   "coordSource": "seturmarinas.com (yayınlanan 40°58'37.0\"N 29°02'08.9\"E çevrildi)",
-   "descriptionTr": "İstanbul Kadıköy'de yer alan marina 1.278 deniz ve 220 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.",
-   "berthCount": 1278,
-   "maxLoaM": 65,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": 6.5,
-   "vhfChannel": "72/16",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "wifi",
-    "wc",
-    "shower",
-    "security"
-   ],
-   "services": [
-    "mooring_assist",
-    "diver",
-    "boat_wash",
-    "technical_service"
-   ],
-   "contacts": [
+  "batch": "5.1-marinas",
+  "collectedAt": "2026-07-07",
+  "method": "Resmi web siteleri + denizcilik dizinleri (web araştırması, 3 paralel araştırma; tahmin/uydurma yok, doğrulanamayan alanlar null)",
+  "notes": [
+    "maxDraftM yalnız kaynakta açıkça 'draft' olarak yayınlandıysa dolu; 'maximum depth' olarak yayınlanan değerler depthMaxM alanına taşındı.",
+    "confidence=low kayıtlar seed'de status=draft ile yüklenir (haritada görünmez, doğrulama bekler).",
+    "Telefonlar +90XXXXXXXXXX biçimine normalize edildi; sosyal medya değerleri tam URL'ye çevrildi."
+  ],
+  "records": [
     {
-     "type": "phone",
-     "value": "+902163462346",
-     "primary": true
+      "slug": "setur-kalamis-fenerbahce-marina",
+      "name": "Setur Kalamış & Fenerbahçe Marina",
+      "operator": "Setur Marinas",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "istanbul",
+      "districtSlug": "istanbul-kadikoy",
+      "lat": 40.9769,
+      "lon": 29.0358,
+      "coordSource": "seturmarinas.com (yayınlanan 40°58'37.0\"N 29°02'08.9\"E çevrildi)",
+      "descriptionTr": "İstanbul Kadıköy'de yer alan marina 1.278 deniz ve 220 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.",
+      "berthCount": 1278,
+      "maxLoaM": 65,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": 6.5,
+      "vhfChannel": "72/16",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "wifi",
+        "wc",
+        "shower",
+        "security"
+      ],
+      "services": [
+        "mooring_assist",
+        "diver",
+        "boat_wash",
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902163462346",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "kalamis@seturmarinas.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.seturmarinas.com/en/marinas/kalamis-fenerbahce"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.seturmarinas.com/en/marinas/kalamis-fenerbahce"
+      ],
+      "confidence": "high",
+      "missingNotes": "Su çekimi limiti yayınlanmamış; 6.5 m 'maximum depth' olarak yayınlandığı için depthMaxM'e alındı."
     },
     {
-     "type": "email",
-     "value": "kalamis@seturmarinas.com"
+      "slug": "setur-yalova-marina",
+      "name": "Setur Yalova Marina",
+      "operator": "Setur Marinas",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "yalova",
+      "districtSlug": "yalova-merkez",
+      "lat": 40.6614,
+      "lon": 29.2745,
+      "coordSource": "seturmarinas.com (40°39'41.2\"N 29°16'28.2\"E çevrildi)",
+      "descriptionTr": "Yalova merkez sahilinde yer alan marina 225 deniz ve 70 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.",
+      "berthCount": 225,
+      "maxLoaM": 40,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": 5,
+      "vhfChannel": "73",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "wifi",
+        "wc",
+        "shower",
+        "security"
+      ],
+      "services": [
+        "mooring_assist",
+        "diver",
+        "boat_wash"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902268131919",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "yalova@seturmarinas.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.seturmarinas.com/en/marinas/yalova"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.seturmarinas.com/en/marinas/yalova"
+      ],
+      "confidence": "high",
+      "missingNotes": "100 tonluk çekme-indirme belirtilmiş ama ekipman tipi (travel lift/vinç) adlandırılmamış — boş bırakıldı."
     },
     {
-     "type": "website",
-     "value": "https://www.seturmarinas.com/en/marinas/kalamis-fenerbahce"
+      "slug": "setur-ayvalik-marina",
+      "name": "Setur Ayvalık Marina",
+      "operator": "Setur Marinas",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "balikesir",
+      "districtSlug": "balikesir-ayvalik",
+      "lat": 39.3141,
+      "lon": 26.688,
+      "coordSource": "seturmarinas.com (39°18'50.6\"N 26°41'16.7\"E çevrildi)",
+      "descriptionTr": "Ayvalık ilçe merkezinde yer alan marina 200 deniz ve 30 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.",
+      "berthCount": 200,
+      "maxLoaM": 40,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": 4.7,
+      "vhfChannel": "73/16",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "fuel",
+        "wifi",
+        "wc",
+        "shower",
+        "security",
+        "market",
+        "restaurant",
+        "travel_lift"
+      ],
+      "services": [
+        "mooring_assist",
+        "diver",
+        "boat_wash",
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902663122696",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "ayvalik@seturmarinas.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.seturmarinas.com/en/marinas/ayvalik"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.seturmarinas.com/en/marinas/ayvalik"
+      ],
+      "confidence": "high",
+      "missingNotes": "Elektrik/su sayfada açıkça doğrulanamadı, eklenmedi."
+    },
+    {
+      "slug": "setur-cesme-marina",
+      "name": "Setur Çeşme Marina",
+      "operator": "Setur Marinas",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "izmir",
+      "districtSlug": "izmir-cesme",
+      "lat": 38.3237,
+      "lon": 26.3456,
+      "coordSource": "seturmarinas.com (38°19'25.4\"N 26°20'44.0\"E çevrildi)",
+      "descriptionTr": "Çeşme Altınyunus mevkiinde yer alan marina 186 deniz ve 60 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.",
+      "berthCount": 186,
+      "maxLoaM": 45,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": 5.5,
+      "vhfChannel": "73/16",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "water",
+        "fuel",
+        "wifi",
+        "wc",
+        "shower",
+        "security",
+        "restaurant"
+      ],
+      "services": [
+        "mooring_assist",
+        "boat_wash"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902327231434",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "cesme@seturmarinas.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.seturmarinas.com/en/marinas/cesme"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.seturmarinas.com/en/marinas/cesme"
+      ],
+      "confidence": "high",
+      "missingNotes": "Elektrik sayfada açıkça doğrulanamadı, eklenmedi."
+    },
+    {
+      "slug": "setur-kusadasi-marina",
+      "name": "Setur Kuşadası Marina",
+      "operator": "Setur Marinas",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "aydin",
+      "districtSlug": "aydin-kusadasi",
+      "lat": 37.8685,
+      "lon": 27.2605,
+      "coordSource": "seturmarinas.com (37°52'06.5\"N 27°15'37.7\"E çevrildi)",
+      "descriptionTr": "Kuşadası ilçe merkezinde yer alan marina 557 deniz ve 100 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.",
+      "berthCount": 557,
+      "maxLoaM": 90,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": 5,
+      "vhfChannel": "73/16",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "wifi",
+        "wc",
+        "shower",
+        "security",
+        "laundry",
+        "restaurant",
+        "travel_lift"
+      ],
+      "services": [
+        "mooring_assist",
+        "diver",
+        "boat_wash",
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902566181460",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "kusadasi@seturmarinas.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.seturmarinas.com/en/marinas/kusadasi"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.seturmarinas.com/en/marinas/kusadasi"
+      ],
+      "confidence": "high",
+      "missingNotes": null
+    },
+    {
+      "slug": "netsel-marmaris-marina",
+      "name": "Netsel Marmaris Marina",
+      "operator": "Setur Marinas",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-marmaris",
+      "lat": 36.8506,
+      "lon": 28.2772,
+      "coordSource": "seturmarinas.com (36°51'02\"N 28°16'38\"E çevrildi)",
+      "descriptionTr": "Marmaris ilçe merkezinde yer alan marina 701 tekne kapasiteli deniz bağlama alanına sahiptir. Setur Marinas bünyesinde işletilmektedir.",
+      "berthCount": 701,
+      "maxLoaM": 90,
+      "maxDraftM": null,
+      "depthMinM": 3.5,
+      "depthMaxM": 18,
+      "vhfChannel": "72",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "wifi",
+        "wc",
+        "shower",
+        "security",
+        "market",
+        "laundry",
+        "restaurant"
+      ],
+      "services": [
+        "mooring_assist",
+        "boat_wash",
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902524122708",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@netselmarina.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.seturmarinas.com/en/marinas/netsel-marmaris"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.seturmarinas.com/en/marinas/netsel-marmaris"
+      ],
+      "confidence": "high",
+      "missingNotes": "18 m havza derinliğidir (min 3.5 m), tekne su çekimi limiti değildir. Sayfadaki 'kara kapasitesi 70' otopark aracıdır, çekek değil."
+    },
+    {
+      "slug": "setur-finike-marina",
+      "name": "Setur Finike Marina",
+      "operator": "Setur Marinas",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "antalya",
+      "districtSlug": "antalya-finike",
+      "lat": 36.2947,
+      "lon": 30.1526,
+      "coordSource": "seturmarinas.com (36°17'40.9\"N 30°09'09.2\"E çevrildi)",
+      "descriptionTr": "Finike ilçe merkezinde yer alan marina 284 deniz ve 100 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.",
+      "berthCount": 284,
+      "maxLoaM": 35,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": 4.5,
+      "vhfChannel": "73",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "wifi",
+        "wc",
+        "shower",
+        "security"
+      ],
+      "services": [
+        "mooring_assist",
+        "boat_wash",
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902428555030",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "finike@seturmarinas.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.seturmarinas.com/en/marinas/finike"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.seturmarinas.com/en/marinas/finike"
+      ],
+      "confidence": "high",
+      "missingNotes": "Yakıt istasyonu sayfada açıkça doğrulanamadı, eklenmedi."
+    },
+    {
+      "slug": "setur-antalya-marina",
+      "name": "Setur Antalya Marina",
+      "operator": "Setur Marinas",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "antalya",
+      "districtSlug": "antalya-konyaalti",
+      "lat": 36.8348,
+      "lon": 30.6148,
+      "coordSource": "seturmarinas.com (36°50'05.1\"N 30°36'53.2\"E çevrildi)",
+      "descriptionTr": "Antalya Konyaaltı'nda Büyük Liman mevkiinde yer alan marina 198 deniz ve 150 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.",
+      "berthCount": 198,
+      "maxLoaM": 90,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": 5.5,
+      "vhfChannel": "72",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "wifi",
+        "wc",
+        "shower",
+        "security",
+        "market",
+        "restaurant",
+        "travel_lift"
+      ],
+      "services": [
+        "mooring_assist",
+        "diver",
+        "boat_wash",
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902422593259",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "antalya@seturmarinas.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.seturmarinas.com/en/marinas/antalya"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.seturmarinas.com/en/marinas/antalya"
+      ],
+      "confidence": "high",
+      "missingNotes": "Yakıt istasyonu sayfada açıkça doğrulanamadı, eklenmedi."
+    },
+    {
+      "slug": "setur-kas-marina",
+      "name": "Setur Kaş Marina",
+      "operator": "Setur Marinas",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "antalya",
+      "districtSlug": "antalya-kas",
+      "lat": 36.2053,
+      "lon": 29.6242,
+      "coordSource": "seturmarinas.com (36°12'19\"N 29°37'27\"E çevrildi)",
+      "descriptionTr": "Kaş Bucak Denizi'nde yer alan marina 447 deniz ve 120 kara kapasitesine sahiptir. Setur Marinas bünyesinde Makmarin Kaş Marina adıyla işletilmektedir.",
+      "berthCount": 447,
+      "maxLoaM": 120,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": 30,
+      "vhfChannel": "73",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "wifi",
+        "wc",
+        "shower",
+        "security",
+        "market",
+        "laundry",
+        "restaurant"
+      ],
+      "services": [
+        "mooring_assist",
+        "boat_wash",
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902428363700",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@kasmarina.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://www.seturmarinas.com/en/marinas/makmarin-kas"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.seturmarinas.com/en/marinas/makmarin-kas"
+      ],
+      "confidence": "high",
+      "missingNotes": "30 m koy/havza derinliğidir, su çekimi limiti değildir. 120 m 'maximum full size' resmi sayfadan."
+    },
+    {
+      "slug": "mersin-marina",
+      "name": "Mersin Marina",
+      "operator": "Mersin Yat Limanı İşletmeleri A.Ş.",
+      "status": "draft",
+      "typeCode": "private_marina",
+      "provinceSlug": "mersin",
+      "districtSlug": "mersin-yenisehir",
+      "lat": 36.77,
+      "lon": 34.5707,
+      "coordSource": "marinalar.com dizini (36.77002, 34.57072)",
+      "descriptionTr": "Mersin Yenişehir'de yer alan marina, Mersin Yat Limanı İşletmeleri A.Ş. tarafından işletilmektedir.",
+      "berthCount": 500,
+      "maxLoaM": 40,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "72",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "wifi",
+        "wc",
+        "shower",
+        "security",
+        "laundry",
+        "restaurant",
+        "travel_lift",
+        "crane",
+        "pump_out"
+      ],
+      "services": [
+        "diver",
+        "technical_service",
+        "crane"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+903243300300",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@mersinmarina.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://www.mersinmarina.com.tr"
+        }
+      ],
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Mersin_Marina",
+        "https://marinalar.com/mersin-marina/"
+      ],
+      "confidence": "low",
+      "missingNotes": "Resmi site araştırma sırasında erişilemedi; tüm teknik veri dizin kaynaklı. Resmi siteye karşı doğrulanana dek taslak (draft) tutulur. Not: Setur zinciri üyesi DEĞİL."
+    },
+    {
+      "slug": "d-marin-gocek",
+      "name": "D-Marin Göcek",
+      "operator": "D-Marin",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.7483,
+      "lon": 28.9428,
+      "coordSource": "d-marin.com (36°44'54\"N 28°56'34\"E çevrildi)",
+      "descriptionTr": "Fethiye'nin Göcek mahallesinde yer alan marina 380 deniz bağlama ve 150 tekne kara park kapasitesine sahiptir. D-Marin tarafından işletilmektedir.",
+      "berthCount": 380,
+      "maxLoaM": 85,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": true,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "wifi",
+        "wc",
+        "shower",
+        "security",
+        "laundry",
+        "travel_lift",
+        "pump_out"
+      ],
+      "services": [
+        "mooring_assist",
+        "diver",
+        "boat_wash",
+        "technical_service",
+        "winter_storage"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902526451520",
+          "primary": true
+        },
+        {
+          "type": "website",
+          "value": "https://www.d-marin.com/en/marinas/gocek/"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.d-marin.com/en/marinas/gocek/",
+        "https://www.d-marin.com/tr/marinalar/gocek/",
+        "https://marinalar.com/d-marin/d-marin-gocek/",
+        "https://ytb.org.tr/marinalar/d-marin-gocek_32"
+      ],
+      "confidence": "high",
+      "missingNotes": "Su çekimi yayınlanmamış. Resmi site Türkiye marinaları için telefon yayınlamıyor, e-postalar gizlenmiş — yalnız web sitesi eklendi. | FAZ2 GOCEK TURU: telefon +90 (252) 645 15 20 iki bağımsız kaynaktan (marinalar.com ve ytb.org.tr, aynı rakamlar). maxLoa 70→85: işletmecinin KENDİ sayfası '388 berthing capacity for yachts up to 85 meters in length' diyor; 70 m yalnız marinalar.com'daydı — işletmecinin kendi tesisi hakkındaki beyanı esas alındı."
+    },
+    {
+      "slug": "d-marin-turgutreis",
+      "name": "D-Marin Turgutreis",
+      "operator": "D-Marin",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-bodrum",
+      "lat": 37.0019,
+      "lon": 27.2561,
+      "coordSource": "d-marin.com (37°0'7\"N 27°15'22\"E çevrildi)",
+      "descriptionTr": "Bodrum Turgutreis'te yer alan marina 532 deniz bağlama ve 150 çekek (kara) kapasitesine sahiptir. D-Marin tarafından işletilmektedir.",
+      "berthCount": 532,
+      "maxLoaM": 75,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "72",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": true,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "wifi",
+        "wc",
+        "shower",
+        "security",
+        "laundry",
+        "travel_lift"
+      ],
+      "services": [
+        "mooring_assist",
+        "diver",
+        "boat_wash",
+        "technical_service",
+        "winter_storage"
+      ],
+      "contacts": [
+        {
+          "type": "website",
+          "value": "https://www.d-marin.com/en/marinas/turgutreis/"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.d-marin.com/en/marinas/turgutreis/"
+      ],
+      "confidence": "high",
+      "missingNotes": "75 m LOA, resmi 'vessels ranging from 8 to 75 meters' ifadesinden. Su çekimi yayınlanmamış."
+    },
+    {
+      "slug": "d-marin-didim",
+      "name": "D-Marin Didim",
+      "operator": "D-Marin",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "aydin",
+      "districtSlug": "aydin-didim",
+      "lat": 37.3406,
+      "lon": 27.2594,
+      "coordSource": "d-marin.com (37°20'26\"N 27°15'34\"E çevrildi)",
+      "descriptionTr": "Didim'de yer alan marina, 90'ı süperyat olmak üzere 591 deniz bağlama kapasitesine sahiptir. D-Marin tarafından işletilmektedir.",
+      "berthCount": 591,
+      "maxLoaM": 70,
+      "maxDraftM": 6,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "16/72",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": true,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "wifi",
+        "wc",
+        "shower",
+        "security",
+        "laundry",
+        "restaurant",
+        "travel_lift"
+      ],
+      "services": [
+        "mooring_assist",
+        "diver",
+        "boat_wash",
+        "technical_service",
+        "winter_storage"
+      ],
+      "contacts": [
+        {
+          "type": "website",
+          "value": "https://www.d-marin.com/en/marinas/didim/"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.d-marin.com/en/marinas/didim/",
+        "https://www.dockwalk.com/superports/d-marin-didim--899"
+      ],
+      "confidence": "high",
+      "missingNotes": "Su çekimi 'up to 6 meters' resmi sayfada açıkça yayınlanmış. Kuru park alan (70.000 m²) sayı olmadığı için eklenmedi."
+    },
+    {
+      "slug": "yalikavak-marina",
+      "name": "Yalıkavak Marina",
+      "operator": "Bodrum Yalıkavak Turizm ve Yat Limanı Yatırımları ve Ticaret A.Ş.",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-bodrum",
+      "lat": 37.105,
+      "lon": 27.2855,
+      "coordSource": "navily.com (37°6.30'N 27°17.13'E çevrildi)",
+      "descriptionTr": "Bodrum Yalıkavak'ta yer alan 620 yat kapasiteli marina; daha önce Palmarina adıyla hizmet veren tesis Yalıkavak Marina adını almıştır.",
+      "berthCount": 620,
+      "maxLoaM": 140,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "72",
+      "blueFlag": null,
+      "travelLiftTons": 260,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant",
+        "shower",
+        "market",
+        "laundry",
+        "wifi",
+        "security",
+        "wc",
+        "pump_out",
+        "travel_lift",
+        "technical_service"
+      ],
+      "services": [
+        "mooring_assist",
+        "technical_service",
+        "diver"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902523110600",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@yalikavakmarina.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://yalikavakmarina.com.tr"
+        },
+        {
+          "type": "instagram",
+          "value": "https://www.instagram.com/yalikavakmarina/"
+        },
+        {
+          "type": "facebook",
+          "value": "https://www.facebook.com/yalikavakmarina/"
+        }
+      ],
+      "sourceUrls": [
+        "https://yalikavakmarina.com.tr/marina/",
+        "https://www.globalgoldanchor.com/marina-details/yalikavak-marina",
+        "https://www.navily.com/port/yalikavak-marina/1636"
+      ],
+      "confidence": "high",
+      "missingNotes": "Su çekimi yayınlanmamış. 140 m LOA TYHA 'max berth size' kaynaklı. Travel lift 260 t ve 100 t (büyüğü kaydedildi)."
+    },
+    {
+      "slug": "milta-bodrum-marina",
+      "name": "Milta Bodrum Marina",
+      "operator": "Doğan Holding",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-bodrum",
+      "lat": 37.0345,
+      "lon": 27.4262,
+      "coordSource": "navily.com (37°2.07'N 27°25.57'E çevrildi)",
+      "descriptionTr": "Bodrum kent merkezinde yer alan marina Doğan Holding bünyesinde işletilmektedir. Mavi Bayrak ve 5 Altın Çıpa ödüllerine sahiptir.",
+      "berthCount": 425,
+      "maxLoaM": 70,
+      "maxDraftM": 7,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "blueFlag": true,
+      "travelLiftTons": 70,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant",
+        "shower",
+        "market",
+        "laundry",
+        "wifi",
+        "security",
+        "wc",
+        "pump_out",
+        "travel_lift",
+        "technical_service"
+      ],
+      "services": [
+        "technical_service",
+        "diver"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902523161860",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@miltabodrummarina.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.miltabodrummarina.com"
+        }
+      ],
+      "sourceUrls": [
+        "https://gotosailing.com/milta-bodrum-marina-bodrum",
+        "https://www.globalgoldanchor.com/marina-details/milta-bodrum",
+        "https://www.dockwalk.com/superports/milta-bodrum-marina--859",
+        "https://www.navily.com/port/milta-bodrum-marina/1639"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Resmi site erişilemedi; veriler dizinlerden (425 kapasite 3 kaynak, Dockwalk 450 diyor; LOA 70 TYHA / 75 Dockwalk — 70 alındı; draft 7 yalnız Dockwalk)."
+    },
+    {
+      "slug": "ece-saray-marina",
+      "name": "Ece Saray Marina & Resort",
+      "operator": "Ece Şirketler Grubu",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.6244,
+      "lon": 29.1016,
+      "coordSource": "marinas.com",
+      "descriptionTr": "Fethiye Karagözler mevkiinde yer alan marina, 50 metreye kadar tekneler için 350 bağlama kapasitesi sunmaktadır. Mavi Bayrak ve 5 Altın Çıpa sahibidir.",
+      "berthCount": 350,
+      "maxLoaM": 50,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "blueFlag": true,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant",
+        "shower",
+        "laundry",
+        "wifi",
+        "security",
+        "wc",
+        "pump_out",
+        "technical_service"
+      ],
+      "services": [
+        "mooring_assist",
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902526128829",
+          "primary": true
+        },
+        {
+          "type": "phone",
+          "value": "+902526125005"
+        },
+        {
+          "type": "email",
+          "value": "marina@ecemarina.com"
+        },
+        {
+          "type": "website",
+          "value": "https://ecesaray.com.tr/marina/en/"
+        }
+      ],
+      "sourceUrls": [
+        "https://ecesaray.com.tr/marina/en/",
+        "https://marinas.com/view/marina/jnc13dz_Ece_Saray_Marina_Fethiye_Turkey",
+        "https://www.navily.com/port/ece-saray-marina/1656"
+      ],
+      "confidence": "high",
+      "missingNotes": "VHF 73 üçüncü taraf kaynaklı (resmi sitede yok). Su çekimi yayınlanmamış."
+    },
+    {
+      "slug": "gocek-village-port-marina",
+      "name": "Göcek Village Port Marina",
+      "operator": "Setur Marinas",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.7567,
+      "lon": 28.9283,
+      "coordSource": "seturmarinas.com (36°45'24\"N 28°55'42\"E çevrildi)",
+      "descriptionTr": "Göcek'te yer alan marina (eski adıyla Marintürk Göcek Village Port) Setur Marinas tarafından işletilmektedir. Denizde 220, karada 200 tekne kapasitesi ve çekek alanı bulunmaktadır.",
+      "berthCount": 220,
+      "maxLoaM": 50,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "69",
+      "blueFlag": null,
+      "travelLiftTons": 200,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant",
+        "market",
+        "shower",
+        "wifi",
+        "security",
+        "wc",
+        "travel_lift",
+        "technical_service"
+      ],
+      "services": [
+        "mooring_assist",
+        "technical_service",
+        "boat_wash",
+        "diver"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902522771012",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "villageport@seturmarinas.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.seturmarinas.com/en/marinas/gocek-village-port"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.seturmarinas.com/en/marinas/gocek-village-port"
+      ],
+      "confidence": "high",
+      "missingNotes": "Max LOA/su çekimi yayınlanmamış. Travel lift 75 t ve 200 t (büyüğü kaydedildi). VHF 69 güncel Setur sayfasından (eski kaynaklar 73 der). | FAZ2 GOCEK TURU: maxLoa 50 m marinalar.com fişinden ('50m.', https://marinalar.com/gocek-village-port-marina). Fiş Marintürk dönemine ait ama rıhtım altyapısı işletmeci değişimiyle değişmez; Setur'un kendi sayfası bu alanı boş bırakıyor."
+    },
+    {
+      "slug": "club-marina-gocek",
+      "name": "Club Marina",
+      "operator": "Club Marina-Göcek",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.7467,
+      "lon": 28.925,
+      "coordSource": "clubmarina.com.tr resmi iletişim sayfası (36.7467228, 28.9249808)",
+      "descriptionTr": "1990 yılında kurulan Club Marina, Göcek Büngüş Koyu'nda yer alan doğal korunaklı bir marinadır ve mega yatlara hizmet verebilmektedir.",
+      "berthCount": 100,
+      "maxLoaM": 80,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "72",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant",
+        "shower",
+        "market",
+        "laundry",
+        "wifi",
+        "security",
+        "wc",
+        "pump_out",
+        "technical_service"
+      ],
+      "services": [
+        "mooring_assist",
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902526451800",
+          "primary": true
+        },
+        {
+          "type": "phone",
+          "value": "+905307675804"
+        },
+        {
+          "type": "email",
+          "value": "info@clubmarina.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://www.clubmarina.com.tr"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.clubmarina.com.tr/",
+        "https://www.clubmarina.com.tr/marina-hizmetleri/",
+        "https://www.sea-seek.com/en/Gocek-Club-Marina-Fethiye-Korfezi-",
+        "https://hurriyet.com.tr/gocek-koyu-nun-ilk-marinasi-club-marina-7150580"
+      ],
+      "confidence": "high",
+      "missingNotes": "Kapasite 100, sea-seek dizin yaklaşık değeri (resmi sitede yok). LOA/draft yayınlanmamış. | FAZ2 GOCEK TURU: maxLoa 80 m Hürriyet haberinden ('Bu bölüme 80 metre uzunluğa kadar yatlar yanaşabiliyor.'). İşletmecinin kendi sitesi (clubmarina.com.tr) erişilemedi; site okununca teyit edilmeli."
+    },
+    {
+      "slug": "skopea-marina",
+      "name": "Skopea Marina",
+      "operator": null,
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-fethiye",
+      "lat": 36.7548,
+      "lon": 28.9392,
+      "coordSource": "gotosailing.com (N36°45'17.21\" E28°56'21.16\" çevrildi)",
+      "descriptionTr": "1989 yılında kurulan Skopea Marina, Göcek merkez sahil şeridinde yer almaktadır ve 110 metreye kadar teknelere hizmet verebilmektedir.",
+      "berthCount": 80,
+      "maxLoaM": 110,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "72",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant",
+        "shower",
+        "market",
+        "laundry",
+        "wifi",
+        "security",
+        "wc",
+        "pump_out"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902526451794",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@skopeamarina.com.tr"
+        },
+        {
+          "type": "email",
+          "value": "skopeamarina@gmail.com"
+        },
+        {
+          "type": "website",
+          "value": "http://www.skopeamarina.com.tr"
+        }
+      ],
+      "sourceUrls": [
+        "http://www.skopeamarina.com.tr/",
+        "https://gotosailing.com/skopea-marina-gocek",
+        "https://www.marinareservation.com/marina-skopea-marina-50"
+      ],
+      "confidence": "high",
+      "missingNotes": "Su çekimi dizinlerde çelişkili (5-6.5 m) — boş bırakıldı. İşletmeci şirket adı yayınlanmamış."
+    },
+    {
+      "slug": "marti-marina-orhaniye",
+      "name": "Martı Marina",
+      "operator": "Martı Hotels & Marinas",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-marmaris",
+      "lat": 36.7583,
+      "lon": 28.1417,
+      "coordSource": "marti.com.tr resmi site (36°45'30\"N 028°08'30\"E çevrildi)",
+      "descriptionTr": "Marmaris'in Orhaniye mevkiinde yer alan marina Martı Hotels & Marinas tarafından işletilmektedir. Yakıt istasyonu ve teknik servis hizmetleri bulunmaktadır.",
+      "berthCount": 380,
+      "maxLoaM": null,
+      "maxDraftM": 4,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73/16",
+      "blueFlag": null,
+      "travelLiftTons": 60,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant",
+        "shower",
+        "market",
+        "laundry",
+        "wifi",
+        "security",
+        "wc",
+        "pump_out",
+        "travel_lift",
+        "technical_service"
+      ],
+      "services": [
+        "technical_service",
+        "diver"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902524871063",
+          "primary": true
+        },
+        {
+          "type": "phone",
+          "value": "+905301709093"
+        },
+        {
+          "type": "email",
+          "value": "marina@marti.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://www.marti.com.tr/marti-marina"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.marti.com.tr/marti-marina",
+        "https://my-sea.com/en/poi/turkey/bodrum-to-marmaris/orhaniye/marti-marina/5445b226-608a-4e8e-82e5-c8d6019daff2"
+      ],
+      "confidence": "high",
+      "missingNotes": "LOA kaynaklarda çelişkili (30/40/50) — boş bırakıldı. Draft 4 m tek dizin kaynaklı. Kapasite 380 iki bağımsız dizinle uyumlu."
+    },
+    {
+      "slug": "my-marina-ekincik",
+      "name": "My Marina Yacht Club",
+      "operator": null,
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-koycegiz",
+      "lat": 36.8242,
+      "lon": 28.5655,
+      "coordSource": "navily.com (36°49.45'N 28°33.93'E çevrildi)",
+      "descriptionTr": "Köyceğiz'e bağlı Ekincik Koyu'nda restoran ve yat bağlama iskelesi hizmeti veren küçük bir tesistir. Nisan-Ekim döneminde sezonluk olarak faaliyet göstermektedir.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "season": {
+        "opensOn": [
+          4,
+          1
+        ],
+        "closesOn": [
+          10,
+          31
+        ]
+      },
+      "amenities": [
+        "electricity",
+        "water",
+        "restaurant",
+        "shower",
+        "laundry",
+        "wifi",
+        "security",
+        "wc",
+        "pump_out"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902522660276",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@mymarinayachtclub.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.mymarinayachtclub.com/"
+        }
+      ],
+      "sourceUrls": [
+        "https://my-sea.com/en/poi/turkey/marmaris-to-fethiye/ekincik/my-marina-restaurant/ec40a70c-48f1-4a04-b8a3-01d29bac1bf2",
+        "https://www.navily.com/port/my-marina-yacht-club/22287",
+        "https://www.harbourmaps.com/en/harbour/my-marina-yacht-club-koycegiz"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Kapasite/LOA/draft/VHF hiçbir kaynakta yayınlanmamış. Sezon 01.04-31.10 (my-sea)."
+    },
+    {
+      "slug": "yacht-marin-marmaris",
+      "name": "Yacht Marin Marmaris",
+      "operator": null,
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-marmaris",
+      "lat": 36.8197,
+      "lon": 28.3092,
+      "coordSource": "navily.com (36°49.18'N 28°18.55'E çevrildi)",
+      "descriptionTr": "Marmaris Adaköy Yalancı Boğaz mevkiinde yer alan büyük bir marinadır; Marmaris Yacht Marina adıyla da bilinir. Denizde 750 tekne kapasitesi ve büyük bir çekek sahası bulunmaktadır.",
+      "berthCount": 750,
+      "maxLoaM": 75,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "72",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant",
+        "shower",
+        "market",
+        "laundry",
+        "wifi",
+        "security",
+        "wc",
+        "pump_out",
+        "travel_lift",
+        "technical_service"
+      ],
+      "services": [
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902524220022",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@yachtmarin.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.yachtmarin.com"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.tyha.co.uk/marina-details/marmaris-yacht-marina",
+        "https://www.navily.com/port/marmaris-yacht-marine/1651"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Resmi site erişilemedi; kapasite 750 (TYHA, kara 1000 hariç), LOA 75 (TYHA; my-sea 50 der). İşletmeci şirket yayınlanmamış."
+    },
+    {
+      "slug": "albatros-marina-marmaris",
+      "name": "Albatros Marina",
+      "operator": "Albatros Turizm Yat ve Marina İşletmeciliği A.Ş.",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-marmaris",
+      "lat": 36.8439,
+      "lon": 28.2856,
+      "coordSource": "albatrosmarina.com resmi site (36°50'38\"N 28°17'08\"E çevrildi)",
+      "descriptionTr": "Marmaris merkezinin yaklaşık 3 km doğusunda 1982'de kurulan marina, denizde 44 tekne bağlama kapasitesi ve karada 150 tekne için çekek alanı sunmaktadır.",
+      "berthCount": 44,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": true,
+      "amenities": [
+        "electricity",
+        "water",
+        "restaurant",
+        "shower",
+        "market",
+        "laundry",
+        "security",
+        "wc",
+        "technical_service"
+      ],
+      "services": [
+        "technical_service",
+        "winter_storage",
+        "boat_wash"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902524122456",
+          "primary": true
+        },
+        {
+          "type": "whatsapp",
+          "value": "+905302373852"
+        },
+        {
+          "type": "email",
+          "value": "info@albatrosmarina.com"
+        },
+        {
+          "type": "website",
+          "value": "https://albatrosmarina.com"
+        }
+      ],
+      "sourceUrls": [
+        "https://albatrosmarina.com/",
+        "https://albatrosmarina.com/services/",
+        "https://www.sailing360.com/en/marinas-turkey/albatros-marina-marmaris.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "LOA/draft: dizin değerleri resmi siteyle çelişti (VHF dahil), güvenilmedi. D-Resort Grand Azur bağlantısı DOĞRULANAMADI — bağımsız tesis."
+    },
+    {
+      "slug": "port-iasos-marina",
+      "name": "Port Iasos Marina",
+      "operator": null,
+      "status": "draft",
+      "typeCode": "private_marina",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-milas",
+      "lat": 37.2489,
+      "lon": 27.5367,
+      "coordSource": "marinas.com (37.248877, 27.536702)",
+      "descriptionTr": "Milas Kıyıkışlacık köyü Gökliman mevkiinde, antik Iasos kenti yakınında yer alan küçük bir marinadır.",
+      "berthCount": 150,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "shower",
+        "wc",
+        "wifi"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+905417604241",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@portiasos.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.portiasos.com"
+        }
+      ],
+      "sourceUrls": [
+        "https://marinakedisi.com/marinalar/ege/port-iasos-marina/",
+        "https://marinas.com/view/marina/3gcdr69_Port_iasos_Marina_Milas-Bodrum_Mugla_Turkey",
+        "https://www.navily.com/port/port-iasos-marina/1633"
+      ],
+      "confidence": "low",
+      "missingNotes": "2026 itibarıyla faal olduğu doğrulanamadı (resmi site erişilemedi, en güncel dizin verisi 2023). VHF çelişkili (16/73) — boş. Doğrulanana dek taslak."
+    },
+    {
+      "slug": "atakoy-marina",
+      "name": "Ataköy Marina",
+      "operator": "DATI Yatırım Holding",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "istanbul",
+      "districtSlug": "istanbul-bakirkoy",
+      "lat": 40.9728,
+      "lon": 28.8819,
+      "coordSource": "atakoymarina.com.tr resmi iletişim sayfası (N 40°58'22\" E 28°52'55\" çevrildi)",
+      "descriptionTr": "İstanbul Bakırköy'de yer alan marina denizde 1000 tekneye bağlama imkânı sunmaktadır. Akaryakıt istasyonu ve teknik bakım-onarım hizmetleri bulunmaktadır.",
+      "berthCount": 1000,
+      "maxLoaM": 30,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "blueFlag": null,
+      "travelLiftTons": 63,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant",
+        "market",
+        "laundry",
+        "wifi",
+        "security",
+        "travel_lift",
+        "crane",
+        "technical_service"
+      ],
+      "services": [
+        "mooring_assist",
+        "technical_service",
+        "crane",
+        "boat_wash",
+        "diver"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902125604270",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "atakoymarina@atakoymarina.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://atakoymarina.com.tr"
+        },
+        {
+          "type": "instagram",
+          "value": "https://www.instagram.com/marina_atakoy/"
+        },
+        {
+          "type": "facebook",
+          "value": "https://www.facebook.com/marina.atakoy"
+        }
+      ],
+      "sourceUrls": [
+        "https://atakoymarina.com.tr/",
+        "https://atakoymarina.com.tr/iletisim/"
+      ],
+      "confidence": "high",
+      "missingNotes": "Su çekimi yayınlanmamış; 30 m LOA tonoz bağlama sistemi için belirtilen değer. Duş/WC sayfada açıkça doğrulanamadı."
+    },
+    {
+      "slug": "viaport-marina",
+      "name": "Viaport Marina",
+      "operator": null,
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "istanbul",
+      "districtSlug": "istanbul-tuzla",
+      "lat": 40.8158,
+      "lon": 29.3188,
+      "coordSource": "navily.com (40°48.95'N 29°19.13'E), dockwalk ile tutarlı",
+      "descriptionTr": "İstanbul Tuzla'da Viaport alışveriş ve eğlence kompleksi içinde 2015 yılında açılan marinadır.",
+      "berthCount": 750,
+      "maxLoaM": 80,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "72",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "shower",
+        "wc",
+        "wifi",
+        "laundry",
+        "security"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902165601842",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "viaportmarina@viaportmarina.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.viaportmarina.com/marina/en/"
+        },
+        {
+          "type": "instagram",
+          "value": "https://www.instagram.com/viaportmarinatuzla/"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.dockwalk.com/superports/viaport-marina--1039",
+        "https://www.navily.com/port/viaport-marina/1611",
+        "https://app.metarina.com/marinas/viaport-marina-tuzla"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Resmi site erişilemedi; kapasite/LOA/VHF dizin kaynaklı. 750 'bağlama' ifadesi deniz/kara ayrımı netleştirmiyor olabilir."
+    },
+    {
+      "slug": "west-istanbul-marina",
+      "name": "West Istanbul Marina",
+      "operator": "Enelka Taahhüt İmalat ve Ticaret Ltd. Şti.",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "istanbul",
+      "districtSlug": "istanbul-beylikduzu",
+      "lat": 40.9628,
+      "lon": 28.6636,
+      "coordSource": "westistanbulmarina.com resmi iletişim sayfası (N 40°57'46\" E 28°39'49\" çevrildi)",
+      "descriptionTr": "İstanbul Beylikdüzü'nde denizde 600 tekne bağlama, karada 300 tekne kapasitesine sahip marinadır. 75 ve 700 ton kapasiteli travel liftleri ile bakım-onarım ve refit hizmetleri sunar; gümrük kapısı bulunan giriş limanıdır.",
+      "berthCount": 600,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "72",
+      "blueFlag": null,
+      "travelLiftTons": 700,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant",
+        "shower",
+        "wc",
+        "wifi",
+        "security",
+        "pump_out",
+        "crane",
+        "travel_lift",
+        "technical_service"
+      ],
+      "services": [
+        "mooring_assist",
+        "technical_service",
+        "crane",
+        "diver"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902128502200",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "marina@westistanbulmarina.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.westistanbulmarina.com"
+        },
+        {
+          "type": "instagram",
+          "value": "https://www.instagram.com/westistanbul_marina/"
+        },
+        {
+          "type": "facebook",
+          "value": "https://www.facebook.com/westistanbul/"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.westistanbulmarina.com",
+        "https://www.westistanbulmarina.com/contact",
+        "https://www.westistanbulmarina.com/about-us"
+      ],
+      "confidence": "high",
+      "missingNotes": "LOA/su çekimi resmi sayfalarda yayınlanmamış."
+    },
+    {
+      "slug": "marinturk-istanbul-city-port",
+      "name": "Marinturk İstanbul City Port",
+      "operator": "Pendik Turizm Marina Yat ve Çekek İşletmesi A.Ş.",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "istanbul",
+      "districtSlug": "istanbul-pendik",
+      "lat": 40.8705,
+      "lon": 29.2375,
+      "coordSource": "navily.com (40°52.23'N 29°14.25'E); resmi site koordinat yayınlamıyor",
+      "descriptionTr": "İstanbul Pendik'te yer alan marina yüzer pontonlarla 785 bağlama kapasitesine sahiptir. 200 tona kadar tekne çekme-indirme imkânı ve bakım-onarım hizmetleri bulunmaktadır.",
+      "berthCount": 785,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "blueFlag": null,
+      "travelLiftTons": 200,
+      "winterStorage": true,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "shower",
+        "wc",
+        "wifi",
+        "technical_service"
+      ],
+      "services": [
+        "technical_service",
+        "crane",
+        "winter_storage"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902169991234",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "cityport@marinturk.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://www.marinturk.com.tr"
+        },
+        {
+          "type": "instagram",
+          "value": "https://www.instagram.com/marinturkmarina"
+        },
+        {
+          "type": "facebook",
+          "value": "https://www.facebook.com/MarinturkMarinas"
+        }
+      ],
+      "sourceUrls": [
+        "https://marinturk.com.tr/tr",
+        "https://www.marinturk.com.tr/en/marinas/istanbul-city-port",
+        "https://www.navily.com/port/marinturk-istanbul-city-port-pendik/1612"
+      ],
+      "confidence": "high",
+      "missingNotes": "LOA/draft yayınlanmamış (30+ m ifadesi var, üst sınır yok). Dizin 752 der, resmi 785 esas alındı."
+    },
+    {
+      "slug": "teos-marina",
+      "name": "Teos Marina",
+      "operator": "Teos Marine İşletmeciliği ve Tic. A.Ş.",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "izmir",
+      "districtSlug": "izmir-seferihisar",
+      "lat": 38.1958,
+      "lon": 26.7825,
+      "coordSource": "galayachtagency.com (38°11'45\"N 026°46'57\"E çevrildi)",
+      "descriptionTr": "İzmir'in Seferihisar ilçesi Sığacık'ta 2010 yılından beri hizmet veren yat limanıdır. Denizde yaklaşık 480, karada 80 tekne kapasitesine sahiptir.",
+      "berthCount": 480,
+      "maxLoaM": 40,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "72/16",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "fuel",
+        "restaurant",
+        "market",
+        "laundry",
+        "wifi",
+        "pump_out",
+        "travel_lift"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902327458080",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@teosmarina.com"
+        },
+        {
+          "type": "website",
+          "value": "https://teosmarina.com.tr"
+        }
+      ],
+      "sourceUrls": [
+        "https://marinakedisi.com/marinalar/ege/teos-marina/",
+        "https://galayachtagency.com/yacht-marinas-ports-turkey/teos-marina-izmir/",
+        "https://izmir.ktb.gov.tr/TR-77353/yat-limanlari.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Resmi site erişilemedi. Kapasite kaynaklarda 400-510 arası değişiyor; 480 (resmi veriyi aktaran marinakedisi) alındı."
+    },
+    {
+      "slug": "port-alacati-marina",
+      "name": "Port Alaçatı Marina",
+      "operator": "Alaçatı Turizm Yatırım İşletmeleri A.Ş.",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "izmir",
+      "districtSlug": "izmir-cesme",
+      "lat": 38.25875,
+      "lon": 26.37793,
+      "coordSource": "portalacati.com.tr (resmi site harita koordinatı)",
+      "descriptionTr": "İzmir'in Çeşme ilçesi Alaçatı'da yat limanı ile konut ve otel alanlarını birleştiren bir deniz yerleşimidir.",
+      "berthCount": 260,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "72",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902327166373",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@portalacati.com.tr"
+        },
+        {
+          "type": "email",
+          "value": "marina@portalacati.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://www.portalacati.com.tr"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.portalacati.com.tr/",
+        "https://marinakedisi.com/marinalar/ege/port-alacati-marina/",
+        "https://izmir.ktb.gov.tr/TR-77353/yat-limanlari.html"
+      ],
+      "confidence": "medium",
+      "missingNotes": "Olanak listesi hiçbir doğrulanan kaynakta açıkça yayınlanmadığı için boş. Kapasite 260 (izmir.ktb.gov.tr resmi listesi); marinakedisi 150 der."
+    },
+    {
+      "slug": "levent-marina-izmir",
+      "name": "Levent Marina",
+      "operator": null,
+      "status": "draft",
+      "typeCode": "private_marina",
+      "provinceSlug": "izmir",
+      "districtSlug": null,
+      "lat": 38.4067,
+      "lon": 27.0692,
+      "coordSource": "marinakedisi.com (38°24'24\"N 27°04'09\"E çevrildi)",
+      "descriptionTr": "İzmir Üçkuyular'da yer alan marina; İzmir Büyükşehir Belediyesi'ne devredilerek İzmir Marina adıyla yenilendiği yönünde yayınlar bulunmaktadır.",
+      "berthCount": null,
+      "maxLoaM": 25,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "technical_service"
+      ],
+      "services": [
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902322597070",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@leventmarina.com.tr"
+        }
+      ],
+      "sourceUrls": [
+        "https://marinakedisi.com/marinalar/ege/levent-marina/",
+        "https://ytb.org.tr/marinalar/levent-marina-izmir_47"
+      ],
+      "confidence": "low",
+      "missingNotes": "Alan adı işlevsiz; devir/yeniden adlandırma (İzmir Marina) doğrulanamadı. Güncel durum netleşene dek taslak."
+    },
+    {
+      "slug": "ic-cesme-marina",
+      "name": "Çeşme Marina",
+      "operator": "IC Çeşme Marina Yat. Tur. ve İşl. A.Ş. (IC Holding + Camper & Nicholsons)",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "izmir",
+      "districtSlug": "izmir-cesme",
+      "lat": 38.3233,
+      "lon": 26.3004,
+      "coordSource": "sail-friend.club (38.323296, 26.300442)",
+      "descriptionTr": "Çeşme ilçe merkezinde IC Holding ve Camper & Nicholsons ortaklığında işletilen, 60 metreye kadar teknelere hizmet veren yat limanıdır. Gümrük ve pasaport işlemlerinin yapılabildiği bir giriş limanıdır.",
+      "berthCount": 400,
+      "maxLoaM": 60,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "72",
+      "blueFlag": null,
+      "travelLiftTons": 80,
+      "winterStorage": null,
+      "amenities": [
+        "water",
+        "fuel",
+        "restaurant",
+        "laundry",
+        "wifi",
+        "wc",
+        "pump_out",
+        "travel_lift",
+        "technical_service"
+      ],
+      "services": [
+        "mooring_assist",
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902327122500",
+          "primary": true
+        },
+        {
+          "type": "website",
+          "value": "https://cnmarinas.com/marinas/cesme-marina/"
+        }
+      ],
+      "sourceUrls": [
+        "https://cnmarinas.com/marinas/cesme-marina/",
+        "https://sail-friend.club/listings/cesme-marina/",
+        "https://izmir.ktb.gov.tr/TR-77353/yat-limanlari.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "Kapasite kaynaklarda 377-400 arası; 400 alındı. Su çekimi yayınlanmamış."
+    },
+    {
+      "slug": "g-marina-kemer",
+      "name": "G-Marina Kemer",
+      "operator": "Mavi Yeşil International Tourism Ltd. Co.",
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "antalya",
+      "districtSlug": "antalya-kemer",
+      "lat": 36.599625,
+      "lon": 30.573331,
+      "coordSource": "gmarinakemer.net resmi iletişim sayfası",
+      "descriptionTr": "Kemer ilçe merkezinde yer alan marina (eski adıyla Kemer Türkiz Marina) denizde 230 ve karada 140 tekne kapasitesine sahiptir. 2016'dan bu yana Mavi Yeşil International Tourism Ltd. tarafından işletilmektedir.",
+      "berthCount": 230,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "blueFlag": null,
+      "travelLiftTons": null,
+      "winterStorage": true,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant",
+        "shower",
+        "market",
+        "laundry",
+        "security",
+        "wc",
+        "travel_lift",
+        "technical_service"
+      ],
+      "services": [
+        "technical_service",
+        "winter_storage"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902428141490",
+          "primary": true
+        },
+        {
+          "type": "whatsapp",
+          "value": "+905367179649"
+        },
+        {
+          "type": "email",
+          "value": "marina@gmarinakemer.net"
+        },
+        {
+          "type": "website",
+          "value": "https://www.gmarinakemer.net"
+        },
+        {
+          "type": "instagram",
+          "value": "https://www.instagram.com/gmarinakemer/"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.gmarinakemer.net/en",
+        "https://www.gmarinakemer.net/en/about-us",
+        "https://www.gmarinakemer.net/en/contact"
+      ],
+      "confidence": "high",
+      "missingNotes": "Resmi sitede kapasite tutarsızlığı (ana sayfa 270/100, hakkımızda 230/140) — hakkımızda esas alındı. LOA/draft yayınlanmamış."
+    },
+    {
+      "slug": "alanya-marina",
+      "name": "Alanya Marina",
+      "operator": null,
+      "status": "published",
+      "typeCode": "private_marina",
+      "provinceSlug": "antalya",
+      "districtSlug": "antalya-alanya",
+      "lat": 36.5569,
+      "lon": 31.9519,
+      "coordSource": "alanyamarina.com.tr resmi site (36°33'25\"N 31°57'07\"E çevrildi)",
+      "descriptionTr": "10 Şubat 2011'de açılan Alanya Marina, denizde 287 ve karada 150 tekne kapasitesine sahiptir. 100 ton kapasiteli travel lift bulunmaktadır.",
+      "berthCount": 287,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "16/73",
+      "blueFlag": null,
+      "travelLiftTons": 100,
+      "winterStorage": true,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant",
+        "shower",
+        "market",
+        "laundry",
+        "wifi",
+        "security",
+        "travel_lift",
+        "technical_service"
+      ],
+      "services": [
+        "technical_service",
+        "winter_storage"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902425113400",
+          "primary": true
+        },
+        {
+          "type": "phone",
+          "value": "+902425121219"
+        },
+        {
+          "type": "email",
+          "value": "info@alanyamarina.com.tr"
+        },
+        {
+          "type": "email",
+          "value": "office@alanyamarina.com.tr"
+        },
+        {
+          "type": "website",
+          "value": "https://www.alanyamarina.com.tr"
+        },
+        {
+          "type": "instagram",
+          "value": "https://www.instagram.com/alanyamarina/"
+        },
+        {
+          "type": "facebook",
+          "value": "https://www.facebook.com/ALANYA-MARINA-180783565338565"
+        }
+      ],
+      "sourceUrls": [
+        "https://www.alanyamarina.com.tr/",
+        "https://www.alanyamarina.com.tr/alanya-marina-antalya-hizmetler.asp"
+      ],
+      "confidence": "high",
+      "missingNotes": "İşletmeci şirket adı, LOA ve su çekimi resmi sitede yayınlanmamış."
     }
-   ],
-   "sourceUrls": [
-    "https://www.seturmarinas.com/en/marinas/kalamis-fenerbahce"
-   ],
-   "confidence": "high",
-   "missingNotes": "Su çekimi limiti yayınlanmamış; 6.5 m 'maximum depth' olarak yayınlandığı için depthMaxM'e alındı."
-  },
-  {
-   "slug": "setur-yalova-marina",
-   "name": "Setur Yalova Marina",
-   "operator": "Setur Marinas",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "yalova",
-   "districtSlug": "yalova-merkez",
-   "lat": 40.6614,
-   "lon": 29.2745,
-   "coordSource": "seturmarinas.com (40°39'41.2\"N 29°16'28.2\"E çevrildi)",
-   "descriptionTr": "Yalova merkez sahilinde yer alan marina 225 deniz ve 70 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.",
-   "berthCount": 225,
-   "maxLoaM": 40,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": 5,
-   "vhfChannel": "73",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "wifi",
-    "wc",
-    "shower",
-    "security"
-   ],
-   "services": [
-    "mooring_assist",
-    "diver",
-    "boat_wash"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902268131919",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "yalova@seturmarinas.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.seturmarinas.com/en/marinas/yalova"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.seturmarinas.com/en/marinas/yalova"
-   ],
-   "confidence": "high",
-   "missingNotes": "100 tonluk çekme-indirme belirtilmiş ama ekipman tipi (travel lift/vinç) adlandırılmamış — boş bırakıldı."
-  },
-  {
-   "slug": "setur-ayvalik-marina",
-   "name": "Setur Ayvalık Marina",
-   "operator": "Setur Marinas",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "balikesir",
-   "districtSlug": "balikesir-ayvalik",
-   "lat": 39.3141,
-   "lon": 26.688,
-   "coordSource": "seturmarinas.com (39°18'50.6\"N 26°41'16.7\"E çevrildi)",
-   "descriptionTr": "Ayvalık ilçe merkezinde yer alan marina 200 deniz ve 30 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.",
-   "berthCount": 200,
-   "maxLoaM": 40,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": 4.7,
-   "vhfChannel": "73/16",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "fuel",
-    "wifi",
-    "wc",
-    "shower",
-    "security",
-    "market",
-    "restaurant",
-    "travel_lift"
-   ],
-   "services": [
-    "mooring_assist",
-    "diver",
-    "boat_wash",
-    "technical_service"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902663122696",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "ayvalik@seturmarinas.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.seturmarinas.com/en/marinas/ayvalik"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.seturmarinas.com/en/marinas/ayvalik"
-   ],
-   "confidence": "high",
-   "missingNotes": "Elektrik/su sayfada açıkça doğrulanamadı, eklenmedi."
-  },
-  {
-   "slug": "setur-cesme-marina",
-   "name": "Setur Çeşme Marina",
-   "operator": "Setur Marinas",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "izmir",
-   "districtSlug": "izmir-cesme",
-   "lat": 38.3237,
-   "lon": 26.3456,
-   "coordSource": "seturmarinas.com (38°19'25.4\"N 26°20'44.0\"E çevrildi)",
-   "descriptionTr": "Çeşme Altınyunus mevkiinde yer alan marina 186 deniz ve 60 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.",
-   "berthCount": 186,
-   "maxLoaM": 45,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": 5.5,
-   "vhfChannel": "73/16",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "water",
-    "fuel",
-    "wifi",
-    "wc",
-    "shower",
-    "security",
-    "restaurant"
-   ],
-   "services": [
-    "mooring_assist",
-    "boat_wash"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902327231434",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "cesme@seturmarinas.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.seturmarinas.com/en/marinas/cesme"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.seturmarinas.com/en/marinas/cesme"
-   ],
-   "confidence": "high",
-   "missingNotes": "Elektrik sayfada açıkça doğrulanamadı, eklenmedi."
-  },
-  {
-   "slug": "setur-kusadasi-marina",
-   "name": "Setur Kuşadası Marina",
-   "operator": "Setur Marinas",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "aydin",
-   "districtSlug": "aydin-kusadasi",
-   "lat": 37.8685,
-   "lon": 27.2605,
-   "coordSource": "seturmarinas.com (37°52'06.5\"N 27°15'37.7\"E çevrildi)",
-   "descriptionTr": "Kuşadası ilçe merkezinde yer alan marina 557 deniz ve 100 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.",
-   "berthCount": 557,
-   "maxLoaM": 90,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": 5,
-   "vhfChannel": "73/16",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "wifi",
-    "wc",
-    "shower",
-    "security",
-    "laundry",
-    "restaurant",
-    "travel_lift"
-   ],
-   "services": [
-    "mooring_assist",
-    "diver",
-    "boat_wash",
-    "technical_service"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902566181460",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "kusadasi@seturmarinas.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.seturmarinas.com/en/marinas/kusadasi"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.seturmarinas.com/en/marinas/kusadasi"
-   ],
-   "confidence": "high",
-   "missingNotes": null
-  },
-  {
-   "slug": "netsel-marmaris-marina",
-   "name": "Netsel Marmaris Marina",
-   "operator": "Setur Marinas",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-marmaris",
-   "lat": 36.8506,
-   "lon": 28.2772,
-   "coordSource": "seturmarinas.com (36°51'02\"N 28°16'38\"E çevrildi)",
-   "descriptionTr": "Marmaris ilçe merkezinde yer alan marina 701 tekne kapasiteli deniz bağlama alanına sahiptir. Setur Marinas bünyesinde işletilmektedir.",
-   "berthCount": 701,
-   "maxLoaM": 90,
-   "maxDraftM": null,
-   "depthMinM": 3.5,
-   "depthMaxM": 18,
-   "vhfChannel": "72",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "wifi",
-    "wc",
-    "shower",
-    "security",
-    "market",
-    "laundry",
-    "restaurant"
-   ],
-   "services": [
-    "mooring_assist",
-    "boat_wash",
-    "technical_service"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902524122708",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "info@netselmarina.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.seturmarinas.com/en/marinas/netsel-marmaris"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.seturmarinas.com/en/marinas/netsel-marmaris"
-   ],
-   "confidence": "high",
-   "missingNotes": "18 m havza derinliğidir (min 3.5 m), tekne su çekimi limiti değildir. Sayfadaki 'kara kapasitesi 70' otopark aracıdır, çekek değil."
-  },
-  {
-   "slug": "setur-finike-marina",
-   "name": "Setur Finike Marina",
-   "operator": "Setur Marinas",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "antalya",
-   "districtSlug": "antalya-finike",
-   "lat": 36.2947,
-   "lon": 30.1526,
-   "coordSource": "seturmarinas.com (36°17'40.9\"N 30°09'09.2\"E çevrildi)",
-   "descriptionTr": "Finike ilçe merkezinde yer alan marina 284 deniz ve 100 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.",
-   "berthCount": 284,
-   "maxLoaM": 35,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": 4.5,
-   "vhfChannel": "73",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "wifi",
-    "wc",
-    "shower",
-    "security"
-   ],
-   "services": [
-    "mooring_assist",
-    "boat_wash",
-    "technical_service"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902428555030",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "finike@seturmarinas.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.seturmarinas.com/en/marinas/finike"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.seturmarinas.com/en/marinas/finike"
-   ],
-   "confidence": "high",
-   "missingNotes": "Yakıt istasyonu sayfada açıkça doğrulanamadı, eklenmedi."
-  },
-  {
-   "slug": "setur-antalya-marina",
-   "name": "Setur Antalya Marina",
-   "operator": "Setur Marinas",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "antalya",
-   "districtSlug": "antalya-konyaalti",
-   "lat": 36.8348,
-   "lon": 30.6148,
-   "coordSource": "seturmarinas.com (36°50'05.1\"N 30°36'53.2\"E çevrildi)",
-   "descriptionTr": "Antalya Konyaaltı'nda Büyük Liman mevkiinde yer alan marina 198 deniz ve 150 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.",
-   "berthCount": 198,
-   "maxLoaM": 90,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": 5.5,
-   "vhfChannel": "72",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "wifi",
-    "wc",
-    "shower",
-    "security",
-    "market",
-    "restaurant",
-    "travel_lift"
-   ],
-   "services": [
-    "mooring_assist",
-    "diver",
-    "boat_wash",
-    "technical_service"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902422593259",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "antalya@seturmarinas.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.seturmarinas.com/en/marinas/antalya"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.seturmarinas.com/en/marinas/antalya"
-   ],
-   "confidence": "high",
-   "missingNotes": "Yakıt istasyonu sayfada açıkça doğrulanamadı, eklenmedi."
-  },
-  {
-   "slug": "setur-kas-marina",
-   "name": "Setur Kaş Marina",
-   "operator": "Setur Marinas",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "antalya",
-   "districtSlug": "antalya-kas",
-   "lat": 36.2053,
-   "lon": 29.6242,
-   "coordSource": "seturmarinas.com (36°12'19\"N 29°37'27\"E çevrildi)",
-   "descriptionTr": "Kaş Bucak Denizi'nde yer alan marina 447 deniz ve 120 kara kapasitesine sahiptir. Setur Marinas bünyesinde Makmarin Kaş Marina adıyla işletilmektedir.",
-   "berthCount": 447,
-   "maxLoaM": 120,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": 30,
-   "vhfChannel": "73",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "wifi",
-    "wc",
-    "shower",
-    "security",
-    "market",
-    "laundry",
-    "restaurant"
-   ],
-   "services": [
-    "mooring_assist",
-    "boat_wash",
-    "technical_service"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902428363700",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "info@kasmarina.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://www.seturmarinas.com/en/marinas/makmarin-kas"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.seturmarinas.com/en/marinas/makmarin-kas"
-   ],
-   "confidence": "high",
-   "missingNotes": "30 m koy/havza derinliğidir, su çekimi limiti değildir. 120 m 'maximum full size' resmi sayfadan."
-  },
-  {
-   "slug": "mersin-marina",
-   "name": "Mersin Marina",
-   "operator": "Mersin Yat Limanı İşletmeleri A.Ş.",
-   "status": "draft",
-   "typeCode": "private_marina",
-   "provinceSlug": "mersin",
-   "districtSlug": "mersin-yenisehir",
-   "lat": 36.77,
-   "lon": 34.5707,
-   "coordSource": "marinalar.com dizini (36.77002, 34.57072)",
-   "descriptionTr": "Mersin Yenişehir'de yer alan marina, Mersin Yat Limanı İşletmeleri A.Ş. tarafından işletilmektedir.",
-   "berthCount": 500,
-   "maxLoaM": 40,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "72",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "wifi",
-    "wc",
-    "shower",
-    "security",
-    "laundry",
-    "restaurant",
-    "travel_lift",
-    "crane",
-    "pump_out"
-   ],
-   "services": [
-    "diver",
-    "technical_service",
-    "crane"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+903243300300",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "info@mersinmarina.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://www.mersinmarina.com.tr"
-    }
-   ],
-   "sourceUrls": [
-    "https://en.wikipedia.org/wiki/Mersin_Marina",
-    "https://marinalar.com/mersin-marina/"
-   ],
-   "confidence": "low",
-   "missingNotes": "Resmi site araştırma sırasında erişilemedi; tüm teknik veri dizin kaynaklı. Resmi siteye karşı doğrulanana dek taslak (draft) tutulur. Not: Setur zinciri üyesi DEĞİL."
-  },
-  {
-   "slug": "d-marin-gocek",
-   "name": "D-Marin Göcek",
-   "operator": "D-Marin",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-fethiye",
-   "lat": 36.7483,
-   "lon": 28.9428,
-   "coordSource": "d-marin.com (36°44'54\"N 28°56'34\"E çevrildi)",
-   "descriptionTr": "Fethiye'nin Göcek mahallesinde yer alan marina 380 deniz bağlama ve 150 tekne kara park kapasitesine sahiptir. D-Marin tarafından işletilmektedir.",
-   "berthCount": 380,
-   "maxLoaM": 70,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": true,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "wifi",
-    "wc",
-    "shower",
-    "security",
-    "laundry",
-    "travel_lift",
-    "pump_out"
-   ],
-   "services": [
-    "mooring_assist",
-    "diver",
-    "boat_wash",
-    "technical_service",
-    "winter_storage"
-   ],
-   "contacts": [
-    {
-     "type": "website",
-     "value": "https://www.d-marin.com/en/marinas/gocek/"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.d-marin.com/en/marinas/gocek/",
-    "https://www.d-marin.com/tr/marinalar/gocek/"
-   ],
-   "confidence": "high",
-   "missingNotes": "Su çekimi yayınlanmamış. Resmi site Türkiye marinaları için telefon yayınlamıyor, e-postalar gizlenmiş — yalnız web sitesi eklendi."
-  },
-  {
-   "slug": "d-marin-turgutreis",
-   "name": "D-Marin Turgutreis",
-   "operator": "D-Marin",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-bodrum",
-   "lat": 37.0019,
-   "lon": 27.2561,
-   "coordSource": "d-marin.com (37°0'7\"N 27°15'22\"E çevrildi)",
-   "descriptionTr": "Bodrum Turgutreis'te yer alan marina 532 deniz bağlama ve 150 çekek (kara) kapasitesine sahiptir. D-Marin tarafından işletilmektedir.",
-   "berthCount": 532,
-   "maxLoaM": 75,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "72",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": true,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "wifi",
-    "wc",
-    "shower",
-    "security",
-    "laundry",
-    "travel_lift"
-   ],
-   "services": [
-    "mooring_assist",
-    "diver",
-    "boat_wash",
-    "technical_service",
-    "winter_storage"
-   ],
-   "contacts": [
-    {
-     "type": "website",
-     "value": "https://www.d-marin.com/en/marinas/turgutreis/"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.d-marin.com/en/marinas/turgutreis/"
-   ],
-   "confidence": "high",
-   "missingNotes": "75 m LOA, resmi 'vessels ranging from 8 to 75 meters' ifadesinden. Su çekimi yayınlanmamış."
-  },
-  {
-   "slug": "d-marin-didim",
-   "name": "D-Marin Didim",
-   "operator": "D-Marin",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "aydin",
-   "districtSlug": "aydin-didim",
-   "lat": 37.3406,
-   "lon": 27.2594,
-   "coordSource": "d-marin.com (37°20'26\"N 27°15'34\"E çevrildi)",
-   "descriptionTr": "Didim'de yer alan marina, 90'ı süperyat olmak üzere 591 deniz bağlama kapasitesine sahiptir. D-Marin tarafından işletilmektedir.",
-   "berthCount": 591,
-   "maxLoaM": 70,
-   "maxDraftM": 6,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "16/72",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": true,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "wifi",
-    "wc",
-    "shower",
-    "security",
-    "laundry",
-    "restaurant",
-    "travel_lift"
-   ],
-   "services": [
-    "mooring_assist",
-    "diver",
-    "boat_wash",
-    "technical_service",
-    "winter_storage"
-   ],
-   "contacts": [
-    {
-     "type": "website",
-     "value": "https://www.d-marin.com/en/marinas/didim/"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.d-marin.com/en/marinas/didim/",
-    "https://www.dockwalk.com/superports/d-marin-didim--899"
-   ],
-   "confidence": "high",
-   "missingNotes": "Su çekimi 'up to 6 meters' resmi sayfada açıkça yayınlanmış. Kuru park alan (70.000 m²) sayı olmadığı için eklenmedi."
-  },
-  {
-   "slug": "yalikavak-marina",
-   "name": "Yalıkavak Marina",
-   "operator": "Bodrum Yalıkavak Turizm ve Yat Limanı Yatırımları ve Ticaret A.Ş.",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-bodrum",
-   "lat": 37.105,
-   "lon": 27.2855,
-   "coordSource": "navily.com (37°6.30'N 27°17.13'E çevrildi)",
-   "descriptionTr": "Bodrum Yalıkavak'ta yer alan 620 yat kapasiteli marina; daha önce Palmarina adıyla hizmet veren tesis Yalıkavak Marina adını almıştır.",
-   "berthCount": 620,
-   "maxLoaM": 140,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "72",
-   "blueFlag": null,
-   "travelLiftTons": 260,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant",
-    "shower",
-    "market",
-    "laundry",
-    "wifi",
-    "security",
-    "wc",
-    "pump_out",
-    "travel_lift",
-    "technical_service"
-   ],
-   "services": [
-    "mooring_assist",
-    "technical_service",
-    "diver"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902523110600",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "info@yalikavakmarina.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://yalikavakmarina.com.tr"
-    },
-    {
-     "type": "instagram",
-     "value": "https://www.instagram.com/yalikavakmarina/"
-    },
-    {
-     "type": "facebook",
-     "value": "https://www.facebook.com/yalikavakmarina/"
-    }
-   ],
-   "sourceUrls": [
-    "https://yalikavakmarina.com.tr/marina/",
-    "https://www.globalgoldanchor.com/marina-details/yalikavak-marina",
-    "https://www.navily.com/port/yalikavak-marina/1636"
-   ],
-   "confidence": "high",
-   "missingNotes": "Su çekimi yayınlanmamış. 140 m LOA TYHA 'max berth size' kaynaklı. Travel lift 260 t ve 100 t (büyüğü kaydedildi)."
-  },
-  {
-   "slug": "milta-bodrum-marina",
-   "name": "Milta Bodrum Marina",
-   "operator": "Doğan Holding",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-bodrum",
-   "lat": 37.0345,
-   "lon": 27.4262,
-   "coordSource": "navily.com (37°2.07'N 27°25.57'E çevrildi)",
-   "descriptionTr": "Bodrum kent merkezinde yer alan marina Doğan Holding bünyesinde işletilmektedir. Mavi Bayrak ve 5 Altın Çıpa ödüllerine sahiptir.",
-   "berthCount": 425,
-   "maxLoaM": 70,
-   "maxDraftM": 7,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73",
-   "blueFlag": true,
-   "travelLiftTons": 70,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant",
-    "shower",
-    "market",
-    "laundry",
-    "wifi",
-    "security",
-    "wc",
-    "pump_out",
-    "travel_lift",
-    "technical_service"
-   ],
-   "services": [
-    "technical_service",
-    "diver"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902523161860",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "info@miltabodrummarina.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.miltabodrummarina.com"
-    }
-   ],
-   "sourceUrls": [
-    "https://gotosailing.com/milta-bodrum-marina-bodrum",
-    "https://www.globalgoldanchor.com/marina-details/milta-bodrum",
-    "https://www.dockwalk.com/superports/milta-bodrum-marina--859",
-    "https://www.navily.com/port/milta-bodrum-marina/1639"
-   ],
-   "confidence": "medium",
-   "missingNotes": "Resmi site erişilemedi; veriler dizinlerden (425 kapasite 3 kaynak, Dockwalk 450 diyor; LOA 70 TYHA / 75 Dockwalk — 70 alındı; draft 7 yalnız Dockwalk)."
-  },
-  {
-   "slug": "ece-saray-marina",
-   "name": "Ece Saray Marina & Resort",
-   "operator": "Ece Şirketler Grubu",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-fethiye",
-   "lat": 36.6244,
-   "lon": 29.1016,
-   "coordSource": "marinas.com",
-   "descriptionTr": "Fethiye Karagözler mevkiinde yer alan marina, 50 metreye kadar tekneler için 350 bağlama kapasitesi sunmaktadır. Mavi Bayrak ve 5 Altın Çıpa sahibidir.",
-   "berthCount": 350,
-   "maxLoaM": 50,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73",
-   "blueFlag": true,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant",
-    "shower",
-    "laundry",
-    "wifi",
-    "security",
-    "wc",
-    "pump_out",
-    "technical_service"
-   ],
-   "services": [
-    "mooring_assist",
-    "technical_service"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902526128829",
-     "primary": true
-    },
-    {
-     "type": "phone",
-     "value": "+902526125005"
-    },
-    {
-     "type": "email",
-     "value": "marina@ecemarina.com"
-    },
-    {
-     "type": "website",
-     "value": "https://ecesaray.com.tr/marina/en/"
-    }
-   ],
-   "sourceUrls": [
-    "https://ecesaray.com.tr/marina/en/",
-    "https://marinas.com/view/marina/jnc13dz_Ece_Saray_Marina_Fethiye_Turkey",
-    "https://www.navily.com/port/ece-saray-marina/1656"
-   ],
-   "confidence": "high",
-   "missingNotes": "VHF 73 üçüncü taraf kaynaklı (resmi sitede yok). Su çekimi yayınlanmamış."
-  },
-  {
-   "slug": "gocek-village-port-marina",
-   "name": "Göcek Village Port Marina",
-   "operator": "Setur Marinas",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-fethiye",
-   "lat": 36.7567,
-   "lon": 28.9283,
-   "coordSource": "seturmarinas.com (36°45'24\"N 28°55'42\"E çevrildi)",
-   "descriptionTr": "Göcek'te yer alan marina (eski adıyla Marintürk Göcek Village Port) Setur Marinas tarafından işletilmektedir. Denizde 220, karada 200 tekne kapasitesi ve çekek alanı bulunmaktadır.",
-   "berthCount": 220,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "69",
-   "blueFlag": null,
-   "travelLiftTons": 200,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant",
-    "market",
-    "shower",
-    "wifi",
-    "security",
-    "wc",
-    "travel_lift",
-    "technical_service"
-   ],
-   "services": [
-    "mooring_assist",
-    "technical_service",
-    "boat_wash",
-    "diver"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902522771012",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "villageport@seturmarinas.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.seturmarinas.com/en/marinas/gocek-village-port"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.seturmarinas.com/en/marinas/gocek-village-port"
-   ],
-   "confidence": "high",
-   "missingNotes": "Max LOA/su çekimi yayınlanmamış. Travel lift 75 t ve 200 t (büyüğü kaydedildi). VHF 69 güncel Setur sayfasından (eski kaynaklar 73 der)."
-  },
-  {
-   "slug": "club-marina-gocek",
-   "name": "Club Marina",
-   "operator": "Club Marina-Göcek",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-fethiye",
-   "lat": 36.7467,
-   "lon": 28.925,
-   "coordSource": "clubmarina.com.tr resmi iletişim sayfası (36.7467228, 28.9249808)",
-   "descriptionTr": "1990 yılında kurulan Club Marina, Göcek Büngüş Koyu'nda yer alan doğal korunaklı bir marinadır ve mega yatlara hizmet verebilmektedir.",
-   "berthCount": 100,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "72",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant",
-    "shower",
-    "market",
-    "laundry",
-    "wifi",
-    "security",
-    "wc",
-    "pump_out",
-    "technical_service"
-   ],
-   "services": [
-    "mooring_assist",
-    "technical_service"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902526451800",
-     "primary": true
-    },
-    {
-     "type": "phone",
-     "value": "+905307675804"
-    },
-    {
-     "type": "email",
-     "value": "info@clubmarina.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://www.clubmarina.com.tr"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.clubmarina.com.tr/",
-    "https://www.clubmarina.com.tr/marina-hizmetleri/",
-    "https://www.sea-seek.com/en/Gocek-Club-Marina-Fethiye-Korfezi-"
-   ],
-   "confidence": "high",
-   "missingNotes": "Kapasite 100, sea-seek dizin yaklaşık değeri (resmi sitede yok). LOA/draft yayınlanmamış."
-  },
-  {
-   "slug": "skopea-marina",
-   "name": "Skopea Marina",
-   "operator": null,
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-fethiye",
-   "lat": 36.7548,
-   "lon": 28.9392,
-   "coordSource": "gotosailing.com (N36°45'17.21\" E28°56'21.16\" çevrildi)",
-   "descriptionTr": "1989 yılında kurulan Skopea Marina, Göcek merkez sahil şeridinde yer almaktadır ve 110 metreye kadar teknelere hizmet verebilmektedir.",
-   "berthCount": 80,
-   "maxLoaM": 110,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "72",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant",
-    "shower",
-    "market",
-    "laundry",
-    "wifi",
-    "security",
-    "wc",
-    "pump_out"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902526451794",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "info@skopeamarina.com.tr"
-    },
-    {
-     "type": "email",
-     "value": "skopeamarina@gmail.com"
-    },
-    {
-     "type": "website",
-     "value": "http://www.skopeamarina.com.tr"
-    }
-   ],
-   "sourceUrls": [
-    "http://www.skopeamarina.com.tr/",
-    "https://gotosailing.com/skopea-marina-gocek",
-    "https://www.marinareservation.com/marina-skopea-marina-50"
-   ],
-   "confidence": "high",
-   "missingNotes": "Su çekimi dizinlerde çelişkili (5-6.5 m) — boş bırakıldı. İşletmeci şirket adı yayınlanmamış."
-  },
-  {
-   "slug": "marti-marina-orhaniye",
-   "name": "Martı Marina",
-   "operator": "Martı Hotels & Marinas",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-marmaris",
-   "lat": 36.7583,
-   "lon": 28.1417,
-   "coordSource": "marti.com.tr resmi site (36°45'30\"N 028°08'30\"E çevrildi)",
-   "descriptionTr": "Marmaris'in Orhaniye mevkiinde yer alan marina Martı Hotels & Marinas tarafından işletilmektedir. Yakıt istasyonu ve teknik servis hizmetleri bulunmaktadır.",
-   "berthCount": 380,
-   "maxLoaM": null,
-   "maxDraftM": 4,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73/16",
-   "blueFlag": null,
-   "travelLiftTons": 60,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant",
-    "shower",
-    "market",
-    "laundry",
-    "wifi",
-    "security",
-    "wc",
-    "pump_out",
-    "travel_lift",
-    "technical_service"
-   ],
-   "services": [
-    "technical_service",
-    "diver"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902524871063",
-     "primary": true
-    },
-    {
-     "type": "phone",
-     "value": "+905301709093"
-    },
-    {
-     "type": "email",
-     "value": "marina@marti.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://www.marti.com.tr/marti-marina"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.marti.com.tr/marti-marina",
-    "https://my-sea.com/en/poi/turkey/bodrum-to-marmaris/orhaniye/marti-marina/5445b226-608a-4e8e-82e5-c8d6019daff2"
-   ],
-   "confidence": "high",
-   "missingNotes": "LOA kaynaklarda çelişkili (30/40/50) — boş bırakıldı. Draft 4 m tek dizin kaynaklı. Kapasite 380 iki bağımsız dizinle uyumlu."
-  },
-  {
-   "slug": "my-marina-ekincik",
-   "name": "My Marina Yacht Club",
-   "operator": null,
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-koycegiz",
-   "lat": 36.8242,
-   "lon": 28.5655,
-   "coordSource": "navily.com (36°49.45'N 28°33.93'E çevrildi)",
-   "descriptionTr": "Köyceğiz'e bağlı Ekincik Koyu'nda restoran ve yat bağlama iskelesi hizmeti veren küçük bir tesistir. Nisan-Ekim döneminde sezonluk olarak faaliyet göstermektedir.",
-   "berthCount": null,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "season": {
-    "opensOn": [
-     4,
-     1
-    ],
-    "closesOn": [
-     10,
-     31
-    ]
-   },
-   "amenities": [
-    "electricity",
-    "water",
-    "restaurant",
-    "shower",
-    "laundry",
-    "wifi",
-    "security",
-    "wc",
-    "pump_out"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902522660276",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "info@mymarinayachtclub.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.mymarinayachtclub.com/"
-    }
-   ],
-   "sourceUrls": [
-    "https://my-sea.com/en/poi/turkey/marmaris-to-fethiye/ekincik/my-marina-restaurant/ec40a70c-48f1-4a04-b8a3-01d29bac1bf2",
-    "https://www.navily.com/port/my-marina-yacht-club/22287",
-    "https://www.harbourmaps.com/en/harbour/my-marina-yacht-club-koycegiz"
-   ],
-   "confidence": "medium",
-   "missingNotes": "Kapasite/LOA/draft/VHF hiçbir kaynakta yayınlanmamış. Sezon 01.04-31.10 (my-sea)."
-  },
-  {
-   "slug": "yacht-marin-marmaris",
-   "name": "Yacht Marin Marmaris",
-   "operator": null,
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-marmaris",
-   "lat": 36.8197,
-   "lon": 28.3092,
-   "coordSource": "navily.com (36°49.18'N 28°18.55'E çevrildi)",
-   "descriptionTr": "Marmaris Adaköy Yalancı Boğaz mevkiinde yer alan büyük bir marinadır; Marmaris Yacht Marina adıyla da bilinir. Denizde 750 tekne kapasitesi ve büyük bir çekek sahası bulunmaktadır.",
-   "berthCount": 750,
-   "maxLoaM": 75,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "72",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant",
-    "shower",
-    "market",
-    "laundry",
-    "wifi",
-    "security",
-    "wc",
-    "pump_out",
-    "travel_lift",
-    "technical_service"
-   ],
-   "services": [
-    "technical_service"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902524220022",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "info@yachtmarin.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.yachtmarin.com"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.tyha.co.uk/marina-details/marmaris-yacht-marina",
-    "https://www.navily.com/port/marmaris-yacht-marine/1651"
-   ],
-   "confidence": "medium",
-   "missingNotes": "Resmi site erişilemedi; kapasite 750 (TYHA, kara 1000 hariç), LOA 75 (TYHA; my-sea 50 der). İşletmeci şirket yayınlanmamış."
-  },
-  {
-   "slug": "albatros-marina-marmaris",
-   "name": "Albatros Marina",
-   "operator": "Albatros Turizm Yat ve Marina İşletmeciliği A.Ş.",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-marmaris",
-   "lat": 36.8439,
-   "lon": 28.2856,
-   "coordSource": "albatrosmarina.com resmi site (36°50'38\"N 28°17'08\"E çevrildi)",
-   "descriptionTr": "Marmaris merkezinin yaklaşık 3 km doğusunda 1982'de kurulan marina, denizde 44 tekne bağlama kapasitesi ve karada 150 tekne için çekek alanı sunmaktadır.",
-   "berthCount": 44,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": true,
-   "amenities": [
-    "electricity",
-    "water",
-    "restaurant",
-    "shower",
-    "market",
-    "laundry",
-    "security",
-    "wc",
-    "technical_service"
-   ],
-   "services": [
-    "technical_service",
-    "winter_storage",
-    "boat_wash"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902524122456",
-     "primary": true
-    },
-    {
-     "type": "whatsapp",
-     "value": "+905302373852"
-    },
-    {
-     "type": "email",
-     "value": "info@albatrosmarina.com"
-    },
-    {
-     "type": "website",
-     "value": "https://albatrosmarina.com"
-    }
-   ],
-   "sourceUrls": [
-    "https://albatrosmarina.com/",
-    "https://albatrosmarina.com/services/",
-    "https://www.sailing360.com/en/marinas-turkey/albatros-marina-marmaris.html"
-   ],
-   "confidence": "medium",
-   "missingNotes": "LOA/draft: dizin değerleri resmi siteyle çelişti (VHF dahil), güvenilmedi. D-Resort Grand Azur bağlantısı DOĞRULANAMADI — bağımsız tesis."
-  },
-  {
-   "slug": "port-iasos-marina",
-   "name": "Port Iasos Marina",
-   "operator": null,
-   "status": "draft",
-   "typeCode": "private_marina",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-milas",
-   "lat": 37.2489,
-   "lon": 27.5367,
-   "coordSource": "marinas.com (37.248877, 27.536702)",
-   "descriptionTr": "Milas Kıyıkışlacık köyü Gökliman mevkiinde, antik Iasos kenti yakınında yer alan küçük bir marinadır.",
-   "berthCount": 150,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "shower",
-    "wc",
-    "wifi"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+905417604241",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "info@portiasos.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.portiasos.com"
-    }
-   ],
-   "sourceUrls": [
-    "https://marinakedisi.com/marinalar/ege/port-iasos-marina/",
-    "https://marinas.com/view/marina/3gcdr69_Port_iasos_Marina_Milas-Bodrum_Mugla_Turkey",
-    "https://www.navily.com/port/port-iasos-marina/1633"
-   ],
-   "confidence": "low",
-   "missingNotes": "2026 itibarıyla faal olduğu doğrulanamadı (resmi site erişilemedi, en güncel dizin verisi 2023). VHF çelişkili (16/73) — boş. Doğrulanana dek taslak."
-  },
-  {
-   "slug": "atakoy-marina",
-   "name": "Ataköy Marina",
-   "operator": "DATI Yatırım Holding",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "istanbul",
-   "districtSlug": "istanbul-bakirkoy",
-   "lat": 40.9728,
-   "lon": 28.8819,
-   "coordSource": "atakoymarina.com.tr resmi iletişim sayfası (N 40°58'22\" E 28°52'55\" çevrildi)",
-   "descriptionTr": "İstanbul Bakırköy'de yer alan marina denizde 1000 tekneye bağlama imkânı sunmaktadır. Akaryakıt istasyonu ve teknik bakım-onarım hizmetleri bulunmaktadır.",
-   "berthCount": 1000,
-   "maxLoaM": 30,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73",
-   "blueFlag": null,
-   "travelLiftTons": 63,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant",
-    "market",
-    "laundry",
-    "wifi",
-    "security",
-    "travel_lift",
-    "crane",
-    "technical_service"
-   ],
-   "services": [
-    "mooring_assist",
-    "technical_service",
-    "crane",
-    "boat_wash",
-    "diver"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902125604270",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "atakoymarina@atakoymarina.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://atakoymarina.com.tr"
-    },
-    {
-     "type": "instagram",
-     "value": "https://www.instagram.com/marina_atakoy/"
-    },
-    {
-     "type": "facebook",
-     "value": "https://www.facebook.com/marina.atakoy"
-    }
-   ],
-   "sourceUrls": [
-    "https://atakoymarina.com.tr/",
-    "https://atakoymarina.com.tr/iletisim/"
-   ],
-   "confidence": "high",
-   "missingNotes": "Su çekimi yayınlanmamış; 30 m LOA tonoz bağlama sistemi için belirtilen değer. Duş/WC sayfada açıkça doğrulanamadı."
-  },
-  {
-   "slug": "viaport-marina",
-   "name": "Viaport Marina",
-   "operator": null,
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "istanbul",
-   "districtSlug": "istanbul-tuzla",
-   "lat": 40.8158,
-   "lon": 29.3188,
-   "coordSource": "navily.com (40°48.95'N 29°19.13'E), dockwalk ile tutarlı",
-   "descriptionTr": "İstanbul Tuzla'da Viaport alışveriş ve eğlence kompleksi içinde 2015 yılında açılan marinadır.",
-   "berthCount": 750,
-   "maxLoaM": 80,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "72",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "shower",
-    "wc",
-    "wifi",
-    "laundry",
-    "security"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902165601842",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "viaportmarina@viaportmarina.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.viaportmarina.com/marina/en/"
-    },
-    {
-     "type": "instagram",
-     "value": "https://www.instagram.com/viaportmarinatuzla/"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.dockwalk.com/superports/viaport-marina--1039",
-    "https://www.navily.com/port/viaport-marina/1611",
-    "https://app.metarina.com/marinas/viaport-marina-tuzla"
-   ],
-   "confidence": "medium",
-   "missingNotes": "Resmi site erişilemedi; kapasite/LOA/VHF dizin kaynaklı. 750 'bağlama' ifadesi deniz/kara ayrımı netleştirmiyor olabilir."
-  },
-  {
-   "slug": "west-istanbul-marina",
-   "name": "West Istanbul Marina",
-   "operator": "Enelka Taahhüt İmalat ve Ticaret Ltd. Şti.",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "istanbul",
-   "districtSlug": "istanbul-beylikduzu",
-   "lat": 40.9628,
-   "lon": 28.6636,
-   "coordSource": "westistanbulmarina.com resmi iletişim sayfası (N 40°57'46\" E 28°39'49\" çevrildi)",
-   "descriptionTr": "İstanbul Beylikdüzü'nde denizde 600 tekne bağlama, karada 300 tekne kapasitesine sahip marinadır. 75 ve 700 ton kapasiteli travel liftleri ile bakım-onarım ve refit hizmetleri sunar; gümrük kapısı bulunan giriş limanıdır.",
-   "berthCount": 600,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "72",
-   "blueFlag": null,
-   "travelLiftTons": 700,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant",
-    "shower",
-    "wc",
-    "wifi",
-    "security",
-    "pump_out",
-    "crane",
-    "travel_lift",
-    "technical_service"
-   ],
-   "services": [
-    "mooring_assist",
-    "technical_service",
-    "crane",
-    "diver"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902128502200",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "marina@westistanbulmarina.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.westistanbulmarina.com"
-    },
-    {
-     "type": "instagram",
-     "value": "https://www.instagram.com/westistanbul_marina/"
-    },
-    {
-     "type": "facebook",
-     "value": "https://www.facebook.com/westistanbul/"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.westistanbulmarina.com",
-    "https://www.westistanbulmarina.com/contact",
-    "https://www.westistanbulmarina.com/about-us"
-   ],
-   "confidence": "high",
-   "missingNotes": "LOA/su çekimi resmi sayfalarda yayınlanmamış."
-  },
-  {
-   "slug": "marinturk-istanbul-city-port",
-   "name": "Marinturk İstanbul City Port",
-   "operator": "Pendik Turizm Marina Yat ve Çekek İşletmesi A.Ş.",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "istanbul",
-   "districtSlug": "istanbul-pendik",
-   "lat": 40.8705,
-   "lon": 29.2375,
-   "coordSource": "navily.com (40°52.23'N 29°14.25'E); resmi site koordinat yayınlamıyor",
-   "descriptionTr": "İstanbul Pendik'te yer alan marina yüzer pontonlarla 785 bağlama kapasitesine sahiptir. 200 tona kadar tekne çekme-indirme imkânı ve bakım-onarım hizmetleri bulunmaktadır.",
-   "berthCount": 785,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73",
-   "blueFlag": null,
-   "travelLiftTons": 200,
-   "winterStorage": true,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "shower",
-    "wc",
-    "wifi",
-    "technical_service"
-   ],
-   "services": [
-    "technical_service",
-    "crane",
-    "winter_storage"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902169991234",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "cityport@marinturk.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://www.marinturk.com.tr"
-    },
-    {
-     "type": "instagram",
-     "value": "https://www.instagram.com/marinturkmarina"
-    },
-    {
-     "type": "facebook",
-     "value": "https://www.facebook.com/MarinturkMarinas"
-    }
-   ],
-   "sourceUrls": [
-    "https://marinturk.com.tr/tr",
-    "https://www.marinturk.com.tr/en/marinas/istanbul-city-port",
-    "https://www.navily.com/port/marinturk-istanbul-city-port-pendik/1612"
-   ],
-   "confidence": "high",
-   "missingNotes": "LOA/draft yayınlanmamış (30+ m ifadesi var, üst sınır yok). Dizin 752 der, resmi 785 esas alındı."
-  },
-  {
-   "slug": "teos-marina",
-   "name": "Teos Marina",
-   "operator": "Teos Marine İşletmeciliği ve Tic. A.Ş.",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "izmir",
-   "districtSlug": "izmir-seferihisar",
-   "lat": 38.1958,
-   "lon": 26.7825,
-   "coordSource": "galayachtagency.com (38°11'45\"N 026°46'57\"E çevrildi)",
-   "descriptionTr": "İzmir'in Seferihisar ilçesi Sığacık'ta 2010 yılından beri hizmet veren yat limanıdır. Denizde yaklaşık 480, karada 80 tekne kapasitesine sahiptir.",
-   "berthCount": 480,
-   "maxLoaM": 40,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "72/16",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "fuel",
-    "restaurant",
-    "market",
-    "laundry",
-    "wifi",
-    "pump_out",
-    "travel_lift"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902327458080",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "info@teosmarina.com"
-    },
-    {
-     "type": "website",
-     "value": "https://teosmarina.com.tr"
-    }
-   ],
-   "sourceUrls": [
-    "https://marinakedisi.com/marinalar/ege/teos-marina/",
-    "https://galayachtagency.com/yacht-marinas-ports-turkey/teos-marina-izmir/",
-    "https://izmir.ktb.gov.tr/TR-77353/yat-limanlari.html"
-   ],
-   "confidence": "medium",
-   "missingNotes": "Resmi site erişilemedi. Kapasite kaynaklarda 400-510 arası değişiyor; 480 (resmi veriyi aktaran marinakedisi) alındı."
-  },
-  {
-   "slug": "port-alacati-marina",
-   "name": "Port Alaçatı Marina",
-   "operator": "Alaçatı Turizm Yatırım İşletmeleri A.Ş.",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "izmir",
-   "districtSlug": "izmir-cesme",
-   "lat": 38.25875,
-   "lon": 26.37793,
-   "coordSource": "portalacati.com.tr (resmi site harita koordinatı)",
-   "descriptionTr": "İzmir'in Çeşme ilçesi Alaçatı'da yat limanı ile konut ve otel alanlarını birleştiren bir deniz yerleşimidir.",
-   "berthCount": 260,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "72",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902327166373",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "info@portalacati.com.tr"
-    },
-    {
-     "type": "email",
-     "value": "marina@portalacati.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://www.portalacati.com.tr"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.portalacati.com.tr/",
-    "https://marinakedisi.com/marinalar/ege/port-alacati-marina/",
-    "https://izmir.ktb.gov.tr/TR-77353/yat-limanlari.html"
-   ],
-   "confidence": "medium",
-   "missingNotes": "Olanak listesi hiçbir doğrulanan kaynakta açıkça yayınlanmadığı için boş. Kapasite 260 (izmir.ktb.gov.tr resmi listesi); marinakedisi 150 der."
-  },
-  {
-   "slug": "levent-marina-izmir",
-   "name": "Levent Marina",
-   "operator": null,
-   "status": "draft",
-   "typeCode": "private_marina",
-   "provinceSlug": "izmir",
-   "districtSlug": null,
-   "lat": 38.4067,
-   "lon": 27.0692,
-   "coordSource": "marinakedisi.com (38°24'24\"N 27°04'09\"E çevrildi)",
-   "descriptionTr": "İzmir Üçkuyular'da yer alan marina; İzmir Büyükşehir Belediyesi'ne devredilerek İzmir Marina adıyla yenilendiği yönünde yayınlar bulunmaktadır.",
-   "berthCount": null,
-   "maxLoaM": 25,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "technical_service"
-   ],
-   "services": [
-    "technical_service"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902322597070",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "info@leventmarina.com.tr"
-    }
-   ],
-   "sourceUrls": [
-    "https://marinakedisi.com/marinalar/ege/levent-marina/",
-    "https://ytb.org.tr/marinalar/levent-marina-izmir_47"
-   ],
-   "confidence": "low",
-   "missingNotes": "Alan adı işlevsiz; devir/yeniden adlandırma (İzmir Marina) doğrulanamadı. Güncel durum netleşene dek taslak."
-  },
-  {
-   "slug": "ic-cesme-marina",
-   "name": "Çeşme Marina",
-   "operator": "IC Çeşme Marina Yat. Tur. ve İşl. A.Ş. (IC Holding + Camper & Nicholsons)",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "izmir",
-   "districtSlug": "izmir-cesme",
-   "lat": 38.3233,
-   "lon": 26.3004,
-   "coordSource": "sail-friend.club (38.323296, 26.300442)",
-   "descriptionTr": "Çeşme ilçe merkezinde IC Holding ve Camper & Nicholsons ortaklığında işletilen, 60 metreye kadar teknelere hizmet veren yat limanıdır. Gümrük ve pasaport işlemlerinin yapılabildiği bir giriş limanıdır.",
-   "berthCount": 400,
-   "maxLoaM": 60,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "72",
-   "blueFlag": null,
-   "travelLiftTons": 80,
-   "winterStorage": null,
-   "amenities": [
-    "water",
-    "fuel",
-    "restaurant",
-    "laundry",
-    "wifi",
-    "wc",
-    "pump_out",
-    "travel_lift",
-    "technical_service"
-   ],
-   "services": [
-    "mooring_assist",
-    "technical_service"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902327122500",
-     "primary": true
-    },
-    {
-     "type": "website",
-     "value": "https://cnmarinas.com/marinas/cesme-marina/"
-    }
-   ],
-   "sourceUrls": [
-    "https://cnmarinas.com/marinas/cesme-marina/",
-    "https://sail-friend.club/listings/cesme-marina/",
-    "https://izmir.ktb.gov.tr/TR-77353/yat-limanlari.html"
-   ],
-   "confidence": "high",
-   "missingNotes": "Kapasite kaynaklarda 377-400 arası; 400 alındı. Su çekimi yayınlanmamış."
-  },
-  {
-   "slug": "g-marina-kemer",
-   "name": "G-Marina Kemer",
-   "operator": "Mavi Yeşil International Tourism Ltd. Co.",
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "antalya",
-   "districtSlug": "antalya-kemer",
-   "lat": 36.599625,
-   "lon": 30.573331,
-   "coordSource": "gmarinakemer.net resmi iletişim sayfası",
-   "descriptionTr": "Kemer ilçe merkezinde yer alan marina (eski adıyla Kemer Türkiz Marina) denizde 230 ve karada 140 tekne kapasitesine sahiptir. 2016'dan bu yana Mavi Yeşil International Tourism Ltd. tarafından işletilmektedir.",
-   "berthCount": 230,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73",
-   "blueFlag": null,
-   "travelLiftTons": null,
-   "winterStorage": true,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant",
-    "shower",
-    "market",
-    "laundry",
-    "security",
-    "wc",
-    "travel_lift",
-    "technical_service"
-   ],
-   "services": [
-    "technical_service",
-    "winter_storage"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902428141490",
-     "primary": true
-    },
-    {
-     "type": "whatsapp",
-     "value": "+905367179649"
-    },
-    {
-     "type": "email",
-     "value": "marina@gmarinakemer.net"
-    },
-    {
-     "type": "website",
-     "value": "https://www.gmarinakemer.net"
-    },
-    {
-     "type": "instagram",
-     "value": "https://www.instagram.com/gmarinakemer/"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.gmarinakemer.net/en",
-    "https://www.gmarinakemer.net/en/about-us",
-    "https://www.gmarinakemer.net/en/contact"
-   ],
-   "confidence": "high",
-   "missingNotes": "Resmi sitede kapasite tutarsızlığı (ana sayfa 270/100, hakkımızda 230/140) — hakkımızda esas alındı. LOA/draft yayınlanmamış."
-  },
-  {
-   "slug": "alanya-marina",
-   "name": "Alanya Marina",
-   "operator": null,
-   "status": "published",
-   "typeCode": "private_marina",
-   "provinceSlug": "antalya",
-   "districtSlug": "antalya-alanya",
-   "lat": 36.5569,
-   "lon": 31.9519,
-   "coordSource": "alanyamarina.com.tr resmi site (36°33'25\"N 31°57'07\"E çevrildi)",
-   "descriptionTr": "10 Şubat 2011'de açılan Alanya Marina, denizde 287 ve karada 150 tekne kapasitesine sahiptir. 100 ton kapasiteli travel lift bulunmaktadır.",
-   "berthCount": 287,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "16/73",
-   "blueFlag": null,
-   "travelLiftTons": 100,
-   "winterStorage": true,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant",
-    "shower",
-    "market",
-    "laundry",
-    "wifi",
-    "security",
-    "travel_lift",
-    "technical_service"
-   ],
-   "services": [
-    "technical_service",
-    "winter_storage"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902425113400",
-     "primary": true
-    },
-    {
-     "type": "phone",
-     "value": "+902425121219"
-    },
-    {
-     "type": "email",
-     "value": "info@alanyamarina.com.tr"
-    },
-    {
-     "type": "email",
-     "value": "office@alanyamarina.com.tr"
-    },
-    {
-     "type": "website",
-     "value": "https://www.alanyamarina.com.tr"
-    },
-    {
-     "type": "instagram",
-     "value": "https://www.instagram.com/alanyamarina/"
-    },
-    {
-     "type": "facebook",
-     "value": "https://www.facebook.com/ALANYA-MARINA-180783565338565"
-    }
-   ],
-   "sourceUrls": [
-    "https://www.alanyamarina.com.tr/",
-    "https://www.alanyamarina.com.tr/alanya-marina-antalya-hizmetler.asp"
-   ],
-   "confidence": "high",
-   "missingNotes": "İşletmeci şirket adı, LOA ve su çekimi resmi sitede yayınlanmamış."
-  }
- ]
+  ]
 }

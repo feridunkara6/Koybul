@@ -990,13 +990,20 @@
         "fuel"
       ],
       "services": [],
-      "contacts": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902526451520",
+          "label": "Marina santrali (yakıt için ayrı hat yok)",
+          "primary": true
+        }
+      ],
       "sourceUrls": [
         "https://www.asmiramarine.com/en/tr-marina-fuel-stations.aspx",
         "https://www.petrolofisi.com.tr/en/marine-sales/marina-stations"
       ],
       "confidence": "high",
-      "missingNotes": "Tank kapasitesi kaynakta 'sınırsız' olarak geçiyor (rakam yok). Çalışma saatleri ve istasyon telefonu kaynaklarda yok."
+      "missingNotes": "Tank kapasitesi kaynakta 'sınırsız' olarak geçiyor (rakam yok). Çalışma saatleri ve istasyon telefonu kaynaklarda yok. | FAZ2 GOCEK TURU: yakıt istasyonunun ayrı hattı YOK — D-Marin'in kendi sayfasında yakıt bir marina olanağı olarak geçiyor ('fully equipped fuel station') ve tek iletişim kanalı marina santralidir; numara etiketle eklendi."
     },
     {
       "slug": "aganlar-tersane-yakit",

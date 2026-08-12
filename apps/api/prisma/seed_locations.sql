@@ -835,7 +835,7 @@ SELECT gen_random_uuid(), 'd-marin-gocek', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
   'D-Marin Göcek', 'Fethiye''nin Göcek mahallesinde yer alan marina 380 deniz bağlama ve 150 tekne kara park kapasitesine sahiptir. D-Marin tarafından işletilmektedir.',
   ST_SetSRID(ST_MakePoint(28.9428, 36.7483), 4326)::geography,
-  70, NULL, NULL, NULL,
+  85, NULL, NULL, NULL,
   380, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
@@ -854,6 +854,10 @@ INSERT INTO location_services (location_id, service_id)
 SELECT l.id, sv.id FROM locations l, services sv
 WHERE l.slug = 'd-marin-gocek' AND sv.code IN ('mooring_assist', 'diver', 'boat_wash', 'technical_service', 'winter_storage')
 ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902526451520', NULL, true
+FROM locations l WHERE l.slug = 'd-marin-gocek'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
 SELECT gen_random_uuid(), l.id, 'website', 'https://www.d-marin.com/en/marinas/gocek/', NULL, false
 FROM locations l WHERE l.slug = 'd-marin-gocek'
@@ -1063,7 +1067,7 @@ SELECT gen_random_uuid(), 'gocek-village-port-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
   'Göcek Village Port Marina', 'Göcek''te yer alan marina (eski adıyla Marintürk Göcek Village Port) Setur Marinas tarafından işletilmektedir. Denizde 220, karada 200 tekne kapasitesi ve çekek alanı bulunmaktadır.',
   ST_SetSRID(ST_MakePoint(28.9283, 36.7567), 4326)::geography,
-  NULL, NULL, NULL, NULL,
+  50, NULL, NULL, NULL,
   220, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
@@ -1103,7 +1107,7 @@ SELECT gen_random_uuid(), 'club-marina-gocek', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
   'Club Marina', '1990 yılında kurulan Club Marina, Göcek Büngüş Koyu''nda yer alan doğal korunaklı bir marinadır ve mega yatlara hizmet verebilmektedir.',
   ST_SetSRID(ST_MakePoint(28.925, 36.7467), 4326)::geography,
-  NULL, NULL, NULL, NULL,
+  80, NULL, NULL, NULL,
   100, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
@@ -2136,22 +2140,34 @@ SELECT gen_random_uuid(), l.id, 'website', 'https://muttas.com.tr/limanlar/', NU
 FROM locations l WHERE l.slug = 'fethiye-limani'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Göcek Belediye İskelesi · güven: medium · kaynak: www.yatvitrini.com, panel.mugla.bel.tr ---
+-- --- MUÇEV Göcek Marina · güven: medium · kaynak: www.yatvitrini.com, panel.mugla.bel.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
 SELECT gen_random_uuid(), 'gocek-belediye-iskelesi', 3, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
-  'Göcek Belediye İskelesi', 'Göcek köyiçindeki belediye iskelesi 1989''da inşa edilmiş olup bugün Fethiye Belediyesi tarafından işletilmektedir. Bağlama ücretleri belediye gelir tarifesinde metre başına belirlenmektedir.',
+  'MUÇEV Göcek Marina', 'Göcek köyiçindeki iskele 1989''da inşa edilmiş olup bugün MUÇEV tarafından MUÇEV Göcek Marina adıyla işletilmektedir (eski adıyla Göcek Belediye İskelesi). 40-50 metre boyundaki yatlara hizmet verebilmektedir; VHF kanalı 13''tür.',
   ST_SetSRID(ST_MakePoint(28.946667, 36.754444), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'tr', 'Göcek Belediye İskelesi', 'Göcek köyiçindeki belediye iskelesi 1989''da inşa edilmiş olup bugün Fethiye Belediyesi tarafından işletilmektedir. Bağlama ücretleri belediye gelir tarifesinde metre başına belirlenmektedir.' FROM locations WHERE slug = 'gocek-belediye-iskelesi'
+SELECT id, 'tr', 'MUÇEV Göcek Marina', 'Göcek köyiçindeki iskele 1989''da inşa edilmiş olup bugün MUÇEV tarafından MUÇEV Göcek Marina adıyla işletilmektedir (eski adıyla Göcek Belediye İskelesi). 40-50 metre boyundaki yatlara hizmet verebilmektedir; VHF kanalı 13''tür.' FROM locations WHERE slug = 'gocek-belediye-iskelesi'
 ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
-SELECT gen_random_uuid(), l.id, 'website', 'https://www.fethiye.bel.tr/', NULL, false
+SELECT gen_random_uuid(), l.id, 'phone', '+902526452122', NULL, true
+FROM locations l WHERE l.slug = 'gocek-belediye-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+905373206886', NULL, false
+FROM locations l WHERE l.slug = 'gocek-belediye-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'vhf', '13', NULL, false
+FROM locations l WHERE l.slug = 'gocek-belediye-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.marinagocek.com', NULL, false
 FROM locations l WHERE l.slug = 'gocek-belediye-iskelesi'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
@@ -4778,19 +4794,19 @@ SELECT gen_random_uuid(), l.id, 'phone', '+905320642648', NULL, true
 FROM locations l WHERE l.slug = 'kairos-marina'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
--- --- Marintürk Göcek Exclusive Marina · güven: medium · kaynak: www.denizticaretodasi.org.tr, marinalar.com ---
+-- --- Göcek Exclusive Marina · güven: medium · kaynak: www.denizticaretodasi.org.tr, marinalar.com ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
 SELECT gen_random_uuid(), 'marinturk-gocek-exclusive', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
-  'Marintürk Göcek Exclusive Marina', 'Göcek Poruklu Koyu''nda Marintürk tarafından işletilen özel marina.',
+  'Göcek Exclusive Marina', 'Göcek Poruklu Koyu''nda Setur Marinas tarafından işletilen özel marina (eski adıyla Marintürk Göcek Exclusive).',
   ST_SetSRID(ST_MakePoint(28.9237, 36.7557), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'tr', 'Marintürk Göcek Exclusive Marina', 'Göcek Poruklu Koyu''nda Marintürk tarafından işletilen özel marina.' FROM locations WHERE slug = 'marinturk-gocek-exclusive'
+SELECT id, 'tr', 'Göcek Exclusive Marina', 'Göcek Poruklu Koyu''nda Setur Marinas tarafından işletilen özel marina (eski adıyla Marintürk Göcek Exclusive).' FROM locations WHERE slug = 'marinturk-gocek-exclusive'
 ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
   travel_lift_capacity_tons, winter_storage)
@@ -4798,7 +4814,11 @@ SELECT id, NULL, '69/73', NULL, NULL, NULL
 FROM locations WHERE slug = 'marinturk-gocek-exclusive'
 ON CONFLICT (location_id) DO NOTHING;
 INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
-SELECT gen_random_uuid(), l.id, 'phone', '+902169991480', NULL, true
+SELECT gen_random_uuid(), l.id, 'phone', '+902522771012', NULL, true
+FROM locations l WHERE l.slug = 'marinturk-gocek-exclusive'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://www.seturmarinas.com/marinalar/gocek-exclusive', NULL, false
 FROM locations l WHERE l.slug = 'marinturk-gocek-exclusive'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
@@ -10863,6 +10883,10 @@ INSERT INTO location_amenities (location_id, amenity_id)
 SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'd-marin-gocek-yakit' AND a.code IN ('fuel')
 ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902526451520', 'Marina santrali (yakıt için ayrı hat yok)', true
+FROM locations l WHERE l.slug = 'd-marin-gocek-yakit'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
 -- --- Ağanlar Tersanesi Yakıt İskelesi (Petrol Ofisi) · güven: high · kaynak: www.asmiramarine.com, www.petrolofisi.com.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -11281,6 +11305,7 @@ UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K') WH
 UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K') WHERE slug = 'ekincik-koyu-demirleme';
 UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'gok-liman-kokar-demirleme';
 UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'gokkaya-koyu-kekova';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'kapi-creek-restaurant';
 UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,GB') WHERE slug = 'kargi-koyu-datca-demirleme';
 UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'G') WHERE slug = 'katapola-guney-demirleme';
 UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'keci-buku-demirleme';
@@ -11296,6 +11321,7 @@ UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D
 UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K') WHERE slug = 'ornos-koyu-mykonos';
 UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K,KD,D,GD,G,GB,B,KB') WHERE slug = 'serce-limani';
 UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'K') WHERE slug = 'skala-kallonis-demirleme';
+UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'KD,D,GD,G,GB,B') WHERE slug = 'tersane-adasi-koyu';
 
 -- ======================================================================
 -- VERİ ÇEVİRİLERİ — koy açıklamaları EN/ES/RU (adlar çevrilmez).
@@ -11689,13 +11715,13 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'ru', NULL, 'В гавани Karagözler в Fethiye, находящейся под управлением MUTTAŞ, могут швартоваться около 50 судов; предоставляются вода, приём отходов, охрана и швартовные услуги. Отсюда выполняются международные паромные рейсы на Rodos.' FROM locations WHERE slug = 'fethiye-limani'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'en', NULL, 'The municipal pier in the village centre of Göcek was built in 1989 and is today operated by the Fethiye Municipality. Mooring fees are set per metre in the municipal revenue tariff.' FROM locations WHERE slug = 'gocek-belediye-iskelesi'
+SELECT id, 'en', NULL, 'The pier in the village centre of Göcek was built in 1989 and is today operated by MUÇEV as MUÇEV Göcek Marina (formerly the Göcek municipal pier). It can serve yachts of 40-50 metres; VHF channel 13.' FROM locations WHERE slug = 'gocek-belediye-iskelesi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'es', NULL, 'El embarcadero municipal del centro del pueblo de Göcek se construyó en 1989 y hoy lo gestiona el Ayuntamiento de Fethiye. Las tarifas de amarre se fijan por metro en la ordenanza de ingresos municipal.' FROM locations WHERE slug = 'gocek-belediye-iskelesi'
+SELECT id, 'es', NULL, 'El embarcadero del centro del pueblo de Göcek se construyó en 1989 y hoy lo gestiona MUÇEV como MUÇEV Göcek Marina (antes embarcadero municipal de Göcek). Puede atender yates de 40-50 metros; canal VHF 13.' FROM locations WHERE slug = 'gocek-belediye-iskelesi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'ru', NULL, 'Муниципальный пирс в центре посёлка Göcek построен в 1989 году и сегодня находится в ведении муниципалитета Fethiye. Плата за стоянку устанавливается за метр согласно муниципальному тарифу.' FROM locations WHERE slug = 'gocek-belediye-iskelesi'
+SELECT id, 'ru', NULL, 'Пристань в центре посёлка Гёджек построена в 1989 году; сегодня ею управляет MUÇEV под названием MUÇEV Göcek Marina (ранее муниципальная пристань Гёджека). Принимает яхты длиной 40-50 метров; канал VHF 13.' FROM locations WHERE slug = 'gocek-belediye-iskelesi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'en', NULL, 'A harbour with a capacity of 120 yachts on the waterfront promenade in the centre of Çanakkale, operated by the municipality. Thanks to its status as a temporary border gate, transit log formalities can be completed here.' FROM locations WHERE slug = 'canakkale-yat-limani'
@@ -12698,13 +12724,13 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'ru', NULL, 'Частная марина в Datça вместимостью 246 мест на воде и 256 на берегу.' FROM locations WHERE slug = 'kairos-marina'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'en', NULL, 'A private marina operated by Marintürk in Poruklu Koyu, Göcek.' FROM locations WHERE slug = 'marinturk-gocek-exclusive'
+SELECT id, 'en', NULL, 'A private marina in Poruklu Koyu, Göcek, operated by Setur Marinas (formerly Marintürk Göcek Exclusive).' FROM locations WHERE slug = 'marinturk-gocek-exclusive'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'es', NULL, 'Puerto deportivo privado gestionado por Marintürk en Poruklu Koyu, Göcek.' FROM locations WHERE slug = 'marinturk-gocek-exclusive'
+SELECT id, 'es', NULL, 'Puerto deportivo privado en Poruklu Koyu, Göcek, gestionado por Setur Marinas (antes Marintürk Göcek Exclusive).' FROM locations WHERE slug = 'marinturk-gocek-exclusive'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'ru', NULL, 'Частная марина под управлением Marintürk в бухте Poruklu Koyu, Göcek.' FROM locations WHERE slug = 'marinturk-gocek-exclusive'
+SELECT id, 'ru', NULL, 'Частная марина в бухте Poruklu Koyu, Göcek, под управлением Setur Marinas (ранее Marintürk Göcek Exclusive).' FROM locations WHERE slug = 'marinturk-gocek-exclusive'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'en', NULL, 'Marina and yacht boatyard (haul-out yard) in Bodrum.' FROM locations WHERE slug = 'aganlar-marina-bodrum'
@@ -16423,3 +16449,22 @@ UPDATE locations SET status = 'draft'
 WHERE slug = 'setur-altinyunus-marina' AND status <> 'draft'; -- Mükerrer: batch1'deki setur-cesme-marina ile aynı marina (aynı DMS koordinat kaynağı, aynı berth/LOA). Ana kayıt setur-cesme-marina.
 UPDATE locations SET status = 'draft'
 WHERE slug = 'adrasan-koyu-demirleme' AND status <> 'draft'; -- Koordinat Wikipedia'daki köy merkezi; demirleme kaydı için tehlikeli. Doğrulanmış koy koordinatı bulunana dek yayından çekildi.
+DELETE FROM location_contacts
+WHERE location_id = (SELECT id FROM locations WHERE slug = 'marinturk-gocek-exclusive')
+  AND contact_type = 'phone' AND value = '+902169991480'; -- Eski Marintürk İstanbul santrali; işletme Setur Marinas'a geçti (seturmarinas.com haber sayfası).
+DELETE FROM location_contacts
+WHERE location_id = (SELECT id FROM locations WHERE slug = 'gocek-belediye-iskelesi')
+  AND contact_type = 'website' AND value = 'https://www.fethiye.bel.tr/'; -- İşletme MUÇEV Göcek Marina'ya geçti; belediye sitesi artık işletmeci değil (marinagocek.com).
+
+-- ======================================================================
+-- TAMAMLAMA TURU — gocek_tamamlama_2026_08.json (mevcut veritabanlarına akar, idempotent).
+UPDATE locations SET max_boat_length_m = 80
+WHERE slug = 'club-marina-gocek' AND max_boat_length_m IS DISTINCT FROM 80; -- https://hurriyet.com.tr/gocek-koyu-nun-ilk-marinasi-club-marina-7150580
+UPDATE locations SET max_boat_length_m = 85
+WHERE slug = 'd-marin-gocek' AND max_boat_length_m IS DISTINCT FROM 85; -- https://www.d-marin.com/en/marinas/gocek/
+UPDATE locations SET name = 'MUÇEV Göcek Marina'
+WHERE slug = 'gocek-belediye-iskelesi' AND name <> 'MUÇEV Göcek Marina'; -- https://www.wikiderya.org/wiki/mucev-gocek-marina
+UPDATE locations SET max_boat_length_m = 50
+WHERE slug = 'gocek-village-port-marina' AND max_boat_length_m IS DISTINCT FROM 50; -- https://marinalar.com/gocek-village-port-marina
+UPDATE locations SET name = 'Göcek Exclusive Marina'
+WHERE slug = 'marinturk-gocek-exclusive' AND name <> 'Göcek Exclusive Marina'; -- https://www.seturmarinas.com/bizden-haberler/setur-marinalari-gocekte-yeni-bir-donem-baslatiyor
