@@ -106,7 +106,13 @@ class BoatScreen extends ConsumerWidget {
                       key: const ValueKey<String>('boat-marina-map'),
                       borderRadius: BorderRadius.circular(8),
                       onTap: () {
-                        final HomeMarina hm = boat!.homeMarina!;
+                        // CI DERSİ (tasarım 4 kırmızısı): `boat` bu kapanışın
+                        // içinde zaten null-olamaz kabul ediliyor (koşul
+                        // `boat?.homeMarina != null` kapanış yaratılırken
+                        // terfiyi sabitliyor); fazladan `!` analizörde
+                        // unnecessary_non_null_assertion uyarısı üretir ve
+                        // --fatal-infos bunu kırmızı sayar.
+                        final HomeMarina hm = boat.homeMarina!;
                         final MapFocusRequest? prev =
                             ref.read(mapFocusProvider);
                         ref.read(mapFocusProvider.notifier).state =
