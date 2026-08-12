@@ -234,8 +234,10 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
         }
       }
       // Seçim durumu değişen pinleri düşür — aşağıda toplu yaratılırlar.
+      // (CI düzeltmesi: eleman tipi String? — eski ya da yeni seçim null
+      // olabilir, örneğin seçim ilk kez yapılırken.)
       if (selectedId != _lastSelectedPinId) {
-        for (final String id in <String?>[selectedId, _lastSelectedPinId]) {
+        for (final String? id in <String?>[selectedId, _lastSelectedPinId]) {
           final CircleAnnotation? ann = id == null ? null : _pinAnnotations.remove(id);
           if (ann != null) {
             _annotationToPin.remove(ann.id);
