@@ -842,7 +842,16 @@ def emit_media(here, records):
     photos = data.get("fotograflar", {})
     if not photos:
         return ""
-    slugs = {r["slug"] for r in records}
+    by_slug = {r["slug"]: r for r in records}
+    slugs = set(by_slug)
+
+    def _host(u):
+        """URL'den www'suz küçük-harf alan adı ('' = geçersiz)."""
+        try:
+            h = u.split("//", 1)[1].split("/", 1)[0].lower()
+        except IndexError:
+            return ""
+        return h.removeprefix("www.")
     allowed_mime = {"image/jpeg", "image/png", "image/webp"}
     # Lisans BEYAZ LİSTESİ: NC (ticari kullanım yasak) ve ND (türev yasak)
     # lisanslar ticari bir uygulamada KULLANILAMAZ — girildiği an üretim durur.
@@ -882,7 +891,28 @@ def emit_media(here, records):
             errors.append(f"kapak {slug}: url https:// ile başlamalı")
         if not credit:
             errors.append(f"kapak {slug}: credit boş — CC lisansı atfı zorunlu kılar")
-        if url.startswith(kaynak_izni_prefix):
+        if e.get("isletmeIzni") is True:
+            # İŞLETME İZNİ (feri'nin kararı, 2026-08-12, marina turu): işletmenin
+            # KENDİ resmî sitesinde yayımladığı tanıtım görseli, kaynak
+            # gösterilerek kullanılır ("kendi sitelerinde resmi paylaşılmış
+            # fotoğrafları kullan"). Dizin uygulamalarında yaygın pratik;
+            # kaldırma talebi gelirse girdi tek satırla silinir. GÜVENCE:
+            # sourceUrl'in alan adı, KAYDIN kendi website contact'ıyla AYNI
+            # olmak zorunda — üçüncü taraf sitesinden görsel bu yoldan giremez.
+            if license_code:
+                errors.append(
+                    f"kapak {slug}: işletme-izni girişinde license BOŞ bırakılır")
+            rec = by_slug.get(slug)
+            rec_hosts = {
+                _host(c.get("value", ""))
+                for c in (rec.get("contacts", []) if rec else [])
+                if c.get("type") == "website"
+            } - {""}
+            if _host(source_url) not in rec_hosts:
+                errors.append(
+                    f"kapak {slug}: işletme-izni sourceUrl alan adı ({_host(source_url)!r}) "
+                    f"kaydın resmî sitesiyle eşleşmiyor (kayıtlı: {sorted(rec_hosts)})")
+        elif url.startswith(kaynak_izni_prefix):
             if license_code:
                 errors.append(
                     f"kapak {slug}: kaynak-izni (DERİA) girişinde license BOŞ "

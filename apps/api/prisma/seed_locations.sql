@@ -16929,6 +16929,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/aegina-limani/kapak')
 WHERE slug = 'aegina-limani' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/aegina-limani/kapak');
+-- --- alanya-marina ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/alanya-marina/kapak', 'image/jpeg', 2140, 1140,
+  'https://www.alanyamarina.com.tr/img/spot/01.jpg', 'Fotoğraf: Alanya Marina (resmî site)', NULL, 'https://www.alanyamarina.com.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'alanya-marina' AND m.storage_key = 'ext/alanya-marina/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/alanya-marina/kapak')
+WHERE slug = 'alanya-marina' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/alanya-marina/kapak');
 -- --- antalya-kaleici-yat-limani ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17307,6 +17325,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/gocek-dogu-samandira-sahasi/kapak')
 WHERE slug = 'gocek-dogu-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/gocek-dogu-samandira-sahasi/kapak');
+-- --- gocek-village-port-marina ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/gocek-village-port-marina/kapak', 'image/jpeg', 2376, 1584,
+  'https://www.seturmarinas.com/Upload/MarinaPictures/320a285e-67d6-4636-bd00-0c89641f2e8d.jpg', 'Fotoğraf: Göcek Village Port Marina (resmî site)', NULL, 'https://www.seturmarinas.com/en/marinas/gocek-village-port', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'gocek-village-port-marina' AND m.storage_key = 'ext/gocek-village-port-marina/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/gocek-village-port-marina/kapak')
+WHERE slug = 'gocek-village-port-marina' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/gocek-village-port-marina/kapak');
 -- --- gokceada-kuzu-limani ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17667,6 +17703,42 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/lindos-koyu/kapak')
 WHERE slug = 'lindos-koyu' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/lindos-koyu/kapak');
+-- --- marinturk-gocek-exclusive ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/marinturk-gocek-exclusive/kapak', 'image/jpeg', 1920, 786,
+  'https://www.seturmarinas.com/Upload/MarinaPictures/445e754be94e40b5b1efd9a4825bcd80.jpg', 'Fotoğraf: Göcek Exclusive Marina (resmî site)', NULL, 'https://www.seturmarinas.com/marinalar/gocek-exclusive', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'marinturk-gocek-exclusive' AND m.storage_key = 'ext/marinturk-gocek-exclusive/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/marinturk-gocek-exclusive/kapak')
+WHERE slug = 'marinturk-gocek-exclusive' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/marinturk-gocek-exclusive/kapak');
+-- --- marti-marina-orhaniye ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/marti-marina-orhaniye/kapak', 'image/jpeg', 1600, 1669,
+  'https://irp.cdn-website.com/2e136757/dms3rep/multi/opt/MartiMarina-71-1920w.jpg', 'Fotoğraf: Martı Marina (resmî site)', NULL, 'https://www.marti.com.tr/marti-marina', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'marti-marina-orhaniye' AND m.storage_key = 'ext/marti-marina-orhaniye/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/marti-marina-orhaniye/kapak')
+WHERE slug = 'marti-marina-orhaniye' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/marti-marina-orhaniye/kapak');
 -- --- marti-samandira-sahasi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17901,6 +17973,78 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/sarsala-samandira-sahasi/kapak')
 WHERE slug = 'sarsala-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/sarsala-samandira-sahasi/kapak');
+-- --- setur-antalya-marina ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/setur-antalya-marina/kapak', 'image/jpeg', 1920, 786,
+  'https://www.seturmarinas.com/Upload/MarinaPictures/antalya-banner.jpg', 'Fotoğraf: Setur Antalya Marina (resmî site)', NULL, 'https://www.seturmarinas.com/en/marinas/antalya', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'setur-antalya-marina' AND m.storage_key = 'ext/setur-antalya-marina/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/setur-antalya-marina/kapak')
+WHERE slug = 'setur-antalya-marina' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/setur-antalya-marina/kapak');
+-- --- setur-ayvalik-marina ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/setur-ayvalik-marina/kapak', 'image/jpeg', 3885, 2185,
+  'https://www.seturmarinas.com/Upload/MarinaPictures/ayvalik-banner.jpg', 'Fotoğraf: Setur Ayvalık Marina (resmî site)', NULL, 'https://www.seturmarinas.com/en/marinas/ayvalik', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'setur-ayvalik-marina' AND m.storage_key = 'ext/setur-ayvalik-marina/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/setur-ayvalik-marina/kapak')
+WHERE slug = 'setur-ayvalik-marina' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/setur-ayvalik-marina/kapak');
+-- --- setur-cesme-marina ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/setur-cesme-marina/kapak', 'image/jpeg', 4000, 3000,
+  'https://www.seturmarinas.com/Upload/MarinaPictures/cesme-banner.jpg', 'Fotoğraf: Setur Çeşme Marina (resmî site)', NULL, 'https://www.seturmarinas.com/en/marinas/cesme', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'setur-cesme-marina' AND m.storage_key = 'ext/setur-cesme-marina/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/setur-cesme-marina/kapak')
+WHERE slug = 'setur-cesme-marina' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/setur-cesme-marina/kapak');
+-- --- setur-finike-marina ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/setur-finike-marina/kapak', 'image/jpeg', 1920, 786,
+  'https://www.seturmarinas.com/Upload/MarinaPictures/3332cd82f2b0434da13de362896156bc.jpg', 'Fotoğraf: Setur Finike Marina (resmî site)', NULL, 'https://www.seturmarinas.com/en/marinas/finike', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'setur-finike-marina' AND m.storage_key = 'ext/setur-finike-marina/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/setur-finike-marina/kapak')
+WHERE slug = 'setur-finike-marina' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/setur-finike-marina/kapak');
 -- --- setur-kalamis-fenerbahce-marina ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17919,6 +18063,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/setur-kalamis-fenerbahce-marina/kapak')
 WHERE slug = 'setur-kalamis-fenerbahce-marina' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/setur-kalamis-fenerbahce-marina/kapak');
+-- --- setur-kas-marina ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/setur-kas-marina/kapak', 'image/jpeg', 4240, 2832,
+  'https://www.seturmarinas.com/Upload/MarinaPictures/kas-banner.jpg', 'Fotoğraf: Setur Kaş Marina (resmî site)', NULL, 'https://www.seturmarinas.com/en/marinas/makmarin-kas', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'setur-kas-marina' AND m.storage_key = 'ext/setur-kas-marina/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/setur-kas-marina/kapak')
+WHERE slug = 'setur-kas-marina' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/setur-kas-marina/kapak');
 -- --- setur-kusadasi-marina ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17937,6 +18099,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/setur-kusadasi-marina/kapak')
 WHERE slug = 'setur-kusadasi-marina' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/setur-kusadasi-marina/kapak');
+-- --- setur-yalova-marina ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/setur-yalova-marina/kapak', 'image/jpeg', 1920, 786,
+  'https://www.seturmarinas.com/Upload/MarinaPictures/e836fcc0ac0d431f840cd323c455f674.jpg', 'Fotoğraf: Setur Yalova Marina (resmî site)', NULL, 'https://www.seturmarinas.com/en/marinas/yalova', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'setur-yalova-marina' AND m.storage_key = 'ext/setur-yalova-marina/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/setur-yalova-marina/kapak')
+WHERE slug = 'setur-yalova-marina' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/setur-yalova-marina/kapak');
 -- --- siralibuk-koyu ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)

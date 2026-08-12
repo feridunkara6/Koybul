@@ -1,5 +1,5 @@
 {
-  "kaynak": "Wikimedia Commons — 2026-08-12 tarayıcı turu (Commons API, dosya başına LicenseShortName/Artist/Categories alanları okundu; konu eşleşmesi kategori+açıklama ile doğrulandı). İzmir'deki Yassıca Adası ve Fethiye'nin Taşyaka MAHALLESİ gibi ad benzerleri kategorileri sayesinde ELENDİ. | BÖLGE TURU 2 (2026-08-12): Ege-Akdeniz-Yunan adaları limanları için 25 fotoğraf daha; her biri Commons API extmetadata alanlarından atıf/lisansla alındı ve tarayıcıda tek tek görsel doğrulandı. Elenenler: Ataköy (fotoğraf AVM yürüyüş yolunu gösteriyordu), Yalıkavak (marina görünmüyordu), Parikia (otopark ağırlıklı), Kastellorizo (puslu/karanlık), Kuşadası 04 (bina ağırlıklı; 03 alındı). | BÖLGE TURU 3 (2026-08-12): koylar ve kalan limanlar için 19 fotoğraf daha (Kelebekler Vadisi, Phaselis, Lindos, Keçi Bükü/Kızkumu, Bozukkale, İngiliz Limanı, Fethiye, Datça, Gökçeada ve 10 Yunan limanı). Elenenler: Selimiye (yol fotoğrafı çıktı), Akyaka (kitesurf karesi), Gemiler (karanlık/backlit), Sedir (açık deniz), Bitez (mercek parlaması), Gouvia (1280 küçüğü 182 px'lik aşırı panorama).",
+  "kaynak": "Wikimedia Commons — 2026-08-12 tarayıcı turu (Commons API, dosya başına LicenseShortName/Artist/Categories alanları okundu; konu eşleşmesi kategori+açıklama ile doğrulandı). İzmir'deki Yassıca Adası ve Fethiye'nin Taşyaka MAHALLESİ gibi ad benzerleri kategorileri sayesinde ELENDİ. | BÖLGE TURU 2 (2026-08-12): Ege-Akdeniz-Yunan adaları limanları için 25 fotoğraf daha; her biri Commons API extmetadata alanlarından atıf/lisansla alındı ve tarayıcıda tek tek görsel doğrulandı. Elenenler: Ataköy (fotoğraf AVM yürüyüş yolunu gösteriyordu), Yalıkavak (marina görünmüyordu), Parikia (otopark ağırlıklı), Kastellorizo (puslu/karanlık), Kuşadası 04 (bina ağırlıklı; 03 alındı). | BÖLGE TURU 3 (2026-08-12): koylar ve kalan limanlar için 19 fotoğraf daha (Kelebekler Vadisi, Phaselis, Lindos, Keçi Bükü/Kızkumu, Bozukkale, İngiliz Limanı, Fethiye, Datça, Gökçeada ve 10 Yunan limanı). Elenenler: Selimiye (yol fotoğrafı çıktı), Akyaka (kitesurf karesi), Gemiler (karanlık/backlit), Sedir (açık deniz), Bitez (mercek parlaması), Gouvia (1280 küçüğü 182 px'lik aşırı panorama). | MARİNA TURU (2026-08-12): 10 özel marinaya işletmelerin kendi sitelerindeki resmî tanıtım görselleri eklendi (7 Setur sayfası, Martı, Alanya; Finike'nin Commons karesi işletme görseliyle değiştirildi). Erişilemeyen/elenenler: d-marin.com, clubmarina, yachtmarin, adaköy, kumlubükü, marinturk, west/güzelce/kıyı İstanbul, gazipaşa, kosmarina.gr, marina-symi.gr tarayıcı erişimine kapalı; Yalıkavak bot korumalı; Viaport/MyMarina/Ece Saray sayfalarında kullanılabilir görsel çıkmadı; Letoonia görseli grafik bindirmeliydi; Oasis görseli 699 px.",
   "kurallar": [
     "Tahmin/uydurma YOK. Her alan Commons dosya sayfasından birebir kopyalanır.",
     "url: dosyanın upload.wikimedia.org üzerindeki DOĞRUDAN adresi (Commons sayfasındaki 'Orijinal dosya' bağlantısı ya da uygun genişlikte önizleme).",
@@ -10,7 +10,8 @@
     "width/height: dosyanın piksel ölçüleri (url hangi boyuta işaret ediyorsa o).",
     "Fotoğraf GERÇEKTEN o koyu/marinayı göstermeli — emin değilsen ekleme, boş kalsın.",
     "Girdi eklendikçe generate_locations_seed.py yeniden koşulur; SQL kendiliğinden üretilir.",
-    "KAYNAK İZNİ istisnası (feri, 2026-08-12): DERİA'nın (deria.gov.tr) kendi koy fotoğrafları kaynak gösterilerek kullanılır — feri: 'bunlar public fotolar ve kullanılabilir, zaten site yönlendirmesini yapıyoruz'. Bu girişlerde license BOŞ bırakılır (lisans adı uydurulmaz), credit 'Fotoğraf: DERİA ...' der, sourceUrl deria.gov.tr'ye gider. Üretici bu istisnayı YALNIZ https://deria.gov.tr/ ile başlayan url'lere tanır."
+    "KAYNAK İZNİ istisnası (feri, 2026-08-12): DERİA'nın (deria.gov.tr) kendi koy fotoğrafları kaynak gösterilerek kullanılır — feri: 'bunlar public fotolar ve kullanılabilir, zaten site yönlendirmesini yapıyoruz'. Bu girişlerde license BOŞ bırakılır (lisans adı uydurulmaz), credit 'Fotoğraf: DERİA ...' der, sourceUrl deria.gov.tr'ye gider. Üretici bu istisnayı YALNIZ https://deria.gov.tr/ ile başlayan url'lere tanır.",
+    "İŞLETME İZNİ (feri, 2026-08-12): işletmenin KENDİ resmî sitesindeki tanıtım görseli kaynak gösterilerek kullanılabilir. Şartlar: isletmeIzni=true, license BOŞ, credit 'Fotoğraf: <işletme> (resmî site)', sourceUrl işletmenin KAYITLI website contact alanıyla aynı alan adında (üretici bunu zorlar). Kaldırma talebi gelirse girdi silinir."
   ],
   "fotograflar": {
     "gobun-samandira-sahasi": {
@@ -682,6 +683,116 @@
       "width": 1280,
       "height": 525,
       "not": "Başlık: İngiliz Limanı; kategori Gulet. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "setur-yalova-marina": {
+      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/e836fcc0ac0d431f840cd323c455f674.jpg",
+      "credit": "Fotoğraf: Setur Yalova Marina (resmî site)",
+      "license": "",
+      "sourceUrl": "https://www.seturmarinas.com/en/marinas/yalova",
+      "isletmeIzni": true,
+      "mimeType": "image/jpeg",
+      "width": 1920,
+      "height": 786,
+      "not": "Setur Yalova Marina sayfasının kendi tanıtım görseli (hero). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+    },
+    "setur-ayvalik-marina": {
+      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/ayvalik-banner.jpg",
+      "credit": "Fotoğraf: Setur Ayvalık Marina (resmî site)",
+      "license": "",
+      "sourceUrl": "https://www.seturmarinas.com/en/marinas/ayvalik",
+      "isletmeIzni": true,
+      "mimeType": "image/jpeg",
+      "width": 3885,
+      "height": 2185,
+      "not": "Setur Ayvalık Marina sayfasının kendi tanıtım görseli (drone, gün batımı). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+    },
+    "setur-cesme-marina": {
+      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/cesme-banner.jpg",
+      "credit": "Fotoğraf: Setur Çeşme Marina (resmî site)",
+      "license": "",
+      "sourceUrl": "https://www.seturmarinas.com/en/marinas/cesme",
+      "isletmeIzni": true,
+      "mimeType": "image/jpeg",
+      "width": 4000,
+      "height": 3000,
+      "not": "Setur Çeşme Marina sayfasının kendi tanıtım görseli (drone). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+    },
+    "setur-finike-marina": {
+      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/3332cd82f2b0434da13de362896156bc.jpg",
+      "credit": "Fotoğraf: Setur Finike Marina (resmî site)",
+      "license": "",
+      "sourceUrl": "https://www.seturmarinas.com/en/marinas/finike",
+      "isletmeIzni": true,
+      "mimeType": "image/jpeg",
+      "width": 1920,
+      "height": 786,
+      "not": "Setur Finike Marina sayfasının kendi tanıtım görseli. Tur 2'deki 1280px Commons karesinin yerine geçti (işletmenin güncel ve yüksek çözünürlüklü görseli). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+    },
+    "setur-antalya-marina": {
+      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/antalya-banner.jpg",
+      "credit": "Fotoğraf: Setur Antalya Marina (resmî site)",
+      "license": "",
+      "sourceUrl": "https://www.seturmarinas.com/en/marinas/antalya",
+      "isletmeIzni": true,
+      "mimeType": "image/jpeg",
+      "width": 1920,
+      "height": 786,
+      "not": "Setur Antalya Marina sayfasının kendi tanıtım görseli. Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+    },
+    "setur-kas-marina": {
+      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/kas-banner.jpg",
+      "credit": "Fotoğraf: Setur Kaş Marina (resmî site)",
+      "license": "",
+      "sourceUrl": "https://www.seturmarinas.com/en/marinas/makmarin-kas",
+      "isletmeIzni": true,
+      "mimeType": "image/jpeg",
+      "width": 4240,
+      "height": 2832,
+      "not": "Setur Kaş Marina sayfasının kendi tanıtım görseli (marina + adalar). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+    },
+    "gocek-village-port-marina": {
+      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/320a285e-67d6-4636-bd00-0c89641f2e8d.jpg",
+      "credit": "Fotoğraf: Göcek Village Port Marina (resmî site)",
+      "license": "",
+      "sourceUrl": "https://www.seturmarinas.com/en/marinas/gocek-village-port",
+      "isletmeIzni": true,
+      "mimeType": "image/jpeg",
+      "width": 2376,
+      "height": 1584,
+      "not": "Setur Göcek Village Port sayfasının galeri görseli (pontonlar). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+    },
+    "marinturk-gocek-exclusive": {
+      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/445e754be94e40b5b1efd9a4825bcd80.jpg",
+      "credit": "Fotoğraf: Göcek Exclusive Marina (resmî site)",
+      "license": "",
+      "sourceUrl": "https://www.seturmarinas.com/marinalar/gocek-exclusive",
+      "isletmeIzni": true,
+      "mimeType": "image/jpeg",
+      "width": 1920,
+      "height": 786,
+      "not": "Setur Göcek Exclusive sayfasının kendi tanıtım görseli (hava, pontonlar). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+    },
+    "marti-marina-orhaniye": {
+      "url": "https://irp.cdn-website.com/2e136757/dms3rep/multi/opt/MartiMarina-71-1920w.jpg",
+      "credit": "Fotoğraf: Martı Marina (resmî site)",
+      "license": "",
+      "sourceUrl": "https://www.marti.com.tr/marti-marina",
+      "isletmeIzni": true,
+      "mimeType": "image/jpeg",
+      "width": 1600,
+      "height": 1669,
+      "not": "marti.com.tr/marti-marina sayfasının galeri görseli (pontonlar, Keçi Bükü). Görsel işletmenin CDN'inde (irp.cdn-website.com) durur; kaynak sayfa resmî sitedir. Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+    },
+    "alanya-marina": {
+      "url": "https://www.alanyamarina.com.tr/img/spot/01.jpg",
+      "credit": "Fotoğraf: Alanya Marina (resmî site)",
+      "license": "",
+      "sourceUrl": "https://www.alanyamarina.com.tr",
+      "isletmeIzni": true,
+      "mimeType": "image/jpeg",
+      "width": 2140,
+      "height": 1140,
+      "not": "alanyamarina.com.tr ana sayfa tanıtım görseli (havza + direkler). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
     }
   }
 }
