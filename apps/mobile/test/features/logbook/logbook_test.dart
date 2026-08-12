@@ -58,7 +58,7 @@ void main() {
   });
 
   testWidgets('liste: giriş kartı tarih + başlık + bağlam + notla görünür; '
-      'çöp kutusu siler', (WidgetTester tester) async {
+      'karttaki çöp ikonu KALKTI (UX P0 2026-08)', (WidgetTester tester) async {
     final FakeLogbookStore store = FakeLogbookStore()
       ..data = <LogEntry>[_sample];
     await tester.pumpWidget(_app(store));
@@ -67,12 +67,77 @@ void main() {
     expect(find.text('İlk seyir'), findsOneWidget);
     expect(find.textContaining('Bodrum → Kille Koyu'), findsOneWidget);
     expect(find.textContaining('Gökova poyrazı'), findsOneWidget);
+    // Tek dokunuşla kalıcı silme kaldırıldı — kartta çöp ikonu yok.
+    expect(find.byTooltip('Girişi sil'), findsNothing);
+  });
 
-    await tester.tap(find.byTooltip('Girişi sil'));
+  testWidgets('SİLME (UX P0 2026-08): sola kaydır → silinir + snackbar; '
+      '"Geri al" kaydı geri getirir', (WidgetTester tester) async {
+    final FakeLogbookStore store = FakeLogbookStore()
+      ..data = <LogEntry>[_sample];
+    await tester.pumpWidget(_app(store));
     await tester.pumpAndSettle();
+
+    await tester.drag(find.byKey(const ValueKey<String>('log-dismiss-l1')),
+        const Offset(-600, 0));
+    await tester.pumpAndSettle();
+
+    // Giriş listeden ve diskten silindi; Geri al snackbar'ı görünür.
     expect(find.text('İlk seyir'), findsNothing);
     expect(store.data, isEmpty);
+    expect(find.text('Kayıt silindi.'), findsOneWidget);
+
+    await tester.tap(find.text('Geri al'));
+    await tester.pumpAndSettle();
+
+    // Giriş, tüm alanlarıyla geri geldi (listede ve diskte).
+    expect(find.text('İlk seyir'), findsOneWidget);
+    expect(store.data, hasLength(1));
+    expect(store.data.single.ctxRoute, 'Bodrum → Kille Koyu');
+  });
+
+  testWidgets('SİLME: Geri al kullanılmazsa silme kalıcıdır, boş durum döner',
+      (WidgetTester tester) async {
+    final FakeLogbookStore store = FakeLogbookStore()
+      ..data = <LogEntry>[_sample];
+    await tester.pumpWidget(_app(store));
+    await tester.pumpAndSettle();
+
+    await tester.drag(find.byKey(const ValueKey<String>('log-dismiss-l1')),
+        const Offset(-600, 0));
+    await tester.pumpAndSettle();
+    // Snackbar zamanlayıcısını akıt (CI dersi: bekleyen Timer kırmızı yapar).
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
+
+    expect(store.data, isEmpty);
     expect(find.textContaining('Henüz günlük girişi yok'), findsOneWidget);
+  });
+
+  test('GERİ AL beyni: geri gelen giriş tarih sırasını korur (en yeni başta)',
+      () async {
+    final FakeLogbookStore store = FakeLogbookStore()
+      ..data = <LogEntry>[
+        const LogEntry(id: 'eski', dateMs: 1754100000000, text: 'Eski not'),
+        _sample, // dateMs: 1754300000000 (daha yeni)
+      ];
+    final ProviderContainer c = ProviderContainer(
+      overrides: <Override>[logbookStoreProvider.overrideWithValue(store)],
+    );
+    addTearDown(c.dispose);
+    final LogbookController ctrl = c.read(logbookProvider.notifier);
+    await c.read(logbookProvider.notifier).remove('eski');
+    expect(c.read(logbookProvider).map((LogEntry e) => e.id), <String>['l1']);
+
+    await ctrl.restore(
+        const LogEntry(id: 'eski', dateMs: 1754100000000, text: 'Eski not'));
+    expect(c.read(logbookProvider).map((LogEntry e) => e.id),
+        <String>['l1', 'eski']); // sıra: en yeni başta
+    // Çift dokunuş çift kayıt üretmez.
+    await ctrl.restore(
+        const LogEntry(id: 'eski', dateMs: 1754100000000, text: 'Eski not'));
+    expect(c.read(logbookProvider), hasLength(2));
+    expect(store.data, hasLength(2)); // disk de aynı
   });
 
   testWidgets('YENİ KAYIT: aktif rota bağlamı kendiliğinden gelir, ✕ ile '

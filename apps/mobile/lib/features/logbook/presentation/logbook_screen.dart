@@ -70,6 +70,12 @@ class LogbookBody extends ConsumerWidget {
 }
 
 /// Tek günlük girişi kartı: tarih + (varsa) başlık + bağlam satırı + not.
+///
+/// SİLME (P0, UX denetimi 2026-08 — kullanıcı onaylı): karttaki çöp ikonu
+/// KALDIRILDI — tek dokunuşla geri alınamaz silme, kaptanın en kişisel
+/// verisi (anıları) için fazla riskliydi. Yeni akış: kartı SOLA KAYDIR →
+/// giriş silinir + 5 saniyelik "Geri al" snackbar'ı çıkar. Geri al, kaydı
+/// tarih sırası bozulmadan geri getirir (controller.restore).
 class _LogEntryCard extends ConsumerWidget {
   const _LogEntryCard({required this.entry});
 
@@ -86,61 +92,89 @@ class _LogEntryCard extends ConsumerWidget {
         : entry.ctxNm == null
             ? entry.ctxRoute
             : '${entry.ctxRoute} · ≈ ${entry.ctxNm! >= 10 ? entry.ctxNm!.round() : entry.ctxNm!.toStringAsFixed(1)} ${t.nmUnit}';
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.fromLTRB(14, 12, 8, 12),
+    final Widget card = Container(
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         border: Border.all(color: theme.colorScheme.outline),
         borderRadius: BorderRadius.circular(14),
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Text(date,
+              style: theme.textTheme.bodySmall?.copyWith(
+                  color: DocklyColors.brandPrimary,
+                  fontWeight: FontWeight.w800)),
+          if (entry.title != null && entry.title!.isNotEmpty) ...<Widget>[
+            const SizedBox(height: 2),
+            Text(entry.title!,
+                style: theme.textTheme.titleSmall
+                    ?.copyWith(fontWeight: FontWeight.w800)),
+          ],
+          if (ctx != null) ...<Widget>[
+            const SizedBox(height: 2),
+            Row(
               children: <Widget>[
-                Text(date,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                        color: DocklyColors.brandPrimary,
-                        fontWeight: FontWeight.w800)),
-                if (entry.title != null && entry.title!.isNotEmpty) ...<Widget>[
-                  const SizedBox(height: 2),
-                  Text(entry.title!,
-                      style: theme.textTheme.titleSmall
-                          ?.copyWith(fontWeight: FontWeight.w800)),
-                ],
-                if (ctx != null) ...<Widget>[
-                  const SizedBox(height: 2),
-                  Row(
-                    children: <Widget>[
-                      const DocklyIcon(DocklyIcons.navigation,
-                          size: 12, color: DocklyColors.accentTurquoise),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(ctx,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant)),
-                      ),
-                    ],
-                  ),
-                ],
-                const SizedBox(height: 6),
-                Text(entry.text, style: theme.textTheme.bodyMedium),
+                const DocklyIcon(DocklyIcons.navigation,
+                    size: 12, color: DocklyColors.accentTurquoise),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(ctx,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant)),
+                ),
               ],
             ),
-          ),
-          IconButton(
-            tooltip: t.logbookDeleteTooltip,
-            icon: DocklyIcon(DocklyIcons.deleteOutline,
-                size: 18, color: theme.colorScheme.onSurfaceVariant),
-            onPressed: () =>
-                ref.read(logbookProvider.notifier).remove(entry.id),
-          ),
+          ],
+          const SizedBox(height: 6),
+          Text(entry.text, style: theme.textTheme.bodyMedium),
         ],
+      ),
+    );
+
+    // Kaydırınca arkada beliren kırmızı "sil" zemini — yalnız sola kaydırma.
+    final Widget deleteBg = Container(
+      alignment: Alignment.centerRight,
+      padding: const EdgeInsets.only(right: 18),
+      decoration: BoxDecoration(
+        color: DocklyColors.error.withValues(alpha: 0.90),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: const DocklyIcon(DocklyIcons.deleteOutline,
+          size: 20, color: Colors.white),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Dismissible(
+        key: ValueKey<String>('log-dismiss-${entry.id}'),
+        direction: DismissDirection.endToStart,
+        background: deleteBg,
+        onDismissed: (_) {
+          // Kart birazdan ağaçtan düşer; snackbar'daki Geri al o esnada
+          // çalışacağı için ref/context ÖNCE yakalanır (dispose güvenliği).
+          final LogbookController controller =
+              ref.read(logbookProvider.notifier);
+          final ScaffoldMessengerState messenger =
+              ScaffoldMessenger.of(context);
+          controller.remove(entry.id);
+          messenger
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(t.logbookDeleted),
+                duration: const Duration(seconds: 5),
+                action: SnackBarAction(
+                  label: t.undoLabel,
+                  onPressed: () => controller.restore(entry),
+                ),
+              ),
+            );
+        },
+        child: card,
       ),
     );
   }

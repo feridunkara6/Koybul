@@ -196,6 +196,40 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('D) UX P0 (2026-08): marinada ARA kısayolu + favori kalbi '
+      'yapışkan çubukta, kaydırmadan erişilir', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(sampleMarinaDetail));
+    await tester.pumpAndSettle();
+
+    // Kaydırma YAPMADAN bulunmalılar (yapışkan çubuk).
+    expect(find.byKey(const ValueKey<String>('detail-call-button')),
+        findsOneWidget);
+    expect(find.byTooltip('Favorilere ekle'), findsOneWidget);
+  });
+
+  testWidgets('D) UX P0: telefon kaydı olmayan koyda ARA ikonu HİÇ çizilmez; '
+      'kalp yine çubukta', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(sampleAnchorageDetail));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('detail-call-button')),
+        findsNothing);
+    expect(find.byTooltip('Favorilere ekle'), findsOneWidget);
+  });
+
+  testWidgets('D) UX P0: HESAPSIZ Ara kısayolu üyelik kapısına çıkar '
+      '(iletişim kutucuğuyla aynı kapı)', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(sampleMarinaDetail));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey<String>('detail-call-button')));
+    await tester.pumpAndSettle();
+    expect(find.text('Hesap gerekli'), findsOneWidget);
+    expect(find.textContaining('tek dokunuşla aramak'), findsOneWidget);
+    await tester.tap(find.text('Şimdi değil'));
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('C) İLETİŞİM KUTUCUĞU: "Ara" etiketi + numara birlikte görünür',
       (WidgetTester tester) async {
     await tester.pumpWidget(_app(sampleMarinaDetail));

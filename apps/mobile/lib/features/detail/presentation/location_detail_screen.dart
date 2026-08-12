@@ -47,6 +47,8 @@ import 'operating_info.dart';
 ///  B) UYARI KARTLARI: yaklaşma notu turuncu kart, rüzgâr bandı kırmızı/turuncu.
 ///  C) İkonlu BÖLÜM KARTLARI + tek dokunuş iletişim kutucukları.
 ///  D) YAPIŞKAN EYLEM ÇUBUĞU: Deniz Rotası + Doluluk Bildir/Rezervasyon.
+///     UX denetimi P0 (kullanıcı onayı 2026-08) ile genişledi: ARA kısayolu
+///     (telefon kaydı varsa) + FAVORİ KALBİ (appbar'dan taşındı) da çubukta.
 /// 0-uydurma ilkesi sürer: verisi olmayan kutu/bölüm hiç çizilmez.
 class LocationDetailScreen extends ConsumerWidget {
   const LocationDetailScreen({required this.idOrSlug, super.key});
@@ -65,8 +67,10 @@ class LocationDetailScreen extends ConsumerWidget {
         actions: <Widget>[
           // PAYLAŞ (UX analizi 2026-08): ad + koordinat + site bağlantısını
           // panoya kopyalar — ek bağımlılık yok, her platformda çalışır.
+          // FAVORİ KALBİ artık alttaki yapışkan eylem çubuğunda (UX denetimi
+          // P0, kullanıcı onayı 2026-08): üç kritik eylem — rota, ara,
+          // kaydet — tek çubukta, her kaydırma derinliğinde parmak altında.
           if (loaded != null) _ShareButton(detail: loaded),
-          if (loaded != null) FavoriteButton(favorite: _favoriteFrom(loaded)),
         ],
       ),
       body: async.when(
@@ -1034,6 +1038,14 @@ String _fmtEta(L10n t, double hours) {
 /// D) YAPIŞKAN EYLEM ÇUBUĞU — Deniz Rotası (birincil) + türe göre ikinci eylem:
 /// demirleme tiplerinde Doluluk Bildir, diğerlerinde Rezervasyon Talebi.
 /// Konum şartı haritayla aynıdır (kaptan kuralı): GPS yoksa rota başlamaz.
+///
+/// UX DENETİMİ P0 (kullanıcı onayı 2026-08): kaptanın bu sayfadaki üç işi
+/// "rota çiz / ara / kaydet"tir; üçü de artık bu çubukta. Eklenenler:
+///  • ARA kısayolu — kayıtta telefon varsa telefon ikonu (iletişim
+///    kutucuğuyla aynı üyelik kapısından geçer; kutucuklar aynen durur).
+///  • FAVORİ KALBİ — appbar'dan buraya taşındı (tek ev).
+/// Mevcut iki düğme (rota + doluluk/rezervasyon) aynen korunur — hiçbir
+/// özellik eksilmedi, yalnız erişim tekilleşti.
 class _ActionBar extends ConsumerWidget {
   const _ActionBar({required this.detail});
 
@@ -1064,6 +1076,9 @@ class _ActionBar extends ConsumerWidget {
         (1.05 / (ident.computeLuminance() + 0.05)) < 4.5
             ? _identInkOf(ident)
             : ident;
+    // ARA kısayolu için ilk telefon kaydı (yoksa ikon hiç çizilmez — çubukta
+    // işlevsiz düğme durmaz; 0-uydurma ilkesinin arayüz hâli).
+    final Contact? phoneContact = _firstPhone(detail.contacts);
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -1121,6 +1136,27 @@ class _ActionBar extends ConsumerWidget {
                             ),
                           ),
                   ),
+                  // ARA kısayolu (UX P0 2026-08): iletişim kutucuğuyla aynı
+                  // üyelik kapısı — kaptan yer ayırtmak için önce arar.
+                  if (phoneContact != null) ...<Widget>[
+                    const SizedBox(width: 2),
+                    IconButton(
+                      key: const ValueKey<String>('detail-call-button'),
+                      tooltip: t.contactTypeLabel('phone'),
+                      icon: DocklyIcon(DocklyIcons.phone,
+                          size: 22, color: btnColor),
+                      onPressed: () => requireAccount(
+                        context,
+                        ref,
+                        message: t.gateCallMsg,
+                        onAllowed: () => launchContact(
+                            context, 'phone', phoneContact.value),
+                      ),
+                    ),
+                  ],
+                  // KAYDET (favori) — appbar'dan taşındı (UX P0 2026-08).
+                  const SizedBox(width: 2),
+                  FavoriteButton(favorite: _favoriteFrom(detail)),
                 ],
               ),
             ),
@@ -1128,6 +1164,15 @@ class _ActionBar extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  /// İlk telefon iletişimi (yoksa null). `firstWhere` fırlatma riski yerine
+  /// açık döngü — boş listede sessizce null döner.
+  static Contact? _firstPhone(List<Contact> contacts) {
+    for (final Contact c in contacts) {
+      if (c.type == 'phone') return c;
+    }
+    return null;
   }
 
   /// Rota: aramadan/detaydan gelen kullanıcı haritaya dönüp işareti yeniden

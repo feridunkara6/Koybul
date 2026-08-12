@@ -53,6 +53,21 @@ class LogbookController extends Notifier<List<LogEntry>> {
     );
     await _store.save(state);
   }
+
+  /// GERİ AL (P0, UX denetimi 2026-08 — kullanıcı onaylı): silme artık
+  /// "kaydır → sil + Geri al" akışıyla çalışır; bu metot snackbar'daki
+  /// Geri al'ın beynidir. Giriş, TARİH SIRASI BOZULMADAN geri gelir (liste
+  /// her zaman en-yeni-başta) ve çift dokunuş çift kayıt üretmez.
+  Future<void> restore(LogEntry entry) async {
+    await _loading;
+    _touched = true;
+    if (state.any((LogEntry e) => e.id == entry.id)) return;
+    state = List<LogEntry>.unmodifiable(
+      <LogEntry>[entry, ...state]
+        ..sort((LogEntry a, LogEntry b) => b.dateMs - a.dateMs),
+    );
+    await _store.save(state);
+  }
 }
 
 final NotifierProvider<LogbookController, List<LogEntry>> logbookProvider =
