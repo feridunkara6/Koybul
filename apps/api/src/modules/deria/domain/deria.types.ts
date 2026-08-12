@@ -64,6 +64,20 @@ export const DERIA_COVE_TO_SLUG: ReadonlyMap<number, string> = new Map([
   [15, 'yassica-adalari'], // YASSICA ADALARI (36.7104, 28.9331)
   [5, 'kille-buku'], // KİLLE KOYU (36.6988, 28.8794)
   [7, 'siralibuk-koyu'], // SIRALIBÜK KOYU (36.6778, 28.8636)
+  // 2026-08-12 ikinci tur: DERİA'nın kalan 12 koyu Koybul'a KAYIT olarak
+  // eklendi (batch39_deria_koylar.json) — kimlikler aynı canlı yanıttan.
+  [9, 'binlik-samandira-sahasi'], // BİNLİK KOYU (36.6410, 28.8658)
+  [1726, 'buyukova-samandira-sahasi'], // BÜYÜKOVA KOYU (36.7047, 28.9064)
+  [16, 'gocek-adasi-bati-samandira-sahasi'], // GÖCEK ADASI (BATI) (36.7284, 28.9347)
+  [1725, 'gocek-adasi-dogu-samandira-sahasi'], // GÖCEK ADASI (DOĞU) (36.7330, 28.9447)
+  [17, 'gocek-dogu-samandira-sahasi'], // GÖCEK DOĞU (36.7410, 28.9487)
+  [3, 'gunluk-atbuku-samandira-sahasi'], // GÜNLÜK-ATBÜKÜ (36.7262, 28.9147)
+  [1, 'inceburun-samandira-sahasi'], // İNCEBURUN (36.7361, 28.9281)
+  [10, 'marti-samandira-sahasi'], // MARTI KOYU (36.6360, 28.8789)
+  [11, 'merdivenli-samandira-sahasi'], // MERDİVENLİ KOYU (36.6451, 28.8886)
+  [2, 'osmanaga-samandira-sahasi'], // OSMANAĞA KOYU (36.7342, 28.9225)
+  [1727, 'yaz-limani-samandira-sahasi'], // YAZ LİMANI KOYU (36.6765, 28.9303)
+  [14, 'zeytin-adasi-samandira-sahasi'], // ZEYTİN ADASI (36.6992, 28.9296)
 ]);
 
 /**

@@ -9,9 +9,50 @@
     "mimeType: image/jpeg | image/png | image/webp (veritabanı başka değer kabul etmez).",
     "width/height: dosyanın piksel ölçüleri (url hangi boyuta işaret ediyorsa o).",
     "Fotoğraf GERÇEKTEN o koyu/marinayı göstermeli — emin değilsen ekleme, boş kalsın.",
-    "Girdi eklendikçe generate_locations_seed.py yeniden koşulur; SQL kendiliğinden üretilir."
+    "Girdi eklendikçe generate_locations_seed.py yeniden koşulur; SQL kendiliğinden üretilir.",
+    "KAYNAK İZNİ istisnası (feri, 2026-08-12): DERİA'nın (deria.gov.tr) kendi koy fotoğrafları kaynak gösterilerek kullanılır — feri: 'bunlar public fotolar ve kullanılabilir, zaten site yönlendirmesini yapıyoruz'. Bu girişlerde license BOŞ bırakılır (lisans adı uydurulmaz), credit 'Fotoğraf: DERİA ...' der, sourceUrl deria.gov.tr'ye gider. Üretici bu istisnayı YALNIZ https://deria.gov.tr/ ile başlayan url'lere tanır."
   ],
   "fotograflar": {
+    "gobun-samandira-sahasi": {
+      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/2fa516e7-6d3f-4960-9adf-ea503d0003b3_14.G%C3%96B%C3%9CN.jpg",
+      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+      "license": "",
+      "sourceUrl": "https://deria.gov.tr",
+      "mimeType": "image/jpeg",
+      "width": 4888,
+      "height": 3666,
+      "not": "DERİA cove/paged API'sinde id=12 GÖBÜN KOYU kaydının imageUrl alanı (2026-08-12). Görsel tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+    },
+    "kille-buku": {
+      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/79564fea-77a9-4376-99db-e127d7f0980e_6.K%C4%B0LLEADASI.jpg",
+      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+      "license": "",
+      "sourceUrl": "https://deria.gov.tr",
+      "mimeType": "image/jpeg",
+      "width": 5015,
+      "height": 3817,
+      "not": "DERİA API id=5 KİLLE KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda doğrulandı: plajlı koyun drone çekimi."
+    },
+    "siralibuk-koyu": {
+      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/489a460f-4ac7-414c-9083-9967fdea0be4_12.SIRALIB%C3%9CK.jpg",
+      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+      "license": "",
+      "sourceUrl": "https://deria.gov.tr",
+      "mimeType": "image/jpeg",
+      "width": 5280,
+      "height": 3956,
+      "not": "DERİA API id=7 SIRALIBÜK KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda doğrulandı: tonozda bağlı teknelerle koyun drone çekimi."
+    },
+    "tersane-adasi-koyu": {
+      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/dc1b9731-750a-4544-b5dd-02bfe05d826d_10.TERSANE%20ADASI.jpg",
+      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+      "license": "",
+      "sourceUrl": "https://deria.gov.tr",
+      "mimeType": "image/jpeg",
+      "width": 4929,
+      "height": 3780,
+      "not": "DERİA API id=13 TERSANE ADASI kaydının imageUrl alanı (2026-08-12). Tarayıcıda doğrulandı: guletlerle dolu koyun drone çekimi. Commons'taki tek aday 640 px'ti, bu 4929 px."
+    },
     "bedri-rahmi-samandira-sahasi": {
       "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Fish_Figure_on_a_Rock_Painted_By_Bedri_Rahmi_Ey%C3%BCbo%C4%9Flu%2C_located_in_Bedri_Rahmi_Bay_in_G%C3%B6cek.jpg/1280px-Fish_Figure_on_a_Rock_Painted_By_Bedri_Rahmi_Ey%C3%BCbo%C4%9Flu%2C_located_in_Bedri_Rahmi_Bay_in_G%C3%B6cek.jpg",
       "credit": "Raicem",
@@ -101,6 +142,106 @@
       "width": 1280,
       "height": 853,
       "not": "Port Göcek = bugünkü D-Marin Göcek (marka değişimi ~2011). Dosya açıklaması marinayı ayrıntısıyla anlatıyor (C&N işletmesi, yüzer pontonlar, 1999 açılışı)."
+    },
+    "binlik-samandira-sahasi": {
+      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/e9d7b6a0-360b-4dec-bc71-55a656d68b3d_13.%20B%C4%B0NL%C4%B0K.jpg",
+      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+      "license": "",
+      "sourceUrl": "https://deria.gov.tr",
+      "mimeType": "image/jpeg",
+      "width": 5000,
+      "height": 3765,
+      "not": "DERİA cove/paged id=9 BİNLİK KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+    },
+    "buyukova-samandira-sahasi": {
+      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/a538ac67-229b-437c-a97c-e5e54cfaf56f_buyukova.jpg",
+      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+      "license": "",
+      "sourceUrl": "https://deria.gov.tr",
+      "mimeType": "image/jpeg",
+      "width": 5280,
+      "height": 3956,
+      "not": "DERİA cove/paged id=1726 BÜYÜKOVA KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+    },
+    "gocek-adasi-bati-samandira-sahasi": {
+      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/c4fa39fd-6bd1-4fa5-bd8f-a699c3f4ea45_8.G%C3%96CEKADASI.jpg",
+      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+      "license": "",
+      "sourceUrl": "https://deria.gov.tr",
+      "mimeType": "image/jpeg",
+      "width": 5017,
+      "height": 3755,
+      "not": "DERİA cove/paged id=16 GÖCEK ADASI (BATI) kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+    },
+    "gocek-dogu-samandira-sahasi": {
+      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/54e0e78d-a954-48c2-9d55-d11c63f3fa13_7.G%C3%96CEKDO%C4%9EU.jpg",
+      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+      "license": "",
+      "sourceUrl": "https://deria.gov.tr",
+      "mimeType": "image/jpeg",
+      "width": 4999,
+      "height": 3722,
+      "not": "DERİA cove/paged id=17 GÖCEK DOĞU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+    },
+    "gunluk-atbuku-samandira-sahasi": {
+      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/be50ef31-6647-4941-842c-0fe9f320a20d_9.ATB%C3%9CK%C3%9C.jpg",
+      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+      "license": "",
+      "sourceUrl": "https://deria.gov.tr",
+      "mimeType": "image/jpeg",
+      "width": 5280,
+      "height": 3956,
+      "not": "DERİA cove/paged id=3 GÜNLÜK-ATBÜKÜ kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+    },
+    "inceburun-samandira-sahasi": {
+      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/34e2a8c8-7257-4bad-8c14-c977ee83f475_3.%C4%B0NCEBURUN.jpg",
+      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+      "license": "",
+      "sourceUrl": "https://deria.gov.tr",
+      "mimeType": "image/jpeg",
+      "width": 5280,
+      "height": 3622,
+      "not": "DERİA cove/paged id=1 İNCEBURUN kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+    },
+    "marti-samandira-sahasi": {
+      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/4f69d934-89a5-4bcc-973f-3ae336850ed0_15.MARTI.jpg",
+      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+      "license": "",
+      "sourceUrl": "https://deria.gov.tr",
+      "mimeType": "image/jpeg",
+      "width": 4835,
+      "height": 3702,
+      "not": "DERİA cove/paged id=10 MARTI KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+    },
+    "merdivenli-samandira-sahasi": {
+      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/b065d664-9350-427b-8c0e-1b626cdc94db_16.MERD%C4%B0VENL%C4%B0.jpg",
+      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+      "license": "",
+      "sourceUrl": "https://deria.gov.tr",
+      "mimeType": "image/jpeg",
+      "width": 3840,
+      "height": 2160,
+      "not": "DERİA cove/paged id=11 MERDİVENLİ KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+    },
+    "osmanaga-samandira-sahasi": {
+      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/14007ab8-4a03-48d3-adc9-f0b865917855_1.OSMANAGA.jpg",
+      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+      "license": "",
+      "sourceUrl": "https://deria.gov.tr",
+      "mimeType": "image/jpeg",
+      "width": 5280,
+      "height": 3562,
+      "not": "DERİA cove/paged id=2 OSMANAĞA KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+    },
+    "zeytin-adasi-samandira-sahasi": {
+      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/45dfa2c5-62cd-487b-b0da-2b2e77ff44ae_5.ZEYT%C4%B0NADASI.jpg",
+      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+      "license": "",
+      "sourceUrl": "https://deria.gov.tr",
+      "mimeType": "image/jpeg",
+      "width": 4986,
+      "height": 3854,
+      "not": "DERİA cove/paged id=14 ZEYTİN ADASI kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
     }
   }
 }

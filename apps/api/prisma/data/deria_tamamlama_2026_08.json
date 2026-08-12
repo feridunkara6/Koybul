@@ -1,0 +1,62 @@
+{
+ "kaynak": "DERİA (deria.gov.tr, TÜÇA) cove/paged API, 2026-08-12 — şamandıra kapasiteleri. Yanıtın SHA-256'lı tam kopyası: deria_koylar_2026_08.json. İşletmecinin (TÜÇA) kendi sistemindeki koy başına şamandıra sayısı; canlı müsaitlik ayrı uçtan gelir.",
+ "not": "berthCount → locations.capacity: mevcut veritabanlarına UPDATE ile akar. musaitSamandiraSayisi CANLI veridir, statik kayda yazılmaz.",
+ "veriler": {
+  "bedri-rahmi-samandira-sahasi": {
+   "berthCount": {
+    "deger": 73,
+    "alinti": "\"kapasite\":73 (id=6, BEDRİ RAHMİ KOYU)",
+    "kaynak": "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   }
+  },
+  "boynuzbuku-samandira-sahasi": {
+   "berthCount": {
+    "deger": 84,
+    "alinti": "\"kapasite\":84 (id=4, BOYNUZBÜKÜ)",
+    "kaynak": "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   }
+  },
+  "sarsala-samandira-sahasi": {
+   "berthCount": {
+    "deger": 98,
+    "alinti": "\"kapasite\":98 (id=8, SARSALA KOYU)",
+    "kaynak": "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   }
+  },
+  "gobun-samandira-sahasi": {
+   "berthCount": {
+    "deger": 11,
+    "alinti": "\"kapasite\":11 (id=12, GÖBÜN KOYU)",
+    "kaynak": "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   }
+  },
+  "tersane-adasi-koyu": {
+   "berthCount": {
+    "deger": 8,
+    "alinti": "\"kapasite\":8 (id=13, TERSANE ADASI)",
+    "kaynak": "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   }
+  },
+  "yassica-adalari": {
+   "berthCount": {
+    "deger": 48,
+    "alinti": "\"kapasite\":48 (id=15, YASSICA ADALARI)",
+    "kaynak": "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   }
+  },
+  "kille-buku": {
+   "berthCount": {
+    "deger": 55,
+    "alinti": "\"kapasite\":55 (id=5, KİLLE KOYU)",
+    "kaynak": "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   }
+  },
+  "siralibuk-koyu": {
+   "berthCount": {
+    "deger": 48,
+    "alinti": "\"kapasite\":48 (id=7, SIRALIBÜK KOYU)",
+    "kaynak": "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   }
+  }
+ }
+}

@@ -1,0 +1,477 @@
+{
+ "batch": "39-deria-koylar",
+ "collectedAt": "2026-08-12",
+ "method": "DERİA (deria.gov.tr, Türkiye Çevre Ajansı) cove/paged API'sinden feri'nin tarayıcısıyla canlı çekildi; yanıtın tamamı SHA-256 sağlamasıyla bire bir kopyalandı (deria_koylar_2026_08.json). DERİA'nın 20 koyundan Koybul'da kaydı olmayan 12'si burada; kalan 8'i zaten kayıtlıydı (kapasiteleri deria_tamamlama_2026_08.json ile işlendi). Mükerrer kontrolü: 12 koyun her biri en yakın mevcut kayıttan ≥400 m uzakta ve farklı bir nokta.",
+ "notes": "districtSlug: Göcek körfezi kayıtlarının tümünde olduğu gibi mugla-fethiye kullanıldı (Kapıdağ/Dalaman tarafındakiler dahil — mevcut sarsala/gobun kayıtlarıyla tutarlılık; DERİA da hepsini 'GÖCEK DALAMAN KOYLAR' altında topluyor). Canlı doluluk kutusu bu kayıtlarda DERIA_COVE_TO_SLUG eşlemesiyle otomatik açılır.",
+ "records": [
+  {
+   "slug": "binlik-samandira-sahasi",
+   "name": "Binlik Koyu Şamandıra Sahası",
+   "operator": "Türkiye Çevre Ajansı",
+   "status": "published",
+   "typeCode": "buoy",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.641011,
+   "lon": 28.865753,
+   "coordSource": "deria.gov.tr cove/paged API (2026-08-12)",
+   "descriptionTr": "Denize dik inen yamaçlar arasında, eşsiz bir doğal güzelliğe sahip olan Binlik Koyu, Çam ağaçlarının denize kadar indiği koyda su sporları ve olta balıkçılığı yapabileceğiniz gibi, yanınıza şnorkelinizi alarak Binlik’in gizemli sularını keşfetebilirsiniz. Türkiye Çevre Ajansı'nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA'nın DERİA sistemi üzerinden yapılır (deria.gov.tr).",
+   "berthCount": 9,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "holdingType": null,
+   "swellExposure": null,
+   "isFree": false,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "website",
+     "value": "https://deria.gov.tr",
+     "label": "DERİA rezervasyon",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://deria.gov.tr",
+    "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   ],
+   "confidence": "high",
+   "missingNotes": "DERİA cove/paged API kaydı id=9 (BİNLİK KOYU), çekim 2026-08-12; yanıtın SHA-256'lı kopyası deria_koylar_2026_08.json içinde. | Kapasite alıntısı: \"kapasite\":9 — DERİA'nın koy başına şamandıra sayısı. | Koordinat, açıklama (TR/EN/RU) ve fotoğraf aynı API kaydından. ES çevirisi bu projede TR/EN metinden yazıldı. | DERİA'daki sicaklik/ruzgarHizi/derinlik alanları CANLI sensör verisidir — statik kayda yazılmadı. Zemin bilinmiyor."
+  },
+  {
+   "slug": "buyukova-samandira-sahasi",
+   "name": "Büyükova Koyu Şamandıra Sahası",
+   "operator": "Türkiye Çevre Ajansı",
+   "status": "published",
+   "typeCode": "buoy",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.704737,
+   "lon": 28.906372,
+   "coordSource": "deria.gov.tr cove/paged API (2026-08-12)",
+   "descriptionTr": "Göcek'in eşsiz koylarından biri. Kristal berraklığındaki suları ve doğal güzelliği ile unutulmaz anlar yaşatır. Türkiye Çevre Ajansı'nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA'nın DERİA sistemi üzerinden yapılır (deria.gov.tr).",
+   "berthCount": 3,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "holdingType": null,
+   "swellExposure": null,
+   "isFree": false,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "website",
+     "value": "https://deria.gov.tr",
+     "label": "DERİA rezervasyon",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://deria.gov.tr",
+    "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   ],
+   "confidence": "high",
+   "missingNotes": "DERİA cove/paged API kaydı id=1726 (BÜYÜKOVA KOYU), çekim 2026-08-12; yanıtın SHA-256'lı kopyası deria_koylar_2026_08.json içinde. | Kapasite alıntısı: \"kapasite\":3 — DERİA'nın koy başına şamandıra sayısı. | Koordinat, açıklama (TR/EN/RU) ve fotoğraf aynı API kaydından. ES çevirisi bu projede TR/EN metinden yazıldı. | DERİA'daki sicaklik/ruzgarHizi/derinlik alanları CANLI sensör verisidir — statik kayda yazılmadı. Zemin bilinmiyor."
+  },
+  {
+   "slug": "gocek-adasi-bati-samandira-sahasi",
+   "name": "Göcek Adası (Batı) Şamandıra Sahası",
+   "operator": "Türkiye Çevre Ajansı",
+   "status": "published",
+   "typeCode": "buoy",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.728357,
+   "lon": 28.934675,
+   "coordSource": "deria.gov.tr cove/paged API (2026-08-12)",
+   "descriptionTr": "Göcek'in hemen karşısında yer alan ve kasabayı rüzgardan koruyan doğal bir dalgakıran görevi gören etkileyici bir adadır. Adada yer alan koylar ve plajlar, kristal netliğindeki suları ve huzurlu atmosferiyle bilinir. Adanın içinde yer alan işletme bünyesinde yemek ve içecek seçenekleri mevcuttur; Göcek Marinalardan kalkan teknelerle yaklaşık 15 dakikada ulaşılabilir. Türkiye Çevre Ajansı'nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA'nın DERİA sistemi üzerinden yapılır (deria.gov.tr).",
+   "berthCount": 43,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "holdingType": null,
+   "swellExposure": null,
+   "isFree": false,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "website",
+     "value": "https://deria.gov.tr",
+     "label": "DERİA rezervasyon",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://deria.gov.tr",
+    "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   ],
+   "confidence": "high",
+   "missingNotes": "DERİA cove/paged API kaydı id=16 (GÖCEK ADASI (BATI)), çekim 2026-08-12; yanıtın SHA-256'lı kopyası deria_koylar_2026_08.json içinde. | Kapasite alıntısı: \"kapasite\":43 — DERİA'nın koy başına şamandıra sayısı. | Koordinat, açıklama (TR/EN/RU) ve fotoğraf aynı API kaydından. ES çevirisi bu projede TR/EN metinden yazıldı. | DERİA'daki sicaklik/ruzgarHizi/derinlik alanları CANLI sensör verisidir — statik kayda yazılmadı. Zemin bilinmiyor."
+  },
+  {
+   "slug": "gocek-adasi-dogu-samandira-sahasi",
+   "name": "Göcek Adası (Doğu) Şamandıra Sahası",
+   "operator": "Türkiye Çevre Ajansı",
+   "status": "published",
+   "typeCode": "buoy",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.73295833,
+   "lon": 28.944675,
+   "coordSource": "deria.gov.tr cove/paged API (2026-08-12)",
+   "descriptionTr": "Göcek'in hemen karşısında yer alan ve kasabayı rüzgardan koruyan doğal bir dalgakıran görevi gören etkileyici bir adadır. Adada yer alan koylar ve plajlar, kristal netliğindeki suları ve huzurlu atmosferiyle bilinir. Adanın içinde yer alan işletme bünyesinde yemek ve içecek seçenekleri mevcuttur; Göcek Marinalardan kalkan teknelerle yaklaşık 15 dakikada ulaşılabilir. Türkiye Çevre Ajansı'nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA'nın DERİA sistemi üzerinden yapılır (deria.gov.tr).",
+   "berthCount": 42,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "holdingType": null,
+   "swellExposure": null,
+   "isFree": false,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "website",
+     "value": "https://deria.gov.tr",
+     "label": "DERİA rezervasyon",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://deria.gov.tr",
+    "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   ],
+   "confidence": "high",
+   "missingNotes": "DERİA cove/paged API kaydı id=1725 (GÖCEK ADASI (DOĞU)), çekim 2026-08-12; yanıtın SHA-256'lı kopyası deria_koylar_2026_08.json içinde. | Kapasite alıntısı: \"kapasite\":42 — DERİA'nın koy başına şamandıra sayısı. | Koordinat, açıklama (TR/EN/RU) ve fotoğraf aynı API kaydından. ES çevirisi bu projede TR/EN metinden yazıldı. | DERİA'daki sicaklik/ruzgarHizi/derinlik alanları CANLI sensör verisidir — statik kayda yazılmadı. Zemin bilinmiyor. | imageUrl yok (kaynakta null) — kapak fotoğrafsız. RU açıklamasının sonuna yapışık Latin transliterasyon kopyası alınmadı."
+  },
+  {
+   "slug": "gocek-dogu-samandira-sahasi",
+   "name": "Göcek Doğu Şamandıra Sahası",
+   "operator": "Türkiye Çevre Ajansı",
+   "status": "published",
+   "typeCode": "buoy",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.740954,
+   "lon": 28.948664,
+   "coordSource": "deria.gov.tr cove/paged API (2026-08-12)",
+   "descriptionTr": "Çam ağaçlarıyla çevrili, sakin ve turkuaz sularıyla bilinen bu koy günübirlik ziyaretçiler için popüler bir duraktır. Özellikle sessizlik ve doğa ile baş başa kalmak isteyenlerin tercihidir. Türkiye Çevre Ajansı'nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA'nın DERİA sistemi üzerinden yapılır (deria.gov.tr).",
+   "berthCount": 33,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "holdingType": null,
+   "swellExposure": null,
+   "isFree": false,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "website",
+     "value": "https://deria.gov.tr",
+     "label": "DERİA rezervasyon",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://deria.gov.tr",
+    "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   ],
+   "confidence": "high",
+   "missingNotes": "DERİA cove/paged API kaydı id=17 (GÖCEK DOĞU), çekim 2026-08-12; yanıtın SHA-256'lı kopyası deria_koylar_2026_08.json içinde. | Kapasite alıntısı: \"kapasite\":33 — DERİA'nın koy başına şamandıra sayısı. | Koordinat, açıklama (TR/EN/RU) ve fotoğraf aynı API kaydından. ES çevirisi bu projede TR/EN metinden yazıldı. | DERİA'daki sicaklik/ruzgarHizi/derinlik alanları CANLI sensör verisidir — statik kayda yazılmadı. Zemin bilinmiyor."
+  },
+  {
+   "slug": "gunluk-atbuku-samandira-sahasi",
+   "name": "Günlük-Atbükü Şamandıra Sahası",
+   "operator": "Türkiye Çevre Ajansı",
+   "status": "published",
+   "typeCode": "buoy",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.726168,
+   "lon": 28.914726,
+   "coordSource": "deria.gov.tr cove/paged API (2026-08-12)",
+   "descriptionTr": "Doğal günlük ağaçları gölgesinde, sessiz ve huzurlu bir atmosfere sahiptir. Bölgenin en sakin ve doğal güzelliğini korumuş noktalarından biridir. Genellikle günübirlik tekne turlarının veya özel yatların rotasında yer alan bu koy, özellikle sessizlik arayan deniz tutkunları tarafından tercih edilmektedir. Türkiye Çevre Ajansı'nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA'nın DERİA sistemi üzerinden yapılır (deria.gov.tr).",
+   "berthCount": 51,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "holdingType": null,
+   "swellExposure": null,
+   "isFree": false,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "website",
+     "value": "https://deria.gov.tr",
+     "label": "DERİA rezervasyon",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://deria.gov.tr",
+    "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   ],
+   "confidence": "high",
+   "missingNotes": "DERİA cove/paged API kaydı id=3 (GÜNLÜK-ATBÜKÜ), çekim 2026-08-12; yanıtın SHA-256'lı kopyası deria_koylar_2026_08.json içinde. | Kapasite alıntısı: \"kapasite\":51 — DERİA'nın koy başına şamandıra sayısı. | Koordinat, açıklama (TR/EN/RU) ve fotoğraf aynı API kaydından. ES çevirisi bu projede TR/EN metinden yazıldı. | DERİA'daki sicaklik/ruzgarHizi/derinlik alanları CANLI sensör verisidir — statik kayda yazılmadı. Zemin bilinmiyor."
+  },
+  {
+   "slug": "inceburun-samandira-sahasi",
+   "name": "İnceburun Şamandıra Sahası",
+   "operator": "Türkiye Çevre Ajansı",
+   "status": "published",
+   "typeCode": "buoy",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.736111,
+   "lon": 28.928056,
+   "coordSource": "deria.gov.tr cove/paged API (2026-08-12)",
+   "descriptionTr": "Göcek'in mavi tur rotaları üzerinde yer alan İnceburun Koyu, adını denize doğru uzanan ince bir burundan alır. Denizi oldukça berrak ve sığdır. Türkiye Çevre Ajansı'nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA'nın DERİA sistemi üzerinden yapılır (deria.gov.tr).",
+   "berthCount": 16,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "holdingType": null,
+   "swellExposure": null,
+   "isFree": false,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "website",
+     "value": "https://deria.gov.tr",
+     "label": "DERİA rezervasyon",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://deria.gov.tr",
+    "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   ],
+   "confidence": "high",
+   "missingNotes": "DERİA cove/paged API kaydı id=1 (İNCEBURUN), çekim 2026-08-12; yanıtın SHA-256'lı kopyası deria_koylar_2026_08.json içinde. | Kapasite alıntısı: \"kapasite\":16 — DERİA'nın koy başına şamandıra sayısı. | Koordinat, açıklama (TR/EN/RU) ve fotoğraf aynı API kaydından. ES çevirisi bu projede TR/EN metinden yazıldı. | DERİA'daki sicaklik/ruzgarHizi/derinlik alanları CANLI sensör verisidir — statik kayda yazılmadı. Zemin bilinmiyor."
+  },
+  {
+   "slug": "marti-samandira-sahasi",
+   "name": "Martı Koyu Şamandıra Sahası",
+   "operator": "Türkiye Çevre Ajansı",
+   "status": "published",
+   "typeCode": "buoy",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.635983,
+   "lon": 28.878883,
+   "coordSource": "deria.gov.tr cove/paged API (2026-08-12)",
+   "descriptionTr": "Sahilindeki taşlarla yapılmış martı silueti nedeniyle bu ismi almıştır. Sadece teknelerle ulaşılabilen bu koy, berrak suları ve çam ağaçlarıyla çevrili huzurlu atmosferiyle bilinir. Türkiye Çevre Ajansı'nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA'nın DERİA sistemi üzerinden yapılır (deria.gov.tr).",
+   "berthCount": 45,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "holdingType": null,
+   "swellExposure": null,
+   "isFree": false,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "website",
+     "value": "https://deria.gov.tr",
+     "label": "DERİA rezervasyon",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://deria.gov.tr",
+    "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   ],
+   "confidence": "high",
+   "missingNotes": "DERİA cove/paged API kaydı id=10 (MARTI KOYU), çekim 2026-08-12; yanıtın SHA-256'lı kopyası deria_koylar_2026_08.json içinde. | Kapasite alıntısı: \"kapasite\":45 — DERİA'nın koy başına şamandıra sayısı. | Koordinat, açıklama (TR/EN/RU) ve fotoğraf aynı API kaydından. ES çevirisi bu projede TR/EN metinden yazıldı. | DERİA'daki sicaklik/ruzgarHizi/derinlik alanları CANLI sensör verisidir — statik kayda yazılmadı. Zemin bilinmiyor."
+  },
+  {
+   "slug": "merdivenli-samandira-sahasi",
+   "name": "Merdivenli Koyu Şamandıra Sahası",
+   "operator": "Türkiye Çevre Ajansı",
+   "status": "published",
+   "typeCode": "buoy",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.645072,
+   "lon": 28.888583,
+   "coordSource": "deria.gov.tr cove/paged API (2026-08-12)",
+   "descriptionTr": "Göcek’in en karakteristik noktalarından biri olan Merdivenli Koyu, ismini sahilden yukarıya doğru çıkan ve antik dönemden kaldığı düşünülen taş merdivenlerden alır. Doğal bir mağaraya ve tertemiz turkuaz bir denize sahip olmasıyla bilinen bu koy, özellikle sessizlik ve doğa ile baş başa kalmak isteyenlerin tercihidir. Merdivenleri takip ederek yukarı çıktığınızda sizi eşsiz bir Göcek manzarası ve eski bir köy kalıntısı bekler. Türkiye Çevre Ajansı'nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA'nın DERİA sistemi üzerinden yapılır (deria.gov.tr).",
+   "berthCount": 14,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "holdingType": null,
+   "swellExposure": null,
+   "isFree": false,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "website",
+     "value": "https://deria.gov.tr",
+     "label": "DERİA rezervasyon",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://deria.gov.tr",
+    "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   ],
+   "confidence": "high",
+   "missingNotes": "DERİA cove/paged API kaydı id=11 (MERDİVENLİ KOYU), çekim 2026-08-12; yanıtın SHA-256'lı kopyası deria_koylar_2026_08.json içinde. | Kapasite alıntısı: \"kapasite\":14 — DERİA'nın koy başına şamandıra sayısı. | Koordinat, açıklama (TR/EN/RU) ve fotoğraf aynı API kaydından. ES çevirisi bu projede TR/EN metinden yazıldı. | DERİA'daki sicaklik/ruzgarHizi/derinlik alanları CANLI sensör verisidir — statik kayda yazılmadı. Zemin bilinmiyor."
+  },
+  {
+   "slug": "osmanaga-samandira-sahasi",
+   "name": "Osmanağa Koyu Şamandıra Sahası",
+   "operator": "Türkiye Çevre Ajansı",
+   "status": "published",
+   "typeCode": "buoy",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.73421728255958,
+   "lon": 28.92247268412472,
+   "coordSource": "deria.gov.tr cove/paged API (2026-08-12)",
+   "descriptionTr": "Bölgenin karadan ulaşılabilen nadir ve bakir noktalarından biridir. Çam ağaçlarıyla çevrili, sakin ve turkuaz sularıyla bilinen bu koy günübirlik ziyaretçiler için popüler bir duraktır. Alanda herhangi bir işletme, tuvalet veya duş imkanı bulunmamaktadır. Ziyaretçilerin yiyecek ve içecek ihtiyaçlarını yanlarında getirmeleri önerilir. Türkiye Çevre Ajansı'nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA'nın DERİA sistemi üzerinden yapılır (deria.gov.tr).",
+   "berthCount": 12,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "holdingType": null,
+   "swellExposure": null,
+   "isFree": false,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "website",
+     "value": "https://deria.gov.tr",
+     "label": "DERİA rezervasyon",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://deria.gov.tr",
+    "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   ],
+   "confidence": "high",
+   "missingNotes": "DERİA cove/paged API kaydı id=2 (OSMANAĞA KOYU), çekim 2026-08-12; yanıtın SHA-256'lı kopyası deria_koylar_2026_08.json içinde. | Kapasite alıntısı: \"kapasite\":12 — DERİA'nın koy başına şamandıra sayısı. | Koordinat, açıklama (TR/EN/RU) ve fotoğraf aynı API kaydından. ES çevirisi bu projede TR/EN metinden yazıldı. | DERİA'daki sicaklik/ruzgarHizi/derinlik alanları CANLI sensör verisidir — statik kayda yazılmadı. Zemin bilinmiyor."
+  },
+  {
+   "slug": "yaz-limani-samandira-sahasi",
+   "name": "Yaz Limanı Koyu Şamandıra Sahası",
+   "operator": "Türkiye Çevre Ajansı",
+   "status": "published",
+   "typeCode": "buoy",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.676471,
+   "lon": 28.930263,
+   "coordSource": "deria.gov.tr cove/paged API (2026-08-12)",
+   "descriptionTr": "Adını Osmanlı döneminde gemilerin inşa ve tamir edildiği eski tersanelerden alır. Kıyı şeridinde mübadele döneminden kalma eski Rum evlerinin kalıntıları vardır. Koyda genellikle denizcilerin uğradığı küçük restoranlar bulunur. Türkiye Çevre Ajansı'nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA'nın DERİA sistemi üzerinden yapılır (deria.gov.tr).",
+   "berthCount": 27,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "holdingType": null,
+   "swellExposure": null,
+   "isFree": false,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "website",
+     "value": "https://deria.gov.tr",
+     "label": "DERİA rezervasyon",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://deria.gov.tr",
+    "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   ],
+   "confidence": "high",
+   "missingNotes": "DERİA cove/paged API kaydı id=1727 (YAZ LİMANI KOYU), çekim 2026-08-12; yanıtın SHA-256'lı kopyası deria_koylar_2026_08.json içinde. | Kapasite alıntısı: \"kapasite\":27 — DERİA'nın koy başına şamandıra sayısı. | Koordinat, açıklama (TR/EN/RU) ve fotoğraf aynı API kaydından. ES çevirisi bu projede TR/EN metinden yazıldı. | DERİA'daki sicaklik/ruzgarHizi/derinlik alanları CANLI sensör verisidir — statik kayda yazılmadı. Zemin bilinmiyor. | DERİA'nın açıklaması Tersane Adası metniyle aynı (kaynağın kendi içeriği böyle); koordinat Tersane Adası'nın doğusundaki koya işaret eder."
+  },
+  {
+   "slug": "zeytin-adasi-samandira-sahasi",
+   "name": "Zeytin Adası Şamandıra Sahası",
+   "operator": "Türkiye Çevre Ajansı",
+   "status": "published",
+   "typeCode": "buoy",
+   "provinceSlug": "mugla",
+   "districtSlug": "mugla-fethiye",
+   "lat": 36.699202,
+   "lon": 28.929604,
+   "coordSource": "deria.gov.tr cove/paged API (2026-08-12)",
+   "descriptionTr": "Göcek Körfezi'nde yer alan Zeytin Adası, yaklaşık 650 dönüm yüzölçümüne sahip, binlerce zeytin ağacıyla kaplı özel mülkiyetli bir adadır. 70 bin civarında zeytin ağacına ev sahipliği yapar ve adada küçük bir zeytinyağı fabrikası bulunur. Türkiye Çevre Ajansı'nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA'nın DERİA sistemi üzerinden yapılır (deria.gov.tr).",
+   "berthCount": 13,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "priceTier": "paid",
+   "holdingType": null,
+   "swellExposure": null,
+   "isFree": false,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "website",
+     "value": "https://deria.gov.tr",
+     "label": "DERİA rezervasyon",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://deria.gov.tr",
+    "https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50"
+   ],
+   "confidence": "high",
+   "missingNotes": "DERİA cove/paged API kaydı id=14 (ZEYTİN ADASI), çekim 2026-08-12; yanıtın SHA-256'lı kopyası deria_koylar_2026_08.json içinde. | Kapasite alıntısı: \"kapasite\":13 — DERİA'nın koy başına şamandıra sayısı. | Koordinat, açıklama (TR/EN/RU) ve fotoğraf aynı API kaydından. ES çevirisi bu projede TR/EN metinden yazıldı. | DERİA'daki sicaklik/ruzgarHizi/derinlik alanları CANLI sensör verisidir — statik kayda yazılmadı. Zemin bilinmiyor. | Kaynağın EN çevirisi 'acres', RU çevirisi 'гектаров' diyor; TR aslı 'dönüm' — çevirilerde birim dönüm olarak KORUNDU, dönüşüm uydurulmadı."
+  }
+ ],
+ "excluded": []
+}

@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit + 28-tr-tur15-bodrum-gokova-datca-fethiye + 29-ege-tur16-izmir-kuzey-ege-bodrum-dogu-hisaronu + 30-liman-tur17-marmara-marina-belediye + 32-gr-tur19-saronik-dogu-ege + 33-iskele-tur20-restoran-marina-liman + 34-ege-akdeniz-tur21-restoran-baglama + 35-tr-tur22-fethiye-korfezi-iskeleler + 36-tr-tur23-gokova-fethiye-kulup + 37-gr-tur24-bekleyenler-iyonya-kiklad + 38-eksik-tamamlama-akvaryum-yedideler-yakitlar · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit + 28-tr-tur15-bodrum-gokova-datca-fethiye + 29-ege-tur16-izmir-kuzey-ege-bodrum-dogu-hisaronu + 30-liman-tur17-marmara-marina-belediye + 32-gr-tur19-saronik-dogu-ege + 33-iskele-tur20-restoran-marina-liman + 34-ege-akdeniz-tur21-restoran-baglama + 35-tr-tur22-fethiye-korfezi-iskeleler + 36-tr-tur23-gokova-fethiye-kulup + 37-gr-tur24-bekleyenler-iyonya-kiklad + 38-eksik-tamamlama-akvaryum-yedideler-yakitlar + 39-deria-koylar · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -3394,7 +3394,7 @@ SELECT gen_random_uuid(), 'siralibuk-koyu', 8, 'published', 'TR',
   'Sıralıbük Koyu', 'Göcek Körfezi''nin batı kıyısında, Sarsala ile Taşyaka arasında yer alan doğal bir demirleme koyudur. Zemin kum, çamur, kaya ve yosun karışımıdır; demirleme ve kıçtan karaya halat verme uygulanır.',
   ST_SetSRID(ST_MakePoint(28.8588, 36.6762), 4326)::geography,
   NULL, NULL, NULL, NULL,
-  NULL, 'paid', 'import'
+  48, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Sıralıbük Koyu', 'Göcek Körfezi''nin batı kıyısında, Sarsala ile Taşyaka arasında yer alan doğal bir demirleme koyudur. Zemin kum, çamur, kaya ve yosun karışımıdır; demirleme ve kıçtan karaya halat verme uygulanır.' FROM locations WHERE slug = 'siralibuk-koyu'
@@ -3413,7 +3413,7 @@ SELECT gen_random_uuid(), 'kille-buku', 8, 'published', 'TR',
   'Kille Bükü', 'Göcek Körfezi''nin batı kıyısında, Boynuzbükü''nün güneyinde yer alan sakin bir demirleme koyudur. Zemin kumdur; demirleme ve kıçtan karaya bağlama yapılır, koyda tesis bulunmaz.',
   ST_SetSRID(ST_MakePoint(28.8778, 36.6997), 4326)::geography,
   NULL, NULL, NULL, NULL,
-  NULL, 'paid', 'import'
+  55, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Kille Bükü', 'Göcek Körfezi''nin batı kıyısında, Boynuzbükü''nün güneyinde yer alan sakin bir demirleme koyudur. Zemin kumdur; demirleme ve kıçtan karaya bağlama yapılır, koyda tesis bulunmaz.' FROM locations WHERE slug = 'kille-buku'
@@ -3432,7 +3432,7 @@ SELECT gen_random_uuid(), 'yassica-adalari', 8, 'published', 'TR',
   'Yassıca Adaları Demirleme Alanı', 'Göcek önünde yer alan alçak ada grubudur; tekneler adalar arasındaki sığ kumluk alanda demirler veya kıçtan karaya bağlanır. Zemin kum ve kayadır; bölgede az sayıda misafir şamandırası bildirilmiştir.',
   ST_SetSRID(ST_MakePoint(28.9322, 36.7105), 4326)::geography,
   NULL, NULL, NULL, NULL,
-  NULL, 'paid', 'import'
+  48, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Yassıca Adaları Demirleme Alanı', 'Göcek önünde yer alan alçak ada grubudur; tekneler adalar arasındaki sığ kumluk alanda demirler veya kıçtan karaya bağlanır. Zemin kum ve kayadır; bölgede az sayıda misafir şamandırası bildirilmiştir.' FROM locations WHERE slug = 'yassica-adalari'
@@ -3451,7 +3451,7 @@ SELECT gen_random_uuid(), 'tersane-adasi-koyu', 8, 'published', 'TR',
   'Tersane Adası Koyu', 'Tersane Adası''nın koyunda, girişinde Bizans-Osmanlı dönemi tersane kalıntıları bulunan tarihi bir demirleme yeri vardır. Yaklaşık 14 m derinlikte demirlenip kıçtan karaya bağlanılır, tutuş iyidir; koyun dibindeki iki küçük ağız sığdır.',
   ST_SetSRID(ST_MakePoint(28.9153, 36.6754), 4326)::geography,
   NULL, NULL, 2, 14,
-  NULL, 'paid', 'import'
+  8, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Tersane Adası Koyu', 'Tersane Adası''nın koyunda, girişinde Bizans-Osmanlı dönemi tersane kalıntıları bulunan tarihi bir demirleme yeri vardır. Yaklaşık 14 m derinlikte demirlenip kıçtan karaya bağlanılır, tutuş iyidir; koyun dibindeki iki küçük ağız sığdır.' FROM locations WHERE slug = 'tersane-adasi-koyu'
@@ -3546,7 +3546,7 @@ SELECT gen_random_uuid(), 'gobun-samandira-sahasi', 9, 'published', 'TR',
   'Göbün Koyu Şamandıra Sahası', 'Kapıdağ Yarımadası''nın güneydoğusundaki Göbün (Kapı Creek) koyu, Göcek Özel Çevre Koruma Bölgesi''nde ücretli bağlama sistemine dahildir. 2025 rejimiyle koylarda serbest demirleme yerine Türkiye Çevre Ajansı işletimindeki mapa/tonoz/şamandıra sistemleri kullanılmaktadır; koy zemini kumdur. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
   ST_SetSRID(ST_MakePoint(28.8937, 36.6438), 4326)::geography,
   NULL, NULL, NULL, NULL,
-  NULL, 'paid', 'import'
+  11, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Göbün Koyu Şamandıra Sahası', 'Kapıdağ Yarımadası''nın güneydoğusundaki Göbün (Kapı Creek) koyu, Göcek Özel Çevre Koruma Bölgesi''nde ücretli bağlama sistemine dahildir. 2025 rejimiyle koylarda serbest demirleme yerine Türkiye Çevre Ajansı işletimindeki mapa/tonoz/şamandıra sistemleri kullanılmaktadır; koy zemini kumdur. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'gobun-samandira-sahasi'
@@ -3569,7 +3569,7 @@ SELECT gen_random_uuid(), 'sarsala-samandira-sahasi', 9, 'published', 'TR',
   'Sarsala Koyu Şamandıra Sahası', 'Göcek Körfezi''nin batı kıyısındaki büyük Sarsala koyu, 2025 Göcek bağlama rejiminde şamandıra/tonoz sistemi kurulan koylar arasındadır ve sistem Türkiye Çevre Ajansı tarafından ücretli işletilmektedir. Koy kuzeydoğuya açıktır. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
   ST_SetSRID(ST_MakePoint(28.8596, 36.661), 4326)::geography,
   NULL, NULL, NULL, 15,
-  NULL, 'paid', 'import'
+  98, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Sarsala Koyu Şamandıra Sahası', 'Göcek Körfezi''nin batı kıyısındaki büyük Sarsala koyu, 2025 Göcek bağlama rejiminde şamandıra/tonoz sistemi kurulan koylar arasındadır ve sistem Türkiye Çevre Ajansı tarafından ücretli işletilmektedir. Koy kuzeydoğuya açıktır. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'sarsala-samandira-sahasi'
@@ -3592,7 +3592,7 @@ SELECT gen_random_uuid(), 'boynuzbuku-samandira-sahasi', 9, 'published', 'TR',
   'Boynuzbükü Şamandıra Sahası', 'Göcek Körfezi''nin kuzeybatısındaki ağaçlıklı ve derin Boynuzbükü, 2025 Göcek bağlama rejiminde ücretli şamandıra/tonoz sistemine dahildir; sistem Türkiye Çevre Ajansı tarafından işletilmektedir. Koy zemini çamurdur. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
   ST_SetSRID(ST_MakePoint(28.8967, 36.7112), 4326)::geography,
   NULL, NULL, NULL, NULL,
-  NULL, 'paid', 'import'
+  84, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Boynuzbükü Şamandıra Sahası', 'Göcek Körfezi''nin kuzeybatısındaki ağaçlıklı ve derin Boynuzbükü, 2025 Göcek bağlama rejiminde ücretli şamandıra/tonoz sistemine dahildir; sistem Türkiye Çevre Ajansı tarafından işletilmektedir. Koy zemini çamurdur. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
@@ -3615,7 +3615,7 @@ SELECT gen_random_uuid(), 'bedri-rahmi-samandira-sahasi', 9, 'published', 'TR',
   'Bedri Rahmi (Taşyaka) Şamandıra Sahası', 'Taşyaka olarak da bilinen koy, Likya kaya mezarları ve Bedri Rahmi Eyüboğlu''nun balık figürüyle tanınır; 2025 Göcek bağlama rejiminde Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz sistemi kurulan koyları arasındadır. Taşkaya adacığının kuzeybatısında geniş ve korunaklı bir bağlama alanı sunar. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
   ST_SetSRID(ST_MakePoint(28.8668, 36.6905), 4326)::geography,
   NULL, NULL, NULL, NULL,
-  NULL, 'paid', 'import'
+  73, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'tr', 'Bedri Rahmi (Taşyaka) Şamandıra Sahası', 'Taşyaka olarak da bilinen koy, Likya kaya mezarları ve Bedri Rahmi Eyüboğlu''nun balık figürüyle tanınır; 2025 Göcek bağlama rejiminde Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz sistemi kurulan koyları arasındadır. Taşkaya adacığının kuzeybatısında geniş ve korunaklı bir bağlama alanı sunar. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
@@ -10950,6 +10950,282 @@ SELECT l.id, a.id FROM locations l, amenities a
 WHERE l.slug = 'oasis-yeni-foca-yakit' AND a.code IN ('fuel')
 ON CONFLICT DO NOTHING;
 
+-- --- Binlik Koyu Şamandıra Sahası · güven: high · kaynak: deria.gov.tr, deria.gov.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'binlik-samandira-sahasi', 9, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Binlik Koyu Şamandıra Sahası', 'Denize dik inen yamaçlar arasında, eşsiz bir doğal güzelliğe sahip olan Binlik Koyu, Çam ağaçlarının denize kadar indiği koyda su sporları ve olta balıkçılığı yapabileceğiniz gibi, yanınıza şnorkelinizi alarak Binlik’in gizemli sularını keşfetebilirsiniz. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
+  ST_SetSRID(ST_MakePoint(28.865753, 36.641011), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  9, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Binlik Koyu Şamandıra Sahası', 'Denize dik inen yamaçlar arasında, eşsiz bir doğal güzelliğe sahip olan Binlik Koyu, Çam ağaçlarının denize kadar indiği koyda su sporları ve olta balıkçılığı yapabileceğiniz gibi, yanınıza şnorkelinizi alarak Binlik’in gizemli sularını keşfetebilirsiniz. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'binlik-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, false
+FROM locations WHERE slug = 'binlik-samandira-sahasi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'binlik-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Büyükova Koyu Şamandıra Sahası · güven: high · kaynak: deria.gov.tr, deria.gov.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'buyukova-samandira-sahasi', 9, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Büyükova Koyu Şamandıra Sahası', 'Göcek''in eşsiz koylarından biri. Kristal berraklığındaki suları ve doğal güzelliği ile unutulmaz anlar yaşatır. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
+  ST_SetSRID(ST_MakePoint(28.906372, 36.704737), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  3, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Büyükova Koyu Şamandıra Sahası', 'Göcek''in eşsiz koylarından biri. Kristal berraklığındaki suları ve doğal güzelliği ile unutulmaz anlar yaşatır. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'buyukova-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, false
+FROM locations WHERE slug = 'buyukova-samandira-sahasi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'buyukova-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Göcek Adası (Batı) Şamandıra Sahası · güven: high · kaynak: deria.gov.tr, deria.gov.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gocek-adasi-bati-samandira-sahasi', 9, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Göcek Adası (Batı) Şamandıra Sahası', 'Göcek''in hemen karşısında yer alan ve kasabayı rüzgardan koruyan doğal bir dalgakıran görevi gören etkileyici bir adadır. Adada yer alan koylar ve plajlar, kristal netliğindeki suları ve huzurlu atmosferiyle bilinir. Adanın içinde yer alan işletme bünyesinde yemek ve içecek seçenekleri mevcuttur; Göcek Marinalardan kalkan teknelerle yaklaşık 15 dakikada ulaşılabilir. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
+  ST_SetSRID(ST_MakePoint(28.934675, 36.728357), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  43, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Göcek Adası (Batı) Şamandıra Sahası', 'Göcek''in hemen karşısında yer alan ve kasabayı rüzgardan koruyan doğal bir dalgakıran görevi gören etkileyici bir adadır. Adada yer alan koylar ve plajlar, kristal netliğindeki suları ve huzurlu atmosferiyle bilinir. Adanın içinde yer alan işletme bünyesinde yemek ve içecek seçenekleri mevcuttur; Göcek Marinalardan kalkan teknelerle yaklaşık 15 dakikada ulaşılabilir. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'gocek-adasi-bati-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, false
+FROM locations WHERE slug = 'gocek-adasi-bati-samandira-sahasi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'gocek-adasi-bati-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Göcek Adası (Doğu) Şamandıra Sahası · güven: high · kaynak: deria.gov.tr, deria.gov.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gocek-adasi-dogu-samandira-sahasi', 9, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Göcek Adası (Doğu) Şamandıra Sahası', 'Göcek''in hemen karşısında yer alan ve kasabayı rüzgardan koruyan doğal bir dalgakıran görevi gören etkileyici bir adadır. Adada yer alan koylar ve plajlar, kristal netliğindeki suları ve huzurlu atmosferiyle bilinir. Adanın içinde yer alan işletme bünyesinde yemek ve içecek seçenekleri mevcuttur; Göcek Marinalardan kalkan teknelerle yaklaşık 15 dakikada ulaşılabilir. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
+  ST_SetSRID(ST_MakePoint(28.944675, 36.73295833), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  42, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Göcek Adası (Doğu) Şamandıra Sahası', 'Göcek''in hemen karşısında yer alan ve kasabayı rüzgardan koruyan doğal bir dalgakıran görevi gören etkileyici bir adadır. Adada yer alan koylar ve plajlar, kristal netliğindeki suları ve huzurlu atmosferiyle bilinir. Adanın içinde yer alan işletme bünyesinde yemek ve içecek seçenekleri mevcuttur; Göcek Marinalardan kalkan teknelerle yaklaşık 15 dakikada ulaşılabilir. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'gocek-adasi-dogu-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, false
+FROM locations WHERE slug = 'gocek-adasi-dogu-samandira-sahasi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'gocek-adasi-dogu-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Göcek Doğu Şamandıra Sahası · güven: high · kaynak: deria.gov.tr, deria.gov.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gocek-dogu-samandira-sahasi', 9, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Göcek Doğu Şamandıra Sahası', 'Çam ağaçlarıyla çevrili, sakin ve turkuaz sularıyla bilinen bu koy günübirlik ziyaretçiler için popüler bir duraktır. Özellikle sessizlik ve doğa ile baş başa kalmak isteyenlerin tercihidir. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
+  ST_SetSRID(ST_MakePoint(28.948664, 36.740954), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  33, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Göcek Doğu Şamandıra Sahası', 'Çam ağaçlarıyla çevrili, sakin ve turkuaz sularıyla bilinen bu koy günübirlik ziyaretçiler için popüler bir duraktır. Özellikle sessizlik ve doğa ile baş başa kalmak isteyenlerin tercihidir. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'gocek-dogu-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, false
+FROM locations WHERE slug = 'gocek-dogu-samandira-sahasi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'gocek-dogu-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Günlük-Atbükü Şamandıra Sahası · güven: high · kaynak: deria.gov.tr, deria.gov.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gunluk-atbuku-samandira-sahasi', 9, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Günlük-Atbükü Şamandıra Sahası', 'Doğal günlük ağaçları gölgesinde, sessiz ve huzurlu bir atmosfere sahiptir. Bölgenin en sakin ve doğal güzelliğini korumuş noktalarından biridir. Genellikle günübirlik tekne turlarının veya özel yatların rotasında yer alan bu koy, özellikle sessizlik arayan deniz tutkunları tarafından tercih edilmektedir. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
+  ST_SetSRID(ST_MakePoint(28.914726, 36.726168), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  51, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Günlük-Atbükü Şamandıra Sahası', 'Doğal günlük ağaçları gölgesinde, sessiz ve huzurlu bir atmosfere sahiptir. Bölgenin en sakin ve doğal güzelliğini korumuş noktalarından biridir. Genellikle günübirlik tekne turlarının veya özel yatların rotasında yer alan bu koy, özellikle sessizlik arayan deniz tutkunları tarafından tercih edilmektedir. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'gunluk-atbuku-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, false
+FROM locations WHERE slug = 'gunluk-atbuku-samandira-sahasi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'gunluk-atbuku-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- İnceburun Şamandıra Sahası · güven: high · kaynak: deria.gov.tr, deria.gov.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'inceburun-samandira-sahasi', 9, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'İnceburun Şamandıra Sahası', 'Göcek''in mavi tur rotaları üzerinde yer alan İnceburun Koyu, adını denize doğru uzanan ince bir burundan alır. Denizi oldukça berrak ve sığdır. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
+  ST_SetSRID(ST_MakePoint(28.928056, 36.736111), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  16, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İnceburun Şamandıra Sahası', 'Göcek''in mavi tur rotaları üzerinde yer alan İnceburun Koyu, adını denize doğru uzanan ince bir burundan alır. Denizi oldukça berrak ve sığdır. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'inceburun-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, false
+FROM locations WHERE slug = 'inceburun-samandira-sahasi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'inceburun-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Martı Koyu Şamandıra Sahası · güven: high · kaynak: deria.gov.tr, deria.gov.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'marti-samandira-sahasi', 9, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Martı Koyu Şamandıra Sahası', 'Sahilindeki taşlarla yapılmış martı silueti nedeniyle bu ismi almıştır. Sadece teknelerle ulaşılabilen bu koy, berrak suları ve çam ağaçlarıyla çevrili huzurlu atmosferiyle bilinir. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
+  ST_SetSRID(ST_MakePoint(28.878883, 36.635983), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  45, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Martı Koyu Şamandıra Sahası', 'Sahilindeki taşlarla yapılmış martı silueti nedeniyle bu ismi almıştır. Sadece teknelerle ulaşılabilen bu koy, berrak suları ve çam ağaçlarıyla çevrili huzurlu atmosferiyle bilinir. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'marti-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, false
+FROM locations WHERE slug = 'marti-samandira-sahasi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'marti-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Merdivenli Koyu Şamandıra Sahası · güven: high · kaynak: deria.gov.tr, deria.gov.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'merdivenli-samandira-sahasi', 9, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Merdivenli Koyu Şamandıra Sahası', 'Göcek’in en karakteristik noktalarından biri olan Merdivenli Koyu, ismini sahilden yukarıya doğru çıkan ve antik dönemden kaldığı düşünülen taş merdivenlerden alır. Doğal bir mağaraya ve tertemiz turkuaz bir denize sahip olmasıyla bilinen bu koy, özellikle sessizlik ve doğa ile baş başa kalmak isteyenlerin tercihidir. Merdivenleri takip ederek yukarı çıktığınızda sizi eşsiz bir Göcek manzarası ve eski bir köy kalıntısı bekler. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
+  ST_SetSRID(ST_MakePoint(28.888583, 36.645072), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  14, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Merdivenli Koyu Şamandıra Sahası', 'Göcek’in en karakteristik noktalarından biri olan Merdivenli Koyu, ismini sahilden yukarıya doğru çıkan ve antik dönemden kaldığı düşünülen taş merdivenlerden alır. Doğal bir mağaraya ve tertemiz turkuaz bir denize sahip olmasıyla bilinen bu koy, özellikle sessizlik ve doğa ile baş başa kalmak isteyenlerin tercihidir. Merdivenleri takip ederek yukarı çıktığınızda sizi eşsiz bir Göcek manzarası ve eski bir köy kalıntısı bekler. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'merdivenli-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, false
+FROM locations WHERE slug = 'merdivenli-samandira-sahasi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'merdivenli-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Osmanağa Koyu Şamandıra Sahası · güven: high · kaynak: deria.gov.tr, deria.gov.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'osmanaga-samandira-sahasi', 9, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Osmanağa Koyu Şamandıra Sahası', 'Bölgenin karadan ulaşılabilen nadir ve bakir noktalarından biridir. Çam ağaçlarıyla çevrili, sakin ve turkuaz sularıyla bilinen bu koy günübirlik ziyaretçiler için popüler bir duraktır. Alanda herhangi bir işletme, tuvalet veya duş imkanı bulunmamaktadır. Ziyaretçilerin yiyecek ve içecek ihtiyaçlarını yanlarında getirmeleri önerilir. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
+  ST_SetSRID(ST_MakePoint(28.92247268412472, 36.73421728255958), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  12, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Osmanağa Koyu Şamandıra Sahası', 'Bölgenin karadan ulaşılabilen nadir ve bakir noktalarından biridir. Çam ağaçlarıyla çevrili, sakin ve turkuaz sularıyla bilinen bu koy günübirlik ziyaretçiler için popüler bir duraktır. Alanda herhangi bir işletme, tuvalet veya duş imkanı bulunmamaktadır. Ziyaretçilerin yiyecek ve içecek ihtiyaçlarını yanlarında getirmeleri önerilir. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'osmanaga-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, false
+FROM locations WHERE slug = 'osmanaga-samandira-sahasi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'osmanaga-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Yaz Limanı Koyu Şamandıra Sahası · güven: high · kaynak: deria.gov.tr, deria.gov.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yaz-limani-samandira-sahasi', 9, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Yaz Limanı Koyu Şamandıra Sahası', 'Adını Osmanlı döneminde gemilerin inşa ve tamir edildiği eski tersanelerden alır. Kıyı şeridinde mübadele döneminden kalma eski Rum evlerinin kalıntıları vardır. Koyda genellikle denizcilerin uğradığı küçük restoranlar bulunur. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
+  ST_SetSRID(ST_MakePoint(28.930263, 36.676471), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  27, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yaz Limanı Koyu Şamandıra Sahası', 'Adını Osmanlı döneminde gemilerin inşa ve tamir edildiği eski tersanelerden alır. Kıyı şeridinde mübadele döneminden kalma eski Rum evlerinin kalıntıları vardır. Koyda genellikle denizcilerin uğradığı küçük restoranlar bulunur. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'yaz-limani-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, false
+FROM locations WHERE slug = 'yaz-limani-samandira-sahasi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'yaz-limani-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Zeytin Adası Şamandıra Sahası · güven: high · kaynak: deria.gov.tr, deria.gov.tr ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'zeytin-adasi-samandira-sahasi', 9, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Zeytin Adası Şamandıra Sahası', 'Göcek Körfezi''nde yer alan Zeytin Adası, yaklaşık 650 dönüm yüzölçümüne sahip, binlerce zeytin ağacıyla kaplı özel mülkiyetli bir adadır. 70 bin civarında zeytin ağacına ev sahipliği yapar ve adada küçük bir zeytinyağı fabrikası bulunur. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
+  ST_SetSRID(ST_MakePoint(28.929604, 36.699202), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  13, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Zeytin Adası Şamandıra Sahası', 'Göcek Körfezi''nde yer alan Zeytin Adası, yaklaşık 650 dönüm yüzölçümüne sahip, binlerce zeytin ağacıyla kaplı özel mülkiyetli bir adadır. 70 bin civarında zeytin ağacına ev sahipliği yapar ve adada küçük bir zeytinyağı fabrikası bulunur. Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz bağlama sistemine dahildir; bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'zeytin-adasi-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
+SELECT id, NULL, NULL, false
+FROM locations WHERE slug = 'zeytin-adasi-samandira-sahasi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'zeytin-adasi-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
 
 -- ======================================================================
 -- RÜZGÂRA AÇIK YÖNLER — uyarı rozeti verisi (açıklamalardan, elle onaylı).
@@ -11342,6 +11618,115 @@ UPDATE locations SET wind_sheltered_dirs = COALESCE(wind_sheltered_dirs, 'KD,D,G
 -- ======================================================================
 -- VERİ ÇEVİRİLERİ — koy açıklamaları EN/ES/RU (adlar çevrilmez).
 -- Kaynak: i18n_*.json; yeniden koşmak çeviriyi tazeler (DO UPDATE).
+-- --- i18n_deria_2026_08.json (deria-2026-08) ---
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Nestled among slopes descending steeply to the sea, Binlik Bay boasts unique natural beauty. In this cove where pine trees reach all the way to the shoreline, you can enjoy water sports and fishing, or bring your snorkel and explore Binlik’s mysterious waters. It is part of the paid buoy/stern mooring system of the Türkiye Çevre Ajansı; mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'binlik-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Entre laderas que descienden abruptamente hacia el mar, la cala Binlik posee una belleza natural incomparable. En esta cala donde los pinos llegan hasta el mar puede practicar deportes acuáticos y pesca con caña, o llevar su esnórquel y explorar las misteriosas aguas de Binlik. Forma parte del sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı; las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'binlik-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Среди склонов, круто спускающихся к морю, находится бухта Бинлик, обладающая уникальной природной красотой; в бухте, где сосны спускаются прямо к морю, вы можете заняться водными видами спорта и рыбной ловлей на удочку, а также, взяв с собой трубку для подводного плавания, исследовать таинственные воды Бинлика. Входит в платную систему швартовки на буях/бочках агентства Türkiye Çevre Ajansı; бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'binlik-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'One of Göcek''s unique bays. Its crystal-clear waters and natural beauty offer unforgettable moments. It is part of the paid buoy/stern mooring system of the Türkiye Çevre Ajansı; mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'buyukova-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Una de las calas incomparables de Göcek. Sus aguas de claridad cristalina y su belleza natural regalan momentos inolvidables. Forma parte del sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı; las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'buyukova-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Одна из уникальных бухт Гёчека. Ее кристально чистая вода и природная красота подарят незабываемые впечатления. Входит в платную систему швартовки на буях/бочках агентства Türkiye Çevre Ajansı; бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'buyukova-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'It is a striking island located directly opposite Göcek, acting as a natural breakwater that protects the town from the wind. The island’s bays and beaches are known for their crystal-clear waters and peaceful atmosphere. Food and beverage options are available within the island’s on-site facilities. It can be reached in approximately 15 minutes by boat departing from Göcek marinas. It is part of the paid buoy/stern mooring system of the Türkiye Çevre Ajansı; mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'gocek-adasi-bati-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Es una impresionante isla situada justo enfrente de Göcek que actúa como un rompeolas natural protegiendo el pueblo del viento. Las calas y playas de la isla son conocidas por sus aguas cristalinas y su ambiente apacible. El establecimiento de la isla ofrece opciones de comida y bebida; se llega en unos 15 minutos en barco desde los puertos deportivos de Göcek. Forma parte del sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı; las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'gocek-adasi-bati-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Это впечатляющий остров, расположенный прямо напротив Гечека и выполняющий функцию естественного волнолома, защищающего город от ветра. Бухты и пляжи на острове известны своей кристально чистой водой и умиротворённой атмосферой. На территории заведения, расположенного на острове, имеются варианты питания и напитков; до него можно добраться примерно за 15 минут на лодках, отправляющихся с пристаней Гёчека. Входит в платную систему швартовки на буях/бочках агентства Türkiye Çevre Ajansı; бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'gocek-adasi-bati-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located directly opposite Göcek, this impressive island acts as a natural breakwater protecting the town from the wind. The bays and beaches on the island are known for their crystal-clear waters and peaceful atmosphere. The island itself offers food and beverage options through its on-site facilities; it can be reached in approximately 15 minutes by boat from Göcek Marinas. It is part of the paid buoy/stern mooring system of the Türkiye Çevre Ajansı; mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'gocek-adasi-dogu-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Es una impresionante isla situada justo enfrente de Göcek que actúa como un rompeolas natural protegiendo el pueblo del viento. Las calas y playas de la isla son conocidas por sus aguas cristalinas y su ambiente apacible. El establecimiento de la isla ofrece opciones de comida y bebida; se llega en unos 15 minutos en barco desde los puertos deportivos de Göcek. Forma parte del sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı; las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'gocek-adasi-dogu-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Этот впечатляющий остров, расположенный прямо напротив Гёчека, служит естественным волнорезом, защищающим город от ветра. Бухты и пляжи острова известны своей кристально чистой водой и спокойной атмосферой. На самом острове есть рестораны и бары; до него можно добраться на лодке примерно за 15 минут от пристани Гёчека. Входит в платную систему швартовки на буях/бочках агентства Türkiye Çevre Ajansı; бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'gocek-adasi-dogu-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Surrounded by pine trees, this cove is known for its calm atmosphere and turquoise waters and is a popular stop for day visitors. It is especially favored by those who seek silence and a peaceful experience in nature. It is part of the paid buoy/stern mooring system of the Türkiye Çevre Ajansı; mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'gocek-dogu-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Rodeada de pinos y conocida por sus aguas tranquilas y turquesas, esta cala es una parada popular para los visitantes de un día. Es la elección de quienes buscan sobre todo silencio y contacto con la naturaleza. Forma parte del sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı; las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'gocek-dogu-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Эта бухта, окружённая соснами и известная своими спокойными бирюзовыми водами, является популярной остановкой для однодневных посетителей. Особенно она нравится тем, кто хочет тишины и уединения с природой. Входит в платную систему швартовки на буях/бочках агентства Türkiye Çevre Ajansı; бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'gocek-dogu-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'It has a quiet and peaceful atmosphere under the shade of natural trees. It is one of the most tranquil spots in the region that has preserved its natural beauty. This cove is often included in the routes of daily boat tours and private yachts, and is especially preferred by sea lovers seeking silence and serenity. It is part of the paid buoy/stern mooring system of the Türkiye Çevre Ajansı; mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'gunluk-atbuku-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Tiene un ambiente silencioso y apacible a la sombra de árboles de liquidámbar naturales. Es uno de los rincones más tranquilos de la región que ha conservado su belleza natural. Esta cala, incluida a menudo en las rutas de las excursiones diarias en barco y de los yates privados, es preferida sobre todo por los amantes del mar que buscan silencio. Forma parte del sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı; las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'gunluk-atbuku-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'В тени естественных ежедневных деревьев царит тихая и умиротворённая атмосфера. Это одна из самых спокойных и сохранивших свою природную красоту точек региона. Эта бухта, обычно входящая в маршрут однодневных морских экскурсий или частных яхт, особенно предпочитается любителями моря, ищущими тишины. Входит в платную систему швартовки на буях/бочках агентства Türkiye Çevre Ajansı; бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'gunluk-atbuku-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Located on Göcek’s blue cruise routes, İnceburun Bay takes its name from the narrow headland extending into the sea. The sea here is very clear and shallow. It is part of the paid buoy/stern mooring system of the Türkiye Çevre Ajansı; mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'inceburun-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Situada en las rutas de crucero azul de Göcek, la cala İnceburun toma su nombre del delgado cabo que se adentra en el mar. Sus aguas son muy claras y poco profundas. Forma parte del sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı; las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'inceburun-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Бухта Инчебурун, расположенная на маршрутах голубого круиза в Гечеке, получила своё название от тонкого мыса, выступающего в море. Море здесь довольно чистое и мелкое. Входит в платную систему швартовки на буях/бочках агентства Türkiye Çevre Ajansı; бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'inceburun-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'It takes its name from the seagull silhouette made of stones on its shoreline. Accessible only by boat, this cove is known for its crystal-clear waters and peaceful atmosphere surrounded by pine trees. It is part of the paid buoy/stern mooring system of the Türkiye Çevre Ajansı; mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'marti-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Debe su nombre a la silueta de gaviota formada con piedras en su orilla. Accesible solo en barco, esta cala es conocida por sus aguas cristalinas y su apacible ambiente rodeado de pinos. Forma parte del sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı; las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'marti-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Он получил своё название из‑за силуэта чайки, выложенного из камней на его берегу. Этот залив, до которого можно добраться только на лодке, известен своими чистыми водами и спокойной атмосферой, окружённой соснами. Входит в платную систему швартовки на буях/бочках агентства Türkiye Çevre Ajansı; бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'marti-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'One of the most distinctive spots in Göcek, Merdivenli Bay takes its name from the stone steps that are believed to date back to ancient times, rising from the shoreline inland. Known for its natural cave and crystal-clear turquoise sea, this cove is especially preferred by those seeking silence and a close connection with nature. By following the steps upward, you are rewarded with a unique view of Göcek and the remains of an old village settlement. It is part of the paid buoy/stern mooring system of the Türkiye Çevre Ajansı; mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'merdivenli-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Uno de los puntos más característicos de Göcek, la cala Merdivenli toma su nombre de los escalones de piedra que suben desde la orilla y que se cree datan de la antigüedad. Conocida por su cueva natural y su mar turquesa cristalino, esta cala es preferida sobre todo por quienes buscan silencio y contacto con la naturaleza. Al subir siguiendo los escalones le esperan una vista única de Göcek y las ruinas de un antiguo pueblo. Forma parte del sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı; las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'merdivenli-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Одна из самых характерных точек Гечека, бухта Мерденели, получила своё название от каменных ступеней, ведущих вверх от побережья и, как считается, сохранившихся с античного периода. Эта бухта, известная своей естественной пещерой и чистейшим бирюзовым морем, особенно популярна среди тех, кто хочет тишины и уединения с природой. Когда вы подниметесь наверх, следуя по лестнице, вас ждёт уникальный вид на Гёчек и остатки старой деревни. Входит в платную систему швартовки на буях/бочках агентства Türkiye Çevre Ajansı; бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'merdivenli-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'It is one of the rare and untouched spots in the region that can be accessed by land. Surrounded by pine trees, this cove is known for its calm atmosphere and turquoise waters and is a popular stop for day visitors. There are no facilities on site such as businesses, restrooms, or showers. Visitors are advised to bring their own food and drinks. It is part of the paid buoy/stern mooring system of the Türkiye Çevre Ajansı; mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'osmanaga-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Es uno de los pocos rincones vírgenes de la región accesibles por tierra. Rodeada de pinos y conocida por sus aguas tranquilas y turquesas, esta cala es una parada popular para los visitantes de un día. No hay en el lugar ningún establecimiento, aseo ni ducha. Se recomienda a los visitantes traer su propia comida y bebida. Forma parte del sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı; las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'osmanaga-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Это одно из редких и нетронутых мест в регионе, до которого можно добраться по суше. Окружённая соснами, известная своими спокойными и бирюзовыми водами, эта бухта является популярной остановкой для однодневных посетителей. На территории нет никаких заведений, туалетов или душевых. Посетителям рекомендуется приносить с собой еду и напитки. Входит в платную систему швартовки на буях/бочках агентства Türkiye Çevre Ajansı; бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'osmanaga-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'It takes its name from the old shipyards where ships were built and repaired during the Ottoman period. Along the coastline, there are remnants of old Greek houses from the population exchange period. The bay has small restaurants usually frequented by sailors. It is part of the paid buoy/stern mooring system of the Türkiye Çevre Ajansı; mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'yaz-limani-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'Toma su nombre de los antiguos astilleros donde se construían y reparaban barcos en la época otomana. En la línea de costa hay restos de antiguas casas griegas de la época del intercambio de poblaciones. En la cala suele haber pequeños restaurantes frecuentados por los navegantes. Forma parte del sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı; las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'yaz-limani-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Свое название бухта получила от старых верфей, где строили и ремонтировали корабли в османский период. Вдоль береговой линии сохранились остатки старых греческих домов времен обмена населением. В бухте расположены небольшие рестораны, которые обычно посещают моряки. Входит в платную систему швартовки на буях/бочках агентства Türkiye Çevre Ajansı; бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'yaz-limani-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'en', NULL, 'Zeytin Island, located in Göcek Bay, is a privately owned island covering approximately 650 dönüm and blanketed with olive trees. It is home to around 70 thousand olive trees, and there is a small olive oil production facility on the island. It is part of the paid buoy/stern mooring system of the Türkiye Çevre Ajansı; mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'zeytin-adasi-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'es', NULL, 'La isla Zeytin, situada en el golfo de Göcek, es una isla de propiedad privada con una superficie aproximada de 650 dönüm, cubierta de olivos. Alberga alrededor de 70 mil olivos y cuenta con una pequeña almazara. Forma parte del sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı; las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'zeytin-adasi-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'ru', NULL, 'Остров Зейтин, расположенный в заливе Гёчек, — частный остров площадью около 650 дёнюмов, покрытый оливковыми деревьями. На нём произрастает около 70 тысяч оливковых деревьев, а на острове находится небольшая фабрика по производству оливкового масла. Входит в платную систему швартовки на буях/бочках агентства Türkiye Çevre Ajansı; бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'zeytin-adasi-samandira-sahasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 -- --- i18n_tur1.json (i18n-tur1) ---
 INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'en', NULL, 'Located in Kadıköy, İstanbul, the marina has a capacity of 1.278 berths afloat and 220 places ashore. It is operated by Setur Marinas.' FROM locations WHERE slug = 'setur-kalamis-fenerbahce-marina'
@@ -16473,6 +16858,25 @@ WHERE location_id = (SELECT id FROM locations WHERE slug = 'gocek-belediye-iskel
   AND contact_type = 'website' AND value = 'https://www.fethiye.bel.tr/'; -- İşletme MUÇEV Göcek Marina'ya geçti; belediye sitesi artık işletmeci değil (marinagocek.com).
 
 -- ======================================================================
+-- TAMAMLAMA TURU — deria_tamamlama_2026_08.json (mevcut veritabanlarına akar, idempotent).
+UPDATE locations SET capacity = 73
+WHERE slug = 'bedri-rahmi-samandira-sahasi' AND capacity IS DISTINCT FROM 73; -- https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50
+UPDATE locations SET capacity = 84
+WHERE slug = 'boynuzbuku-samandira-sahasi' AND capacity IS DISTINCT FROM 84; -- https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50
+UPDATE locations SET capacity = 11
+WHERE slug = 'gobun-samandira-sahasi' AND capacity IS DISTINCT FROM 11; -- https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50
+UPDATE locations SET capacity = 55
+WHERE slug = 'kille-buku' AND capacity IS DISTINCT FROM 55; -- https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50
+UPDATE locations SET capacity = 98
+WHERE slug = 'sarsala-samandira-sahasi' AND capacity IS DISTINCT FROM 98; -- https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50
+UPDATE locations SET capacity = 48
+WHERE slug = 'siralibuk-koyu' AND capacity IS DISTINCT FROM 48; -- https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50
+UPDATE locations SET capacity = 8
+WHERE slug = 'tersane-adasi-koyu' AND capacity IS DISTINCT FROM 8; -- https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50
+UPDATE locations SET capacity = 48
+WHERE slug = 'yassica-adalari' AND capacity IS DISTINCT FROM 48; -- https://deria.gov.tr/api-gateway/api/cove/paged?arama=&girisTarihi=2026-08-11T21:00:00.000Z&cikisTarihi=2026-08-12T21:00:00.000Z&page=1&pageNumber=1&pageSize=50&sayfaNo=1&sayfaBoyutu=50
+
+-- ======================================================================
 -- TAMAMLAMA TURU — gocek_tamamlama_2026_08.json (mevcut veritabanlarına akar, idempotent).
 UPDATE locations SET max_boat_length_m = 80
 WHERE slug = 'club-marina-gocek' AND max_boat_length_m IS DISTINCT FROM 80; -- https://hurriyet.com.tr/gocek-koyu-nun-ilk-marinasi-club-marina-7150580
@@ -16486,7 +16890,8 @@ UPDATE locations SET name = 'Göcek Exclusive Marina'
 WHERE slug = 'marinturk-gocek-exclusive' AND name <> 'Göcek Exclusive Marina'; -- https://www.seturmarinas.com/bizden-haberler/setur-marinalari-gocekte-yeni-bir-donem-baslatiyor
 
 -- ======================================================================
--- KAPAK FOTOĞRAFLARI — Wikimedia Commons (atıf + lisans zorunlu).
+-- KAPAK FOTOĞRAFLARI — Wikimedia Commons (atıf + lisans zorunlu)
+-- ve DERİA/deria.gov.tr (kaynak izni, alan adına kilitli istisna).
 -- Kaynak: kapak_fotograflari.json; her giriş dosya sayfasından doğrulandı.
 -- --- bedri-rahmi-samandira-sahasi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
@@ -16506,6 +16911,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/bedri-rahmi-samandira-sahasi/kapak')
 WHERE slug = 'bedri-rahmi-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/bedri-rahmi-samandira-sahasi/kapak');
+-- --- binlik-samandira-sahasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/binlik-samandira-sahasi/kapak', 'image/jpeg', 5000, 3765,
+  'https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/e9d7b6a0-360b-4dec-bc71-55a656d68b3d_13.%20B%C4%B0NL%C4%B0K.jpg', 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)', NULL, 'https://deria.gov.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'binlik-samandira-sahasi' AND m.storage_key = 'ext/binlik-samandira-sahasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/binlik-samandira-sahasi/kapak')
+WHERE slug = 'binlik-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/binlik-samandira-sahasi/kapak');
 -- --- boynuzbuku-samandira-sahasi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -16524,6 +16947,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/boynuzbuku-samandira-sahasi/kapak')
 WHERE slug = 'boynuzbuku-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/boynuzbuku-samandira-sahasi/kapak');
+-- --- buyukova-samandira-sahasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/buyukova-samandira-sahasi/kapak', 'image/jpeg', 5280, 3956,
+  'https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/a538ac67-229b-437c-a97c-e5e54cfaf56f_buyukova.jpg', 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)', NULL, 'https://deria.gov.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'buyukova-samandira-sahasi' AND m.storage_key = 'ext/buyukova-samandira-sahasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/buyukova-samandira-sahasi/kapak')
+WHERE slug = 'buyukova-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/buyukova-samandira-sahasi/kapak');
 -- --- d-marin-gocek ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -16542,6 +16983,42 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/d-marin-gocek/kapak')
 WHERE slug = 'd-marin-gocek' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/d-marin-gocek/kapak');
+-- --- gobun-samandira-sahasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/gobun-samandira-sahasi/kapak', 'image/jpeg', 4888, 3666,
+  'https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/2fa516e7-6d3f-4960-9adf-ea503d0003b3_14.G%C3%96B%C3%9CN.jpg', 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)', NULL, 'https://deria.gov.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'gobun-samandira-sahasi' AND m.storage_key = 'ext/gobun-samandira-sahasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/gobun-samandira-sahasi/kapak')
+WHERE slug = 'gobun-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/gobun-samandira-sahasi/kapak');
+-- --- gocek-adasi-bati-samandira-sahasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/gocek-adasi-bati-samandira-sahasi/kapak', 'image/jpeg', 5017, 3755,
+  'https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/c4fa39fd-6bd1-4fa5-bd8f-a699c3f4ea45_8.G%C3%96CEKADASI.jpg', 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)', NULL, 'https://deria.gov.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'gocek-adasi-bati-samandira-sahasi' AND m.storage_key = 'ext/gocek-adasi-bati-samandira-sahasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/gocek-adasi-bati-samandira-sahasi/kapak')
+WHERE slug = 'gocek-adasi-bati-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/gocek-adasi-bati-samandira-sahasi/kapak');
 -- --- gocek-belediye-iskelesi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -16560,6 +17037,42 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/gocek-belediye-iskelesi/kapak')
 WHERE slug = 'gocek-belediye-iskelesi' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/gocek-belediye-iskelesi/kapak');
+-- --- gocek-dogu-samandira-sahasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/gocek-dogu-samandira-sahasi/kapak', 'image/jpeg', 4999, 3722,
+  'https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/54e0e78d-a954-48c2-9d55-d11c63f3fa13_7.G%C3%96CEKDO%C4%9EU.jpg', 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)', NULL, 'https://deria.gov.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'gocek-dogu-samandira-sahasi' AND m.storage_key = 'ext/gocek-dogu-samandira-sahasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/gocek-dogu-samandira-sahasi/kapak')
+WHERE slug = 'gocek-dogu-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/gocek-dogu-samandira-sahasi/kapak');
+-- --- gunluk-atbuku-samandira-sahasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/gunluk-atbuku-samandira-sahasi/kapak', 'image/jpeg', 5280, 3956,
+  'https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/be50ef31-6647-4941-842c-0fe9f320a20d_9.ATB%C3%9CK%C3%9C.jpg', 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)', NULL, 'https://deria.gov.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'gunluk-atbuku-samandira-sahasi' AND m.storage_key = 'ext/gunluk-atbuku-samandira-sahasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/gunluk-atbuku-samandira-sahasi/kapak')
+WHERE slug = 'gunluk-atbuku-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/gunluk-atbuku-samandira-sahasi/kapak');
 -- --- gunluklu-koyu-demirleme ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -16578,6 +17091,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/gunluklu-koyu-demirleme/kapak')
 WHERE slug = 'gunluklu-koyu-demirleme' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/gunluklu-koyu-demirleme/kapak');
+-- --- inceburun-samandira-sahasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/inceburun-samandira-sahasi/kapak', 'image/jpeg', 5280, 3622,
+  'https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/34e2a8c8-7257-4bad-8c14-c977ee83f475_3.%C4%B0NCEBURUN.jpg', 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)', NULL, 'https://deria.gov.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'inceburun-samandira-sahasi' AND m.storage_key = 'ext/inceburun-samandira-sahasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/inceburun-samandira-sahasi/kapak')
+WHERE slug = 'inceburun-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/inceburun-samandira-sahasi/kapak');
 -- --- katranci-koyu ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -16596,6 +17127,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/katranci-koyu/kapak')
 WHERE slug = 'katranci-koyu' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/katranci-koyu/kapak');
+-- --- kille-buku ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/kille-buku/kapak', 'image/jpeg', 5015, 3817,
+  'https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/79564fea-77a9-4376-99db-e127d7f0980e_6.K%C4%B0LLEADASI.jpg', 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)', NULL, 'https://deria.gov.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'kille-buku' AND m.storage_key = 'ext/kille-buku/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/kille-buku/kapak')
+WHERE slug = 'kille-buku' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/kille-buku/kapak');
 -- --- kizilada-fener-restorani ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -16614,6 +17163,60 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/kizilada-fener-restorani/kapak')
 WHERE slug = 'kizilada-fener-restorani' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/kizilada-fener-restorani/kapak');
+-- --- marti-samandira-sahasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/marti-samandira-sahasi/kapak', 'image/jpeg', 4835, 3702,
+  'https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/4f69d934-89a5-4bcc-973f-3ae336850ed0_15.MARTI.jpg', 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)', NULL, 'https://deria.gov.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'marti-samandira-sahasi' AND m.storage_key = 'ext/marti-samandira-sahasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/marti-samandira-sahasi/kapak')
+WHERE slug = 'marti-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/marti-samandira-sahasi/kapak');
+-- --- merdivenli-samandira-sahasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/merdivenli-samandira-sahasi/kapak', 'image/jpeg', 3840, 2160,
+  'https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/b065d664-9350-427b-8c0e-1b626cdc94db_16.MERD%C4%B0VENL%C4%B0.jpg', 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)', NULL, 'https://deria.gov.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'merdivenli-samandira-sahasi' AND m.storage_key = 'ext/merdivenli-samandira-sahasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/merdivenli-samandira-sahasi/kapak')
+WHERE slug = 'merdivenli-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/merdivenli-samandira-sahasi/kapak');
+-- --- osmanaga-samandira-sahasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/osmanaga-samandira-sahasi/kapak', 'image/jpeg', 5280, 3562,
+  'https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/14007ab8-4a03-48d3-adc9-f0b865917855_1.OSMANAGA.jpg', 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)', NULL, 'https://deria.gov.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'osmanaga-samandira-sahasi' AND m.storage_key = 'ext/osmanaga-samandira-sahasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/osmanaga-samandira-sahasi/kapak')
+WHERE slug = 'osmanaga-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/osmanaga-samandira-sahasi/kapak');
 -- --- sarsala-samandira-sahasi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -16632,6 +17235,42 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/sarsala-samandira-sahasi/kapak')
 WHERE slug = 'sarsala-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/sarsala-samandira-sahasi/kapak');
+-- --- siralibuk-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/siralibuk-koyu/kapak', 'image/jpeg', 5280, 3956,
+  'https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/489a460f-4ac7-414c-9083-9967fdea0be4_12.SIRALIB%C3%9CK.jpg', 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)', NULL, 'https://deria.gov.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'siralibuk-koyu' AND m.storage_key = 'ext/siralibuk-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/siralibuk-koyu/kapak')
+WHERE slug = 'siralibuk-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/siralibuk-koyu/kapak');
+-- --- tersane-adasi-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/tersane-adasi-koyu/kapak', 'image/jpeg', 4929, 3780,
+  'https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/dc1b9731-750a-4544-b5dd-02bfe05d826d_10.TERSANE%20ADASI.jpg', 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)', NULL, 'https://deria.gov.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'tersane-adasi-koyu' AND m.storage_key = 'ext/tersane-adasi-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/tersane-adasi-koyu/kapak')
+WHERE slug = 'tersane-adasi-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/tersane-adasi-koyu/kapak');
 -- --- yassica-adalari ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -16650,3 +17289,21 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/yassica-adalari/kapak')
 WHERE slug = 'yassica-adalari' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/yassica-adalari/kapak');
+-- --- zeytin-adasi-samandira-sahasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/zeytin-adasi-samandira-sahasi/kapak', 'image/jpeg', 4986, 3854,
+  'https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/45dfa2c5-62cd-487b-b0da-2b2e77ff44ae_5.ZEYT%C4%B0NADASI.jpg', 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)', NULL, 'https://deria.gov.tr', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'zeytin-adasi-samandira-sahasi' AND m.storage_key = 'ext/zeytin-adasi-samandira-sahasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/zeytin-adasi-samandira-sahasi/kapak')
+WHERE slug = 'zeytin-adasi-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/zeytin-adasi-samandira-sahasi/kapak');

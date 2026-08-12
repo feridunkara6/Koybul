@@ -26,6 +26,12 @@ class CoverPhoto extends StatelessWidget {
             Image.network(
               cover.url,
               fit: BoxFit.cover,
+              // Çözme genişliği tavanı: DERİA kaynaklı kapaklar 5000+ piksel
+              // orijinaldir; sınırsız çözmek telefonda ~80 MB'lık bitmap
+              // demektir (eski cihazda takılma/çökme). 1600 px, 3x yoğunluklu
+              // ekranda bile 16:9 kapak kutusuna yeter. Commons'un 1280'lik
+              // önizlemeleri bu tavandan etkilenmez (kaynak zaten küçük).
+              cacheWidth: 1600,
               loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? progress) {
                 if (progress == null) return child;
                 return const ColoredBox(

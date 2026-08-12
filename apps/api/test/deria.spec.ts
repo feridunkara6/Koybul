@@ -13,13 +13,15 @@ import { EnvService } from '../src/config/env.service';
  * kaynak çökünce SESSİZ geri çekilme (asla 5xx, asla 30 dk'dan bayat veri).
  */
 
-// 2026-08-12 canlı yanıtından kırpılmış GERÇEK örnek (3 koy + 1 eşlenmemiş).
+// 2026-08-12 canlı yanıtından kırpılmış GERÇEK 3 koy + 1 UYDURMA eşlenmemiş
+// kimlik (9999 — DERİA'nın 20 koyu da artık eşlendiği için gerçek bir
+// eşlenmemiş kimlik kalmadı; atlama yolunun sözleşmesi yine de kilitli kalsın).
 const LIVE_SAMPLE = {
   items: [
     { id: 13, ad: 'TERSANE ADASI', kapasite: 8, musaitSamandiraSayisi: 2 },
     { id: 4, ad: 'BOYNUZBÜKÜ', kapasite: 84, musaitSamandiraSayisi: 66 },
     { id: 8, ad: 'SARSALA KOYU', kapasite: 98, musaitSamandiraSayisi: 63 },
-    { id: 9, ad: 'BİNLİK KOYU', kapasite: 9, musaitSamandiraSayisi: 6 }, // eşlenmemiş
+    { id: 9999, ad: 'HAYALET KOYU', kapasite: 9, musaitSamandiraSayisi: 6 }, // eşlenmemiş
   ],
   totalCount: 4,
 };
@@ -35,7 +37,13 @@ describe('transformDeria', () => {
     const bySlug = new Map(out.map((c) => [c.slug, c]));
     expect(bySlug.get('tersane-adasi-koyu')).toMatchObject({ free: 2, total: 8, coveId: 13 });
     expect(bySlug.get('boynuzbuku-samandira-sahasi')).toMatchObject({ free: 66, total: 84 });
-    expect(bySlug.has('binlik')).toBe(false);
+    expect(bySlug.has('hayalet')).toBe(false);
+  });
+
+  it("eşleme DERİA'nın 20 koyunun TAMAMINI kapsar (2026-08 ikinci tur)", () => {
+    expect(DERIA_COVE_TO_SLUG.size).toBe(20);
+    expect(DERIA_COVE_TO_SLUG.get(9)).toBe('binlik-samandira-sahasi');
+    expect(DERIA_COVE_TO_SLUG.get(1727)).toBe('yaz-limani-samandira-sahasi');
   });
 
   it('saçma değerleri ELER: negatif, kapasite üstü, sayı olmayan', () => {

@@ -742,6 +742,8 @@ def emit_tamamlama(here, records):
       bilinçli olarak KOŞULSUZ yazılır — yanlış eski değeri düzeltebilmeli)
     - name    → locations.name  (işletmeci değişimleri; i18n 'tr' adı ana
       emit'teki DO UPDATE ile zaten aynı parti verisinden güncellenir)
+    - berthCount → locations.capacity  (DERİA turu 2026-08: işletmecinin
+      kendi sistemindeki şamandıra sayısı — koy başına kapasite)
 
     Tutarlılık: dosyadaki değer, parti kaydındaki değerle AYNI olmalı —
     taze kurulum ile güncellenen canlı veritabanı birbirinden ayrışamaz.
@@ -777,6 +779,21 @@ def emit_tamamlama(here, records):
                         f"WHERE slug = {q(slug)} AND max_boat_length_m IS DISTINCT FROM {num(val)}; "
                         f"-- {loa.get('kaynak', '')}"
                     )
+            bc = v.get("berthCount")
+            if bc:
+                val = bc.get("deger")
+                # type() is int: bool tuzağına karşı (kapak bölümündeki ders).
+                if type(val) is not int or val <= 0:
+                    errors.append(f"tamamlama {slug}: berthCount.deger pozitif tam sayı olmalı")
+                elif r.get("berthCount") != val:
+                    errors.append(
+                        f"tamamlama {slug}: berthCount={val} ama parti kaydında {r.get('berthCount')} — ikisi aynı olmalı")
+                else:
+                    out.append(
+                        f"UPDATE locations SET capacity = {num(val)}\n"
+                        f"WHERE slug = {q(slug)} AND capacity IS DISTINCT FROM {num(val)}; "
+                        f"-- {bc.get('kaynak', '')}"
+                    )
             nm_ = v.get("name")
             if nm_:
                 val = (nm_.get("deger") or "").strip()
@@ -803,8 +820,8 @@ def emit_tamamlama(here, records):
 def emit_media(here, records):
     """Kapak fotoğrafları (kapak_fotograflari.json) → media + location_media.
 
-    Kaynak: Wikimedia Commons; her girişin lisans ve atıf alanları dosya
-    sayfasından elle doğrulanır (dosyadaki 'kurallar' bölümü). Boş dosya =
+    Kaynak: Wikimedia Commons (lisans + atıf dosya sayfasından elle doğrulanır)
+    veya DERİA/deria.gov.tr (kaynak izni istisnası — aşağıda). Boş dosya =
     hiç SQL üretilmez; fotoğrafsız koy DÜRÜSTÇE fotoğrafsız kalır.
 
     İdempotency ve mevcut veritabanlarına akış:
@@ -834,9 +851,21 @@ def emit_media(here, records):
         "CC BY 2.0", "CC BY 2.5", "CC BY 3.0", "CC BY 4.0",
         "CC BY-SA 2.0", "CC BY-SA 2.5", "CC BY-SA 3.0", "CC BY-SA 4.0",
     }
+    # KAYNAK İZNİ istisnası (feri'nin kararı, 2026-08-12): DERİA'nın
+    # (Türkiye Çevre Ajansı, deria.gov.tr) kendi sitesindeki koy fotoğrafları
+    # CC lisanslı değildir; feri "bunlar public fotolar ve kullanılabilir,
+    # zaten site yönlendirmesini yapıyoruz" diyerek kullanım kararını verdi.
+    # Bu yol ALAN ADINA KİLİTLİDİR: yalnız url'i aşağıdaki önekle başlayan
+    # girişler CC beyaz listesinin dışına çıkabilir. Şartlar:
+    #   · license BOŞ bırakılır — var olmayan bir lisans adı UYDURULMAZ,
+    #     atıf şeridi yalnız kaynağın adını gösterir;
+    #   · credit kaynağı açıkça söyler (ör. 'Fotoğraf: DERİA ...');
+    #   · sourceUrl deria.gov.tr'ye gider (şerit dokununca kaynak açılır).
+    kaynak_izni_prefix = "https://deria.gov.tr/"
     errors = []
     out = ["", "-- " + "=" * 70,
-           "-- KAPAK FOTOĞRAFLARI — Wikimedia Commons (atıf + lisans zorunlu).",
+           "-- KAPAK FOTOĞRAFLARI — Wikimedia Commons (atıf + lisans zorunlu)",
+           "-- ve DERİA/deria.gov.tr (kaynak izni, alan adına kilitli istisna).",
            "-- Kaynak: kapak_fotograflari.json; her giriş dosya sayfasından doğrulandı."]
     for slug in sorted(photos):
         e = photos[slug]
@@ -853,7 +882,15 @@ def emit_media(here, records):
             errors.append(f"kapak {slug}: url https:// ile başlamalı")
         if not credit:
             errors.append(f"kapak {slug}: credit boş — CC lisansı atfı zorunlu kılar")
-        if license_code not in allowed_licenses:
+        if url.startswith(kaynak_izni_prefix):
+            if license_code:
+                errors.append(
+                    f"kapak {slug}: kaynak-izni (DERİA) girişinde license BOŞ "
+                    "bırakılır — lisans adı uydurulmaz, atıf kaynağı söyler")
+            if not source_url.startswith(kaynak_izni_prefix.rstrip("/")):
+                errors.append(
+                    f"kapak {slug}: kaynak-izni girişinde sourceUrl deria.gov.tr olmalı")
+        elif license_code not in allowed_licenses:
             errors.append(
                 f"kapak {slug}: license {license_code!r} izinli kümede değil "
                 "(NC/ND lisanslar ticari kullanımda YASAKTIR; kısa adı sayfadaki gibi yaz)")
@@ -873,7 +910,7 @@ def emit_media(here, records):
             "INSERT INTO media (media_type, storage_key, mime_type, width, height,\n"
             "  external_url, credit, license_code, source_url, moderation_status)\n"
             f"VALUES ('photo', {q(key)}, {q(mime)}, {num(width)}, {num(height)},\n"
-            f"  {q(url)}, {q(credit)}, {q(license_code)}, {q(source_url)}, 'approved')\n"
+            f"  {q(url)}, {q(credit)}, {q(license_code) if license_code else 'NULL'}, {q(source_url)}, 'approved')\n"
             "ON CONFLICT (storage_key) DO UPDATE SET\n"
             "  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,\n"
             "  height = EXCLUDED.height, external_url = EXCLUDED.external_url,\n"
@@ -959,7 +996,7 @@ def main():
     here = Path(__file__).resolve().parent
     batches = ["batch1_marinas.json", "batch2_municipal.json", "batch3_piers.json", "batch4_anchorages.json",
                "batch5_expansion.json", "batch6_istanbul.json", "batch7_dogu_akdeniz.json", "batch8_ege_marina.json", "batch9_yunanistan.json",
-               "batch10_symi.json", "batch11_yunanistan_koylar.json", "batch12_tr_tamamlama.json", "batch13_tr_tur2.json", "batch14_gr_tur2.json", "batch15_gr_tur3.json", "batch16_gr_tur4.json", "batch17_gr_tur5.json", "batch18_tr_gr_tur6.json", "batch19_tr_tur7.json", "batch20_gr_tur8.json", "batch21_gr_tur9.json", "batch22_gr_tur10.json", "batch23_gr_tur11.json", "batch24_gr_tur12.json", "batch25_gr_yakit1.json", "batch26_gr_tur13.json", "batch27_gr_tur14.json", "batch28_tr_tur15.json", "batch29_ege_tur16.json", "batch30_liman_tur17.json", "batch32_gr_tur19.json", "batch33_iskele_tur20.json", "batch34_ege_akdeniz_tur21.json", "batch35_tr_tur22.json", "batch36_tr_tur23.json", "batch37_gr_tur24.json", "batch38_eksik_tamamlama.json"]
+               "batch10_symi.json", "batch11_yunanistan_koylar.json", "batch12_tr_tamamlama.json", "batch13_tr_tur2.json", "batch14_gr_tur2.json", "batch15_gr_tur3.json", "batch16_gr_tur4.json", "batch17_gr_tur5.json", "batch18_tr_gr_tur6.json", "batch19_tr_tur7.json", "batch20_gr_tur8.json", "batch21_gr_tur9.json", "batch22_gr_tur10.json", "batch23_gr_tur11.json", "batch24_gr_tur12.json", "batch25_gr_yakit1.json", "batch26_gr_tur13.json", "batch27_gr_tur14.json", "batch28_tr_tur15.json", "batch29_ege_tur16.json", "batch30_liman_tur17.json", "batch32_gr_tur19.json", "batch33_iskele_tur20.json", "batch34_ege_akdeniz_tur21.json", "batch35_tr_tur22.json", "batch36_tr_tur23.json", "batch37_gr_tur24.json", "batch38_eksik_tamamlama.json", "batch39_deria_koylar.json"]
     records, batch_names = [], []
     for b in batches:
         p = here / b
