@@ -6,27 +6,30 @@ import '../../../core/l10n/app_locale.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../../academy/presentation/academy_screen.dart';
 import '../../auth/presentation/account_section.dart';
-import '../../boat/application/my_boat_controller.dart';
-import '../../boat/domain/my_boat.dart';
-import '../../boat/presentation/boat_sheet.dart';
 import '../../community/presentation/contributions_block.dart';
+import '../../deck/presentation/deck_screen.dart' show deckSegmentProvider;
 import '../../emergency/presentation/emergency_screen.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../favorites/presentation/favorites_screen.dart';
-import '../../logbook/presentation/logbook_screen.dart';
 import '../../legal/presentation/legal_screen.dart';
 import '../../route/presentation/saved_routes_screen.dart';
 import '../../shell/application/shell_tab_provider.dart';
 
-/// Profil sekmesi (misafir). Kalıcı tekne bilgisini gösterir/düzenler, hesap
-/// bölümünü ve DİL seçimini barındırır (kullanıcı kararı 2026-07: dil cihazdan
-/// otomatik; burada küçük bir açılır menüyle elle değiştirilebilir).
+/// Profil sekmesi (misafir). Hesap bölümünü ve DİL seçimini barındırır
+/// (kullanıcı kararı 2026-07: dil cihazdan otomatik; burada küçük bir açılır
+/// menüyle elle değiştirilebilir).
+///
+/// TEK EV TAMİRİ (UX denetimi P1, kullanıcı onayı 2026-08): aynı içerik iki
+/// kapıdan açılmaz. (1) Buradaki TEKNE KARTI kaldırıldı — teknenin evi Teknem
+/// sekmesidir; Profil'de yalnız oraya götüren KÖPRÜ satırı durur. (2)
+/// "Kaptanın Günlüğü" satırı artık ayrı bir ekran AÇMAZ; Defter sekmesinin
+/// Notlar bölümüne YÖNLENDİRİR. Hiçbir içerik/özellik silinmedi — yalnız
+/// kapılar tekilleşti, kaptanın zihin haritası netleşti.
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final MyBoat? boat = ref.watch(myBoatProvider);
     final L10n t = ref.watch(l10nProvider);
     final ThemeData theme = Theme.of(context);
     return Scaffold(
@@ -42,17 +45,13 @@ class ProfileScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 24),
-          Text(t.sectionBoat, style: theme.textTheme.titleMedium),
-          const SizedBox(height: 8),
-          if (boat == null)
-            _BoatEmptyCard(t: t, onDefine: () => showBoatSheet(context))
-          else
-            _BoatCard(
-              t: t,
-              boat: boat,
-              onEdit: () => showBoatSheet(context),
-              onRemove: () => ref.read(myBoatProvider.notifier).clear(),
-            ),
+          // TEKNEM KÖPRÜSÜ (tek ev): kart değil köprü — dokununca Teknem
+          // sekmesine geçilir. Boy/su çekimi/düzenleme hepsi orada.
+          _NavRow(
+            icon: DocklyIcons.sailing,
+            label: t.sectionBoat,
+            onTap: () => ref.read(shellTabProvider.notifier).state = 3,
+          ),
           const SizedBox(height: 28),
           Text(t.sectionAccount, style: theme.textTheme.titleMedium),
           const SizedBox(height: 8),
@@ -89,13 +88,16 @@ class ProfileScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 12),
-          // KAPTANIN GÜNLÜĞÜ (kullanıcı onayı 2026-08): seyir notları.
+          // KAPTANIN GÜNLÜĞÜ (tek ev tamiri, UX P1 2026-08): satır artık
+          // ikinci bir ekran açmaz — notların TEK evi Defter'in Notlar
+          // bölümüdür; buradan oraya yönlendirilir.
           _NavRow(
             icon: DocklyIcons.edit,
             label: t.logbookTitle,
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => const LogbookScreen()),
-            ),
+            onTap: () {
+              ref.read(deckSegmentProvider.notifier).state = 2; // Notlar
+              ref.read(shellTabProvider.notifier).state = 2; // Defter
+            },
           ),
           const SizedBox(height: 12),
           // DENİZCİLİK AKADEMİSİ (v2.0, kurucu onayı 2026-08): 10 kısa
@@ -307,90 +309,5 @@ class _EmergencyEntryCard extends StatelessWidget {
   }
 }
 
-class _BoatCard extends StatelessWidget {
-  const _BoatCard({
-    required this.t,
-    required this.boat,
-    required this.onEdit,
-    required this.onRemove,
-  });
-
-  final L10n t;
-  final MyBoat boat;
-  final VoidCallback onEdit;
-  final VoidCallback onRemove;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                const DocklyIcon(DocklyIcons.sailing, color: DocklyColors.brandPrimary),
-                const SizedBox(width: 10),
-                Text(L10n.fmt(t.boatLengthFmt, _fmt(boat.lengthM)),
-                    style: theme.textTheme.titleMedium),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Text(
-              boat.draftM != null
-                  ? L10n.fmt(t.boatDraftFmt, _fmt(boat.draftM!))
-                  : t.boatDraftUnknown,
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: <Widget>[
-                TextButton.icon(
-                  onPressed: onEdit,
-                  icon: const DocklyIcon(DocklyIcons.edit, size: 18),
-                  label: Text(t.editLabel),
-                ),
-                const SizedBox(width: 8),
-                TextButton.icon(
-                  onPressed: onRemove,
-                  icon: const DocklyIcon(DocklyIcons.deleteOutline, size: 18),
-                  label: Text(t.removeLabel),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  static String _fmt(double v) => v == v.roundToDouble() ? v.toInt().toString() : v.toString();
-}
-
-class _BoatEmptyCard extends StatelessWidget {
-  const _BoatEmptyCard({required this.t, required this.onDefine});
-
-  final L10n t;
-  final VoidCallback onDefine;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(t.boatEmptyBody),
-            const SizedBox(height: 12),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: DocklyButton(label: t.boatDefineCta, onPressed: onDefine),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// _BoatCard ve _BoatEmptyCard KALDIRILDI (tek ev tamiri, UX P1 2026-08):
+// tekne kartının evi Teknem sekmesi; Profil yalnız köprü satırı taşır.

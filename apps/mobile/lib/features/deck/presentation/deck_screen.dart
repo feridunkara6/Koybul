@@ -15,29 +15,31 @@ import '../../route/presentation/saved_routes_screen.dart' show SavedRouteCard;
 import '../application/trip_log_controller.dart';
 import '../domain/sea_trip_log.dart';
 
+/// Defter segmenti: 0 = Seyirler · 1 = Rotalarım · 2 = Notlar.
+///
+/// TEK EV TAMİRİ (UX denetimi P1, kullanıcı onayı 2026-08): segment artık
+/// SAĞLAYICIDA tutulur — Profil'deki "Kaptanın Günlüğü" satırı ayrı bir
+/// ekran açmak yerine Defter sekmesine geçip bu segmenti Notlar'a çevirir.
+/// Aynı içerik iki kapıdan açılmaz; kapı tek, ev tek.
+final StateProvider<int> deckSegmentProvider = StateProvider<int>((ref) => 0);
+
 /// DEFTER sekmesi (v2.0 vizyonu, kurucu onayı 2026-08): denizcinin arşivi.
 /// Üç bölüm: SEYİRLER (tamamlanan seyirler + sezon özeti) · ROTALARIM ·
 /// NOTLAR (eski Günlük). Seyir kaydı akışı: rota kartında "Seyri başlat" →
 /// burada "Seyri bitir" ya da rota kartından bitir — kayıt buraya işlenir.
-class DeckScreen extends ConsumerStatefulWidget {
+class DeckScreen extends ConsumerWidget {
   const DeckScreen({super.key});
 
   @override
-  ConsumerState<DeckScreen> createState() => _DeckScreenState();
-}
-
-class _DeckScreenState extends ConsumerState<DeckScreen> {
-  int _seg = 0; // 0 = Seyirler · 1 = Rotalarım · 2 = Notlar
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final L10n t = ref.watch(l10nProvider);
     // ÖRNEKLİ TUR: Defter adımında Rotalarım segmenti gösterilir ve ÖRNEK
-    // rozetli kart eklenir (kalıcı değildir; adım geçince kaybolur).
+    // rozetli kart eklenir (kalıcı değildir; adım geçince kaybolur —
+    // kullanıcının kendi segment tercihi sağlayıcıda el değmeden korunur).
     final bool tourDemo = ref.watch(onboardingControllerProvider
             .select((OnboardingState s) => s.tourStep)) ==
         kTourStepSaved;
-    final int seg = tourDemo ? 1 : _seg;
+    final int seg = tourDemo ? 1 : ref.watch(deckSegmentProvider);
     return Scaffold(
       appBar: AppBar(title: Text(t.navDeck)),
       // Not ekleme yalnız Notlar segmentinde (heroTag: Günlük ekranındaki
@@ -67,19 +69,22 @@ class _DeckScreenState extends ConsumerState<DeckScreen> {
                 _SegChip(
                   label: t.deckTabTrips,
                   selected: seg == 0,
-                  onTap: () => setState(() => _seg = 0),
+                  onTap: () =>
+                      ref.read(deckSegmentProvider.notifier).state = 0,
                 ),
                 const SizedBox(width: 8),
                 _SegChip(
                   label: t.deckTabRoutes,
                   selected: seg == 1,
-                  onTap: () => setState(() => _seg = 1),
+                  onTap: () =>
+                      ref.read(deckSegmentProvider.notifier).state = 1,
                 ),
                 const SizedBox(width: 8),
                 _SegChip(
                   label: t.deckTabNotes,
                   selected: seg == 2,
-                  onTap: () => setState(() => _seg = 2),
+                  onTap: () =>
+                      ref.read(deckSegmentProvider.notifier).state = 2,
                 ),
               ],
             ),
