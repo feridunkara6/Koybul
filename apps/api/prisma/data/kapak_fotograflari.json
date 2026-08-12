@@ -1,5 +1,5 @@
 {
-  "kaynak": "Wikimedia Commons — 2026-08-12 tarayıcı turu (Commons API, dosya başına LicenseShortName/Artist/Categories alanları okundu; konu eşleşmesi kategori+açıklama ile doğrulandı). İzmir'deki Yassıca Adası ve Fethiye'nin Taşyaka MAHALLESİ gibi ad benzerleri kategorileri sayesinde ELENDİ.",
+  "kaynak": "Wikimedia Commons — 2026-08-12 tarayıcı turu (Commons API, dosya başına LicenseShortName/Artist/Categories alanları okundu; konu eşleşmesi kategori+açıklama ile doğrulandı). İzmir'deki Yassıca Adası ve Fethiye'nin Taşyaka MAHALLESİ gibi ad benzerleri kategorileri sayesinde ELENDİ. | BÖLGE TURU 2 (2026-08-12): Ege-Akdeniz-Yunan adaları limanları için 25 fotoğraf daha; her biri Commons API extmetadata alanlarından atıf/lisansla alındı ve tarayıcıda tek tek görsel doğrulandı. Elenenler: Ataköy (fotoğraf AVM yürüyüş yolunu gösteriyordu), Yalıkavak (marina görünmüyordu), Parikia (otopark ağırlıklı), Kastellorizo (puslu/karanlık), Kuşadası 04 (bina ağırlıklı; 03 alındı).",
   "kurallar": [
     "Tahmin/uydurma YOK. Her alan Commons dosya sayfasından birebir kopyalanır.",
     "url: dosyanın upload.wikimedia.org üzerindeki DOĞRUDAN adresi (Commons sayfasındaki 'Orijinal dosya' bağlantısı ya da uygun genişlikte önizleme).",
@@ -242,6 +242,256 @@
       "width": 4986,
       "height": 3854,
       "not": "DERİA cove/paged id=14 ZEYTİN ADASI kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+    },
+    "hydra-limani": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Harbour_of_Hydra_island_(43058393960).jpg/1280px-Harbour_of_Hydra_island_(43058393960).jpg",
+      "credit": "dronepicr",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Harbour_of_Hydra_island_(43058393960).jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 853,
+      "not": "Kategori: Port of Hydra; adanın ana limanının drone çekimi. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "symi-gialos-rihtimi": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Symi_harbour.jpg/1280px-Symi_harbour.jpg",
+      "credit": "SymiArt",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Symi_harbour.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 853,
+      "not": "Kategori: Port of Symi — Gialos limanı. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "rodos-mandraki-limani": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Mandraki_Harbour_Entrance_Port_of_Rhodes_21_August_2023.jpg/1280px-Mandraki_Harbour_Entrance_Port_of_Rhodes_21_August_2023.jpg",
+      "credit": "Pjotr Mahhonin",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mandraki_Harbour_Entrance_Port_of_Rhodes_21_August_2023.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Kategori: Mandraki Harbour (Rhodes); liman girişi. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "netsel-marmaris-marina": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Marmaris_marina_2019_G2.jpg/1280px-Marmaris_marina_2019_G2.jpg",
+      "credit": "George Chernilevsky",
+      "license": "Public domain",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Marmaris_marina_2019_G2.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 747,
+      "not": "Kategori: Marinas in Turkey; Marmaris'in yat marinası (Netsel). Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "gumusluk-iskeleleri": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/G%C3%BCm%C3%BC%C5%9Fl%C3%BCk,_Bodrum.jpg/1280px-G%C3%BCm%C3%BC%C5%9Fl%C3%BCk,_Bodrum.jpg",
+      "credit": "Koray",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%BCm%C3%BC%C5%9Fl%C3%BCk,_Bodrum.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 853,
+      "not": "Başlık: Gümüşlük, Bodrum. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "milta-bodrum-marina": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Bodrum_marina,_Turkey_(5653802003).jpg/1280px-Bodrum_marina,_Turkey_(5653802003).jpg",
+      "credit": "Michal Osmenda from Brussels, Belgium",
+      "license": "CC BY-SA 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bodrum_marina,_Turkey_(5653802003).jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 850,
+      "not": "Başlık: Bodrum marina — Bodrum'un yat marinası (Milta). Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "kas-belediye-limani": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Kaya_mezar_ve_liman-Ka%C5%9F_-_panoramio.jpg/1280px-Kaya_mezar_ve_liman-Ka%C5%9F_-_panoramio.jpg",
+      "credit": "HALUK COMERTEL",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kaya_mezar_ve_liman-Ka%C5%9F_-_panoramio.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 816,
+      "not": "Başlık: kaya mezarı ve liman, Kaş. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "bozcaada-limani": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/7/74/Bozcaada_liman.jpg",
+      "credit": "Filanca",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bozcaada_liman.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1248,
+      "height": 832,
+      "not": "Başlık: Bozcaada liman. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "port-alacati-marina": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Cesme_-_Alacati_Marina_-_panoramio.jpg/1280px-Cesme_-_Alacati_Marina_-_panoramio.jpg",
+      "credit": "David Broad",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cesme_-_Alacati_Marina_-_panoramio.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 850,
+      "not": "Başlık: Alaçatı Marina; kategori Alaçatı. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "ic-cesme-marina": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Cesme_Marina.jpg/1280px-Cesme_Marina.jpg",
+      "credit": "Irfan Parlar",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cesme_Marina.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 856,
+      "not": "Kategori: Çeşme Marina. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "setur-kusadasi-marina": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Ku%C5%9Fadas%C4%B1_Marina_03.jpg/1280px-Ku%C5%9Fadas%C4%B1_Marina_03.jpg",
+      "credit": "Zeynel Cebeci",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ku%C5%9Fadas%C4%B1_Marina_03.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 808,
+      "not": "Kategoriler: Marinas in Turkey, Port of Kuşadası. İlk aday (04) bulutlu/bina ağırlıklıydı — 03 marinayı gösteriyor (görsel doğrulandı). Commons API taraması 2026-08-12 (bölge turu 2)."
+    },
+    "setur-kalamis-fenerbahce-marina": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Fenerbah%C3%A7e_Yat_Liman%C4%B1.jpg/1280px-Fenerbah%C3%A7e_Yat_Liman%C4%B1.jpg",
+      "credit": "Kadı",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fenerbah%C3%A7e_Yat_Liman%C4%B1.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Başlık: Fenerbahçe Yat Limanı; kategori Kalamış, Kadıköy. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "d-marin-turgutreis": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Turgutreis_-_panoramio_(11).jpg/1280px-Turgutreis_-_panoramio_(11).jpg",
+      "credit": "Tanya Dedyukhina",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Turgutreis_-_panoramio_(11).jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Başlık: Turgutreis — marina görünümü (görsel doğrulandı). Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "bozburun-yat-yanasma-yeri": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Merkez,_48710_Bozburun-Marmaris-Mu%C4%9Fla,_Turkey_-_panoramio.jpg/1280px-Merkez,_48710_Bozburun-Marmaris-Mu%C4%9Fla,_Turkey_-_panoramio.jpg",
+      "credit": "Bir_Ege_Hikayesi ©",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Merkez,_48710_Bozburun-Marmaris-Mu%C4%9Fla,_Turkey_-_panoramio.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Kategori: Bozburun, Marmaris; kıyı/yanaşma görünümü. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "fiskardo-limani": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Fiscardo,_Kefalonia_10-2003_02.jpg/1280px-Fiscardo,_Kefalonia_10-2003_02.jpg",
+      "credit": "Dan Taylor from London, UK",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fiscardo,_Kefalonia_10-2003_02.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 853,
+      "not": "Başlık: Fiscardo, Kefalonia — liman. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "naoussa-limani-paros": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Naoussa_Harbour_-_panoramio.jpg/1280px-Naoussa_Harbour_-_panoramio.jpg",
+      "credit": "ian freeman",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Naoussa_Harbour_-_panoramio.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Başlık: Naoussa Harbour. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "ermoupoli-limani-syros": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Syros_Ano_Syros_u_Ermoupolis140707.jpg/1280px-Syros_Ano_Syros_u_Ermoupolis140707.jpg",
+      "credit": "Hans Peter Schaefer, http://www.reserv-a-rt.de",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Syros_Ano_Syros_u_Ermoupolis140707.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 853,
+      "not": "Ermoupoli ve limanının genel görünümü. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "aegina-limani": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Lascar_Island_of_Aegina_-_Main_harbour_(4518425007).jpg/1280px-Lascar_Island_of_Aegina_-_Main_harbour_(4518425007).jpg",
+      "credit": "Jorge Láscar from Australia",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lascar_Island_of_Aegina_-_Main_harbour_(4518425007).jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 850,
+      "not": "Başlık: Island of Aegina - Main harbour. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "pythagorio-limani-samos": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Pythagorio.jpg/1280px-Pythagorio.jpg",
+      "credit": "Orthodox33",
+      "license": "Public domain",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pythagorio.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Kategori: Pythagoreio. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "patmos-skala-rihtimi": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Skala-of-patmos.JPG/1280px-Skala-of-patmos.JPG",
+      "credit": "Chris Vlachos",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Skala-of-patmos.JPG",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Başlık: Skala of Patmos. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "kos-eski-liman-mandraki": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Kos-Harbour-01ASD.jpg/1280px-Kos-Harbour-01ASD.jpg",
+      "credit": "Asurnipal",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kos-Harbour-01ASD.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 852,
+      "not": "Kategori: Port of Kos. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "symi-panormitis-iskelesi": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Panorama_Blick_auf_Schiffanleger_Panormitis.jpg/1280px-Panorama_Blick_auf_Schiffanleger_Panormitis.jpg",
+      "credit": "A.F.E.Bean",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panorama_Blick_auf_Schiffanleger_Panormitis.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 458,
+      "not": "Başlık: Panormitis iskelesine panoramik bakış; kategori Panormitis. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "teos-marina": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/S%C4%B1%C4%9Fac%C4%B1k_Castle,_Harbour_and_Teos_Marina_01.jpg/1280px-S%C4%B1%C4%9Fac%C4%B1k_Castle,_Harbour_and_Teos_Marina_01.jpg",
+      "credit": "BSRF",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:S%C4%B1%C4%9Fac%C4%B1k_Castle,_Harbour_and_Teos_Marina_01.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 959,
+      "not": "Kategoriler: Sığacık Castle, Teos Marina; drone çekimi. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "g-marina-kemer": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/KEMER_MAR%C4%B0NA_%C2%A9Abdullah_Kiyga_-_panoramio.jpg/1280px-KEMER_MAR%C4%B0NA_%C2%A9Abdullah_Kiyga_-_panoramio.jpg",
+      "credit": "Abdullah kıyga",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:KEMER_MAR%C4%B0NA_%C2%A9Abdullah_Kiyga_-_panoramio.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Başlık: Kemer Marina; kategori Kemer. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "antalya-kaleici-yat-limani": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/20180111_AntalyaMarina_5272_(25238627627).jpg/1280px-20180111_AntalyaMarina_5272_(25238627627).jpg",
+      "credit": "Ray Swi-hymn from Sijhih-Taipei, Taiwan",
+      "license": "CC BY-SA 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:20180111_AntalyaMarina_5272_(25238627627).jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 854,
+      "not": "Antalya Kaleiçi yat limanı (görsel doğrulandı). Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
     }
   }
 }
