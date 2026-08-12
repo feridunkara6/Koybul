@@ -1,5 +1,7 @@
-import 'package:dockly_api/dockly_api.dart' show GeoPoint;
+import 'package:dockly_api/dockly_api.dart'
+    show DeriaAvailability, DeriaCove, GeoPoint;
 import 'package:dockly_core/dockly_core.dart';
+import 'package:dockly_mobile/features/deria/application/deria_controller.dart';
 import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
 import 'package:dockly_mobile/features/detail/domain/location_detail_gateway.dart';
@@ -14,6 +16,7 @@ import 'package:dockly_mobile/features/community/application/community_controlle
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/community_fakes.dart';
+import '../../support/deria_fakes.dart';
 import '../../support/auth_fakes.dart';
 import '../../support/detail_fakes.dart';
 import '../../support/nearby_fakes.dart';
@@ -36,6 +39,7 @@ Widget _app(LocationDetailGateway gateway, {bool signedIn = false}) {
       nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
       reviewsGatewayProvider.overrideWithValue(FakeReviewsGateway()),
       weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
+      deriaGatewayProvider.overrideWithValue(FakeDeriaGateway()),
       if (signedIn) signedInAuthOverride(),
     ],
     child: const MaterialApp(home: LocationDetailScreen(idOrSlug: 'loc-1')),
@@ -77,6 +81,7 @@ void main() {
           nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
           reviewsGatewayProvider.overrideWithValue(FakeReviewsGateway()),
       weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
+      deriaGatewayProvider.overrideWithValue(FakeDeriaGateway()),
           originProvider.overrideWith((ref) => const GeoPoint(lat: 40.0, lon: 28.93)),
         ],
         child: const MaterialApp(home: LocationDetailScreen(idOrSlug: 'loc-1')),
@@ -321,5 +326,49 @@ void main() {
     // Zemin kutuda KISA yazılır; parantezli açılım kutuyu altı satır uzatırdı.
     expect(find.text('Karışık'), findsOneWidget);
     expect(find.text('Karışık (kum/çamur/yosun)'), findsNothing);
+  });
+
+  testWidgets('DERİA eşleşen kayıtta doluluk kutusu detayda görünür '
+      've rezervasyon düğmesi taşır', (WidgetTester tester) async {
+    // Sunucu hangi kayıtların eşlendiğini belirler; ekran yalnız kendi
+    // slug'ını arar. Burada sahte veri detayın slug'ıyla (d-marin-gocek)
+    // eşleşiyor → kutu çizilir. openInNew artık 2 adettir (iletişim + DERİA)
+    // — bu sayı bilinçli olarak kilitlendi (inceleme bulgusu: kutu gerçek
+    // veriyle gelince eski findsOneWidget kırılacaktı).
+    tester.view.physicalSize = const Size(800, 2800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    final FakeDeriaGateway deria = FakeDeriaGateway(
+      result: DeriaAvailability(
+        fetchedAt: DateTime.now().toUtc(),
+        forDate: '2026-08-12',
+        attribution: 'DERİA — Türkiye Çevre Ajansı (deria.gov.tr)',
+        coves: const <DeriaCove>[
+          DeriaCove(slug: 'd-marin-gocek', free: 5, total: 12),
+        ],
+      ),
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: <Override>[
+          communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
+          locationDetailGatewayProvider
+              .overrideWithValue(FakeLocationDetailGateway()),
+          nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
+          reviewsGatewayProvider.overrideWithValue(FakeReviewsGateway()),
+          weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
+          deriaGatewayProvider.overrideWithValue(deria),
+        ],
+        child: const MaterialApp(home: LocationDetailScreen(idOrSlug: 'loc-1')),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(
+        find.byKey(const ValueKey<String>('deria-box')), 300);
+    expect(find.text('5'), findsOneWidget);
+    expect(find.text('/ 12 şamandıra boş'), findsOneWidget);
+    expect(_docklyIcon(DocklyIcons.openInNew), findsNWidgets(2));
   });
 }

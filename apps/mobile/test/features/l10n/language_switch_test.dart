@@ -1,3 +1,4 @@
+import 'package:dockly_mobile/features/deria/application/deria_controller.dart';
 import 'package:dockly_mobile/core/l10n/app_locale.dart';
 import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
 import 'package:dockly_mobile/features/detail/presentation/location_detail_screen.dart';
@@ -14,6 +15,7 @@ import 'package:dockly_mobile/features/community/application/community_controlle
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/community_fakes.dart';
+import '../../support/deria_fakes.dart';
 import '../../support/detail_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/reviews_fakes.dart';
@@ -144,6 +146,7 @@ void main() {
           nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
           reviewsGatewayProvider.overrideWithValue(FakeReviewsGateway()),
           weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
+          deriaGatewayProvider.overrideWithValue(FakeDeriaGateway()),
         ],
         child: const MaterialApp(home: LocationDetailScreen(idOrSlug: 'loc-1')),
       ),

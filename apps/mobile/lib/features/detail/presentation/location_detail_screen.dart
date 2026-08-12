@@ -15,6 +15,7 @@ import '../../auth/presentation/account_gate.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
+import '../../deria/presentation/deria_box.dart';
 import '../../favorites/domain/favorite_location.dart';
 import '../../favorites/presentation/favorite_button.dart';
 import '../../map/application/map_controller.dart';
@@ -188,6 +189,12 @@ class _DetailContent extends ConsumerWidget {
           ),
 
         _SeaRouteRow(destination: detail.position, accent: ink),
+
+        // DERİA TONOZ DOLULUĞU (kurucu kararı 2026-08): Göcek'teki TÜÇA
+        // şamandıra sahalarında "bu gece kaç tonoz boş" canlı gösterilir;
+        // rezervasyon BİZDE YAPILMAZ, kutu deria.gov.tr'ye yönlendirir.
+        // Eşlenmemiş kayıtlar/veri yok/bayat → kutu HİÇ çizilmez.
+        DeriaAvailabilityBox(slug: detail.slug),
 
         // DOLULUK yukarıda (kullanıcı isteği 2026-08): "yer var mı?" sorusu
         // sayfanın dibinde beklemez; DOLULUK BİLDİR düğmesi buradadır.

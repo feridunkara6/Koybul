@@ -1,4 +1,5 @@
 import 'package:dockly_api/dockly_api.dart';
+import 'package:dockly_mobile/features/deria/application/deria_controller.dart';
 import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
 import 'package:dockly_mobile/features/detail/presentation/location_detail_screen.dart';
@@ -13,6 +14,7 @@ import 'package:dockly_mobile/features/community/application/community_controlle
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/community_fakes.dart';
+import '../../support/deria_fakes.dart';
 import '../../support/detail_fakes.dart';
 import '../../support/location_fakes.dart';
 import '../../support/nearby_fakes.dart';
@@ -78,6 +80,7 @@ Widget _app(LocationDetail detail, {List<Override> extra = const <Override>[]}) 
       nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
       reviewsGatewayProvider.overrideWithValue(FakeReviewsGateway()),
       weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
+      deriaGatewayProvider.overrideWithValue(FakeDeriaGateway()),
       // CI DERSİ (2026-08): gerçek konum eklentisi widget testinde ASLA
       // çalıştırılmamalı — kanal yanıtı sahte-zaman döngüsünde hiç gelmez ve
       // akış sonsuza dek bekler (başlangıç menüsü hiç açılmaz → kırmızı).

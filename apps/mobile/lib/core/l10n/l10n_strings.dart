@@ -370,6 +370,10 @@ class L10n {
     required this.launchGuestNote,
     required this.qSkipAll,
     required this.tourInviteMsg,
+    required this.deriaTitle,
+    required this.deriaFreeOfTotal,
+    required this.deriaSourceNote,
+    required this.deriaReserveBtn,
     required this.tourInviteYes,
     required this.tourInviteNo,
     required this.routePickTitle,
@@ -892,6 +896,9 @@ class L10n {
 
   // Tanıtım turu daveti (Faz 1) + haritadan rota hedefi seçme.
   final String tourInviteMsg, tourInviteYes, tourInviteNo, routePickTitle;
+
+  // DERİA tonoz doluluğu (Göcek — kurucu kararı 2026-08).
+  final String deriaTitle, deriaFreeOfTotal, deriaSourceNote, deriaReserveBtn;
 
   // Konum ön-izin ekranı — E6 (onaylı açılış tasarımı 2026-08).
   final String locTitle, locBenefit1, locBenefit2, locUseBtn, locSkipBtn,
@@ -1520,6 +1527,10 @@ const L10n _tr = L10n(
   launchGuestNote: 'Kayıt gerekmez — istediğin an hesap açabilirsin.',
   qSkipAll: 'Soruları atla',
   tourInviteMsg: 'Kısa bir tanıtım turu ister misin?',
+  deriaTitle: 'Tonoz doluluk — bu gece',
+  deriaFreeOfTotal: '/ {0} şamandıra boş',
+  deriaSourceNote: 'Kaynak: DERİA (Türkiye Çevre Ajansı). Bağlama rezervasyon gerektirir.',
+  deriaReserveBtn: 'DERİA\'da rezervasyon yap',
   tourInviteYes: 'Göster',
   tourInviteNo: 'Şimdi değil',
   routePickTitle: 'Nereye gitmek istiyorsun?',
@@ -2144,6 +2155,10 @@ const L10n _en = L10n(
   launchGuestNote: 'No sign-up needed — create an account anytime.',
   qSkipAll: 'Skip questions',
   tourInviteMsg: 'Want a quick tour?',
+  deriaTitle: 'Mooring buoys — tonight',
+  deriaFreeOfTotal: '/ {0} buoys free',
+  deriaSourceNote: 'Source: DERİA (Turkish Environment Agency). Mooring requires a reservation.',
+  deriaReserveBtn: 'Reserve on DERİA',
   tourInviteYes: 'Show me',
   tourInviteNo: 'Not now',
   routePickTitle: 'Where do you want to go?',
@@ -2768,6 +2783,10 @@ const L10n _es = L10n(
   launchGuestNote: 'Sin registro: crea una cuenta cuando quieras.',
   qSkipAll: 'Saltar preguntas',
   tourInviteMsg: '¿Quieres un recorrido rápido?',
+  deriaTitle: 'Boyas de amarre — esta noche',
+  deriaFreeOfTotal: '/ {0} boyas libres',
+  deriaSourceNote: 'Fuente: DERİA (Agencia de Medio Ambiente de Türkiye). El amarre requiere reserva.',
+  deriaReserveBtn: 'Reservar en DERİA',
   tourInviteYes: 'Muéstrame',
   tourInviteNo: 'Ahora no',
   routePickTitle: '¿Adónde quieres ir?',
@@ -3392,6 +3411,10 @@ const L10n _ru = L10n(
   launchGuestNote: 'Без регистрации — аккаунт можно создать в любой момент.',
   qSkipAll: 'Пропустить вопросы',
   tourInviteMsg: 'Показать короткий тур?',
+  deriaTitle: 'Швартовные буи — сегодня ночью',
+  deriaFreeOfTotal: '/ {0} буёв свободно',
+  deriaSourceNote: 'Источник: DERİA (Агентство окружающей среды Турции). Швартовка требует бронирования.',
+  deriaReserveBtn: 'Забронировать на DERİA',
   tourInviteYes: 'Показать',
   tourInviteNo: 'Не сейчас',
   routePickTitle: 'Куда вы хотите пойти?',

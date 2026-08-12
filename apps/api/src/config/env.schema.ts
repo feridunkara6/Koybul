@@ -52,6 +52,20 @@ export const envSchema = z.object({
    * Boş bırakılabilir: o zaman kimse otomatik yükseltilmez.
    */
   MODERATOR_EMAILS: z.string().optional(),
+  /**
+   * DERİA tonoz doluluğu (Göcek) — panel anahtarı. 'false' yazılırsa sunucu
+   * DERİA'ya hiç istek atmaz ve uç nokta boş liste döner (mobil göstergeyi
+   * kendiliğinden gizler). Kaynak tarafında bir sorun/istek olursa yeniden
+   * dağıtım GEREKMEDEN kapatılabilsin diye var. Varsayılan: açık.
+   * Yalnız 'true'/'false' kabul edilir — '0'/'off' gibi bir yazım sessizce
+   * açık bırakmasın diye önyükleme HATAYLA durur (dosyanın genel ilkesi).
+   */
+  DERIA_ENABLED: z
+    .preprocess(
+      (v) => (typeof v === 'string' ? v.trim().toLowerCase() : v),
+      z.enum(['true', 'false']).default('true'),
+    )
+    .transform((v) => v === 'true'),
 });
 
 export type Env = z.infer<typeof envSchema>;

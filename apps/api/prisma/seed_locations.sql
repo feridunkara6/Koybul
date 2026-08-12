@@ -3543,18 +3543,22 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
   capacity, price_tier, source)
 SELECT gen_random_uuid(), 'gobun-samandira-sahasi', 9, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
-  'Göbün Koyu Şamandıra Sahası', 'Kapıdağ Yarımadası''nın güneydoğusundaki Göbün (Kapı Creek) koyu, Göcek Özel Çevre Koruma Bölgesi''nde ücretli bağlama sistemine dahildir. 2025 rejimiyle koylarda serbest demirleme yerine Türkiye Çevre Ajansı işletimindeki mapa/tonoz/şamandıra sistemleri kullanılmaktadır; koy zemini kumdur.',
+  'Göbün Koyu Şamandıra Sahası', 'Kapıdağ Yarımadası''nın güneydoğusundaki Göbün (Kapı Creek) koyu, Göcek Özel Çevre Koruma Bölgesi''nde ücretli bağlama sistemine dahildir. 2025 rejimiyle koylarda serbest demirleme yerine Türkiye Çevre Ajansı işletimindeki mapa/tonoz/şamandıra sistemleri kullanılmaktadır; koy zemini kumdur. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
   ST_SetSRID(ST_MakePoint(28.8937, 36.6438), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'tr', 'Göbün Koyu Şamandıra Sahası', 'Kapıdağ Yarımadası''nın güneydoğusundaki Göbün (Kapı Creek) koyu, Göcek Özel Çevre Koruma Bölgesi''nde ücretli bağlama sistemine dahildir. 2025 rejimiyle koylarda serbest demirleme yerine Türkiye Çevre Ajansı işletimindeki mapa/tonoz/şamandıra sistemleri kullanılmaktadır; koy zemini kumdur.' FROM locations WHERE slug = 'gobun-samandira-sahasi'
+SELECT id, 'tr', 'Göbün Koyu Şamandıra Sahası', 'Kapıdağ Yarımadası''nın güneydoğusundaki Göbün (Kapı Creek) koyu, Göcek Özel Çevre Koruma Bölgesi''nde ücretli bağlama sistemine dahildir. 2025 rejimiyle koylarda serbest demirleme yerine Türkiye Çevre Ajansı işletimindeki mapa/tonoz/şamandıra sistemleri kullanılmaktadır; koy zemini kumdur. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'gobun-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'sand', NULL, false
 FROM locations WHERE slug = 'gobun-samandira-sahasi'
 ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'gobun-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
 -- --- Sarsala Koyu Şamandıra Sahası · güven: medium · kaynak: www.sea-seek.com, www.adf.org.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -3562,18 +3566,22 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
   capacity, price_tier, source)
 SELECT gen_random_uuid(), 'sarsala-samandira-sahasi', 9, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
-  'Sarsala Koyu Şamandıra Sahası', 'Göcek Körfezi''nin batı kıyısındaki büyük Sarsala koyu, 2025 Göcek bağlama rejiminde şamandıra/tonoz sistemi kurulan koylar arasındadır ve sistem Türkiye Çevre Ajansı tarafından ücretli işletilmektedir. Koy kuzeydoğuya açıktır.',
+  'Sarsala Koyu Şamandıra Sahası', 'Göcek Körfezi''nin batı kıyısındaki büyük Sarsala koyu, 2025 Göcek bağlama rejiminde şamandıra/tonoz sistemi kurulan koylar arasındadır ve sistem Türkiye Çevre Ajansı tarafından ücretli işletilmektedir. Koy kuzeydoğuya açıktır. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
   ST_SetSRID(ST_MakePoint(28.8596, 36.661), 4326)::geography,
   NULL, NULL, NULL, 15,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'tr', 'Sarsala Koyu Şamandıra Sahası', 'Göcek Körfezi''nin batı kıyısındaki büyük Sarsala koyu, 2025 Göcek bağlama rejiminde şamandıra/tonoz sistemi kurulan koylar arasındadır ve sistem Türkiye Çevre Ajansı tarafından ücretli işletilmektedir. Koy kuzeydoğuya açıktır.' FROM locations WHERE slug = 'sarsala-samandira-sahasi'
+SELECT id, 'tr', 'Sarsala Koyu Şamandıra Sahası', 'Göcek Körfezi''nin batı kıyısındaki büyük Sarsala koyu, 2025 Göcek bağlama rejiminde şamandıra/tonoz sistemi kurulan koylar arasındadır ve sistem Türkiye Çevre Ajansı tarafından ücretli işletilmektedir. Koy kuzeydoğuya açıktır. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'sarsala-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mixed', 'kuzeydoğuya açık', false
 FROM locations WHERE slug = 'sarsala-samandira-sahasi'
 ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'sarsala-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
 -- --- Boynuzbükü Şamandıra Sahası · güven: medium · kaynak: www.navily.com, www.adf.org.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -3581,18 +3589,22 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
   capacity, price_tier, source)
 SELECT gen_random_uuid(), 'boynuzbuku-samandira-sahasi', 9, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
-  'Boynuzbükü Şamandıra Sahası', 'Göcek Körfezi''nin kuzeybatısındaki ağaçlıklı ve derin Boynuzbükü, 2025 Göcek bağlama rejiminde ücretli şamandıra/tonoz sistemine dahildir; sistem Türkiye Çevre Ajansı tarafından işletilmektedir. Koy zemini çamurdur.',
+  'Boynuzbükü Şamandıra Sahası', 'Göcek Körfezi''nin kuzeybatısındaki ağaçlıklı ve derin Boynuzbükü, 2025 Göcek bağlama rejiminde ücretli şamandıra/tonoz sistemine dahildir; sistem Türkiye Çevre Ajansı tarafından işletilmektedir. Koy zemini çamurdur. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
   ST_SetSRID(ST_MakePoint(28.8967, 36.7112), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'tr', 'Boynuzbükü Şamandıra Sahası', 'Göcek Körfezi''nin kuzeybatısındaki ağaçlıklı ve derin Boynuzbükü, 2025 Göcek bağlama rejiminde ücretli şamandıra/tonoz sistemine dahildir; sistem Türkiye Çevre Ajansı tarafından işletilmektedir. Koy zemini çamurdur.' FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
+SELECT id, 'tr', 'Boynuzbükü Şamandıra Sahası', 'Göcek Körfezi''nin kuzeybatısındaki ağaçlıklı ve derin Boynuzbükü, 2025 Göcek bağlama rejiminde ücretli şamandıra/tonoz sistemine dahildir; sistem Türkiye Çevre Ajansı tarafından işletilmektedir. Koy zemini çamurdur. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, 'mud', NULL, false
 FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
 ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'boynuzbuku-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
 -- --- Bedri Rahmi (Taşyaka) Şamandıra Sahası · güven: medium · kaynak: karyayolu.wordpress.com, www.adf.org.tr ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -3600,18 +3612,22 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
   capacity, price_tier, source)
 SELECT gen_random_uuid(), 'bedri-rahmi-samandira-sahasi', 9, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
-  'Bedri Rahmi (Taşyaka) Şamandıra Sahası', 'Taşyaka olarak da bilinen koy, Likya kaya mezarları ve Bedri Rahmi Eyüboğlu''nun balık figürüyle tanınır; 2025 Göcek bağlama rejiminde Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz sistemi kurulan koyları arasındadır. Taşkaya adacığının kuzeybatısında geniş ve korunaklı bir bağlama alanı sunar.',
+  'Bedri Rahmi (Taşyaka) Şamandıra Sahası', 'Taşyaka olarak da bilinen koy, Likya kaya mezarları ve Bedri Rahmi Eyüboğlu''nun balık figürüyle tanınır; 2025 Göcek bağlama rejiminde Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz sistemi kurulan koyları arasındadır. Taşkaya adacığının kuzeybatısında geniş ve korunaklı bir bağlama alanı sunar. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).',
   ST_SetSRID(ST_MakePoint(28.8668, 36.6905), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'tr', 'Bedri Rahmi (Taşyaka) Şamandıra Sahası', 'Taşyaka olarak da bilinen koy, Likya kaya mezarları ve Bedri Rahmi Eyüboğlu''nun balık figürüyle tanınır; 2025 Göcek bağlama rejiminde Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz sistemi kurulan koyları arasındadır. Taşkaya adacığının kuzeybatısında geniş ve korunaklı bir bağlama alanı sunar.' FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
+SELECT id, 'tr', 'Bedri Rahmi (Taşyaka) Şamandıra Sahası', 'Taşyaka olarak da bilinen koy, Likya kaya mezarları ve Bedri Rahmi Eyüboğlu''nun balık figürüyle tanınır; 2025 Göcek bağlama rejiminde Türkiye Çevre Ajansı''nın ücretli şamandıra/tonoz sistemi kurulan koyları arasındadır. Taşkaya adacığının kuzeybatısında geniş ve korunaklı bir bağlama alanı sunar. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).' FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
 INSERT INTO anchorage_details (location_id, holding_type, swell_exposure, is_free)
 SELECT id, NULL, NULL, false
 FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
 ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezervasyon', true
+FROM locations l WHERE l.slug = 'bedri-rahmi-samandira-sahasi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
 -- --- Poyrazköy Balıkçı Barınağı ve Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com, www.cruiserswiki.org ---
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
@@ -12237,40 +12253,40 @@ INSERT INTO location_i18n (location_id, locale, name, description)
 SELECT id, 'ru', NULL, 'Бухта на северном берегу залива, примерно в 2 милях к западу от входа в гавань Fethiye, известная своим рестораном. В летние месяцы здесь обычно спокойно, бухта подходит для якорной стоянки; за пределами бухты дно круто обрывается до 45-50 м.' FROM locations WHERE slug = 'turunc-pinari-koyu'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'en', NULL, 'Göbün (Kapı Creek) bay, in the south-east of the Kapıdağ Peninsula, is included in the paid mooring system of the Göcek Special Environmental Protection Area. Under the 2025 regime, instead of free anchoring, the bays use the shore ring/stern mooring/buoy systems operated by the Türkiye Çevre Ajansı; the bottom of the bay is sand.' FROM locations WHERE slug = 'gobun-samandira-sahasi'
+SELECT id, 'en', NULL, 'Göbün (Kapı Creek) bay, in the south-east of the Kapıdağ Peninsula, is included in the paid mooring system of the Göcek Special Environmental Protection Area. Under the 2025 regime, instead of free anchoring, the bays use the shore ring/stern mooring/buoy systems operated by the Türkiye Çevre Ajansı; the bottom of the bay is sand. Mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'gobun-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'es', NULL, 'La cala de Göbün (Kapı Creek), al sureste de la península de Kapıdağ, está incluida en el sistema de amarre de pago de la Zona de Protección Ambiental Especial de Göcek. Con el régimen de 2025, en lugar del fondeo libre, en las calas se utilizan los sistemas de argollas de tierra/muertos/boyas gestionados por la Türkiye Çevre Ajansı; el fondo de la cala es de arena.' FROM locations WHERE slug = 'gobun-samandira-sahasi'
+SELECT id, 'es', NULL, 'La cala de Göbün (Kapı Creek), al sureste de la península de Kapıdağ, está incluida en el sistema de amarre de pago de la Zona de Protección Ambiental Especial de Göcek. Con el régimen de 2025, en lugar del fondeo libre, en las calas se utilizan los sistemas de argollas de tierra/muertos/boyas gestionados por la Türkiye Çevre Ajansı; el fondo de la cala es de arena. Las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'gobun-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'ru', NULL, 'Бухта Göbün (Kapı Creek) на юго-востоке полуострова Kapıdağ входит в платную систему швартовки особой природоохранной зоны Göcek. По режиму 2025 года вместо свободной якорной стоянки в бухтах используются системы береговых рымов/рейдовых бочек/буёв, обслуживаемые агентством Türkiye Çevre Ajansı; дно бухты песчаное.' FROM locations WHERE slug = 'gobun-samandira-sahasi'
+SELECT id, 'ru', NULL, 'Бухта Göbün (Kapı Creek) на юго-востоке полуострова Kapıdağ входит в платную систему швартовки особой природоохранной зоны Göcek. По режиму 2025 года вместо свободной якорной стоянки в бухтах используются системы береговых рымов/рейдовых бочек/буёв, обслуживаемые агентством Türkiye Çevre Ajansı; дно бухты песчаное. Бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'gobun-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'en', NULL, 'The large Sarsala bay on the western shore of the Gulf of Göcek is among the bays where a buoy/stern mooring system has been installed under the 2025 Göcek mooring regime, and the system is operated for a fee by the Türkiye Çevre Ajansı. The bay is open to the north-east.' FROM locations WHERE slug = 'sarsala-samandira-sahasi'
+SELECT id, 'en', NULL, 'The large Sarsala bay on the western shore of the Gulf of Göcek is among the bays where a buoy/stern mooring system has been installed under the 2025 Göcek mooring regime, and the system is operated for a fee by the Türkiye Çevre Ajansı. The bay is open to the north-east. Mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'sarsala-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'es', NULL, 'La gran cala de Sarsala, en la costa occidental del golfo de Göcek, figura entre las calas donde se ha instalado un sistema de boyas/muertos con el régimen de amarre de Göcek de 2025, y el sistema lo gestiona de pago la Türkiye Çevre Ajansı. La cala está abierta al nordeste.' FROM locations WHERE slug = 'sarsala-samandira-sahasi'
+SELECT id, 'es', NULL, 'La gran cala de Sarsala, en la costa occidental del golfo de Göcek, figura entre las calas donde se ha instalado un sistema de boyas/muertos con el régimen de amarre de Göcek de 2025, y el sistema lo gestiona de pago la Türkiye Çevre Ajansı. La cala está abierta al nordeste. Las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'sarsala-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'ru', NULL, 'Большая бухта Sarsala на западном берегу залива Göcek входит в число бухт, где по режиму швартовки Göcek 2025 года установлена система буёв/рейдовых бочек; система платно эксплуатируется агентством Türkiye Çevre Ajansı. Бухта открыта к северо-востоку.' FROM locations WHERE slug = 'sarsala-samandira-sahasi'
+SELECT id, 'ru', NULL, 'Большая бухта Sarsala на западном берегу залива Göcek входит в число бухт, где по режиму швартовки Göcek 2025 года установлена система буёв/рейдовых бочек; система платно эксплуатируется агентством Türkiye Çevre Ajansı. Бухта открыта к северо-востоку. Бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'sarsala-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'en', NULL, 'Boynuzbükü, a wooded and deep bay in the north-west of the Gulf of Göcek, is included in the paid buoy/stern mooring system under the 2025 Göcek mooring regime; the system is operated by the Türkiye Çevre Ajansı. The bottom of the bay is mud.' FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
+SELECT id, 'en', NULL, 'Boynuzbükü, a wooded and deep bay in the north-west of the Gulf of Göcek, is included in the paid buoy/stern mooring system under the 2025 Göcek mooring regime; the system is operated by the Türkiye Çevre Ajansı. The bottom of the bay is mud. Mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'es', NULL, 'Boynuzbükü, una cala arbolada y profunda en el noroeste del golfo de Göcek, está incluida en el sistema de pago de boyas/muertos del régimen de amarre de Göcek de 2025; el sistema lo gestiona la Türkiye Çevre Ajansı. El fondo de la cala es de fango.' FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
+SELECT id, 'es', NULL, 'Boynuzbükü, una cala arbolada y profunda en el noroeste del golfo de Göcek, está incluida en el sistema de pago de boyas/muertos del régimen de amarre de Göcek de 2025; el sistema lo gestiona la Türkiye Çevre Ajansı. El fondo de la cala es de fango. Las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'ru', NULL, 'Boynuzbükü — лесистая и глубокая бухта на северо-западе залива Göcek — включена в платную систему буёв/рейдовых бочек по режиму швартовки Göcek 2025 года; система эксплуатируется агентством Türkiye Çevre Ajansı. Дно бухты илистое.' FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
+SELECT id, 'ru', NULL, 'Boynuzbükü — лесистая и глубокая бухта на северо-западе залива Göcek — включена в платную систему буёв/рейдовых бочек по режиму швартовки Göcek 2025 года; система эксплуатируется агентством Türkiye Çevre Ajansı. Дно бухты илистое. Бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'boynuzbuku-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'en', NULL, 'Also known as Taşyaka, the bay is famous for its Lycian rock tombs and for the fish figure by Bedri Rahmi Eyüboğlu; under the 2025 Göcek mooring regime it is among the bays where the paid buoy/stern mooring system of the Türkiye Çevre Ajansı has been installed. It offers a wide and sheltered mooring area north-west of the Taşkaya islet.' FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
+SELECT id, 'en', NULL, 'Also known as Taşyaka, the bay is famous for its Lycian rock tombs and for the fish figure by Bedri Rahmi Eyüboğlu; under the 2025 Göcek mooring regime it is among the bays where the paid buoy/stern mooring system of the Türkiye Çevre Ajansı has been installed. It offers a wide and sheltered mooring area north-west of the Taşkaya islet. Mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).' FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'es', NULL, 'Conocida también como Taşyaka, la cala es famosa por sus tumbas rupestres licias y por la figura del pez de Bedri Rahmi Eyüboğlu; en el régimen de amarre de Göcek de 2025 figura entre las calas donde se ha instalado el sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı. Ofrece una zona de amarre amplia y abrigada al noroeste del islote de Taşkaya.' FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
+SELECT id, 'es', NULL, 'Conocida también como Taşyaka, la cala es famosa por sus tumbas rupestres licias y por la figura del pez de Bedri Rahmi Eyüboğlu; en el régimen de amarre de Göcek de 2025 figura entre las calas donde se ha instalado el sistema de pago de boyas/muertos de la Türkiye Çevre Ajansı. Ofrece una zona de amarre amplia y abrigada al noroeste del islote de Taşkaya. Las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'ru', NULL, 'Бухта, известная также как Taşyaka, славится ликийскими скальными гробницами и фигурой рыбы работы Bedri Rahmi Eyüboğlu; по режиму швартовки Göcek 2025 года она входит в число бухт, где установлена платная система буёв/рейдовых бочек агентства Türkiye Çevre Ajansı. К северо-западу от островка Taşkaya она предлагает обширную и защищённую зону швартовки.' FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
+SELECT id, 'ru', NULL, 'Бухта, известная также как Taşyaka, славится ликийскими скальными гробницами и фигурой рыбы работы Bedri Rahmi Eyüboğlu; по режиму швартовки Göcek 2025 года она входит в число бухт, где установлена платная система буёв/рейдовых бочек агентства Türkiye Çevre Ajansı. К северо-западу от островка Taşkaya она предлагает обширную и защищённую зону швартовки. Бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).' FROM locations WHERE slug = 'bedri-rahmi-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 -- --- i18n_tur2.json (i18n-tur2) ---
 INSERT INTO location_i18n (location_id, locale, name, description)
@@ -15503,26 +15519,26 @@ SELECT id, 'ru', NULL, 'Небольшая бухта между Marmaris и Boz
 Заметка о подходе: Подходя с юго-запада, остерегайтесь каменных обломков у оконечности мыса; хотя бухта закрыта от мельтеми, из ущелья временами срываются шквалы.' FROM locations WHERE slug = 'gerbekse-koyu'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 -- --- gobun-samandira-sahasi ---
-UPDATE locations SET description = 'Kapıdağ Yarımadası''nın güneydoğusundaki Göbün (Kapı Creek) koyu, Göcek Özel Çevre Koruma Bölgesi''nde ücretli bağlama sistemine dahildir. 2025 rejimiyle koylarda serbest demirleme yerine Türkiye Çevre Ajansı işletimindeki mapa/tonoz/şamandıra sistemleri kullanılmaktadır; koy zemini kumdur.
+UPDATE locations SET description = 'Kapıdağ Yarımadası''nın güneydoğusundaki Göbün (Kapı Creek) koyu, Göcek Özel Çevre Koruma Bölgesi''nde ücretli bağlama sistemine dahildir. 2025 rejimiyle koylarda serbest demirleme yerine Türkiye Çevre Ajansı işletimindeki mapa/tonoz/şamandıra sistemleri kullanılmaktadır; koy zemini kumdur. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).
 
 Yaklaşma notu: Giriş uzaktan belli olmaz; batı tarafı tamamen sığdır; su altında antik kalıntılar vardır.' WHERE slug = 'gobun-samandira-sahasi';
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'tr', NULL, 'Kapıdağ Yarımadası''nın güneydoğusundaki Göbün (Kapı Creek) koyu, Göcek Özel Çevre Koruma Bölgesi''nde ücretli bağlama sistemine dahildir. 2025 rejimiyle koylarda serbest demirleme yerine Türkiye Çevre Ajansı işletimindeki mapa/tonoz/şamandıra sistemleri kullanılmaktadır; koy zemini kumdur.
+SELECT id, 'tr', NULL, 'Kapıdağ Yarımadası''nın güneydoğusundaki Göbün (Kapı Creek) koyu, Göcek Özel Çevre Koruma Bölgesi''nde ücretli bağlama sistemine dahildir. 2025 rejimiyle koylarda serbest demirleme yerine Türkiye Çevre Ajansı işletimindeki mapa/tonoz/şamandıra sistemleri kullanılmaktadır; koy zemini kumdur. Bağlama rezervasyonu TÜÇA''nın DERİA sistemi üzerinden yapılır (deria.gov.tr).
 
 Yaklaşma notu: Giriş uzaktan belli olmaz; batı tarafı tamamen sığdır; su altında antik kalıntılar vardır.' FROM locations WHERE slug = 'gobun-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'en', NULL, 'Göbün (Kapı Creek) bay, in the south-east of the Kapıdağ Peninsula, is included in the paid mooring system of the Göcek Special Environmental Protection Area. Under the 2025 regime, instead of free anchoring, the bays use the shore ring/stern mooring/buoy systems operated by the Türkiye Çevre Ajansı; the bottom of the bay is sand.
+SELECT id, 'en', NULL, 'Göbün (Kapı Creek) bay, in the south-east of the Kapıdağ Peninsula, is included in the paid mooring system of the Göcek Special Environmental Protection Area. Under the 2025 regime, instead of free anchoring, the bays use the shore ring/stern mooring/buoy systems operated by the Türkiye Çevre Ajansı; the bottom of the bay is sand. Mooring reservations are made through TÜÇA''s DERİA system (deria.gov.tr).
 
 Approach note: The entrance is not obvious from a distance; the western side is entirely shallow; there are ancient remains underwater.' FROM locations WHERE slug = 'gobun-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'es', NULL, 'La cala de Göbün (Kapı Creek), al sureste de la península de Kapıdağ, está incluida en el sistema de amarre de pago de la Zona de Protección Ambiental Especial de Göcek. Con el régimen de 2025, en lugar del fondeo libre, en las calas se utilizan los sistemas de argollas de tierra/muertos/boyas gestionados por la Türkiye Çevre Ajansı; el fondo de la cala es de arena.
+SELECT id, 'es', NULL, 'La cala de Göbün (Kapı Creek), al sureste de la península de Kapıdağ, está incluida en el sistema de amarre de pago de la Zona de Protección Ambiental Especial de Göcek. Con el régimen de 2025, en lugar del fondeo libre, en las calas se utilizan los sistemas de argollas de tierra/muertos/boyas gestionados por la Türkiye Çevre Ajansı; el fondo de la cala es de arena. Las reservas de amarre se hacen a través del sistema DERİA de TÜÇA (deria.gov.tr).
 
 Nota de aproximación: La entrada no se aprecia desde lejos; el lado oeste es todo somero; hay restos antiguos bajo el agua.' FROM locations WHERE slug = 'gobun-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;
 INSERT INTO location_i18n (location_id, locale, name, description)
-SELECT id, 'ru', NULL, 'Бухта Göbün (Kapı Creek) на юго-востоке полуострова Kapıdağ входит в платную систему швартовки особой природоохранной зоны Göcek. По режиму 2025 года вместо свободной якорной стоянки в бухтах используются системы береговых рымов/рейдовых бочек/буёв, обслуживаемые агентством Türkiye Çevre Ajansı; дно бухты песчаное.
+SELECT id, 'ru', NULL, 'Бухта Göbün (Kapı Creek) на юго-востоке полуострова Kapıdağ входит в платную систему швартовки особой природоохранной зоны Göcek. По режиму 2025 года вместо свободной якорной стоянки в бухтах используются системы береговых рымов/рейдовых бочек/буёв, обслуживаемые агентством Türkiye Çevre Ajansı; дно бухты песчаное. Бронирование швартовки выполняется через систему DERİA агентства TÜÇA (deria.gov.tr).
 
 Заметка о подходе: Вход издалека не заметен; западная сторона сплошь мелководна; под водой античные руины.' FROM locations WHERE slug = 'gobun-samandira-sahasi'
 ON CONFLICT (location_id, locale) DO UPDATE SET description = EXCLUDED.description;

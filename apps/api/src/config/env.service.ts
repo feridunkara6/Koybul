@@ -17,4 +17,9 @@ export class EnvService {
   get isProduction(): boolean {
     return this.env.NODE_ENV === 'production';
   }
+
+  /** DERİA doluluk entegrasyonu açık mı? (panelden 'false' ile kapatılır) */
+  get deriaEnabled(): boolean {
+    return this.env.DERIA_ENABLED;
+  }
 }
