@@ -30,7 +30,15 @@ import { Client } from 'pg';
  * burada koşabilir; 0006/0007/0008 bu deseni izler.
  */
 
-/** Bu ada kadarki (dahil) göçler, mevcut şemada uygulanmış kabul edilir. */
+/**
+ * Bu ada kadarki (dahil) göçler, mevcut şemada uygulanmış kabul edilir.
+ *
+ * SAHA DERSİ (2026-08-12): bu varsayım canlıda YANLIŞ çıktı — elle kurulmuş
+ * şema 0005'in media sütunlarını içermiyordu ama defter "uygulandı" dedi;
+ * içerik seed'i aylarca sessizce geri alındı. Böyle bir uyumsuzluk bir daha
+ * görülürse çözüm bu sabiti ya da defteri OYNAMAK DEĞİL, eksik DDL'i yeni
+ * bir İDEMPOTENT onarım göçüyle (bkz. 0012_media_onarim) göndermektir.
+ */
 export const BASELINE_THROUGH = '0007_wind_exposure';
 
 /** Aynı anda açılan iki örneğin göçü çakıştırmaması için sabit kilit anahtarı. */
