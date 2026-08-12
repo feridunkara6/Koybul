@@ -16484,3 +16484,169 @@ UPDATE locations SET max_boat_length_m = 50
 WHERE slug = 'gocek-village-port-marina' AND max_boat_length_m IS DISTINCT FROM 50; -- https://marinalar.com/gocek-village-port-marina
 UPDATE locations SET name = 'Göcek Exclusive Marina'
 WHERE slug = 'marinturk-gocek-exclusive' AND name <> 'Göcek Exclusive Marina'; -- https://www.seturmarinas.com/bizden-haberler/setur-marinalari-gocekte-yeni-bir-donem-baslatiyor
+
+-- ======================================================================
+-- KAPAK FOTOĞRAFLARI — Wikimedia Commons (atıf + lisans zorunlu).
+-- Kaynak: kapak_fotograflari.json; her giriş dosya sayfasından doğrulandı.
+-- --- bedri-rahmi-samandira-sahasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/bedri-rahmi-samandira-sahasi/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Fish_Figure_on_a_Rock_Painted_By_Bedri_Rahmi_Ey%C3%BCbo%C4%9Flu%2C_located_in_Bedri_Rahmi_Bay_in_G%C3%B6cek.jpg/1280px-Fish_Figure_on_a_Rock_Painted_By_Bedri_Rahmi_Ey%C3%BCbo%C4%9Flu%2C_located_in_Bedri_Rahmi_Bay_in_G%C3%B6cek.jpg', 'Raicem', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Fish_Figure_on_a_Rock_Painted_By_Bedri_Rahmi_Ey%C3%BCbo%C4%9Flu,_located_in_Bedri_Rahmi_Bay_in_G%C3%B6cek.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'bedri-rahmi-samandira-sahasi' AND m.storage_key = 'ext/bedri-rahmi-samandira-sahasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/bedri-rahmi-samandira-sahasi/kapak')
+WHERE slug = 'bedri-rahmi-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/bedri-rahmi-samandira-sahasi/kapak');
+-- --- boynuzbuku-samandira-sahasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/boynuzbuku-samandira-sahasi/kapak', 'image/jpeg', 1280, 720,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Boynuzb%C3%BCk%C3%BC_-_panoramio.jpg/1280px-Boynuzb%C3%BCk%C3%BC_-_panoramio.jpg', 'Jorge Franganillo', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:Boynuzb%C3%BCk%C3%BC_-_panoramio.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'boynuzbuku-samandira-sahasi' AND m.storage_key = 'ext/boynuzbuku-samandira-sahasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/boynuzbuku-samandira-sahasi/kapak')
+WHERE slug = 'boynuzbuku-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/boynuzbuku-samandira-sahasi/kapak');
+-- --- d-marin-gocek ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/d-marin-gocek/kapak', 'image/jpeg', 1280, 853,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Port_G%C3%B6cek_early_evening.jpg/1280px-Port_G%C3%B6cek_early_evening.jpg', 'Poet Laureate', 'CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:Port_G%C3%B6cek_early_evening.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'd-marin-gocek' AND m.storage_key = 'ext/d-marin-gocek/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/d-marin-gocek/kapak')
+WHERE slug = 'd-marin-gocek' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/d-marin-gocek/kapak');
+-- --- gocek-belediye-iskelesi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/gocek-belediye-iskelesi/kapak', 'image/jpeg', 1280, 849,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/G%C3%B6cek_Hafen_T%C3%BCrkei.jpg/1280px-G%C3%B6cek_Hafen_T%C3%BCrkei.jpg', 'Herbert wie', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:G%C3%B6cek_Hafen_T%C3%BCrkei.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'gocek-belediye-iskelesi' AND m.storage_key = 'ext/gocek-belediye-iskelesi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/gocek-belediye-iskelesi/kapak')
+WHERE slug = 'gocek-belediye-iskelesi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/gocek-belediye-iskelesi/kapak');
+-- --- gunluklu-koyu-demirleme ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/gunluklu-koyu-demirleme/kapak', 'image/jpeg', 1280, 853,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/G%C3%BCnl%C3%BCkl%C3%BC_Koyu_-_panoramio.jpg/1280px-G%C3%BCnl%C3%BCkl%C3%BC_Koyu_-_panoramio.jpg', 'Jorge Franganillo', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:G%C3%BCnl%C3%BCkl%C3%BC_Koyu_-_panoramio.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'gunluklu-koyu-demirleme' AND m.storage_key = 'ext/gunluklu-koyu-demirleme/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/gunluklu-koyu-demirleme/kapak')
+WHERE slug = 'gunluklu-koyu-demirleme' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/gunluklu-koyu-demirleme/kapak');
+-- --- katranci-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/katranci-koyu/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Katranc%C4%B1%2C_Fethiye_-_panoramio.jpg/1280px-Katranc%C4%B1%2C_Fethiye_-_panoramio.jpg', 'Merih Sezgin', 'CC BY-SA 3.0', 'https://commons.wikimedia.org/wiki/File:Katranc%C4%B1,_Fethiye_-_panoramio.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'katranci-koyu' AND m.storage_key = 'ext/katranci-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/katranci-koyu/kapak')
+WHERE slug = 'katranci-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/katranci-koyu/kapak');
+-- --- kizilada-fener-restorani ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/kizilada-fener-restorani/kapak', 'image/jpeg', 714, 717,
+  'https://upload.wikimedia.org/wikipedia/commons/4/46/The_Gulf_of_Fethiye._Kizilada_Restaurant_and_K%C4%B1z%C4%B1lada_Feneri.jpg', 'Николай Максимович', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:The_Gulf_of_Fethiye._Kizilada_Restaurant_and_K%C4%B1z%C4%B1lada_Feneri.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'kizilada-fener-restorani' AND m.storage_key = 'ext/kizilada-fener-restorani/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/kizilada-fener-restorani/kapak')
+WHERE slug = 'kizilada-fener-restorani' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/kizilada-fener-restorani/kapak');
+-- --- sarsala-samandira-sahasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/sarsala-samandira-sahasi/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Sarsala_Bay_in_Dalaman_from_above.jpg/1280px-Sarsala_Bay_in_Dalaman_from_above.jpg', 'Raicem', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Sarsala_Bay_in_Dalaman_from_above.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'sarsala-samandira-sahasi' AND m.storage_key = 'ext/sarsala-samandira-sahasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/sarsala-samandira-sahasi/kapak')
+WHERE slug = 'sarsala-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/sarsala-samandira-sahasi/kapak');
+-- --- yassica-adalari ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/yassica-adalari/kapak', 'image/jpeg', 1280, 720,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Yass%C4%B1ca_Adalar%C4%B1_-_panoramio.jpg/1280px-Yass%C4%B1ca_Adalar%C4%B1_-_panoramio.jpg', 'Jorge Franganillo', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:Yass%C4%B1ca_Adalar%C4%B1_-_panoramio.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'yassica-adalari' AND m.storage_key = 'ext/yassica-adalari/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/yassica-adalari/kapak')
+WHERE slug = 'yassica-adalari' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/yassica-adalari/kapak');

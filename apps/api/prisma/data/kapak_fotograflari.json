@@ -1,5 +1,5 @@
 {
-  "kaynak": "Wikimedia Commons — her giriş, dosyanın Commons sayfasından ELLE doğrulanır",
+  "kaynak": "Wikimedia Commons — 2026-08-12 tarayıcı turu (Commons API, dosya başına LicenseShortName/Artist/Categories alanları okundu; konu eşleşmesi kategori+açıklama ile doğrulandı). İzmir'deki Yassıca Adası ve Fethiye'nin Taşyaka MAHALLESİ gibi ad benzerleri kategorileri sayesinde ELENDİ.",
   "kurallar": [
     "Tahmin/uydurma YOK. Her alan Commons dosya sayfasından birebir kopyalanır.",
     "url: dosyanın upload.wikimedia.org üzerindeki DOĞRUDAN adresi (Commons sayfasındaki 'Orijinal dosya' bağlantısı ya da uygun genişlikte önizleme).",
@@ -11,5 +11,96 @@
     "Fotoğraf GERÇEKTEN o koyu/marinayı göstermeli — emin değilsen ekleme, boş kalsın.",
     "Girdi eklendikçe generate_locations_seed.py yeniden koşulur; SQL kendiliğinden üretilir."
   ],
-  "fotograflar": {}
+  "fotograflar": {
+    "bedri-rahmi-samandira-sahasi": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Fish_Figure_on_a_Rock_Painted_By_Bedri_Rahmi_Ey%C3%BCbo%C4%9Flu%2C_located_in_Bedri_Rahmi_Bay_in_G%C3%B6cek.jpg/1280px-Fish_Figure_on_a_Rock_Painted_By_Bedri_Rahmi_Ey%C3%BCbo%C4%9Flu%2C_located_in_Bedri_Rahmi_Bay_in_G%C3%B6cek.jpg",
+      "credit": "Raicem",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fish_Figure_on_a_Rock_Painted_By_Bedri_Rahmi_Ey%C3%BCbo%C4%9Flu,_located_in_Bedri_Rahmi_Bay_in_G%C3%B6cek.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Koyun simgesi: Bedri Rahmi Eyüboğlu'nun balık kayası — açıklama 'located in Bedri Rahmi Bay in Göcek'."
+    },
+    "boynuzbuku-samandira-sahasi": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Boynuzb%C3%BCk%C3%BC_-_panoramio.jpg/1280px-Boynuzb%C3%BCk%C3%BC_-_panoramio.jpg",
+      "credit": "Jorge Franganillo",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Boynuzb%C3%BCk%C3%BC_-_panoramio.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 720,
+      "not": "Kategori: Boynuzbükü."
+    },
+    "sarsala-samandira-sahasi": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Sarsala_Bay_in_Dalaman_from_above.jpg/1280px-Sarsala_Bay_in_Dalaman_from_above.jpg",
+      "credit": "Raicem",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sarsala_Bay_in_Dalaman_from_above.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Kategori: Bay of Sarsala; koyun havadan görünümü."
+    },
+    "yassica-adalari": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Yass%C4%B1ca_Adalar%C4%B1_-_panoramio.jpg/1280px-Yass%C4%B1ca_Adalar%C4%B1_-_panoramio.jpg",
+      "credit": "Jorge Franganillo",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Yass%C4%B1ca_Adalar%C4%B1_-_panoramio.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 720,
+      "not": "Kategori: Yassıca Islands (Göcek). İzmir Körfezi'ndeki aynı adlı ada kategorisiyle AYRIŞTI, o elendi."
+    },
+    "gunluklu-koyu-demirleme": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/G%C3%BCnl%C3%BCkl%C3%BC_Koyu_-_panoramio.jpg/1280px-G%C3%BCnl%C3%BCkl%C3%BC_Koyu_-_panoramio.jpg",
+      "credit": "Jorge Franganillo",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%BCnl%C3%BCkl%C3%BC_Koyu_-_panoramio.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 853,
+      "not": "Başlık/açıklama: Günlüklü Koyu; kategori Fethiye."
+    },
+    "katranci-koyu": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Katranc%C4%B1%2C_Fethiye_-_panoramio.jpg/1280px-Katranc%C4%B1%2C_Fethiye_-_panoramio.jpg",
+      "credit": "Merih Sezgin",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Katranc%C4%B1,_Fethiye_-_panoramio.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Kategori: Katrancı Bay."
+    },
+    "kizilada-fener-restorani": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/4/46/The_Gulf_of_Fethiye._Kizilada_Restaurant_and_K%C4%B1z%C4%B1lada_Feneri.jpg",
+      "credit": "Николай Максимович",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Gulf_of_Fethiye._Kizilada_Restaurant_and_K%C4%B1z%C4%B1lada_Feneri.jpg",
+      "mimeType": "image/jpeg",
+      "width": 714,
+      "height": 717,
+      "not": "Restoranın ve fenerin kendisi (kategoriler: Lighthouses in Fethiye, Restaurants in Fethiye). Orijinal 714px — 1280 önizleme yok, doğrudan dosya kullanıldı."
+    },
+    "gocek-belediye-iskelesi": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/G%C3%B6cek_Hafen_T%C3%BCrkei.jpg/1280px-G%C3%B6cek_Hafen_T%C3%BCrkei.jpg",
+      "credit": "Herbert wie",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%B6cek_Hafen_T%C3%BCrkei.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 849,
+      "not": "Açıklama: 'port of Göcek with sailing ship' — köyiçi liman cephesi (bugünkü MUÇEV Göcek Marina)."
+    },
+    "d-marin-gocek": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Port_G%C3%B6cek_early_evening.jpg/1280px-Port_G%C3%B6cek_early_evening.jpg",
+      "credit": "Poet Laureate",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Port_G%C3%B6cek_early_evening.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 853,
+      "not": "Port Göcek = bugünkü D-Marin Göcek (marka değişimi ~2011). Dosya açıklaması marinayı ayrıntısıyla anlatıyor (C&N işletmesi, yüzer pontonlar, 1999 açılışı)."
+    }
+  }
 }
