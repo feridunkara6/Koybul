@@ -16,6 +16,7 @@ import '../data/bundled_map_snapshot.dart';
 import '../data/shared_prefs_map_cache.dart';
 import '../domain/map_cache.dart';
 import '../domain/map_locations_gateway.dart';
+import '../domain/pin_spread.dart';
 import '../domain/map_state.dart';
 import '../domain/map_viewport.dart';
 
@@ -138,7 +139,7 @@ class MapController extends Notifier<MapState> {
         DateTime.now().difference(_pinCacheAt!) <= _pinCacheTtl &&
         _containsBbox(_pinCacheBbox!, viewport.bbox)) {
       state = state.copyWith(
-        pins: _pinsInBbox(_pinCachePins, viewport.bbox),
+        pins: spreadCoincidentPins(_pinsInBbox(_pinCachePins, viewport.bbox)),
         clusters: const <Cluster>[],
         truncated: false,
         isLoading: false,
@@ -161,7 +162,8 @@ class MapController extends Notifier<MapState> {
         warm = await ref.read(bundledMapSnapshotProvider).load();
       }
       if (seq == _seq && warm != null && !warm.isEmpty && !state.hasData) {
-        state = state.copyWith(pins: warm.pins, clusters: warm.clusters);
+        state = state.copyWith(
+            pins: spreadCoincidentPins(warm.pins), clusters: warm.clusters);
       }
       if (seq != _seq) return;
     }
@@ -175,7 +177,8 @@ class MapController extends Notifier<MapState> {
         _pinCacheAt = DateTime.now();
       }
       state = state.copyWith(
-        pins: result.locations,
+        // Çakışık koordinatlı iğneler sunumda halkaya açılır (pin_spread).
+        pins: spreadCoincidentPins(result.locations),
         clusters: result.clusters,
         truncated: result.truncated,
         isLoading: false,
@@ -209,7 +212,7 @@ class MapController extends Notifier<MapState> {
         if (seq != _seq) return;
         if (cached != null && !cached.isEmpty) {
           state = state.copyWith(
-            pins: cached.pins,
+            pins: spreadCoincidentPins(cached.pins),
             clusters: cached.clusters,
             isLoading: false,
             clearFailure: true,

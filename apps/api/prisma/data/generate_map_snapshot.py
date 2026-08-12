@@ -56,7 +56,7 @@ def main():
     cells = {}
     for r in pub:
         key = (math.floor(r["lon"] / CELL), math.floor(r["lat"] / CELL),
-               r.get("countryCode", ""))
+               r.get("countryCode", "TR"))  # seed ile AYNI varsayılan (TR)
         cells.setdefault(key, []).append(r)
 
     clusters = []

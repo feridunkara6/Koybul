@@ -1,610 +1,610 @@
 {
- "batch": "30-liman-tur17-marmara-marina-belediye",
- "collectedAt": "2026-07-13",
- "method": "Liman/marina eksikleri (17. tur): resmî UAB 'Yat Limanları Bilgileri' listesi (61 işletmedeki tesis) mevcut veriyle çapraz kontrol edildi; eksik bulunan Marmara (İstanbul+Kocaeli) liman/marina/barınakları turkeymarinas.blogspot.com sayfalarından (DMS koordinat + kapasite + hizmet + iletişim), eksik Ege marinaları (Setur Gökova Ören, Setur Çeşme Altınyunus) marinakedisi.com ve marinalar.com marina fişlerinden alındı. Kocaeli ili veri setine ilk kez girdi. Tahmin/uydurma YOK.",
- "notes": [
-  "Resmî listeyle çapraz kontrol sonucu kapatılan eksikler: Yeşilköy, İzmit Belediye Marinası, Darıca, Atabay (tersane-marina), Gökova Ören (420 tekne kapasiteli büyük eksikti!), Setur Altınyunus.",
-  "İstanbul Anadolu yakası balıkçı barınakları (Bostancı, Küçükyalı, Heybeliada) ve Silivri/Büyükçekmece (Selimpaşa, Mimarsinan) ilk kez ekleniyor — İstanbullu tekne sahipleri için günlük ağ.",
-  "Yakıt: Yeşilköy, Bostancı, Küçükyalı, Selimpaşa, Mimarsinan, Darıca, Eskihisar, Hereke, Karamürsel Ereğli, İzmit ve Atabay'da yakıt var (kaynak) — amenity olarak işlendi.",
-  "Resmî listede kalan bekleyenler (koordinat kaynağı yok): Trabzon Yat Limanı (Faroz), Mandalya Marina, Ant Marin, Port Atami, Pupa Yat, Kumlubükü Yat Kulübü, Global Sailing Marinet — sonraki tur adayları."
- ],
- "records": [
-  {
-   "slug": "yesilkoy-marina",
-   "name": "Yeşilköy Marina",
-   "operator": null,
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "countryCode": "TR",
-   "provinceSlug": "istanbul",
-   "districtSlug": "istanbul-bakirkoy",
-   "lat": 40.955278,
-   "lon": 28.825833,
-   "coordSource": "turkeymarinas (40°57'19.0\"N 28°49'33.0\"E → 40.955278, 28.825833)",
-   "descriptionTr": "Yeşilköy'de 350 m dış + 150 m iç mendirekli liman; balıkçı bölümü 95 tekne alır. VHF 16'dan 'Yeşilköy Marina' çağrılır. Rıhtımda su, elektrik ve yakıt pompası; WC-duş ve idare ofisi vardır. Barınma yeterlidir; büyük ticari gemilerin soluğanı rahatsız edebilir. Yurda giriş-çıkış işlemleri Karaköy Yolcu Salonu'nda yapılır. Yanındaki fenerin özellikleri: 18 m kule, 10 sn'de beyaz çakar, 15 mil.",
-   "berthCount": 95,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "16",
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "wc",
-    "shower"
-   ],
-   "services": [],
-   "contacts": [],
-   "sourceUrls": [
-    "https://turkeymarinas.blogspot.com/2016/11/yesilkoy-marina.html",
-    "https://www.tarimorman.gov.tr/BSGM/Belgeler/Icerikler/Su%20Ürünleri%20Altyapıları/Balıkçı%20Barınakları.pdf (Bakanlık balıkçı barınağı listesi, Şubat 2026 — tesis kayıtlı)"
-   ],
-   "confidence": "high",
-   "missingNotes": "İşletme yapısı (belediye/özel) ve derinlik kaynakta belirtilmiyor. | 2026-07 doğrulama turu: tesis Bakanlığın Şubat 2026 listesinde kayıtlı; telefon güncel kaynakta doğrulanamadı."
-  },
-  {
-   "slug": "bostanci-balikci-barinagi",
-   "name": "Bostancı Balıkçı Barınağı",
-   "operator": "Bostancı Su Ürünleri Kooperatifi",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "countryCode": "TR",
-   "provinceSlug": "istanbul",
-   "districtSlug": "istanbul-maltepe",
-   "lat": 40.950139,
-   "lon": 29.094833,
-   "coordSource": "turkeymarinas (40°57'00.5\"N 29°05'41.4\"E → 40.950139, 29.094833)",
-   "descriptionTr": "Anadolu yakasının en işlek barınaklarından; 520 m ana mendirek, 100 tekne. Elektrik, içme suyu, yakıt pompası, soğuk hava deposu, çekek yeri ve balık hali vardır. Metro, minibüs, banliyö treni ve deniz otobüsü bağlantıları hemen yanındadır.",
-   "berthCount": 100,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel"
-   ],
-   "services": [],
-   "contacts": [
+  "batch": "30-liman-tur17-marmara-marina-belediye",
+  "collectedAt": "2026-07-13",
+  "method": "Liman/marina eksikleri (17. tur): resmî UAB 'Yat Limanları Bilgileri' listesi (61 işletmedeki tesis) mevcut veriyle çapraz kontrol edildi; eksik bulunan Marmara (İstanbul+Kocaeli) liman/marina/barınakları turkeymarinas.blogspot.com sayfalarından (DMS koordinat + kapasite + hizmet + iletişim), eksik Ege marinaları (Setur Gökova Ören, Setur Çeşme Altınyunus) marinakedisi.com ve marinalar.com marina fişlerinden alındı. Kocaeli ili veri setine ilk kez girdi. Tahmin/uydurma YOK.",
+  "notes": [
+    "Resmî listeyle çapraz kontrol sonucu kapatılan eksikler: Yeşilköy, İzmit Belediye Marinası, Darıca, Atabay (tersane-marina), Gökova Ören (420 tekne kapasiteli büyük eksikti!), Setur Altınyunus.",
+    "İstanbul Anadolu yakası balıkçı barınakları (Bostancı, Küçükyalı, Heybeliada) ve Silivri/Büyükçekmece (Selimpaşa, Mimarsinan) ilk kez ekleniyor — İstanbullu tekne sahipleri için günlük ağ.",
+    "Yakıt: Yeşilköy, Bostancı, Küçükyalı, Selimpaşa, Mimarsinan, Darıca, Eskihisar, Hereke, Karamürsel Ereğli, İzmit ve Atabay'da yakıt var (kaynak) — amenity olarak işlendi.",
+    "Resmî listede kalan bekleyenler (koordinat kaynağı yok): Trabzon Yat Limanı (Faroz), Mandalya Marina, Ant Marin, Port Atami, Pupa Yat, Kumlubükü Yat Kulübü, Global Sailing Marinet — sonraki tur adayları."
+  ],
+  "records": [
     {
-     "type": "phone",
-     "value": "+902164589999",
-     "primary": true
-    }
-   ],
-   "sourceUrls": [
-    "https://turkeymarinas.blogspot.com/2016/12/bostanci-fishing-harbour.html",
-    "https://www.tarimorman.gov.tr/BSGM/Belgeler/Icerikler/Su%20Ürünleri%20Altyapıları/Balıkçı%20Barınakları.pdf (Bakanlık balıkçı barınağı listesi, Şubat 2026 — tesis kayıtlı)"
-   ],
-   "confidence": "high",
-   "missingNotes": "Derinlik ve VHF kaynakta yok. | 2026-07 doğrulama turu: tesis Bakanlığın Şubat 2026 listesinde kayıtlı; telefon güncel kaynakta doğrulanamadı."
-  },
-  {
-   "slug": "kucukyali-balikci-barinagi",
-   "name": "Küçükyalı Balıkçı Barınağı",
-   "operator": "Küçükyalı Su Ürünleri Kooperatifi",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "countryCode": "TR",
-   "provinceSlug": "istanbul",
-   "districtSlug": "istanbul-maltepe",
-   "lat": 40.942639,
-   "lon": 29.105806,
-   "coordSource": "turkeymarinas (40°56'33.5\"N 29°06'20.9\"E → 40.942639, 29.105806)",
-   "descriptionTr": "Maltepe Küçükyalı'da 250 m ana mendirekli kooperatif barınağı; 100 tekne. Elektrik, içme suyu, yakıt pompası, soğuk hava deposu, çekek yeri ve balık hali vardır. Kıyıdaki balık restoranları mevsim balığına göre çalışır.",
-   "berthCount": 100,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902164589999",
-     "primary": true
-    }
-   ],
-   "sourceUrls": [
-    "https://turkeymarinas.blogspot.com/2016/12/kucukyali-fishing-harbour.html",
-    "https://www.tarimorman.gov.tr/BSGM/Belgeler/Icerikler/Su%20Ürünleri%20Altyapıları/Balıkçı%20Barınakları.pdf (Bakanlık balıkçı barınağı listesi, Şubat 2026 — tesis kayıtlı)"
-   ],
-   "confidence": "high",
-   "missingNotes": "Derinlik ve VHF kaynakta yok. | 2026-07 doğrulama turu: tesis Bakanlığın Şubat 2026 listesinde kayıtlı; telefon güncel kaynakta doğrulanamadı."
-  },
-  {
-   "slug": "heybeliada-balikci-barinagi",
-   "name": "Heybeliada Balıkçı Barınağı",
-   "operator": "Heybeliada Su Ürünleri Kooperatifi",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "countryCode": "TR",
-   "provinceSlug": "istanbul",
-   "districtSlug": "istanbul-adalar",
-   "lat": 40.879611,
-   "lon": 29.100361,
-   "coordSource": "turkeymarinas (40°52'46.6\"N 29°06'01.3\"E → 40.879611, 29.100361)",
-   "descriptionTr": "Adalar'ın ikinci büyüğü Heybeliada'nın kooperatif barınağı; 70 tekne. Mendirek feneri 2 sn'de kırmızı çakar (7 mil). Adada restoranlar, oteller, tamirhaneler, sağlık ve banka hizmetleri vardır; Bostancı ve Kabataş'a deniz otobüsü, Kadıköy'e vapur kalkar. Çam Limanı koyu adanın güneybatısında ayrı kayıttır.",
-   "berthCount": 70,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "amenities": [],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902163823382",
-     "primary": true
+      "slug": "yesilkoy-marina",
+      "name": "Yeşilköy Marina",
+      "operator": null,
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "istanbul",
+      "districtSlug": "istanbul-bakirkoy",
+      "lat": 40.955278,
+      "lon": 28.825833,
+      "coordSource": "turkeymarinas (40°57'19.0\"N 28°49'33.0\"E → 40.955278, 28.825833)",
+      "descriptionTr": "Yeşilköy'de 350 m dış + 150 m iç mendirekli liman; balıkçı bölümü 95 tekne alır. VHF 16'dan 'Yeşilköy Marina' çağrılır. Rıhtımda su, elektrik ve yakıt pompası; WC-duş ve idare ofisi vardır. Barınma yeterlidir; büyük ticari gemilerin soluğanı rahatsız edebilir. Yurda giriş-çıkış işlemleri Karaköy Yolcu Salonu'nda yapılır. Yanındaki fenerin özellikleri: 18 m kule, 10 sn'de beyaz çakar, 15 mil.",
+      "berthCount": 95,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "16",
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "wc",
+        "shower"
+      ],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/11/yesilkoy-marina.html",
+        "https://www.tarimorman.gov.tr/BSGM/Belgeler/Icerikler/Su%20Ürünleri%20Altyapıları/Balıkçı%20Barınakları.pdf (Bakanlık balıkçı barınağı listesi, Şubat 2026 — tesis kayıtlı)"
+      ],
+      "confidence": "high",
+      "missingNotes": "İşletme yapısı (belediye/özel) ve derinlik kaynakta belirtilmiyor. | 2026-07 doğrulama turu: tesis Bakanlığın Şubat 2026 listesinde kayıtlı; telefon güncel kaynakta doğrulanamadı."
     },
     {
-     "type": "email",
-     "value": "iletisim@adalar.bel.tr"
-    }
-   ],
-   "sourceUrls": [
-    "https://turkeymarinas.blogspot.com/2016/12/heybeli-ada-fishing-harbour.html",
-    "https://www.tarimorman.gov.tr/BSGM/Belgeler/Icerikler/Su%20Ürünleri%20Altyapıları/Balıkçı%20Barınakları.pdf (Bakanlık balıkçı barınağı listesi, Şubat 2026 — tesis kayıtlı)"
-   ],
-   "confidence": "high",
-   "missingNotes": "Su/elektrik ve derinlik kaynakta belirtilmiyor → boş bırakıldı. | 2026-07 doğrulama turu: tesis Bakanlığın Şubat 2026 listesinde kayıtlı; telefon güncel kaynakta doğrulanamadı."
-  },
-  {
-   "slug": "selimpasa-balikci-barinagi",
-   "name": "Selimpaşa Balıkçı Barınağı",
-   "operator": "Selimpaşa Su Ürünleri Kooperatifi",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "countryCode": "TR",
-   "provinceSlug": "istanbul",
-   "districtSlug": "istanbul-silivri",
-   "lat": 41.051861,
-   "lon": 28.367361,
-   "coordSource": "turkeymarinas (41°03'06.7\"N 28°22'02.5\"E → 41.051861, 28.367361)",
-   "descriptionTr": "İstanbul'un 50 km batısında, Silivri Selimpaşa'da 265 m ana mendirekli barınak. VHF 16'dan 'Selimpaşa Harbour' çağrılır. Girişte 2-3,5 m; batı ve kuzey rıhtımlarında 0,5-1,5 m — SU ÇEKİMİ FAZLA TEKNELER DİKKAT. Doğu dışında her yöne iyi barınak. İçme suyu, elektrik, yakıt ve çekek yeri vardır; kuzey tarafta restoran bulunur.",
-   "berthCount": null,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": 1,
-   "depthMaxM": 3,
-   "vhfChannel": "16",
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902124442047",
-     "primary": true
+      "slug": "bostanci-balikci-barinagi",
+      "name": "Bostancı Balıkçı Barınağı",
+      "operator": "Bostancı Su Ürünleri Kooperatifi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "istanbul",
+      "districtSlug": "istanbul-maltepe",
+      "lat": 40.950139,
+      "lon": 29.094833,
+      "coordSource": "turkeymarinas (40°57'00.5\"N 29°05'41.4\"E → 40.950139, 29.094833)",
+      "descriptionTr": "Anadolu yakasının en işlek barınaklarından; 520 m ana mendirek, 100 tekne. Elektrik, içme suyu, yakıt pompası, soğuk hava deposu, çekek yeri ve balık hali vardır. Metro, minibüs, banliyö treni ve deniz otobüsü bağlantıları hemen yanındadır.",
+      "berthCount": 100,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902164589999",
+          "primary": true
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/12/bostanci-fishing-harbour.html",
+        "https://www.tarimorman.gov.tr/BSGM/Belgeler/Icerikler/Su%20Ürünleri%20Altyapıları/Balıkçı%20Barınakları.pdf (Bakanlık balıkçı barınağı listesi, Şubat 2026 — tesis kayıtlı)"
+      ],
+      "confidence": "high",
+      "missingNotes": "Derinlik ve VHF kaynakta yok. | 2026-07 doğrulama turu: tesis Bakanlığın Şubat 2026 listesinde kayıtlı; telefon güncel kaynakta doğrulanamadı."
     },
     {
-     "type": "email",
-     "value": "sibim@silivri.bel.tr"
-    }
-   ],
-   "sourceUrls": [
-    "https://turkeymarinas.blogspot.com/2016/11/selimpasa-fishing-harbour.html",
-    "https://www.silivri.bel.tr/sayfa/iletisim/269 (belediye çağrı merkezi — 2026-07 teyit)"
-   ],
-   "confidence": "high",
-   "missingNotes": "Kapasite kaynakta yok. Rıhtım derinlikleri 0,5-1,5 m — derinlik aralığı girişe göre 1-3 m yazıldı, ayrıntı açıklamada. | 2026-07 doğrulama turu: telefon güncel kaynakta teyit edildi."
-  },
-  {
-   "slug": "mimarsinan-balikci-barinagi",
-   "name": "Mimarsinan Balıkçı Barınağı",
-   "operator": "Büyükçekmece Belediyesi",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "countryCode": "TR",
-   "provinceSlug": "istanbul",
-   "districtSlug": "istanbul-buyukcekmece",
-   "lat": 41.015403,
-   "lon": 28.565796,
-   "coordSource": "turkeymarinas (41°00'55.5\"N 28°33'56.9\"E → 41.015403, 28.565796)",
-   "descriptionTr": "Büyükçekmece Mimarsinan'da belediye işletmesindeki barınak; 290 m dış mendirek. VHF 73'ten 'Mimarsinan Marina' çağrılır. Elektrik, içme suyu, yakıt, çekek yeri ve kara park sahası vardır. Mendirek feneri: 7 m kule, 3 mil görünürlük.",
-   "berthCount": null,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73",
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902124440340",
-     "primary": true
+      "slug": "kucukyali-balikci-barinagi",
+      "name": "Küçükyalı Balıkçı Barınağı",
+      "operator": "Küçükyalı Su Ürünleri Kooperatifi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "istanbul",
+      "districtSlug": "istanbul-maltepe",
+      "lat": 40.942639,
+      "lon": 29.105806,
+      "coordSource": "turkeymarinas (40°56'33.5\"N 29°06'20.9\"E → 40.942639, 29.105806)",
+      "descriptionTr": "Maltepe Küçükyalı'da 250 m ana mendirekli kooperatif barınağı; 100 tekne. Elektrik, içme suyu, yakıt pompası, soğuk hava deposu, çekek yeri ve balık hali vardır. Kıyıdaki balık restoranları mevsim balığına göre çalışır.",
+      "berthCount": 100,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902164589999",
+          "primary": true
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/12/kucukyali-fishing-harbour.html",
+        "https://www.tarimorman.gov.tr/BSGM/Belgeler/Icerikler/Su%20Ürünleri%20Altyapıları/Balıkçı%20Barınakları.pdf (Bakanlık balıkçı barınağı listesi, Şubat 2026 — tesis kayıtlı)"
+      ],
+      "confidence": "high",
+      "missingNotes": "Derinlik ve VHF kaynakta yok. | 2026-07 doğrulama turu: tesis Bakanlığın Şubat 2026 listesinde kayıtlı; telefon güncel kaynakta doğrulanamadı."
     },
     {
-     "type": "email",
-     "value": "danisma@bcekmece.bel.tr"
-    }
-   ],
-   "sourceUrls": [
-    "https://turkeymarinas.blogspot.com/2016/11/mimarsinan-fishing-harbour.html",
-    "https://www.bcekmece.bel.tr/iletisim (belediye çağrı merkezi — 2026-07 teyit)"
-   ],
-   "confidence": "high",
-   "missingNotes": "Kapasite ve derinlik kaynakta yok. | 2026-07 doğrulama turu: telefon güncel kaynakta teyit edildi."
-  },
-  {
-   "slug": "izmit-belediye-marina",
-   "name": "İzmit Belediye Marinası",
-   "operator": "Kocaeli Büyükşehir Belediyesi",
-   "status": "published",
-   "typeCode": "municipal_marina",
-   "countryCode": "TR",
-   "provinceSlug": "kocaeli",
-   "districtSlug": "kocaeli-izmit",
-   "lat": 40.758762,
-   "lon": 29.921752,
-   "coordSource": "turkeymarinas (40°45'31.5\"N 29°55'18.3\"E → 40.758762, 29.921752)",
-   "descriptionTr": "İzmit Körfezi'nin doğu ucunda, İstanbul'a ~100 km mesafede belediye marinası; 400 yat kapasitesi, 7-10 m derinlik. VHF 16'dan 'İzmit Marina' çağrılır. İçme suyu, elektrik, yakıt istasyonu, telefon/internet, kablolu TV, çekek yeri ve bakım-onarım hizmetleri vardır. Çevrede tersaneler, oteller, hastaneler ve alışveriş olanakları bulunur.",
-   "berthCount": 400,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": 7,
-   "depthMaxM": 10,
-   "vhfChannel": "16",
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "wifi"
-   ],
-   "services": [
-    "technical_service"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902623181001",
-     "primary": true
-    }
-   ],
-   "sourceUrls": [
-    "https://turkeymarinas.blogspot.com/2016/12/izmit-municipality-marina.html",
-    "https://www.ozgurkocaeli.com.tr/haber/21490647/izmit-marinadaki-tekneleri-gundeme-tasidi-hicbir-yonetmelige-uymuyorlar (Eylül 2024 — marina faal)"
-   ],
-   "confidence": "high",
-   "missingNotes": "2026-07 doğrulama turu: marina faal (2024 haberi); telefon güncel kaynakta doğrulanamadı."
-  },
-  {
-   "slug": "darica-balikci-barinagi",
-   "name": "Darıca Balıkçı Barınağı ve Yat Limanı",
-   "operator": "Darıca Belediyesi",
-   "status": "draft",
-   "typeCode": "municipal_marina",
-   "countryCode": "TR",
-   "provinceSlug": "kocaeli",
-   "districtSlug": "kocaeli-darica",
-   "lat": 40.752611,
-   "lon": 29.388389,
-   "coordSource": "turkeymarinas (40°45'09.4\"N 29°23'18.2\"E → 40.752611, 29.388389)",
-   "descriptionTr": "Darıca'da belediye işletmesinde barınak + yat limanı; 300 tekne. İçme suyu, elektrik, yakıt, teknik servis, çekek yeri, idare binası, ağ tamirhanesi ve balık hali vardır. Girişi 18 mil görünürlüklü Yelkenkaya Feneri işaretler. Kıyı balık restoranlarıyla ünlüdür.",
-   "berthCount": 300,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel"
-   ],
-   "services": [
-    "technical_service"
-   ],
-   "contacts": [
-    {
-     "type": "email",
-     "value": "beyazmasa@darica.bel.tr"
-    }
-   ],
-   "sourceUrls": [
-    "https://turkeymarinas.blogspot.com/2016/12/darica-fishing-harbour-and-yacht-marina.html",
-    "https://www.denizbulten.com/darica-balikci-barinagi-ve-marina-2024te-hizmete-girecek-52693h.htm (barınak yıkılıp ~200 teknelik marina olarak yeniden yapılıyor)"
-   ],
-   "confidence": "high",
-   "missingNotes": "Derinlik ve VHF kaynakta yok. | 2026-07 doğrulama turu: tesis yıkılıp yeniden inşa edildi; güncel durum/telefon netleşene dek TASLAĞA alındı."
-  },
-  {
-   "slug": "eskihisar-balikci-barinagi",
-   "name": "Eskihisar Balıkçı Barınağı",
-   "operator": "Eskihisar Su Ürünleri Kooperatifi",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "countryCode": "TR",
-   "provinceSlug": "kocaeli",
-   "districtSlug": "kocaeli-gebze",
-   "lat": 40.768611,
-   "lon": 29.428056,
-   "coordSource": "turkeymarinas (40°46'07.0\"N 29°25'41.0\"E → 40.768611, 29.428056)",
-   "descriptionTr": "Gebze Eskihisar'da, Topçular (Yalova) feribot iskelesinin yanındaki kooperatif barınağı; 95 tekne. VHF 16. İçme suyu, elektrik, yakıt, WC-duş ve gümrük ofisi vardır. Kıyı balık restoranları, Osman Hamdi Bey Müzesi ve kale yakındadır.",
-   "berthCount": 95,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "16",
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "wc",
-    "shower"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "email",
-     "value": "bilgi@gebze.bel.tr",
-     "primary": true
-    }
-   ],
-   "sourceUrls": [
-    "https://turkeymarinas.blogspot.com/2016/12/eskihisar-fishing-harbour.html",
-    "https://www.tarimorman.gov.tr/BSGM/Belgeler/Icerikler/Su%20Ürünleri%20Altyapıları/Balıkçı%20Barınakları.pdf (Bakanlık balıkçı barınağı listesi, Şubat 2026 — tesis kayıtlı)"
-   ],
-   "confidence": "high",
-   "missingNotes": "Derinlik kaynakta yok. Telefon yalnız 444'lü kısa numara (biçim dışı) → alınmadı. | 2026-07 doğrulama turu: tesis Bakanlığın Şubat 2026 listesinde kayıtlı; telefon güncel kaynakta doğrulanamadı."
-  },
-  {
-   "slug": "atabay-marina",
-   "name": "Atabay Marina",
-   "operator": "Atabay Marina",
-   "status": "published",
-   "typeCode": "private_marina",
-   "countryCode": "TR",
-   "provinceSlug": "kocaeli",
-   "districtSlug": "kocaeli-gebze",
-   "lat": 40.770833,
-   "lon": 29.44,
-   "coordSource": "turkeymarinas (40°46'15.0\"N 29°26'24.0\"E → 40.770833, 29.440000)",
-   "descriptionTr": "Eskihisar'da yıl boyu çalışan tersane-marina. VHF 16'dan 'Atabay Marina' çağrılır. Yakıt, tatlı su ve elektrik; motor-pervane-tekne tamiri, fiberglas/ahşap onarım, elektronik, torna ve boya atölyeleri; 100 tonluk iki vinç vardır. Karada ~100 tekne kapasitesi; 25 odalı otel, restoran ve bar bulunur.",
-   "berthCount": null,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "16",
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant"
-   ],
-   "services": [
-    "technical_service",
-    "crane",
-    "winter_storage"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902626555854",
-     "primary": true
+      "slug": "heybeliada-balikci-barinagi",
+      "name": "Heybeliada Balıkçı Barınağı",
+      "operator": "Heybeliada Su Ürünleri Kooperatifi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "istanbul",
+      "districtSlug": "istanbul-adalar",
+      "lat": 40.879611,
+      "lon": 29.100361,
+      "coordSource": "turkeymarinas (40°52'46.6\"N 29°06'01.3\"E → 40.879611, 29.100361)",
+      "descriptionTr": "Adalar'ın ikinci büyüğü Heybeliada'nın kooperatif barınağı; 70 tekne. Mendirek feneri 2 sn'de kırmızı çakar (7 mil). Adada restoranlar, oteller, tamirhaneler, sağlık ve banka hizmetleri vardır; Bostancı ve Kabataş'a deniz otobüsü, Kadıköy'e vapur kalkar. Çam Limanı koyu adanın güneybatısında ayrı kayıttır.",
+      "berthCount": 70,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "amenities": [],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902163823382",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "iletisim@adalar.bel.tr"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/12/heybeli-ada-fishing-harbour.html",
+        "https://www.tarimorman.gov.tr/BSGM/Belgeler/Icerikler/Su%20Ürünleri%20Altyapıları/Balıkçı%20Barınakları.pdf (Bakanlık balıkçı barınağı listesi, Şubat 2026 — tesis kayıtlı)"
+      ],
+      "confidence": "high",
+      "missingNotes": "Su/elektrik ve derinlik kaynakta belirtilmiyor → boş bırakıldı. | 2026-07 doğrulama turu: tesis Bakanlığın Şubat 2026 listesinde kayıtlı; telefon güncel kaynakta doğrulanamadı."
     },
     {
-     "type": "email",
-     "value": "info@atabaymarina.com"
+      "slug": "selimpasa-balikci-barinagi",
+      "name": "Selimpaşa Balıkçı Barınağı",
+      "operator": "Selimpaşa Su Ürünleri Kooperatifi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "istanbul",
+      "districtSlug": "istanbul-silivri",
+      "lat": 41.051861,
+      "lon": 28.367361,
+      "coordSource": "turkeymarinas (41°03'06.7\"N 28°22'02.5\"E → 41.051861, 28.367361)",
+      "descriptionTr": "İstanbul'un 50 km batısında, Silivri Selimpaşa'da 265 m ana mendirekli barınak. VHF 16'dan 'Selimpaşa Harbour' çağrılır. Girişte 2-3,5 m; batı ve kuzey rıhtımlarında 0,5-1,5 m — SU ÇEKİMİ FAZLA TEKNELER DİKKAT. Doğu dışında her yöne iyi barınak. İçme suyu, elektrik, yakıt ve çekek yeri vardır; kuzey tarafta restoran bulunur.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": 1,
+      "depthMaxM": 3,
+      "vhfChannel": "16",
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902124442047",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "sibim@silivri.bel.tr"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/11/selimpasa-fishing-harbour.html",
+        "https://www.silivri.bel.tr/sayfa/iletisim/269 (belediye çağrı merkezi — 2026-07 teyit)"
+      ],
+      "confidence": "high",
+      "missingNotes": "Kapasite kaynakta yok. Rıhtım derinlikleri 0,5-1,5 m — derinlik aralığı girişe göre 1-3 m yazıldı, ayrıntı açıklamada. | 2026-07 doğrulama turu: telefon güncel kaynakta teyit edildi."
     },
     {
-     "type": "website",
-     "value": "https://www.atabaymarina.com/"
+      "slug": "mimarsinan-balikci-barinagi",
+      "name": "Mimarsinan Balıkçı Barınağı",
+      "operator": "Büyükçekmece Belediyesi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "istanbul",
+      "districtSlug": "istanbul-buyukcekmece",
+      "lat": 41.015403,
+      "lon": 28.565796,
+      "coordSource": "turkeymarinas (41°00'55.5\"N 28°33'56.9\"E → 41.015403, 28.565796)",
+      "descriptionTr": "Büyükçekmece Mimarsinan'da belediye işletmesindeki barınak; 290 m dış mendirek. VHF 73'ten 'Mimarsinan Marina' çağrılır. Elektrik, içme suyu, yakıt, çekek yeri ve kara park sahası vardır. Mendirek feneri: 7 m kule, 3 mil görünürlük.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902124440340",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "danisma@bcekmece.bel.tr"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/11/mimarsinan-fishing-harbour.html",
+        "https://www.bcekmece.bel.tr/iletisim (belediye çağrı merkezi — 2026-07 teyit)"
+      ],
+      "confidence": "high",
+      "missingNotes": "Kapasite ve derinlik kaynakta yok. | 2026-07 doğrulama turu: telefon güncel kaynakta teyit edildi."
+    },
+    {
+      "slug": "izmit-belediye-marina",
+      "name": "İzmit Belediye Marinası",
+      "operator": "Kocaeli Büyükşehir Belediyesi",
+      "status": "published",
+      "typeCode": "municipal_marina",
+      "countryCode": "TR",
+      "provinceSlug": "kocaeli",
+      "districtSlug": "kocaeli-izmit",
+      "lat": 40.758762,
+      "lon": 29.921752,
+      "coordSource": "turkeymarinas (40°45'31.5\"N 29°55'18.3\"E → 40.758762, 29.921752)",
+      "descriptionTr": "İzmit Körfezi'nin doğu ucunda, İstanbul'a ~100 km mesafede belediye marinası; 400 yat kapasitesi, 7-10 m derinlik. VHF 16'dan 'İzmit Marina' çağrılır. İçme suyu, elektrik, yakıt istasyonu, telefon/internet, kablolu TV, çekek yeri ve bakım-onarım hizmetleri vardır. Çevrede tersaneler, oteller, hastaneler ve alışveriş olanakları bulunur.",
+      "berthCount": 400,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": 7,
+      "depthMaxM": 10,
+      "vhfChannel": "16",
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "wifi"
+      ],
+      "services": [
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902623181001",
+          "primary": true
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/12/izmit-municipality-marina.html",
+        "https://www.ozgurkocaeli.com.tr/haber/21490647/izmit-marinadaki-tekneleri-gundeme-tasidi-hicbir-yonetmelige-uymuyorlar (Eylül 2024 — marina faal)"
+      ],
+      "confidence": "high",
+      "missingNotes": "2026-07 doğrulama turu: marina faal (2024 haberi); telefon güncel kaynakta doğrulanamadı."
+    },
+    {
+      "slug": "darica-balikci-barinagi",
+      "name": "Darıca Balıkçı Barınağı ve Yat Limanı",
+      "operator": "Darıca Belediyesi",
+      "status": "draft",
+      "typeCode": "municipal_marina",
+      "countryCode": "TR",
+      "provinceSlug": "kocaeli",
+      "districtSlug": "kocaeli-darica",
+      "lat": 40.752611,
+      "lon": 29.388389,
+      "coordSource": "turkeymarinas (40°45'09.4\"N 29°23'18.2\"E → 40.752611, 29.388389)",
+      "descriptionTr": "Darıca'da belediye işletmesinde barınak + yat limanı; 300 tekne. İçme suyu, elektrik, yakıt, teknik servis, çekek yeri, idare binası, ağ tamirhanesi ve balık hali vardır. Girişi 18 mil görünürlüklü Yelkenkaya Feneri işaretler. Kıyı balık restoranlarıyla ünlüdür.",
+      "berthCount": 300,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel"
+      ],
+      "services": [
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "email",
+          "value": "beyazmasa@darica.bel.tr"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/12/darica-fishing-harbour-and-yacht-marina.html",
+        "https://www.denizbulten.com/darica-balikci-barinagi-ve-marina-2024te-hizmete-girecek-52693h.htm (barınak yıkılıp ~200 teknelik marina olarak yeniden yapılıyor)"
+      ],
+      "confidence": "high",
+      "missingNotes": "Derinlik ve VHF kaynakta yok. | 2026-07 doğrulama turu: tesis yıkılıp yeniden inşa edildi; güncel durum/telefon netleşene dek TASLAĞA alındı."
+    },
+    {
+      "slug": "eskihisar-balikci-barinagi",
+      "name": "Eskihisar Balıkçı Barınağı",
+      "operator": "Eskihisar Su Ürünleri Kooperatifi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "kocaeli",
+      "districtSlug": "kocaeli-gebze",
+      "lat": 40.768611,
+      "lon": 29.428056,
+      "coordSource": "turkeymarinas (40°46'07.0\"N 29°25'41.0\"E → 40.768611, 29.428056)",
+      "descriptionTr": "Gebze Eskihisar'da, Topçular (Yalova) feribot iskelesinin yanındaki kooperatif barınağı; 95 tekne. VHF 16. İçme suyu, elektrik, yakıt, WC-duş ve gümrük ofisi vardır. Kıyı balık restoranları, Osman Hamdi Bey Müzesi ve kale yakındadır.",
+      "berthCount": 95,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "16",
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "wc",
+        "shower"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "email",
+          "value": "bilgi@gebze.bel.tr",
+          "primary": true
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/12/eskihisar-fishing-harbour.html",
+        "https://www.tarimorman.gov.tr/BSGM/Belgeler/Icerikler/Su%20Ürünleri%20Altyapıları/Balıkçı%20Barınakları.pdf (Bakanlık balıkçı barınağı listesi, Şubat 2026 — tesis kayıtlı)"
+      ],
+      "confidence": "high",
+      "missingNotes": "Derinlik kaynakta yok. Telefon yalnız 444'lü kısa numara (biçim dışı) → alınmadı. | 2026-07 doğrulama turu: tesis Bakanlığın Şubat 2026 listesinde kayıtlı; telefon güncel kaynakta doğrulanamadı."
+    },
+    {
+      "slug": "atabay-marina",
+      "name": "Atabay Marina",
+      "operator": "Atabay Marina",
+      "status": "published",
+      "typeCode": "private_marina",
+      "countryCode": "TR",
+      "provinceSlug": "kocaeli",
+      "districtSlug": "kocaeli-gebze",
+      "lat": 40.770833,
+      "lon": 29.44,
+      "coordSource": "turkeymarinas (40°46'15.0\"N 29°26'24.0\"E → 40.770833, 29.440000)",
+      "descriptionTr": "Eskihisar'da yıl boyu çalışan tersane-marina. VHF 16'dan 'Atabay Marina' çağrılır. Yakıt, tatlı su ve elektrik; motor-pervane-tekne tamiri, fiberglas/ahşap onarım, elektronik, torna ve boya atölyeleri; 100 tonluk iki vinç vardır. Karada ~100 tekne kapasitesi; 25 odalı otel, restoran ve bar bulunur.",
+      "berthCount": null,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "16",
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant"
+      ],
+      "services": [
+        "technical_service",
+        "crane",
+        "winter_storage"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902626555854",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@atabaymarina.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.atabaymarina.com/"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/12/atabay-marina.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "Deniz bağlama kapasitesi ve derinlik kaynakta yok (kara ~100 tekne). | 2026-07 doğrulama turu: telefon güncel kaynakta doğrulanamadı (tur: yalnız açık/izinli kaynaklar tarandı)."
+    },
+    {
+      "slug": "hereke-balikci-barinagi",
+      "name": "Hereke Balıkçı Barınağı",
+      "operator": "Hereke Su Ürünleri Kooperatifi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "kocaeli",
+      "districtSlug": "kocaeli-korfez",
+      "lat": 40.782528,
+      "lon": 29.617639,
+      "coordSource": "turkeymarinas (40°46'57.1\"N 29°37'03.5\"E → 40.782528, 29.617639)",
+      "descriptionTr": "İzmit Körfezi'nin kuzey kıyısında, ipek halısıyla ünlü Hereke'nin kooperatif barınağı; 60 tekne. Elektrik, içme suyu, yakıt istasyonu ve idare ofisi vardır; günün balığı barınaktaki halden alınabilir.",
+      "berthCount": 60,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel"
+      ],
+      "services": [],
+      "contacts": [],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/12/hereke-fishing-harbour.html"
+      ],
+      "confidence": "high",
+      "missingNotes": "Derinlik, VHF ve iletişim kaynakta yok."
+    },
+    {
+      "slug": "karamursel-eregli-balikci-barinagi",
+      "name": "Karamürsel Ereğli Balıkçı Barınağı",
+      "operator": "Karamürsel Ereğli Su Ürünleri Kooperatifi",
+      "status": "published",
+      "typeCode": "municipal_pier",
+      "countryCode": "TR",
+      "provinceSlug": "kocaeli",
+      "districtSlug": "kocaeli-karamursel",
+      "lat": 40.701944,
+      "lon": 29.659722,
+      "coordSource": "turkeymarinas (40°42'07.0\"N 29°39'35.0\"E → 40.701944, 29.659722)",
+      "descriptionTr": "İzmit Körfezi'nin güney kıyısında, Karamürsel'e 4 km uzaklıkta Ereğli köyünün barınağı; 85 tekne. VHF 16'dan 'Ereğli Marina' çağrılır. Elektrik, içme suyu, yakıt istasyonu, balık restoranı, balık hali ve soğuk hava deposu vardır. Yenikapı'ya deniz otobüsü bağlantısı bulunur.",
+      "berthCount": 85,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "16",
+      "amenities": [
+        "electricity",
+        "water",
+        "fuel",
+        "restaurant"
+      ],
+      "services": [],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902624521025",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "info@karamursel.bel.tr"
+        }
+      ],
+      "sourceUrls": [
+        "https://turkeymarinas.blogspot.com/2016/12/karamursel-eregli-fishing-harbour.html",
+        "https://www.tarimorman.gov.tr/BSGM/Belgeler/Icerikler/Su%20Ürünleri%20Altyapıları/Balıkçı%20Barınakları.pdf (Bakanlık balıkçı barınağı listesi, Şubat 2026 — tesis kayıtlı)"
+      ],
+      "confidence": "high",
+      "missingNotes": "Derinlik kaynakta yok. | 2026-07 doğrulama turu: tesis Bakanlığın Şubat 2026 listesinde kayıtlı; telefon güncel kaynakta doğrulanamadı."
+    },
+    {
+      "slug": "gokova-oren-marina",
+      "name": "Setur Ören Rib & Refit Park",
+      "operator": "Setur Marinas",
+      "status": "published",
+      "typeCode": "private_marina",
+      "countryCode": "TR",
+      "provinceSlug": "mugla",
+      "districtSlug": "mugla-milas",
+      "lat": 37.031417,
+      "lon": 27.981972,
+      "coordSource": "marinakedisi.com marina fişi (37°01'53.1\"N 27°58'55.1\"E → 37.031417, 27.981972)",
+      "descriptionTr": "Gökova Körfezi'nin kuzey kıyısındaki eski Setur Gökova Ören Marina, 'Ören Rib & Refit Park' adıyla çekek ve bakım-onarım tesisine dönüştürülmüştür. 150 tekne kapasiteli kara parkı, 50 m'ye kadar tekneler için 240 ton amfibik lift, 70 ton travel lift ve üç kapalı hangar bulunur. Ziyaretçi teknelere denizde bağlama hizmeti sunmaz; çekek, kışlama ve refit için hizmet verir.",
+      "berthCount": 410,
+      "maxLoaM": null,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": null,
+      "vhfChannel": "73",
+      "amenities": [
+        "electricity",
+        "water",
+        "travel_lift",
+        "crane",
+        "technical_service"
+      ],
+      "services": [
+        "winter_storage",
+        "technical_service"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902525323361",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "gokovaoren@seturmarinas.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.seturmarinas.com/"
+        }
+      ],
+      "sourceUrls": [
+        "https://marinakedisi.com/marinalar/ege/setur-gokova-oren-marina/ (koordinat, kapasite, VHF, iletişim)",
+        "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf (resmî liste: 420 deniz / 130 kara)",
+        "https://www.seturmarinas.com/en/marinas/oren-rib-refit-park"
+      ],
+      "confidence": "high",
+      "missingNotes": "Kapasite kaynaklar arasında küçük farkla veriliyor (410/150 marina fişi; 420/130 resmî liste) — marina fişi esas alındı. Maks. boy ve derinlik verilmiyor. 2026-07 kontrolü: tesis tipi değişti (marina → çekek/refit); tip kodu şema gereği korunuyor, açıklama günceldir."
+    },
+    {
+      "slug": "setur-altinyunus-marina",
+      "name": "Setur Çeşme Altınyunus Marina",
+      "operator": "Setur Marinas",
+      "status": "draft",
+      "typeCode": "private_marina",
+      "countryCode": "TR",
+      "provinceSlug": "izmir",
+      "districtSlug": "izmir-cesme",
+      "lat": 38.3231,
+      "lon": 26.34201,
+      "coordSource": "marinalar.com marina fişi (38°19'25\"N 26°20'44\"E → 38.32310, 26.34201)",
+      "descriptionTr": "Çeşme Boyalık ile Ilıca arasındaki Altınyunus koyunda marina: denizde 186, karada 60 tekne; maksimum boy 45 m, derinlik 4 m'ye kadar. Elektrik, su, Wi-Fi, güvenlik, yakıt ve dalgıç hizmeti; WC-duş, çamaşırhane, ATM, restoran-bar ve plaj vardır. Koy, rüzgâr sörfü için dünyanın elverişli koylarından sayılır — öğleden sonra termik rüzgâr belirgindir.",
+      "berthCount": 186,
+      "maxLoaM": 45,
+      "maxDraftM": null,
+      "depthMinM": null,
+      "depthMaxM": 4,
+      "vhfChannel": null,
+      "amenities": [
+        "electricity",
+        "water",
+        "wifi",
+        "security",
+        "fuel",
+        "wc",
+        "shower",
+        "laundry",
+        "restaurant"
+      ],
+      "services": [
+        "diver"
+      ],
+      "contacts": [
+        {
+          "type": "phone",
+          "value": "+902327231434",
+          "primary": true
+        },
+        {
+          "type": "email",
+          "value": "cesme@seturmarinas.com"
+        },
+        {
+          "type": "website",
+          "value": "https://www.seturmarinas.com/"
+        }
+      ],
+      "sourceUrls": [
+        "https://marinalar.com/setur/setur-cesme-altinyunus-marina/ (koordinat, kapasite, boy/derinlik, hizmetler)",
+        "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf (resmî liste: 180 deniz / 60 kara)"
+      ],
+      "confidence": "high",
+      "missingNotes": "VHF kaynaklarda verilmiyor. Kapasite marina fişinde 186, resmî listede 180 — fiş esas alındı. | FAZ2 DENETIM: Bu kayıt batch1'deki setur-cesme-marina ile AYNI marinadır (iki kaynak da aynı DMS koordinatını 38°19'25\"N 26°20'44\"E verir; berth 186, LOA 45 aynı). Mükerrer kayıt haritada iki iğne çıkarır ve güveni bozar — taslağa çekildi. Ana kayıt: setur-cesme-marina."
     }
-   ],
-   "sourceUrls": [
-    "https://turkeymarinas.blogspot.com/2016/12/atabay-marina.html"
-   ],
-   "confidence": "high",
-   "missingNotes": "Deniz bağlama kapasitesi ve derinlik kaynakta yok (kara ~100 tekne). | 2026-07 doğrulama turu: telefon güncel kaynakta doğrulanamadı (tur: yalnız açık/izinli kaynaklar tarandı)."
-  },
-  {
-   "slug": "hereke-balikci-barinagi",
-   "name": "Hereke Balıkçı Barınağı",
-   "operator": "Hereke Su Ürünleri Kooperatifi",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "countryCode": "TR",
-   "provinceSlug": "kocaeli",
-   "districtSlug": "kocaeli-korfez",
-   "lat": 40.782528,
-   "lon": 29.617639,
-   "coordSource": "turkeymarinas (40°46'57.1\"N 29°37'03.5\"E → 40.782528, 29.617639)",
-   "descriptionTr": "İzmit Körfezi'nin kuzey kıyısında, ipek halısıyla ünlü Hereke'nin kooperatif barınağı; 60 tekne. Elektrik, içme suyu, yakıt istasyonu ve idare ofisi vardır; günün balığı barınaktaki halden alınabilir.",
-   "berthCount": 60,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel"
-   ],
-   "services": [],
-   "contacts": [],
-   "sourceUrls": [
-    "https://turkeymarinas.blogspot.com/2016/12/hereke-fishing-harbour.html"
-   ],
-   "confidence": "high",
-   "missingNotes": "Derinlik, VHF ve iletişim kaynakta yok."
-  },
-  {
-   "slug": "karamursel-eregli-balikci-barinagi",
-   "name": "Karamürsel Ereğli Balıkçı Barınağı",
-   "operator": "Karamürsel Ereğli Su Ürünleri Kooperatifi",
-   "status": "published",
-   "typeCode": "municipal_pier",
-   "countryCode": "TR",
-   "provinceSlug": "kocaeli",
-   "districtSlug": "kocaeli-karamursel",
-   "lat": 40.701944,
-   "lon": 29.659722,
-   "coordSource": "turkeymarinas (40°42'07.0\"N 29°39'35.0\"E → 40.701944, 29.659722)",
-   "descriptionTr": "İzmit Körfezi'nin güney kıyısında, Karamürsel'e 4 km uzaklıkta Ereğli köyünün barınağı; 85 tekne. VHF 16'dan 'Ereğli Marina' çağrılır. Elektrik, içme suyu, yakıt istasyonu, balık restoranı, balık hali ve soğuk hava deposu vardır. Yenikapı'ya deniz otobüsü bağlantısı bulunur.",
-   "berthCount": 85,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "16",
-   "amenities": [
-    "electricity",
-    "water",
-    "fuel",
-    "restaurant"
-   ],
-   "services": [],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902624521025",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "info@karamursel.bel.tr"
-    }
-   ],
-   "sourceUrls": [
-    "https://turkeymarinas.blogspot.com/2016/12/karamursel-eregli-fishing-harbour.html",
-    "https://www.tarimorman.gov.tr/BSGM/Belgeler/Icerikler/Su%20Ürünleri%20Altyapıları/Balıkçı%20Barınakları.pdf (Bakanlık balıkçı barınağı listesi, Şubat 2026 — tesis kayıtlı)"
-   ],
-   "confidence": "high",
-   "missingNotes": "Derinlik kaynakta yok. | 2026-07 doğrulama turu: tesis Bakanlığın Şubat 2026 listesinde kayıtlı; telefon güncel kaynakta doğrulanamadı."
-  },
-  {
-   "slug": "gokova-oren-marina",
-   "name": "Setur Ören Rib & Refit Park",
-   "operator": "Setur Marinas",
-   "status": "published",
-   "typeCode": "private_marina",
-   "countryCode": "TR",
-   "provinceSlug": "mugla",
-   "districtSlug": "mugla-milas",
-   "lat": 37.031417,
-   "lon": 27.981972,
-   "coordSource": "marinakedisi.com marina fişi (37°01'53.1\"N 27°58'55.1\"E → 37.031417, 27.981972)",
-   "descriptionTr": "Gökova Körfezi'nin kuzey kıyısındaki eski Setur Gökova Ören Marina, 'Ören Rib & Refit Park' adıyla çekek ve bakım-onarım tesisine dönüştürülmüştür. 150 tekne kapasiteli kara parkı, 50 m'ye kadar tekneler için 240 ton amfibik lift, 70 ton travel lift ve üç kapalı hangar bulunur. Ziyaretçi teknelere denizde bağlama hizmeti sunmaz; çekek, kışlama ve refit için hizmet verir.",
-   "berthCount": 410,
-   "maxLoaM": null,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": null,
-   "vhfChannel": "73",
-   "amenities": [
-    "electricity",
-    "water",
-    "travel_lift",
-    "crane",
-    "technical_service"
-   ],
-   "services": [
-    "winter_storage",
-    "technical_service"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902525323361",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "gokovaoren@seturmarinas.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.seturmarinas.com/"
-    }
-   ],
-   "sourceUrls": [
-    "https://marinakedisi.com/marinalar/ege/setur-gokova-oren-marina/ (koordinat, kapasite, VHF, iletişim)",
-    "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf (resmî liste: 420 deniz / 130 kara)",
-    "https://www.seturmarinas.com/en/marinas/oren-rib-refit-park"
-   ],
-   "confidence": "high",
-   "missingNotes": "Kapasite kaynaklar arasında küçük farkla veriliyor (410/150 marina fişi; 420/130 resmî liste) — marina fişi esas alındı. Maks. boy ve derinlik verilmiyor. 2026-07 kontrolü: tesis tipi değişti (marina → çekek/refit); tip kodu şema gereği korunuyor, açıklama günceldir."
-  },
-  {
-   "slug": "setur-altinyunus-marina",
-   "name": "Setur Çeşme Altınyunus Marina",
-   "operator": "Setur Marinas",
-   "status": "published",
-   "typeCode": "private_marina",
-   "countryCode": "TR",
-   "provinceSlug": "izmir",
-   "districtSlug": "izmir-cesme",
-   "lat": 38.3231,
-   "lon": 26.34201,
-   "coordSource": "marinalar.com marina fişi (38°19'25\"N 26°20'44\"E → 38.32310, 26.34201)",
-   "descriptionTr": "Çeşme Boyalık ile Ilıca arasındaki Altınyunus koyunda marina: denizde 186, karada 60 tekne; maksimum boy 45 m, derinlik 4 m'ye kadar. Elektrik, su, Wi-Fi, güvenlik, yakıt ve dalgıç hizmeti; WC-duş, çamaşırhane, ATM, restoran-bar ve plaj vardır. Koy, rüzgâr sörfü için dünyanın elverişli koylarından sayılır — öğleden sonra termik rüzgâr belirgindir.",
-   "berthCount": 186,
-   "maxLoaM": 45,
-   "maxDraftM": null,
-   "depthMinM": null,
-   "depthMaxM": 4,
-   "vhfChannel": null,
-   "amenities": [
-    "electricity",
-    "water",
-    "wifi",
-    "security",
-    "fuel",
-    "wc",
-    "shower",
-    "laundry",
-    "restaurant"
-   ],
-   "services": [
-    "diver"
-   ],
-   "contacts": [
-    {
-     "type": "phone",
-     "value": "+902327231434",
-     "primary": true
-    },
-    {
-     "type": "email",
-     "value": "cesme@seturmarinas.com"
-    },
-    {
-     "type": "website",
-     "value": "https://www.seturmarinas.com/"
-    }
-   ],
-   "sourceUrls": [
-    "https://marinalar.com/setur/setur-cesme-altinyunus-marina/ (koordinat, kapasite, boy/derinlik, hizmetler)",
-    "https://tkygm.uab.gov.tr/uploads/pages/limanlar-ve-kiyi-yapilari/3-yat-limanlari-bilgileri.pdf (resmî liste: 180 deniz / 60 kara)"
-   ],
-   "confidence": "high",
-   "missingNotes": "VHF kaynaklarda verilmiyor. Kapasite marina fişinde 186, resmî listede 180 — fiş esas alındı."
-  }
- ]
+  ]
 }

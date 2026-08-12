@@ -1,6 +1,8 @@
 import 'geo.dart';
 
-/// Kart kapak görseli (docs/23 §11.2). `url` her zaman varyant CDN URL'idir.
+/// Kart kapak görseli (docs/23 §11.2). Bugün `url` DIŞ görsel adresidir
+/// (Wikimedia Commons, `external_url`); iç CDN varyantları medya yükleme
+/// altyapısıyla (Faz 4) gelecek.
 class CoverMedia {
   const CoverMedia({
     required this.url,

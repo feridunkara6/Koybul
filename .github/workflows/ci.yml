@@ -71,6 +71,16 @@ jobs:
       - run: npx prisma generate
       - name: Migration'ları gerçek PostGIS'e uygula
         run: npx prisma migrate deploy
+      - name: Üretilen dosyalar taze mi? (seed + harita anlık görüntüsü)
+        # SESSİZ ÇÜRÜME KORUMASI (Faz 2 inceleme bulgusu): data/*.json değişip
+        # üreticiler koşulmazsa, seed ve uygulamayla gömülü harita görüntüsü
+        # eski veriyi taşımaya devam eder — kimse fark etmez. Burada ikisi de
+        # yeniden üretilir; depodakiyle bayt farkı varsa iş KIRMIZI olur ve
+        # hangi dosyanın bayat olduğu diff ile ekrana yazılır.
+        run: |
+          python3 prisma/data/generate_locations_seed.py
+          python3 prisma/data/generate_map_snapshot.py
+          git diff --exit-code -- prisma/seed_locations.sql ../mobile/assets/map/map_snapshot.json
       - name: Seed idempotency kontrolü (iki kez koşar)
         run: |
           psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f prisma/seed.sql

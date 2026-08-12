@@ -1,0 +1,12 @@
+[
+  {
+    "slug": "setur-altinyunus-marina",
+    "setStatus": "draft",
+    "reason": "Mükerrer: batch1'deki setur-cesme-marina ile aynı marina (aynı DMS koordinat kaynağı, aynı berth/LOA). Ana kayıt setur-cesme-marina."
+  },
+  {
+    "slug": "adrasan-koyu-demirleme",
+    "setStatus": "draft",
+    "reason": "Koordinat Wikipedia'daki köy merkezi; demirleme kaydı için tehlikeli. Doğrulanmış koy koordinatı bulunana dek yayından çekildi."
+  }
+]

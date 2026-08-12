@@ -732,6 +732,106 @@ def emit_korunak(here, records):
     return "\n".join(out)
 
 
+def emit_media(here, records):
+    """Kapak fotoğrafları (kapak_fotograflari.json) → media + location_media.
+
+    Kaynak: Wikimedia Commons; her girişin lisans ve atıf alanları dosya
+    sayfasından elle doğrulanır (dosyadaki 'kurallar' bölümü). Boş dosya =
+    hiç SQL üretilmez; fotoğrafsız koy DÜRÜSTÇE fotoğrafsız kalır.
+
+    İdempotency ve mevcut veritabanlarına akış:
+    - media: storage_key üzerinden ON CONFLICT DO UPDATE — atıf/lisans
+      düzeltmeleri ve fotoğraf değişimleri canlı veritabanına da yansır.
+    - location_media: (location_id, media_id) çifti DO NOTHING; photo_count
+      tetikleyicisi bu ekle üzerinde çalışır (yalnız 'approved' sayar).
+    - locations.cover_media_id: koşullu UPDATE (zaten doğruysa dokunmaz).
+
+    storage_key sözleşmesi: 'ext/<slug>/kapak' — sütun NOT NULL + UNIQUE
+    olduğu için dış-URL'li satır da tekil bir anahtar taşımak zorunda; slug
+    başına tek kapak bu anahtarla garanti edilir.
+    """
+    f = here / "kapak_fotograflari.json"
+    if not f.exists():
+        return ""
+    data = json.loads(f.read_text(encoding="utf-8"))
+    photos = data.get("fotograflar", {})
+    if not photos:
+        return ""
+    slugs = {r["slug"] for r in records}
+    allowed_mime = {"image/jpeg", "image/png", "image/webp"}
+    # Lisans BEYAZ LİSTESİ: NC (ticari kullanım yasak) ve ND (türev yasak)
+    # lisanslar ticari bir uygulamada KULLANILAMAZ — girildiği an üretim durur.
+    allowed_licenses = {
+        "CC0 1.0", "Public domain",
+        "CC BY 2.0", "CC BY 2.5", "CC BY 3.0", "CC BY 4.0",
+        "CC BY-SA 2.0", "CC BY-SA 2.5", "CC BY-SA 3.0", "CC BY-SA 4.0",
+    }
+    errors = []
+    out = ["", "-- " + "=" * 70,
+           "-- KAPAK FOTOĞRAFLARI — Wikimedia Commons (atıf + lisans zorunlu).",
+           "-- Kaynak: kapak_fotograflari.json; her giriş dosya sayfasından doğrulandı."]
+    for slug in sorted(photos):
+        e = photos[slug]
+        if slug not in slugs:
+            errors.append(f"kapak: bilinmeyen slug {slug}")
+            continue
+        url = (e.get("url") or "").strip()
+        credit = (e.get("credit") or "").strip()
+        license_code = (e.get("license") or "").strip()
+        source_url = (e.get("sourceUrl") or "").strip()
+        mime = (e.get("mimeType") or "").strip()
+        width, height = e.get("width"), e.get("height")
+        if not url.startswith("https://"):
+            errors.append(f"kapak {slug}: url https:// ile başlamalı")
+        if not credit:
+            errors.append(f"kapak {slug}: credit boş — CC lisansı atfı zorunlu kılar")
+        if license_code not in allowed_licenses:
+            errors.append(
+                f"kapak {slug}: license {license_code!r} izinli kümede değil "
+                "(NC/ND lisanslar ticari kullanımda YASAKTIR; kısa adı sayfadaki gibi yaz)")
+        if not source_url.startswith("https://"):
+            errors.append(f"kapak {slug}: sourceUrl https:// ile başlamalı (Commons dosya sayfası)")
+        if mime not in allowed_mime:
+            errors.append(f"kapak {slug}: mimeType {mime!r} geçersiz (jpeg/png/webp)")
+        # type() is int: bool da int alt tipidir — `true` yazılmış bir genişlik
+        # doğrulamadan geçip Postgres tip hatasıyla SEED sırasında patlardı.
+        if not (type(width) is int and width > 0 and type(height) is int and height > 0):
+            errors.append(f"kapak {slug}: width/height pozitif tam sayı olmalı")
+        if errors:
+            continue
+        key = f"ext/{slug}/kapak"
+        out.append(f"-- --- {slug} ---")
+        out.append(
+            "INSERT INTO media (media_type, storage_key, mime_type, width, height,\n"
+            "  external_url, credit, license_code, source_url, moderation_status)\n"
+            f"VALUES ('photo', {q(key)}, {q(mime)}, {num(width)}, {num(height)},\n"
+            f"  {q(url)}, {q(credit)}, {q(license_code)}, {q(source_url)}, 'approved')\n"
+            "ON CONFLICT (storage_key) DO UPDATE SET\n"
+            "  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,\n"
+            "  height = EXCLUDED.height, external_url = EXCLUDED.external_url,\n"
+            "  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,\n"
+            "  source_url = EXCLUDED.source_url, updated_at = now();"
+        )
+        out.append(
+            "INSERT INTO location_media (location_id, media_id, is_cover, sort_order)\n"
+            f"SELECT l.id, m.id, true, 1 FROM locations l, media m\n"
+            f"WHERE l.slug = {q(slug)} AND m.storage_key = {q(key)}\n"
+            "ON CONFLICT (location_id, media_id) DO NOTHING;"
+        )
+        out.append(
+            "UPDATE locations SET cover_media_id =\n"
+            f"  (SELECT id FROM media WHERE storage_key = {q(key)})\n"
+            f"WHERE slug = {q(slug)} AND cover_media_id IS DISTINCT FROM\n"
+            f"  (SELECT id FROM media WHERE storage_key = {q(key)});"
+        )
+    if errors:
+        for e in errors:
+            print(f"HATA: {e}", file=sys.stderr)
+        sys.exit(1)
+    out.append("")
+    return "\n".join(out)
+
+
 def emit_corrections(here, records):
     """Doğrulama turu düzeltmeleri (corrections_*.json) → idempotent SQL.
 
@@ -817,6 +917,7 @@ def main():
     # yaklaşma, i18n'den SONRA: birleşik (notlu) metin taban çeviriyi ezmeli.
     sql += emit_yaklasma(here, records)
     sql += emit_corrections(here, records)
+    sql += emit_media(here, records)
     (here.parent / "seed_locations.sql").write_text(sql, encoding="utf-8")
     published = sum(1 for r in records if r["status"] == "published")
     draft = len(records) - published

@@ -201,6 +201,9 @@ void main() {
     )));
     await tester.pumpAndSettle();
     expect(find.textContaining('henüz liman yok'), findsOneWidget);
+    // KAPSAM DÜRÜSTLÜĞÜ (Faz 2, denetim bulgusu): Karadeniz'e bakan kullanıcı
+    // "veri yok" değil, kapsamın ne olduğunu okusun.
+    expect(find.textContaining('Ege ve Akdeniz'), findsOneWidget);
   });
 
   testWidgets('truncated → yakınlaştırma ipucu', (WidgetTester tester) async {

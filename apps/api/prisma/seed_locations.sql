@@ -8891,7 +8891,7 @@ ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
-SELECT gen_random_uuid(), 'setur-altinyunus-marina', 1, 'published', 'TR',
+SELECT gen_random_uuid(), 'setur-altinyunus-marina', 1, 'draft', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-cesme'),
   'Setur Çeşme Altınyunus Marina', 'Çeşme Boyalık ile Ilıca arasındaki Altınyunus koyunda marina: denizde 186, karada 60 tekne; maksimum boy 45 m, derinlik 4 m''ye kadar. Elektrik, su, Wi-Fi, güvenlik, yakıt ve dalgıç hizmeti; WC-duş, çamaşırhane, ATM, restoran-bar ve plaj vardır. Koy, rüzgâr sörfü için dünyanın elverişli koylarından sayılır — öğleden sonra termik rüzgâr belirgindir.',
   ST_SetSRID(ST_MakePoint(26.34201, 38.3231), 4326)::geography,
@@ -10639,7 +10639,7 @@ ON CONFLICT (location_id) DO NOTHING;
 INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
   name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
   capacity, price_tier, source)
-SELECT gen_random_uuid(), 'adrasan-koyu-demirleme', 8, 'published', 'TR',
+SELECT gen_random_uuid(), 'adrasan-koyu-demirleme', 8, 'draft', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kumluca'),
   'Adrasan Koyu (Çavuş Limanı)', 'Kumluca ilçesinde, Türkiye''nin güney kıyısında 2,5 km''den fazla uzanan geniş bir koydur; sırtını Beydağları''na dayamış olan Adrasan''ın etrafı çam ağaçlarıyla çevrilidir. Suluada ile Sazak, Ceneviz ve Korsan koylarına günübirlik tekne turları bu koydaki limandan kalkar.',
   ST_SetSRID(ST_MakePoint(30.433, 36.333), 4326)::geography,
@@ -16418,3 +16418,8 @@ WHERE slug = 'denizkizi-kaptan-okluk' AND status <> 'draft'; -- işletme Ayın K
 -- --- corrections_2026_07_yakit_kontrol.json ---
 UPDATE locations SET status = 'draft'
 WHERE slug = 'oren-gokova-yakit' AND status <> 'draft'; -- Setur tesisi Rib & Refit Park'a dönüştü; yakıt istasyonu güncel resmî kaynakta doğrulanamadı (2026-07)
+-- --- corrections_2026_08_faz2.json ---
+UPDATE locations SET status = 'draft'
+WHERE slug = 'setur-altinyunus-marina' AND status <> 'draft'; -- Mükerrer: batch1'deki setur-cesme-marina ile aynı marina (aynı DMS koordinat kaynağı, aynı berth/LOA). Ana kayıt setur-cesme-marina.
+UPDATE locations SET status = 'draft'
+WHERE slug = 'adrasan-koyu-demirleme' AND status <> 'draft'; -- Koordinat Wikipedia'daki köy merkezi; demirleme kaydı için tehlikeli. Doğrulanmış koy koordinatı bulunana dek yayından çekildi.

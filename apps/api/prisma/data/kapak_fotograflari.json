@@ -1,0 +1,15 @@
+{
+  "kaynak": "Wikimedia Commons — her giriş, dosyanın Commons sayfasından ELLE doğrulanır",
+  "kurallar": [
+    "Tahmin/uydurma YOK. Her alan Commons dosya sayfasından birebir kopyalanır.",
+    "url: dosyanın upload.wikimedia.org üzerindeki DOĞRUDAN adresi (Commons sayfasındaki 'Orijinal dosya' bağlantısı ya da uygun genişlikte önizleme).",
+    "credit: fotoğrafçının adı, sayfadaki 'Yazar/Author' alanından. CC lisansı atfı ZORUNLU kılar.",
+    "license: lisansın kısa adı, sayfada yazdığı gibi (ör. 'CC BY-SA 4.0', 'CC BY 3.0', 'Public domain').",
+    "sourceUrl: Commons dosya sayfasının adresi (commons.wikimedia.org/wiki/File:...). Uygulamada atıf şeridi bu sayfayı açar.",
+    "mimeType: image/jpeg | image/png | image/webp (veritabanı başka değer kabul etmez).",
+    "width/height: dosyanın piksel ölçüleri (url hangi boyuta işaret ediyorsa o).",
+    "Fotoğraf GERÇEKTEN o koyu/marinayı göstermeli — emin değilsen ekleme, boş kalsın.",
+    "Girdi eklendikçe generate_locations_seed.py yeniden koşulur; SQL kendiliğinden üretilir."
+  ],
+  "fotograflar": {}
+}
