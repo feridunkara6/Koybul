@@ -75,4 +75,45 @@ void main() {
     await storage.clear();
     expect(await storage.load(), isNull);
   });
+
+  test('SharedPrefsBoatStorage: AD + BAĞLI MARİNA gidiş-dönüş (2026-08)',
+      () async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    const SharedPrefsBoatStorage storage = SharedPrefsBoatStorage();
+
+    await storage.save(const MyBoat(
+      lengthM: 11,
+      name: 'Martı',
+      homeMarina:
+          HomeMarina(id: 'dm1', name: 'D-Marin Göcek', lat: 36.75, lon: 28.93),
+    ));
+    final MyBoat? loaded = await storage.load();
+    expect(loaded?.name, 'Martı');
+    expect(loaded?.homeMarina?.id, 'dm1');
+    expect(loaded?.homeMarina?.name, 'D-Marin Göcek');
+    expect(loaded?.homeMarina?.lat, 36.75);
+    expect(loaded?.homeMarina?.lon, 28.93);
+
+    // Marina kaldırılınca dört anahtar da silinir (yarım kayıt kalmaz).
+    await storage.save(const MyBoat(lengthM: 11, name: 'Martı'));
+    final MyBoat? cleared = await storage.load();
+    expect(cleared?.name, 'Martı');
+    expect(cleared?.homeMarina, isNull);
+  });
+
+  test('SharedPrefsBoatStorage: YARIM marina kaydı marina yokmuş gibi okunur',
+      () async {
+    // Dört anahtardan biri eksikse (bozuk/eski kayıt) HomeMarina kurulamaz —
+    // yarım koordinatla haritayı yanlış yere odaklamak yerine yok sayılır.
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      'boat.lengthM': 11.0,
+      'boat.marina.id': 'dm1',
+      'boat.marina.name': 'D-Marin Göcek',
+      // lat/lon YOK
+    });
+    const SharedPrefsBoatStorage storage = SharedPrefsBoatStorage();
+    final MyBoat? loaded = await storage.load();
+    expect(loaded, isNotNull);
+    expect(loaded!.homeMarina, isNull);
+  });
 }

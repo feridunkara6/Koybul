@@ -1,5 +1,3 @@
-import 'dart:ui' show ImageFilter;
-
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
@@ -44,11 +42,15 @@ class NearbySheet extends ConsumerWidget {
     final ThemeData theme = Theme.of(context);
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-        child: Container(
+      // PERF (kullanıcı şikâyeti 2026-08, "kaydırınca/zoom yapınca kasıyor"):
+      // buradaki BackdropFilter blur'u KALDIRILDI. Şerit haritanın üstünde
+      // HEP durur; altındaki harita her karede oynadığından blur her karede
+      // yeniden hesaplanıyordu — web'de (CanvasKit) ve zayıf telefonlarda
+      // gezinme kasmasının başlıca kaynağı buydu. Cam hissi, daha yüksek
+      // opaklıkla korunur; kasma biter.
+      child: Container(
           decoration: BoxDecoration(
-            color: theme.colorScheme.surface.withValues(alpha: 0.78),
+            color: theme.colorScheme.surface.withValues(alpha: 0.94),
             border: Border(
               top: BorderSide(color: theme.dividerColor.withValues(alpha: 0.4)),
             ),
@@ -133,7 +135,6 @@ class NearbySheet extends ConsumerWidget {
               ),
             ),
           ),
-        ),
       ),
     );
   }

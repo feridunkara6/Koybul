@@ -1,8 +1,10 @@
+import 'package:dockly_api/dockly_api.dart' show LocationSummary;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../search/presentation/search_screen.dart';
 import '../domain/launch_answers.dart';
 
 /// SORU EKRANLARI — E3 / E4 / E5 (onaylı tasarım 2026-08).
@@ -165,12 +167,24 @@ class BoatSizeScreen extends ConsumerStatefulWidget {
     required this.initialDraftM,
     required this.onContinue,
     required this.onSkipAll,
+    this.initialName,
+    this.initialMarina,
     super.key,
   });
 
   final double initialLengthM;
   final double initialDraftM;
-  final void Function(double lengthM, double draftM) onContinue;
+  final String? initialName;
+  final LocationSummary? initialMarina;
+
+  /// Ölçülere ek: tekne adı ve bağlı marina (kullanıcı isteği 2026-08).
+  /// İkisi de İSTEĞE BAĞLI — boş bırakan kullanıcı aynen devam eder.
+  final void Function(
+    double lengthM,
+    double draftM,
+    String? boatName,
+    LocationSummary? homeMarina,
+  ) onContinue;
   final VoidCallback onSkipAll;
 
   @override
@@ -180,10 +194,39 @@ class BoatSizeScreen extends ConsumerStatefulWidget {
 class _BoatSizeScreenState extends ConsumerState<BoatSizeScreen> {
   late double _len = widget.initialLengthM.clamp(6.0, 30.0);
   late double _draft = widget.initialDraftM.clamp(0.5, 4.0);
+  late final TextEditingController _name =
+      TextEditingController(text: widget.initialName ?? '');
+  late LocationSummary? _marina = widget.initialMarina;
 
   /// Repo genelindeki sayı biçimi (nokta ondalık): 12 → '12', 12.5 → '12.5'.
   static String _m(double v) =>
       v % 1 == 0 ? v.toStringAsFixed(0) : v.toStringAsFixed(1);
+
+  @override
+  void dispose() {
+    _name.dispose();
+    super.dispose();
+  }
+
+  void _continue() {
+    final String name = _name.text.trim();
+    widget.onContinue(_len, _draft, name.isEmpty ? null : name, _marina);
+  }
+
+  /// Bağlı marinayı MEVCUT arama ekranıyla seçtirir (yeni liste kurulmaz;
+  /// arama sunucusu ad/yer bilir). Seçim kipi sonucu geri döndürür.
+  Future<void> _pickMarina() async {
+    final LocationSummary? picked =
+        await Navigator.of(context).push<LocationSummary>(
+      MaterialPageRoute<LocationSummary>(
+        builder: (BuildContext _) => SearchScreen(
+          pickDestination: true,
+          pickHint: ref.read(l10nProvider).marinaPickTitle,
+        ),
+      ),
+    );
+    if (picked != null && mounted) setState(() => _marina = picked);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +236,7 @@ class _BoatSizeScreenState extends ConsumerState<BoatSizeScreen> {
       title: t.qSizeTitle,
       subtitle: t.qSizeSub,
       ctaLabel: t.qContinue,
-      onCta: () => widget.onContinue(_len, _draft),
+      onCta: _continue,
       onSkipAll: widget.onSkipAll,
       footnote: t.qLaterNote,
       child: Column(
@@ -222,6 +265,15 @@ class _BoatSizeScreenState extends ConsumerState<BoatSizeScreen> {
             minLabel: '0.5 m',
             maxLabel: '4 m+',
             onChanged: (double v) => setState(() => _draft = v),
+          ),
+          const SizedBox(height: 14),
+          // TEKNE ADI + BAĞLI MARİNA (kullanıcı isteği 2026-08). İkisi de
+          // isteğe bağlı: soru sayısı artmaz, aynı ekranda iki hafif alan.
+          _NameAndMarinaCard(
+            nameController: _name,
+            marina: _marina,
+            onPickMarina: _pickMarina,
+            onClearMarina: () => setState(() => _marina = null),
           ),
           const SizedBox(height: 16),
           // CANLI KAZANIM KUTUSU (onaylı): "bu bilgiyi neden veriyorum?"
@@ -340,6 +392,113 @@ class _SliderCard extends StatelessWidget {
                       fontSize: 10.5, color: Color(0xFF98A5B8))),
             ],
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Tekne adı + bağlı marina kartı (kullanıcı isteği 2026-08). Ad serbest
+/// metindir; marina MEVCUT arama ekranından seçilir (uydurma liste yok —
+/// kayıtlarımızdan gelir). Marina seçilince kazanç cümlesi görünür:
+/// "Haritayı {marina} çevresinde açarız."
+class _NameAndMarinaCard extends ConsumerWidget {
+  const _NameAndMarinaCard({
+    required this.nameController,
+    required this.marina,
+    required this.onPickMarina,
+    required this.onClearMarina,
+  });
+
+  final TextEditingController nameController;
+  final LocationSummary? marina;
+  final VoidCallback onPickMarina;
+  final VoidCallback onClearMarina;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final LocationSummary? m = marina;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+      decoration: BoxDecoration(
+        color: DocklyColors.bgSurface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE3E9F1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            t.qBoatNameLabel,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: DocklyColors.text2,
+            ),
+          ),
+          TextField(
+            key: const ValueKey<String>('launch-boat-name'),
+            controller: nameController,
+            textCapitalization: TextCapitalization.words,
+            maxLength: 40,
+            decoration: InputDecoration(
+              hintText: t.qBoatNameHint,
+              counterText: '',
+              isDense: true,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            t.qMarinaLabel,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: DocklyColors.text2,
+            ),
+          ),
+          const SizedBox(height: 8),
+          if (m == null)
+            OutlinedButton.icon(
+              key: const ValueKey<String>('launch-marina-pick'),
+              onPressed: onPickMarina,
+              icon: const DocklyIcon(DocklyIcons.search, size: 16),
+              label: Text(t.qMarinaPick),
+            )
+          else
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: InkWell(
+                    key: const ValueKey<String>('launch-marina-change'),
+                    onTap: onPickMarina,
+                    child: Text(
+                      m.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: DocklyColors.brandPrimary,
+                      ),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  key: const ValueKey<String>('launch-marina-clear'),
+                  tooltip: t.clearTooltip,
+                  icon: const DocklyIcon(DocklyIcons.clear, size: 16),
+                  onPressed: onClearMarina,
+                ),
+              ],
+            ),
+          if (m != null) ...<Widget>[
+            const SizedBox(height: 4),
+            Text(
+              '✓  ${L10n.fmt(t.qMarinaBenefit, m.name)}',
+              style: const TextStyle(fontSize: 12.5, color: Color(0xFF155E56)),
+            ),
+          ],
         ],
       ),
     );

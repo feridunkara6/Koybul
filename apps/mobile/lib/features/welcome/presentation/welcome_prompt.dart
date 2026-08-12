@@ -46,6 +46,10 @@ Future<void> maybeShowWelcomePrompt(BuildContext context, WidgetRef ref) async {
               brand: brand,
               draftM: current?.draftM,
               typeId: current?.typeId,
+              // Ad + bağlı marina da korunur (2026-08 alanları): boy
+              // güncellemek teknenin kimliğini silmesin.
+              name: current?.name,
+              homeMarina: current?.homeMarina,
             ));
         Navigator.of(sheetContext).pop();
       },

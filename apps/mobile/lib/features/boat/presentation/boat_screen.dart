@@ -57,7 +57,9 @@ class BoatScreen extends ConsumerWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          boat?.brand ?? t.sectionBoat,
+                          // Kimlik sırası: teknenin ADI (kullanıcı isteği
+                          // 2026-08) → marka → genel başlık.
+                          boat?.name ?? boat?.brand ?? t.sectionBoat,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: theme.textTheme.titleMedium?.copyWith(
@@ -69,6 +71,27 @@ class BoatScreen extends ConsumerWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
+                  // Bağlı marina — kimlik kartında ince satır (varsa).
+                  if (boat?.homeMarina != null) ...<Widget>[
+                    Row(
+                      children: <Widget>[
+                        const DocklyIcon(DocklyIcons.amMooring,
+                            size: 13, color: Color(0xFF9BD8CF)),
+                        const SizedBox(width: 5),
+                        Expanded(
+                          child: Text(
+                            boat!.homeMarina!.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: const Color(0xFFD7E6F5),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                  ],
                   if (boat == null)
                     Text(
                       t.boatEmptyBody,

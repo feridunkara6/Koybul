@@ -1,12 +1,14 @@
-import 'package:dockly_api/dockly_api.dart' show GeoPoint;
+import 'package:dockly_api/dockly_api.dart' show GeoPoint, LocationSummary;
 import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/auth/presentation/sign_in_screen.dart';
 import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
+import 'package:dockly_mobile/features/boat/domain/my_boat.dart';
 import 'package:dockly_mobile/features/launch/domain/launch_store.dart';
 import 'package:dockly_mobile/features/launch/presentation/launch_gate.dart';
 import 'package:dockly_mobile/features/location/application/location_controller.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/domain/map_viewport.dart';
+import 'package:dockly_mobile/features/search/application/search_controller.dart';
 import 'package:dockly_mobile/features/splash/presentation/splash_screen.dart'
     show appReadyProvider;
 import 'package:flutter/material.dart';
@@ -15,12 +17,14 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/launch_fakes.dart';
 import '../../support/location_fakes.dart';
+import '../../support/search_fakes.dart';
 import '../../support/welcome_fakes.dart';
 
 Widget _app(
   FakeLaunchStore store, {
   FakeBoatStorage? boatStorage,
   FakeLocationService? location,
+  FakeSearchGateway? search,
 }) {
   return ProviderScope(
     overrides: <Override>[
@@ -30,6 +34,9 @@ Widget _app(
       // (gerçek eklenti test ortamında sonsuza dek bekler).
       locationServiceProvider
           .overrideWithValue(location ?? FakeLocationService(null)),
+      // Bağlı marina seçimi MEVCUT arama ekranını kullanır — sahte ağ geçidi.
+      searchGatewayProvider.overrideWithValue(search ?? FakeSearchGateway()),
+      searchDebounceProvider.overrideWithValue(Duration.zero),
     ],
     child: const MaterialApp(
       home: LaunchGate(child: Text('KABUK')),
@@ -304,6 +311,101 @@ void main() {
         findsOneWidget);
     expect(find.text('Denizcilerin yorumları ve gerçek deneyimleri'),
         findsOneWidget);
+  });
+
+  // ===========================================================================
+  // TEKNE ADI + BAĞLI MARİNA (kullanıcı isteği 2026-08): ölçüler ekranında
+  // iki isteğe bağlı alan. Marina seçilirse bölge sorusu ATLANIR ve harita
+  // marina çevresinde açılır; ad ve marina Teknem modeline yazılır.
+  // ===========================================================================
+
+  testWidgets('AD + MARİNA verilirse: bölge sorulmaz, tekneye yazılır, '
+      'harita marina çevresine odaklanır', (WidgetTester tester) async {
+    final FakeLaunchStore store = FakeLaunchStore();
+    final FakeBoatStorage boatStorage = FakeBoatStorage();
+    final FakeSearchGateway search = FakeSearchGateway(
+      // sampleSummary konumu: lat 36.75, lon 28.93 (odak beklentisiyle aynı).
+      results: <LocationSummary>[sampleSummary('dm1', 'D-Marin Göcek')],
+    );
+    await tester.pumpWidget(
+        _app(store, boatStorage: boatStorage, search: search));
+    await tester.pumpAndSettle();
+
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-start')));
+    // Tekne adı yaz.
+    await tester.enterText(
+        find.byKey(const ValueKey<String>('launch-boat-name')), 'Martı');
+    // Marina seç: arama ekranı açılır, sonuç seçilir, geri dönülür.
+    await _tapVisible(
+        tester, find.byKey(const ValueKey<String>('launch-marina-pick')));
+    await tester.enterText(find.byType(TextField).first, 'göcek');
+    await tester.pumpAndSettle();
+    await _tapVisible(tester, find.text('D-Marin Göcek'));
+    // Ölçüler ekranına dönüldü; seçim ve kazanç cümlesi görünür.
+    expect(find.text('D-Marin Göcek'), findsOneWidget);
+    expect(find.textContaining('çevresinde açarız'), findsOneWidget);
+
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-q-cta')));
+    // Konum ön-izni → izinsiz devam: bölge SORULMAZ (marina cevabı yeter).
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-loc-skip')));
+    expect(find.text('En çok nerede geziyorsun?'), findsNothing);
+    expect(find.text('KABUK'), findsOneWidget);
+
+    // Tekne kaydı: ad + marina.
+    expect(boatStorage.boat, isNotNull);
+    expect(boatStorage.boat!.name, 'Martı');
+    expect(boatStorage.boat!.homeMarina, isNotNull);
+    expect(boatStorage.boat!.homeMarina!.name, 'D-Marin Göcek');
+    expect(boatStorage.boat!.homeMarina!.lat, closeTo(36.75, 0.001));
+
+    // Harita odağı: marina çevresi (zoom 11 — bölgeden yakın, Konumum'dan geniş).
+    final ProviderContainer c =
+        ProviderScope.containerOf(tester.element(find.text('KABUK')));
+    final MapFocusRequest? focus = c.read(mapFocusProvider);
+    expect(focus, isNotNull);
+    expect(focus!.zoom, 11);
+    expect(focus.point.lat, closeTo(36.75, 0.001));
+    expect(focus.point.lon, closeTo(28.93, 0.001));
+  });
+
+  testWidgets('DÖNEN kullanıcı + kayıtlı marina: harita açılışta marina '
+      'çevresine odaklanır (GPS yokken)', (WidgetTester tester) async {
+    final FakeBoatStorage boatStorage = FakeBoatStorage(
+      boat: const MyBoat(
+        lengthM: 11,
+        name: 'Martı',
+        homeMarina:
+            HomeMarina(id: 'dm1', name: 'D-Marin Göcek', lat: 36.75, lon: 28.93),
+      ),
+    );
+    await tester.pumpWidget(_app(
+      FakeLaunchStore(done: true),
+      boatStorage: boatStorage,
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('KABUK'), findsOneWidget);
+    final ProviderContainer c =
+        ProviderScope.containerOf(tester.element(find.text('KABUK')));
+    final MapFocusRequest? focus = c.read(mapFocusProvider);
+    expect(focus, isNotNull);
+    expect(focus!.zoom, 11);
+    expect(focus.point.lat, closeTo(36.75, 0.001));
+  });
+
+  testWidgets('DÖNEN kullanıcı + marinasız tekne: açılış odağı KURULMAZ',
+      (WidgetTester tester) async {
+    final FakeBoatStorage boatStorage =
+        FakeBoatStorage(boat: const MyBoat(lengthM: 11));
+    await tester.pumpWidget(_app(
+      FakeLaunchStore(done: true),
+      boatStorage: boatStorage,
+    ));
+    await tester.pumpAndSettle();
+
+    final ProviderContainer c =
+        ProviderScope.containerOf(tester.element(find.text('KABUK')));
+    expect(c.read(mapFocusProvider), isNull);
   });
 
   // ===========================================================================

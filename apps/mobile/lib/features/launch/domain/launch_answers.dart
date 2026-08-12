@@ -48,3 +48,8 @@ const List<LaunchRegion> kLaunchRegions = <LaunchRegion>[
 
 /// Bölge odağının yakınlaştırması — körfez ölçeği (Konumum'un 12'sinden geniş).
 const double kRegionFocusZoom = 9;
+
+/// Bağlı marina odağının yakınlaştırması (kullanıcı isteği 2026-08): marina
+/// ÇEVRESİ görünsün — bölgeden yakın (9), "Konumum"dan geniş (12). Kaptanın
+/// evinden çıkıp gidebileceği koylar tek bakışta ekranda olsun.
+const double kHomeMarinaFocusZoom = 11;

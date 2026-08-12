@@ -23,10 +23,15 @@ import '../domain/search_state.dart';
 /// Haritadaki "Deniz rotası" düğmesi bunu kullanır: kullanıcı gitmek istediği
 /// yeri pin arayarak değil, adıyla bulur.
 class SearchScreen extends ConsumerStatefulWidget {
-  const SearchScreen({this.pickDestination = false, super.key});
+  const SearchScreen({this.pickDestination = false, this.pickHint, super.key});
 
   /// Sonuç seçilince ekranı [LocationSummary] ile kapatır (detay açmaz).
   final bool pickDestination;
+
+  /// Seçim kipinde arama kutusunun ipucu metni (verilmezse rota hedefi
+  /// metni). Açılıştaki "bağlı marina seç" adımı kendi metnini geçer —
+  /// kullanıcı rota planladığını sanmasın.
+  final String? pickHint;
 
   @override
   ConsumerState<SearchScreen> createState() => _SearchScreenState();
@@ -85,8 +90,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           decoration: InputDecoration(
             // Seçim kipinde ipucu metni ne yaptığımızı söyler; kullanıcı
             // arama ekranına yanlışlıkla düştüğünü sanmasın.
-            hintText:
-                widget.pickDestination ? t.routePickTitle : t.searchHint,
+            hintText: widget.pickDestination
+                ? (widget.pickHint ?? t.routePickTitle)
+                : t.searchHint,
             border: InputBorder.none,
             suffixIcon: state.query.isEmpty
                 ? const DocklyIcon(DocklyIcons.search)

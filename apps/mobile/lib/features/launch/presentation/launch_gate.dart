@@ -1,4 +1,4 @@
-import 'package:dockly_api/dockly_api.dart' show GeoPoint;
+import 'package:dockly_api/dockly_api.dart' show GeoPoint, LocationSummary;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -59,6 +59,8 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
   double? _lengthM;
   double? _draftM;
   int? _regionIndex;
+  String? _boatName;
+  LocationSummary? _marina;
 
   /// Kullanıcı "Soruları atla" dedi mi? Niyet TAŞINIR: bölge de bir sorudur,
   /// atlamak isteyene sonradan yeniden sorulmaz (inceleme bulgusu).
@@ -97,6 +99,26 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
       } catch (_) {
         done = true;
         step = 0;
+      }
+      // DÖNEN KULLANICI + BAĞLI MARİNA (kullanıcı isteği 2026-08): tekne
+      // kaydında marina varsa harita her açılışta o çevrede açılır. Soğuk
+      // açılışta GPS henüz yoktur (izin düğmeye bağlı); kullanıcı "Konumum"a
+      // basınca odak zaten konuma taşınır. Tekne kaydının cihazdan yüklenmesi
+      // BEKLENİR — beklenmezse odak, boş tekneye bakıp hiç kurulmazdı.
+      if (done) {
+        try {
+          await ref.read(myBoatProvider.notifier).ensureRestored();
+          final HomeMarina? hm = ref.read(myBoatProvider)?.homeMarina;
+          if (hm != null &&
+              ref.read(devicePositionProvider) == null &&
+              ref.read(mapFocusProvider) == null) {
+            ref.read(mapFocusProvider.notifier).state = MapFocusRequest(
+              point: GeoPoint(lat: hm.lat, lon: hm.lon),
+              seq: 1,
+              zoom: kHomeMarinaFocusZoom,
+            );
+          }
+        } catch (_) {/* en iyi çaba — odak süslemedir, kapıyı geciktirmez */}
       }
       if (!mounted) return;
       setState(() {
@@ -137,11 +159,13 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
     }
   }
 
-  /// Konum yok. Bölge sorulur — AMA kullanıcı "soruları atla" dediyse
-  /// sorulmaz: atlamak isteyene sonradan soru çıkarmak sözden dönmektir.
-  /// Bu durumda harita kendi varsayılan görünümünde açılır.
+  /// Konum yok. Bölge sorulur — AMA:
+  /// - kullanıcı "soruları atla" dediyse sorulmaz (söz sözdür);
+  /// - BAĞLI MARİNA seçildiyse de sorulmaz (kullanıcı isteği 2026-08):
+  ///   bölge sorusunun tek işi haritanın açılış odağıydı; marina o cevabı
+  ///   zaten daha isabetli veriyor. Bir soru eksik = daha hızlı giriş.
   void _afterPrimerWithoutLocation() {
-    if (_skippedAll) {
+    if (_skippedAll || _marina != null) {
       _complete();
     } else {
       _goto(3);
@@ -155,19 +179,34 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
     ref.read(launchStoreProvider).markDone();
     // Tekne: boy verilmişse MEVCUT modele yazılır (marka VE tip korunur —
     // tek gerçek kaynak Profil → Teknem ile aynı depo; akış tip sormuyor
-    // ama daha önce girilmiş bir tipi de silmiyor).
+    // ama daha önce girilmiş bir tipi de silmiyor). Ad ve bağlı marina da
+    // buradan akar (kullanıcı isteği 2026-08); boş bırakıldıysa eski değer
+    // korunur — akışı yarım dolduran, önceki kaydını silmez.
     final double? len = _lengthM;
     if (len != null) {
       final MyBoat? current = ref.read(myBoatProvider);
+      final LocationSummary? m = _marina;
       ref.read(myBoatProvider.notifier).set(MyBoat(
             lengthM: len,
             draftM: _draftM,
             brand: current?.brand,
             typeId: current?.typeId,
+            name: _boatName ?? current?.name,
+            homeMarina: m != null
+                ? HomeMarina(
+                    id: m.id,
+                    name: m.name,
+                    lat: m.position.lat,
+                    lon: m.position.lon,
+                  )
+                : current?.homeMarina,
           ));
     }
-    // Bölge: haritanın açılış odağı (yüzey onMapReady'de uygular).
+    // Açılış odağı (yüzey onMapReady'de uygular). Öncelik: GPS varsa hiçbiri
+    // (locateMe odağı zaten konuma verdi) → bölge (bölge ekranından çıkış)
+    // → bağlı marina (kullanıcı isteği 2026-08: "marina çevresine odaklan").
     final int? region = applyRegion ? _regionIndex : null;
+    final LocationSummary? marina = _marina;
     if (region != null) {
       final LaunchRegion r = kLaunchRegions[region];
       final MapFocusRequest? prev = ref.read(mapFocusProvider);
@@ -175,6 +214,13 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
         point: GeoPoint(lat: r.lat, lon: r.lon),
         seq: (prev?.seq ?? 0) + 1,
         zoom: kRegionFocusZoom,
+      );
+    } else if (marina != null && ref.read(devicePositionProvider) == null) {
+      final MapFocusRequest? prev = ref.read(mapFocusProvider);
+      ref.read(mapFocusProvider.notifier).state = MapFocusRequest(
+        point: GeoPoint(lat: marina.position.lat, lon: marina.position.lon),
+        seq: (prev?.seq ?? 0) + 1,
+        zoom: kHomeMarinaFocusZoom,
       );
     }
     setState(() => _done = true);
@@ -200,9 +246,14 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
           key: const ValueKey<String>('launch-step-1'),
           initialLengthM: _lengthM ?? kDefaultLengthM,
           initialDraftM: _draftM ?? kDefaultDraftM,
-          onContinue: (double lengthM, double draftM) {
+          initialName: _boatName,
+          initialMarina: _marina,
+          onContinue: (double lengthM, double draftM, String? boatName,
+              LocationSummary? marina) {
             _lengthM = lengthM;
             _draftM = draftM;
+            _boatName = boatName;
+            _marina = marina;
             _goto(2);
           },
           // Atla → konum ön-izni. Konum bir SORU değil, izin; atlanmaz.

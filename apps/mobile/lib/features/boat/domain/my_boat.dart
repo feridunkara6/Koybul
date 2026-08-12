@@ -1,7 +1,33 @@
+/// Teknenin BAĞLI OLDUĞU marina (kullanıcı isteği 2026-08: "tekne tanıtırken
+/// bağlı olduğu marinayı da sorsun; marina çevresine odaklanabiliriz").
+/// Koordinat, seçim anında lokasyon kaydından kopyalanır — açılışta harita
+/// bu noktaya odaklanır (GPS yoksa). Kimlik, ileride detay sayfasına
+/// bağlamak için saklanır.
+class HomeMarina {
+  const HomeMarina({
+    required this.id,
+    required this.name,
+    required this.lat,
+    required this.lon,
+  });
+
+  final String id;
+  final String name;
+  final double lat;
+  final double lon;
+}
+
 /// Kullanıcının teknesi — hafif, oturum içi model (docs/01-prd §6.2 basitleştirilmiş).
 /// Kalıcılık (cihazda hatırlama) bir sonraki küçük adımda eklenecek.
 class MyBoat {
-  const MyBoat({required this.lengthM, this.draftM, this.brand, this.typeId});
+  const MyBoat({
+    required this.lengthM,
+    this.draftM,
+    this.brand,
+    this.typeId,
+    this.name,
+    this.homeMarina,
+  });
 
   /// Tekne boyu (m) — zorunlu. İÇ BİRİM her zaman metredir (uyum hesapları
   /// metre üzerinden); karşılama ekranı denizci diliyle FEET sorar ve çevirir.
@@ -17,6 +43,14 @@ class MyBoat {
   /// 'sail' | 'motor' | 'catamaran' | 'gulet'. Rüzgâr vurguları ve ileride
   /// rezervasyon ön-dolumu için saklanır; bilinmiyorsa null.
   final String? typeId;
+
+  /// Teknenin adı (ör. "Martı") — opsiyonel, kişiselleştirme için
+  /// (kullanıcı isteği 2026-08).
+  final String? name;
+
+  /// Bağlı olduğu marina — opsiyonel. Verilirse harita açılışta bu çevreye
+  /// odaklanır (GPS paylaşılmadıysa).
+  final HomeMarina? homeMarina;
 }
 
 /// Feet → metre (uluslararası sabit: 1 ft = 0.3048 m), 1 ondalığa yuvarlanır.

@@ -488,6 +488,13 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface>
   Widget build(BuildContext context) {
     // Tekne tanımlıysa pinlerde uyum rozeti gösterilir (wow kişiselleştirme).
     final MyBoat? boat = ref.watch(myBoatProvider);
+    // PERF (kasma şikâyeti 2026-08): "damlama" girişi çok pinli sahnede
+    // KAPATILIR. Zoom pin eşiğini geçince onlarca pin AYNI ANDA belirir;
+    // her biri 260 ms boyunca her karede ölçek animasyonu çizmek, tam da
+    // kullanıcının parmağı ekrandayken kare düşürüyordu. Az pinde (keşif
+    // hissi asıl orada) animasyon durur; kalabalıkta pinler düz belirir.
+    final bool dropIn = widget.data.pins.length <= 60 &&
+        !MediaQuery.of(context).disableAnimations;
     return FlutterMap(
       mapController: _map,
       options: MapOptions(
@@ -638,6 +645,7 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface>
                 alignment: Alignment.topCenter,
                 child: RepaintBoundary(
                   child: _DropIn(
+                    animate: dropIn,
                     child: _PinMarker(
                       type: p.type,
                       selected: p.id == widget.data.selectedPinId,
@@ -785,12 +793,17 @@ class _MapAttribution extends StatelessWidget {
 /// Pin "damlama" girişi (onaylı E7): küçükten büyüyerek belirme — TEK yönlü,
 /// 260 ms'de biter (tekrar eden animasyon yok; test/pil dostu).
 class _DropIn extends StatelessWidget {
-  const _DropIn({required this.child});
+  const _DropIn({required this.child, this.animate = true});
 
   final Widget child;
 
+  /// false → animasyonsuz düz beliriş (PERF: kalabalık pin sahnesi ve
+  /// "hareketi azalt" tercihi — bkz. build'deki dropIn kararı).
+  final bool animate;
+
   @override
   Widget build(BuildContext context) {
+    if (!animate) return child;
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(begin: 0.8, end: 1),
       duration: const Duration(milliseconds: 260),

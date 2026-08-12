@@ -18,11 +18,22 @@ class MyBoatController extends Notifier<MyBoat?> {
   /// Öyleyse geç gelen `_restore` kullanıcının seçimini EZMEZ (yarış koruması).
   bool _touched = false;
 
+  /// Açılış yüklemesinin bittiği an — açılış kapısı "bağlı marina odağı"nı
+  /// vermeden önce bunu bekler (kullanıcı isteği 2026-08: harita, teknenin
+  /// bağlı olduğu marina çevresinde açılsın).
+  late Future<void> _restored;
+
   @override
   MyBoat? build() {
-    unawaited(_restore());
+    final Future<void> f = _restore();
+    _restored = f;
+    unawaited(f);
     return null;
   }
+
+  /// Cihazdan yükleme tamamlanınca çözülür (hata durumunda da çözülür —
+  /// asla fırlatmaz; depolama sözleşmesiyle aynı: en iyi çaba).
+  Future<void> ensureRestored() => _restored;
 
   BoatStorage get _storage => ref.read(boatStorageProvider);
 
