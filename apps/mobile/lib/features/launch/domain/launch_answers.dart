@@ -1,34 +1,27 @@
-/// Açılış sorularının cevap uzayı (onaylı tasarım E3–E5, 2026-08).
+/// Açılış sorularının cevap uzayı (onaylı tasarım E4–E5, 2026-08;
+/// Faz 1'de sadeleştirildi).
 library;
 
-/// Tekne tipi seçenekleri — E3. Kimlikler MyBoat.typeId'ye yazılır.
-enum BoatTypeChoice {
-  sail('sail'),
-  motor('motor'),
-  catamaran('catamaran'),
-  gulet('gulet');
+/// Ölçü kaydırıcılarının başlangıç değerleri.
+///
+/// Eskiden bunlar bir "tekne tipi" sorusundan türetiliyordu (yelkenli 12/1,8 ·
+/// motoryat 14/1,2 · katamaran 12/1,1 · gulet 20/2,5). O soru Faz 1'de
+/// KALDIRILDI: verilen cevap `MyBoat.typeId` alanına yazılıyor ama uygulamada
+/// hiçbir yerde OKUNMUYORDU — yani kullanıcıya sorulan ilk soru, hiçbir işe
+/// yaramayan bir soruydu. Geriye kalan tek işlevi buradaki iki başlangıç
+/// değeriydi; onlar da yelkenli varsayılanına sabitlendi (Türkiye kıyısındaki
+/// amatör filonun ağırlık merkezi orası).
+///
+/// Kullanıcı ölçüyü zaten kaydırıcıyla ayarlıyor; tip bilgisine ihtiyaç
+/// duyulursa Profil → Teknem'den girilebilir.
+const double kDefaultLengthM = 12;
+const double kDefaultDraftM = 1.8;
 
-  const BoatTypeChoice(this.id);
-
-  final String id;
-
-  /// E4 kaydırıcılarının tipe göre AKILLI VARSAYILANLARI (onaylı):
-  /// yelkenli 12 m / 1,8 m · motoryat 14 m / 1,2 m · katamaran 12 m / 1,1 m ·
-  /// gulet 20 m / 2,5 m. Tip seçilmediyse yelkenli varsayılanı kullanılır.
-  double get defaultLengthM => switch (this) {
-        BoatTypeChoice.sail => 12,
-        BoatTypeChoice.motor => 14,
-        BoatTypeChoice.catamaran => 12,
-        BoatTypeChoice.gulet => 20,
-      };
-
-  double get defaultDraftM => switch (this) {
-        BoatTypeChoice.sail => 1.8,
-        BoatTypeChoice.motor => 1.2,
-        BoatTypeChoice.catamaran => 1.1,
-        BoatTypeChoice.gulet => 2.5,
-      };
-}
+/// İlerleme çubuğunun paydası: akışta kalan SORU ekranı sayısı (ölçüler +
+/// bölge). Karşılama ve konum ön-izni soru değildir, sayılmaz. Bölge yalnız
+/// konum reddedilirse çıktığı için çoğu kullanıcı yalnız 1/2'yi görür — bu
+/// bilinçli: "en fazla iki soru" sözü, gördüğün her ekranda tutulur.
+const int kLaunchQuestionCount = 2;
 
 /// Seyir bölgesi — E5. Adlar YER ADIDIR (özel isim, çevrilmez); merkezler
 /// bölgenin coğrafi orta noktası (gerçek koordinat — uydurma veri değil).

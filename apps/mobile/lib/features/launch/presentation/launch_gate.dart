@@ -20,15 +20,24 @@ import 'welcome_screen.dart';
 final Provider<LaunchStore> launchStoreProvider =
     Provider<LaunchStore>((ref) => const SharedPrefsLaunchStore());
 
-/// AÇILIŞ KAPISI (onaylı tasarım 2026-08, Paket 2: E2 + E3–E5).
+/// AÇILIŞ KAPISI — Faz 1'de KISALTILDI (5 ekran → 3).
 ///
-/// İLK açılış: karşılama (E2) → tekne tipi (E3) → ölçüler (E4) → bölge (E5)
-/// → konum ön-izni (E6) → harita. DÖNEN kullanıcı hiçbirini görmez. Kurallar:
-/// - "Soruları atla" kalan soruları atlar ve E6'ya gider (onaylı akış); o ana
-///   dek verilen cevaplar YİNE uygulanır (atlayan cezalandırılmaz).
-/// - Adım cihaza işlenir (`onb.v2.step`): sekmeyi E4'te kapatan, E4'te açar.
-/// - Tekne cevapları MEVCUT "Teknem" modeline yazılır (tek gerçek kaynak;
-///   çift tekne kaydı oluşmaz). Bölge, haritanın açılış odağı olur.
+/// Eski akış: karşılama → tekne tipi → ölçüler → bölge → konum ön-izni.
+/// Beş tam ekran, arkasından da 10 kartlık tanıtım turu; kullanıcı haritayı
+/// görmeden önce iki dakikalık bir tören yaşıyordu. Denetimin bulgusu net:
+/// en yüksek kayıp ilk iki dakikada.
+///
+/// Yeni akış: **karşılama → ölçüler → konum ön-izni → harita.**
+/// - TEKNE TİPİ kaldırıldı: cevabı hiçbir yerde okunmuyordu (launch_answers).
+/// - BÖLGE artık koşullu: konum izni verildiyse zaten gereksizdi (eski kodda
+///   da veriliyorsa cevap ÇÖPE ATILIYORDU). Yalnız izin gelmediğinde sorulur,
+///   çünkü orada gerçekten işe yarar: haritanın nereyi göstereceğini o belirler.
+///
+/// İzin veren kullanıcı 2 soru görür; vermeyen 3. Kurallar aynı kaldı:
+/// - "Soruları atla" kalan soruları atlar; o ana dek verilen cevaplar YİNE
+///   uygulanır (atlayan cezalandırılmaz).
+/// - Adım cihaza işlenir (`onb.v2.step`): yarım kalan akış kaldığı yerden sürer.
+/// - Tekne cevapları MEVCUT "Teknem" modeline yazılır (tek gerçek kaynak).
 /// - "Giriş yap" akışı TAMAMLAMAZ (dönünce kaldığı yerden).
 class LaunchGate extends ConsumerStatefulWidget {
   const LaunchGate({required this.child, super.key});
@@ -43,14 +52,17 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
   /// null = depo okunuyor; true = kabuk; false = akış.
   bool? _done;
 
-  /// 0 karşılama · 1 tekne tipi · 2 ölçüler · 3 bölge · 4 konum ön-izni.
+  /// 0 karşılama · 1 ölçüler · 2 konum ön-izni · 3 bölge (yalnız izin yoksa).
   int _step = 0;
 
   // Akış içinde toplanan cevaplar (hepsi isteğe bağlı).
-  BoatTypeChoice? _type;
   double? _lengthM;
   double? _draftM;
   int? _regionIndex;
+
+  /// Kullanıcı "Soruları atla" dedi mi? Niyet TAŞINIR: bölge de bir sorudur,
+  /// atlamak isteyene sonradan yeniden sorulmaz (inceleme bulgusu).
+  bool _skippedAll = false;
 
   @override
   void initState() {
@@ -74,6 +86,13 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
         final List<Object> both = await Future.wait<Object>(
             <Future<Object>>[store.isDone(), store.step()]);
         done = both[0] as bool;
+        // 0..4. Eski numaralar hiç görünmez: depolama anahtarı Faz 1'de
+        // sürümlendi (bkz. SharedPrefsLaunchStore). Kırpma yine de durur —
+        // bozuk/ileri bir değer kullanıcıyı boş ekrana düşürmesin.
+        //
+        // 4 gerçek bir ekran DEĞİL, "konum ön-izni + kullanıcı soruları
+        // atlamıştı" durumudur; niyetin uygulama kapansa bile yaşaması için
+        // cihaza böyle yazılır (inceleme bulgusu).
         step = done ? 0 : (both[1] as int).clamp(0, 4);
       } catch (_) {
         done = true;
@@ -82,7 +101,9 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
       if (!mounted) return;
       setState(() {
         _done = done;
-        _step = step;
+        // 4 = "konum ön-izni, sorular atlanmış" → ekran 2, niyet geri yüklenir.
+        _skippedAll = step == 4;
+        _step = step == 4 ? 2 : step;
       });
       // AÇILIŞ EKRANINA HABER VER: gösterilecek doğru ekran artık belli.
       // Bundan sonra beklemenin karşılığı yok — marka yüzeyi çekilebilir.
@@ -92,29 +113,49 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
     });
   }
 
-  void _goto(int step) {
-    ref.read(launchStoreProvider).setStep(step); // en iyi çaba, beklenmez
+  /// [persistAs] verilirse cihaza YAZILAN değer ekrandan farklı olur; tek
+  /// kullanımı "atlandı" niyetini de taşıyan 4 kodudur.
+  void _goto(int step, {int? persistAs}) {
+    ref.read(launchStoreProvider).setStep(persistAs ?? step); // en iyi çaba
     setState(() => _step = step);
   }
 
   /// E6: "Konumumu kullan" — tarayıcı izin penceresi BURADA açılır (locateMe).
-  /// İzin gelirse kamera konuma iner (locateMe odak isteğini kendisi üretir,
-  /// bölge odağı uygulanmaz); gelmezse SESSİZCE bölgeyle devam edilir —
-  /// suçlama yok, hiçbir özellik kilitlenmez (onaylı E6 kuralı).
+  ///
+  /// İzin GELİRSE akış biter: kamera konuma iner, bölge sorusu hiç sorulmaz —
+  /// konum varken bölge cevabı zaten kullanılmıyordu.
+  /// İzin GELMEZSE bölge sorusuna geçilir; harita bir yeri göstermek zorunda
+  /// ve o yeri artık ancak kullanıcı söyleyebilir. Suçlama yok, hiçbir özellik
+  /// kilitlenmez (onaylı E6 kuralı).
   Future<void> _useLocation() async {
     await ref.read(locationControllerProvider.notifier).locateMe();
     if (!mounted) return;
-    final bool granted = ref.read(devicePositionProvider) != null;
-    _complete(applyRegion: !granted);
+    if (ref.read(devicePositionProvider) != null) {
+      _complete();
+    } else {
+      _afterPrimerWithoutLocation();
+    }
+  }
+
+  /// Konum yok. Bölge sorulur — AMA kullanıcı "soruları atla" dediyse
+  /// sorulmaz: atlamak isteyene sonradan soru çıkarmak sözden dönmektir.
+  /// Bu durumda harita kendi varsayılan görünümünde açılır.
+  void _afterPrimerWithoutLocation() {
+    if (_skippedAll) {
+      _complete();
+    } else {
+      _goto(3);
+    }
   }
 
   /// Akışı bitirir: karar cihaza, cevaplar sistemlere.
-  /// [applyRegion] E6 çıkışlarında true olur; "seçilmemiş bölge" uydurulamaz —
-  /// kullanıcı E5'te bölge seçmediyse odak yine uygulanmaz.
+  /// [applyRegion] yalnız bölge ekranından çıkarken true olur; "seçilmemiş
+  /// bölge" uydurulamaz — kullanıcı çip seçmediyse odak yine uygulanmaz.
   void _complete({bool applyRegion = false}) {
     ref.read(launchStoreProvider).markDone();
-    // Tekne: boy verilmişse MEVCUT modele yazılır (marka korunur — tek
-    // gerçek kaynak Profil → Teknem ile aynı depo).
+    // Tekne: boy verilmişse MEVCUT modele yazılır (marka VE tip korunur —
+    // tek gerçek kaynak Profil → Teknem ile aynı depo; akış tip sormuyor
+    // ama daha önce girilmiş bir tipi de silmiyor).
     final double? len = _lengthM;
     if (len != null) {
       final MyBoat? current = ref.read(myBoatProvider);
@@ -122,7 +163,7 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
             lengthM: len,
             draftM: _draftM,
             brand: current?.brand,
-            typeId: _type?.id,
+            typeId: current?.typeId,
           ));
     }
     // Bölge: haritanın açılış odağı (yüzey onMapReady'de uygular).
@@ -155,35 +196,35 @@ class _LaunchGateState extends ConsumerState<LaunchGate> {
           key: const ValueKey<String>('launch-step-0'),
           onStart: () => _goto(1),
         ),
-      1 => BoatTypeScreen(
+      1 => BoatSizeScreen(
           key: const ValueKey<String>('launch-step-1'),
-          selected: _type,
-          onSelect: (BoatTypeChoice c) => setState(() => _type = c),
-          onContinue: () => _goto(2),
-          onSkipAll: () => _goto(4), // onaylı akış: Atla → E6 (konum)
-        ),
-      2 => BoatSizeScreen(
-          key: const ValueKey<String>('launch-step-2'),
-          initialLengthM: _lengthM ?? (_type ?? BoatTypeChoice.sail).defaultLengthM,
-          initialDraftM: _draftM ?? (_type ?? BoatTypeChoice.sail).defaultDraftM,
+          initialLengthM: _lengthM ?? kDefaultLengthM,
+          initialDraftM: _draftM ?? kDefaultDraftM,
           onContinue: (double lengthM, double draftM) {
             _lengthM = lengthM;
             _draftM = draftM;
-            _goto(3);
+            _goto(2);
           },
-          onSkipAll: () => _goto(4),
+          // Atla → konum ön-izni. Konum bir SORU değil, izin; atlanmaz.
+          // Cihaza 4 yazılır: "primer + atlandı" (bkz. yükleme kodu).
+          onSkipAll: () {
+            _skippedAll = true;
+            _goto(2, persistAs: 4);
+          },
         ),
-      3 => RegionScreen(
+      2 => LocationPrimerScreen(
+          key: const ValueKey<String>('launch-step-2'),
+          onUseLocation: _useLocation,
+          // "Şimdilik bölgemle devam" → bölgeyi SORMAK gerekir; harita bir
+          // yeri göstermeli ve konum yokken onu ancak kullanıcı bilir.
+          onContinueWithout: _afterPrimerWithoutLocation,
+        ),
+      _ => RegionScreen(
           key: const ValueKey<String>('launch-step-3'),
           selectedIndex: _regionIndex,
           onSelect: (int i) => setState(() => _regionIndex = i),
-          onOpenMap: () => _goto(4), // "Haritayı aç" → önce konum ön-izni
-          onSkipAll: () => _goto(4),
-        ),
-      _ => LocationPrimerScreen(
-          key: const ValueKey<String>('launch-step-4'),
-          onUseLocation: _useLocation,
-          onContinueWithout: () => _complete(applyRegion: true),
+          onOpenMap: () => _complete(applyRegion: true),
+          onSkipAll: () => _complete(applyRegion: true),
         ),
     };
 

@@ -12,7 +12,13 @@ class SharedPrefsLaunchStore implements LaunchStore {
   const SharedPrefsLaunchStore();
 
   static const String _doneKey = 'onb.v2.launchDone';
-  static const String _stepKey = 'onb.v2.step';
+  // ADIM ANAHTARI SÜRÜMLENDİ (Faz 1). Akış kısalınca adım NUMARALARININ
+  // ANLAMI değişti (2 artık "ölçüler" değil "konum ön-izni"). Eski numarayı
+  // yeni akışta okumak, yükseltme sırasında akışın ortasında olan kullanıcıyı
+  // yanlış ekrana düşürürdü — o yüzden anahtar değişti: eski değer görünmez
+  // olur, kullanıcı kısalmış akışa baştan başlar. `launchDone` anahtarı AYNI
+  // kaldı; akışı bitirmiş kullanıcı hiçbir şey görmez.
+  static const String _stepKey = 'onb.v3.step';
 
   @override
   Future<bool> isDone() async {

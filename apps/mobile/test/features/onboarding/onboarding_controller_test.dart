@@ -21,8 +21,10 @@ OnboardingController _ctrl(ProviderContainer c) =>
 OnboardingState _state(ProviderContainer c) =>
     c.read(onboardingControllerProvider);
 
-/// TANITIM BEYNİ v2 testleri (kullanıcı isteği 2026-08): kartlar ilk açılışta
-/// KENDİLİĞİNDEN başlar, dokundukça ilerler; karar anında cihaza işlenir.
+/// TANITIM BEYNİ testleri. FAZ 1'de değişen sözleşme: kartlar ilk açılışta
+/// KENDİLİĞİNDEN BAŞLAMAZ — tek satırlık bir davet çıkar, isteyen açar.
+/// Kart akışının kendisi (dokundukça ilerleme, Atla, Profil'den yeniden
+/// izleme) aynen korundu.
 void main() {
   test('depo yok/bozuk (null) → hazır DEĞİL: hiçbir tanıtım öğesi çıkmaz', () async {
     final ProviderContainer c = _container(FakeOnboardingStore()); // data null
@@ -34,8 +36,8 @@ void main() {
     expect(s.showHint(kHintBottomCard), isFalse);
   });
 
-  test('İLK AÇILIŞ: kartlar otomatik başlar; karar ANINDA cihaza işlenir '
-      '(yarıda kapansa bile bir daha kendiliğinden açılmaz)', () async {
+  test('İLK AÇILIŞ (Faz 1): tur BAŞLAMAZ, davet çıkar; karar ANINDA işlenir',
+      () async {
     final FakeOnboardingStore store =
         FakeOnboardingStore(data: const OnboardingData());
     final ProviderContainer c = _container(store);
@@ -43,9 +45,40 @@ void main() {
     await Future<void>.delayed(Duration.zero);
     final OnboardingState s = _state(c);
     expect(s.ready, isTrue);
-    expect(s.tourStep, 0); // kartlar kendiliğinden açıldı
+    expect(s.tourActive, isFalse); // 10 kartlık tören kalktı
+    expect(s.tourInvite, isTrue); // yerine tek satırlık soru
     expect(store.saveCount, 1);
     expect(store.data!.welcomeDone, isTrue); // kalıcı karar
+  });
+
+  test('davet: "Göster" turu açar, "Şimdi değil" sessizce kapatır', () async {
+    final ProviderContainer c =
+        _container(FakeOnboardingStore(data: const OnboardingData()));
+    c.read(onboardingControllerProvider);
+    await Future<void>.delayed(Duration.zero);
+
+    _ctrl(c).acceptTourInvite();
+    expect(_state(c).tourStep, 0);
+    expect(_state(c).tourInvite, isFalse);
+
+    // Reddetme yolu ayrı bir kapsayıcıda.
+    final ProviderContainer c2 =
+        _container(FakeOnboardingStore(data: const OnboardingData()));
+    c2.read(onboardingControllerProvider);
+    await Future<void>.delayed(Duration.zero);
+    _ctrl(c2).declineTourInvite();
+    expect(_state(c2).tourActive, isFalse);
+    expect(_state(c2).tourInvite, isFalse);
+  });
+
+  test('davet dururken ipuçları susar (iki uyarı üst üste binmesin)', () async {
+    final ProviderContainer c =
+        _container(FakeOnboardingStore(data: const OnboardingData()));
+    c.read(onboardingControllerProvider);
+    await Future<void>.delayed(Duration.zero);
+    expect(_state(c).showHint(kHintBottomCard), isFalse);
+    _ctrl(c).declineTourInvite();
+    expect(_state(c).showHint(kHintBottomCard), isTrue);
   });
 
   test('İKİNCİ açılış: kartlar kendiliğinden AÇILMAZ', () async {
@@ -58,12 +91,14 @@ void main() {
     expect(_state(c).tourActive, isFalse);
   });
 
-  test('dokunuş akışı: 7 kartta biter; Atla her an kapatır; Profil yeniden açar', () async {
+  test('dokunuş akışı: son kartta biter; Atla her an kapatır; Profil yeniden açar',
+      () async {
     final FakeOnboardingStore store =
         FakeOnboardingStore(data: const OnboardingData());
     final ProviderContainer c = _container(store);
     c.read(onboardingControllerProvider);
     await Future<void>.delayed(Duration.zero);
+    _ctrl(c).acceptTourInvite(); // Faz 1: tur davetle başlar
     expect(_state(c).tourStep, 0);
 
     for (int i = 1; i < kTourStepCount; i++) {

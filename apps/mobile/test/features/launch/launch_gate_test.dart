@@ -45,8 +45,11 @@ Future<void> _tapVisible(WidgetTester tester, Finder finder) async {
   await tester.pumpAndSettle();
 }
 
-/// AÇILIŞ AKIŞI testleri — E2–E6 (onaylı tasarım 2026-08, Paket 3):
-/// karşılama → tekne tipi → ölçüler → bölge → KONUM ÖN-İZNİ → harita.
+/// AÇILIŞ AKIŞI testleri — FAZ 1'de kısaltıldı (5 ekran → 3):
+/// karşılama → ölçüler → KONUM ÖN-İZNİ → harita.
+/// Bölge sorusu yalnız konum gelmezse çıkar (izin varken cevabı zaten
+/// kullanılmıyordu). Tekne tipi sorusu tamamen kaldırıldı (cevabı hiçbir
+/// yerde okunmuyordu).
 void main() {
   testWidgets('İLK açılış: karşılama görünür, kabuk görünmez', (
     WidgetTester tester,
@@ -60,8 +63,8 @@ void main() {
     expect(find.text('KABUK'), findsNothing);
   });
 
-  testWidgets('TAM AKIŞ: sorular → E6 "bölgemle devam" → harita; cevaplar '
-      'Teknem modeline, bölge harita odağına yazılır', (
+  testWidgets('TAM AKIŞ (konum yok): karşılama → ölçüler → konum ön-izni → '
+      'bölge → harita; cevaplar Teknem modeline ve harita odağına yazılır', (
     WidgetTester tester,
   ) async {
     final FakeLaunchStore store = FakeLaunchStore();
@@ -69,42 +72,39 @@ void main() {
     await tester.pumpWidget(_app(store, boatStorage: boatStorage));
     await tester.pumpAndSettle();
 
-    // E2 → E3 (adım cihaza işlenir).
+    // Karşılama → ÖLÇÜLER (artık ilk soru bu; tekne tipi kaldırıldı).
     await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-start')));
-    expect(find.text('Nasıl bir tekneyle geziyorsun?'), findsOneWidget);
-    expect(store.savedStep, 1);
-
-    // Yelkenli seç → Devam (seçim otomatik ilerletmez — onaylı kural).
-    await _tapVisible(tester, find.byKey(const ValueKey<String>('boat-type-sail')));
-    expect(find.text('Nasıl bir tekneyle geziyorsun?'), findsOneWidget);
-    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-q-cta')));
-
-    // E4: yelkenli varsayılanları (12 m / 1.8 m); Devam.
+    expect(find.text('Nasıl bir tekneyle geziyorsun?'), findsNothing);
     expect(find.text('Teknenin ölçüleri?'), findsOneWidget);
+    expect(store.savedStep, 1);
+    // Varsayılanlar tipten değil sabitten gelir (12 m / 1.8 m).
     expect(find.text('12 m'), findsOneWidget);
     expect(find.text('1.8 m'), findsOneWidget);
     await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-q-cta')));
 
-    // E5: Bodrum–Gökova seç → "Haritayı aç" → E6 KONUM ÖN-İZNİ (harita değil!).
+    // KONUM ÖN-İZNİ.
+    expect(find.text('Haritayı sana göre açalım'), findsOneWidget);
+    expect(store.savedStep, 2);
+
+    // "Şimdilik bölgemle devam" → BÖLGE sorusu (harita bir yeri göstermeli).
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-loc-skip')));
     expect(find.text('En çok nerede geziyorsun?'), findsOneWidget);
+    expect(find.text('KABUK'), findsNothing);
+    expect(store.savedStep, 3);
+
+    // Bodrum–Gökova seç → "Haritayı aç" → harita.
     await _tapVisible(tester, find.byKey(const ValueKey<String>('region-2')));
     await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-q-cta')));
-    expect(find.text('Haritayı sana göre açalım'), findsOneWidget);
-    expect(find.text('KABUK'), findsNothing);
-    expect(store.savedStep, 4);
-
-    // E6: izinsiz devam → harita; bölge odağı uygulanır, izin penceresi YOK.
-    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-loc-skip')));
     expect(find.text('KABUK'), findsOneWidget);
     expect(store.done, isTrue);
     expect(store.markCount, 1);
     expect(store.savedStep, 0);
 
-    // Tekne TEK gerçek kaynağa yazıldı.
+    // Tekne TEK gerçek kaynağa yazıldı (tip sorulmadı → null).
     expect(boatStorage.boat, isNotNull);
     expect(boatStorage.boat!.lengthM, 12);
     expect(boatStorage.boat!.draftM, 1.8);
-    expect(boatStorage.boat!.typeId, 'sail');
+    expect(boatStorage.boat!.typeId, isNull);
 
     // Bölge odağı: Gökova, körfez ölçeği (zoom 9).
     final ProviderContainer c =
@@ -115,6 +115,25 @@ void main() {
     expect(focus.point.lat, closeTo(36.99, 0.01));
   });
 
+  testWidgets('İZİN VERİLİRSE bölge HİÇ sorulmaz — akış 2 soruda biter',
+      (WidgetTester tester) async {
+    // Faz 1'in asıl kazancı bu yol: eski kodda bölge sorulup cevap ÇÖPE
+    // ATILIYORDU (konum varken uygulanmıyordu). Artık hiç sorulmuyor.
+    final FakeLaunchStore store = FakeLaunchStore();
+    await tester.pumpWidget(_app(
+      store,
+      location: FakeLocationService(const GeoPoint(lat: 36.55, lon: 28.05)),
+    ));
+    await tester.pumpAndSettle();
+
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-start')));
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-q-cta')));
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-loc-use')));
+
+    expect(find.text('En çok nerede geziyorsun?'), findsNothing);
+    expect(find.text('KABUK'), findsOneWidget);
+  });
+
   testWidgets('E6 "Konumumu kullan" (izin VERİLDİ): konum alınır, kamera '
       'konuma iner — bölge odağı konumu EZMEZ', (WidgetTester tester) async {
     final FakeLaunchStore store = FakeLaunchStore();
@@ -123,7 +142,7 @@ void main() {
     await tester.pumpWidget(_app(store, location: location));
     await tester.pumpAndSettle();
 
-    // Hızlı yol: soruları atla → E6.
+    // Hızlı yol: soruları atla → konum ön-izni.
     await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-start')));
     await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-skip-all')));
     expect(find.text('Haritayı sana göre açalım'), findsOneWidget);
@@ -143,9 +162,9 @@ void main() {
     expect(focus.zoom, isNull);
   });
 
-  testWidgets('E6 izin REDDEDİLDİ: sessizce devam — kabuk açılır, suçlama yok',
+  testWidgets('İZİN REDDEDİLDİ: suçlama yok — bölge sorulur, sonra harita',
       (WidgetTester tester) async {
-    final FakeLaunchStore store = FakeLaunchStore(savedStep: 4);
+    final FakeLaunchStore store = FakeLaunchStore(savedStep: 2);
     final FakeLocationService location = FakeLocationService(null);
     await tester.pumpWidget(_app(store, location: location));
     await tester.pumpAndSettle();
@@ -154,12 +173,18 @@ void main() {
     await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-loc-use')));
 
     expect(location.calls, 1);
-    expect(find.text('KABUK'), findsOneWidget); // akış kilitlenmedi
+    // Konum gelmedi → harita bir yeri göstermek zorunda; onu ancak kullanıcı
+    // bilir. Akış kilitlenmez, bölge sorusuna düşer.
+    expect(find.text('En çok nerede geziyorsun?'), findsOneWidget);
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-skip-all')));
+    expect(find.text('KABUK'), findsOneWidget);
     expect(store.done, isTrue);
   });
 
-  testWidgets('SORULARI ATLA: E3\'te atla → E6\'ya gider (haritaya değil); '
-      'tekne yazılmaz, bölge odağı uygulanmaz', (WidgetTester tester) async {
+  testWidgets('SORULARI ATLA: niyet TAŞINIR — bölge bir daha sorulmaz',
+      (WidgetTester tester) async {
+    // İnceleme bulgusu: "atla" diyene, konum ekranından sonra ÜÇÜNCÜ bir
+    // soru çıkarmak sözden dönmektir. Konum bir soru değil, izin — o sorulur.
     final FakeLaunchStore store = FakeLaunchStore();
     final FakeBoatStorage boatStorage = FakeBoatStorage();
     await tester.pumpWidget(_app(store, boatStorage: boatStorage));
@@ -169,10 +194,11 @@ void main() {
     await _tapVisible(
         tester, find.byKey(const ValueKey<String>('launch-skip-all')));
 
-    // Onaylı akış: Atla → E6 (konum sorusu atlanmaz, sorular atlanır).
     expect(find.text('Haritayı sana göre açalım'), findsOneWidget);
     await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-loc-skip')));
 
+    // Doğrudan harita — bölge sorusu ÇIKMAZ.
+    expect(find.text('En çok nerede geziyorsun?'), findsNothing);
     expect(find.text('KABUK'), findsOneWidget);
     expect(store.done, isTrue);
     expect(boatStorage.boat, isNull); // uydurma tekne kaydı yok
@@ -184,11 +210,54 @@ void main() {
   testWidgets('YARIM KALAN akış kaldığı adımdan sürer (onb.v2.step)', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(_app(FakeLaunchStore(savedStep: 2)));
+    await tester.pumpWidget(_app(FakeLaunchStore(savedStep: 1)));
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey<String>('launch-welcome')), findsNothing);
     expect(find.text('Teknenin ölçüleri?'), findsOneWidget);
+  });
+
+  testWidgets('BOZUK/İLERİ adım değeri boş ekrana düşürmez', (
+    WidgetTester tester,
+  ) async {
+    // Akış Faz 1'de kısaldı. Eski numaralar depolama anahtarı sürümlendiği
+    // için hiç okunmaz; yine de aralık dışı bir değer gelirse kullanıcı boş
+    // ekranda kalmamalı — son geçerli koda kırpılır.
+    await tester.pumpWidget(_app(FakeLaunchStore(savedStep: 99)));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Haritayı sana göre açalım'), findsOneWidget);
+  });
+
+  testWidgets('ATLA niyeti uygulama kapansa bile yaşar (cihaza yazılır)', (
+    WidgetTester tester,
+  ) async {
+    // "Soruları atla" dedikten sonra uygulamayı kapatıp açan kullanıcıya,
+    // konum ekranından sonra bölge sorusu ÇIKMAMALI. Niyet 4 koduyla cihaza
+    // yazılıyor; burada o kodla yeniden başlatılıyoruz.
+    final FakeLaunchStore store = FakeLaunchStore(savedStep: 4);
+    await tester.pumpWidget(_app(store));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Haritayı sana göre açalım'), findsOneWidget);
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-loc-skip')));
+    expect(find.text('En çok nerede geziyorsun?'), findsNothing);
+    expect(find.text('KABUK'), findsOneWidget);
+  });
+
+  testWidgets('ATLA cihaza 4 olarak yazılır (ekran 2, niyet dahil)', (
+    WidgetTester tester,
+  ) async {
+    final FakeLaunchStore store = FakeLaunchStore();
+    await tester.pumpWidget(_app(store));
+    await tester.pumpAndSettle();
+
+    await _tapVisible(tester, find.byKey(const ValueKey<String>('launch-start')));
+    await _tapVisible(
+        tester, find.byKey(const ValueKey<String>('launch-skip-all')));
+
+    expect(find.text('Haritayı sana göre açalım'), findsOneWidget);
+    expect(store.savedStep, 4);
   });
 
   testWidgets('DÖNEN kullanıcı: hiçbir açılış ekranı görünmez, doğrudan kabuk', (

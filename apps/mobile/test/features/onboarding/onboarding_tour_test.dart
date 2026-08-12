@@ -109,6 +109,15 @@ int _tab(WidgetTester tester) => ProviderScope.containerOf(
       tester.element(find.byType(DocklyShell)),
     ).read(shellTabProvider);
 
+/// FAZ 1: tur artık KENDİLİĞİNDEN başlamıyor — önce tek satırlık bir davet
+/// çıkıyor. Aşağıdaki testler turun DAVRANIŞINI sınadığı için daveti kabul
+/// ederek başlar; davetin kendisi ayrı bir testte doğrulanır.
+Future<void> _startTour(WidgetTester tester) async {
+  expect(find.byKey(const ValueKey<String>('tour-invite')), findsOneWidget);
+  await tester.tap(find.byKey(const ValueKey<String>('tour-invite-yes')));
+  await tester.pumpAndSettle();
+}
+
 Future<void> _advance(WidgetTester tester) async {
   await tester.tapAt(const Offset(40, 300));
   await tester.pumpAndSettle();
@@ -118,12 +127,42 @@ Future<void> _advance(WidgetTester tester) async {
 /// SPOT + OKLA gösterir, gerektiğinde SAYFA DEĞİŞİR, dokundukça ilerler ve
 /// son kart "Hazırsın" deyip Keşfet'e döner.
 void main() {
-  testWidgets('İLK açılış: kart 1 kendiliğinden görünür; dokununca ilerler',
+  testWidgets('İLK AÇILIŞ: tur BAŞLAMAZ, tek satırlık davet çıkar',
+      (WidgetTester tester) async {
+    // Faz 1'in ilk-izlenim kararı: 10 kartlık tören yerine bir soru.
+    final FakeOnboardingStore store =
+        FakeOnboardingStore(data: const OnboardingData());
+    await tester.pumpWidget(_app(store));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('onb-tour-step-0')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('tour-invite')), findsOneWidget);
+    expect(find.text('Kısa bir tanıtım turu ister misin?'), findsOneWidget);
+    // Karar anında işlenir: davet bir daha kendiliğinden çıkmaz.
+    expect(store.data!.welcomeDone, isTrue);
+  });
+
+  testWidgets('davete "Şimdi değil": tur açılmaz, davet kaybolur, harita kalır',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+        _app(FakeOnboardingStore(data: const OnboardingData())));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey<String>('tour-invite-no')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('tour-invite')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('onb-tour-step-0')), findsNothing);
+    expect(_tab(tester), 0); // kullanıcı haritada, hiçbir şey kapatmıyor
+  });
+
+  testWidgets('davet kabul edilince kart 1 görünür; dokununca ilerler',
       (WidgetTester tester) async {
     final FakeOnboardingStore store =
         FakeOnboardingStore(data: const OnboardingData());
     await tester.pumpWidget(_app(store));
     await tester.pumpAndSettle();
+    await _startTour(tester);
 
     expect(find.byKey(const ValueKey<String>('onb-tour-step-0')), findsOneWidget);
     expect(find.text('Harita hazır, kaptan'), findsOneWidget);
@@ -144,6 +183,7 @@ void main() {
     await tester.pumpWidget(
         _app(FakeOnboardingStore(data: const OnboardingData())));
     await tester.pumpAndSettle();
+    await _startTour(tester);
 
     await _advance(tester); // → harita ve koylar
     await _advance(tester); // → filtreler (hedef: üstteki çip şeridi)
@@ -162,6 +202,7 @@ void main() {
         FakeOnboardingStore(data: const OnboardingData());
     await tester.pumpWidget(_app(store));
     await tester.pumpAndSettle();
+    await _startTour(tester);
     await tester.tap(find.text('Atla'));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey<String>('onb-tour-step-0')), findsNothing);
@@ -175,6 +216,7 @@ void main() {
     await tester.pumpWidget(
         _app(FakeOnboardingStore(data: const OnboardingData())));
     await tester.pumpAndSettle();
+    await _startTour(tester);
     final ProviderContainer c = ProviderScope.containerOf(
         tester.element(find.byType(DocklyShell)));
 
@@ -238,6 +280,7 @@ void main() {
     await tester.pumpWidget(
         _app(FakeOnboardingStore(data: const OnboardingData())));
     await tester.pumpAndSettle();
+    await _startTour(tester);
 
     for (int i = 0; i < 8; i++) {
       await _advance(tester); // adım 8 = Teknem (sekme 3)
@@ -302,6 +345,7 @@ void main() {
     await tester.pumpWidget(
         _app(FakeOnboardingStore(data: const OnboardingData())));
     await tester.pumpAndSettle();
+    await _startTour(tester);
 
     Future<void> next() async {
       await tester.tap(find.text('İleri'));
@@ -340,6 +384,7 @@ void main() {
       mapResult: clusterResult,
     ));
     await tester.pumpAndSettle();
+    await _startTour(tester);
 
     // Adım 1 (işaretler): işaret yok → tur örnek bölgeye (Göcek) uçar ki
     // işaretler yüklensin ve kırmızı bağlama imleci yakın planda görünsün.

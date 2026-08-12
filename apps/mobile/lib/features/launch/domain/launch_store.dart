@@ -11,9 +11,13 @@ abstract interface class LaunchStore {
   /// Karşılama akışını tamamlandı olarak işaretler.
   Future<void> markDone();
 
-  /// Yarım kalan akışın adımı (0 = karşılama, 1 = tekne tipi, 2 = ölçüler,
-  /// 3 = bölge). Hata/boş → 0. Onaylı iyileştirme: sekmeyi E4'te kapatan
-  /// kullanıcı ertesi gün E4'te açar, başa dönmez.
+  /// Yarım kalan akışın adımı (Faz 1 numaralandırması: 0 = karşılama,
+  /// 1 = ölçüler, 2 = konum ön-izni, 3 = bölge). Hata/boş → 0. Onaylı
+  /// iyileştirme: sekmeyi ölçülerde kapatan kullanıcı ertesi gün orada açar,
+  /// başa dönmez.
+  ///
+  /// Numaraların ANLAMI Faz 1'de değiştiği için depolama anahtarı da
+  /// sürümlendi (`onb.v3.step`); eski değerler okunmaz.
   Future<int> step();
 
   /// Akış adımını cihaza işler (her geçişte çağrılır).

@@ -42,6 +42,7 @@ class OnboardingState {
     this.ready = false,
     this.welcomeDone = true,
     this.tourStep = -1,
+    this.tourInvite = false,
     this.seenHints = const <String>{},
   });
 
@@ -50,25 +51,31 @@ class OnboardingState {
 
   /// -1 = tur kapalı; 0..[kTourStepCount]-1 = aktif adım.
   final int tourStep;
+
+  /// Tur DAVETİ görünür mü? (Faz 1: tur artık kendiliğinden başlamıyor.)
+  final bool tourInvite;
+
   final Set<String> seenHints;
 
   bool get tourActive => tourStep >= 0;
 
-  /// İpucu gösterilsin mi? Depo hazır değilse ya da tanıtım kartları açıkken
-  /// gösterilmez (ekran kalabalığı olmasın).
+  /// İpucu gösterilsin mi? Depo hazır değilse, tur açıkken ya da davet
+  /// dururken gösterilmez (ekran kalabalığı olmasın).
   bool showHint(String key) =>
-      ready && !tourActive && !seenHints.contains(key);
+      ready && !tourActive && !tourInvite && !seenHints.contains(key);
 
   OnboardingState copyWith({
     bool? ready,
     bool? welcomeDone,
     int? tourStep,
+    bool? tourInvite,
     Set<String>? seenHints,
   }) {
     return OnboardingState(
       ready: ready ?? this.ready,
       welcomeDone: welcomeDone ?? this.welcomeDone,
       tourStep: tourStep ?? this.tourStep,
+      tourInvite: tourInvite ?? this.tourInvite,
       seenHints: seenHints ?? this.seenHints,
     );
   }
@@ -90,14 +97,22 @@ class OnboardingController extends Notifier<OnboardingState> {
     final OnboardingData? data = await _store.load();
     if (data == null) return; // depo yok/bozuk → tanıtım hiç açılmaz
     if (!data.welcomeDone) {
-      // İLK AÇILIŞ (v2, kullanıcı isteği 2026-08): tanıtım kartları
-      // KENDİLİĞİNDEN başlar — ayrı karşılama sorusu yok; ekrana dokundukça
-      // kart ilerler. Karar hemen işlenir: yarıda kapatılsa bile bir daha
-      // kendiliğinden açılmaz (Profil'den istenince tekrar izlenir).
+      // İLK AÇILIŞ — FAZ 1'DE DEĞİŞTİ: tur artık KENDİLİĞİNDEN BAŞLAMIYOR.
+      //
+      // Eskiden 10 kartlık tur, karşılama akışının hemen ardından zorla
+      // başlıyordu. Kullanıcı haritayı görmeden önce 15 yüzey geçiyordu; tur
+      // atlanabiliyordu ama "atla"yı bulmak da bir işti. Denetim bunu ilk iki
+      // dakikadaki en büyük kayıp kalemi olarak işaretledi.
+      //
+      // Yerine tek satırlık bir DAVET çıkar: "kısa bir tanıtım ister misin?"
+      // İsteyen açar, istemeyen haritaya dokunmaya başlar. Karar hemen
+      // işlenir: davet bir kez gösterilir, cevap ne olursa olsun bir daha
+      // kendiliğinden çıkmaz (Profil'den istenince tur tekrar izlenir).
       state = OnboardingState(
         ready: true,
         welcomeDone: true,
-        tourStep: 0,
+        tourStep: -1,
+        tourInvite: true,
         seenHints: data.seenHints,
       );
       _persist();
@@ -130,9 +145,27 @@ class OnboardingController extends Notifier<OnboardingState> {
     state = state.copyWith(tourStep: -1);
   }
 
+  /// Davet → "Evet, göster": tur başlar, davet kapanır.
+  void acceptTourInvite() {
+    if (!state.tourInvite) return;
+    state = state.copyWith(tourInvite: false, tourStep: 0);
+  }
+
+  /// Davet → "Şimdi değil": davet kapanır, tur açılmaz. Bir daha
+  /// kendiliğinden sorulmaz — Profil'den istendiğinde izlenir.
+  void declineTourInvite() {
+    if (!state.tourInvite) return;
+    state = state.copyWith(tourInvite: false);
+  }
+
   /// Profil → "Tanıtım turunu tekrar izle".
   void replayTour() {
-    state = state.copyWith(ready: true, welcomeDone: true, tourStep: 0);
+    state = state.copyWith(
+      ready: true,
+      welcomeDone: true,
+      tourInvite: false,
+      tourStep: 0,
+    );
   }
 
   /// İlk-dokunuş ipucu kapatıldı — bir daha gösterilmez.

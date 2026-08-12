@@ -13,7 +13,7 @@ import '../domain/launch_answers.dart';
 /// kullanıcı cevaplayanla AYNI haritayı görür.
 class QuestionShell extends ConsumerWidget {
   const QuestionShell({
-    required this.stepIndex, // 1..3
+    required this.stepIndex, // 1..kLaunchQuestionCount
     required this.title,
     required this.subtitle,
     required this.child,
@@ -62,7 +62,7 @@ class QuestionShell extends ConsumerWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(3),
                               child: LinearProgressIndicator(
-                                value: stepIndex / 3,
+                                value: stepIndex / kLaunchQuestionCount,
                                 minHeight: 6,
                                 backgroundColor: const Color(0xFFE3E9F1),
                                 color: DocklyColors.accentTurquoise,
@@ -147,263 +147,13 @@ class QuestionShell extends ConsumerWidget {
 }
 
 // ============================================================================
-// E3 — TEKNE TİPİ
+// E3 — TEKNE TİPİ: KALDIRILDI (Faz 1)
+//
+// Kullanıcıya sorulan İLK soruydu ve cevabı hiçbir yerde okunmuyordu
+// (bkz. launch_answers.dart). Bir soruyu sormanın bedeli var: ilk iki
+// dakikada en çok kullanıcı kaybediliyor. Karşılığı olmayan soru
+// sorulmaz.
 // ============================================================================
-
-class BoatTypeScreen extends ConsumerWidget {
-  const BoatTypeScreen({
-    required this.selected,
-    required this.onSelect,
-    required this.onContinue,
-    required this.onSkipAll,
-    super.key,
-  });
-
-  final BoatTypeChoice? selected;
-  final ValueChanged<BoatTypeChoice> onSelect;
-  final VoidCallback onContinue;
-  final VoidCallback onSkipAll;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final L10n t = ref.watch(l10nProvider);
-    String label(BoatTypeChoice c) => switch (c) {
-          BoatTypeChoice.sail => t.qTypeSail,
-          BoatTypeChoice.motor => t.qTypeMotor,
-          BoatTypeChoice.catamaran => t.qTypeCat,
-          BoatTypeChoice.gulet => t.qTypeGulet,
-        };
-    return QuestionShell(
-      stepIndex: 1,
-      title: t.qTypeTitle,
-      subtitle: t.qTypeSub,
-      ctaLabel: t.qContinue,
-      onCta: onContinue,
-      onSkipAll: onSkipAll,
-      footnote: t.qLaterNote,
-      child: GridView.count(
-        crossAxisCount: 2,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-        childAspectRatio: 1.05,
-        children: <Widget>[
-          for (final BoatTypeChoice c in BoatTypeChoice.values)
-            _TypeCard(
-              key: ValueKey<String>('boat-type-${c.id}'),
-              choice: c,
-              label: label(c),
-              selected: selected == c,
-              onTap: () => onSelect(c),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _TypeCard extends StatelessWidget {
-  const _TypeCard({
-    required this.choice,
-    required this.label,
-    required this.selected,
-    required this.onTap,
-    super.key,
-  });
-
-  final BoatTypeChoice choice;
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        decoration: BoxDecoration(
-          color: DocklyColors.bgSurface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: selected
-                ? DocklyColors.accentTurquoise
-                : const Color(0xFFE3E9F1),
-            width: selected ? 2 : 1,
-          ),
-        ),
-        child: Stack(
-          children: <Widget>[
-            Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  SizedBox(
-                    width: 72,
-                    height: 56,
-                    child: CustomPaint(painter: _BoatTypePainter(choice)),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    label,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: DocklyColors.text1,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            if (selected)
-              Positioned(
-                top: 10,
-                right: 10,
-                child: Container(
-                  width: 20,
-                  height: 20,
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                    color: DocklyColors.accentTurquoise,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const DocklyIcon(
-                    DocklyIcons.checkCircle,
-                    size: 14,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Özgün mini tekne çizimleri — E3 kartları (onaylı taslaktaki oranlarla).
-class _BoatTypePainter extends CustomPainter {
-  const _BoatTypePainter(this.type);
-
-  final BoatTypeChoice type;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final double w = size.width;
-    final double h = size.height;
-    final Paint deep = Paint()..color = DocklyColors.brandDeep;
-    final Paint blue = Paint()..color = DocklyColors.brandPrimary;
-    final Paint turq = Paint()..color = const Color(0xFF7FE7DC);
-    switch (type) {
-      case BoatTypeChoice.sail:
-        // Direk + iki yelken + gövde.
-        canvas.drawRect(
-            Rect.fromLTWH(w * 0.48, h * 0.06, w * 0.045, h * 0.68), deep);
-        canvas.drawPath(
-          Path()
-            ..moveTo(w * 0.46, h * 0.10)
-            ..lineTo(w * 0.16, h * 0.66)
-            ..lineTo(w * 0.46, h * 0.66)
-            ..close(),
-          blue,
-        );
-        canvas.drawPath(
-          Path()
-            ..moveTo(w * 0.54, h * 0.20)
-            ..lineTo(w * 0.76, h * 0.66)
-            ..lineTo(w * 0.54, h * 0.66)
-            ..close(),
-          turq,
-        );
-        canvas.drawPath(_hull(w * 0.10, h * 0.74, w * 0.80, h * 0.18), deep);
-      case BoatTypeChoice.motor:
-        // Kabinli motoryat.
-        canvas.drawRect(
-            Rect.fromLTWH(w * 0.38, h * 0.16, w * 0.24, h * 0.16),
-            Paint()..color = const Color(0xFF7FA8CF));
-        canvas.drawPath(
-          Path()
-            ..moveTo(w * 0.24, h * 0.34)
-            ..lineTo(w * 0.66, h * 0.34)
-            ..quadraticBezierTo(w * 0.82, h * 0.36, w * 0.84, h * 0.52)
-            ..lineTo(w * 0.20, h * 0.52)
-            ..close(),
-          blue,
-        );
-        canvas.drawPath(_hull(w * 0.10, h * 0.56, w * 0.80, h * 0.20), deep);
-      case BoatTypeChoice.catamaran:
-        // Çift gövde + yelkenler.
-        canvas.drawRect(
-            Rect.fromLTWH(w * 0.485, h * 0.08, w * 0.04, h * 0.52), deep);
-        canvas.drawPath(
-          Path()
-            ..moveTo(w * 0.47, h * 0.12)
-            ..lineTo(w * 0.24, h * 0.56)
-            ..lineTo(w * 0.47, h * 0.56)
-            ..close(),
-          blue,
-        );
-        canvas.drawPath(
-          Path()
-            ..moveTo(w * 0.55, h * 0.22)
-            ..lineTo(w * 0.70, h * 0.56)
-            ..lineTo(w * 0.55, h * 0.56)
-            ..close(),
-          turq,
-        );
-        canvas.drawPath(_hull(w * 0.08, h * 0.64, w * 0.34, h * 0.15), deep);
-        canvas.drawPath(_hull(w * 0.58, h * 0.64, w * 0.34, h * 0.15), deep);
-        canvas.drawRect(
-            Rect.fromLTWH(w * 0.20, h * 0.66, w * 0.60, h * 0.05), deep);
-      case BoatTypeChoice.gulet:
-        // İki direkli ahşap tekne.
-        canvas.drawRect(
-            Rect.fromLTWH(w * 0.30, h * 0.10, w * 0.04, h * 0.52), deep);
-        canvas.drawRect(
-            Rect.fromLTWH(w * 0.62, h * 0.20, w * 0.04, h * 0.42), deep);
-        final Paint cream = Paint()..color = const Color(0xFFF2E4C8);
-        canvas.drawPath(
-          Path()
-            ..moveTo(w * 0.36, h * 0.14)
-            ..lineTo(w * 0.56, h * 0.58)
-            ..lineTo(w * 0.36, h * 0.58)
-            ..close(),
-          cream,
-        );
-        canvas.drawPath(
-          Path()
-            ..moveTo(w * 0.68, h * 0.24)
-            ..lineTo(w * 0.86, h * 0.58)
-            ..lineTo(w * 0.68, h * 0.58)
-            ..close(),
-          cream,
-        );
-        canvas.drawPath(
-          Path()
-            ..moveTo(w * 0.06, h * 0.62)
-            ..quadraticBezierTo(w * 0.5, h * 0.74, w * 0.94, h * 0.62)
-            ..lineTo(w * 0.84, h * 0.82)
-            ..lineTo(w * 0.16, h * 0.82)
-            ..close(),
-          deep,
-        );
-    }
-  }
-
-  /// Basit gövde: üstten alta daralan yamuk.
-  Path _hull(double x, double y, double width, double height) => Path()
-    ..moveTo(x, y)
-    ..lineTo(x + width, y)
-    ..lineTo(x + width * 0.86, y + height)
-    ..lineTo(x + width * 0.14, y + height)
-    ..close();
-
-  @override
-  bool shouldRepaint(_BoatTypePainter oldDelegate) =>
-      oldDelegate.type != type;
-}
 
 // ============================================================================
 // E4 — BOY + SU ÇEKİMİ
@@ -439,7 +189,7 @@ class _BoatSizeScreenState extends ConsumerState<BoatSizeScreen> {
   Widget build(BuildContext context) {
     final L10n t = ref.watch(l10nProvider);
     return QuestionShell(
-      stepIndex: 2,
+      stepIndex: 1,
       title: t.qSizeTitle,
       subtitle: t.qSizeSub,
       ctaLabel: t.qContinue,
@@ -618,7 +368,7 @@ class RegionScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final L10n t = ref.watch(l10nProvider);
     return QuestionShell(
-      stepIndex: 3,
+      stepIndex: 2,
       title: t.qRegionTitle,
       subtitle: t.qRegionSub,
       ctaLabel: t.qRegionCta,

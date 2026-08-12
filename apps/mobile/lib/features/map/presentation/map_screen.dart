@@ -252,6 +252,15 @@ class MapScreen extends ConsumerWidget {
                   // HARİTADA ARAMA (UX analizi 2026-08): sekme değiştirmeden
                   // arama — sonuçtan detay açılır, harita durumu korunur.
                   const _MapSearchButton(),
+                  // ROTA GİRİŞİ (Faz 1 — keşfedilebilirlik). Rota motoru
+                  // uygulamanın en ayırt edici parçası ama ilk ekranda hiçbir
+                  // izi yoktu: ancak bir pini seçmeyi bilen kullanıcı
+                  // bulabiliyordu. Artık ilk ekranda duruyor ve hedefi adıyla
+                  // aratıyor. Rota zaten çiziliyken gizlenir (çip devralır).
+                  if (state.route == null) ...<Widget>[
+                    const SizedBox(height: 8),
+                    const _RouteStartButton(),
+                  ],
                   if (state.pins.isNotEmpty) ...<Widget>[
                     const SizedBox(height: 8),
                     _ViewToggle(
@@ -344,6 +353,9 @@ class MapScreen extends ConsumerWidget {
               selectedPin == null &&
               !isList &&
               onb.tourStep < 0 &&
+              // Tur daveti de aynı bantta duruyor (kabuk katmanında); iki
+              // davet üst üste binmesin — tur daveti bir kerelik, o geçsin.
+              !onb.tourInvite &&
               // Hata/boş/yükleme ekranlarının üstüne davet ÇIKMAZ ve yakın
               // rayı AÇIKKEN kartların dokunuşunu çalmaz (inceleme dersi).
               state.failure == null &&
@@ -1040,6 +1052,48 @@ class _SosButton extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// "Deniz rotası" — haritanın ilk ekranındaki rota girişi (Faz 1).
+///
+/// Akış: hedefi ADIYLA arat → seç → mevcut `startSeaRoute` akışı devralır
+/// (konum izni, gerekirse başlangıç menüsü). Yeni bir rota mantığı YAZILMADI;
+/// yalnız var olan yeteneğin kapısı ilk ekrana taşındı.
+class _RouteStartButton extends ConsumerWidget {
+  const _RouteStartButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    return Material(
+      elevation: 3,
+      borderRadius: BorderRadius.circular(24),
+      child: IconButton(
+        key: const ValueKey<String>('map-route-start'),
+        // Pusula: hemen üstündeki "Konumum" düğmesi `navigation` kullanıyor;
+        // aynı glifi iki komşu düğmede kullanmak ikisini de okunmaz yapardı.
+        icon: const DocklyIcon(DocklyIcons.compass),
+        tooltip: t.routeBtn,
+        onPressed: () async {
+          final LocationSummary? picked =
+              await Navigator.of(context).push<LocationSummary>(
+            MaterialPageRoute<LocationSummary>(
+              builder: (BuildContext _) =>
+                  const SearchScreen(pickDestination: true),
+            ),
+          );
+          if (picked == null || !context.mounted) return;
+          await startSeaRoute(
+            context,
+            ref,
+            destPos: picked.position,
+            destId: picked.id,
+            destName: picked.name,
+          );
+        },
       ),
     );
   }

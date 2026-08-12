@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../../boat/presentation/boat_screen.dart';
 import '../../deck/presentation/deck_screen.dart';
+import '../../map/application/map_controller.dart' show mapControllerProvider;
+import '../../map/domain/map_state.dart' show MapState;
 import '../../map/presentation/map_screen.dart'
     show MapScreen, todayInviteDismissedProvider;
 import '../../onboarding/application/onboarding_controller.dart';
@@ -160,7 +162,77 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
         shell,
         if (tourStep >= 0)
           Positioned.fill(child: TourOverlay(step: tourStep)),
+        // Davet, alt yüzeylerin ÜSTÜNDE durur. Üç incelik, üçü de inceleme
+        // bulgusu:
+        // · Yükseklik: haritanın "Bugün" davet kartıyla AYNI banda oturur.
+        //   O kart gövde içinde 78'de duruyor; kabuk katmanında aynı yer
+        //   78 + sekme çubuğu (64 + 1 çizgi) = 143'tür. Altındaki "Yakın
+        //   limanlar" rayı (~62 px) böylece açıkta kalır, dokunuşu çalınmaz.
+        // · Alt boşluk cihazdan gelir (iPhone ana çubuğu, Android tuşları);
+        //   sabit sayı verilseydi davet sekme adlarının üstüne binerdi.
+        // · Haritada bir koy KARTI açıkken çıkmaz. Ölçüt kartın kendi ölçütü
+        //   (`selectedPin`), kimlik değil: kimlik seçili kalıp kart kapanmış
+        //   olabilir (pin görünümden çıkınca) — o durumda tek seferlik davet
+        //   sebepsiz yere kaybolurdu.
+        if (tourStep < 0 &&
+            ref.watch(onboardingControllerProvider
+                .select((OnboardingState s) => s.tourInvite)) &&
+            ref.watch(mapControllerProvider
+                .select((MapState s) => s.selectedPin == null)))
+          Positioned(
+            left: 12,
+            right: 12,
+            bottom: 143 + MediaQuery.paddingOf(context).bottom,
+            child: const _TourInvite(),
+          ),
       ],
+    );
+  }
+}
+
+/// TUR DAVETİ (Faz 1). Eskiden 10 kartlık tur zorla başlıyordu; artık tek
+/// satırlık bir soru soruluyor. Ekranı KAPATMAZ — kullanıcı isterse daveti
+/// hiç okumadan haritayla oynamaya başlayabilir.
+class _TourInvite extends ConsumerWidget {
+  const _TourInvite();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final OnboardingController c =
+        ref.read(onboardingControllerProvider.notifier);
+    return Material(
+      key: const ValueKey<String>('tour-invite'),
+      elevation: 6,
+      borderRadius: BorderRadius.circular(14),
+      // Tema kartı rengi: karanlık kipte de doğru zemin (sabit beyaz değil).
+      color: Theme.of(context).cardColor,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                t.tourInviteMsg,
+                style: const TextStyle(fontSize: 13.5, height: 1.35),
+              ),
+            ),
+            TextButton(
+              key: const ValueKey<String>('tour-invite-no'),
+              onPressed: c.declineTourInvite,
+              child: Text(t.tourInviteNo),
+            ),
+            TextButton(
+              key: const ValueKey<String>('tour-invite-yes'),
+              onPressed: c.acceptTourInvite,
+              child: Text(
+                t.tourInviteYes,
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

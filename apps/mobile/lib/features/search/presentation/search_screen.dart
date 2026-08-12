@@ -17,8 +17,16 @@ import '../domain/search_state.dart';
 
 /// Arama ekranı (S-07, docs/01-prd §6.13). Misafir: liman/koy/şehir adıyla arar,
 /// sonuca dokununca detay açılır. Yazma eylemleri yok — tamamen misafir-dostu.
+///
+/// SEÇİM KİPİ (Faz 1): [pickDestination] true ise ekran "hedef seç" olarak
+/// davranır — sonuca dokununca detay AÇILMAZ, seçilen kayıt geri döndürülür.
+/// Haritadaki "Deniz rotası" düğmesi bunu kullanır: kullanıcı gitmek istediği
+/// yeri pin arayarak değil, adıyla bulur.
 class SearchScreen extends ConsumerStatefulWidget {
-  const SearchScreen({super.key});
+  const SearchScreen({this.pickDestination = false, super.key});
+
+  /// Sonuç seçilince ekranı [LocationSummary] ile kapatır (detay açmaz).
+  final bool pickDestination;
 
   @override
   ConsumerState<SearchScreen> createState() => _SearchScreenState();
@@ -75,7 +83,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           textInputAction: TextInputAction.search,
           onChanged: controller.onQueryChanged,
           decoration: InputDecoration(
-            hintText: t.searchHint,
+            // Seçim kipinde ipucu metni ne yaptığımızı söyler; kullanıcı
+            // arama ekranına yanlışlıkla düştüğünü sanmasın.
+            hintText:
+                widget.pickDestination ? t.routePickTitle : t.searchHint,
             border: InputBorder.none,
             suffixIcon: state.query.isEmpty
                 ? const DocklyIcon(DocklyIcons.search)
@@ -94,7 +105,12 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           child: _FilterRow(),
         ),
       ),
-      body: _SearchBody(state: state, results: visible, onRetry: () => controller.retry()),
+      body: _SearchBody(
+        state: state,
+        results: visible,
+        onRetry: () => controller.retry(),
+        pickDestination: widget.pickDestination,
+      ),
     );
   }
 }
@@ -191,11 +207,17 @@ class _FilterRow extends ConsumerWidget {
 }
 
 class _SearchBody extends ConsumerWidget {
-  const _SearchBody({required this.state, required this.results, required this.onRetry});
+  const _SearchBody({
+    required this.state,
+    required this.results,
+    required this.onRetry,
+    required this.pickDestination,
+  });
 
   final SearchState state;
   final List<LocationSummary> results;
   final VoidCallback onRetry;
+  final bool pickDestination;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -215,15 +237,17 @@ class _SearchBody extends ConsumerWidget {
     return ListView.separated(
       itemCount: results.length,
       separatorBuilder: (BuildContext _, int __) => const Divider(height: 1),
-      itemBuilder: (BuildContext context, int i) => _ResultTile(item: results[i]),
+      itemBuilder: (BuildContext context, int i) =>
+          _ResultTile(item: results[i], pickDestination: pickDestination),
     );
   }
 }
 
 class _ResultTile extends ConsumerWidget {
-  const _ResultTile({required this.item});
+  const _ResultTile({required this.item, required this.pickDestination});
 
   final LocationSummary item;
+  final bool pickDestination;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -268,11 +292,18 @@ class _ResultTile extends ConsumerWidget {
               ],
             )
           : null,
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (BuildContext _) => LocationDetailScreen(idOrSlug: item.id),
-        ),
-      ),
+      onTap: () {
+        if (pickDestination) {
+          // Seçim kipi: detay AÇMA, seçilen kaydı çağırana geri ver.
+          Navigator.of(context).pop<LocationSummary>(item);
+          return;
+        }
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (BuildContext _) => LocationDetailScreen(idOrSlug: item.id),
+          ),
+        );
+      },
     );
   }
 
