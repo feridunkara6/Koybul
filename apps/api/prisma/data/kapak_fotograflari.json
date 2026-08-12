@@ -1,5 +1,5 @@
 {
-  "kaynak": "Wikimedia Commons — 2026-08-12 tarayıcı turu (Commons API, dosya başına LicenseShortName/Artist/Categories alanları okundu; konu eşleşmesi kategori+açıklama ile doğrulandı). İzmir'deki Yassıca Adası ve Fethiye'nin Taşyaka MAHALLESİ gibi ad benzerleri kategorileri sayesinde ELENDİ. | BÖLGE TURU 2 (2026-08-12): Ege-Akdeniz-Yunan adaları limanları için 25 fotoğraf daha; her biri Commons API extmetadata alanlarından atıf/lisansla alındı ve tarayıcıda tek tek görsel doğrulandı. Elenenler: Ataköy (fotoğraf AVM yürüyüş yolunu gösteriyordu), Yalıkavak (marina görünmüyordu), Parikia (otopark ağırlıklı), Kastellorizo (puslu/karanlık), Kuşadası 04 (bina ağırlıklı; 03 alındı).",
+  "kaynak": "Wikimedia Commons — 2026-08-12 tarayıcı turu (Commons API, dosya başına LicenseShortName/Artist/Categories alanları okundu; konu eşleşmesi kategori+açıklama ile doğrulandı). İzmir'deki Yassıca Adası ve Fethiye'nin Taşyaka MAHALLESİ gibi ad benzerleri kategorileri sayesinde ELENDİ. | BÖLGE TURU 2 (2026-08-12): Ege-Akdeniz-Yunan adaları limanları için 25 fotoğraf daha; her biri Commons API extmetadata alanlarından atıf/lisansla alındı ve tarayıcıda tek tek görsel doğrulandı. Elenenler: Ataköy (fotoğraf AVM yürüyüş yolunu gösteriyordu), Yalıkavak (marina görünmüyordu), Parikia (otopark ağırlıklı), Kastellorizo (puslu/karanlık), Kuşadası 04 (bina ağırlıklı; 03 alındı). | BÖLGE TURU 3 (2026-08-12): koylar ve kalan limanlar için 19 fotoğraf daha (Kelebekler Vadisi, Phaselis, Lindos, Keçi Bükü/Kızkumu, Bozukkale, İngiliz Limanı, Fethiye, Datça, Gökçeada ve 10 Yunan limanı). Elenenler: Selimiye (yol fotoğrafı çıktı), Akyaka (kitesurf karesi), Gemiler (karanlık/backlit), Sedir (açık deniz), Bitez (mercek parlaması), Gouvia (1280 küçüğü 182 px'lik aşırı panorama).",
   "kurallar": [
     "Tahmin/uydurma YOK. Her alan Commons dosya sayfasından birebir kopyalanır.",
     "url: dosyanın upload.wikimedia.org üzerindeki DOĞRUDAN adresi (Commons sayfasındaki 'Orijinal dosya' bağlantısı ya da uygun genişlikte önizleme).",
@@ -492,6 +492,196 @@
       "width": 1280,
       "height": 854,
       "not": "Antalya Kaleiçi yat limanı (görsel doğrulandı). Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "kelebekler-vadisi-demirleme": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Kelebekler_Vadisi_-_Butterfly_Valley,_Turkey.jpg/1280px-Kelebekler_Vadisi_-_Butterfly_Valley,_Turkey.jpg",
+      "credit": "Htkava",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kelebekler_Vadisi_-_Butterfly_Valley,_Turkey.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Kategoriler: Lycian Way, Butterfly Valley. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "phaselis-koylari-demirleme": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Phaselis_beach.jpg/1280px-Phaselis_beach.jpg",
+      "credit": "Mike like0708",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Phaselis_beach.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Başlık: Phaselis beach — antik kentin koyu. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "lindos-koyu": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Pier_at_Lindos._Rhodes,_Greece.jpg/1280px-Pier_at_Lindos._Rhodes,_Greece.jpg",
+      "credit": "Ввласенко",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pier_at_Lindos._Rhodes,_Greece.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 849,
+      "not": "Başlık: Pier at Lindos; kategori Piers in Greece. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "keci-buku-demirleme": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/K%C4%B1zkumu_Orhaniye_Marmaris.jpg/1280px-K%C4%B1zkumu_Orhaniye_Marmaris.jpg",
+      "credit": "Arif Sipahi",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:K%C4%B1zkumu_Orhaniye_Marmaris.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Başlık: Kızkumu, Orhaniye — Keçi Bükü'nün simgesi; kategoriler Marinas/Boats in Turkey. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "nisyros-mandraki-limani": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Nisyros_port_Mandraki_1.jpg/1280px-Nisyros_port_Mandraki_1.jpg",
+      "credit": "Karelj",
+      "license": "Public domain",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Nisyros_port_Mandraki_1.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 853,
+      "not": "Başlık: Nisyros port Mandraki. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "adamas-limani-milos": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Adamas_(4703820265).jpg/1280px-Adamas_(4703820265).jpg",
+      "credit": "Klearchos Kapoutsis from Santorini, Greece",
+      "license": "CC BY 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Adamas_(4703820265).jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 632,
+      "not": "Kategori: Adamas — liman görünümü. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "kalymnos-pothia-limani": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Calymnos_harbour.jpg",
+      "credit": "Κ. Καλογερόπουλος Kalogeropoulos",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Calymnos_harbour.jpg",
+      "mimeType": "image/jpeg",
+      "width": 960,
+      "height": 541,
+      "not": "Kategori: Pothia. Küçük çözünürlük (960px) — tek uygun aday. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "gaios-limani-paksos": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Paxos_gaios_port_bgiu.jpg/1280px-Paxos_gaios_port_bgiu.jpg",
+      "credit": "Bogdan Giuşcă",
+      "license": "CC BY-SA 2.5",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Paxos_gaios_port_bgiu.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Başlık: Paxos Gaios port. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "lakka-koyu-paksos": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Lakka_bay_20210606.jpg/1280px-Lakka_bay_20210606.jpg",
+      "credit": "Jess Stubenbord",
+      "license": "CC0 1.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lakka_bay_20210606.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 622,
+      "not": "Başlık: Lakka bay; kategoriler Lakka (Paxi), Bays of Greece. Commons kısa adı 'CC0'; tam adı CC0 1.0. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "zea-marina": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Piraeus,_marina_Zea_03.JPG/1280px-Piraeus,_marina_Zea_03.JPG",
+      "credit": "Palickap",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Piraeus,_marina_Zea_03.JPG",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Kategori: Zea harbour. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "tilos-livadia-rihtimi": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Livadhia_Tilos_2.jpg/1280px-Livadhia_Tilos_2.jpg",
+      "credit": "freddie boy",
+      "license": "CC BY-SA 2.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Livadhia_Tilos_2.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Başlık: Livadhia, Tilos. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "halki-emporios-rihtimi": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Emporio_port_in_Halki_island.jpg/1280px-Emporio_port_in_Halki_island.jpg",
+      "credit": "Oliver H",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Emporio_port_in_Halki_island.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 783,
+      "not": "Başlık: Emporio port, Halki. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "kandiye-limani-girit": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Venetian_Fortress,_Heraklion,_Crete.JPG/1280px-Venetian_Fortress,_Heraklion,_Crete.JPG",
+      "credit": "Stu's Images",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Venetian_Fortress,_Heraklion,_Crete.JPG",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 921,
+      "not": "Başlık: Koules (Venedik kalesi) — Kandiye eski limanının girişi. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "katapola-limani-amorgos": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Katapola_bay,_Amorgos,_213202.jpg/1280px-Katapola_bay,_Amorgos,_213202.jpg",
+      "credit": "Zde",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Katapola_bay,_Amorgos,_213202.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 852,
+      "not": "Kategori: Katapola (Amorgos). Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "fethiye-limani": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Fethiye_Harbour_area_in_2011_5727.jpg/1280px-Fethiye_Harbour_area_in_2011_5727.jpg",
+      "credit": "Dosseman",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fethiye_Harbour_area_in_2011_5727.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 852,
+      "not": "Kategori: Fethiye Harbour. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "datca-yat-limani": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Dat%C3%A7a,_yachts_harbour_*%C2%A9Abdullah_Kiyga_-_panoramio.jpg/1280px-Dat%C3%A7a,_yachts_harbour_*%C2%A9Abdullah_Kiyga_-_panoramio.jpg",
+      "credit": "Abdullah kıyga",
+      "license": "CC BY 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dat%C3%A7a,_yachts_harbour_*%C2%A9Abdullah_Kiyga_-_panoramio.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 681,
+      "not": "Başlık: Datça yachts harbour; kategori Datça. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "gokceada-kuzu-limani": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/G%C3%B6kceada_Kuzu_Limani_1.jpg/1280px-G%C3%B6kceada_Kuzu_Limani_1.jpg",
+      "credit": "Bilderbrei",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%B6kceada_Kuzu_Limani_1.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 960,
+      "not": "Başlık: Gökçeada Kuzu Limanı; kategori Gökçeada. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "bozukkale-loryma-demirleme": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Loryma_(3).jpg/1280px-Loryma_(3).jpg",
+      "credit": "Marmaracalypso",
+      "license": "CC BY-SA 4.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Loryma_(3).jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 853,
+      "not": "Başlık: Loryma — Bozukkale koyu. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+    },
+    "degirmen-buku-ingiliz-limani": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Ingiliz_limani_04404_-_04406.jpg/1280px-Ingiliz_limani_04404_-_04406.jpg",
+      "credit": "Nevit Dilmen (talk)",
+      "license": "CC BY-SA 3.0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ingiliz_limani_04404_-_04406.jpg",
+      "mimeType": "image/jpeg",
+      "width": 1280,
+      "height": 525,
+      "not": "Başlık: İngiliz Limanı; kategori Gulet. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
     }
   }
 }
