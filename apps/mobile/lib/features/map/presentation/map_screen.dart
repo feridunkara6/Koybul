@@ -219,11 +219,25 @@ class MapScreen extends ConsumerWidget {
                     ),
                   ),
           ),
-          // Üst şerit: tip filtre çipleri TAM GENİŞLİK (renk noktalı lejant).
-          // Kullanıcı isteği (2026-07): ekranın üstünü rozetler kaplasın,
-          // konum/liste düğmeleri bir alt sıraya insin.
+          // ÜST KATMAN — UX DENETİMİ P0-2 (kullanıcı onayı 2026-08): en üstte
+          // TAM GENİŞLİK ARAMA HAPI. Google/Apple Maps alışkanlığı: "ne
+          // yapacağım?" sorusunun evrensel cevabı ekranın tepesindeki arama
+          // kutusudur. Eski sağ-kolon arama düğmesinin işlevi buraya taşındı.
           Positioned(
             top: 12,
+            left: 12,
+            right: 12,
+            child: SafeArea(
+              child: KeyedSubtree(
+                key: tourKeySearch,
+                child: const _MapSearchPill(),
+              ),
+            ),
+          ),
+          // Tip filtre çipleri arama hapının HEMEN ALTINA indi (P0-2):
+          // önce "ara", sonra "süz" — okuma sırası doğal hiyerarşiyi izler.
+          Positioned(
+            top: 66, // 12 (hap üstü) + 46 (hap) + 8 (ara)
             left: 0,
             right: 0,
             child: SafeArea(
@@ -234,33 +248,18 @@ class MapScreen extends ConsumerWidget {
               ),
             ),
           ),
-          // Çip şeridinin HEMEN ALTINDA sağda: "Konumum" (her zaman) +
-          // harita↔liste geçişi (yalnız pin/yakın zoom verisi varken).
+          // SAĞ KOLON SADELEŞTİ (P0-2): eskiden dört eş yuvarlak düğme üst
+          // üsteydi (SOS→Konumum→Arama→Rota) ve panik butonu en işlek
+          // noktadaydı. Artık yalnız İKİNCİL araçlar burada: Konumum +
+          // harita↔liste. Arama üstteki hapa, rota sağ alttaki etiketli
+          // FAB'a, SOS sol alt köşeye taşındı — işlev birebir aynı.
           Positioned(
-            top: 60, // 12 (çip üst boşluğu) + 40 (çip şeridi) + 8 (ara)
+            top: 114, // 66 (çip üstü) + 40 (çip şeridi) + 8 (ara)
             right: 12,
             child: SafeArea(
               child: Column(
                 children: <Widget>[
-                  // ACİL DURUM KISAYOLU (UX analizi 2026-08): panik anında tek
-                  // dokunuş — Profil'in derinliğinde kalmasın. Üyelik kapısı YOK.
-                  // Tur hedefleri (v3): SOS ve Konumum adımları okla gösterir.
-                  KeyedSubtree(key: tourKeySos, child: const _SosButton()),
-                  const SizedBox(height: 8),
                   KeyedSubtree(key: tourKeyLocate, child: const LocateButton()),
-                  const SizedBox(height: 8),
-                  // HARİTADA ARAMA (UX analizi 2026-08): sekme değiştirmeden
-                  // arama — sonuçtan detay açılır, harita durumu korunur.
-                  const _MapSearchButton(),
-                  // ROTA GİRİŞİ (Faz 1 — keşfedilebilirlik). Rota motoru
-                  // uygulamanın en ayırt edici parçası ama ilk ekranda hiçbir
-                  // izi yoktu: ancak bir pini seçmeyi bilen kullanıcı
-                  // bulabiliyordu. Artık ilk ekranda duruyor ve hedefi adıyla
-                  // aratıyor. Rota zaten çiziliyken gizlenir (çip devralır).
-                  if (state.route == null) ...<Widget>[
-                    const SizedBox(height: 8),
-                    const _RouteStartButton(),
-                  ],
                   if (state.pins.isNotEmpty) ...<Widget>[
                     const SizedBox(height: 8),
                     _ViewToggle(
@@ -283,10 +282,12 @@ class MapScreen extends ConsumerWidget {
           // Üst-orta bilgi katmanı: çevrimdışı şeridi + deniz rotası çipi.
           if (state.isOffline || state.route != null)
             Positioned(
-              top: 60,
+              // P0-2: üst katman artık hap (46) + çipler (40) — bilgi çipi
+              // onların altından başlar.
+              top: 114,
               // ROTA BİLGİ EKRANI 2.0 (kullanıcı isteği 2026-08): çip artık
               // ekranın genişliğini kullanır — "küçük kalıyor" düzeltmesi.
-              // Sağda 64: SOS/konum düğme sütunuyla çakışmaz.
+              // Sağda 64: Konumum/liste düğme sütunuyla çakışmaz.
               left: 12,
               right: 64,
               child: SafeArea(
@@ -339,6 +340,43 @@ class MapScreen extends ConsumerWidget {
           // harita modunda, seçili pin yokken. Pin seçilince yerini karta bırakır.
           if (!isList && selectedPin == null)
             const Positioned(left: 0, right: 0, bottom: 0, child: NearbySheet()),
+          // SOS SOL ALTTA, YALNIZ (P0-2, kullanıcı onayı 2026-08): panik
+          // butonunun değeri ayrıksılığındadır — onu bulunur kılan boyutu
+          // değil, YALNIZLIĞIDIR. En işlek kolonun tepesinden (en çok
+          // yanlışlıkla dokunulan nokta) kimsenin kazara basmayacağı sol alt
+          // köşeye taşındı; kas hafızasıyla bulunur. Davranış AYNEN: tek
+          // dokunuş, üyelik kapısı yok, çevrimdışı çalışır. Pin kartı
+          // açılınca kart üstte çizilir (Stack sırası); kart kapanınca SOS
+          // aynı yerdedir.
+          Positioned(
+            left: 12,
+            bottom: 78, // yakın rayının (katlı ~62) üstünde
+            child: SafeArea(
+              top: false,
+              child: KeyedSubtree(key: tourKeySos, child: const _SosButton()),
+            ),
+          ),
+          // "ROTA PLANLA" FAB'I (P0-2): uygulamanın imza özelliği artık
+          // ADIYLA ve başparmağın tam altında. Rota çizilince kaybolur
+          // (bilgi çipi devralır — mevcut davranış), pin kartı açıkken
+          // karta yol verir (kartta zaten Rota düğmesi var), yakın rayı
+          // açıkken rayın kartlarını örtmez.
+          if (state.route == null &&
+              selectedPin == null &&
+              // Hata/boş ekranların üstüne rota daveti ÇIKMAZ (davet
+              // kartıyla aynı kural). SOS ise bilerek HER durumda kalır —
+              // acil buton hata ekranında da çalışmalı.
+              state.failure == null &&
+              !state.isEmpty &&
+              (isList || ref.watch(nearbySheetCollapsedProvider)))
+            const Positioned(
+              right: 12,
+              bottom: 78,
+              child: SafeArea(
+                top: false,
+                child: _RouteStartButton(),
+              ),
+            ),
           // "BUGÜN NEREYE?" DAVET KARTI (onaylı E1: haritanın tek eklemesi).
           // Rota/seçim yokken ve tur kapalıyken görünür; kapatılabilir ve
           // Bugün'e bir kez gidilince bir daha çıkmaz. YAKIN RAYININ ÜSTÜNDE
@@ -913,9 +951,10 @@ class _TodayInviteCard extends ConsumerWidget {
     return Positioned(
       left: 12,
       right: 12,
-      // Yakın rayının (kapalı hâlde ~62 px) ÜSTÜNDE durur — kaptanın rayı
-      // açmasını engellemez.
-      bottom: 78,
+      // Yakın rayının (kapalı hâlde ~62 px) ve SOS + "Rota planla" FAB
+      // bandının (P0-2: bottom 78, ~56 boy) ÜSTÜNDE durur — ne rayı
+      // ne köşe düğmelerini örter.
+      bottom: 142,
       child: SafeArea(
         top: false,
         child: Material(
@@ -1019,6 +1058,8 @@ class _TruncatedHint extends ConsumerWidget {
 
 /// Acil Durum kısayolu (2026-08): kırmızı SOS — panikte tek dokunuş.
 /// Bilinçli olarak üyelik kapısız; Acil Durum sayfası tamamen çevrimdışıdır.
+/// P0-2 (2026-08): sol alt köşede yalnız durur; boyut 48→44 (ayrıksılık
+/// bulunurluğu sağlar, boyut değil). Davranış değişmedi.
 class _SosButton extends ConsumerWidget {
   const _SosButton();
 
@@ -1028,24 +1069,24 @@ class _SosButton extends ConsumerWidget {
     return Material(
       elevation: 3,
       color: DocklyColors.error,
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(22),
       child: InkWell(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(22),
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute<void>(builder: (_) => const EmergencyScreen()),
         ),
         child: Tooltip(
           message: t.emergencyTitle,
           child: const SizedBox(
-            width: 48,
-            height: 48,
+            width: 44,
+            height: 44,
             child: Center(
               child: Text(
                 'SOS',
                 style: TextStyle(
                   color: Color(0xFFFFFFFF),
                   fontWeight: FontWeight.w800,
-                  fontSize: 13,
+                  fontSize: 12.5,
                   letterSpacing: 0.5,
                 ),
               ),
@@ -1057,63 +1098,95 @@ class _SosButton extends ConsumerWidget {
   }
 }
 
-/// "Deniz rotası" — haritanın ilk ekranındaki rota girişi (Faz 1).
+/// "Rota planla" — haritanın ilk ekranındaki rota girişi (Faz 1 →
+/// P0-2, 2026-08: sağ altta ETİKETLİ FAB). Uygulamanın imza özelliği artık
+/// adıyla kendini anlatıyor ve tek elle kullanımda başparmağın tam altında.
 ///
-/// Akış: hedefi ADIYLA arat → seç → mevcut `startSeaRoute` akışı devralır
-/// (konum izni, gerekirse başlangıç menüsü). Yeni bir rota mantığı YAZILMADI;
-/// yalnız var olan yeteneğin kapısı ilk ekrana taşındı.
+/// Akış AYNEN: hedefi ADIYLA arat → seç → mevcut `startSeaRoute` akışı
+/// devralır (konum izni, gerekirse başlangıç menüsü). Yeni bir rota mantığı
+/// YAZILMADI; yalnız var olan yeteneğin kapısı görünür kılındı.
 class _RouteStartButton extends ConsumerWidget {
   const _RouteStartButton();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final L10n t = ref.watch(l10nProvider);
-    return Material(
-      elevation: 3,
-      borderRadius: BorderRadius.circular(24),
-      child: IconButton(
-        key: const ValueKey<String>('map-route-start'),
-        // Pusula: hemen üstündeki "Konumum" düğmesi `navigation` kullanıyor;
-        // aynı glifi iki komşu düğmede kullanmak ikisini de okunmaz yapardı.
-        icon: const DocklyIcon(DocklyIcons.compass),
-        tooltip: t.routeBtn,
-        onPressed: () async {
-          final LocationSummary? picked =
-              await Navigator.of(context).push<LocationSummary>(
-            MaterialPageRoute<LocationSummary>(
-              builder: (BuildContext _) =>
-                  const SearchScreen(pickDestination: true),
-            ),
-          );
-          if (picked == null || !context.mounted) return;
-          await startSeaRoute(
-            context,
-            ref,
-            destPos: picked.position,
-            destId: picked.id,
-            destName: picked.name,
-          );
-        },
-      ),
+    return FloatingActionButton.extended(
+      key: const ValueKey<String>('map-route-start'),
+      // Kabuk IndexedStack'inde başka FAB'lar da yaşıyor (günlük FAB'ı) —
+      // varsayılan heroTag çakışması çökme yaratır; her FAB kendi etiketini
+      // taşır (logbook-fab dersi).
+      heroTag: 'map-route-fab',
+      backgroundColor: DocklyColors.brandPrimary,
+      foregroundColor: Colors.white,
+      // Pusula: "Konumum" düğmesi `navigation` kullanıyor; aynı glifi iki
+      // düğmede kullanmak ikisini de okunmaz yapardı.
+      icon: const DocklyIcon(DocklyIcons.compass, size: 20, color: Colors.white),
+      label: Text(t.routePlanFab),
+      onPressed: () async {
+        final LocationSummary? picked =
+            await Navigator.of(context).push<LocationSummary>(
+          MaterialPageRoute<LocationSummary>(
+            builder: (BuildContext _) =>
+                const SearchScreen(pickDestination: true),
+          ),
+        );
+        if (picked == null || !context.mounted) return;
+        await startSeaRoute(
+          context,
+          ref,
+          destPos: picked.position,
+          destId: picked.id,
+          destName: picked.name,
+        );
+      },
     );
   }
 }
 
-/// Haritada arama kısayolu (2026-08): sekmeye gitmeden arama sayfasını açar.
-class _MapSearchButton extends ConsumerWidget {
-  const _MapSearchButton();
+/// ARAMA HAPI (P0-2, 2026-08): haritanın tepesinde tam genişlik arama girişi
+/// — eski sağ-kolon arama düğmesinin yerine. Dokununca arama sayfası açılır;
+/// sonuçtan detay açılır, harita durumu korunur (işlev birebir aynı).
+class _MapSearchPill extends ConsumerWidget {
+  const _MapSearchPill();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final L10n t = ref.watch(l10nProvider);
+    final ThemeData theme = Theme.of(context);
     return Material(
       elevation: 3,
-      borderRadius: BorderRadius.circular(24),
-      child: IconButton(
-        icon: const DocklyIcon(DocklyIcons.search),
-        tooltip: t.navSearch,
-        onPressed: () => Navigator.of(context).push(
+      borderRadius: BorderRadius.circular(23),
+      color: theme.colorScheme.surface,
+      child: InkWell(
+        key: const ValueKey<String>('map-search-pill'),
+        borderRadius: BorderRadius.circular(23),
+        onTap: () => Navigator.of(context).push(
           MaterialPageRoute<void>(builder: (_) => const SearchScreen()),
+        ),
+        child: SizedBox(
+          height: 46,
+          child: Row(
+            children: <Widget>[
+              const SizedBox(width: 16),
+              DocklyIcon(
+                DocklyIcons.search,
+                size: 18,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  t.searchHint,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodyMedium
+                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                ),
+              ),
+              const SizedBox(width: 12),
+            ],
+          ),
         ),
       ),
     );

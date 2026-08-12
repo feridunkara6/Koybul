@@ -266,6 +266,7 @@ class L10n {
     required this.windExposedLabels,
     required this.wwBadgeFmt,
     required this.routeBtn,
+    required this.routePlanFab,
     required this.routeClearTooltip,
     required this.routeApproxNote,
     required this.routeCoastNote,
@@ -829,7 +830,7 @@ class L10n {
   final String wwBadgeFmt;
 
   // Deniz rotası (2026-08): uygulama içi, kara tanıyan rota önizlemesi.
-  final String routeBtn, routeClearTooltip, routeApproxNote, routeCoastNote,
+  final String routeBtn, routePlanFab, routeClearTooltip, routeApproxNote, routeCoastNote,
       routeDirectNote, routeNeedOrigin, etaHmFmt, etaMFmt;
 
   // Giriş ekranı (l10n'a taşındı — eskiden sabit Türkçe idi) + paylaşım +
@@ -1408,6 +1409,7 @@ const L10n _tr = L10n(
   },
   wwBadgeFmt: '{0} — bugün {1} kn bekleniyor',
   routeBtn: 'Deniz rotası',
+  routePlanFab: 'Rota planla',
   routeClearTooltip: 'Rotayı temizle',
   routeApproxNote: 'Tahminî deniz rotası — seyir için resmî deniz haritalarını kullanın.',
   routeCoastNote: 'Rota koyun açığında biter — son yaklaşmayı resmî haritayla planlayın.',
@@ -2044,6 +2046,7 @@ const L10n _en = L10n(
   },
   wwBadgeFmt: '{0} — {1} kn expected today',
   routeBtn: 'Sea route',
+  routePlanFab: 'Plan a route',
   routeClearTooltip: 'Clear route',
   routeApproxNote: 'Estimated sea route — use official nautical charts for navigation.',
   routeCoastNote: 'The route ends off the cove — plan the final approach with official charts.',
@@ -2680,6 +2683,7 @@ const L10n _es = L10n(
   },
   wwBadgeFmt: '{0} — hoy se esperan {1} kn',
   routeBtn: 'Ruta marítima',
+  routePlanFab: 'Planificar ruta',
   routeClearTooltip: 'Quitar ruta',
   routeApproxNote: 'Ruta marítima estimada — use cartas náuticas oficiales para navegar.',
   routeCoastNote: 'La ruta termina frente a la cala — planifique la aproximación final con cartas oficiales.',
@@ -3316,6 +3320,7 @@ const L10n _ru = L10n(
   },
   wwBadgeFmt: '{0} — сегодня ожидается {1} уз',
   routeBtn: 'Морской маршрут',
+  routePlanFab: 'Проложить маршрут',
   routeClearTooltip: 'Убрать маршрут',
   routeApproxNote: 'Примерный морской маршрут — для навигации используйте официальные морские карты.',
   routeCoastNote: 'Маршрут заканчивается на подходе к бухте — финальный заход планируйте по официальным картам.',
