@@ -11,11 +11,12 @@ import 'badges_screen.dart';
 import 'reputation_shell.dart';
 import 'sailor_level_screen.dart';
 
-/// TEKNEM sekmesindeki "Denizci Profilim" kartı.
+/// PROFİL sekmesindeki "Denizci Profilim" kartı.
 ///
-/// Tekne kimlik kartı ile bakım takibi ARASINA girer; ikisine de dokunmaz.
-/// HESAP YOKSA HİÇ ÇİZİLMEZ — misafirin Teknem sekmesi bugünküyle birebir
-/// aynı kalır (kurucu kararı 2026-08).
+/// Teknem Konsept A (kullanıcı onayı 2026-08) ile Teknem'den Profil'e
+/// taşındı: bu kart KAPTANIN kimliğidir, teknenin değil. Hesap kartının
+/// hemen altında durur. HESAP YOKSA HİÇ ÇİZİLMEZ — misafirin Profil ekranı
+/// bugünküyle birebir aynı kalır (kurucu kararı 2026-08 aynen sürer).
 ///
 /// Sayılar iki kaynaktan gelir ve hiçbiri uydurulmaz: SEYİR/NM cihazdaki
 /// gerçek seyir kayıtlarından (Defter'deki sezon özetiyle AYNI hesap), katkı

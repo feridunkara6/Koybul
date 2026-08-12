@@ -97,6 +97,7 @@ class L10n {
     required this.emergencySub,
     required this.sectionBoat,
     required this.boatEmptyBody,
+    required this.boatDeckBridge,
     required this.boatDefineCta,
     required this.boatLengthFmt,
     required this.boatDraftFmt,
@@ -600,7 +601,7 @@ class L10n {
   final List<String> weekdayShort;
   final List<String> monthShort;
   final String profileTitle, emergencyTitle, emergencySub;
-  final String sectionBoat, boatEmptyBody, boatDefineCta;
+  final String sectionBoat, boatEmptyBody, boatDeckBridge, boatDefineCta;
   final String boatLengthFmt, boatDraftFmt, boatDraftUnknown, editLabel, removeLabel;
   final String sectionAccount, accTitle, accBody, accCta, accOpen, signOut;
   final String sheetTitle, sheetSub, emailLabel, passwordLabel, signInBtn,
@@ -1197,6 +1198,7 @@ const L10n _tr = L10n(
   boatEmptyBody:
       'Henüz tekne tanımlamadın. Tanımlarsan her limanda "teknen sığar mı?" '
       'işaretini görürsün. Bilgi cihazında kalır.',
+  boatDeckBridge: 'Seyirlerin ve sezon istatistiklerin Defter\'de',
   boatDefineCta: 'Tekneni tanımla',
   boatLengthFmt: 'Boy {0} m',
   boatDraftFmt: 'Su çekimi {0} m',
@@ -1504,7 +1506,7 @@ const L10n _tr = L10n(
     'İşte canlı bir örnek: Göcek açıklarında karaya değmeyen gerçek bir rota çizdik. Sen de bir koya dokunup "Deniz rotası"na basınca aynısı olur — konum iznin yoksa uygulama kendiliğinden sorar.',
     'Örnek rotanın bilgi kartı yukarıda. "Nokta ekle" ile durak eklersin, çizgideki beyaz noktaları sürükleyerek rotayı bükersin; yer imi simgesi rotayı kaydeder.',
     'Rotaların ve seyir notların artık tek çatıda: Defter. Aşağıda örnek bir rota kartı var — dokununca rota haritada anında kurulur.',
-    'Teknenin evi: boy, su çekimi ve tipi burada durur; "Teknem sığar" filtresi bu bilgiyle çalışır. Bakım takibi de yakında bu sekmeye gelecek.',
+    'Teknenin evi: adı, boyu, su çekimi ve bağlı marinası burada durur; "Teknem sığar" filtresi bu bilgiyle çalışır. Bakım takibi tek satırlık özetten açılır.',
     'Tanıtım bitti. Şimdi haritadan bir koya dokun ve ilk deniz rotanı çiz. İyi seyirler!',
   ],
   cancelLabel: 'Vazgeç',
@@ -1834,6 +1836,7 @@ const L10n _en = L10n(
   boatEmptyBody:
       'You haven\'t added your boat yet. Add it to see the "will my boat '
       'fit?" badge at every harbor. The info stays on your device.',
+  boatDeckBridge: 'Your voyages and season stats live in the Deck Log',
   boatDefineCta: 'Add your boat',
   boatLengthFmt: 'Length {0} m',
   boatDraftFmt: 'Draft {0} m',
@@ -2141,7 +2144,7 @@ const L10n _en = L10n(
     'Here is a live example: we drew a real land-avoiding route off Göcek. Tap a bay and press "Sea route" and the same happens — if location is off, the app asks automatically.',
     'The example route\'s info card is above. "Add point" adds stops, dragging the white dots bends the line; the bookmark icon saves the route.',
     'Your routes and sailing notes now live under one roof: the Deck Log. Below is a sample route card — tapping it rebuilds the route on the map.',
-    'Your boat\'s home: length, draft and type live here; the "My boat fits" filter uses them. Maintenance tracking will join this tab soon.',
+    'Your boat\'s home: name, length, draft and home marina live here; the "My boat fits" filter uses them. Maintenance opens from a one-line summary.',
     'That\'s the tour. Now tap a bay on the map and draw your first sea route. Fair winds!',
   ],
   cancelLabel: 'Cancel',
@@ -2471,6 +2474,7 @@ const L10n _es = L10n(
   boatEmptyBody:
       'Aún no has añadido tu barco. Añádelo para ver el aviso "¿cabe mi '
       'barco?" en cada puerto. La información se queda en tu dispositivo.',
+  boatDeckBridge: 'Tus travesías y estadísticas de temporada están en el Diario',
   boatDefineCta: 'Añadir mi barco',
   boatLengthFmt: 'Eslora {0} m',
   boatDraftFmt: 'Calado {0} m',
@@ -2778,7 +2782,7 @@ const L10n _es = L10n(
     'Un ejemplo en vivo: dibujamos una ruta real que evita tierra frente a Göcek. Toca una cala y pulsa "Ruta marítima": pasará lo mismo — si la ubicación está apagada, la app la pide sola.',
     'Arriba está la tarjeta de la ruta de ejemplo. "Añadir punto" agrega paradas, arrastrar los puntos blancos curva la línea; el marcador guarda la ruta.',
     'Tus rutas y notas de navegación ahora viven bajo un mismo techo: el Diario. Abajo hay una tarjeta de ruta de ejemplo.',
-    'La casa de tu barco: eslora, calado y tipo viven aquí; el filtro "Mi barco cabe" los usa. El mantenimiento llegará a esta pestaña.',
+    'La casa de tu barco: nombre, eslora, calado y puerto base viven aquí; el filtro "Mi barco cabe" los usa. El mantenimiento se abre desde un resumen de una línea.',
     'Fin del recorrido. Ahora toca una cala en el mapa y traza tu primera ruta marina. ¡Buen viento!',
   ],
   cancelLabel: 'Cancelar',
@@ -3108,6 +3112,7 @@ const L10n _ru = L10n(
   boatEmptyBody:
       'Вы ещё не добавили свою лодку. Добавьте её, чтобы видеть отметку '
       '«поместится ли лодка» в каждой гавани. Данные остаются на устройстве.',
+  boatDeckBridge: 'Ваши походы и статистика сезона — в Журнале',
   boatDefineCta: 'Добавить лодку',
   boatLengthFmt: 'Длина {0} м',
   boatDraftFmt: 'Осадка {0} м',
@@ -3415,7 +3420,7 @@ const L10n _ru = L10n(
     'Живой пример: мы построили настоящий маршрут в обход суши у Гёджека. Коснитесь бухты и нажмите «Морской маршрут» — будет то же самое; если геолокация выключена, приложение само спросит.',
     'Выше — карточка примерного маршрута. «Добавить точку» добавляет остановки, белые точки на линии изгибают её; закладка сохраняет маршрут.',
     'Твои маршруты и заметки теперь под одной крышей — в Журнале. Ниже пример карточки маршрута.',
-    'Дом твоей лодки: длина, осадка и тип хранятся здесь; фильтр «Лодка пройдёт» использует их. Скоро сюда придёт и учёт обслуживания.',
+    'Дом твоей лодки: имя, длина, осадка и родная марина хранятся здесь; фильтр «Лодка пройдёт» использует их. Учёт обслуживания открывается из краткой сводки.',
     'Тур окончен. Коснитесь бухты на карте и постройте свой первый морской маршрут. Попутного ветра!',
   ],
   cancelLabel: 'Отмена',

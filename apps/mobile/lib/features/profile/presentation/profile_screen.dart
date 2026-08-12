@@ -7,6 +7,7 @@ import '../../../core/l10n/l10n_strings.dart';
 import '../../academy/presentation/academy_screen.dart';
 import '../../auth/presentation/account_section.dart';
 import '../../community/presentation/contributions_block.dart';
+import '../../community/presentation/sailor_profile_card.dart';
 import '../../deck/presentation/deck_screen.dart' show deckSegmentProvider;
 import '../../emergency/presentation/emergency_screen.dart';
 import '../../onboarding/application/onboarding_controller.dart';
@@ -57,6 +58,10 @@ class ProfileScreen extends ConsumerWidget {
           const SizedBox(height: 8),
           // Giriş/kayıt (paket 1): oturum yoksa giriş kartı, varsa hesap kartı.
           const AccountSection(),
+          // DENİZCİ PROFİLİM (Teknem Konsept A, kullanıcı onayı 2026-08):
+          // kart Teknem'den BURAYA taşındı — o kaptanın kimliğidir, teknenin
+          // değil. Hesap yoksa kendini çizmez (davranış aynen korunur).
+          const SailorProfileCard(),
           // KATKILARIM (topluluk 2026-08): hesap kartının HEMEN ALTINDA üç
           // sayaç. Hesap yoksa hiç çizilmez — misafirin Profil ekranı
           // bugünküyle birebir aynı kalır.
