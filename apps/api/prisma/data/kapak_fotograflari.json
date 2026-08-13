@@ -1,798 +1,1158 @@
 {
-  "kaynak": "Wikimedia Commons — 2026-08-12 tarayıcı turu (Commons API, dosya başına LicenseShortName/Artist/Categories alanları okundu; konu eşleşmesi kategori+açıklama ile doğrulandı). İzmir'deki Yassıca Adası ve Fethiye'nin Taşyaka MAHALLESİ gibi ad benzerleri kategorileri sayesinde ELENDİ. | BÖLGE TURU 2 (2026-08-12): Ege-Akdeniz-Yunan adaları limanları için 25 fotoğraf daha; her biri Commons API extmetadata alanlarından atıf/lisansla alındı ve tarayıcıda tek tek görsel doğrulandı. Elenenler: Ataköy (fotoğraf AVM yürüyüş yolunu gösteriyordu), Yalıkavak (marina görünmüyordu), Parikia (otopark ağırlıklı), Kastellorizo (puslu/karanlık), Kuşadası 04 (bina ağırlıklı; 03 alındı). | BÖLGE TURU 3 (2026-08-12): koylar ve kalan limanlar için 19 fotoğraf daha (Kelebekler Vadisi, Phaselis, Lindos, Keçi Bükü/Kızkumu, Bozukkale, İngiliz Limanı, Fethiye, Datça, Gökçeada ve 10 Yunan limanı). Elenenler: Selimiye (yol fotoğrafı çıktı), Akyaka (kitesurf karesi), Gemiler (karanlık/backlit), Sedir (açık deniz), Bitez (mercek parlaması), Gouvia (1280 küçüğü 182 px'lik aşırı panorama). | MARİNA TURU (2026-08-12): 10 özel marinaya işletmelerin kendi sitelerindeki resmî tanıtım görselleri eklendi (7 Setur sayfası, Martı, Alanya; Finike'nin Commons karesi işletme görseliyle değiştirildi). Erişilemeyen/elenenler: d-marin.com, clubmarina, yachtmarin, adaköy, kumlubükü, marinturk, west/güzelce/kıyı İstanbul, gazipaşa, kosmarina.gr, marina-symi.gr tarayıcı erişimine kapalı; Yalıkavak bot korumalı; Viaport/MyMarina/Ece Saray sayfalarında kullanılabilir görsel çıkmadı; Letoonia görseli grafik bindirmeliydi; Oasis görseli 699 px.",
-  "kurallar": [
-    "Tahmin/uydurma YOK. Her alan Commons dosya sayfasından birebir kopyalanır.",
-    "url: dosyanın upload.wikimedia.org üzerindeki DOĞRUDAN adresi (Commons sayfasındaki 'Orijinal dosya' bağlantısı ya da uygun genişlikte önizleme).",
-    "credit: fotoğrafçının adı, sayfadaki 'Yazar/Author' alanından. CC lisansı atfı ZORUNLU kılar.",
-    "license: lisansın kısa adı, sayfada yazdığı gibi (ör. 'CC BY-SA 4.0', 'CC BY 3.0', 'Public domain').",
-    "sourceUrl: Commons dosya sayfasının adresi (commons.wikimedia.org/wiki/File:...). Uygulamada atıf şeridi bu sayfayı açar.",
-    "mimeType: image/jpeg | image/png | image/webp (veritabanı başka değer kabul etmez).",
-    "width/height: dosyanın piksel ölçüleri (url hangi boyuta işaret ediyorsa o).",
-    "Fotoğraf GERÇEKTEN o koyu/marinayı göstermeli — emin değilsen ekleme, boş kalsın.",
-    "Girdi eklendikçe generate_locations_seed.py yeniden koşulur; SQL kendiliğinden üretilir.",
-    "KAYNAK İZNİ istisnası (feri, 2026-08-12): DERİA'nın (deria.gov.tr) kendi koy fotoğrafları kaynak gösterilerek kullanılır — feri: 'bunlar public fotolar ve kullanılabilir, zaten site yönlendirmesini yapıyoruz'. Bu girişlerde license BOŞ bırakılır (lisans adı uydurulmaz), credit 'Fotoğraf: DERİA ...' der, sourceUrl deria.gov.tr'ye gider. Üretici bu istisnayı YALNIZ https://deria.gov.tr/ ile başlayan url'lere tanır.",
-    "İŞLETME İZNİ (feri, 2026-08-12): işletmenin KENDİ resmî sitesindeki tanıtım görseli kaynak gösterilerek kullanılabilir. Şartlar: isletmeIzni=true, license BOŞ, credit 'Fotoğraf: <işletme> (resmî site)', sourceUrl işletmenin KAYITLI website contact alanıyla aynı alan adında (üretici bunu zorlar). Kaldırma talebi gelirse girdi silinir."
-  ],
-  "fotograflar": {
-    "gobun-samandira-sahasi": {
-      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/2fa516e7-6d3f-4960-9adf-ea503d0003b3_14.G%C3%96B%C3%9CN.jpg",
-      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
-      "license": "",
-      "sourceUrl": "https://deria.gov.tr",
-      "mimeType": "image/jpeg",
-      "width": 4888,
-      "height": 3666,
-      "not": "DERİA cove/paged API'sinde id=12 GÖBÜN KOYU kaydının imageUrl alanı (2026-08-12). Görsel tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
-    },
-    "kille-buku": {
-      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/79564fea-77a9-4376-99db-e127d7f0980e_6.K%C4%B0LLEADASI.jpg",
-      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
-      "license": "",
-      "sourceUrl": "https://deria.gov.tr",
-      "mimeType": "image/jpeg",
-      "width": 5015,
-      "height": 3817,
-      "not": "DERİA API id=5 KİLLE KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda doğrulandı: plajlı koyun drone çekimi."
-    },
-    "siralibuk-koyu": {
-      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/489a460f-4ac7-414c-9083-9967fdea0be4_12.SIRALIB%C3%9CK.jpg",
-      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
-      "license": "",
-      "sourceUrl": "https://deria.gov.tr",
-      "mimeType": "image/jpeg",
-      "width": 5280,
-      "height": 3956,
-      "not": "DERİA API id=7 SIRALIBÜK KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda doğrulandı: tonozda bağlı teknelerle koyun drone çekimi."
-    },
-    "tersane-adasi-koyu": {
-      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/dc1b9731-750a-4544-b5dd-02bfe05d826d_10.TERSANE%20ADASI.jpg",
-      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
-      "license": "",
-      "sourceUrl": "https://deria.gov.tr",
-      "mimeType": "image/jpeg",
-      "width": 4929,
-      "height": 3780,
-      "not": "DERİA API id=13 TERSANE ADASI kaydının imageUrl alanı (2026-08-12). Tarayıcıda doğrulandı: guletlerle dolu koyun drone çekimi. Commons'taki tek aday 640 px'ti, bu 4929 px."
-    },
-    "bedri-rahmi-samandira-sahasi": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Fish_Figure_on_a_Rock_Painted_By_Bedri_Rahmi_Ey%C3%BCbo%C4%9Flu%2C_located_in_Bedri_Rahmi_Bay_in_G%C3%B6cek.jpg/1280px-Fish_Figure_on_a_Rock_Painted_By_Bedri_Rahmi_Ey%C3%BCbo%C4%9Flu%2C_located_in_Bedri_Rahmi_Bay_in_G%C3%B6cek.jpg",
-      "credit": "Raicem",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fish_Figure_on_a_Rock_Painted_By_Bedri_Rahmi_Ey%C3%BCbo%C4%9Flu,_located_in_Bedri_Rahmi_Bay_in_G%C3%B6cek.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Koyun simgesi: Bedri Rahmi Eyüboğlu'nun balık kayası — açıklama 'located in Bedri Rahmi Bay in Göcek'."
-    },
-    "boynuzbuku-samandira-sahasi": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Boynuzb%C3%BCk%C3%BC_-_panoramio.jpg/1280px-Boynuzb%C3%BCk%C3%BC_-_panoramio.jpg",
-      "credit": "Jorge Franganillo",
-      "license": "CC BY 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Boynuzb%C3%BCk%C3%BC_-_panoramio.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 720,
-      "not": "Kategori: Boynuzbükü."
-    },
-    "sarsala-samandira-sahasi": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Sarsala_Bay_in_Dalaman_from_above.jpg/1280px-Sarsala_Bay_in_Dalaman_from_above.jpg",
-      "credit": "Raicem",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sarsala_Bay_in_Dalaman_from_above.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Kategori: Bay of Sarsala; koyun havadan görünümü."
-    },
-    "yassica-adalari": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Yass%C4%B1ca_Adalar%C4%B1_-_panoramio.jpg/1280px-Yass%C4%B1ca_Adalar%C4%B1_-_panoramio.jpg",
-      "credit": "Jorge Franganillo",
-      "license": "CC BY 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Yass%C4%B1ca_Adalar%C4%B1_-_panoramio.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 720,
-      "not": "Kategori: Yassıca Islands (Göcek). İzmir Körfezi'ndeki aynı adlı ada kategorisiyle AYRIŞTI, o elendi."
-    },
-    "gunluklu-koyu-demirleme": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/G%C3%BCnl%C3%BCkl%C3%BC_Koyu_-_panoramio.jpg/1280px-G%C3%BCnl%C3%BCkl%C3%BC_Koyu_-_panoramio.jpg",
-      "credit": "Jorge Franganillo",
-      "license": "CC BY 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%BCnl%C3%BCkl%C3%BC_Koyu_-_panoramio.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 853,
-      "not": "Başlık/açıklama: Günlüklü Koyu; kategori Fethiye."
-    },
-    "katranci-koyu": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Katranc%C4%B1%2C_Fethiye_-_panoramio.jpg/1280px-Katranc%C4%B1%2C_Fethiye_-_panoramio.jpg",
-      "credit": "Merih Sezgin",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Katranc%C4%B1,_Fethiye_-_panoramio.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Kategori: Katrancı Bay."
-    },
-    "kizilada-fener-restorani": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/4/46/The_Gulf_of_Fethiye._Kizilada_Restaurant_and_K%C4%B1z%C4%B1lada_Feneri.jpg",
-      "credit": "Николай Максимович",
-      "license": "CC BY 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Gulf_of_Fethiye._Kizilada_Restaurant_and_K%C4%B1z%C4%B1lada_Feneri.jpg",
-      "mimeType": "image/jpeg",
-      "width": 714,
-      "height": 717,
-      "not": "Restoranın ve fenerin kendisi (kategoriler: Lighthouses in Fethiye, Restaurants in Fethiye). Orijinal 714px — 1280 önizleme yok, doğrudan dosya kullanıldı."
-    },
-    "gocek-belediye-iskelesi": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/G%C3%B6cek_Hafen_T%C3%BCrkei.jpg/1280px-G%C3%B6cek_Hafen_T%C3%BCrkei.jpg",
-      "credit": "Herbert wie",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%B6cek_Hafen_T%C3%BCrkei.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 849,
-      "not": "Açıklama: 'port of Göcek with sailing ship' — köyiçi liman cephesi (bugünkü MUÇEV Göcek Marina)."
-    },
-    "d-marin-gocek": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Port_G%C3%B6cek_early_evening.jpg/1280px-Port_G%C3%B6cek_early_evening.jpg",
-      "credit": "Poet Laureate",
-      "license": "CC BY 2.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Port_G%C3%B6cek_early_evening.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 853,
-      "not": "Port Göcek = bugünkü D-Marin Göcek (marka değişimi ~2011). Dosya açıklaması marinayı ayrıntısıyla anlatıyor (C&N işletmesi, yüzer pontonlar, 1999 açılışı)."
-    },
-    "binlik-samandira-sahasi": {
-      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/e9d7b6a0-360b-4dec-bc71-55a656d68b3d_13.%20B%C4%B0NL%C4%B0K.jpg",
-      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
-      "license": "",
-      "sourceUrl": "https://deria.gov.tr",
-      "mimeType": "image/jpeg",
-      "width": 5000,
-      "height": 3765,
-      "not": "DERİA cove/paged id=9 BİNLİK KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
-    },
-    "buyukova-samandira-sahasi": {
-      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/a538ac67-229b-437c-a97c-e5e54cfaf56f_buyukova.jpg",
-      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
-      "license": "",
-      "sourceUrl": "https://deria.gov.tr",
-      "mimeType": "image/jpeg",
-      "width": 5280,
-      "height": 3956,
-      "not": "DERİA cove/paged id=1726 BÜYÜKOVA KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
-    },
-    "gocek-adasi-bati-samandira-sahasi": {
-      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/c4fa39fd-6bd1-4fa5-bd8f-a699c3f4ea45_8.G%C3%96CEKADASI.jpg",
-      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
-      "license": "",
-      "sourceUrl": "https://deria.gov.tr",
-      "mimeType": "image/jpeg",
-      "width": 5017,
-      "height": 3755,
-      "not": "DERİA cove/paged id=16 GÖCEK ADASI (BATI) kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
-    },
-    "gocek-dogu-samandira-sahasi": {
-      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/54e0e78d-a954-48c2-9d55-d11c63f3fa13_7.G%C3%96CEKDO%C4%9EU.jpg",
-      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
-      "license": "",
-      "sourceUrl": "https://deria.gov.tr",
-      "mimeType": "image/jpeg",
-      "width": 4999,
-      "height": 3722,
-      "not": "DERİA cove/paged id=17 GÖCEK DOĞU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
-    },
-    "gunluk-atbuku-samandira-sahasi": {
-      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/be50ef31-6647-4941-842c-0fe9f320a20d_9.ATB%C3%9CK%C3%9C.jpg",
-      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
-      "license": "",
-      "sourceUrl": "https://deria.gov.tr",
-      "mimeType": "image/jpeg",
-      "width": 5280,
-      "height": 3956,
-      "not": "DERİA cove/paged id=3 GÜNLÜK-ATBÜKÜ kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
-    },
-    "inceburun-samandira-sahasi": {
-      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/34e2a8c8-7257-4bad-8c14-c977ee83f475_3.%C4%B0NCEBURUN.jpg",
-      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
-      "license": "",
-      "sourceUrl": "https://deria.gov.tr",
-      "mimeType": "image/jpeg",
-      "width": 5280,
-      "height": 3622,
-      "not": "DERİA cove/paged id=1 İNCEBURUN kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
-    },
-    "marti-samandira-sahasi": {
-      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/4f69d934-89a5-4bcc-973f-3ae336850ed0_15.MARTI.jpg",
-      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
-      "license": "",
-      "sourceUrl": "https://deria.gov.tr",
-      "mimeType": "image/jpeg",
-      "width": 4835,
-      "height": 3702,
-      "not": "DERİA cove/paged id=10 MARTI KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
-    },
-    "merdivenli-samandira-sahasi": {
-      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/b065d664-9350-427b-8c0e-1b626cdc94db_16.MERD%C4%B0VENL%C4%B0.jpg",
-      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
-      "license": "",
-      "sourceUrl": "https://deria.gov.tr",
-      "mimeType": "image/jpeg",
-      "width": 3840,
-      "height": 2160,
-      "not": "DERİA cove/paged id=11 MERDİVENLİ KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
-    },
-    "osmanaga-samandira-sahasi": {
-      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/14007ab8-4a03-48d3-adc9-f0b865917855_1.OSMANAGA.jpg",
-      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
-      "license": "",
-      "sourceUrl": "https://deria.gov.tr",
-      "mimeType": "image/jpeg",
-      "width": 5280,
-      "height": 3562,
-      "not": "DERİA cove/paged id=2 OSMANAĞA KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
-    },
-    "zeytin-adasi-samandira-sahasi": {
-      "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/45dfa2c5-62cd-487b-b0da-2b2e77ff44ae_5.ZEYT%C4%B0NADASI.jpg",
-      "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
-      "license": "",
-      "sourceUrl": "https://deria.gov.tr",
-      "mimeType": "image/jpeg",
-      "width": 4986,
-      "height": 3854,
-      "not": "DERİA cove/paged id=14 ZEYTİN ADASI kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
-    },
-    "hydra-limani": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Harbour_of_Hydra_island_(43058393960).jpg/1280px-Harbour_of_Hydra_island_(43058393960).jpg",
-      "credit": "dronepicr",
-      "license": "CC BY 2.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Harbour_of_Hydra_island_(43058393960).jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 853,
-      "not": "Kategori: Port of Hydra; adanın ana limanının drone çekimi. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "symi-gialos-rihtimi": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Symi_harbour.jpg/1280px-Symi_harbour.jpg",
-      "credit": "SymiArt",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Symi_harbour.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 853,
-      "not": "Kategori: Port of Symi — Gialos limanı. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "rodos-mandraki-limani": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Mandraki_Harbour_Entrance_Port_of_Rhodes_21_August_2023.jpg/1280px-Mandraki_Harbour_Entrance_Port_of_Rhodes_21_August_2023.jpg",
-      "credit": "Pjotr Mahhonin",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mandraki_Harbour_Entrance_Port_of_Rhodes_21_August_2023.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Kategori: Mandraki Harbour (Rhodes); liman girişi. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "netsel-marmaris-marina": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Marmaris_marina_2019_G2.jpg/1280px-Marmaris_marina_2019_G2.jpg",
-      "credit": "George Chernilevsky",
-      "license": "Public domain",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Marmaris_marina_2019_G2.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 747,
-      "not": "Kategori: Marinas in Turkey; Marmaris'in yat marinası (Netsel). Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "gumusluk-iskeleleri": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/G%C3%BCm%C3%BC%C5%9Fl%C3%BCk,_Bodrum.jpg/1280px-G%C3%BCm%C3%BC%C5%9Fl%C3%BCk,_Bodrum.jpg",
-      "credit": "Koray",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%BCm%C3%BC%C5%9Fl%C3%BCk,_Bodrum.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 853,
-      "not": "Başlık: Gümüşlük, Bodrum. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "milta-bodrum-marina": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Bodrum_marina,_Turkey_(5653802003).jpg/1280px-Bodrum_marina,_Turkey_(5653802003).jpg",
-      "credit": "Michal Osmenda from Brussels, Belgium",
-      "license": "CC BY-SA 2.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bodrum_marina,_Turkey_(5653802003).jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 850,
-      "not": "Başlık: Bodrum marina — Bodrum'un yat marinası (Milta). Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "kas-belediye-limani": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Kaya_mezar_ve_liman-Ka%C5%9F_-_panoramio.jpg/1280px-Kaya_mezar_ve_liman-Ka%C5%9F_-_panoramio.jpg",
-      "credit": "HALUK COMERTEL",
-      "license": "CC BY 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kaya_mezar_ve_liman-Ka%C5%9F_-_panoramio.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 816,
-      "not": "Başlık: kaya mezarı ve liman, Kaş. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "bozcaada-limani": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/7/74/Bozcaada_liman.jpg",
-      "credit": "Filanca",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bozcaada_liman.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1248,
-      "height": 832,
-      "not": "Başlık: Bozcaada liman. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "port-alacati-marina": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Cesme_-_Alacati_Marina_-_panoramio.jpg/1280px-Cesme_-_Alacati_Marina_-_panoramio.jpg",
-      "credit": "David Broad",
-      "license": "CC BY 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cesme_-_Alacati_Marina_-_panoramio.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 850,
-      "not": "Başlık: Alaçatı Marina; kategori Alaçatı. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "ic-cesme-marina": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Cesme_Marina.jpg/1280px-Cesme_Marina.jpg",
-      "credit": "Irfan Parlar",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cesme_Marina.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 856,
-      "not": "Kategori: Çeşme Marina. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "setur-kusadasi-marina": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Ku%C5%9Fadas%C4%B1_Marina_03.jpg/1280px-Ku%C5%9Fadas%C4%B1_Marina_03.jpg",
-      "credit": "Zeynel Cebeci",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ku%C5%9Fadas%C4%B1_Marina_03.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 808,
-      "not": "Kategoriler: Marinas in Turkey, Port of Kuşadası. İlk aday (04) bulutlu/bina ağırlıklıydı — 03 marinayı gösteriyor (görsel doğrulandı). Commons API taraması 2026-08-12 (bölge turu 2)."
-    },
-    "setur-kalamis-fenerbahce-marina": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Fenerbah%C3%A7e_Yat_Liman%C4%B1.jpg/1280px-Fenerbah%C3%A7e_Yat_Liman%C4%B1.jpg",
-      "credit": "Kadı",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fenerbah%C3%A7e_Yat_Liman%C4%B1.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Başlık: Fenerbahçe Yat Limanı; kategori Kalamış, Kadıköy. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "d-marin-turgutreis": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Turgutreis_-_panoramio_(11).jpg/1280px-Turgutreis_-_panoramio_(11).jpg",
-      "credit": "Tanya Dedyukhina",
-      "license": "CC BY 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Turgutreis_-_panoramio_(11).jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Başlık: Turgutreis — marina görünümü (görsel doğrulandı). Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "bozburun-yat-yanasma-yeri": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Merkez,_48710_Bozburun-Marmaris-Mu%C4%9Fla,_Turkey_-_panoramio.jpg/1280px-Merkez,_48710_Bozburun-Marmaris-Mu%C4%9Fla,_Turkey_-_panoramio.jpg",
-      "credit": "Bir_Ege_Hikayesi ©",
-      "license": "CC BY 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Merkez,_48710_Bozburun-Marmaris-Mu%C4%9Fla,_Turkey_-_panoramio.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Kategori: Bozburun, Marmaris; kıyı/yanaşma görünümü. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "fiskardo-limani": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Fiscardo,_Kefalonia_10-2003_02.jpg/1280px-Fiscardo,_Kefalonia_10-2003_02.jpg",
-      "credit": "Dan Taylor from London, UK",
-      "license": "CC BY 2.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fiscardo,_Kefalonia_10-2003_02.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 853,
-      "not": "Başlık: Fiscardo, Kefalonia — liman. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "naoussa-limani-paros": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Naoussa_Harbour_-_panoramio.jpg/1280px-Naoussa_Harbour_-_panoramio.jpg",
-      "credit": "ian freeman",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Naoussa_Harbour_-_panoramio.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Başlık: Naoussa Harbour. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "ermoupoli-limani-syros": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Syros_Ano_Syros_u_Ermoupolis140707.jpg/1280px-Syros_Ano_Syros_u_Ermoupolis140707.jpg",
-      "credit": "Hans Peter Schaefer, http://www.reserv-a-rt.de",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Syros_Ano_Syros_u_Ermoupolis140707.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 853,
-      "not": "Ermoupoli ve limanının genel görünümü. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "aegina-limani": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Lascar_Island_of_Aegina_-_Main_harbour_(4518425007).jpg/1280px-Lascar_Island_of_Aegina_-_Main_harbour_(4518425007).jpg",
-      "credit": "Jorge Láscar from Australia",
-      "license": "CC BY 2.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lascar_Island_of_Aegina_-_Main_harbour_(4518425007).jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 850,
-      "not": "Başlık: Island of Aegina - Main harbour. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "pythagorio-limani-samos": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Pythagorio.jpg/1280px-Pythagorio.jpg",
-      "credit": "Orthodox33",
-      "license": "Public domain",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pythagorio.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Kategori: Pythagoreio. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "patmos-skala-rihtimi": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Skala-of-patmos.JPG/1280px-Skala-of-patmos.JPG",
-      "credit": "Chris Vlachos",
-      "license": "CC BY 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Skala-of-patmos.JPG",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Başlık: Skala of Patmos. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "kos-eski-liman-mandraki": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Kos-Harbour-01ASD.jpg/1280px-Kos-Harbour-01ASD.jpg",
-      "credit": "Asurnipal",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kos-Harbour-01ASD.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 852,
-      "not": "Kategori: Port of Kos. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "symi-panormitis-iskelesi": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Panorama_Blick_auf_Schiffanleger_Panormitis.jpg/1280px-Panorama_Blick_auf_Schiffanleger_Panormitis.jpg",
-      "credit": "A.F.E.Bean",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panorama_Blick_auf_Schiffanleger_Panormitis.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 458,
-      "not": "Başlık: Panormitis iskelesine panoramik bakış; kategori Panormitis. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "teos-marina": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/S%C4%B1%C4%9Fac%C4%B1k_Castle,_Harbour_and_Teos_Marina_01.jpg/1280px-S%C4%B1%C4%9Fac%C4%B1k_Castle,_Harbour_and_Teos_Marina_01.jpg",
-      "credit": "BSRF",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:S%C4%B1%C4%9Fac%C4%B1k_Castle,_Harbour_and_Teos_Marina_01.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 959,
-      "not": "Kategoriler: Sığacık Castle, Teos Marina; drone çekimi. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "g-marina-kemer": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/KEMER_MAR%C4%B0NA_%C2%A9Abdullah_Kiyga_-_panoramio.jpg/1280px-KEMER_MAR%C4%B0NA_%C2%A9Abdullah_Kiyga_-_panoramio.jpg",
-      "credit": "Abdullah kıyga",
-      "license": "CC BY 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:KEMER_MAR%C4%B0NA_%C2%A9Abdullah_Kiyga_-_panoramio.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Başlık: Kemer Marina; kategori Kemer. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "antalya-kaleici-yat-limani": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/20180111_AntalyaMarina_5272_(25238627627).jpg/1280px-20180111_AntalyaMarina_5272_(25238627627).jpg",
-      "credit": "Ray Swi-hymn from Sijhih-Taipei, Taiwan",
-      "license": "CC BY-SA 2.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:20180111_AntalyaMarina_5272_(25238627627).jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 854,
-      "not": "Antalya Kaleiçi yat limanı (görsel doğrulandı). Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "kelebekler-vadisi-demirleme": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Kelebekler_Vadisi_-_Butterfly_Valley,_Turkey.jpg/1280px-Kelebekler_Vadisi_-_Butterfly_Valley,_Turkey.jpg",
-      "credit": "Htkava",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kelebekler_Vadisi_-_Butterfly_Valley,_Turkey.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Kategoriler: Lycian Way, Butterfly Valley. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "phaselis-koylari-demirleme": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Phaselis_beach.jpg/1280px-Phaselis_beach.jpg",
-      "credit": "Mike like0708",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Phaselis_beach.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Başlık: Phaselis beach — antik kentin koyu. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "lindos-koyu": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Pier_at_Lindos._Rhodes,_Greece.jpg/1280px-Pier_at_Lindos._Rhodes,_Greece.jpg",
-      "credit": "Ввласенко",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pier_at_Lindos._Rhodes,_Greece.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 849,
-      "not": "Başlık: Pier at Lindos; kategori Piers in Greece. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "keci-buku-demirleme": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/K%C4%B1zkumu_Orhaniye_Marmaris.jpg/1280px-K%C4%B1zkumu_Orhaniye_Marmaris.jpg",
-      "credit": "Arif Sipahi",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:K%C4%B1zkumu_Orhaniye_Marmaris.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Başlık: Kızkumu, Orhaniye — Keçi Bükü'nün simgesi; kategoriler Marinas/Boats in Turkey. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "nisyros-mandraki-limani": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Nisyros_port_Mandraki_1.jpg/1280px-Nisyros_port_Mandraki_1.jpg",
-      "credit": "Karelj",
-      "license": "Public domain",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Nisyros_port_Mandraki_1.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 853,
-      "not": "Başlık: Nisyros port Mandraki. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "adamas-limani-milos": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Adamas_(4703820265).jpg/1280px-Adamas_(4703820265).jpg",
-      "credit": "Klearchos Kapoutsis from Santorini, Greece",
-      "license": "CC BY 2.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Adamas_(4703820265).jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 632,
-      "not": "Kategori: Adamas — liman görünümü. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "kalymnos-pothia-limani": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Calymnos_harbour.jpg",
-      "credit": "Κ. Καλογερόπουλος Kalogeropoulos",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Calymnos_harbour.jpg",
-      "mimeType": "image/jpeg",
-      "width": 960,
-      "height": 541,
-      "not": "Kategori: Pothia. Küçük çözünürlük (960px) — tek uygun aday. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "gaios-limani-paksos": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Paxos_gaios_port_bgiu.jpg/1280px-Paxos_gaios_port_bgiu.jpg",
-      "credit": "Bogdan Giuşcă",
-      "license": "CC BY-SA 2.5",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Paxos_gaios_port_bgiu.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Başlık: Paxos Gaios port. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "lakka-koyu-paksos": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Lakka_bay_20210606.jpg/1280px-Lakka_bay_20210606.jpg",
-      "credit": "Jess Stubenbord",
-      "license": "CC0 1.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lakka_bay_20210606.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 622,
-      "not": "Başlık: Lakka bay; kategoriler Lakka (Paxi), Bays of Greece. Commons kısa adı 'CC0'; tam adı CC0 1.0. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "zea-marina": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Piraeus,_marina_Zea_03.JPG/1280px-Piraeus,_marina_Zea_03.JPG",
-      "credit": "Palickap",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Piraeus,_marina_Zea_03.JPG",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Kategori: Zea harbour. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "tilos-livadia-rihtimi": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Livadhia_Tilos_2.jpg/1280px-Livadhia_Tilos_2.jpg",
-      "credit": "freddie boy",
-      "license": "CC BY-SA 2.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Livadhia_Tilos_2.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Başlık: Livadhia, Tilos. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "halki-emporios-rihtimi": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Emporio_port_in_Halki_island.jpg/1280px-Emporio_port_in_Halki_island.jpg",
-      "credit": "Oliver H",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Emporio_port_in_Halki_island.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 783,
-      "not": "Başlık: Emporio port, Halki. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "kandiye-limani-girit": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Venetian_Fortress,_Heraklion,_Crete.JPG/1280px-Venetian_Fortress,_Heraklion,_Crete.JPG",
-      "credit": "Stu's Images",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Venetian_Fortress,_Heraklion,_Crete.JPG",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 921,
-      "not": "Başlık: Koules (Venedik kalesi) — Kandiye eski limanının girişi. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "katapola-limani-amorgos": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Katapola_bay,_Amorgos,_213202.jpg/1280px-Katapola_bay,_Amorgos,_213202.jpg",
-      "credit": "Zde",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Katapola_bay,_Amorgos,_213202.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 852,
-      "not": "Kategori: Katapola (Amorgos). Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "fethiye-limani": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Fethiye_Harbour_area_in_2011_5727.jpg/1280px-Fethiye_Harbour_area_in_2011_5727.jpg",
-      "credit": "Dosseman",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fethiye_Harbour_area_in_2011_5727.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 852,
-      "not": "Kategori: Fethiye Harbour. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "datca-yat-limani": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Dat%C3%A7a,_yachts_harbour_*%C2%A9Abdullah_Kiyga_-_panoramio.jpg/1280px-Dat%C3%A7a,_yachts_harbour_*%C2%A9Abdullah_Kiyga_-_panoramio.jpg",
-      "credit": "Abdullah kıyga",
-      "license": "CC BY 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dat%C3%A7a,_yachts_harbour_*%C2%A9Abdullah_Kiyga_-_panoramio.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 681,
-      "not": "Başlık: Datça yachts harbour; kategori Datça. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "gokceada-kuzu-limani": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/G%C3%B6kceada_Kuzu_Limani_1.jpg/1280px-G%C3%B6kceada_Kuzu_Limani_1.jpg",
-      "credit": "Bilderbrei",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%B6kceada_Kuzu_Limani_1.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 960,
-      "not": "Başlık: Gökçeada Kuzu Limanı; kategori Gökçeada. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "bozukkale-loryma-demirleme": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Loryma_(3).jpg/1280px-Loryma_(3).jpg",
-      "credit": "Marmaracalypso",
-      "license": "CC BY-SA 4.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Loryma_(3).jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 853,
-      "not": "Başlık: Loryma — Bozukkale koyu. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "degirmen-buku-ingiliz-limani": {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Ingiliz_limani_04404_-_04406.jpg/1280px-Ingiliz_limani_04404_-_04406.jpg",
-      "credit": "Nevit Dilmen (talk)",
-      "license": "CC BY-SA 3.0",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ingiliz_limani_04404_-_04406.jpg",
-      "mimeType": "image/jpeg",
-      "width": 1280,
-      "height": 525,
-      "not": "Başlık: İngiliz Limanı; kategori Gulet. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
-    },
-    "setur-yalova-marina": {
-      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/e836fcc0ac0d431f840cd323c455f674.jpg",
-      "credit": "Fotoğraf: Setur Yalova Marina (resmî site)",
-      "license": "",
-      "sourceUrl": "https://www.seturmarinas.com/en/marinas/yalova",
-      "isletmeIzni": true,
-      "mimeType": "image/jpeg",
-      "width": 1920,
-      "height": 786,
-      "not": "Setur Yalova Marina sayfasının kendi tanıtım görseli (hero). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
-    },
-    "setur-ayvalik-marina": {
-      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/ayvalik-banner.jpg",
-      "credit": "Fotoğraf: Setur Ayvalık Marina (resmî site)",
-      "license": "",
-      "sourceUrl": "https://www.seturmarinas.com/en/marinas/ayvalik",
-      "isletmeIzni": true,
-      "mimeType": "image/jpeg",
-      "width": 3885,
-      "height": 2185,
-      "not": "Setur Ayvalık Marina sayfasının kendi tanıtım görseli (drone, gün batımı). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
-    },
-    "setur-cesme-marina": {
-      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/cesme-banner.jpg",
-      "credit": "Fotoğraf: Setur Çeşme Marina (resmî site)",
-      "license": "",
-      "sourceUrl": "https://www.seturmarinas.com/en/marinas/cesme",
-      "isletmeIzni": true,
-      "mimeType": "image/jpeg",
-      "width": 4000,
-      "height": 3000,
-      "not": "Setur Çeşme Marina sayfasının kendi tanıtım görseli (drone). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
-    },
-    "setur-finike-marina": {
-      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/3332cd82f2b0434da13de362896156bc.jpg",
-      "credit": "Fotoğraf: Setur Finike Marina (resmî site)",
-      "license": "",
-      "sourceUrl": "https://www.seturmarinas.com/en/marinas/finike",
-      "isletmeIzni": true,
-      "mimeType": "image/jpeg",
-      "width": 1920,
-      "height": 786,
-      "not": "Setur Finike Marina sayfasının kendi tanıtım görseli. Tur 2'deki 1280px Commons karesinin yerine geçti (işletmenin güncel ve yüksek çözünürlüklü görseli). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
-    },
-    "setur-antalya-marina": {
-      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/antalya-banner.jpg",
-      "credit": "Fotoğraf: Setur Antalya Marina (resmî site)",
-      "license": "",
-      "sourceUrl": "https://www.seturmarinas.com/en/marinas/antalya",
-      "isletmeIzni": true,
-      "mimeType": "image/jpeg",
-      "width": 1920,
-      "height": 786,
-      "not": "Setur Antalya Marina sayfasının kendi tanıtım görseli. Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
-    },
-    "setur-kas-marina": {
-      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/kas-banner.jpg",
-      "credit": "Fotoğraf: Setur Kaş Marina (resmî site)",
-      "license": "",
-      "sourceUrl": "https://www.seturmarinas.com/en/marinas/makmarin-kas",
-      "isletmeIzni": true,
-      "mimeType": "image/jpeg",
-      "width": 4240,
-      "height": 2832,
-      "not": "Setur Kaş Marina sayfasının kendi tanıtım görseli (marina + adalar). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
-    },
-    "gocek-village-port-marina": {
-      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/320a285e-67d6-4636-bd00-0c89641f2e8d.jpg",
-      "credit": "Fotoğraf: Göcek Village Port Marina (resmî site)",
-      "license": "",
-      "sourceUrl": "https://www.seturmarinas.com/en/marinas/gocek-village-port",
-      "isletmeIzni": true,
-      "mimeType": "image/jpeg",
-      "width": 2376,
-      "height": 1584,
-      "not": "Setur Göcek Village Port sayfasının galeri görseli (pontonlar). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
-    },
-    "marinturk-gocek-exclusive": {
-      "url": "https://www.seturmarinas.com/Upload/MarinaPictures/445e754be94e40b5b1efd9a4825bcd80.jpg",
-      "credit": "Fotoğraf: Göcek Exclusive Marina (resmî site)",
-      "license": "",
-      "sourceUrl": "https://www.seturmarinas.com/marinalar/gocek-exclusive",
-      "isletmeIzni": true,
-      "mimeType": "image/jpeg",
-      "width": 1920,
-      "height": 786,
-      "not": "Setur Göcek Exclusive sayfasının kendi tanıtım görseli (hava, pontonlar). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
-    },
-    "marti-marina-orhaniye": {
-      "url": "https://irp.cdn-website.com/2e136757/dms3rep/multi/opt/MartiMarina-71-1920w.jpg",
-      "credit": "Fotoğraf: Martı Marina (resmî site)",
-      "license": "",
-      "sourceUrl": "https://www.marti.com.tr/marti-marina",
-      "isletmeIzni": true,
-      "mimeType": "image/jpeg",
-      "width": 1600,
-      "height": 1669,
-      "not": "marti.com.tr/marti-marina sayfasının galeri görseli (pontonlar, Keçi Bükü). Görsel işletmenin CDN'inde (irp.cdn-website.com) durur; kaynak sayfa resmî sitedir. Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
-    },
-    "alanya-marina": {
-      "url": "https://www.alanyamarina.com.tr/img/spot/01.jpg",
-      "credit": "Fotoğraf: Alanya Marina (resmî site)",
-      "license": "",
-      "sourceUrl": "https://www.alanyamarina.com.tr",
-      "isletmeIzni": true,
-      "mimeType": "image/jpeg",
-      "width": 2140,
-      "height": 1140,
-      "not": "alanyamarina.com.tr ana sayfa tanıtım görseli (havza + direkler). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
-    }
+ "kaynak": "Wikimedia Commons — 2026-08-12 tarayıcı turu (Commons API, dosya başına LicenseShortName/Artist/Categories alanları okundu; konu eşleşmesi kategori+açıklama ile doğrulandı). İzmir'deki Yassıca Adası ve Fethiye'nin Taşyaka MAHALLESİ gibi ad benzerleri kategorileri sayesinde ELENDİ. | BÖLGE TURU 2 (2026-08-12): Ege-Akdeniz-Yunan adaları limanları için 25 fotoğraf daha; her biri Commons API extmetadata alanlarından atıf/lisansla alındı ve tarayıcıda tek tek görsel doğrulandı. Elenenler: Ataköy (fotoğraf AVM yürüyüş yolunu gösteriyordu), Yalıkavak (marina görünmüyordu), Parikia (otopark ağırlıklı), Kastellorizo (puslu/karanlık), Kuşadası 04 (bina ağırlıklı; 03 alındı). | BÖLGE TURU 3 (2026-08-12): koylar ve kalan limanlar için 19 fotoğraf daha (Kelebekler Vadisi, Phaselis, Lindos, Keçi Bükü/Kızkumu, Bozukkale, İngiliz Limanı, Fethiye, Datça, Gökçeada ve 10 Yunan limanı). Elenenler: Selimiye (yol fotoğrafı çıktı), Akyaka (kitesurf karesi), Gemiler (karanlık/backlit), Sedir (açık deniz), Bitez (mercek parlaması), Gouvia (1280 küçüğü 182 px'lik aşırı panorama). | MARİNA TURU (2026-08-12): 10 özel marinaya işletmelerin kendi sitelerindeki resmî tanıtım görselleri eklendi (7 Setur sayfası, Martı, Alanya; Finike'nin Commons karesi işletme görseliyle değiştirildi). Erişilemeyen/elenenler: d-marin.com, clubmarina, yachtmarin, adaköy, kumlubükü, marinturk, west/güzelce/kıyı İstanbul, gazipaşa, kosmarina.gr, marina-symi.gr tarayıcı erişimine kapalı; Yalıkavak bot korumalı; Viaport/MyMarina/Ece Saray sayfalarında kullanılabilir görsel çıkmadı; Letoonia görseli grafik bindirmeliydi; Oasis görseli 699 px. | Veri turu 25 (2026-08-13): 312 yeni kayıt adı Commons'ta tarandı; 701 ham eşleşmeden GPS+görsel doğrulamayla 36 kapak kabul edildi; şehir sokakları, yanlış-yer eşleşmeleri (ör. Van Bardakçı, Sinop Akliman, Kıbrıs Tatlısu) ve düşük kaliteli adaylar reddedildi.",
+ "kurallar": [
+  "Tahmin/uydurma YOK. Her alan Commons dosya sayfasından birebir kopyalanır.",
+  "url: dosyanın upload.wikimedia.org üzerindeki DOĞRUDAN adresi (Commons sayfasındaki 'Orijinal dosya' bağlantısı ya da uygun genişlikte önizleme).",
+  "credit: fotoğrafçının adı, sayfadaki 'Yazar/Author' alanından. CC lisansı atfı ZORUNLU kılar.",
+  "license: lisansın kısa adı, sayfada yazdığı gibi (ör. 'CC BY-SA 4.0', 'CC BY 3.0', 'Public domain').",
+  "sourceUrl: Commons dosya sayfasının adresi (commons.wikimedia.org/wiki/File:...). Uygulamada atıf şeridi bu sayfayı açar.",
+  "mimeType: image/jpeg | image/png | image/webp (veritabanı başka değer kabul etmez).",
+  "width/height: dosyanın piksel ölçüleri (url hangi boyuta işaret ediyorsa o).",
+  "Fotoğraf GERÇEKTEN o koyu/marinayı göstermeli — emin değilsen ekleme, boş kalsın.",
+  "Girdi eklendikçe generate_locations_seed.py yeniden koşulur; SQL kendiliğinden üretilir.",
+  "KAYNAK İZNİ istisnası (feri, 2026-08-12): DERİA'nın (deria.gov.tr) kendi koy fotoğrafları kaynak gösterilerek kullanılır — feri: 'bunlar public fotolar ve kullanılabilir, zaten site yönlendirmesini yapıyoruz'. Bu girişlerde license BOŞ bırakılır (lisans adı uydurulmaz), credit 'Fotoğraf: DERİA ...' der, sourceUrl deria.gov.tr'ye gider. Üretici bu istisnayı YALNIZ https://deria.gov.tr/ ile başlayan url'lere tanır.",
+  "İŞLETME İZNİ (feri, 2026-08-12): işletmenin KENDİ resmî sitesindeki tanıtım görseli kaynak gösterilerek kullanılabilir. Şartlar: isletmeIzni=true, license BOŞ, credit 'Fotoğraf: <işletme> (resmî site)', sourceUrl işletmenin KAYITLI website contact alanıyla aynı alan adında (üretici bunu zorlar). Kaldırma talebi gelirse girdi silinir."
+ ],
+ "fotograflar": {
+  "gobun-samandira-sahasi": {
+   "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/2fa516e7-6d3f-4960-9adf-ea503d0003b3_14.G%C3%96B%C3%9CN.jpg",
+   "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+   "license": "",
+   "sourceUrl": "https://deria.gov.tr",
+   "mimeType": "image/jpeg",
+   "width": 4888,
+   "height": 3666,
+   "not": "DERİA cove/paged API'sinde id=12 GÖBÜN KOYU kaydının imageUrl alanı (2026-08-12). Görsel tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+  },
+  "kille-buku": {
+   "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/79564fea-77a9-4376-99db-e127d7f0980e_6.K%C4%B0LLEADASI.jpg",
+   "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+   "license": "",
+   "sourceUrl": "https://deria.gov.tr",
+   "mimeType": "image/jpeg",
+   "width": 5015,
+   "height": 3817,
+   "not": "DERİA API id=5 KİLLE KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda doğrulandı: plajlı koyun drone çekimi."
+  },
+  "siralibuk-koyu": {
+   "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/489a460f-4ac7-414c-9083-9967fdea0be4_12.SIRALIB%C3%9CK.jpg",
+   "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+   "license": "",
+   "sourceUrl": "https://deria.gov.tr",
+   "mimeType": "image/jpeg",
+   "width": 5280,
+   "height": 3956,
+   "not": "DERİA API id=7 SIRALIBÜK KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda doğrulandı: tonozda bağlı teknelerle koyun drone çekimi."
+  },
+  "tersane-adasi-koyu": {
+   "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/dc1b9731-750a-4544-b5dd-02bfe05d826d_10.TERSANE%20ADASI.jpg",
+   "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+   "license": "",
+   "sourceUrl": "https://deria.gov.tr",
+   "mimeType": "image/jpeg",
+   "width": 4929,
+   "height": 3780,
+   "not": "DERİA API id=13 TERSANE ADASI kaydının imageUrl alanı (2026-08-12). Tarayıcıda doğrulandı: guletlerle dolu koyun drone çekimi. Commons'taki tek aday 640 px'ti, bu 4929 px."
+  },
+  "bedri-rahmi-samandira-sahasi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Fish_Figure_on_a_Rock_Painted_By_Bedri_Rahmi_Ey%C3%BCbo%C4%9Flu%2C_located_in_Bedri_Rahmi_Bay_in_G%C3%B6cek.jpg/1280px-Fish_Figure_on_a_Rock_Painted_By_Bedri_Rahmi_Ey%C3%BCbo%C4%9Flu%2C_located_in_Bedri_Rahmi_Bay_in_G%C3%B6cek.jpg",
+   "credit": "Raicem",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fish_Figure_on_a_Rock_Painted_By_Bedri_Rahmi_Ey%C3%BCbo%C4%9Flu,_located_in_Bedri_Rahmi_Bay_in_G%C3%B6cek.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Koyun simgesi: Bedri Rahmi Eyüboğlu'nun balık kayası — açıklama 'located in Bedri Rahmi Bay in Göcek'."
+  },
+  "boynuzbuku-samandira-sahasi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Boynuzb%C3%BCk%C3%BC_-_panoramio.jpg/1280px-Boynuzb%C3%BCk%C3%BC_-_panoramio.jpg",
+   "credit": "Jorge Franganillo",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Boynuzb%C3%BCk%C3%BC_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 720,
+   "not": "Kategori: Boynuzbükü."
+  },
+  "sarsala-samandira-sahasi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Sarsala_Bay_in_Dalaman_from_above.jpg/1280px-Sarsala_Bay_in_Dalaman_from_above.jpg",
+   "credit": "Raicem",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sarsala_Bay_in_Dalaman_from_above.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Kategori: Bay of Sarsala; koyun havadan görünümü."
+  },
+  "yassica-adalari": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Yass%C4%B1ca_Adalar%C4%B1_-_panoramio.jpg/1280px-Yass%C4%B1ca_Adalar%C4%B1_-_panoramio.jpg",
+   "credit": "Jorge Franganillo",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Yass%C4%B1ca_Adalar%C4%B1_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 720,
+   "not": "Kategori: Yassıca Islands (Göcek). İzmir Körfezi'ndeki aynı adlı ada kategorisiyle AYRIŞTI, o elendi."
+  },
+  "gunluklu-koyu-demirleme": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/G%C3%BCnl%C3%BCkl%C3%BC_Koyu_-_panoramio.jpg/1280px-G%C3%BCnl%C3%BCkl%C3%BC_Koyu_-_panoramio.jpg",
+   "credit": "Jorge Franganillo",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%BCnl%C3%BCkl%C3%BC_Koyu_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 853,
+   "not": "Başlık/açıklama: Günlüklü Koyu; kategori Fethiye."
+  },
+  "katranci-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Katranc%C4%B1%2C_Fethiye_-_panoramio.jpg/1280px-Katranc%C4%B1%2C_Fethiye_-_panoramio.jpg",
+   "credit": "Merih Sezgin",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Katranc%C4%B1,_Fethiye_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Kategori: Katrancı Bay."
+  },
+  "kizilada-fener-restorani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/4/46/The_Gulf_of_Fethiye._Kizilada_Restaurant_and_K%C4%B1z%C4%B1lada_Feneri.jpg",
+   "credit": "Николай Максимович",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Gulf_of_Fethiye._Kizilada_Restaurant_and_K%C4%B1z%C4%B1lada_Feneri.jpg",
+   "mimeType": "image/jpeg",
+   "width": 714,
+   "height": 717,
+   "not": "Restoranın ve fenerin kendisi (kategoriler: Lighthouses in Fethiye, Restaurants in Fethiye). Orijinal 714px — 1280 önizleme yok, doğrudan dosya kullanıldı."
+  },
+  "gocek-belediye-iskelesi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/G%C3%B6cek_Hafen_T%C3%BCrkei.jpg/1280px-G%C3%B6cek_Hafen_T%C3%BCrkei.jpg",
+   "credit": "Herbert wie",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%B6cek_Hafen_T%C3%BCrkei.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 849,
+   "not": "Açıklama: 'port of Göcek with sailing ship' — köyiçi liman cephesi (bugünkü MUÇEV Göcek Marina)."
+  },
+  "d-marin-gocek": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Port_G%C3%B6cek_early_evening.jpg/1280px-Port_G%C3%B6cek_early_evening.jpg",
+   "credit": "Poet Laureate",
+   "license": "CC BY 2.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Port_G%C3%B6cek_early_evening.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 853,
+   "not": "Port Göcek = bugünkü D-Marin Göcek (marka değişimi ~2011). Dosya açıklaması marinayı ayrıntısıyla anlatıyor (C&N işletmesi, yüzer pontonlar, 1999 açılışı)."
+  },
+  "binlik-samandira-sahasi": {
+   "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/e9d7b6a0-360b-4dec-bc71-55a656d68b3d_13.%20B%C4%B0NL%C4%B0K.jpg",
+   "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+   "license": "",
+   "sourceUrl": "https://deria.gov.tr",
+   "mimeType": "image/jpeg",
+   "width": 5000,
+   "height": 3765,
+   "not": "DERİA cove/paged id=9 BİNLİK KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+  },
+  "buyukova-samandira-sahasi": {
+   "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/a538ac67-229b-437c-a97c-e5e54cfaf56f_buyukova.jpg",
+   "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+   "license": "",
+   "sourceUrl": "https://deria.gov.tr",
+   "mimeType": "image/jpeg",
+   "width": 5280,
+   "height": 3956,
+   "not": "DERİA cove/paged id=1726 BÜYÜKOVA KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+  },
+  "gocek-adasi-bati-samandira-sahasi": {
+   "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/c4fa39fd-6bd1-4fa5-bd8f-a699c3f4ea45_8.G%C3%96CEKADASI.jpg",
+   "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+   "license": "",
+   "sourceUrl": "https://deria.gov.tr",
+   "mimeType": "image/jpeg",
+   "width": 5017,
+   "height": 3755,
+   "not": "DERİA cove/paged id=16 GÖCEK ADASI (BATI) kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+  },
+  "gocek-dogu-samandira-sahasi": {
+   "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/54e0e78d-a954-48c2-9d55-d11c63f3fa13_7.G%C3%96CEKDO%C4%9EU.jpg",
+   "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+   "license": "",
+   "sourceUrl": "https://deria.gov.tr",
+   "mimeType": "image/jpeg",
+   "width": 4999,
+   "height": 3722,
+   "not": "DERİA cove/paged id=17 GÖCEK DOĞU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+  },
+  "gunluk-atbuku-samandira-sahasi": {
+   "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/be50ef31-6647-4941-842c-0fe9f320a20d_9.ATB%C3%9CK%C3%9C.jpg",
+   "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+   "license": "",
+   "sourceUrl": "https://deria.gov.tr",
+   "mimeType": "image/jpeg",
+   "width": 5280,
+   "height": 3956,
+   "not": "DERİA cove/paged id=3 GÜNLÜK-ATBÜKÜ kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+  },
+  "inceburun-samandira-sahasi": {
+   "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/34e2a8c8-7257-4bad-8c14-c977ee83f475_3.%C4%B0NCEBURUN.jpg",
+   "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+   "license": "",
+   "sourceUrl": "https://deria.gov.tr",
+   "mimeType": "image/jpeg",
+   "width": 5280,
+   "height": 3622,
+   "not": "DERİA cove/paged id=1 İNCEBURUN kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+  },
+  "marti-samandira-sahasi": {
+   "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/4f69d934-89a5-4bcc-973f-3ae336850ed0_15.MARTI.jpg",
+   "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+   "license": "",
+   "sourceUrl": "https://deria.gov.tr",
+   "mimeType": "image/jpeg",
+   "width": 4835,
+   "height": 3702,
+   "not": "DERİA cove/paged id=10 MARTI KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+  },
+  "merdivenli-samandira-sahasi": {
+   "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/b065d664-9350-427b-8c0e-1b626cdc94db_16.MERD%C4%B0VENL%C4%B0.jpg",
+   "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+   "license": "",
+   "sourceUrl": "https://deria.gov.tr",
+   "mimeType": "image/jpeg",
+   "width": 3840,
+   "height": 2160,
+   "not": "DERİA cove/paged id=11 MERDİVENLİ KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+  },
+  "osmanaga-samandira-sahasi": {
+   "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/14007ab8-4a03-48d3-adc9-f0b865917855_1.OSMANAGA.jpg",
+   "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+   "license": "",
+   "sourceUrl": "https://deria.gov.tr",
+   "mimeType": "image/jpeg",
+   "width": 5280,
+   "height": 3562,
+   "not": "DERİA cove/paged id=2 OSMANAĞA KOYU kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+  },
+  "zeytin-adasi-samandira-sahasi": {
+   "url": "https://deria.gov.tr/api-gateway/api/file/uploads/cove-images/45dfa2c5-62cd-487b-b0da-2b2e77ff44ae_5.ZEYT%C4%B0NADASI.jpg",
+   "credit": "Fotoğraf: DERİA (Türkiye Çevre Ajansı)",
+   "license": "",
+   "sourceUrl": "https://deria.gov.tr",
+   "mimeType": "image/jpeg",
+   "width": 4986,
+   "height": 3854,
+   "not": "DERİA cove/paged id=14 ZEYTİN ADASI kaydının imageUrl alanı (2026-08-12). Tarayıcıda açılıp doğrulandı: koyun drone çekimi. Kaynak izni istisnası — feri'nin kararı."
+  },
+  "hydra-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Harbour_of_Hydra_island_(43058393960).jpg/1280px-Harbour_of_Hydra_island_(43058393960).jpg",
+   "credit": "dronepicr",
+   "license": "CC BY 2.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Harbour_of_Hydra_island_(43058393960).jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 853,
+   "not": "Kategori: Port of Hydra; adanın ana limanının drone çekimi. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "symi-gialos-rihtimi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Symi_harbour.jpg/1280px-Symi_harbour.jpg",
+   "credit": "SymiArt",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Symi_harbour.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 853,
+   "not": "Kategori: Port of Symi — Gialos limanı. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "rodos-mandraki-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Mandraki_Harbour_Entrance_Port_of_Rhodes_21_August_2023.jpg/1280px-Mandraki_Harbour_Entrance_Port_of_Rhodes_21_August_2023.jpg",
+   "credit": "Pjotr Mahhonin",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mandraki_Harbour_Entrance_Port_of_Rhodes_21_August_2023.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Kategori: Mandraki Harbour (Rhodes); liman girişi. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "netsel-marmaris-marina": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Marmaris_marina_2019_G2.jpg/1280px-Marmaris_marina_2019_G2.jpg",
+   "credit": "George Chernilevsky",
+   "license": "Public domain",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Marmaris_marina_2019_G2.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 747,
+   "not": "Kategori: Marinas in Turkey; Marmaris'in yat marinası (Netsel). Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "gumusluk-iskeleleri": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/G%C3%BCm%C3%BC%C5%9Fl%C3%BCk,_Bodrum.jpg/1280px-G%C3%BCm%C3%BC%C5%9Fl%C3%BCk,_Bodrum.jpg",
+   "credit": "Koray",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%BCm%C3%BC%C5%9Fl%C3%BCk,_Bodrum.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 853,
+   "not": "Başlık: Gümüşlük, Bodrum. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "milta-bodrum-marina": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Bodrum_marina,_Turkey_(5653802003).jpg/1280px-Bodrum_marina,_Turkey_(5653802003).jpg",
+   "credit": "Michal Osmenda from Brussels, Belgium",
+   "license": "CC BY-SA 2.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bodrum_marina,_Turkey_(5653802003).jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 850,
+   "not": "Başlık: Bodrum marina — Bodrum'un yat marinası (Milta). Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "kas-belediye-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Kaya_mezar_ve_liman-Ka%C5%9F_-_panoramio.jpg/1280px-Kaya_mezar_ve_liman-Ka%C5%9F_-_panoramio.jpg",
+   "credit": "HALUK COMERTEL",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kaya_mezar_ve_liman-Ka%C5%9F_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 816,
+   "not": "Başlık: kaya mezarı ve liman, Kaş. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "bozcaada-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/7/74/Bozcaada_liman.jpg",
+   "credit": "Filanca",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bozcaada_liman.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1248,
+   "height": 832,
+   "not": "Başlık: Bozcaada liman. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "port-alacati-marina": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Cesme_-_Alacati_Marina_-_panoramio.jpg/1280px-Cesme_-_Alacati_Marina_-_panoramio.jpg",
+   "credit": "David Broad",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cesme_-_Alacati_Marina_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 850,
+   "not": "Başlık: Alaçatı Marina; kategori Alaçatı. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "ic-cesme-marina": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Cesme_Marina.jpg/1280px-Cesme_Marina.jpg",
+   "credit": "Irfan Parlar",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cesme_Marina.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 856,
+   "not": "Kategori: Çeşme Marina. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "setur-kusadasi-marina": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Ku%C5%9Fadas%C4%B1_Marina_03.jpg/1280px-Ku%C5%9Fadas%C4%B1_Marina_03.jpg",
+   "credit": "Zeynel Cebeci",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ku%C5%9Fadas%C4%B1_Marina_03.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 808,
+   "not": "Kategoriler: Marinas in Turkey, Port of Kuşadası. İlk aday (04) bulutlu/bina ağırlıklıydı — 03 marinayı gösteriyor (görsel doğrulandı). Commons API taraması 2026-08-12 (bölge turu 2)."
+  },
+  "setur-kalamis-fenerbahce-marina": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Fenerbah%C3%A7e_Yat_Liman%C4%B1.jpg/1280px-Fenerbah%C3%A7e_Yat_Liman%C4%B1.jpg",
+   "credit": "Kadı",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fenerbah%C3%A7e_Yat_Liman%C4%B1.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Başlık: Fenerbahçe Yat Limanı; kategori Kalamış, Kadıköy. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "d-marin-turgutreis": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Turgutreis_-_panoramio_(11).jpg/1280px-Turgutreis_-_panoramio_(11).jpg",
+   "credit": "Tanya Dedyukhina",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Turgutreis_-_panoramio_(11).jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Başlık: Turgutreis — marina görünümü (görsel doğrulandı). Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "bozburun-yat-yanasma-yeri": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Merkez,_48710_Bozburun-Marmaris-Mu%C4%9Fla,_Turkey_-_panoramio.jpg/1280px-Merkez,_48710_Bozburun-Marmaris-Mu%C4%9Fla,_Turkey_-_panoramio.jpg",
+   "credit": "Bir_Ege_Hikayesi ©",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Merkez,_48710_Bozburun-Marmaris-Mu%C4%9Fla,_Turkey_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Kategori: Bozburun, Marmaris; kıyı/yanaşma görünümü. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "fiskardo-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Fiscardo,_Kefalonia_10-2003_02.jpg/1280px-Fiscardo,_Kefalonia_10-2003_02.jpg",
+   "credit": "Dan Taylor from London, UK",
+   "license": "CC BY 2.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fiscardo,_Kefalonia_10-2003_02.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 853,
+   "not": "Başlık: Fiscardo, Kefalonia — liman. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "naoussa-limani-paros": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Naoussa_Harbour_-_panoramio.jpg/1280px-Naoussa_Harbour_-_panoramio.jpg",
+   "credit": "ian freeman",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Naoussa_Harbour_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Başlık: Naoussa Harbour. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "ermoupoli-limani-syros": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Syros_Ano_Syros_u_Ermoupolis140707.jpg/1280px-Syros_Ano_Syros_u_Ermoupolis140707.jpg",
+   "credit": "Hans Peter Schaefer, http://www.reserv-a-rt.de",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Syros_Ano_Syros_u_Ermoupolis140707.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 853,
+   "not": "Ermoupoli ve limanının genel görünümü. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "aegina-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Lascar_Island_of_Aegina_-_Main_harbour_(4518425007).jpg/1280px-Lascar_Island_of_Aegina_-_Main_harbour_(4518425007).jpg",
+   "credit": "Jorge Láscar from Australia",
+   "license": "CC BY 2.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lascar_Island_of_Aegina_-_Main_harbour_(4518425007).jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 850,
+   "not": "Başlık: Island of Aegina - Main harbour. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "pythagorio-limani-samos": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Pythagorio.jpg/1280px-Pythagorio.jpg",
+   "credit": "Orthodox33",
+   "license": "Public domain",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pythagorio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Kategori: Pythagoreio. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "patmos-skala-rihtimi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Skala-of-patmos.JPG/1280px-Skala-of-patmos.JPG",
+   "credit": "Chris Vlachos",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Skala-of-patmos.JPG",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Başlık: Skala of Patmos. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "kos-eski-liman-mandraki": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Kos-Harbour-01ASD.jpg/1280px-Kos-Harbour-01ASD.jpg",
+   "credit": "Asurnipal",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kos-Harbour-01ASD.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 852,
+   "not": "Kategori: Port of Kos. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "symi-panormitis-iskelesi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Panorama_Blick_auf_Schiffanleger_Panormitis.jpg/1280px-Panorama_Blick_auf_Schiffanleger_Panormitis.jpg",
+   "credit": "A.F.E.Bean",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panorama_Blick_auf_Schiffanleger_Panormitis.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 458,
+   "not": "Başlık: Panormitis iskelesine panoramik bakış; kategori Panormitis. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "teos-marina": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/S%C4%B1%C4%9Fac%C4%B1k_Castle,_Harbour_and_Teos_Marina_01.jpg/1280px-S%C4%B1%C4%9Fac%C4%B1k_Castle,_Harbour_and_Teos_Marina_01.jpg",
+   "credit": "BSRF",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:S%C4%B1%C4%9Fac%C4%B1k_Castle,_Harbour_and_Teos_Marina_01.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 959,
+   "not": "Kategoriler: Sığacık Castle, Teos Marina; drone çekimi. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "g-marina-kemer": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/KEMER_MAR%C4%B0NA_%C2%A9Abdullah_Kiyga_-_panoramio.jpg/1280px-KEMER_MAR%C4%B0NA_%C2%A9Abdullah_Kiyga_-_panoramio.jpg",
+   "credit": "Abdullah kıyga",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:KEMER_MAR%C4%B0NA_%C2%A9Abdullah_Kiyga_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Başlık: Kemer Marina; kategori Kemer. Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "antalya-kaleici-yat-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/20180111_AntalyaMarina_5272_(25238627627).jpg/1280px-20180111_AntalyaMarina_5272_(25238627627).jpg",
+   "credit": "Ray Swi-hymn from Sijhih-Taipei, Taiwan",
+   "license": "CC BY-SA 2.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:20180111_AntalyaMarina_5272_(25238627627).jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 854,
+   "not": "Antalya Kaleiçi yat limanı (görsel doğrulandı). Commons API taraması 2026-08-12 (bölge turu 2); lisans/atıf API'nin extmetadata alanından. Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "kelebekler-vadisi-demirleme": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Kelebekler_Vadisi_-_Butterfly_Valley,_Turkey.jpg/1280px-Kelebekler_Vadisi_-_Butterfly_Valley,_Turkey.jpg",
+   "credit": "Htkava",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kelebekler_Vadisi_-_Butterfly_Valley,_Turkey.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Kategoriler: Lycian Way, Butterfly Valley. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "phaselis-koylari-demirleme": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Phaselis_beach.jpg/1280px-Phaselis_beach.jpg",
+   "credit": "Mike like0708",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Phaselis_beach.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Başlık: Phaselis beach — antik kentin koyu. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "lindos-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Pier_at_Lindos._Rhodes,_Greece.jpg/1280px-Pier_at_Lindos._Rhodes,_Greece.jpg",
+   "credit": "Ввласенко",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pier_at_Lindos._Rhodes,_Greece.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 849,
+   "not": "Başlık: Pier at Lindos; kategori Piers in Greece. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "keci-buku-demirleme": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/K%C4%B1zkumu_Orhaniye_Marmaris.jpg/1280px-K%C4%B1zkumu_Orhaniye_Marmaris.jpg",
+   "credit": "Arif Sipahi",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:K%C4%B1zkumu_Orhaniye_Marmaris.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Başlık: Kızkumu, Orhaniye — Keçi Bükü'nün simgesi; kategoriler Marinas/Boats in Turkey. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "nisyros-mandraki-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Nisyros_port_Mandraki_1.jpg/1280px-Nisyros_port_Mandraki_1.jpg",
+   "credit": "Karelj",
+   "license": "Public domain",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Nisyros_port_Mandraki_1.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 853,
+   "not": "Başlık: Nisyros port Mandraki. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "adamas-limani-milos": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Adamas_(4703820265).jpg/1280px-Adamas_(4703820265).jpg",
+   "credit": "Klearchos Kapoutsis from Santorini, Greece",
+   "license": "CC BY 2.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Adamas_(4703820265).jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 632,
+   "not": "Kategori: Adamas — liman görünümü. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "kalymnos-pothia-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Calymnos_harbour.jpg",
+   "credit": "Κ. Καλογερόπουλος Kalogeropoulos",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Calymnos_harbour.jpg",
+   "mimeType": "image/jpeg",
+   "width": 960,
+   "height": 541,
+   "not": "Kategori: Pothia. Küçük çözünürlük (960px) — tek uygun aday. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "gaios-limani-paksos": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Paxos_gaios_port_bgiu.jpg/1280px-Paxos_gaios_port_bgiu.jpg",
+   "credit": "Bogdan Giuşcă",
+   "license": "CC BY-SA 2.5",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Paxos_gaios_port_bgiu.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Başlık: Paxos Gaios port. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "lakka-koyu-paksos": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Lakka_bay_20210606.jpg/1280px-Lakka_bay_20210606.jpg",
+   "credit": "Jess Stubenbord",
+   "license": "CC0 1.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lakka_bay_20210606.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 622,
+   "not": "Başlık: Lakka bay; kategoriler Lakka (Paxi), Bays of Greece. Commons kısa adı 'CC0'; tam adı CC0 1.0. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "zea-marina": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Piraeus,_marina_Zea_03.JPG/1280px-Piraeus,_marina_Zea_03.JPG",
+   "credit": "Palickap",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Piraeus,_marina_Zea_03.JPG",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Kategori: Zea harbour. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "tilos-livadia-rihtimi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Livadhia_Tilos_2.jpg/1280px-Livadhia_Tilos_2.jpg",
+   "credit": "freddie boy",
+   "license": "CC BY-SA 2.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Livadhia_Tilos_2.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Başlık: Livadhia, Tilos. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "halki-emporios-rihtimi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Emporio_port_in_Halki_island.jpg/1280px-Emporio_port_in_Halki_island.jpg",
+   "credit": "Oliver H",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Emporio_port_in_Halki_island.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 783,
+   "not": "Başlık: Emporio port, Halki. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "kandiye-limani-girit": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Venetian_Fortress,_Heraklion,_Crete.JPG/1280px-Venetian_Fortress,_Heraklion,_Crete.JPG",
+   "credit": "Stu's Images",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Venetian_Fortress,_Heraklion,_Crete.JPG",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 921,
+   "not": "Başlık: Koules (Venedik kalesi) — Kandiye eski limanının girişi. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "katapola-limani-amorgos": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Katapola_bay,_Amorgos,_213202.jpg/1280px-Katapola_bay,_Amorgos,_213202.jpg",
+   "credit": "Zde",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Katapola_bay,_Amorgos,_213202.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 852,
+   "not": "Kategori: Katapola (Amorgos). Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "fethiye-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Fethiye_Harbour_area_in_2011_5727.jpg/1280px-Fethiye_Harbour_area_in_2011_5727.jpg",
+   "credit": "Dosseman",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fethiye_Harbour_area_in_2011_5727.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 852,
+   "not": "Kategori: Fethiye Harbour. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "datca-yat-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Dat%C3%A7a,_yachts_harbour_*%C2%A9Abdullah_Kiyga_-_panoramio.jpg/1280px-Dat%C3%A7a,_yachts_harbour_*%C2%A9Abdullah_Kiyga_-_panoramio.jpg",
+   "credit": "Abdullah kıyga",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dat%C3%A7a,_yachts_harbour_*%C2%A9Abdullah_Kiyga_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 681,
+   "not": "Başlık: Datça yachts harbour; kategori Datça. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "gokceada-kuzu-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/G%C3%B6kceada_Kuzu_Limani_1.jpg/1280px-G%C3%B6kceada_Kuzu_Limani_1.jpg",
+   "credit": "Bilderbrei",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%B6kceada_Kuzu_Limani_1.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Başlık: Gökçeada Kuzu Limanı; kategori Gökçeada. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "bozukkale-loryma-demirleme": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Loryma_(3).jpg/1280px-Loryma_(3).jpg",
+   "credit": "Marmaracalypso",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Loryma_(3).jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 853,
+   "not": "Başlık: Loryma — Bozukkale koyu. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "degirmen-buku-ingiliz-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Ingiliz_limani_04404_-_04406.jpg/1280px-Ingiliz_limani_04404_-_04406.jpg",
+   "credit": "Nevit Dilmen (talk)",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ingiliz_limani_04404_-_04406.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 525,
+   "not": "Başlık: İngiliz Limanı; kategori Gulet. Commons API taraması 2026-08-12 (bölge turu 3). Görsel tarayıcıda açılıp doğrulandı."
+  },
+  "setur-yalova-marina": {
+   "url": "https://www.seturmarinas.com/Upload/MarinaPictures/e836fcc0ac0d431f840cd323c455f674.jpg",
+   "credit": "Fotoğraf: Setur Yalova Marina (resmî site)",
+   "license": "",
+   "sourceUrl": "https://www.seturmarinas.com/en/marinas/yalova",
+   "isletmeIzni": true,
+   "mimeType": "image/jpeg",
+   "width": 1920,
+   "height": 786,
+   "not": "Setur Yalova Marina sayfasının kendi tanıtım görseli (hero). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+  },
+  "setur-ayvalik-marina": {
+   "url": "https://www.seturmarinas.com/Upload/MarinaPictures/ayvalik-banner.jpg",
+   "credit": "Fotoğraf: Setur Ayvalık Marina (resmî site)",
+   "license": "",
+   "sourceUrl": "https://www.seturmarinas.com/en/marinas/ayvalik",
+   "isletmeIzni": true,
+   "mimeType": "image/jpeg",
+   "width": 3885,
+   "height": 2185,
+   "not": "Setur Ayvalık Marina sayfasının kendi tanıtım görseli (drone, gün batımı). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+  },
+  "setur-cesme-marina": {
+   "url": "https://www.seturmarinas.com/Upload/MarinaPictures/cesme-banner.jpg",
+   "credit": "Fotoğraf: Setur Çeşme Marina (resmî site)",
+   "license": "",
+   "sourceUrl": "https://www.seturmarinas.com/en/marinas/cesme",
+   "isletmeIzni": true,
+   "mimeType": "image/jpeg",
+   "width": 4000,
+   "height": 3000,
+   "not": "Setur Çeşme Marina sayfasının kendi tanıtım görseli (drone). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+  },
+  "setur-finike-marina": {
+   "url": "https://www.seturmarinas.com/Upload/MarinaPictures/3332cd82f2b0434da13de362896156bc.jpg",
+   "credit": "Fotoğraf: Setur Finike Marina (resmî site)",
+   "license": "",
+   "sourceUrl": "https://www.seturmarinas.com/en/marinas/finike",
+   "isletmeIzni": true,
+   "mimeType": "image/jpeg",
+   "width": 1920,
+   "height": 786,
+   "not": "Setur Finike Marina sayfasının kendi tanıtım görseli. Tur 2'deki 1280px Commons karesinin yerine geçti (işletmenin güncel ve yüksek çözünürlüklü görseli). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+  },
+  "setur-antalya-marina": {
+   "url": "https://www.seturmarinas.com/Upload/MarinaPictures/antalya-banner.jpg",
+   "credit": "Fotoğraf: Setur Antalya Marina (resmî site)",
+   "license": "",
+   "sourceUrl": "https://www.seturmarinas.com/en/marinas/antalya",
+   "isletmeIzni": true,
+   "mimeType": "image/jpeg",
+   "width": 1920,
+   "height": 786,
+   "not": "Setur Antalya Marina sayfasının kendi tanıtım görseli. Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+  },
+  "setur-kas-marina": {
+   "url": "https://www.seturmarinas.com/Upload/MarinaPictures/kas-banner.jpg",
+   "credit": "Fotoğraf: Setur Kaş Marina (resmî site)",
+   "license": "",
+   "sourceUrl": "https://www.seturmarinas.com/en/marinas/makmarin-kas",
+   "isletmeIzni": true,
+   "mimeType": "image/jpeg",
+   "width": 4240,
+   "height": 2832,
+   "not": "Setur Kaş Marina sayfasının kendi tanıtım görseli (marina + adalar). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+  },
+  "gocek-village-port-marina": {
+   "url": "https://www.seturmarinas.com/Upload/MarinaPictures/320a285e-67d6-4636-bd00-0c89641f2e8d.jpg",
+   "credit": "Fotoğraf: Göcek Village Port Marina (resmî site)",
+   "license": "",
+   "sourceUrl": "https://www.seturmarinas.com/en/marinas/gocek-village-port",
+   "isletmeIzni": true,
+   "mimeType": "image/jpeg",
+   "width": 2376,
+   "height": 1584,
+   "not": "Setur Göcek Village Port sayfasının galeri görseli (pontonlar). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+  },
+  "marinturk-gocek-exclusive": {
+   "url": "https://www.seturmarinas.com/Upload/MarinaPictures/445e754be94e40b5b1efd9a4825bcd80.jpg",
+   "credit": "Fotoğraf: Göcek Exclusive Marina (resmî site)",
+   "license": "",
+   "sourceUrl": "https://www.seturmarinas.com/marinalar/gocek-exclusive",
+   "isletmeIzni": true,
+   "mimeType": "image/jpeg",
+   "width": 1920,
+   "height": 786,
+   "not": "Setur Göcek Exclusive sayfasının kendi tanıtım görseli (hava, pontonlar). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+  },
+  "marti-marina-orhaniye": {
+   "url": "https://irp.cdn-website.com/2e136757/dms3rep/multi/opt/MartiMarina-71-1920w.jpg",
+   "credit": "Fotoğraf: Martı Marina (resmî site)",
+   "license": "",
+   "sourceUrl": "https://www.marti.com.tr/marti-marina",
+   "isletmeIzni": true,
+   "mimeType": "image/jpeg",
+   "width": 1600,
+   "height": 1669,
+   "not": "marti.com.tr/marti-marina sayfasının galeri görseli (pontonlar, Keçi Bükü). Görsel işletmenin CDN'inde (irp.cdn-website.com) durur; kaynak sayfa resmî sitedir. Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+  },
+  "alanya-marina": {
+   "url": "https://www.alanyamarina.com.tr/img/spot/01.jpg",
+   "credit": "Fotoğraf: Alanya Marina (resmî site)",
+   "license": "",
+   "sourceUrl": "https://www.alanyamarina.com.tr",
+   "isletmeIzni": true,
+   "mimeType": "image/jpeg",
+   "width": 2140,
+   "height": 1140,
+   "not": "alanyamarina.com.tr ana sayfa tanıtım görseli (havza + direkler). Marina turu 2026-08-12: işletmenin kendi sitesinde gezilerek alındı; koybul.com üzerinden yüklendiği ve doğru yeri gösterdiği tarayıcıda doğrulandı. Kaldırma talebi gelirse bu girdi silinir."
+  },
+  "akarca-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Seferihisar_-_Akarca_-_panoramio.jpg/1280px-Seferihisar_-_Akarca_-_panoramio.jpg",
+   "credit": "Yağmur Aydın",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Seferihisar_-_Akarca_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 857,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "asagiyapici-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Asagiyap%C4%B1c%C4%B1_koyunun_gorunusu.jpg/1280px-Asagiyap%C4%B1c%C4%B1_koyunun_gorunusu.jpg",
+   "credit": "AycanD",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Asagiyap%C4%B1c%C4%B1_koyunun_gorunusu.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 808,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "baba-island-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Old_lighthouse_on_Baba_Adasi_island_with_a_view_of_Sarigerme,_Turkey_(49070263193).jpg/1280px-Old_lighthouse_on_Baba_Adasi_island_with_a_view_of_Sarigerme,_Turkey_(49070263193).jpg",
+   "credit": "dronepicr",
+   "license": "CC BY 2.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Old_lighthouse_on_Baba_Adasi_island_with_a_view_of_Sarigerme,_Turkey_(49070263193).jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 853,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "bardakci-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Bardak%C3%A7%C4%B1_Beach.jpg/1280px-Bardak%C3%A7%C4%B1_Beach.jpg",
+   "credit": "Vano111ru",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bardak%C3%A7%C4%B1_Beach.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 1209,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "bogsak-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Bo%C4%9Fsak_Island.jpg/1280px-Bo%C4%9Fsak_Island.jpg",
+   "credit": "Yasirarslan",
+   "license": "Public domain",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bo%C4%9Fsak_Island.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "cinarcik-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/%C3%87%C4%B1narc%C4%B1k_-_panoramio_(39).jpg/1280px-%C3%87%C4%B1narc%C4%B1k_-_panoramio_(39).jpg",
+   "credit": "M. PINARCI",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:%C3%87%C4%B1narc%C4%B1k_-_panoramio_(39).jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 853,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "dana-adasi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Dana_Adas%C4%B1_-_panoramio.jpg/1280px-Dana_Adas%C4%B1_-_panoramio.jpg",
+   "credit": "Yılmaz Kilim",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dana_Adas%C4%B1_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 720,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "davutlar-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Sunset_davutlar_coast.jpg/1280px-Sunset_davutlar_coast.jpg",
+   "credit": "Omur Tanyel",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sunset_davutlar_coast.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "denizkoy-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Denizk%C3%B6y,_Dikili.jpg/1280px-Denizk%C3%B6y,_Dikili.jpg",
+   "credit": "Kadı",
+   "license": "CC BY 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Denizk%C3%B6y,_Dikili.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "domuz-island-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Domuz_Adas%C4%B1_-_panoramio.jpg/1280px-Domuz_Adas%C4%B1_-_panoramio.jpg",
+   "credit": "Jorge Franganillo",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Domuz_Adas%C4%B1_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 720,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "eceabat-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Eceabat_in_2003_1404.jpg/1280px-Eceabat_in_2003_1404.jpg",
+   "credit": "Dosseman",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Eceabat_in_2003_1404.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "enez-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Enez_Liman%C4%B1..._-_panoramio.jpg/1280px-Enez_Liman%C4%B1..._-_panoramio.jpg",
+   "credit": "Sinan Şahin",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Enez_Liman%C4%B1..._-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "esenkoy-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Esenk%C3%B6y,%C3%87%C4%B1narc%C4%B1k,Yalova.jpg/1280px-Esenk%C3%B6y,%C3%87%C4%B1narc%C4%B1k,Yalova.jpg",
+   "credit": "Eneshamdi2007",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Esenk%C3%B6y,%C3%87%C4%B1narc%C4%B1k,Yalova.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "garipce-village-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Garip%C3%A7e,_Sar%C4%B1yer.jpg/1280px-Garip%C3%A7e,_Sar%C4%B1yer.jpg",
+   "credit": "Maurice Flesier",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Garip%C3%A7e,_Sar%C4%B1yer.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 853,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "gemlik-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Gemlik_liman%C4%B1_gemlik_bursa_-_panoramio.jpg/1280px-Gemlik_liman%C4%B1_gemlik_bursa_-_panoramio.jpg",
+   "credit": "Mustafa DUMAN",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gemlik_liman%C4%B1_gemlik_bursa_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 781,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "guneyli-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Saros_G%C3%BCneylide_G%C3%BCnbat%C4%B1m%C4%B1_2.jpg/1280px-Saros_G%C3%BCneylide_G%C3%BCnbat%C4%B1m%C4%B1_2.jpg",
+   "credit": "Hamdigumus",
+   "license": "CC0 1.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Saros_G%C3%BCneylide_G%C3%BCnbat%C4%B1m%C4%B1_2.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 853,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "guzelbahce-fishing-harbour-and-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/G%C3%BCzelbah%C3%A7e_%C4%B0skelesi_(2).jpg/1280px-G%C3%BCzelbah%C3%A7e_%C4%B0skelesi_(2).jpg",
+   "credit": "BSRF",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%BCzelbah%C3%A7e_%C4%B0skelesi_(2).jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 959,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "karatas-fisher-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Port_of_Karata%C5%9F_03.jpg/1280px-Port_of_Karata%C5%9F_03.jpg",
+   "credit": "Zeynel Cebeci",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Port_of_Karata%C5%9F_03.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 829,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "kilitbahir-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Kilitbahir,_%C3%87anakkale_(26102024).jpg/1280px-Kilitbahir,_%C3%87anakkale_(26102024).jpg",
+   "credit": "Kadı",
+   "license": "CC BY 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kilitbahir,_%C3%87anakkale_(26102024).jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "kizkalesi-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Kizkalesi,_Erdemli.IMG_3490.jpg/1280px-Kizkalesi,_Erdemli.IMG_3490.jpg",
+   "credit": "YG01",
+   "license": "CC BY 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kizkalesi,_Erdemli.IMG_3490.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "kumyaka-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Kumyaka_-_Si%C4%9Fi_-_Sygi.jpg/1280px-Kumyaka_-_Si%C4%9Fi_-_Sygi.jpg",
+   "credit": "Erdoğan Orçin",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kumyaka_-_Si%C4%9Fi_-_Sygi.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 377,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "kursunlu-marina": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Kur%C5%9Funlu_Bal%C4%B1k%C3%A7%C4%B1_Bar%C4%B1na%C4%9F%C4%B1_-03_May%C4%B1s_2013_-_panoramio.jpg/1280px-Kur%C5%9Funlu_Bal%C4%B1k%C3%A7%C4%B1_Bar%C4%B1na%C4%9F%C4%B1_-03_May%C4%B1s_2013_-_panoramio.jpg",
+   "credit": "A. Kerim ŞENGEL",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kur%C5%9Funlu_Bal%C4%B1k%C3%A7%C4%B1_Bar%C4%B1na%C4%9F%C4%B1_-03_May%C4%B1s_2013_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 765,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "narli-koyu-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Narl%C4%B1_Bal%C4%B1k%C3%A7%C4%B1_Bar%C4%B1na%C4%9F%C4%B1_-03_May%C4%B1s_2013_-_panoramio.jpg/1280px-Narl%C4%B1_Bal%C4%B1k%C3%A7%C4%B1_Bar%C4%B1na%C4%9F%C4%B1_-03_May%C4%B1s_2013_-_panoramio.jpg",
+   "credit": "A. Kerim ŞENGEL",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Narl%C4%B1_Bal%C4%B1k%C3%A7%C4%B1_Bar%C4%B1na%C4%9F%C4%B1_-03_May%C4%B1s_2013_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 765,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "olimpos-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/View_of_Olimpos_Plaj%C4%B1_with_Tahtal%C4%B1_Mountain_in_the_Background.jpg/1280px-View_of_Olimpos_Plaj%C4%B1_with_Tahtal%C4%B1_Mountain_in_the_Background.jpg",
+   "credit": "Oystercard",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:View_of_Olimpos_Plaj%C4%B1_with_Tahtal%C4%B1_Mountain_in_the_Background.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "orak-island-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Orak_Adas%C4%B1_2_-_panoramio.jpg/1280px-Orak_Adas%C4%B1_2_-_panoramio.jpg",
+   "credit": "Tamer BÜKE",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Orak_Adas%C4%B1_2_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 760,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "patara-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Patara_Plaj%C4%B1.jpg/1280px-Patara_Plaj%C4%B1.jpg",
+   "credit": "Esginmurat",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Patara_Plaj%C4%B1.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 720,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "rumeli-feneri-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Rumeli_Feneri,_Sar%C4%B1yer_p1.JPG/1280px-Rumeli_Feneri,_Sar%C4%B1yer_p1.JPG",
+   "credit": "VikiPicture",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rumeli_Feneri,_Sar%C4%B1yer_p1.JPG",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "sapli-island-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Sunset_at_Sapl%C4%B1_Adas%C4%B1_-_Flickr_-_faktor1komma5.jpg/1280px-Sunset_at_Sapl%C4%B1_Adas%C4%B1_-_Flickr_-_faktor1komma5.jpg",
+   "credit": "faktor1komma5 /by Claus P. Heibel from Didim/Aydın, Türkiye",
+   "license": "CC BY 2.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sunset_at_Sapl%C4%B1_Adas%C4%B1_-_Flickr_-_faktor1komma5.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 853,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "sigacik-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/S%C4%B1%C4%9Fac%C4%B1k_02.jpg/1280px-S%C4%B1%C4%9Fac%C4%B1k_02.jpg",
+   "credit": "BSRF",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:S%C4%B1%C4%9Fac%C4%B1k_02.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 959,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "suluada-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Adrasan_Suluada_Drone.jpg/1280px-Adrasan_Suluada_Drone.jpg",
+   "credit": "Erturkercin",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Adrasan_Suluada_Drone.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 783,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "sultanice-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Sultani%C3%A7e_Sahil.jpg/1280px-Sultani%C3%A7e_Sahil.jpg",
+   "credit": "Yavuzsultamselim22",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sultani%C3%A7e_Sahil.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 1707,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "toslaklar-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Toslaklar_Koyu_-_panoramio.jpg/1280px-Toslaklar_Koyu_-_panoramio.jpg",
+   "credit": "Yılmaz Kilim",
+   "license": "CC BY 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Toslaklar_Koyu_-_panoramio.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 582,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "yalova-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Yalova_Seaside.JPG/1280px-Yalova_Seaside.JPG",
+   "credit": "Annikat53",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Yalova_Seaside.JPG",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "yaprakli-koy-koyu": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Yaprakl%C4%B1_Koy.jpg/1280px-Yaprakl%C4%B1_Koy.jpg",
+   "credit": "Wayway21",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Yaprakl%C4%B1_Koy.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 1073,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "yesilovacik-fisher-limani": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Ye%C5%9Filovac%C4%B1k_harbor.jpg/1280px-Ye%C5%9Filovac%C4%B1k_harbor.jpg",
+   "credit": "Nedim Ardoğa",
+   "license": "CC BY-SA 4.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ye%C5%9Filovac%C4%B1k_harbor.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 720,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
+  },
+  "kaynarpinar-balikci-barinagi": {
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Kaynarp%C4%B1nar.jpg/1280px-Kaynarp%C4%B1nar.jpg",
+   "credit": "Atacameño",
+   "license": "CC BY-SA 3.0",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kaynarp%C4%B1nar.jpg",
+   "mimeType": "image/jpeg",
+   "width": 1280,
+   "height": 960,
+   "not": "Veri turu 25 fotoğraf taraması (2026-08-13): Commons API araması; lisans/atıf extmetadata alanından; konu, küçük-resim ızgarasında görsel olarak ve (varsa) dosyanın Commons GPS koordinatı kayıt koordinatıyla karşılaştırılarak doğrulandı."
   }
+ }
 }

@@ -1,0 +1,2714 @@
+{
+ "not": "Kurucu kararı 2026-08: Karadeniz şimdilik uygulamaya EKLENMEZ. Bu dosya veri turu 25te toplanan, kaynak alıntılı Karadeniz kayıtlarının arşividir; üretece BAĞLI DEĞİLDİR.",
+ "records": [
+  {
+   "slug": "sugoren-balikci-barinagi",
+   "name": "Sugören Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "artvin",
+   "districtSlug": "artvin-hopa",
+   "lat": 41.381686,
+   "lon": 41.400989,
+   "coordSource": "turkeymarinas (41°22'54.1\"N 41°24'03.6\"E / 41.381686, 41.400989)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 35 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": 35,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+904663514020",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/sugoren-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 35 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "kemalpasa-balikci-barinagi",
+   "name": "Kemalpaşa Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "artvin",
+   "districtSlug": "artvin-hopa",
+   "lat": 41.484177,
+   "lon": 41.522047,
+   "coordSource": "turkeymarinas (41°29'03.0\"N 41°31'19.4\"E / 41.484177, 41.522047)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 70 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.",
+   "berthCount": 70,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/kemalpasa-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 70 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "arhavi-balikci-barinagi",
+   "name": "Arhavi Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "artvin",
+   "districtSlug": "artvin-arhavi",
+   "lat": 41.351754,
+   "lon": 41.293809,
+   "coordSource": "turkeymarinas (41°21'06.3\"N 41°17'37.7\"E / 41.351754, 41.293809)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 80 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.",
+   "berthCount": 80,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/arhavi-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 80 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "aksu-balikci-barinagi",
+   "name": "Aksu Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "rize",
+   "districtSlug": "rize-findikli",
+   "lat": 41.28575,
+   "lon": 41.162028,
+   "coordSource": "turkeymarinas (41°17'08.7\"N 41°09'43.3\"E / 41.285750, 41.162028)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 70 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 70,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+904645113010",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/aksu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 70 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "yenikoy-balikci-barinagi-findikli",
+   "name": "Yeniköy Balıkçı Barınağı (Fındıklı)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "rize",
+   "districtSlug": "rize-findikli",
+   "lat": 41.260575,
+   "lon": 41.127487,
+   "coordSource": "turkeymarinas (41°15'38.1\"N 41°07'39.0\"E / 41.260575, 41.127487)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 100 tekne olarak yayımlanmış. VHF kanal 16. Kaynak derinliği 3 m veriyor. Kaynağa göre su bulunur.",
+   "berthCount": 100,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 3,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/yenikoy-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 100 Boats",
+    "Dock Depth : 3 m"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "kirazlik-balikci-barinagi",
+   "name": "Kirazlık Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "rize",
+   "districtSlug": "rize-pazar",
+   "lat": 41.181075,
+   "lon": 40.91151,
+   "coordSource": "turkeymarinas (41°10'51.9\"N 40°54'41.4\"E / 41.181075, 40.911510)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": 200,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+904646121130",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/kirazlik-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 200 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "pazar-balikci-barinagi",
+   "name": "Pazar Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "rize",
+   "districtSlug": "rize-pazar",
+   "lat": 41.182331,
+   "lon": 40.880291,
+   "coordSource": "turkeymarinas (41°10'56.4\"N 40°52'49.0\"E / 41.182331, 40.880291)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 160 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": 160,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+904646121130",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/pazar-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 160 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "ardesen-balikci-barinagi",
+   "name": "Ardeşen Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "rize",
+   "districtSlug": "rize-ardesen",
+   "lat": 41.19735,
+   "lon": 40.992802,
+   "coordSource": "turkeymarinas (41°11'50.5\"N 40°59'34.1\"E / 41.197350, 40.992802)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": 200,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+904647151666",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/ardesen-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 200 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "cayeli-balikci-barinagi",
+   "name": "Çayeli Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "rize",
+   "districtSlug": "rize-cayeli",
+   "lat": 41.090939,
+   "lon": 40.722445,
+   "coordSource": "turkeymarinas (41°05'27.4\"N 40°43'20.8\"E / 41.090939, 40.722445)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": 150,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+904645325085",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/cayeli-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 150 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "isikli-balikci-barinagi",
+   "name": "Işıklı Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "rize",
+   "districtSlug": "rize-ardesen",
+   "lat": 41.213029,
+   "lon": 41.047705,
+   "coordSource": "turkeymarinas (41°12'46.9\"N 41°02'51.7\"E / 41.213029, 41.047705)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 45 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": 45,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+904647151666",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/isikli-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 45 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "gundogdu-balikci-barinagi",
+   "name": "Gündoğdu Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "rize",
+   "districtSlug": "rize-merkez",
+   "lat": 41.053919,
+   "lon": 40.611491,
+   "coordSource": "turkeymarinas (41°03'14.1\"N 40°36'41.4\"E / 41.053919, 40.611491)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 100 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": 100,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/gundogdu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 100 Boats"
+   ],
+   "missingNotes": "Kaynaktaki telefon eksik/bozuk basamaklı (+90 444 50 53) → alınmadı."
+  },
+  {
+   "slug": "sogutlu-koyu-balikci-barinagi",
+   "name": "Söğütlü Köyü Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "rize",
+   "districtSlug": "rize-merkez",
+   "lat": 41.069625,
+   "lon": 40.652994,
+   "coordSource": "turkeymarinas (41°04'10.7\"N 40°39'10.8\"E / 41.069625, 40.652994)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 30 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": 30,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/sogutlu-koyu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 30 Boats"
+   ],
+   "missingNotes": "Kaynaktaki telefon eksik/bozuk basamaklı (+90 444 50 53) → alınmadı."
+  },
+  {
+   "slug": "rize-limani-balikci-barinagi",
+   "name": "Rize Limanı Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "rize",
+   "districtSlug": "rize-merkez",
+   "lat": 41.039841,
+   "lon": 40.505399,
+   "coordSource": "turkeymarinas (41°02'23.4\"N 40°30'19.4\"E / 41.039841, 40.505399)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 160 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": 160,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/rize-limani-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 160 Boats"
+   ],
+   "missingNotes": "Kaynaktaki telefon eksik/bozuk basamaklı (+90 444 50 53) → alınmadı."
+  },
+  {
+   "slug": "iyidere-balikci-barinagi",
+   "name": "İyidere Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "rize",
+   "districtSlug": "rize-iyidere",
+   "lat": 41.015539,
+   "lon": 40.36204,
+   "coordSource": "turkeymarinas (41°00'55.9\"N 40°21'43.3\"E / 41.015539, 40.362040)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 60 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": 60,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+904643212565",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/iyidere-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 60 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "vakfikebir-balikci-barinagi",
+   "name": "Vakfıkebir Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-vakfikebir",
+   "lat": 41.051296,
+   "lon": 39.271111,
+   "coordSource": "turkeymarinas (41°03'04.7\"N 39°16'16.0\"E / 41.051296, 39.271111)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 120 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 120,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/vakfikebir-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 120 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "yalikoy-balikci-barinagi",
+   "name": "Yalıköy Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-vakfikebir",
+   "lat": 41.068219,
+   "lon": 39.337666,
+   "coordSource": "turkeymarinas (41°04'05.6\"N 39°20'15.6\"E / 41.068219, 39.337666)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 50 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 50,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/yalikoy-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 50 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "akcakale-balikci-barinagi",
+   "name": "Akçakale Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-akcaabat",
+   "lat": 41.077163,
+   "lon": 39.50816,
+   "coordSource": "turkeymarinas (41°04'37.8\"N 39°30'29.4\"E / 41.077163, 39.508160)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 100 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 100,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/akcakale-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 100 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "darica-balikci-barinagi-2",
+   "name": "Darıca Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-akcaabat",
+   "lat": 41.051906,
+   "lon": 39.540696,
+   "coordSource": "turkeymarinas (41°03'06.9\"N 39°32'26.5\"E / 41.051906, 39.540696)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 80 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 80,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/04/darica-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 80 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "arsin-balikci-barinagi",
+   "name": "Arsin Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-arsin",
+   "lat": 40.957833,
+   "lon": 39.942,
+   "coordSource": "turkeymarinas (40°57'28.2\"N 39°56'31.2\"E / 40.957833, 39.942000)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 50 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 50,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/03/arsin-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 50 Boats"
+   ],
+   "missingNotes": "Kaynaktaki telefon eksik/bozuk basamaklı (+90 462) → alınmadı."
+  },
+  {
+   "slug": "of-balikci-barinagi",
+   "name": "Of Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-of",
+   "lat": 40.956396,
+   "lon": 40.279923,
+   "coordSource": "turkeymarinas (40°57'23.0\"N 40°16'47.7\"E / 40.956396, 40.279923)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 140 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 140,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/03/of-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 140 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "soguksu-balikci-barinagi",
+   "name": "Soğuksu Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-surmene",
+   "lat": 40.914033,
+   "lon": 40.13616,
+   "coordSource": "turkeymarinas (40°54'50.5\"N 40°08'10.2\"E / 40.914033, 40.136160)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 45 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 45,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/03/soguksu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 45 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "kalecik-balikci-barinagi",
+   "name": "Kalecik Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-arakli",
+   "lat": 40.958887,
+   "lon": 40.034028,
+   "coordSource": "turkeymarinas (40°57'32.0\"N 40°02'02.5\"E / 40.958887, 40.034028)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 45 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 45,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/03/kalecik-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 45 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "yomra-balikci-barinagi",
+   "name": "Yomra Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-yomra",
+   "lat": 40.960261,
+   "lon": 39.85739,
+   "coordSource": "turkeymarinas (40°57'36.9\"N 39°51'26.6\"E / 40.960261, 39.857390)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 145 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 145,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/yomra-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 145 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "arakli-balikci-barinagi",
+   "name": "Araklı Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-arakli",
+   "lat": 40.945078,
+   "lon": 40.05479,
+   "coordSource": "turkeymarinas (40°56'42.3\"N 40°03'17.2\"E / 40.945078, 40.054790)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 120 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 120,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/03/arakli-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 120 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "carsibasi-balikci-barinagi",
+   "name": "Çarşıbaşı Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-carsibasi",
+   "lat": 41.082709,
+   "lon": 39.370796,
+   "coordSource": "turkeymarinas (41°04'57.8\"N 39°22'14.9\"E / 41.082709, 39.370796)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 120 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 120,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/carsibasi-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 120 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "fenerkoy-yoroz-balikci-barinagi",
+   "name": "Fenerköy (yoroz) Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-carsibasi",
+   "lat": 41.106545,
+   "lon": 39.418921,
+   "coordSource": "turkeymarinas (41°06'23.6\"N 39°25'08.1\"E / 41.106545, 39.418921)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.",
+   "berthCount": 150,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/fenerkoy-yoroz-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 150 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "yali-balikci-barinagi",
+   "name": "Yalı Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-ortahisar",
+   "lat": 41.011021,
+   "lon": 39.707524,
+   "coordSource": "turkeymarinas (41°00'39.7\"N 39°42'27.1\"E / 41.011021, 39.707524)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 125 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 125,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/yali-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 125 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "besikduzu-buyuk-balikci-barinagi",
+   "name": "Beşikdüzü Büyük Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-besikduzu",
+   "lat": 41.06563,
+   "lon": 39.220585,
+   "coordSource": "turkeymarinas (41°03'56.3\"N 39°13'14.1\"E / 41.065630, 39.220585)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 115 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 115,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/besikduzu-fishing-buyuk-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 115 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "yuzuncuyil-balikci-barinagi",
+   "name": "Yüzüncüyıl Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-ortahisar",
+   "lat": 41.004148,
+   "lon": 39.766105,
+   "coordSource": "turkeymarinas (41°00'14.9\"N 39°45'58.0\"E / 41.004148, 39.766105)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 200,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/yuzuncuyil-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 200 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "gorele-balikci-barinagi",
+   "name": "Görele Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "giresun",
+   "districtSlug": "giresun-gorele",
+   "lat": 41.035854,
+   "lon": 39.008481,
+   "coordSource": "turkeymarinas (41°02'09.1\"N 39°00'30.5\"E / 41.035854, 39.008481)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 140 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik bulunur.",
+   "berthCount": 140,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/gorele-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 140 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "cavuslu-balikci-barinagi",
+   "name": "Çavuşlu Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "giresun",
+   "districtSlug": "giresun-gorele",
+   "lat": 41.043053,
+   "lon": 39.066954,
+   "coordSource": "turkeymarinas (41°02'35.0\"N 39°04'01.0\"E / 41.043053, 39.066954)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 55 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": 55,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/cavuslu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 55 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "boztepe-balikci-barinagi",
+   "name": "Boztepe Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "giresun",
+   "districtSlug": "giresun-eynesil",
+   "lat": 41.079058,
+   "lon": 39.16314,
+   "coordSource": "turkeymarinas (41°04'44.6\"N 39°09'47.3\"E / 41.079058, 39.163140)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 80 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.",
+   "berthCount": 80,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [
+    "water",
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/boztepe-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 80 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "gulburnu-balikci-barinagi",
+   "name": "Gülburnu Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "giresun",
+   "districtSlug": "giresun-espiye",
+   "lat": 40.958473,
+   "lon": 38.659647,
+   "coordSource": "turkeymarinas (40°57'30.5\"N 38°39'34.7\"E / 40.958473, 38.659647)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 45 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik bulunur.",
+   "berthCount": 45,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/gulburnu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 45 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "talipli-balikci-barinagi",
+   "name": "Talipli Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "giresun",
+   "districtSlug": "giresun-bulancak",
+   "lat": 40.944716,
+   "lon": 38.253516,
+   "coordSource": "turkeymarinas (40°56'41.0\"N 38°15'12.7\"E / 40.944716, 38.253516)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 35 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik bulunur.",
+   "berthCount": 35,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/talipli-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 35 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "pazarsuyu-balikci-barinagi",
+   "name": "Pazarsuyu Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "giresun",
+   "districtSlug": "giresun-bulancak",
+   "lat": 40.943289,
+   "lon": 38.186622,
+   "coordSource": "turkeymarinas (40°56'35.8\"N 38°11'11.8\"E / 40.943289, 38.186622)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 130 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 130,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/pazarsuyu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 130 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "piraziz-balikci-barinagi",
+   "name": "Piraziz Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "giresun",
+   "districtSlug": "giresun-piraziz",
+   "lat": 40.954685,
+   "lon": 38.116955,
+   "coordSource": "turkeymarinas (40°57'16.9\"N 38°07'01.0\"E / 40.954685, 38.116955)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 75 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 75,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/piraziz-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 75 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "gemiciler-balikci-barinagi-merkez",
+   "name": "Gemiciler Balıkçı Barınağı (Merkez)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "giresun",
+   "districtSlug": "giresun-merkez",
+   "lat": 40.916769,
+   "lon": 38.400584,
+   "coordSource": "turkeymarinas (40°55'00.4\"N 38°24'02.1\"E / 40.916769, 38.400584)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 60 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 60,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/gemiciler-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 60 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "kumyali-balikci-barinagi",
+   "name": "Kumyalı Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "giresun",
+   "districtSlug": "giresun-merkez",
+   "lat": 40.917656,
+   "lon": 38.377609,
+   "coordSource": "turkeymarinas (40°55'03.6\"N 38°22'39.4\"E / 40.917656, 38.377609)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 150,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/kumyali-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 150 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "besikduzu-kucuk-balikci-barinagi",
+   "name": "Beşikdüzü Küçük Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "trabzon",
+   "districtSlug": "trabzon-besikduzu",
+   "lat": 41.054496,
+   "lon": 39.235741,
+   "coordSource": "turkeymarinas (41°03'16.2\"N 39°14'08.7\"E / 41.054496, 39.235741)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 40,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/besikduzu-fishing-kucuk-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 40 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "fatsa-balikci-barinagi",
+   "name": "Fatsa Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "ordu",
+   "districtSlug": "ordu-fatsa",
+   "lat": 41.033898,
+   "lon": 37.499861,
+   "coordSource": "turkeymarinas (41°02'02.0\"N 37°29'59.5\"E / 41.033898, 37.499861)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 255 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 255,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+904524236300",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/fatsa-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 255 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "kumbasi-balikci-barinagi",
+   "name": "Kumbaşı Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "ordu",
+   "districtSlug": "ordu-persembe",
+   "lat": 41.116111,
+   "lon": 37.786389,
+   "coordSource": "turkeymarinas (41°06'58.0\"N 37°47'11.0\"E / 41.116111, 37.786389)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 200,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/02/kumbasi-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 200 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "medreseonu-balikci-barinagi",
+   "name": "Medreseönü Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "ordu",
+   "districtSlug": "ordu-persembe",
+   "lat": 41.13601,
+   "lon": 37.682591,
+   "coordSource": "turkeymarinas (41°08'09.6\"N 37°40'57.3\"E / 41.136010, 37.682591)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 85 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 85,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+904525005555",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/medreseonu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 85 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "terme-balikci-barinagi",
+   "name": "Terme Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "samsun",
+   "districtSlug": "samsun-terme",
+   "lat": 41.258333,
+   "lon": 37.025,
+   "coordSource": "turkeymarinas (41°15'30.0\"N 37°01'30.0\"E / 41.258333, 37.025000)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 250 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 250,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/terme-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 250 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "tekkekoy-balikci-barinagi",
+   "name": "Tekkeköy Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "samsun",
+   "districtSlug": "samsun-tekkekoy",
+   "lat": 41.254184,
+   "lon": 36.4897,
+   "coordSource": "turkeymarinas (41°15'15.1\"N 36°29'22.9\"E / 41.254184, 36.489700)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 275 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 275,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/tekkekoy-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 275 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "canik-balikci-barinagi",
+   "name": "Canik Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "samsun",
+   "districtSlug": "samsun-canik",
+   "lat": 41.270505,
+   "lon": 36.383641,
+   "coordSource": "turkeymarinas (41°16'13.8\"N 36°23'01.1\"E / 41.270505, 36.383641)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 260 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 260,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/canik-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 260 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "derekoy-balikci-barinagi",
+   "name": "Dereköy Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "samsun",
+   "districtSlug": "samsun-ondokuzmayis",
+   "lat": 41.465842,
+   "lon": 36.134519,
+   "coordSource": "turkeymarinas (41°27'57.0\"N 36°08'04.3\"E / 41.465842, 36.134519)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 225 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 225,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/derekoy-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 225 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "toplu-balikci-barinagi",
+   "name": "Toplu Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "samsun",
+   "districtSlug": "samsun-alacam",
+   "lat": 41.730358,
+   "lon": 35.946604,
+   "coordSource": "turkeymarinas (41°43'49.3\"N 35°56'47.8\"E / 41.730358, 35.946604)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 145 tekne olarak yayımlanmış. VHF kanal 73. Kaynak derinliği 3 m veriyor. Kaynağa göre su bulunur.",
+   "berthCount": 145,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 3,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/toplu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 145 Boats",
+    "Depth : 3 m"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "yakakent-balikci-barinagi",
+   "name": "Yakakent Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "samsun",
+   "districtSlug": "samsun-yakakent",
+   "lat": 41.640874,
+   "lon": 35.51004,
+   "coordSource": "turkeymarinas (41°38'27.1\"N 35°30'36.1\"E / 41.640874, 35.510040)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 270 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 270,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/yakakent-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 270 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "sinop-balikci-barinagi-ve-yat-limani",
+   "name": "Sinop Balıkçı Barınağı ve Yat Limanı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_marina",
+   "countryCode": "TR",
+   "provinceSlug": "sinop",
+   "districtSlug": null,
+   "lat": 42.097088,
+   "lon": 34.944916,
+   "coordSource": "turkeymarinas (42°05'49.5\"N 34°56'41.7\"E / 42.097088, 34.944916)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 73. Kaynak derinliği 3.4 m veriyor. Kaynağa göre su, elektrik bulunur.",
+   "berthCount": 200,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 3.4,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/sinop-fishing-harbour-yacht-marina.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 200 Boats",
+    "Depth : 3.4 m"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "demircikoy-balikci-barinagi",
+   "name": "Demirciköy Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "sinop",
+   "districtSlug": null,
+   "lat": 41.927115,
+   "lon": 35.092536,
+   "coordSource": "turkeymarinas (41°55'37.6\"N 35°05'33.1\"E / 41.927115, 35.092536)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 145 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 145,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/demircikoy-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 145 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "kumkapi-balikci-barinagi",
+   "name": "Kumkapı Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "sinop",
+   "districtSlug": null,
+   "lat": 42.028217,
+   "lon": 35.146008,
+   "coordSource": "turkeymarinas (42°01'41.6\"N 35°08'45.6\"E / 42.028217, 35.146008)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 60 tekne olarak yayımlanmış. Kaynak derinliği 12.3 m veriyor.",
+   "berthCount": 60,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 12.3,
+   "depthMaxM": null,
+   "vhfChannel": null,
+   "amenities": [],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+903682611844",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/kumkapi-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 60 Boats",
+    "Depth :12.30 m"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "ayancik-gemiciler-balikci-barinagi",
+   "name": "Ayancık Gemiciler Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "sinop",
+   "districtSlug": "sinop-ayancik",
+   "lat": 41.97519,
+   "lon": 34.491265,
+   "coordSource": "turkeymarinas (41°58'30.7\"N 34°29'28.6\"E / 41.975190, 34.491265)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 70 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": 70,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [
+    {
+     "type": "phone",
+     "value": "+903686131073",
+     "primary": true
+    }
+   ],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/ayancik-gemiciler-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 70 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "turkeli-balikci-barinagi",
+   "name": "Türkeli Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "sinop",
+   "districtSlug": "sinop-turkeli",
+   "lat": 41.949273,
+   "lon": 34.349021,
+   "coordSource": "turkeymarinas (41°56'57.4\"N 34°20'56.5\"E / 41.949273, 34.349021)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 130 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 130,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/turkeli-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 130 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "guzelkent-balikci-barinagi",
+   "name": "Güzelkent Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "sinop",
+   "districtSlug": "sinop-turkeli",
+   "lat": 41.960876,
+   "lon": 34.411753,
+   "coordSource": "turkeymarinas (41°57'39.1\"N 34°24'42.3\"E / 41.960876, 34.411753)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 168 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 168,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/guzelkent-fishing-harbour-marina.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 168 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "catalzeytin-balikci-barinagi",
+   "name": "Çatalzeytin Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "kastamonu",
+   "districtSlug": "kastamonu-catalzeytin",
+   "lat": 41.964149,
+   "lon": 34.172365,
+   "coordSource": "turkeymarinas (41°57'50.9\"N 34°10'20.5\"E / 41.964149, 34.172365)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 220 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 220,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/catalzeytin-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 220 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "ilisi-balikci-barinagi",
+   "name": "İlişi Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "kastamonu",
+   "districtSlug": "kastamonu-bozkurt",
+   "lat": 41.978639,
+   "lon": 33.963475,
+   "coordSource": "turkeymarinas (41°58'43.1\"N 33°57'48.5\"E / 41.978639, 33.963475)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 90 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 90,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/ilisi-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 90 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "abana-balikci-barinagi",
+   "name": "Abana Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "kastamonu",
+   "districtSlug": "kastamonu-abana",
+   "lat": 41.981518,
+   "lon": 34.024718,
+   "coordSource": "turkeymarinas (41°58'53.5\"N 34°01'29.0\"E / 41.981518, 34.024718)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 120 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 120,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/abana-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 120 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "gemiciler-balikci-barinagi-inebolu",
+   "name": "Gemiciler Balıkçı Barınağı (İnebolu)",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "kastamonu",
+   "districtSlug": "kastamonu-inebolu",
+   "lat": 41.974823,
+   "lon": 33.772081,
+   "coordSource": "turkeymarinas (41°58'29.4\"N 33°46'19.5\"E / 41.974823, 33.772081)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 115 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 115,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/gemiciler-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 115 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "inebolu-balikci-barinagi",
+   "name": "İnebolu Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "kastamonu",
+   "districtSlug": "kastamonu-inebolu",
+   "lat": 42.016865,
+   "lon": 33.337804,
+   "coordSource": "turkeymarinas (42°01'00.7\"N 33°20'16.1\"E / 42.016865, 33.337804)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 150,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/inebolu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 150 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "cide-balikci-barinagi",
+   "name": "Cide Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "kastamonu",
+   "districtSlug": "kastamonu-cide",
+   "lat": 41.90839,
+   "lon": 32.985569,
+   "coordSource": "turkeymarinas (41°54'30.2\"N 32°59'08.1\"E / 41.908390, 32.985569)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 265 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 265,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/cide-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 265 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "tekkeonu-balikci-barinagi",
+   "name": "Tekkeönü Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "bartin",
+   "districtSlug": "bartin-kurucasile",
+   "lat": 41.831804,
+   "lon": 32.673231,
+   "coordSource": "turkeymarinas (41°49'54.5\"N 32°40'23.6\"E / 41.831804, 32.673231)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 60 tekne olarak yayımlanmış. VHF kanal 73. Kaynak derinliği 4 m veriyor. Kaynağa göre su bulunur.",
+   "berthCount": 60,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 4,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/tekkeonu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 60 Boats",
+    "Depth : 4 m"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "kurucasile-balikci-barinagi",
+   "name": "Kurucaşile Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "bartin",
+   "districtSlug": "bartin-kurucasile",
+   "lat": 41.847513,
+   "lon": 32.716996,
+   "coordSource": "turkeymarinas (41°50'51.0\"N 32°43'01.2\"E / 41.847513, 32.716996)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 110 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 110,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/kurucasile-fish-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 110 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "amasra-balikci-barinagi",
+   "name": "Amasra Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "bartin",
+   "districtSlug": "bartin-amasra",
+   "lat": 41.752994,
+   "lon": 32.383429,
+   "coordSource": "turkeymarinas (41°45'10.8\"N 32°23'00.3\"E / 41.752994, 32.383429)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 73 / 16. Kaynağa göre su, elektrik bulunur.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73 / 16",
+   "amenities": [
+    "water",
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/amasra-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [],
+   "missingNotes": null
+  },
+  {
+   "slug": "tarlaagzi-balikci-barinagi",
+   "name": "Tarlaağzı Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "bartin",
+   "districtSlug": "bartin-amasra",
+   "lat": 41.724206,
+   "lon": 32.338925,
+   "coordSource": "turkeymarinas (41°43'27.1\"N 32°20'20.1\"E / 41.724206, 32.338925)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 190 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 190,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/tarlaagzi-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 190 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "bartin-bogaz-limani",
+   "name": "Bartın Boğaz Limanı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "bartin",
+   "districtSlug": null,
+   "lat": 41.67999,
+   "lon": 32.225776,
+   "coordSource": "turkeymarinas (41°40'48.0\"N 32°13'32.8\"E / 41.679990, 32.225776)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/bartin-port.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [],
+   "missingNotes": null
+  },
+  {
+   "slug": "catalagzi-balikci-barinagi",
+   "name": "Çatalağzı Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "zonguldak",
+   "districtSlug": "zonguldak-merkez",
+   "lat": 41.52186,
+   "lon": 31.894746,
+   "coordSource": "turkeymarinas (41°31'18.7\"N 31°53'41.1\"E / 41.521860, 31.894746)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 250 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 250,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/catalagzi-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 250 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "kozlu-balikci-barinagi",
+   "name": "Kozlu Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "zonguldak",
+   "districtSlug": "zonguldak-kozlu",
+   "lat": 41.439898,
+   "lon": 31.745135,
+   "coordSource": "turkeymarinas (41°26'23.6\"N 31°44'42.5\"E / 41.439898, 31.745135)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 190 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik bulunur.",
+   "berthCount": 190,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/kozlu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 190 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "kilimli-balikci-barinagi",
+   "name": "Kilimli Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "zonguldak",
+   "districtSlug": "zonguldak-kilimli",
+   "lat": 41.496547,
+   "lon": 31.841589,
+   "coordSource": "turkeymarinas (41°29'47.6\"N 31°50'29.7\"E / 41.496547, 31.841589)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 200,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/kilimli-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 200 boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "hisaronu-filyos-balikci-barinagi",
+   "name": "Hisarönü (filyos) Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "zonguldak",
+   "districtSlug": "zonguldak-caycuma",
+   "lat": 41.563516,
+   "lon": 32.017234,
+   "coordSource": "turkeymarinas (41°33'48.7\"N 32°01'02.0\"E / 41.563516, 32.017234)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": 150,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/hisaronu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 150 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "bozhane-balikci-barinagi",
+   "name": "Bozhane Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "zonguldak",
+   "districtSlug": null,
+   "lat": 41.313374,
+   "lon": 31.399308,
+   "coordSource": "turkeymarinas (41°18'48.1\"N 31°23'57.5\"E / 41.313374, 31.399308)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 225 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik bulunur.",
+   "berthCount": 225,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/bozhane-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 225 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "alapli-balikci-barinagi",
+   "name": "Alaplı Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "zonguldak",
+   "districtSlug": "zonguldak-alapli",
+   "lat": 41.195202,
+   "lon": 31.387533,
+   "coordSource": "turkeymarinas (41°11'42.7\"N 31°23'15.1\"E / 41.195202, 31.387533)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 140 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.",
+   "berthCount": 140,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water",
+    "electricity",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/alapli-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 140 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "akcakoca-balikci-barinagi",
+   "name": "Akçakoca Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "duzce",
+   "districtSlug": "duzce-akcakoca",
+   "lat": 41.092183,
+   "lon": 31.119686,
+   "coordSource": "turkeymarinas (41°05'31.9\"N 31°07'10.9\"E / 41.092183, 31.119686)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 130 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": 130,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/akcakoca-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 130 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "karasu-balikci-barinagi",
+   "name": "Karasu Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "sakarya",
+   "districtSlug": "sakarya-karasu",
+   "lat": 41.127513,
+   "lon": 30.649829,
+   "coordSource": "turkeymarinas (41°07'39.0\"N 30°38'59.4\"E / 41.127513, 30.649829)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 73. Kaynağa göre su bulunur.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/karasu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [],
+   "missingNotes": null
+  },
+  {
+   "slug": "kefken-adasi-limani",
+   "name": "Kefken Adası Limanı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "kocaeli",
+   "districtSlug": "kocaeli-kandira",
+   "lat": 41.178576,
+   "lon": 30.227152,
+   "coordSource": "turkeymarinas (41°10'42.9\"N 30°13'37.8\"E / 41.178576, 30.227152)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 75 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": 75,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/kefken-island-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 75 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "bagirganli-balikci-barinagi",
+   "name": "Bağırganlı Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "kocaeli",
+   "districtSlug": "kocaeli-kandira",
+   "lat": 41.234788,
+   "lon": 29.226819,
+   "coordSource": "turkeymarinas (41°14'05.2\"N 29°13'36.5\"E / 41.234788, 29.226819)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 190 tekne olarak yayımlanmış. VHF kanal 16. Kaynak derinliği 6–7 m veriyor. Kaynağa göre su, elektrik bulunur.",
+   "berthCount": 190,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": 6,
+   "depthMaxM": 7,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "electricity"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/bagirganli-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 190 Boats",
+    "Depth : 6 - 7 m"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "sile-balikci-barinagi",
+   "name": "Şile Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "istanbul",
+   "districtSlug": "istanbul-sile",
+   "lat": 41.214167,
+   "lon": 29.388889,
+   "coordSource": "turkeymarinas (41°12'51.0\"N 29°23'20.0\"E / 41.214167, 29.388889)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 16. Kaynağa göre su bulunur.",
+   "berthCount": null,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/sile-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [],
+   "missingNotes": null
+  },
+  {
+   "slug": "begendik-koyu-balikci-barinagi",
+   "name": "Beğendik Köyü Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "kirklareli",
+   "districtSlug": "kirklareli-demirkoy",
+   "lat": 41.884552,
+   "lon": 28.056221,
+   "coordSource": "turkeymarinas (41°53'04.4\"N 28°03'22.4\"E / 41.884552, 28.056221)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 120 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, yakıt bulunur.",
+   "berthCount": 120,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16",
+   "amenities": [
+    "water",
+    "fuel"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/begendik-koyu-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 120 Boats"
+   ],
+   "missingNotes": null
+  },
+  {
+   "slug": "kiyikoy-balikci-barinagi",
+   "name": "Kıyıköy Balıkçı Barınağı",
+   "operator": null,
+   "status": "published",
+   "typeCode": "municipal_pier",
+   "countryCode": "TR",
+   "provinceSlug": "kirklareli",
+   "districtSlug": "kirklareli-vize",
+   "lat": 41.633599,
+   "lon": 28.099446,
+   "coordSource": "turkeymarinas (41°38'01.0\"N 28°05'58.0\"E / 41.633599, 28.099446)",
+   "descriptionTr": "turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 300 tekne olarak yayımlanmış. VHF kanal 16 / 73. Kaynağa göre su bulunur.",
+   "berthCount": 300,
+   "maxLoaM": null,
+   "maxDraftM": null,
+   "depthMinM": null,
+   "depthMaxM": null,
+   "vhfChannel": "16 / 73",
+   "amenities": [
+    "water"
+   ],
+   "services": [],
+   "contacts": [],
+   "sourceUrls": [
+    "https://turkeymarinas.blogspot.com/2017/01/kiyikoy-fishing-harbour.html"
+   ],
+   "confidence": "medium",
+   "sourceQuotes": [
+    "Capacity : 300 boats"
+   ],
+   "missingNotes": null
+  }
+ ]
+}

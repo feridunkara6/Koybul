@@ -34,6 +34,10 @@ PROVINCES = {
     "aydin": "Aydın", "mugla": "Muğla", "antalya": "Antalya", "mersin": "Mersin",
     "canakkale": "Çanakkale", "bursa": "Bursa", "tekirdag": "Tekirdağ",
     "kocaeli": "Kocaeli",
+    # Genel veri turu 25 (2026-08): Ege/Akdeniz kapsamı — Saros (Edirne) +
+    # Doğu Akdeniz (Adana/Hatay). KARADENİZ İLLERİ BİLEREK YOK (kurucu kararı:
+    # "Karadeniz şimdilik eklenmeyecek"; veri bekleyen_karadeniz_2026_08.json arşivinde).
+    "edirne": "Edirne", "adana": "Adana", "hatay": "Hatay",
 }
 DISTRICTS = {
     "istanbul-kadikoy": ("istanbul", "Kadıköy"), "istanbul-bakirkoy": ("istanbul", "Bakırköy"),
@@ -70,6 +74,21 @@ DISTRICTS = {
     "kocaeli-darica": ("kocaeli", "Darıca"), "kocaeli-korfez": ("kocaeli", "Körfez"),
     "kocaeli-karamursel": ("kocaeli", "Karamürsel"),
     "antalya-kumluca": ("antalya", "Kumluca"), "balikesir-edremit": ("balikesir", "Edremit"),
+    # Genel veri turu 25 (2026-08): yeni kıyı ilçeleri (yalnız Ege/Akdeniz/Marmara).
+    "adana-karatas": ("adana", "Karataş"), "adana-yumurtalik": ("adana", "Yumurtalık"),
+    "antalya-manavgat": ("antalya", "Manavgat"), "balikesir-gomec": ("balikesir", "Gömeç"),
+    "bursa-gemlik": ("bursa", "Gemlik"), "bursa-karacabey": ("bursa", "Karacabey"),
+    "canakkale-eceabat": ("canakkale", "Eceabat"), "canakkale-ezine": ("canakkale", "Ezine"),
+    "canakkale-lapseki": ("canakkale", "Lapseki"), "edirne-enez": ("edirne", "Enez"),
+    "edirne-kesan": ("edirne", "Keşan"), "hatay-dortyol": ("hatay", "Dörtyol"),
+    "hatay-iskenderun": ("hatay", "İskenderun"), "hatay-samandag": ("hatay", "Samandağ"),
+    "istanbul-arnavutkoy": ("istanbul", "Arnavutköy"), "istanbul-uskudar": ("istanbul", "Üsküdar"),
+    "izmir-aliaga": ("izmir", "Aliağa"), "izmir-guzelbahce": ("izmir", "Güzelbahçe"),
+    "izmir-selcuk": ("izmir", "Selçuk"), "kocaeli-golcuk": ("kocaeli", "Gölcük"),
+    "mersin-akdeniz": ("mersin", "Akdeniz"), "mersin-bozyazi": ("mersin", "Bozyazı"),
+    "mugla-dalaman": ("mugla", "Dalaman"), "tekirdag-marmaraereglisi": ("tekirdag", "Marmaraereğlisi"),
+    "tekirdag-suleymanpasa": ("tekirdag", "Süleymanpaşa"), "yalova-armutlu": ("yalova", "Armutlu"),
+    "yalova-cinarcik": ("yalova", "Çınarcık"),
 }
 
 
@@ -1026,7 +1045,7 @@ def main():
     here = Path(__file__).resolve().parent
     batches = ["batch1_marinas.json", "batch2_municipal.json", "batch3_piers.json", "batch4_anchorages.json",
                "batch5_expansion.json", "batch6_istanbul.json", "batch7_dogu_akdeniz.json", "batch8_ege_marina.json", "batch9_yunanistan.json",
-               "batch10_symi.json", "batch11_yunanistan_koylar.json", "batch12_tr_tamamlama.json", "batch13_tr_tur2.json", "batch14_gr_tur2.json", "batch15_gr_tur3.json", "batch16_gr_tur4.json", "batch17_gr_tur5.json", "batch18_tr_gr_tur6.json", "batch19_tr_tur7.json", "batch20_gr_tur8.json", "batch21_gr_tur9.json", "batch22_gr_tur10.json", "batch23_gr_tur11.json", "batch24_gr_tur12.json", "batch25_gr_yakit1.json", "batch26_gr_tur13.json", "batch27_gr_tur14.json", "batch28_tr_tur15.json", "batch29_ege_tur16.json", "batch30_liman_tur17.json", "batch32_gr_tur19.json", "batch33_iskele_tur20.json", "batch34_ege_akdeniz_tur21.json", "batch35_tr_tur22.json", "batch36_tr_tur23.json", "batch37_gr_tur24.json", "batch38_eksik_tamamlama.json", "batch39_deria_koylar.json"]
+               "batch10_symi.json", "batch11_yunanistan_koylar.json", "batch12_tr_tamamlama.json", "batch13_tr_tur2.json", "batch14_gr_tur2.json", "batch15_gr_tur3.json", "batch16_gr_tur4.json", "batch17_gr_tur5.json", "batch18_tr_gr_tur6.json", "batch19_tr_tur7.json", "batch20_gr_tur8.json", "batch21_gr_tur9.json", "batch22_gr_tur10.json", "batch23_gr_tur11.json", "batch24_gr_tur12.json", "batch25_gr_yakit1.json", "batch26_gr_tur13.json", "batch27_gr_tur14.json", "batch28_tr_tur15.json", "batch29_ege_tur16.json", "batch30_liman_tur17.json", "batch32_gr_tur19.json", "batch33_iskele_tur20.json", "batch34_ege_akdeniz_tur21.json", "batch35_tr_tur22.json", "batch36_tr_tur23.json", "batch37_gr_tur24.json", "batch38_eksik_tamamlama.json", "batch39_deria_koylar.json", "batch40_veri_turu25.json"]
     records, batch_names = [], []
     for b in batches:
         p = here / b

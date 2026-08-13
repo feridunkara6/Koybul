@@ -1,6 +1,6 @@
 -- =========================================================================
 -- Dockly — Gerçek lokasyon verisi (Faz 5 veri edinimi)
--- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit + 28-tr-tur15-bodrum-gokova-datca-fethiye + 29-ege-tur16-izmir-kuzey-ege-bodrum-dogu-hisaronu + 30-liman-tur17-marmara-marina-belediye + 32-gr-tur19-saronik-dogu-ege + 33-iskele-tur20-restoran-marina-liman + 34-ege-akdeniz-tur21-restoran-baglama + 35-tr-tur22-fethiye-korfezi-iskeleler + 36-tr-tur23-gokova-fethiye-kulup + 37-gr-tur24-bekleyenler-iyonya-kiklad + 38-eksik-tamamlama-akvaryum-yedideler-yakitlar + 39-deria-koylar · Toplama: 2026-07-07/08, 2026-07-11
+-- Parti: 5.1-marinas + 5.2-municipal + 5.3-piers + 5.4-anchorages + 5.5-genisleme-istanbul-marmara-kuzeyege + 6-istanbul-genisleme-pilot + 7-dogu-akdeniz + 8-ege-marina-tamamlama + 9-yunanistan + 10-symi + 11-yunanistan-koylar-rihtimlar + 12-tr-tamamlama-kekova-yakit + 13-tr-tur2-ekincik-kekova-cevresi-bozcaada + 14-gr-tur2-halki-ucagiz-taslak + 15-gr-tur3-kalymnos-patmos-leros + 16-gr-tur4-kos-nisyros-lipsi + 17-gr-tur5-sakiz + 18-tr-gr-tur6-fethiye-hisaronu-midilli + 19-tr-tur7-icmeler-karaburun-selimiye + 20-gr-tur8-fourni-amorgos + 21-gr-tur9-naxos + 22-gr-tur10-paros + 23-gr-tur11-syros-mykonos + 24-gr-tur12-kefalonya-zakinthos + 25-gr-yakit-tur1 + 26-gr-tur13-girit-yakit2 + 27-gr-tur14-dogu-girit + 28-tr-tur15-bodrum-gokova-datca-fethiye + 29-ege-tur16-izmir-kuzey-ege-bodrum-dogu-hisaronu + 30-liman-tur17-marmara-marina-belediye + 32-gr-tur19-saronik-dogu-ege + 33-iskele-tur20-restoran-marina-liman + 34-ege-akdeniz-tur21-restoran-baglama + 35-tr-tur22-fethiye-korfezi-iskeleler + 36-tr-tur23-gokova-fethiye-kulup + 37-gr-tur24-bekleyenler-iyonya-kiklad + 38-eksik-tamamlama-akvaryum-yedideler-yakitlar + 39-deria-koylar + 40-veri-turu25-ege-akdeniz · Toplama: 2026-07-07/08, 2026-07-11
 -- Kaynak ve güven bilgisi: prisma/data/batch1_marinas.json (provenance)
 -- Bu dosya generate_locations_seed.py ile üretilir; ELLE DÜZENLEME.
 -- Tamamen idempotent: CI seed'i iki kez koşar (ON CONFLICT DO NOTHING).
@@ -45,6 +45,15 @@ VALUES (gen_random_uuid(), 'TR', 'province', 'Tekirdağ', 'tekirdag')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'TR', 'province', 'Kocaeli', 'kocaeli')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'TR', 'province', 'Edirne', 'edirne')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'TR', 'province', 'Adana', 'adana')
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, level, name, slug)
+VALUES (gen_random_uuid(), 'TR', 'province', 'Hatay', 'hatay')
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, level, name, slug)
 VALUES (gen_random_uuid(), 'GR', 'province', 'Korfu', 'gr-korfu')
@@ -425,6 +434,114 @@ ON CONFLICT (country_code, level, slug) DO NOTHING;
 INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
 SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Edremit', 'balikesir-edremit'
 FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'balikesir'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Karataş', 'adana-karatas'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'adana'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Yumurtalık', 'adana-yumurtalik'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'adana'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Manavgat', 'antalya-manavgat'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'antalya'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Gömeç', 'balikesir-gomec'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'balikesir'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Gemlik', 'bursa-gemlik'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'bursa'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Karacabey', 'bursa-karacabey'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'bursa'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Eceabat', 'canakkale-eceabat'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'canakkale'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Ezine', 'canakkale-ezine'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'canakkale'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Lapseki', 'canakkale-lapseki'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'canakkale'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Enez', 'edirne-enez'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'edirne'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Keşan', 'edirne-kesan'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'edirne'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Dörtyol', 'hatay-dortyol'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'hatay'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'İskenderun', 'hatay-iskenderun'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'hatay'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Samandağ', 'hatay-samandag'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'hatay'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Arnavutköy', 'istanbul-arnavutkoy'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'istanbul'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Üsküdar', 'istanbul-uskudar'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'istanbul'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Aliağa', 'izmir-aliaga'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'izmir'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Güzelbahçe', 'izmir-guzelbahce'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'izmir'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Selçuk', 'izmir-selcuk'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'izmir'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Gölcük', 'kocaeli-golcuk'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'kocaeli'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Akdeniz', 'mersin-akdeniz'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'mersin'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Bozyazı', 'mersin-bozyazi'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'mersin'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Dalaman', 'mugla-dalaman'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'mugla'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Marmaraereğlisi', 'tekirdag-marmaraereglisi'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'tekirdag'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Süleymanpaşa', 'tekirdag-suleymanpasa'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'tekirdag'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Armutlu', 'yalova-armutlu'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'yalova'
+ON CONFLICT (country_code, level, slug) DO NOTHING;
+INSERT INTO admin_areas (id, country_code, parent_id, level, name, slug)
+SELECT gen_random_uuid(), 'TR', p.id, 'district', 'Çınarcık', 'yalova-cinarcik'
+FROM admin_areas p WHERE p.country_code = 'TR' AND p.level = 'province' AND p.slug = 'yalova'
 ON CONFLICT (country_code, level, slug) DO NOTHING;
 
 -- --- Setur Kalamış & Fenerbahçe Marina · güven: high · kaynak: www.seturmarinas.com ---
@@ -11226,6 +11343,5455 @@ SELECT gen_random_uuid(), l.id, 'website', 'https://deria.gov.tr', 'DERİA rezer
 FROM locations l WHERE l.slug = 'zeytin-adasi-samandira-sahasi'
 ON CONFLICT (location_id, contact_type, value) DO NOTHING;
 
+-- --- Karacasöğüt Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karacasogut-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Karacasöğüt Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.186229, 36.943232), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karacasöğüt Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'karacasogut-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ağa Limanı (Dalaman) · güven: medium · kaynak: turkeymarinas.blogspot.com, turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'aga-limani-dalaman', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-dalaman'),
+  'Ağa Limanı (Dalaman)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynak, Ağa Limanı''nın ikiz koylarını tek başlıkta anlatır; iki yazıdaki koordinatlar 750 m arayla aynı koya düşer — tek kayıt açıldı.',
+  ST_SetSRID(ST_MakePoint(28.869326, 36.620768), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ağa Limanı (Dalaman)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynak, Ağa Limanı''nın ikiz koylarını tek başlıkta anlatır; iki yazıdaki koordinatlar 750 m arayla aynı koya düşer — tek kayıt açıldı.' FROM locations WHERE slug = 'aga-limani-dalaman'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Gebekse Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gebekse-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Gebekse Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.231225, 36.703294), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gebekse Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'gebekse-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Borina Yacht Club İskelesi · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'borina-yacht-club', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Borina Yacht Club İskelesi', 'turkeymarinas rehberinde koordinatıyla belgelenmiş bağlanma yeri. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(28.129727, 36.7606), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Borina Yacht Club İskelesi', 'turkeymarinas rehberinde koordinatıyla belgelenmiş bağlanma yeri. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'borina-yacht-club'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'borina-yacht-club'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'borina-yacht-club' AND a.code IN ('water', 'wifi', 'restaurant')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902524871020', NULL, true
+FROM locations l WHERE l.slug = 'borina-yacht-club'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Beykoz Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'beykoz-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-beykoz'),
+  'Beykoz Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(29.093945, 41.129034), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  150, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Beykoz Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'beykoz-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'beykoz-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Harem Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'harem-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-uskudar'),
+  'Harem Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 88 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(29.009602, 41.013996), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  88, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Harem Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 88 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'harem-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'harem-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Salacak Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'salacak-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-uskudar'),
+  'Salacak Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 55 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(29.00798, 41.018685), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  55, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Salacak Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 55 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'salacak-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'salacak-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Garipçe Köyü Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'garipce-village-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-sariyer'),
+  'Garipçe Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(29.110824, 41.213351), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Garipçe Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'garipce-village-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'garipce-village-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Rumeli Feneri Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'rumeli-feneri-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-sariyer'),
+  'Rumeli Feneri Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 300 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(29.112353, 41.234386), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  300, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Rumeli Feneri Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 300 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'rumeli-feneri-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'rumeli-feneri-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Kireçburnu Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kirecburnu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-sariyer'),
+  'Kireçburnu Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 45 tekne olarak yayımlanmış. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(29.044528, 41.149771), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  45, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kireçburnu Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 45 tekne olarak yayımlanmış. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'kirecburnu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kirecburnu-balikci-barinagi' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Yeniköy Balıkçı Barınağı (Sarıyer) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yenikoy-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-sariyer'),
+  'Yeniköy Balıkçı Barınağı (Sarıyer)', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(29.071397, 41.125138), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  40, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yeniköy Balıkçı Barınağı (Sarıyer)', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'yenikoy-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'yenikoy-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Kavaklı Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kavakli-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'kocaeli-golcuk'),
+  'Kavaklı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 55 tekne olarak yayımlanmış. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(29.839617, 40.726018), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  55, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kavaklı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 55 tekne olarak yayımlanmış. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'kavakli-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kavakli-balikci-barinagi' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902624144585', NULL, true
+FROM locations l WHERE l.slug = 'kavakli-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Karamürsel Marina · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karamursel-marina', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'kocaeli-karamursel'),
+  'Karamürsel Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(29.513333, 40.74), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  40, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karamürsel Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'karamursel-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 40, '16', NULL, NULL, NULL
+FROM locations WHERE slug = 'karamursel-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'karamursel-marina' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Yalova Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yalova-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'yalova'),
+  'Yalova Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 105 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(29.268056, 40.660278), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  105, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yalova Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 105 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'yalova-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'yalova-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Koruköy Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'korukoy-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'yalova-cinarcik'),
+  'Koruköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 25 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(29.154011, 40.658286), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  25, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Koruköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 25 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'korukoy-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'korukoy-balikci-barinagi' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Samanlıdere Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'samanlidere-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'yalova'),
+  'Samanlıdere Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 225 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(29.245833, 40.661111), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  225, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Samanlıdere Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 225 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'samanlidere-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'samanlidere-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Çınarcık Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'cinarcik-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'yalova-cinarcik'),
+  'Çınarcık Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 75 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(29.131944, 40.650278), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  75, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çınarcık Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 75 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'cinarcik-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'cinarcik-balikci-barinagi' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Esenköy Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'esenkoy-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'yalova-cinarcik'),
+  'Esenköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 110 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(28.781632, 40.534189), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  110, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Esenköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 110 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'esenkoy-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'esenkoy-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Fıstıklı Köyü Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'fistikli-village-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'yalova-armutlu'),
+  'Fıstıklı Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 95 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(28.884722, 40.478611), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  95, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Fıstıklı Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 95 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'fistikli-village-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'fistikli-village-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Kapaklı Köyü Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kapakli-koyu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'yalova-armutlu'),
+  'Kapaklı Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(28.965397, 40.461102), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  40, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kapaklı Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'kapakli-koyu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kapakli-koyu-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Karacabey Kurşunlu Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karacabey-kursunlu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'bursa-karacabey'),
+  'Karacabey Kurşunlu Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 275 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(28.516405, 40.393042), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  275, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karacabey Kurşunlu Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 275 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'karacabey-kursunlu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'karacabey-kursunlu-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Bayramdere Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bayramdere-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'bursa-karacabey'),
+  'Bayramdere Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 180 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(28.367541, 40.400906), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  180, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bayramdere Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 180 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'bayramdere-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'bayramdere-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Narlı Köyü Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'narli-koyu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'bursa-gemlik'),
+  'Narlı Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 16. Kaynak derinliği 5 m veriyor. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(29.0325, 40.479167), 4326)::geography,
+  NULL, NULL, 5, NULL,
+  40, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Narlı Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 16. Kaynak derinliği 5 m veriyor. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'narli-koyu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'narli-koyu-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Kurşunlu Marina · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kursunlu-marina', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'bursa-gemlik'),
+  'Kurşunlu Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. Kaynakta kapasite 85 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(29.034433, 40.364802), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  85, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kurşunlu Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. Kaynakta kapasite 85 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'kursunlu-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 85, '16', NULL, NULL, NULL
+FROM locations WHERE slug = 'kursunlu-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kursunlu-marina' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Gemlik Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gemlik-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'bursa-gemlik'),
+  'Gemlik Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 60 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(29.151389, 40.423333), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  60, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gemlik Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 60 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'gemlik-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'gemlik-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Arnavutköy Marina · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'arnavutkoy-marina', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'bursa-mudanya'),
+  'Arnavutköy Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(28.866436, 40.384613), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Arnavutköy Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'arnavutkoy-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'arnavutkoy-marina' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Kumyaka Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kumyaka-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'bursa-mudanya'),
+  'Kumyaka Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 25 tekne olarak yayımlanmış. VHF kanal 16. Kaynak derinliği 6 m veriyor. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(28.829031, 40.384575), 4326)::geography,
+  NULL, NULL, 6, NULL,
+  25, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kumyaka Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 25 tekne olarak yayımlanmış. VHF kanal 16. Kaynak derinliği 6 m veriyor. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'kumyaka-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kumyaka-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Tuzla Köyü (Paşalimanı) Demirlemesi · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tuzla-koyu-pasalimani-demirlemesi', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-marmara'),
+  'Tuzla Köyü (Paşalimanı) Demirlemesi', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.667652, 40.462349), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Tuzla Köyü (Paşalimanı) Demirlemesi', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'tuzla-koyu-pasalimani-demirlemesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'tuzla-koyu-pasalimani-demirlemesi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Tirilye Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tirilye-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'bursa-mudanya'),
+  'Tirilye Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 250 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(28.803611, 40.392222), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  250, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Tirilye Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 250 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'tirilye-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'tirilye-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Poyrazlı Koyu (Paşalimanı) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'poyrazli-koyu-pasalimani', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-marmara'),
+  'Poyrazlı Koyu (Paşalimanı)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.63404, 40.49577), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Poyrazlı Koyu (Paşalimanı)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'poyrazli-koyu-pasalimani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Mavi Köy Marina · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'mavi-koy-marina', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-marmara'),
+  'Mavi Köy Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.507778, 40.538889), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Mavi Köy Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'mavi-koy-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '16', NULL, NULL, NULL
+FROM locations WHERE slug = 'mavi-koy-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'mavi-koy-marina' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Ekinlik Adası Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ekinlik-adasi-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-marmara'),
+  'Ekinlik Adası Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 165 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.487638, 40.546334), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  165, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ekinlik Adası Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 165 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'ekinlik-adasi-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ekinlik-adasi-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902668855489', NULL, true
+FROM locations l WHERE l.slug = 'ekinlik-adasi-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Asmalı Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'asmali-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'balikesir'),
+  'Asmalı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 82 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.758325, 40.632385), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  82, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Asmalı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 82 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'asmali-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'asmali-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Topağaç Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'topagac-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'balikesir'),
+  'Topağaç Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 110 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.664852, 40.601552), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  110, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Topağaç Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 110 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'topagac-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'topagac-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Çınarlı Köyü Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'cinarli-koyu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'balikesir'),
+  'Çınarlı Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 90 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(27.529837, 40.607386), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  90, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çınarlı Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 90 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'cinarli-koyu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'cinarli-koyu-balikci-barinagi' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Aşağıyapıcı Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'asagiyapici-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-erdek'),
+  'Aşağıyapıcı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.902289, 40.393494), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  40, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Aşağıyapıcı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'asagiyapici-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'asagiyapici-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902668351050', NULL, true
+FROM locations l WHERE l.slug = 'asagiyapici-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Tavşancıl Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tavsancil-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'kocaeli'),
+  'Tavşancıl Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 55 tekne olarak yayımlanmış. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(29.568917, 40.766667), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  55, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Tavşancıl Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 55 tekne olarak yayımlanmış. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'tavsancil-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'tavsancil-balikci-barinagi' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Karşıyaka Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karsiyaka-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-erdek'),
+  'Karşıyaka Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 190 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(28.00141, 40.439611), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  190, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karşıyaka Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 190 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'karsiyaka-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'karsiyaka-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Ballıpınar (Kocaburgaz) Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ballipinar-kocaburgaz-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-erdek'),
+  'Ballıpınar (Kocaburgaz) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.903543, 40.507638), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ballıpınar (Kocaburgaz) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'ballipinar-kocaburgaz-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Tatlısu Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tatlisu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-erdek'),
+  'Tatlısu Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 70 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.921479, 40.406771), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  70, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Tatlısu Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 70 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'tatlisu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'tatlisu-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Çayağzı Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'cayagzi-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-erdek'),
+  'Çayağzı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 220 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.971591, 40.492993), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  220, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çayağzı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 220 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'cayagzi-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'cayagzi-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Ormanlı Köy Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ormanli-koy-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-erdek'),
+  'Ormanlı Köy Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.834667, 40.513472), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ormanlı Köy Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'ormanli-koy-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Kestanelik Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kestanelik-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-erdek'),
+  'Kestanelik Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 140 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.98696, 40.489769), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  140, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kestanelik Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 140 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'kestanelik-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kestanelik-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Turanköy Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'turankoy-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-erdek'),
+  'Turanköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.781399, 40.507896), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  40, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Turanköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'turankoy-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'turankoy-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902668351050', NULL, true
+FROM locations l WHERE l.slug = 'turankoy-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Doğanlar Köyü Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'doganlar-koyu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-erdek'),
+  'Doğanlar Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 20 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.747603, 40.520359), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  20, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Doğanlar Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 20 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'doganlar-koyu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'doganlar-koyu-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902668351050', NULL, true
+FROM locations l WHERE l.slug = 'doganlar-koyu-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Ocaklar Köyü Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ocaklar-koyu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-erdek'),
+  'Ocaklar Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 25 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.753677, 40.442446), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  25, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ocaklar Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 25 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'ocaklar-koyu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ocaklar-koyu-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902668351050', NULL, true
+FROM locations l WHERE l.slug = 'ocaklar-koyu-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Narlıköy Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'narlikoy-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-erdek'),
+  'Narlıköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 25 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.68273, 40.494324), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  25, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Narlıköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 25 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'narlikoy-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'narlikoy-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- İlhanköy Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ilhankoy-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-erdek'),
+  'İlhanköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 100 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.691601, 40.504502), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  100, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İlhanköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 100 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'ilhankoy-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ilhankoy-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Bandırma Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bandirma-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-bandirma'),
+  'Bandırma Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 260 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(27.972694, 40.360987), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  260, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bandırma Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 260 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'bandirma-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'bandirma-balikci-barinagi' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Yenice Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yenice-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-bandirma'),
+  'Yenice Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 85 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(28.111169, 40.388875), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  85, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yenice Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 85 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'yenice-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'yenice-balikci-barinagi' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Dutliman Köyü Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'dutliman-koyu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-bandirma'),
+  'Dutliman Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 35 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(28.050078, 40.375367), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  35, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Dutliman Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 35 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'dutliman-koyu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'dutliman-koyu-balikci-barinagi' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Misakça Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'misakca-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-bandirma'),
+  'Misakça Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 65 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.672101, 40.310766), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  65, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Misakça Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 65 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'misakca-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'misakca-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Değirmencik Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'degirmencik-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-biga'),
+  'Değirmencik Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.120847, 40.449654), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  40, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Değirmencik Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'degirmencik-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'degirmencik-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Karabiga Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karabiga-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-biga'),
+  'Karabiga Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.285788, 40.47204), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karabiga Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'karabiga-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'karabiga-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Kemer Köyü Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kemer-koyu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-biga'),
+  'Kemer Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 70 tekne olarak yayımlanmış. VHF kanal 09. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.064994, 40.422663), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  70, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kemer Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 70 tekne olarak yayımlanmış. VHF kanal 09. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'kemer-koyu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kemer-koyu-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Aksaz Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'aksaz-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-biga'),
+  'Aksaz Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 105 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.17121, 40.443093), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  105, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Aksaz Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 105 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'aksaz-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'aksaz-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Zeytinburnu Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'zeytinburnu-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'istanbul'),
+  'Zeytinburnu Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 140 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(28.893387, 40.980057), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  140, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Zeytinburnu Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 140 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'zeytinburnu-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'zeytinburnu-limani' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Şevketiye Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sevketiye-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-lapseki'),
+  'Şevketiye Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 75 tekne olarak yayımlanmış. VHF kanal 09. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(26.875497, 40.39844), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  75, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Şevketiye Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 75 tekne olarak yayımlanmış. VHF kanal 09. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'sevketiye-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'sevketiye-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Bakırköy Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bakirkoy-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-bakirkoy'),
+  'Bakırköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 95 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(28.878063, 40.973511), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  95, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bakırköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 95 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'bakirkoy-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'bakirkoy-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902126609011', NULL, true
+FROM locations l WHERE l.slug = 'bakirkoy-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Ambarlı Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ambarli-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'istanbul'),
+  'Ambarlı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 240 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(28.71869, 40.969523), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  240, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ambarlı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 240 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'ambarli-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ambarli-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902126956200', NULL, true
+FROM locations l WHERE l.slug = 'ambarli-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Silivri Marina · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'silivri-marina', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-silivri'),
+  'Silivri Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(28.23938, 41.073008), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Silivri Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'silivri-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '16', NULL, NULL, NULL
+FROM locations WHERE slug = 'silivri-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'silivri-marina' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Tekirdağ Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tekirdag-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'tekirdag'),
+  'Tekirdağ Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 80 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.514167, 40.974167), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  80, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Tekirdağ Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 80 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'tekirdag-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'tekirdag-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Tekirdağ Marina · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tekirdag-marina', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'tekirdag'),
+  'Tekirdağ Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.523027, 40.974681), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  200, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Tekirdağ Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'tekirdag-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, 200, '16', NULL, NULL, NULL
+FROM locations WHERE slug = 'tekirdag-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'tekirdag-marina' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Marmara Ereğlisi Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'marmara-ereglisi-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'tekirdag-marmaraereglisi'),
+  'Marmara Ereğlisi Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 65 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.966225, 40.969476), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  65, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Marmara Ereğlisi Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 65 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'marmara-ereglisi-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'marmara-ereglisi-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Barbaros Balıkçı Barınağı (Tekirdağ) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'barbaros-balikci-barinagi-tekirdag', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'tekirdag'),
+  'Barbaros Balıkçı Barınağı (Tekirdağ)', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.47063, 40.903516), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Barbaros Balıkçı Barınağı (Tekirdağ)', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'barbaros-balikci-barinagi-tekirdag'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'barbaros-balikci-barinagi-tekirdag' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Kumbağ Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kumbag-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'tekirdag-suleymanpasa'),
+  'Kumbağ Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 90 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.461667, 40.865), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  90, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kumbağ Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 90 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'kumbag-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kumbag-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Şarköy Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sarkoy-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'tekirdag-sarkoy'),
+  'Şarköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(26.995705, 40.556499), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  200, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Şarköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'sarkoy-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'sarkoy-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Hoşköy Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'hoskoy-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'tekirdag-sarkoy'),
+  'Hoşköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 120 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.30685, 40.702744), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  120, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Hoşköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 120 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'hoskoy-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'hoskoy-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Mürefte Marina · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'murefte-marina', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'tekirdag-sarkoy'),
+  'Mürefte Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.264787, 40.675732), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Mürefte Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'murefte-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'murefte-marina' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Lapseki Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'lapseki-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-lapseki'),
+  'Lapseki Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 240 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.571767, 40.278725), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  240, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Lapseki Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 240 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'lapseki-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'lapseki-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Seddülbahir Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'seddulbahir-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-eceabat'),
+  'Seddülbahir Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 50 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(26.328078, 40.106405), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  50, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Seddülbahir Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 50 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'seddulbahir-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'seddulbahir-balikci-barinagi' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Kilitbahir Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kilitbahir-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-eceabat'),
+  'Kilitbahir Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 50 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(26.380539, 40.148576), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  50, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kilitbahir Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 50 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'kilitbahir-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kilitbahir-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Kumkale Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kumkale-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'canakkale'),
+  'Kumkale Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 60 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(26.198114, 40.008364), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  60, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kumkale Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 60 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'kumkale-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kumkale-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- İbrice Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ibrice-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'edirne-kesan'),
+  'İbrice Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.747399, 40.558023), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  150, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İbrice Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'ibrice-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ibrice-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Enez Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'enez-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'edirne-enez'),
+  'Enez Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 500 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.050312, 40.698949), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  500, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Enez Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 500 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'enez-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'enez-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Sultaniçe Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sultanice-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'edirne-enez'),
+  'Sultaniçe Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(26.126803, 40.592117), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  150, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sultaniçe Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'sultanice-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'sultanice-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Güneyli Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'guneyli-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-gelibolu'),
+  'Güneyli Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 50 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(26.693379, 40.508219), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  50, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Güneyli Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 50 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'guneyli-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'guneyli-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Ece Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ece-limani', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-eceabat'),
+  'Ece Limanı', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.328333, 40.366389), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ece Limanı', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'ece-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Kabatepe Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kabatepe-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-eceabat'),
+  'Kabatepe Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.265959, 40.202739), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  150, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kabatepe Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'kabatepe-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kabatepe-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Kaleköy Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kalekoy-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-gokceada'),
+  'Kaleköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 115 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.011531, 40.162739), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  115, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kaleköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 115 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'kalekoy-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kalekoy-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Sulubahçe Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sulubahce-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-bozcaada'),
+  'Sulubahçe Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.082924, 39.80119), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sulubahçe Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'sulubahce-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902866978081', NULL, true
+FROM locations l WHERE l.slug = 'sulubahce-koyu'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Yeniköy Balıkçı Barınağı (Ezine) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yenikoy-balikci-barinagi-ezine', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-ezine'),
+  'Yeniköy Balıkçı Barınağı (Ezine)', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 120 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(26.160549, 39.945128), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  120, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yeniköy Balıkçı Barınağı (Ezine)', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 120 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'yenikoy-balikci-barinagi-ezine'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'yenikoy-balikci-barinagi-ezine' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Dalyan Köyü Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'dalyan-koyu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-ezine'),
+  'Dalyan Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 30 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(26.144314, 39.76314), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  30, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Dalyan Köyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 30 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'dalyan-koyu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'dalyan-koyu-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Eceabat Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'eceabat-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-eceabat'),
+  'Eceabat Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 100 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.360322, 40.187338), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  100, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Eceabat Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 100 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'eceabat-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'eceabat-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Gülpınar Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gulpinar-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-ayvacik'),
+  'Gülpınar Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.0964, 39.56614), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  200, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gülpınar Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'gulpinar-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'gulpinar-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Sokakağzı Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sokakagzi-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-ayvacik'),
+  'Sokakağzı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.208254, 39.464995), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  40, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sokakağzı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'sokakagzi-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'sokakagzi-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902867121893', NULL, true
+FROM locations l WHERE l.slug = 'sokakagzi-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kadırga Cove Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kadirga-cove-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-ayvacik'),
+  'Kadırga Cove Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.37567, 39.489087), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kadırga Cove Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kadirga-cove-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Güre Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gure-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-edremit'),
+  'Güre Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.879929, 39.584279), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  200, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Güre Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'gure-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'gure-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Bergos Port Guest House Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bergos-port-guest-house-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'canakkale'),
+  'Bergos Port Guest House Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı.',
+  ST_SetSRID(ST_MakePoint(26.2363, 39.467107), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bergos Port Guest House Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı.' FROM locations WHERE slug = 'bergos-port-guest-house-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902867234267', NULL, true
+FROM locations l WHERE l.slug = 'bergos-port-guest-house-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Gömeç Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gomec-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-gomec'),
+  'Gömeç Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 50 tekne olarak yayımlanmış. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.812737, 39.438564), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  50, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gömeç Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 50 tekne olarak yayımlanmış. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'gomec-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'gomec-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902663571053', NULL, true
+FROM locations l WHERE l.slug = 'gomec-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Paşa Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'pasa-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-ayvalik'),
+  'Paşa Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.664082, 39.287908), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Paşa Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'pasa-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ortunç Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ortunc-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-ayvalik'),
+  'Ortunç Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.622212, 39.329961), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ortunç Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'ortunc-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Narlıdere Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'narlidere-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-dikili'),
+  'Narlıdere Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.84436, 38.930644), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Narlıdere Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'narlidere-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'narlidere-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Bademli Liman · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bademli-liman', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-dikili'),
+  'Bademli Liman', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.799581, 39.015722), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bademli Liman', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'bademli-liman'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'bademli-liman' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Killik Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'killik-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-dikili'),
+  'Killik Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.810693, 39.038751), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Killik Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'killik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Hayıtlı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'hayitli-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-dikili'),
+  'Hayıtlı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.798677, 38.989672), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Hayıtlı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'hayitli-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Denizköy Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'denizkoy-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-dikili'),
+  'Denizköy Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.807723, 38.953489), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Denizköy Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'denizkoy-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'denizkoy-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Aliağa Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'aliaga-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-aliaga'),
+  'Aliağa Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(26.893138, 38.824356), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  150, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Aliağa Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'aliaga-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'aliaga-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Gilimi Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gilimi-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-aliaga'),
+  'Gilimi Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.050075, 38.879548), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gilimi Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'gilimi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'gilimi-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Gencelli Bay · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gencelli-bay', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-foca'),
+  'Gencelli Bay', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.883208, 38.74675), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gencelli Bay', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'gencelli-bay'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'gencelli-bay' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Bakü Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'baku-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-balcova'),
+  'Bakü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 160 tekne olarak yayımlanmış.',
+  ST_SetSRID(ST_MakePoint(27.036589, 38.412927), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  160, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bakü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 160 tekne olarak yayımlanmış.' FROM locations WHERE slug = 'baku-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902324552000', NULL, true
+FROM locations l WHERE l.slug = 'baku-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Narlıdere Sahil Evleri Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'narlidere-sahil-evleri-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'izmir'),
+  'Narlıdere Sahil Evleri Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 100 tekne olarak yayımlanmış. VHF kanal 16.',
+  ST_SetSRID(ST_MakePoint(26.9798, 38.397147), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  100, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Narlıdere Sahil Evleri Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 100 tekne olarak yayımlanmış. VHF kanal 16.' FROM locations WHERE slug = 'narlidere-sahil-evleri-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902322388743', NULL, true
+FROM locations l WHERE l.slug = 'narlidere-sahil-evleri-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Güzelbahçe Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'guzelbahce-fishing-harbour-and-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-guzelbahce'),
+  'Güzelbahçe Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 105 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(26.891667, 38.377778), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  105, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Güzelbahçe Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 105 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'guzelbahce-fishing-harbour-and-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'guzelbahce-fishing-harbour-and-balikci-barinagi' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Kalabak Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kalabak-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Kalabak Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 55 tekne olarak yayımlanmış. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.812259, 38.358069), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  55, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kalabak Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 55 tekne olarak yayımlanmış. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'kalabak-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kalabak-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902327542651', NULL, true
+FROM locations l WHERE l.slug = 'kalabak-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Çeşmealtı Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'cesmealti-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Çeşmealtı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 75 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur. Yakıt tankerle iskeleye getirilir (kaynak) — sabit istasyon değildir.',
+  ST_SetSRID(ST_MakePoint(26.750541, 38.392879), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  75, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çeşmealtı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 75 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur. Yakıt tankerle iskeleye getirilir (kaynak) — sabit istasyon değildir.' FROM locations WHERE slug = 'cesmealti-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'cesmealti-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Urla İskele Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'urla-iskele-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Urla İskele Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 225 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur. Yakıt tankerle iskeleye getirilir (kaynak) — sabit istasyon değildir.',
+  ST_SetSRID(ST_MakePoint(26.710829, 38.539922), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  225, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Urla İskele Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 225 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur. Yakıt tankerle iskeleye getirilir (kaynak) — sabit istasyon değildir.' FROM locations WHERE slug = 'urla-iskele-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'urla-iskele-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Özbekköyü Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ozbekkoyu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Özbekköyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 130 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur. Yakıt tankerle iskeleye getirilir (kaynak) — sabit istasyon değildir.',
+  ST_SetSRID(ST_MakePoint(26.680769, 38.374095), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  130, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Özbekköyü Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 130 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur. Yakıt tankerle iskeleye getirilir (kaynak) — sabit istasyon değildir.' FROM locations WHERE slug = 'ozbekkoyu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ozbekkoyu-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Karapınar Cove And Shelter Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karapinar-cove-and-shelter-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Karapınar Cove And Shelter Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.630881, 38.381542), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karapınar Cove And Shelter Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'karapinar-cove-and-shelter-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Gülbahçe Koyu Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gulbahce-koyu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Gülbahçe Koyu Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı.',
+  ST_SetSRID(ST_MakePoint(26.645106, 38.344304), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gülbahçe Koyu Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı.' FROM locations WHERE slug = 'gulbahce-koyu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- İçmekıyısı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'icmekiyisi-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-karaburun'),
+  'İçmekıyısı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.565936, 38.58166), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İçmekıyısı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'icmekiyisi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Kaynarpınar Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kaynarpinar-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-karaburun'),
+  'Kaynarpınar Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 55 tekne olarak yayımlanmış.',
+  ST_SetSRID(ST_MakePoint(26.569304, 38.560337), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  55, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kaynarpınar Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 55 tekne olarak yayımlanmış.' FROM locations WHERE slug = 'kaynarpinar-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902327313020', NULL, true
+FROM locations l WHERE l.slug = 'kaynarpinar-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Boyabağı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'boyabagi-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-karaburun'),
+  'Boyabağı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.565422, 38.573623), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Boyabağı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'boyabagi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Karareis Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karareis-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-karaburun'),
+  'Karareis Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.430833, 38.469167), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karareis Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'karareis-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ambarseki Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ambarseki-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-karaburun'),
+  'Ambarseki Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.524953, 38.630285), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  40, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ambarseki Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 40 tekne olarak yayımlanmış. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'ambarseki-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ambarseki-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902327313020', NULL, true
+FROM locations l WHERE l.slug = 'ambarseki-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Büyük (Saip) Ada Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'buyuk-saip-ada-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-karaburun'),
+  'Büyük (Saip) Ada Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.513982, 38.660843), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Büyük (Saip) Ada Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'buyuk-saip-ada-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902327313020', NULL, true
+FROM locations l WHERE l.slug = 'buyuk-saip-ada-koyu'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Karaburun Balıkçı Barınağı (İzmir) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karaburun-balikci-barinagi-karaburun', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-karaburun'),
+  'Karaburun Balıkçı Barınağı (İzmir)', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 65 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(26.362719, 38.658506), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  65, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karaburun Balıkçı Barınağı (İzmir)', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 65 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'karaburun-balikci-barinagi-karaburun'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'karaburun-balikci-barinagi-karaburun' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Bodrum Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bodrum-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-karaburun'),
+  'Bodrum Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.523938, 38.6365), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bodrum Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'bodrum-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902327313020', NULL, true
+FROM locations l WHERE l.slug = 'bodrum-koyu'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Saipköy Altı Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'saipkoy-alti-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-karaburun'),
+  'Saipköy Altı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 120 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(26.518002, 38.662735), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  120, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Saipköy Altı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 120 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'saipkoy-alti-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'saipkoy-alti-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Mimoza Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'mimoza-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-karaburun'),
+  'Mimoza Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.523992, 38.640185), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Mimoza Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'mimoza-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902327313020', NULL, true
+FROM locations l WHERE l.slug = 'mimoza-koyu'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kuyucak Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kuyucak-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-karaburun'),
+  'Kuyucak Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.507945, 38.652114), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kuyucak Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kuyucak-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902327313020', NULL, true
+FROM locations l WHERE l.slug = 'kuyucak-koyu'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Denizgiren Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'denizgiren-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-karaburun'),
+  'Denizgiren Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(26.362609, 38.568191), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Denizgiren Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'denizgiren-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'denizgiren-balikci-barinagi' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Kara Ada Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kara-ada-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-cesme'),
+  'Kara Ada Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.342303, 38.428198), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kara Ada Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kara-ada-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ildırı Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ildiri-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-cesme'),
+  'Ildırı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.428798, 38.390697), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ildırı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'ildiri-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ildiri-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902327126632', NULL, true
+FROM locations l WHERE l.slug = 'ildiri-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Paşa Lımanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'pasa-limani', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-cesme'),
+  'Paşa Lımanı', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.390101, 38.341972), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Paşa Lımanı', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'pasa-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ilıca - Yıldızburnu Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ilica-yildizburnu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-cesme'),
+  'Ilıca - Yıldızburnu Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 170 tekne olarak yayımlanmış. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.36119, 38.312425), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  170, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ilıca - Yıldızburnu Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 170 tekne olarak yayımlanmış. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'ilica-yildizburnu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ilica-yildizburnu-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902327126632', NULL, true
+FROM locations l WHERE l.slug = 'ilica-yildizburnu-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Reisdere Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'reisdere-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-cesme'),
+  'Reisdere Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.401795, 38.329416), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Reisdere Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'reisdere-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Westward Of Alaçatı Bay · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'westward-of-alacati-bay', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-cesme'),
+  'Westward Of Alaçatı Bay', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.246348, 38.267334), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Westward Of Alaçatı Bay', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'westward-of-alacati-bay'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Çiftlikköy Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ciftlikkoy-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-cesme'),
+  'Çiftlikköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 85 tekne olarak yayımlanmış. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.275749, 38.293177), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  85, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çiftlikköy Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 85 tekne olarak yayımlanmış. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'ciftlikkoy-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ciftlikkoy-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902327126632', NULL, true
+FROM locations l WHERE l.slug = 'ciftlikkoy-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Alaçatı Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'alacati-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-cesme'),
+  'Alaçatı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 145 tekne olarak yayımlanmış.',
+  ST_SetSRID(ST_MakePoint(26.39, 38.225556), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  145, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Alaçatı Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 145 tekne olarak yayımlanmış.' FROM locations WHERE slug = 'alacati-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902327126632', NULL, true
+FROM locations l WHERE l.slug = 'alacati-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Denizyıldızı Koyu (Bodrum) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'denizyildizi-bodrum-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Denizyıldızı Koyu (Bodrum)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.697431, 38.207341), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Denizyıldızı Koyu (Bodrum)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'denizyildizi-bodrum-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Demircili Koyu Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'demircili-koyu-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-urla'),
+  'Demircili Koyu Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı.',
+  ST_SetSRID(ST_MakePoint(26.686354, 38.207184), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Demircili Koyu Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı.' FROM locations WHERE slug = 'demircili-koyu-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Azmak Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'azmak-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-seferihisar'),
+  'Azmak Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.754222, 38.221164), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Azmak Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'azmak-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Gevil Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gevil-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-seferihisar'),
+  'Gevil Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.743157, 38.213311), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gevil Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'gevil-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Sığacık Çam Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sigacik-cam-limani', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-seferihisar'),
+  'Sığacık Çam Limanı', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.736889, 38.211665), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sığacık Çam Limanı', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'sigacik-cam-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Aktaş (Akvaryum) Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'aktas-akvaryum-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-seferihisar'),
+  'Aktaş (Akvaryum) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.765787, 38.216716), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Aktaş (Akvaryum) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'aktas-akvaryum-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Çamçağız Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'camcagiz-limani', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-seferihisar'),
+  'Çamçağız Limanı', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.772167, 38.208333), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çamçağız Limanı', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'camcagiz-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'camcagiz-limani' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Altınkoy (Ömerali) Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'altinkoy-omerali-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-seferihisar'),
+  'Altınkoy (Ömerali) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.720362, 38.208859), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Altınkoy (Ömerali) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'altinkoy-omerali-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Sığacık Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sigacik-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-seferihisar'),
+  'Sığacık Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(26.770365, 38.199962), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  150, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sığacık Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'sigacik-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'sigacik-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Sıcaksu Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sicaksu-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-seferihisar'),
+  'Sıcaksu Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.868277, 38.031788), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sıcaksu Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'sicaksu-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Akarca Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'akarca-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-seferihisar'),
+  'Akarca Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı.',
+  ST_SetSRID(ST_MakePoint(26.813641, 38.164132), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Akarca Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı.' FROM locations WHERE slug = 'akarca-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ürkmez Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'urkmez-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-seferihisar'),
+  'Ürkmez Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.962048, 38.074549), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ürkmez Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'urkmez-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Bölme (Körmen) Adası Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bolme-kormen-island-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-seferihisar'),
+  'Bölme (Körmen) Adası Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(26.865847, 38.030569), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bölme (Körmen) Adası Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'bolme-kormen-island-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Notıon Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'notion-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-menderes'),
+  'Notıon Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.197645, 37.989448), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Notıon Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'notion-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'notion-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Gümüldür Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gumuldur-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-menderes'),
+  'Gümüldür Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 50 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(26.994319, 38.067432), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  50, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gümüldür Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 50 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'gumuldur-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'gumuldur-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902327821006', NULL, true
+FROM locations l WHERE l.slug = 'gumuldur-balikci-barinagi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Özdere Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ozdere-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-menderes'),
+  'Özdere Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 80 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.10628, 38.009334), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  80, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Özdere Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 80 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'ozdere-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ozdere-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Kargacık Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kargacik-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-menderes'),
+  'Kargacık Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.170028, 37.983246), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kargacık Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'kargacik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kargacik-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Maydanoz Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'maydanoz-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-menderes'),
+  'Maydanoz Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.176722, 37.985771), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Maydanoz Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'maydanoz-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'maydanoz-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Yoncaköy Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yoncakoy-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-selcuk'),
+  'Yoncaköy Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.239075, 37.983892), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yoncaköy Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'yoncakoy-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'yoncakoy-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Çam Limanı (Kuşadası) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'cam-limani-kusadasi', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'aydin-kusadasi'),
+  'Çam Limanı (Kuşadası)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.26261, 37.911769), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çam Limanı (Kuşadası)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'cam-limani-kusadasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Klaros (Denizpınarı) Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'klaros-denizpinari-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-menderes'),
+  'Klaros (Denizpınarı) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.206067, 37.991277), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Klaros (Denizpınarı) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'klaros-denizpinari-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'klaros-denizpinari-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Davutlar Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'davutlar-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'aydin-kusadasi'),
+  'Davutlar Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 123 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.016789, 37.691788), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  123, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Davutlar Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 123 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'davutlar-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'davutlar-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Sandal Islet Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sandal-islet-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'aydin-didim'),
+  'Sandal Islet Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.016667, 37.65), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sandal Islet Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'sandal-islet-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Su Island Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'su-island-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'aydin-kusadasi'),
+  'Su Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.01051, 37.652168), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Su Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'su-island-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Sedef Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sedef-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'aydin-didim'),
+  'Sedef Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.215641, 37.393734), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sedef Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'sedef-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Taşburun (Akköy) Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tasburun-akkoy-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'aydin-didim'),
+  'Taşburun (Akköy) Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.219354, 37.455191), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  200, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Taşburun (Akköy) Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'tasburun-akkoy-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'tasburun-akkoy-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Çukurcuk Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'cukurcuk-limani', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'aydin-didim'),
+  'Çukurcuk Limanı', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.19223, 37.353834), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çukurcuk Limanı', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'cukurcuk-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Altınkum Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'altinkum-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'aydin-didim'),
+  'Altınkum Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.278124, 37.349811), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Altınkum Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'altinkum-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Saplı Island Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sapli-island-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'aydin-didim'),
+  'Saplı Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.409975, 37.411776), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Saplı Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'sapli-island-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Bozbük Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bozbuk-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
+  'Bozbük Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.390691, 37.326176), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bozbük Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'bozbuk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ardıçlıağıl Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ardicliagil-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
+  'Ardıçlıağıl Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.464444, 37.316389), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ardıçlıağıl Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'ardicliagil-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902525121416', NULL, true
+FROM locations l WHERE l.slug = 'ardicliagil-koyu'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Yarım Liman · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yarim-liman', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
+  'Yarım Liman', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.467222, 37.318333), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yarım Liman', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'yarim-liman'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902525121416', NULL, true
+FROM locations l WHERE l.slug = 'yarim-liman'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kaptan Han And İskelesi · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kaptan-han-and-iskelesi', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
+  'Kaptan Han And İskelesi', 'turkeymarinas rehberinde koordinatıyla belgelenmiş bağlanma yeri. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.4773, 37.34), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kaptan Han And İskelesi', 'turkeymarinas rehberinde koordinatıyla belgelenmiş bağlanma yeri. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'kaptan-han-and-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'kaptan-han-and-iskelesi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kaptan-han-and-iskelesi' AND a.code IN ('water', 'electricity', 'restaurant')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902525650022', NULL, true
+FROM locations l WHERE l.slug = 'kaptan-han-and-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Çam Limanı (Milas) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'cam-limani-milas', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
+  'Çam Limanı (Milas)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Yakıt tankerle iskeleye getirilir (kaynak) — sabit istasyon değildir.',
+  ST_SetSRID(ST_MakePoint(27.517894, 37.257533), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çam Limanı (Milas)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Yakıt tankerle iskeleye getirilir (kaynak) — sabit istasyon değildir.' FROM locations WHERE slug = 'cam-limani-milas'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Kazıklı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kazikli-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
+  'Kazıklı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.48, 37.32), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kazıklı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kazikli-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902525121416', NULL, true
+FROM locations l WHERE l.slug = 'kazikli-koyu'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Yamandı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yamandi-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
+  'Yamandı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.481667, 37.264444), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yamandı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'yamandi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902525121416', NULL, true
+FROM locations l WHERE l.slug = 'yamandi-koyu'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Harputlu Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'harputlu-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
+  'Harputlu Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.506944, 37.276389), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Harputlu Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'harputlu-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902525121416', NULL, true
+FROM locations l WHERE l.slug = 'harputlu-koyu'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Gök Liman · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gok-liman', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
+  'Gök Liman', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.525924, 37.239873), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gök Liman', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'gok-liman'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902525121416', NULL, true
+FROM locations l WHERE l.slug = 'gok-liman'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Maya Sitesi Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'maya-sitesi-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Maya Sitesi Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(27.539588, 37.186516), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Maya Sitesi Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'maya-sitesi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'maya-sitesi-koyu' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Derin Liman · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'derin-liman', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Derin Liman', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.413933, 37.130432), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Derin Liman', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'derin-liman'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Hebil Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'hebil-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Hebil Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.378524, 37.14468), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Hebil Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'hebil-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Küçükbük Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kucukbuk-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Küçükbük Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.35994, 37.147596), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Küçükbük Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kucukbuk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Tavşan Island Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tavsan-island-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Tavşan Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.233006, 37.052361), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Tavşan Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'tavsan-island-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Paşalimanı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'pasalimani-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Paşalimanı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.260242, 37.12868), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Paşalimanı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'pasalimani-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Karaincir Koyu (Bodrum) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karaincir-koyu-bodrum', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Karaincir Koyu (Bodrum)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.30171, 36.971455), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karaincir Koyu (Bodrum)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'karaincir-koyu-bodrum'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Bağla Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bagla-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Bağla Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.333521, 36.996571), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bağla Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'bagla-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Kargı (Camel) Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kargi-camel-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Kargı (Camel) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.359407, 37.010242), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kargı (Camel) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kargi-camel-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ortakent Yalısı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ortakent-yalisi-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Ortakent Yalısı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su, elektrik bulunur. Yakıt tankerle iskeleye getirilir (kaynak) — sabit istasyon değildir.',
+  ST_SetSRID(ST_MakePoint(27.355528, 37.019111), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ortakent Yalısı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su, elektrik bulunur. Yakıt tankerle iskeleye getirilir (kaynak) — sabit istasyon değildir.' FROM locations WHERE slug = 'ortakent-yalisi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ortakent-yalisi-koyu' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Yalıçiftlik Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yaliciftlik-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Yalıçiftlik Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.529709, 36.991822), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yalıçiftlik Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'yaliciftlik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Bardakçı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bardakci-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Bardakçı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.418167, 37.027875), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bardakçı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'bardakci-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Kargıcık Bükü · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kargicik-buku', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Kargıcık Bükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.569286, 36.988495), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kargıcık Bükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kargicik-buku'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Orak Island Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'orak-island-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Orak Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. VHF kanal 73.',
+  ST_SetSRID(ST_MakePoint(27.6, 36.966944), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Orak Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. VHF kanal 73.' FROM locations WHERE slug = 'orak-island-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Papuç Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'papuc-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
+  'Papuç Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.568426, 36.978476), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Papuç Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'papuc-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ayın Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ayin-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Ayın Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.140393, 36.925306), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ayın Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'ayin-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ballısu Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ballisu-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Ballısu Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(28.111415, 36.934418), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ballısu Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'ballisu-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'ballisu-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Çamlı Liman · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'camli-liman', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Çamlı Liman', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su, elektrik bulunur. Yakıt tankerle iskeleye getirilir (kaynak) — sabit istasyon değildir.',
+  ST_SetSRID(ST_MakePoint(28.234324, 37.000124), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çamlı Liman', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su, elektrik bulunur. Yakıt tankerle iskeleye getirilir (kaynak) — sabit istasyon değildir.' FROM locations WHERE slug = 'camli-liman'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'camli-liman' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Karaca Island Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karaca-island-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Karaca Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.194185, 36.96237), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karaca Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'karaca-island-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Çanak Koyu (Gökova) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'canak-koyu-gokova', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Çanak Koyu (Gökova)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.172818, 36.950126), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çanak Koyu (Gökova)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'canak-koyu-gokova'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Hırsız Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'hirsiz-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Hırsız Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.159167, 36.923333), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Hırsız Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'hirsiz-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Babuş Bükü · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'babus-buku', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Babuş Bükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.052746, 36.873322), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Babuş Bükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'babus-buku'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Küfre Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kufre-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Küfre Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.055964, 36.88065), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Küfre Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kufre-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Bekar Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bekar-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Bekar Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.029848, 36.858171), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Bekar Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'bekar-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Çamaltı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'camalti-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Çamaltı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.022417, 36.85987), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çamaltı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'camalti-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Maden Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'maden-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Maden Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.049641, 36.828521), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Maden Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'maden-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Çatı Coves Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'cati-coves-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
+  'Çatı Coves Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(28.021667, 36.792359), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çatı Coves Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'cati-coves-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'cati-coves-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Amazon Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'amazon-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Amazon Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.05027, 36.829924), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Amazon Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'amazon-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Gereme Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gereme-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
+  'Gereme Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.720821, 36.785496), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gereme Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'gereme-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Gerence (Armonika) Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gerence-armonika-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
+  'Gerence (Armonika) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.516491, 36.677672), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gerence (Armonika) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'gerence-armonika-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Değirmen Bükü · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'degirmen-buku', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
+  'Değirmen Bükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.405159, 36.713407), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Değirmen Bükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'degirmen-buku'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Murdala Bay · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'murdala-bay', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
+  'Murdala Bay', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.447884, 36.750241), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Murdala Bay', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'murdala-bay'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Kızılbük Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kizilbuk-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
+  'Kızılbük Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.576969, 36.683883), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kızılbük Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kizilbuk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Armutlu Su Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'armutlu-su-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
+  'Armutlu Su Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.676333, 36.689833), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Armutlu Su Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'armutlu-su-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'armutlu-su-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Karaincir Koyu (Datça) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karaincir-koyu-datca', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
+  'Karaincir Koyu (Datça)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.806145, 36.76313), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karaincir Koyu (Datça)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'karaincir-koyu-datca'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Perili Köşk Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'perili-kosk-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
+  'Perili Köşk Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.790764, 36.758757), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Perili Köşk Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'perili-kosk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Çiftlik Koyu (Datça) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ciftlik-koyu-datca', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
+  'Çiftlik Koyu (Datça)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.878389, 36.748378), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çiftlik Koyu (Datça)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'ciftlik-koyu-datca'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Gönlücek Bükü · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gonlucek-buku', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
+  'Gönlücek Bükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.956862, 36.755191), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gönlücek Bükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'gonlucek-buku'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Sucağız Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sucagiz-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Sucağız Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(28.055588, 36.762872), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sucağız Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'sucagiz-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'sucagiz-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Hurmalı Bük Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'hurmali-buk-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
+  'Hurmalı Bük Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(27.976468, 36.758757), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Hurmalı Bük Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'hurmali-buk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'hurmali-buk-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- İnbükü · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'inbuku', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'İnbükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.082862, 36.794952), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İnbükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'inbuku'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Çamurlu Koy Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'camurlu-koy-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Çamurlu Koy Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.075808, 36.788925), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çamurlu Koy Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'camurlu-koy-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Turgutköy Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'turgutkoy-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Turgutköy Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.107842, 36.768285), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Turgutköy Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'turgutkoy-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Çanak Koyu (Bozburun) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'canak-koyu-bozburun', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Çanak Koyu (Bozburun)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(27.971601, 36.675387), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çanak Koyu (Bozburun)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'canak-koyu-bozburun'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Sabrınas House And İskelesi · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sabrinas-house-and-iskelesi', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Sabrınas House And İskelesi', 'turkeymarinas rehberinde koordinatıyla belgelenmiş bağlanma yeri.',
+  ST_SetSRID(ST_MakePoint(28.049473, 36.677279), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sabrınas House And İskelesi', 'turkeymarinas rehberinde koordinatıyla belgelenmiş bağlanma yeri.' FROM locations WHERE slug = 'sabrinas-house-and-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'sabrinas-house-and-iskelesi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'sabrinas-house-and-iskelesi' AND a.code IN ('restaurant')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902524562045', NULL, true
+FROM locations l WHERE l.slug = 'sabrinas-house-and-iskelesi'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kiseli Adası · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kiseli-adasi', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Kiseli Adası', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.04098, 36.67142), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kiseli Adası', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kiseli-adasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Burgaz Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'burgaz-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Burgaz Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.035824, 36.687033), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Burgaz Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'burgaz-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Kertibükü · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kertibuku', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Kertibükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.038939, 36.677018), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kertibükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kertibuku'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Kızılada Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kizilada-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Kızılada Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.036539, 36.667214), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kızılada Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kizilada-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ada Boğazı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ada-bogazi-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Ada Boğazı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.037911, 36.669337), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ada Boğazı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'ada-bogazi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Datbükü · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'datbuku', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Datbükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.043906, 36.658074), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Datbükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'datbuku'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Söğüt Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sogut-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Söğüt Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(28.070847, 36.632769), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Söğüt Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'sogut-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'sogut-koyu' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Vılla Julıa İskelesi · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'villa-julia-iskelesi', 5, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Vılla Julıa İskelesi', 'turkeymarinas rehberinde koordinatıyla belgelenmiş bağlanma yeri.',
+  ST_SetSRID(ST_MakePoint(28.081637, 36.661073), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Vılla Julıa İskelesi', 'turkeymarinas rehberinde koordinatıyla belgelenmiş bağlanma yeri.' FROM locations WHERE slug = 'villa-julia-iskelesi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO restaurant_dock_details (location_id, cuisine, berth_count_free, min_spend_policy, reservation_recommended)
+SELECT id, NULL, NULL, NULL, NULL
+FROM locations WHERE slug = 'villa-julia-iskelesi'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'villa-julia-iskelesi' AND a.code IN ('restaurant')
+ON CONFLICT DO NOTHING;
+
+-- --- Korsan Cove Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'korsan-cove-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Korsan Cove Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.040485, 36.569013), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Korsan Cove Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'korsan-cove-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Gerbeske Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gerbeske-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Gerbeske Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.22916, 36.695749), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gerbeske Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'gerbeske-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Arap Island Cove Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'arap-island-cove-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Arap Island Cove Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.14599, 36.648827), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Arap Island Cove Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'arap-island-cove-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Turunç Bükü · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'turunc-buku', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Turunç Bükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(28.302911, 36.730562), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Turunç Bükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'turunc-buku'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'turunc-buku' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Asarcık (Gökçe) Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'asarcik-gokce-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Asarcık (Gökçe) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.267832, 36.760485), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Asarcık (Gökçe) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'asarcik-gokce-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Pupa Yat Marina · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'pupa-yat-marina', 1, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Pupa Yat Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. VHF kanal 72. Kaynağa göre yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(28.310556, 36.828889), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Pupa Yat Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. VHF kanal 72. Kaynağa göre yakıt bulunur.' FROM locations WHERE slug = 'pupa-yat-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '72', NULL, NULL, NULL
+FROM locations WHERE slug = 'pupa-yat-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'pupa-yat-marina' AND a.code IN ('fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Yıldız Island Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yildiz-island-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Yıldız Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.283911, 36.81934), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yıldız Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'yildiz-island-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ada Ağzı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ada-agzi-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Ada Ağzı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.310165, 36.826791), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ada Ağzı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'ada-agzi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Abdireis Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'abdireis-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
+  'Abdireis Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.28255, 36.794063), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Abdireis Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'abdireis-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Semizce Coves Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'semizce-coves-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-koycegiz'),
+  'Semizce Coves Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.537154, 36.797826), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Semizce Coves Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'semizce-coves-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Kargı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kargi-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-koycegiz'),
+  'Kargı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.54115, 36.805676), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kargı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kargi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Delik Island Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'delik-island-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-koycegiz'),
+  'Delik Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.595886, 36.795975), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Delik Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'delik-island-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Aşı İçi Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'asi-ici-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mugla'),
+  'Aşı İçi Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(28.648451, 36.722276), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Aşı İçi Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'asi-ici-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'asi-ici-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Kargıcak Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kargicak-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mugla'),
+  'Kargıcak Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.632809, 36.755107), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kargıcak Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kargicak-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Baba Island Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'baba-island-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mugla'),
+  'Baba Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.693306, 36.693278), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Baba Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'baba-island-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Domuz Island Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'domuz-island-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-dalaman'),
+  'Domuz Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.900769, 36.668278), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Domuz Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'domuz-island-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Hacıdede Deresi Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'hacidede-deresi-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-dalaman'),
+  'Hacıdede Deresi Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.90542, 36.669409), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Hacıdede Deresi Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'hacidede-deresi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Sarıgerme Bay · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'sarigerme-bay', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'mugla'),
+  'Sarıgerme Bay', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.695477, 36.700255), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Sarıgerme Bay', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'sarigerme-bay'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ragged Bay · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ragged-bay', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-dalaman'),
+  'Ragged Bay', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.887073, 36.633023), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ragged Bay', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'ragged-bay'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Küçük Kuyruk Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kucuk-kuyruk-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-dalaman'),
+  'Küçük Kuyruk Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.880985, 36.629691), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Küçük Kuyruk Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kucuk-kuyruk-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Zeytinli Island Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'zeytinli-island-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Zeytinli Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.926172, 36.700167), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Zeytinli Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'zeytinli-island-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Şeytanlı Island Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'seytanli-island-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Şeytanlı Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.931419, 36.697449), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Şeytanlı Island Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'seytanli-island-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Poruklu Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'poruklu-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Poruklu Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(28.925701, 36.742045), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Poruklu Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'poruklu-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'poruklu-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Çığlık Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ciglik-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Çığlık Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(29.001562, 36.710844), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çığlık Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'ciglik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Inlıce Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'inlice-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Inlıce Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(28.969574, 36.727223), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Inlıce Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'inlice-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Mersin Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'mersin-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Mersin Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(29.08902, 36.5636), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Mersin Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'mersin-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Aksazlar Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'aksazlar-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Aksazlar Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(29.094082, 36.630906), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Aksazlar Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre elektrik bulunur.' FROM locations WHERE slug = 'aksazlar-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'aksazlar-koyu' AND a.code IN ('electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Kuleli Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kuleli-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Kuleli Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(29.076371, 36.644297), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kuleli Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre elektrik bulunur.' FROM locations WHERE slug = 'kuleli-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kuleli-koyu' AND a.code IN ('electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Karacaören Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karacaoren-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Karacaören Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(29.011128, 36.54443), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karacaören Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'karacaoren-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Kabak Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kabak-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Kabak Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(29.123992, 36.461173), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kabak Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kabak-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Dead Sea Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'dead-sea-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
+  'Dead Sea Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(29.110942, 36.546599), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Dead Sea Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre elektrik bulunur.' FROM locations WHERE slug = 'dead-sea-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'dead-sea-koyu' AND a.code IN ('electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Patara Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'patara-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'antalya'),
+  'Patara Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(29.312078, 36.252383), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Patara Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'patara-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902428361238', NULL, true
+FROM locations l WHERE l.slug = 'patara-koyu'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Kalamar Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kalamar-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kas'),
+  'Kalamar Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(29.393168, 36.263444), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kalamar Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'kalamar-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kalamar-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Çamlık Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'camlik-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kas'),
+  'Çamlık Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(29.905939, 36.220419), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çamlık Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'camlik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Kaş Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kas-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kas'),
+  'Kaş Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 73. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(29.643147, 36.196717), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kaş Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 73. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'kas-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'kas-balikci-barinagi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Polemos Bükü · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'polemos-buku', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kas'),
+  'Polemos Bükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(29.815111, 36.170111), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Polemos Bükü', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'polemos-buku'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Kisle Boğazı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kisle-bogazi-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kas'),
+  'Kisle Boğazı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(29.816667, 36.175), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kisle Boğazı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kisle-bogazi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Fakdere Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'fakdere-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kas'),
+  'Fakdere Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(29.666667, 36.150833), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Fakdere Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'fakdere-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Hamidiye Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'hamidiye-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kas'),
+  'Hamidiye Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(29.87, 36.193333), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Hamidiye Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'hamidiye-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Değirmenlik Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'degirmenlik-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kas'),
+  'Değirmenlik Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(29.823417, 36.18125), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Değirmenlik Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'degirmenlik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Asar (Aperlai) Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'asar-aperlai-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kas'),
+  'Asar (Aperlai) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(29.783333, 36.158333), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Asar (Aperlai) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'asar-aperlai-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'asar-aperlai-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Yağlıca Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yaglica-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kas'),
+  'Yağlıca Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(29.782127, 36.141346), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yağlıca Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'yaglica-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Akliman · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'akliman', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-finike'),
+  'Akliman', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(30.117998, 36.251019), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Akliman', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'akliman'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Gökliman (Finike) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'gokliman-finike', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-finike'),
+  'Gökliman (Finike)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(30.138559, 36.273627), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Gökliman (Finike)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'gokliman-finike'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Andrea Dorıa Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'andrea-doria-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-finike'),
+  'Andrea Dorıa Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(30.151185, 36.27409), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Andrea Dorıa Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'andrea-doria-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Buzağlık Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'buzaglik-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-demre'),
+  'Buzağlık Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(29.9045, 36.226167), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Buzağlık Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'buzaglik-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Aşırlı Adası · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'asirli-adasi', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-demre'),
+  'Aşırlı Adası', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(29.9011, 36.2106), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Aşırlı Adası', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'asirli-adasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Çayağzı Balıkçı Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'cayagzi-fisher-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-demre'),
+  'Çayağzı Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı.',
+  ST_SetSRID(ST_MakePoint(29.940616, 36.223951), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çayağzı Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı.' FROM locations WHERE slug = 'cayagzi-fisher-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902428715128', NULL, true
+FROM locations l WHERE l.slug = 'cayagzi-fisher-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Papaz Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'papaz-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kumluca'),
+  'Papaz Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(30.391386, 36.275039), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Papaz Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'papaz-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Karaöz Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karaoz-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kumluca'),
+  'Karaöz Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(30.407445, 36.271784), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karaöz Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'karaoz-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Korsan Koyu (Kumluca) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'korsan-koyu-kumluca', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kumluca'),
+  'Korsan Koyu (Kumluca)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(30.407723, 36.256607), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Korsan Koyu (Kumluca)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'korsan-koyu-kumluca'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Suluada Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'suluada-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kumluca'),
+  'Suluada Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(30.409673, 36.219165), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Suluada Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'suluada-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Pırasalı Adası · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'pirasali-adasi', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kumluca'),
+  'Pırasalı Adası', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(30.53217, 36.335086), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Pırasalı Adası', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'pirasali-adasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'pirasali-adasi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Olımpos Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'olimpos-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kumluca'),
+  'Olımpos Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(30.476705, 36.396874), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Olımpos Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'olimpos-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Alacasu (Cennet) Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'alacasu-cennet-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kemer'),
+  'Alacasu (Cennet) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(30.560459, 36.535358), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Alacasu (Cennet) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'alacasu-cennet-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'alacasu-cennet-koyu' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- İnce Burun Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ince-burun-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kemer'),
+  'İnce Burun Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(30.564282, 36.533544), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İnce Burun Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'ince-burun-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Çıralı Liman Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'cirali-liman-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kemer'),
+  'Çıralı Liman Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(30.488365, 36.417159), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çıralı Liman Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'cirali-liman-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+902428141503', NULL, true
+FROM locations l WHERE l.slug = 'cirali-liman-koyu'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Tatlısu Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tatlisu-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kemer'),
+  'Tatlısu Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(30.509243, 36.46719), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Tatlısu Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'tatlisu-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ayışığı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ayisigi-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kemer'),
+  'Ayışığı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(30.58177, 36.599088), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ayışığı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'ayisigi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Atbükü (Maden) Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'atbuku-maden-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kemer'),
+  'Atbükü (Maden) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(30.483667, 36.433833), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Atbükü (Maden) Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'atbuku-maden-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Yeni Liman Balıkçı Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yeni-liman-fisher-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-konyaalti'),
+  'Yeni Liman Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 366 tekne olarak yayımlanmış. Kaynak derinliği 4–8 m veriyor. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(30.584614, 36.801909), 4326)::geography,
+  NULL, NULL, 4, 8,
+  366, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yeni Liman Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 366 tekne olarak yayımlanmış. Kaynak derinliği 4–8 m veriyor. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'yeni-liman-fisher-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'yeni-liman-fisher-limani' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Side Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'side-fish-harbour-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-manavgat'),
+  'Side Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(31.384875, 36.766548), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  150, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Side Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 150 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'side-fish-harbour-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'side-fish-harbour-balikci-barinagi' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Toslaklar Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'toslaklar-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-bozyazi'),
+  'Toslaklar Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(33.026302, 36.093935), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Toslaklar Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'toslaklar-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Tekmen Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tekmen-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-bozyazi'),
+  'Tekmen Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(33.11004981, 36.10957362), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Tekmen Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'tekmen-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Tekeli Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'tekeli-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-bozyazi'),
+  'Tekeli Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(33.144951, 36.133466), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Tekeli Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'tekeli-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Kızlarhamamı Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kizlarhamami-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-silifke'),
+  'Kızlarhamamı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(34.111895, 36.433767), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kızlarhamamı Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kizlarhamami-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Yoğunduvar Balıkçı Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yogunduvar-fisher-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-bozyazi'),
+  'Yoğunduvar Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 250 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(32.942314, 36.098504), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  250, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yoğunduvar Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 250 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'yogunduvar-fisher-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'yogunduvar-fisher-limani' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Akyar Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'akyar-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-silifke'),
+  'Akyar Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(34.112496, 36.436348), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Akyar Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'akyar-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Narlıkuyu Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'narlikuyu-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-silifke'),
+  'Narlıkuyu Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(34.114162, 36.443793), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Narlıkuyu Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'narlikuyu-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Yapraklı Koy Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yaprakli-koy-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-silifke'),
+  'Yapraklı Koy Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(34.090722, 36.419778), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yapraklı Koy Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'yaprakli-koy-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Barbaros Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'barbaros-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-silifke'),
+  'Barbaros Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(33.805632, 36.242107), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Barbaros Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'barbaros-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Susanoğlu Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'susanoglu-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-silifke'),
+  'Susanoğlu Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(34.0868, 36.417162), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Susanoğlu Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'susanoglu-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Dana Adası · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'dana-adasi', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-silifke'),
+  'Dana Adası', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(33.764838, 36.192035), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Dana Adası', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'dana-adasi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'dana-adasi' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Korsan Koyu (Silifke) · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'korsan-koyu-silifke', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-silifke'),
+  'Korsan Koyu (Silifke)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(33.683388, 36.157085), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Korsan Koyu (Silifke)', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'korsan-koyu-silifke'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Yeşilovacık Balıkçı Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yesilovacik-fisher-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-silifke'),
+  'Yeşilovacık Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 260 tekne olarak yayımlanmış. VHF kanal 72. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(33.683608, 36.134478), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  260, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yeşilovacık Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 260 tekne olarak yayımlanmış. VHF kanal 72. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'yesilovacik-fisher-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'yesilovacik-fisher-limani' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Cleopatra Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'cleopatra-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-silifke'),
+  'Cleopatra Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(33.688323, 36.158749), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Cleopatra Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'cleopatra-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Boğsak Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'bogsak-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-silifke'),
+  'Boğsak Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(33.815928, 36.270981), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Boğsak Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'bogsak-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Ayaş Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'ayas-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-erdemli'),
+  'Ayaş Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(34.178867, 36.484712), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Ayaş Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'ayas-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Akkum Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'akkum-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-erdemli'),
+  'Akkum Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(34.133592, 36.459004), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Akkum Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'akkum-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Limonlu Balıkçı Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'limonlu-fisher-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-erdemli'),
+  'Limonlu Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(34.257278, 36.564833), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Limonlu Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'limonlu-fisher-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'limonlu-fisher-limani' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+INSERT INTO location_contacts (id, location_id, contact_type, value, label, is_primary)
+SELECT gen_random_uuid(), l.id, 'phone', '+903245151017', NULL, true
+FROM locations l WHERE l.slug = 'limonlu-fisher-limani'
+ON CONFLICT (location_id, contact_type, value) DO NOTHING;
+
+-- --- Erdemli Balıkçı Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'erdemli-fisher-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-erdemli'),
+  'Erdemli Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 100 tekne olarak yayımlanmış. VHF kanal 72. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(34.325681, 36.607789), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  100, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Erdemli Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 100 tekne olarak yayımlanmış. VHF kanal 72. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'erdemli-fisher-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'erdemli-fisher-limani' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Kızkalesi Koyu · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'kizkalesi-koyu', 8, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-erdemli'),
+  'Kızkalesi Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.',
+  ST_SetSRID(ST_MakePoint(34.149288, 36.462916), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Kızkalesi Koyu', 'turkeymarinas rehberinde koordinatıyla belgelenmiş demirleme koyu.' FROM locations WHERE slug = 'kizkalesi-koyu'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+
+-- --- Karaduvar Balıkçı Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karaduvar-fisher-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-akdeniz'),
+  'Karaduvar Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 250 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(34.697199, 36.805152), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  250, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karaduvar Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 250 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'karaduvar-fisher-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'karaduvar-fisher-limani' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
+-- --- Çamlıbel Marina · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'camlibel-marina', 2, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-akdeniz'),
+  'Çamlıbel Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(34.627719, 36.790846), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  NULL, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çamlıbel Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'camlibel-marina'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO marina_details (location_id, berth_count, vhf_channel, has_blue_flag,
+  travel_lift_capacity_tons, winter_storage)
+SELECT id, NULL, '16', NULL, NULL, NULL
+FROM locations WHERE slug = 'camlibel-marina'
+ON CONFLICT (location_id) DO NOTHING;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'camlibel-marina' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Yumurtalık Balıkçı Barınağı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'yumurtalik-balikci-barinagi', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'adana-yumurtalik'),
+  'Yumurtalık Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 105 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(35.793329, 36.767309), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  105, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Yumurtalık Balıkçı Barınağı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 105 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'yumurtalik-balikci-barinagi'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'yumurtalik-balikci-barinagi' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Karataş Balıkçı Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'karatas-fisher-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'adana-karatas'),
+  'Karataş Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 245 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(35.339459, 36.53942), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  245, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Karataş Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 245 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'karatas-fisher-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'karatas-fisher-limani' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Çevlik Balıkçı Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'cevlik-fisher-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'hatay-samandag'),
+  'Çevlik Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 300 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(35.911389, 36.127778), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  300, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Çevlik Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 300 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'cevlik-fisher-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'cevlik-fisher-limani' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- Dörtyol Balıkçı Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'dortyol-fisher-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'hatay-dortyol'),
+  'Dörtyol Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 300 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.',
+  ST_SetSRID(ST_MakePoint(36.168693, 36.822402), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  300, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Dörtyol Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 300 tekne olarak yayımlanmış. VHF kanal 73. Kaynağa göre su, elektrik, yakıt bulunur.' FROM locations WHERE slug = 'dortyol-fisher-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'dortyol-fisher-limani' AND a.code IN ('water', 'electricity', 'fuel')
+ON CONFLICT DO NOTHING;
+
+-- --- Işıklı Konacık Balıkçı Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'isikli-konacik-fisher-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'hatay'),
+  'Işıklı Konacık Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
+  ST_SetSRID(ST_MakePoint(35.782067, 36.320234), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  200, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'Işıklı Konacık Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.' FROM locations WHERE slug = 'isikli-konacik-fisher-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'isikli-konacik-fisher-limani' AND a.code IN ('water', 'electricity')
+ON CONFLICT DO NOTHING;
+
+-- --- İskenderun Balıkçı Limanı · güven: medium · kaynak: turkeymarinas.blogspot.com ---
+INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_area_id,
+  name, description, position, max_boat_length_m, max_draft_m, depth_min_m, depth_max_m,
+  capacity, price_tier, source)
+SELECT gen_random_uuid(), 'iskenderun-fisher-limani', 3, 'published', 'TR',
+  (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'hatay-iskenderun'),
+  'İskenderun Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 300 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
+  ST_SetSRID(ST_MakePoint(36.037778, 36.533056), 4326)::geography,
+  NULL, NULL, NULL, NULL,
+  300, 'paid', 'import'
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO location_i18n (location_id, locale, name, description)
+SELECT id, 'tr', 'İskenderun Balıkçı Limanı', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş balıkçı barınağı/limanı. Kaynakta kapasite 300 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.' FROM locations WHERE slug = 'iskenderun-fisher-limani'
+ON CONFLICT (location_id, locale) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description;
+INSERT INTO location_amenities (location_id, amenity_id)
+SELECT l.id, a.id FROM locations l, amenities a
+WHERE l.slug = 'iskenderun-fisher-limani' AND a.code IN ('water')
+ON CONFLICT DO NOTHING;
+
 
 -- ======================================================================
 -- RÜZGÂRA AÇIK YÖNLER — uyarı rozeti verisi (açıklamalardan, elle onaylı).
@@ -16929,6 +22495,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/aegina-limani/kapak')
 WHERE slug = 'aegina-limani' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/aegina-limani/kapak');
+-- --- akarca-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/akarca-balikci-barinagi/kapak', 'image/jpeg', 1280, 857,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Seferihisar_-_Akarca_-_panoramio.jpg/1280px-Seferihisar_-_Akarca_-_panoramio.jpg', 'Yağmur Aydın', 'CC BY-SA 3.0', 'https://commons.wikimedia.org/wiki/File:Seferihisar_-_Akarca_-_panoramio.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'akarca-balikci-barinagi' AND m.storage_key = 'ext/akarca-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/akarca-balikci-barinagi/kapak')
+WHERE slug = 'akarca-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/akarca-balikci-barinagi/kapak');
 -- --- alanya-marina ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -16965,6 +22549,60 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/antalya-kaleici-yat-limani/kapak')
 WHERE slug = 'antalya-kaleici-yat-limani' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/antalya-kaleici-yat-limani/kapak');
+-- --- asagiyapici-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/asagiyapici-balikci-barinagi/kapak', 'image/jpeg', 1280, 808,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Asagiyap%C4%B1c%C4%B1_koyunun_gorunusu.jpg/1280px-Asagiyap%C4%B1c%C4%B1_koyunun_gorunusu.jpg', 'AycanD', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Asagiyap%C4%B1c%C4%B1_koyunun_gorunusu.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'asagiyapici-balikci-barinagi' AND m.storage_key = 'ext/asagiyapici-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/asagiyapici-balikci-barinagi/kapak')
+WHERE slug = 'asagiyapici-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/asagiyapici-balikci-barinagi/kapak');
+-- --- baba-island-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/baba-island-koyu/kapak', 'image/jpeg', 1280, 853,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Old_lighthouse_on_Baba_Adasi_island_with_a_view_of_Sarigerme,_Turkey_(49070263193).jpg/1280px-Old_lighthouse_on_Baba_Adasi_island_with_a_view_of_Sarigerme,_Turkey_(49070263193).jpg', 'dronepicr', 'CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:Old_lighthouse_on_Baba_Adasi_island_with_a_view_of_Sarigerme,_Turkey_(49070263193).jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'baba-island-koyu' AND m.storage_key = 'ext/baba-island-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/baba-island-koyu/kapak')
+WHERE slug = 'baba-island-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/baba-island-koyu/kapak');
+-- --- bardakci-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/bardakci-koyu/kapak', 'image/jpeg', 1280, 1209,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Bardak%C3%A7%C4%B1_Beach.jpg/1280px-Bardak%C3%A7%C4%B1_Beach.jpg', 'Vano111ru', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Bardak%C3%A7%C4%B1_Beach.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'bardakci-koyu' AND m.storage_key = 'ext/bardakci-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/bardakci-koyu/kapak')
+WHERE slug = 'bardakci-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/bardakci-koyu/kapak');
 -- --- bedri-rahmi-samandira-sahasi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17001,6 +22639,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/binlik-samandira-sahasi/kapak')
 WHERE slug = 'binlik-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/binlik-samandira-sahasi/kapak');
+-- --- bogsak-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/bogsak-koyu/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Bo%C4%9Fsak_Island.jpg/1280px-Bo%C4%9Fsak_Island.jpg', 'Yasirarslan', 'Public domain', 'https://commons.wikimedia.org/wiki/File:Bo%C4%9Fsak_Island.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'bogsak-koyu' AND m.storage_key = 'ext/bogsak-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/bogsak-koyu/kapak')
+WHERE slug = 'bogsak-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/bogsak-koyu/kapak');
 -- --- boynuzbuku-samandira-sahasi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17091,6 +22747,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/buyukova-samandira-sahasi/kapak')
 WHERE slug = 'buyukova-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/buyukova-samandira-sahasi/kapak');
+-- --- cinarcik-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/cinarcik-balikci-barinagi/kapak', 'image/jpeg', 1280, 853,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/%C3%87%C4%B1narc%C4%B1k_-_panoramio_(39).jpg/1280px-%C3%87%C4%B1narc%C4%B1k_-_panoramio_(39).jpg', 'M. PINARCI', 'CC BY-SA 3.0', 'https://commons.wikimedia.org/wiki/File:%C3%87%C4%B1narc%C4%B1k_-_panoramio_(39).jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'cinarcik-balikci-barinagi' AND m.storage_key = 'ext/cinarcik-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/cinarcik-balikci-barinagi/kapak')
+WHERE slug = 'cinarcik-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/cinarcik-balikci-barinagi/kapak');
 -- --- d-marin-gocek ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17127,6 +22801,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/d-marin-turgutreis/kapak')
 WHERE slug = 'd-marin-turgutreis' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/d-marin-turgutreis/kapak');
+-- --- dana-adasi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/dana-adasi/kapak', 'image/jpeg', 1280, 720,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Dana_Adas%C4%B1_-_panoramio.jpg/1280px-Dana_Adas%C4%B1_-_panoramio.jpg', 'Yılmaz Kilim', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:Dana_Adas%C4%B1_-_panoramio.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'dana-adasi' AND m.storage_key = 'ext/dana-adasi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/dana-adasi/kapak')
+WHERE slug = 'dana-adasi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/dana-adasi/kapak');
 -- --- datca-yat-limani ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17145,6 +22837,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/datca-yat-limani/kapak')
 WHERE slug = 'datca-yat-limani' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/datca-yat-limani/kapak');
+-- --- davutlar-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/davutlar-balikci-barinagi/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Sunset_davutlar_coast.jpg/1280px-Sunset_davutlar_coast.jpg', 'Omur Tanyel', 'CC BY-SA 3.0', 'https://commons.wikimedia.org/wiki/File:Sunset_davutlar_coast.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'davutlar-balikci-barinagi' AND m.storage_key = 'ext/davutlar-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/davutlar-balikci-barinagi/kapak')
+WHERE slug = 'davutlar-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/davutlar-balikci-barinagi/kapak');
 -- --- degirmen-buku-ingiliz-limani ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17163,6 +22873,78 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/degirmen-buku-ingiliz-limani/kapak')
 WHERE slug = 'degirmen-buku-ingiliz-limani' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/degirmen-buku-ingiliz-limani/kapak');
+-- --- denizkoy-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/denizkoy-koyu/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Denizk%C3%B6y,_Dikili.jpg/1280px-Denizk%C3%B6y,_Dikili.jpg', 'Kadı', 'CC BY 4.0', 'https://commons.wikimedia.org/wiki/File:Denizk%C3%B6y,_Dikili.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'denizkoy-koyu' AND m.storage_key = 'ext/denizkoy-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/denizkoy-koyu/kapak')
+WHERE slug = 'denizkoy-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/denizkoy-koyu/kapak');
+-- --- domuz-island-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/domuz-island-koyu/kapak', 'image/jpeg', 1280, 720,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Domuz_Adas%C4%B1_-_panoramio.jpg/1280px-Domuz_Adas%C4%B1_-_panoramio.jpg', 'Jorge Franganillo', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:Domuz_Adas%C4%B1_-_panoramio.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'domuz-island-koyu' AND m.storage_key = 'ext/domuz-island-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/domuz-island-koyu/kapak')
+WHERE slug = 'domuz-island-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/domuz-island-koyu/kapak');
+-- --- eceabat-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/eceabat-balikci-barinagi/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Eceabat_in_2003_1404.jpg/1280px-Eceabat_in_2003_1404.jpg', 'Dosseman', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Eceabat_in_2003_1404.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'eceabat-balikci-barinagi' AND m.storage_key = 'ext/eceabat-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/eceabat-balikci-barinagi/kapak')
+WHERE slug = 'eceabat-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/eceabat-balikci-barinagi/kapak');
+-- --- enez-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/enez-balikci-barinagi/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Enez_Liman%C4%B1..._-_panoramio.jpg/1280px-Enez_Liman%C4%B1..._-_panoramio.jpg', 'Sinan Şahin', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:Enez_Liman%C4%B1..._-_panoramio.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'enez-balikci-barinagi' AND m.storage_key = 'ext/enez-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/enez-balikci-barinagi/kapak')
+WHERE slug = 'enez-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/enez-balikci-barinagi/kapak');
 -- --- ermoupoli-limani-syros ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17181,6 +22963,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/ermoupoli-limani-syros/kapak')
 WHERE slug = 'ermoupoli-limani-syros' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/ermoupoli-limani-syros/kapak');
+-- --- esenkoy-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/esenkoy-balikci-barinagi/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Esenk%C3%B6y,%C3%87%C4%B1narc%C4%B1k,Yalova.jpg/1280px-Esenk%C3%B6y,%C3%87%C4%B1narc%C4%B1k,Yalova.jpg', 'Eneshamdi2007', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Esenk%C3%B6y,%C3%87%C4%B1narc%C4%B1k,Yalova.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'esenkoy-balikci-barinagi' AND m.storage_key = 'ext/esenkoy-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/esenkoy-balikci-barinagi/kapak')
+WHERE slug = 'esenkoy-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/esenkoy-balikci-barinagi/kapak');
 -- --- fethiye-limani ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17253,6 +23053,42 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/gaios-limani-paksos/kapak')
 WHERE slug = 'gaios-limani-paksos' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/gaios-limani-paksos/kapak');
+-- --- garipce-village-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/garipce-village-balikci-barinagi/kapak', 'image/jpeg', 1280, 853,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Garip%C3%A7e,_Sar%C4%B1yer.jpg/1280px-Garip%C3%A7e,_Sar%C4%B1yer.jpg', 'Maurice Flesier', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Garip%C3%A7e,_Sar%C4%B1yer.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'garipce-village-balikci-barinagi' AND m.storage_key = 'ext/garipce-village-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/garipce-village-balikci-barinagi/kapak')
+WHERE slug = 'garipce-village-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/garipce-village-balikci-barinagi/kapak');
+-- --- gemlik-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/gemlik-balikci-barinagi/kapak', 'image/jpeg', 1280, 781,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Gemlik_liman%C4%B1_gemlik_bursa_-_panoramio.jpg/1280px-Gemlik_liman%C4%B1_gemlik_bursa_-_panoramio.jpg', 'Mustafa DUMAN', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:Gemlik_liman%C4%B1_gemlik_bursa_-_panoramio.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'gemlik-balikci-barinagi' AND m.storage_key = 'ext/gemlik-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/gemlik-balikci-barinagi/kapak')
+WHERE slug = 'gemlik-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/gemlik-balikci-barinagi/kapak');
 -- --- gobun-samandira-sahasi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17379,6 +23215,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/gumusluk-iskeleleri/kapak')
 WHERE slug = 'gumusluk-iskeleleri' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/gumusluk-iskeleleri/kapak');
+-- --- guneyli-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/guneyli-balikci-barinagi/kapak', 'image/jpeg', 1280, 853,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Saros_G%C3%BCneylide_G%C3%BCnbat%C4%B1m%C4%B1_2.jpg/1280px-Saros_G%C3%BCneylide_G%C3%BCnbat%C4%B1m%C4%B1_2.jpg', 'Hamdigumus', 'CC0 1.0', 'https://commons.wikimedia.org/wiki/File:Saros_G%C3%BCneylide_G%C3%BCnbat%C4%B1m%C4%B1_2.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'guneyli-balikci-barinagi' AND m.storage_key = 'ext/guneyli-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/guneyli-balikci-barinagi/kapak')
+WHERE slug = 'guneyli-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/guneyli-balikci-barinagi/kapak');
 -- --- gunluk-atbuku-samandira-sahasi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17415,6 +23269,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/gunluklu-koyu-demirleme/kapak')
 WHERE slug = 'gunluklu-koyu-demirleme' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/gunluklu-koyu-demirleme/kapak');
+-- --- guzelbahce-fishing-harbour-and-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/guzelbahce-fishing-harbour-and-balikci-barinagi/kapak', 'image/jpeg', 1280, 959,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/G%C3%BCzelbah%C3%A7e_%C4%B0skelesi_(2).jpg/1280px-G%C3%BCzelbah%C3%A7e_%C4%B0skelesi_(2).jpg', 'BSRF', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:G%C3%BCzelbah%C3%A7e_%C4%B0skelesi_(2).jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'guzelbahce-fishing-harbour-and-balikci-barinagi' AND m.storage_key = 'ext/guzelbahce-fishing-harbour-and-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/guzelbahce-fishing-harbour-and-balikci-barinagi/kapak')
+WHERE slug = 'guzelbahce-fishing-harbour-and-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/guzelbahce-fishing-harbour-and-balikci-barinagi/kapak');
 -- --- halki-emporios-rihtimi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17523,6 +23395,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/kandiye-limani-girit/kapak')
 WHERE slug = 'kandiye-limani-girit' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/kandiye-limani-girit/kapak');
+-- --- karatas-fisher-limani ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/karatas-fisher-limani/kapak', 'image/jpeg', 1280, 829,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Port_of_Karata%C5%9F_03.jpg/1280px-Port_of_Karata%C5%9F_03.jpg', 'Zeynel Cebeci', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Port_of_Karata%C5%9F_03.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'karatas-fisher-limani' AND m.storage_key = 'ext/karatas-fisher-limani/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/karatas-fisher-limani/kapak')
+WHERE slug = 'karatas-fisher-limani' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/karatas-fisher-limani/kapak');
 -- --- kas-belediye-limani ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17577,6 +23467,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/katranci-koyu/kapak')
 WHERE slug = 'katranci-koyu' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/katranci-koyu/kapak');
+-- --- kaynarpinar-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/kaynarpinar-balikci-barinagi/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Kaynarp%C4%B1nar.jpg/1280px-Kaynarp%C4%B1nar.jpg', 'Atacameño', 'CC BY-SA 3.0', 'https://commons.wikimedia.org/wiki/File:Kaynarp%C4%B1nar.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'kaynarpinar-balikci-barinagi' AND m.storage_key = 'ext/kaynarpinar-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/kaynarpinar-balikci-barinagi/kapak')
+WHERE slug = 'kaynarpinar-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/kaynarpinar-balikci-barinagi/kapak');
 -- --- keci-buku-demirleme ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17613,6 +23521,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/kelebekler-vadisi-demirleme/kapak')
 WHERE slug = 'kelebekler-vadisi-demirleme' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/kelebekler-vadisi-demirleme/kapak');
+-- --- kilitbahir-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/kilitbahir-balikci-barinagi/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Kilitbahir,_%C3%87anakkale_(26102024).jpg/1280px-Kilitbahir,_%C3%87anakkale_(26102024).jpg', 'Kadı', 'CC BY 4.0', 'https://commons.wikimedia.org/wiki/File:Kilitbahir,_%C3%87anakkale_(26102024).jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'kilitbahir-balikci-barinagi' AND m.storage_key = 'ext/kilitbahir-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/kilitbahir-balikci-barinagi/kapak')
+WHERE slug = 'kilitbahir-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/kilitbahir-balikci-barinagi/kapak');
 -- --- kille-buku ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17649,6 +23575,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/kizilada-fener-restorani/kapak')
 WHERE slug = 'kizilada-fener-restorani' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/kizilada-fener-restorani/kapak');
+-- --- kizkalesi-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/kizkalesi-koyu/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Kizkalesi,_Erdemli.IMG_3490.jpg/1280px-Kizkalesi,_Erdemli.IMG_3490.jpg', 'YG01', 'CC BY 4.0', 'https://commons.wikimedia.org/wiki/File:Kizkalesi,_Erdemli.IMG_3490.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'kizkalesi-koyu' AND m.storage_key = 'ext/kizkalesi-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/kizkalesi-koyu/kapak')
+WHERE slug = 'kizkalesi-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/kizkalesi-koyu/kapak');
 -- --- kos-eski-liman-mandraki ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17667,6 +23611,42 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/kos-eski-liman-mandraki/kapak')
 WHERE slug = 'kos-eski-liman-mandraki' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/kos-eski-liman-mandraki/kapak');
+-- --- kumyaka-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/kumyaka-balikci-barinagi/kapak', 'image/jpeg', 1280, 377,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Kumyaka_-_Si%C4%9Fi_-_Sygi.jpg/1280px-Kumyaka_-_Si%C4%9Fi_-_Sygi.jpg', 'Erdoğan Orçin', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Kumyaka_-_Si%C4%9Fi_-_Sygi.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'kumyaka-balikci-barinagi' AND m.storage_key = 'ext/kumyaka-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/kumyaka-balikci-barinagi/kapak')
+WHERE slug = 'kumyaka-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/kumyaka-balikci-barinagi/kapak');
+-- --- kursunlu-marina ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/kursunlu-marina/kapak', 'image/jpeg', 1280, 765,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Kur%C5%9Funlu_Bal%C4%B1k%C3%A7%C4%B1_Bar%C4%B1na%C4%9F%C4%B1_-03_May%C4%B1s_2013_-_panoramio.jpg/1280px-Kur%C5%9Funlu_Bal%C4%B1k%C3%A7%C4%B1_Bar%C4%B1na%C4%9F%C4%B1_-03_May%C4%B1s_2013_-_panoramio.jpg', 'A. Kerim ŞENGEL', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:Kur%C5%9Funlu_Bal%C4%B1k%C3%A7%C4%B1_Bar%C4%B1na%C4%9F%C4%B1_-03_May%C4%B1s_2013_-_panoramio.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'kursunlu-marina' AND m.storage_key = 'ext/kursunlu-marina/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/kursunlu-marina/kapak')
+WHERE slug = 'kursunlu-marina' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/kursunlu-marina/kapak');
 -- --- lakka-koyu-paksos ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17811,6 +23791,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/naoussa-limani-paros/kapak')
 WHERE slug = 'naoussa-limani-paros' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/naoussa-limani-paros/kapak');
+-- --- narli-koyu-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/narli-koyu-balikci-barinagi/kapak', 'image/jpeg', 1280, 765,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Narl%C4%B1_Bal%C4%B1k%C3%A7%C4%B1_Bar%C4%B1na%C4%9F%C4%B1_-03_May%C4%B1s_2013_-_panoramio.jpg/1280px-Narl%C4%B1_Bal%C4%B1k%C3%A7%C4%B1_Bar%C4%B1na%C4%9F%C4%B1_-03_May%C4%B1s_2013_-_panoramio.jpg', 'A. Kerim ŞENGEL', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:Narl%C4%B1_Bal%C4%B1k%C3%A7%C4%B1_Bar%C4%B1na%C4%9F%C4%B1_-03_May%C4%B1s_2013_-_panoramio.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'narli-koyu-balikci-barinagi' AND m.storage_key = 'ext/narli-koyu-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/narli-koyu-balikci-barinagi/kapak')
+WHERE slug = 'narli-koyu-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/narli-koyu-balikci-barinagi/kapak');
 -- --- netsel-marmaris-marina ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17847,6 +23845,42 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/nisyros-mandraki-limani/kapak')
 WHERE slug = 'nisyros-mandraki-limani' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/nisyros-mandraki-limani/kapak');
+-- --- olimpos-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/olimpos-koyu/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/View_of_Olimpos_Plaj%C4%B1_with_Tahtal%C4%B1_Mountain_in_the_Background.jpg/1280px-View_of_Olimpos_Plaj%C4%B1_with_Tahtal%C4%B1_Mountain_in_the_Background.jpg', 'Oystercard', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:View_of_Olimpos_Plaj%C4%B1_with_Tahtal%C4%B1_Mountain_in_the_Background.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'olimpos-koyu' AND m.storage_key = 'ext/olimpos-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/olimpos-koyu/kapak')
+WHERE slug = 'olimpos-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/olimpos-koyu/kapak');
+-- --- orak-island-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/orak-island-koyu/kapak', 'image/jpeg', 1280, 760,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Orak_Adas%C4%B1_2_-_panoramio.jpg/1280px-Orak_Adas%C4%B1_2_-_panoramio.jpg', 'Tamer BÜKE', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:Orak_Adas%C4%B1_2_-_panoramio.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'orak-island-koyu' AND m.storage_key = 'ext/orak-island-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/orak-island-koyu/kapak')
+WHERE slug = 'orak-island-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/orak-island-koyu/kapak');
 -- --- osmanaga-samandira-sahasi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17865,6 +23899,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/osmanaga-samandira-sahasi/kapak')
 WHERE slug = 'osmanaga-samandira-sahasi' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/osmanaga-samandira-sahasi/kapak');
+-- --- patara-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/patara-koyu/kapak', 'image/jpeg', 1280, 720,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Patara_Plaj%C4%B1.jpg/1280px-Patara_Plaj%C4%B1.jpg', 'Esginmurat', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Patara_Plaj%C4%B1.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'patara-koyu' AND m.storage_key = 'ext/patara-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/patara-koyu/kapak')
+WHERE slug = 'patara-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/patara-koyu/kapak');
 -- --- patmos-skala-rihtimi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -17955,6 +24007,42 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/rodos-mandraki-limani/kapak')
 WHERE slug = 'rodos-mandraki-limani' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/rodos-mandraki-limani/kapak');
+-- --- rumeli-feneri-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/rumeli-feneri-balikci-barinagi/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Rumeli_Feneri,_Sar%C4%B1yer_p1.JPG/1280px-Rumeli_Feneri,_Sar%C4%B1yer_p1.JPG', 'VikiPicture', 'CC BY-SA 3.0', 'https://commons.wikimedia.org/wiki/File:Rumeli_Feneri,_Sar%C4%B1yer_p1.JPG', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'rumeli-feneri-balikci-barinagi' AND m.storage_key = 'ext/rumeli-feneri-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/rumeli-feneri-balikci-barinagi/kapak')
+WHERE slug = 'rumeli-feneri-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/rumeli-feneri-balikci-barinagi/kapak');
+-- --- sapli-island-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/sapli-island-koyu/kapak', 'image/jpeg', 1280, 853,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Sunset_at_Sapl%C4%B1_Adas%C4%B1_-_Flickr_-_faktor1komma5.jpg/1280px-Sunset_at_Sapl%C4%B1_Adas%C4%B1_-_Flickr_-_faktor1komma5.jpg', 'faktor1komma5 /by Claus P. Heibel from Didim/Aydın, Türkiye', 'CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:Sunset_at_Sapl%C4%B1_Adas%C4%B1_-_Flickr_-_faktor1komma5.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'sapli-island-koyu' AND m.storage_key = 'ext/sapli-island-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/sapli-island-koyu/kapak')
+WHERE slug = 'sapli-island-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/sapli-island-koyu/kapak');
 -- --- sarsala-samandira-sahasi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -18117,6 +24205,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/setur-yalova-marina/kapak')
 WHERE slug = 'setur-yalova-marina' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/setur-yalova-marina/kapak');
+-- --- sigacik-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/sigacik-balikci-barinagi/kapak', 'image/jpeg', 1280, 959,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/S%C4%B1%C4%9Fac%C4%B1k_02.jpg/1280px-S%C4%B1%C4%9Fac%C4%B1k_02.jpg', 'BSRF', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:S%C4%B1%C4%9Fac%C4%B1k_02.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'sigacik-balikci-barinagi' AND m.storage_key = 'ext/sigacik-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/sigacik-balikci-barinagi/kapak')
+WHERE slug = 'sigacik-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/sigacik-balikci-barinagi/kapak');
 -- --- siralibuk-koyu ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -18135,6 +24241,42 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/siralibuk-koyu/kapak')
 WHERE slug = 'siralibuk-koyu' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/siralibuk-koyu/kapak');
+-- --- sultanice-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/sultanice-balikci-barinagi/kapak', 'image/jpeg', 1280, 1707,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Sultani%C3%A7e_Sahil.jpg/1280px-Sultani%C3%A7e_Sahil.jpg', 'Yavuzsultamselim22', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Sultani%C3%A7e_Sahil.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'sultanice-balikci-barinagi' AND m.storage_key = 'ext/sultanice-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/sultanice-balikci-barinagi/kapak')
+WHERE slug = 'sultanice-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/sultanice-balikci-barinagi/kapak');
+-- --- suluada-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/suluada-koyu/kapak', 'image/jpeg', 1280, 783,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Adrasan_Suluada_Drone.jpg/1280px-Adrasan_Suluada_Drone.jpg', 'Erturkercin', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Adrasan_Suluada_Drone.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'suluada-koyu' AND m.storage_key = 'ext/suluada-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/suluada-koyu/kapak')
+WHERE slug = 'suluada-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/suluada-koyu/kapak');
 -- --- symi-gialos-rihtimi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -18225,6 +24367,60 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/tilos-livadia-rihtimi/kapak')
 WHERE slug = 'tilos-livadia-rihtimi' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/tilos-livadia-rihtimi/kapak');
+-- --- toslaklar-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/toslaklar-koyu/kapak', 'image/jpeg', 1280, 582,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Toslaklar_Koyu_-_panoramio.jpg/1280px-Toslaklar_Koyu_-_panoramio.jpg', 'Yılmaz Kilim', 'CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:Toslaklar_Koyu_-_panoramio.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'toslaklar-koyu' AND m.storage_key = 'ext/toslaklar-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/toslaklar-koyu/kapak')
+WHERE slug = 'toslaklar-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/toslaklar-koyu/kapak');
+-- --- yalova-balikci-barinagi ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/yalova-balikci-barinagi/kapak', 'image/jpeg', 1280, 960,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Yalova_Seaside.JPG/1280px-Yalova_Seaside.JPG', 'Annikat53', 'CC BY-SA 3.0', 'https://commons.wikimedia.org/wiki/File:Yalova_Seaside.JPG', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'yalova-balikci-barinagi' AND m.storage_key = 'ext/yalova-balikci-barinagi/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/yalova-balikci-barinagi/kapak')
+WHERE slug = 'yalova-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/yalova-balikci-barinagi/kapak');
+-- --- yaprakli-koy-koyu ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/yaprakli-koy-koyu/kapak', 'image/jpeg', 1280, 1073,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Yaprakl%C4%B1_Koy.jpg/1280px-Yaprakl%C4%B1_Koy.jpg', 'Wayway21', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Yaprakl%C4%B1_Koy.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'yaprakli-koy-koyu' AND m.storage_key = 'ext/yaprakli-koy-koyu/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/yaprakli-koy-koyu/kapak')
+WHERE slug = 'yaprakli-koy-koyu' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/yaprakli-koy-koyu/kapak');
 -- --- yassica-adalari ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -18243,6 +24439,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/yassica-adalari/kapak')
 WHERE slug = 'yassica-adalari' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/yassica-adalari/kapak');
+-- --- yesilovacik-fisher-limani ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/yesilovacik-fisher-limani/kapak', 'image/jpeg', 1280, 720,
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Ye%C5%9Filovac%C4%B1k_harbor.jpg/1280px-Ye%C5%9Filovac%C4%B1k_harbor.jpg', 'Nedim Ardoğa', 'CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Ye%C5%9Filovac%C4%B1k_harbor.jpg', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'yesilovacik-fisher-limani' AND m.storage_key = 'ext/yesilovacik-fisher-limani/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/yesilovacik-fisher-limani/kapak')
+WHERE slug = 'yesilovacik-fisher-limani' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/yesilovacik-fisher-limani/kapak');
 -- --- zea-marina ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
