@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../logbook/application/logbook_controller.dart';
+import '../../logbook/domain/log_entry.dart';
 import '../../logbook/presentation/logbook_screen.dart'
     show LogbookBody, showLogEntryEditor;
 import '../../onboarding/application/onboarding_controller.dart';
@@ -24,9 +26,10 @@ import '../domain/sea_trip_log.dart';
 final StateProvider<int> deckSegmentProvider = StateProvider<int>((ref) => 0);
 
 /// DEFTER sekmesi (v2.0 vizyonu, kurucu onayı 2026-08): denizcinin arşivi.
-/// Üç bölüm: SEYİRLER (tamamlanan seyirler + sezon özeti) · ROTALARIM ·
-/// NOTLAR (eski Günlük). Seyir kaydı akışı: rota kartında "Seyri başlat" →
-/// burada "Seyri bitir" ya da rota kartından bitir — kayıt buraya işlenir.
+/// Üç bölüm: SEYİRLER (planlanan + gerçekleşen seferler, sezon özeti) ·
+/// ROTALARIM · NOTLAR (eski Günlük). Seyir akışı (v2.1): haritada rota çiz →
+/// "Seyri planla" → buradaki PLANLANDI kartında "Gerçekleşti ✓" → deftere
+/// işlenir. İki-dokunuşlu başlat/bitir modeli emekli (tasarım raporu §9).
 class DeckScreen extends ConsumerWidget {
   const DeckScreen({super.key});
 
@@ -102,7 +105,10 @@ class DeckScreen extends ConsumerWidget {
   }
 }
 
-/// SEYİRLER bölümü: süren seyir (varsa) + sezon özeti + tamamlanan seyirler.
+/// SEYİRLER bölümü (v2.1 "Planla → Gerçekleşti", kurucu onayı 2026-08):
+/// planlanan seferler üstte (eylem düğmeli), gerçekleşenler altta; sezon
+/// özeti YALNIZ gerçekleşenlerden beslenir. Eski "süren seyir" kartı
+/// kaldırıldı (başlat/bitir modeli emekli — tasarım raporu §9).
 class _TripsTab extends ConsumerWidget {
   const _TripsTab();
 
@@ -121,8 +127,7 @@ class _TripsTab extends ConsumerWidget {
     final L10n t = ref.watch(l10nProvider);
     final ThemeData theme = Theme.of(context);
     final List<SeaTripLog> trips = ref.watch(tripLogProvider);
-    final ActiveTrip? active = ref.watch(activeTripProvider);
-    if (trips.isEmpty && active == null) {
+    if (trips.isEmpty) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -135,23 +140,30 @@ class _TripsTab extends ConsumerWidget {
         ),
       );
     }
-    // SEZON ÖZETİ: içinde bulunulan yılın seyirleri (0-uydurma: yalnız
-    // gerçekten kaydedilen seyirler sayılır).
+    final List<SeaTripLog> planned = <SeaTripLog>[
+      for (final SeaTripLog x in trips)
+        if (x.isPlanned) x,
+    ];
+    final List<SeaTripLog> done = <SeaTripLog>[
+      for (final SeaTripLog x in trips)
+        if (!x.isPlanned) x,
+    ];
+    // SEZON ÖZETİ: içinde bulunulan yılın GERÇEKLEŞEN seferleri (0-uydurma:
+    // plan istatistik değildir; süre yalnız bilinen kayıtlardan toplanır).
     final int year = DateTime.now().year;
     final List<SeaTripLog> season = <SeaTripLog>[
-      for (final SeaTripLog x in trips)
-        if (DateTime.fromMillisecondsSinceEpoch(x.endMs).year == year) x,
+      for (final SeaTripLog x in done)
+        if (DateTime.fromMillisecondsSinceEpoch(x.dateMs).year == year) x,
     ];
     double seasonNm = 0;
     int seasonMin = 0;
     for (final SeaTripLog x in season) {
       seasonNm += x.distanceNm;
-      seasonMin += x.durationMin;
+      seasonMin += x.durMin ?? 0;
     }
     return ListView(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 96),
       children: <Widget>[
-        if (active != null) _ActiveTripCard(active: active),
         if (season.isNotEmpty)
           Container(
             margin: const EdgeInsets.only(bottom: 10),
@@ -201,7 +213,10 @@ class _TripsTab extends ConsumerWidget {
               ],
             ),
           ),
-        for (final SeaTripLog x in trips) _TripCard(trip: x),
+        // PLANLANANLAR üstte (eylem bekleyen kartlar), GERÇEKLEŞENLER altta
+        // (arşiv). Her grup kendi içinde tarihçe sırasında (en yeni başta).
+        for (final SeaTripLog x in planned) _PlannedTripCard(trip: x),
+        for (final SeaTripLog x in done) _TripCard(trip: x),
       ],
     );
   }
@@ -251,24 +266,28 @@ class _SeasonStat extends StatelessWidget {
   }
 }
 
-/// SÜREN SEYİR kartı: başlangıç bilgisi + "Seyri bitir" — rota kartı
-/// kapansa/sayfa yenilense bile seyir buradan bitirilebilir.
-class _ActiveTripCard extends ConsumerWidget {
-  const _ActiveTripCard({required this.active});
+/// PLANLANAN sefer kartı: PLANLANDI rozeti + rota adı + ≈ mesafe + plan
+/// tarihi + "Gerçekleşti ✓" düğmesi. Plan istatistiklere sayılmaz; kaptan
+/// seferi yaptığında alttan açılan onay sayfasıyla deftere işler.
+class _PlannedTripCard extends ConsumerWidget {
+  const _PlannedTripCard({required this.trip});
 
-  final ActiveTrip active;
+  final SeaTripLog trip;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final L10n t = ref.watch(l10nProvider);
     final ThemeData theme = Theme.of(context);
-    final DateTime s = DateTime.fromMillisecondsSinceEpoch(active.startMs);
-    final String started = '${s.day}.${s.month}.${s.year} · '
-        '${s.hour.toString().padLeft(2, '0')}:'
-        '${s.minute.toString().padLeft(2, '0')}';
+    final DateTime d = DateTime.fromMillisecondsSinceEpoch(trip.dateMs);
+    final String stats = <String>[
+      '${d.day}.${d.month}.${d.year}',
+      if (trip.distanceNm > 0)
+        '≈ ${_TripsTab._fmtNm(trip.distanceNm)} ${t.nmUnit}',
+      if (trip.stops > 0) '${t.routeStatStops}: ${trip.stops}',
+    ].join(' · ');
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      padding: const EdgeInsets.fromLTRB(14, 12, 8, 12),
       decoration: BoxDecoration(
         color: DocklyColors.brandPrimary.withValues(alpha: 0.08),
         border: Border.all(
@@ -280,46 +299,56 @@ class _ActiveTripCard extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const DocklyIcon(DocklyIcons.sailing,
-                  size: 16, color: DocklyColors.brandPrimary),
-              const SizedBox(width: 6),
               Expanded(
-                child: Text(
-                  '${t.tripActiveLabel} — ${active.name}',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.titleSmall
-                      ?.copyWith(fontWeight: FontWeight.w800),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: DocklyColors.brandPrimary,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        t.tripPlannedBadge,
+                        style: const TextStyle(
+                          color: Color(0xFFFFFFFF),
+                          fontSize: 9,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.8,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(trip.name,
+                        style: theme.textTheme.titleSmall
+                            ?.copyWith(fontWeight: FontWeight.w800)),
+                    const SizedBox(height: 4),
+                    Text(stats, style: theme.textTheme.bodyMedium),
+                  ],
                 ),
+              ),
+              IconButton(
+                tooltip: t.tripDeleteTooltip,
+                icon: DocklyIcon(DocklyIcons.deleteOutline,
+                    size: 18, color: theme.colorScheme.onSurfaceVariant),
+                onPressed: () =>
+                    ref.read(tripLogProvider.notifier).remove(trip.id),
               ),
             ],
           ),
-          const SizedBox(height: 4),
-          Text(
-            L10n.fmt(t.tripStartedFmt, started),
-            style: theme.textTheme.bodySmall
-                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-          ),
-          const SizedBox(height: 10),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: FilledButton(
-              key: const ValueKey<String>('trip-finish-deck'),
-              style: FilledButton.styleFrom(
-                minimumSize: const Size(0, 40),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-              ),
-              onPressed: () async {
-                final SeaTripLog? trip =
-                    await ref.read(activeTripProvider.notifier).finish();
-                if (trip == null || !context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(t.tripSavedSnack)),
-                );
-              },
-              child: Text(t.tripFinishBtn),
+          const SizedBox(height: 8),
+          FilledButton(
+            key: ValueKey<String>('trip-done-${trip.id}'),
+            style: FilledButton.styleFrom(
+              minimumSize: const Size(0, 40),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
             ),
+            onPressed: () => _showMarkDoneSheet(context, trip),
+            child: Text(t.tripMarkDone),
           ),
         ],
       ),
@@ -327,7 +356,207 @@ class _ActiveTripCard extends ConsumerWidget {
   }
 }
 
-/// Tamamlanan seyir kartı: ad + tarih + gerçek süre + plan mesafesi (≈).
+/// "Gerçekleşti" onay sayfasını alttan açar (klavye için inset korumalı).
+void _showMarkDoneSheet(BuildContext context, SeaTripLog trip) {
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    showDragHandle: true,
+    builder: (BuildContext ctx) => Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
+      child: _MarkDoneSheet(trip: trip),
+    ),
+  );
+}
+
+/// GERÇEKLEŞTİ onayı: tarih (Bugün/Dün/Tarih seç) + isteğe bağlı süre çipleri
+/// + isteğe bağlı not (Kaptanın Günlüğü'ne düşer). Tek zorunlu bilgi tarih —
+/// varsayılan Bugün; iki dokunuşla iş biter (tasarım raporu §5).
+class _MarkDoneSheet extends ConsumerStatefulWidget {
+  const _MarkDoneSheet({required this.trip});
+
+  final SeaTripLog trip;
+
+  @override
+  ConsumerState<_MarkDoneSheet> createState() => _MarkDoneSheetState();
+}
+
+class _MarkDoneSheetState extends ConsumerState<_MarkDoneSheet> {
+  /// Seçili sefer günü (gün hassasiyeti yeter — saat iddiası yok).
+  late DateTime _day;
+
+  /// 0 = Bugün · 1 = Dün · 2 = takvimden seçildi.
+  int _dayChoice = 0;
+
+  /// Denizde geçen süre (dk) — null = belirtilmedi (dürüst boşluk).
+  int? _durMin;
+
+  final TextEditingController _note = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _day = DateTime.now();
+  }
+
+  @override
+  void dispose() {
+    _note.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickDay() async {
+    final DateTime now = DateTime.now();
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _day.isAfter(now) ? now : _day,
+      firstDate: DateTime(now.year - 5),
+      lastDate: now,
+    );
+    if (picked == null || !mounted) return;
+    setState(() {
+      _day = picked;
+      _dayChoice = 2;
+    });
+  }
+
+  Future<void> _save() async {
+    final L10n t = ref.read(l10nProvider);
+    // Öğlen 12:00 sabitlenir: gün doğru, saat iddiasız (yaz saati sınırında
+    // gün kaymasın diye gece yarısı yerine gün ortası).
+    final int dateMs =
+        DateTime(_day.year, _day.month, _day.day, 12).millisecondsSinceEpoch;
+    await ref
+        .read(tripLogProvider.notifier)
+        .markDone(widget.trip.id, dateMs: dateMs, durMin: _durMin);
+    // Not düşüldüyse Kaptanın Günlüğü'ne rota bağlamıyla işlenir — hikâye
+    // Notlar'da, sayılar Seyirler'de (tek ev ilkesiyle uyumlu ayrım).
+    final String note = _note.text.trim();
+    if (note.isNotEmpty) {
+      await ref.read(logbookProvider.notifier).add(LogEntry(
+            id: 'l${DateTime.now().millisecondsSinceEpoch}',
+            dateMs: dateMs,
+            text: note,
+            ctxRoute: widget.trip.name,
+            ctxNm: widget.trip.distanceNm > 0 ? widget.trip.distanceNm : null,
+            ctxStops: widget.trip.stops > 0 ? widget.trip.stops : null,
+          ));
+    }
+    if (!mounted) return;
+    // Mesajcı POP'TAN ÖNCE alınır: sayfa kapanınca bu context ağaçtan düşer,
+    // sonradan ScaffoldMessenger.of araması sorun çıkarabilirdi.
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    Navigator.of(context).pop();
+    messenger.showSnackBar(SnackBar(content: Text(t.tripDoneSnack)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final L10n t = ref.watch(l10nProvider);
+    final ThemeData theme = Theme.of(context);
+    final DateTime now = DateTime.now();
+    final DateTime today = DateTime(now.year, now.month, now.day);
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(t.tripDoneSheetTitle,
+                style: theme.textTheme.titleMedium
+                    ?.copyWith(fontWeight: FontWeight.w800)),
+            const SizedBox(height: 2),
+            Text(widget.trip.name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.bodyMedium
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: <Widget>[
+                ChoiceChip(
+                  key: const ValueKey<String>('trip-done-today'),
+                  label: Text(t.dateToday),
+                  selected: _dayChoice == 0,
+                  onSelected: (_) => setState(() {
+                    _dayChoice = 0;
+                    _day = today;
+                  }),
+                ),
+                ChoiceChip(
+                  key: const ValueKey<String>('trip-done-yesterday'),
+                  label: Text(t.dateYesterday),
+                  selected: _dayChoice == 1,
+                  onSelected: (_) => setState(() {
+                    _dayChoice = 1;
+                    _day = today.subtract(const Duration(days: 1));
+                  }),
+                ),
+                ChoiceChip(
+                  key: const ValueKey<String>('trip-done-pick'),
+                  label: Text(_dayChoice == 2
+                      ? '${_day.day}.${_day.month}.${_day.year}'
+                      : t.datePickLabel),
+                  selected: _dayChoice == 2,
+                  onSelected: (_) => _pickDay(),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Text(t.tripDurQ,
+                style: theme.textTheme.bodySmall
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+            const SizedBox(height: 6),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: <Widget>[
+                for (final (String, int) c in <(String, int)>[
+                  (t.dur2h, 120),
+                  (t.durHalf, 240),
+                  (t.durFull, 480),
+                ])
+                  ChoiceChip(
+                    label: Text(c.$1),
+                    selected: _durMin == c.$2,
+                    // İkinci dokunuş seçimi kaldırır — süre isteğe bağlıdır.
+                    onSelected: (bool sel) =>
+                        setState(() => _durMin = sel ? c.$2 : null),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            TextField(
+              controller: _note,
+              maxLines: 2,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                hintText: t.tripNoteHint,
+                border: const OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 14),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                key: const ValueKey<String>('trip-done-save'),
+                style: FilledButton.styleFrom(minimumSize: const Size(0, 44)),
+                onPressed: _save,
+                child: Text(t.tripDoneSave),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// GERÇEKLEŞEN sefer kartı: ad + tarih + plan mesafesi (≈) + süre (yalnız
+/// biliniyorsa — yeni akışta süre isteğe bağlıdır, uydurma değer yazılmaz).
 class _TripCard extends ConsumerWidget {
   const _TripCard({required this.trip});
 
@@ -337,10 +566,10 @@ class _TripCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final L10n t = ref.watch(l10nProvider);
     final ThemeData theme = Theme.of(context);
-    final DateTime d = DateTime.fromMillisecondsSinceEpoch(trip.endMs);
+    final DateTime d = DateTime.fromMillisecondsSinceEpoch(trip.dateMs);
     final String date = '${d.day}.${d.month}.${d.year}';
     final String stats = <String>[
-      _TripsTab._fmtDuration(t, trip.durationMin),
+      if (trip.durMin != null) _TripsTab._fmtDuration(t, trip.durMin!),
       if (trip.distanceNm > 0)
         '≈ ${_TripsTab._fmtNm(trip.distanceNm)} ${t.nmUnit}',
       if (trip.stops > 0) '${t.routeStatStops}: ${trip.stops}',

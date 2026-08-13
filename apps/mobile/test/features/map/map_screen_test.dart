@@ -6,6 +6,7 @@ import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart'
 import 'package:dockly_mobile/features/boat/domain/my_boat.dart';
 import 'package:dockly_mobile/features/checklist/application/checklist_controller.dart';
 import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
+import 'package:dockly_mobile/features/deck/domain/sea_trip_log.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/domain/map_cache.dart';
 import 'package:dockly_mobile/features/map/presentation/location_bottom_card.dart';
@@ -444,8 +445,9 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('SEYİR KAYDI (v2.0): rota kartından başlat → bitir; seyir '
-      'depoya işlenir ve onay mesajı çıkar', (WidgetTester tester) async {
+  testWidgets('SEYİR PLANI (v2.1): rota kartındaki "Seyri planla" seferi '
+      'PLANLANDI olarak depoya işler; aynı rota ikinci kez planlanamaz',
+      (WidgetTester tester) async {
     final FakeTripStore trips = FakeTripStore();
     await tester.pumpWidget(_app(
       FakeMapGateway(result: pinResult),
@@ -463,25 +465,24 @@ void main() {
     await tester.tap(find.byKey(const ValueKey<String>('checklist-ready')));
     await tester.pumpAndSettle();
     // Önceki bildirileri AKIT (CI dersi: ekranda bekleyen eski snackbar,
-    // yenisini kuyruğa atar — "Defter'e işlendi" hiç görünmezdi).
+    // yenisini kuyruğa atar — "PLANLANDI" mesajı hiç görünmezdi).
     await tester.pump(const Duration(seconds: 6));
     await tester.pumpAndSettle();
 
-    // Başlat: süren seyir satırı belirir ve cihaza yazılır.
-    await tester.tap(find.byKey(const ValueKey<String>('trip-start')));
-    await tester.pumpAndSettle();
-    expect(find.textContaining('Seyir sürüyor'), findsOneWidget);
-    expect(trips.active, isNotNull);
-
-    // Bitir: kayıt depoya düşer, onay mesajı görünür, satır sıfırlanır.
+    // Planla: kayıt PLANLANDI olarak depoya düşer, onay mesajı görünür.
     // (Önce depo doğrulanır — mesaj bulunamazsa neden ayrışsın.)
-    await tester.tap(find.byKey(const ValueKey<String>('trip-finish')));
+    await tester.tap(find.byKey(const ValueKey<String>('trip-plan')));
     await tester.pumpAndSettle();
-    expect(trips.active, isNull);
     expect(trips.data, hasLength(1));
+    expect(trips.data.first.status, TripStatus.planned);
     expect(trips.data.first.distanceNm, greaterThan(0));
-    expect(find.textContaining('Defter\'e işlendi'), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('trip-start')), findsOneWidget);
+    expect(trips.data.first.durMin, isNull);
+    expect(find.textContaining('PLANLANDI'), findsOneWidget);
+
+    // Düğme yerini onay satırına bırakır — aynı rota İKİ KEZ planlanamaz
+    // (çifte kayıt = şişirilmiş defter; tasarım raporu §6).
+    expect(find.byKey(const ValueKey<String>('trip-plan')), findsNothing);
+    expect(find.textContaining('Defter\'e eklendi'), findsOneWidget);
 
     // Snackbar zamanlayıcısını akıt.
     await tester.pump(const Duration(seconds: 6));

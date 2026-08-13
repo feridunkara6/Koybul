@@ -43,29 +43,31 @@ Widget _app({
   );
 }
 
-/// DEFTER testleri (v2.0, kurucu onayı 2026-08): Seyirler + Rotalarım + Notlar.
+/// DEFTER testleri (v2.1 "Planla → Gerçekleşti", kurucu onayı 2026-08):
+/// Seyirler (planlanan + gerçekleşen) + Rotalarım + Notlar.
 void main() {
   testWidgets('Seyirler açılışta: kayıt yoksa dürüst boş durum',
       (WidgetTester tester) async {
     await tester.pumpWidget(_app());
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Henüz seyir kaydı yok'), findsOneWidget);
+    expect(find.textContaining('Henüz sefer yok'), findsOneWidget);
   });
 
-  testWidgets('Seyirler: tamamlanan seyir adı/süresiyle listelenir; '
+  testWidgets('Seyirler: gerçekleşen sefer adı/süresiyle listelenir; '
       'sezon kartı toplamları gösterir', (WidgetTester tester) async {
     final int year = DateTime.now().year;
-    final int base = DateTime(year, 6, 1, 10).millisecondsSinceEpoch;
+    final int base = DateTime(year, 6, 1, 12).millisecondsSinceEpoch;
     final FakeTripStore store = FakeTripStore()
       ..data = <SeaTripLog>[
         SeaTripLog(
           id: 't1',
           name: 'Göcek → Bedri Rahmi',
-          startMs: base,
-          endMs: base + 90 * 60000, // 1 sa 30 dk
+          status: TripStatus.done,
+          dateMs: base,
           distanceNm: 6.2,
           stops: 1,
+          durMin: 90, // 1 sa 30 dk
         ),
       ];
     await tester.pumpWidget(_app(trips: store));
@@ -79,7 +81,56 @@ void main() {
     expect(find.textContaining('≈ 6.2'), findsNWidgets(2));
   });
 
-  testWidgets('SÜREN seyir Defter\'den bitirilebilir: kayıt listeye düşer',
+  testWidgets('PLANLANDI sefer "Gerçekleşti ✓" ile deftere işlenir: sezon '
+      'ancak o zaman sayar; not Kaptanın Günlüğü\'ne düşer',
+      (WidgetTester tester) async {
+    final int year = DateTime.now().year;
+    final FakeTripStore store = FakeTripStore()
+      ..data = <SeaTripLog>[
+        SeaTripLog(
+          id: 'tp1',
+          name: 'Datça turu',
+          status: TripStatus.planned,
+          dateMs: DateTime(year, 6, 1, 12).millisecondsSinceEpoch,
+          distanceNm: 12,
+          stops: 1,
+        ),
+      ];
+    await tester.pumpWidget(_app(trips: store));
+    await tester.pumpAndSettle();
+
+    // Plan görünür ama İSTATİSTİK DEĞİLDİR: sezon kartı yok (0-uydurma).
+    expect(find.text('PLANLANDI'), findsOneWidget);
+    expect(find.text('$year sezonu'), findsNothing);
+
+    // "Gerçekleşti ✓" → onay sayfası: süre çipi + not, sonra "Deftere işle".
+    await tester.tap(find.byKey(const ValueKey<String>('trip-done-tp1')));
+    await tester.pumpAndSettle();
+    expect(find.text('Seferi deftere işle'), findsOneWidget);
+    await tester.tap(find.text('Yarım gün'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Rüzgâr tatlıydı.');
+    await tester.tap(find.byKey(const ValueKey<String>('trip-done-save')));
+    await tester.pumpAndSettle();
+
+    // Kayıt GERÇEKLEŞTİ oldu (varsayılan gün: Bugün); sezon artık sayıyor.
+    expect(store.data, hasLength(1));
+    expect(store.data.first.status, TripStatus.done);
+    expect(store.data.first.durMin, 240);
+    expect(find.text('PLANLANDI'), findsNothing);
+    expect(find.text('$year sezonu'), findsOneWidget);
+    expect(find.textContaining('GERÇEKLEŞTİ'), findsOneWidget); // snackbar
+
+    // Not, Notlar segmentine rota bağlamıyla işlendi.
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Notlar'));
+    await tester.pumpAndSettle();
+    expect(find.text('Rüzgâr tatlıydı.'), findsOneWidget);
+  });
+
+  testWidgets('GÖÇ: eski "süren seyir" PLANLANDI kartına dönüşür; eski '
+      'anahtar temizlenir — kimsenin kaydı çöpe gitmez',
       (WidgetTester tester) async {
     final FakeTripStore store = FakeTripStore()
       ..active = ActiveTrip(
@@ -93,20 +144,32 @@ void main() {
     await tester.pumpWidget(_app(trips: store));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Seyir sürüyor'), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey<String>('trip-finish-deck')));
-    await tester.pumpAndSettle();
-
-    // Süren kart gitti; tamamlanan seyir listede; depo temizlendi.
-    expect(find.textContaining('Seyir sürüyor'), findsNothing);
+    expect(find.text('PLANLANDI'), findsOneWidget);
     expect(find.text('Datça turu'), findsOneWidget);
-    expect(store.active, isNull);
+    expect(store.active, isNull); // göç tek seferlik — anahtar silindi
     expect(store.data, hasLength(1));
-    expect(store.data.first.durationMin, greaterThanOrEqualTo(45));
+    expect(store.data.first.status, TripStatus.planned);
+  });
 
-    // Snackbar zamanlayıcısını akıt (CI dersi: bekleyen Timer kırmızı yapar).
-    await tester.pump(const Duration(seconds: 6));
-    await tester.pumpAndSettle();
+  test('GERİYE UYUM: eski başlat/bitir JSON kaydı GERÇEKLEŞTİ olarak, '
+      'ölçülen süresiyle okunur; yeni biçim gidiş-dönüş kayıpsız', () {
+    final SeaTripLog? legacy = SeaTripLog.fromJson(<String, dynamic>{
+      'id': 't1',
+      'name': 'Göcek → Bedri Rahmi',
+      'start': 1000000,
+      'end': 1000000 + 90 * 60000,
+      'nm': 6.2,
+      'stops': 1,
+    });
+    expect(legacy, isNotNull);
+    expect(legacy!.status, TripStatus.done);
+    expect(legacy.dateMs, 1000000 + 90 * 60000);
+    expect(legacy.durMin, 90);
+
+    final SeaTripLog? round = SeaTripLog.fromJson(legacy.toJson());
+    expect(round!.status, TripStatus.done);
+    expect(round.durMin, 90);
+    expect(round.distanceNm, 6.2);
   });
 
   testWidgets('Rotalarım: kayıtlı rota İSMİYLE listelenir',

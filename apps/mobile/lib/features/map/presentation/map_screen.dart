@@ -1572,13 +1572,27 @@ class _RouteChip extends ConsumerWidget {
                   ],
                 ),
               ),
-            // SEYİR KAYDI (v2.0 Defter, kurucu onayı 2026-08): "Seyri başlat"
-            // rotanın fotoğrafını alır; "Seyri bitir" seyri gerçek süresiyle
-            // Defter'in Seyirler bölümüne işler. Süren seyir cihaza yazılır —
-            // sayfa yenilense bile Defter'den bitirilebilir.
+            // SEYİR PLANI (v2.1 "Planla → Gerçekleşti", kurucu onayı
+            // 2026-08): eski "Seyri başlat/bitir" çifti KALDIRILDI — canlı
+            // navigasyon beklentisi yaratıyor ve teknede açık tutulmayan
+            // uygulamada çöp süre üretiyordu (tasarım raporu §1/§9). Tek
+            // dürüst eylem: "Seyri planla" → sefer Defter'e PLANLANDI
+            // düşer; kaptan yaptığında Defter'den "Gerçekleşti"yi işaretler.
             Padding(
               padding: const EdgeInsets.only(top: 8, right: 8),
-              child: _TripRow(t: t),
+              child: _PlanTripRow(
+                t: t,
+                name: label ??
+                    suggestRouteName(
+                      origin?.name ??
+                          (origin?.isDevice == true
+                              ? t.routeOriginDevice
+                              : t.routeOriginPicked),
+                      waypoints,
+                    ),
+                distanceNm: route.distanceNm,
+                stops: stopCount,
+              ),
             ),
           ],
         ),
@@ -1599,74 +1613,85 @@ class _RouteChip extends ConsumerWidget {
   }
 }
 
-/// SEYİR SATIRI (rota çipinin altı): seyir yoksa "Seyri başlat"; sürüyorsa
-/// başlangıç saati + "Seyri bitir". Bitirince Defter'e işlenir ve kaptana
-/// kısa bir onay mesajı gösterilir.
-class _TripRow extends ConsumerWidget {
-  const _TripRow({required this.t});
+/// Bu rota bu oturumda deftere planlandı mı? (routeSeq ile eşleştirilir —
+/// çift dokunuş çift plan üretmesin; yeni rota çizilince düğme geri gelir.)
+final StateProvider<int?> plannedRouteSeqProvider =
+    StateProvider<int?>((ref) => null);
+
+/// SEYİR PLANI SATIRI (rota çipinin altı, v2.1): tek eylem "Seyri planla".
+/// Dokununca sefer, Defter'in Seyirler bölümüne PLANLANDI durumunda düşer;
+/// onay mesajı beklentiyi sabitler ("yaptığında Gerçekleşti'yi işaretle").
+/// Navigasyon başlatma/GPS iması taşıyan hiçbir söz kullanılmaz.
+class _PlanTripRow extends ConsumerWidget {
+  const _PlanTripRow({
+    required this.t,
+    required this.name,
+    required this.distanceNm,
+    required this.stops,
+  });
 
   final L10n t;
+  final String name;
+  final double distanceNm;
+  final int stops;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
-    final ActiveTrip? active = ref.watch(activeTripProvider);
-    if (active == null) {
-      return Align(
-        alignment: Alignment.centerLeft,
-        child: FilledButton.icon(
-          key: const ValueKey<String>('trip-start'),
-          style: FilledButton.styleFrom(
-            minimumSize: const Size(0, 36),
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            visualDensity: VisualDensity.compact,
-          ),
-          onPressed: () =>
-              ref.read(activeTripProvider.notifier).start(),
-          icon: const DocklyIcon(DocklyIcons.sailing,
-              size: 15, color: Colors.white),
-          label: Text(t.tripStartBtn),
-        ),
-      );
-    }
-    final DateTime s = DateTime.fromMillisecondsSinceEpoch(active.startMs);
-    final String hm = '${s.hour.toString().padLeft(2, '0')}:'
-        '${s.minute.toString().padLeft(2, '0')}';
-    return Row(
-      children: <Widget>[
-        const DocklyIcon(DocklyIcons.sailing,
-            size: 14, color: DocklyColors.brandPrimary),
-        const SizedBox(width: 5),
-        Expanded(
-          child: Text(
-            '${t.tripActiveLabel} · ${L10n.fmt(t.tripStartedFmt, hm)}',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.bodySmall?.copyWith(
-              fontWeight: FontWeight.w700,
-              color: DocklyColors.brandPrimary,
+    final int routeSeq =
+        ref.watch(mapControllerProvider.select((MapState s) => s.routeSeq));
+    final bool alreadyPlanned =
+        ref.watch(plannedRouteSeqProvider) == routeSeq;
+    if (alreadyPlanned) {
+      // Bu rota deftere eklendi — düğme yerine sakin bir onay satırı.
+      return Row(
+        children: <Widget>[
+          const DocklyIcon(DocklyIcons.checkCircle,
+              size: 14, color: DocklyColors.success),
+          const SizedBox(width: 5),
+          Expanded(
+            child: Text(
+              t.tripPlannedShort,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodySmall?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
+        ],
+      );
+    }
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: FilledButton.icon(
+        key: const ValueKey<String>('trip-plan'),
+        style: FilledButton.styleFrom(
+          minimumSize: const Size(0, 36),
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          visualDensity: VisualDensity.compact,
         ),
-        const SizedBox(width: 8),
-        FilledButton(
-          key: const ValueKey<String>('trip-finish'),
-          style: FilledButton.styleFrom(
-            minimumSize: const Size(0, 36),
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            visualDensity: VisualDensity.compact,
-          ),
-          onPressed: () async {
-            final SeaTripLog? trip =
-                await ref.read(activeTripProvider.notifier).finish();
-            if (trip == null || !context.mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(t.tripSavedSnack)),
-            );
-          },
-          child: Text(t.tripFinishBtn),
-        ),
-      ],
+        onPressed: () async {
+          final int now = DateTime.now().millisecondsSinceEpoch;
+          await ref.read(tripLogProvider.notifier).add(SeaTripLog(
+                id: 't$now',
+                name: name,
+                status: TripStatus.planned,
+                dateMs: now,
+                distanceNm: distanceNm,
+                stops: stops,
+              ));
+          ref.read(plannedRouteSeqProvider.notifier).state = routeSeq;
+          if (!context.mounted) return;
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(content: Text(t.tripPlannedSnack)));
+        },
+        icon: const DocklyIcon(DocklyIcons.sailing,
+            size: 15, color: Colors.white),
+        label: Text(t.tripPlanBtn),
+      ),
     );
   }
 }

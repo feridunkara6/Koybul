@@ -35,12 +35,14 @@ class SailorProfileCard extends ConsumerWidget {
     final AsyncValue<ReputationSummary> async = ref.watch(reputationSummaryProvider);
 
     // Sezon istatistiği Defter'deki hesabın aynısı — iki ekranda iki farklı
-    // sayı görünmesin diye aynı kaynaktan, aynı kuralla.
+    // sayı görünmesin diye aynı kaynaktan, aynı kuralla: YALNIZ GERÇEKLEŞEN
+    // seferler sayılır (v2.1 — plan istatistik değildir, 0-uydurma).
     final int year = DateTime.now().year;
     int trips = 0;
     double nm = 0;
     for (final SeaTripLog x in ref.watch(tripLogProvider)) {
-      if (DateTime.fromMillisecondsSinceEpoch(x.endMs).year != year) continue;
+      if (x.isPlanned) continue;
+      if (DateTime.fromMillisecondsSinceEpoch(x.dateMs).year != year) continue;
       trips++;
       nm += x.distanceNm;
     }
