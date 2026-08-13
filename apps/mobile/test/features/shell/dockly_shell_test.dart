@@ -129,8 +129,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex, 2);
     expect(find.byType(DeckScreen), findsOneWidget);
-    // Seyir yok → dürüst boş durum (varsayılan segment Seyirler).
-    expect(find.textContaining('Henüz seyir kaydı yok'), findsOneWidget);
+    // Seyir yok → dürüst boş durum (varsayılan segment Seyirler; metin
+    // v2.1 "Planla → Gerçekleşti" akışını anlatır).
+    expect(find.textContaining('Henüz sefer yok'), findsOneWidget);
 
     await tester.tap(find.text('Rotalarım'));
     await tester.pumpAndSettle();
