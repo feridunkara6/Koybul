@@ -176,9 +176,16 @@ void main() {
     expect(find.byKey(const ValueKey<String>('dot-p5')), findsOneWidget);
     expect(_docklyIcon(DocklyIcons.forLocationType('cove')), findsOneWidget);
 
-    // Nokta dokunuşu tam damlayla aynı işi yapar: pin seçilir.
-    await tester.tap(find.byKey(const ValueKey<String>('dot-p5')));
-    await tester.pump();
+    // Nokta dokunuşu tam damlayla aynı işi yapar: pin seçilir. Doğrulama
+    // GestureDetector'ün onTap kablosu üzerinden yapılır — gerçek tester.tap,
+    // haritanın çift-dokunuş bekleyicisini (300 ms) kurup testi "bekleyen
+    // Timer" ile kırmızıya boyuyordu (SAHA DERSİ 2026-08: bu depo bekleyen
+    // zamanlayıcıya sıfır tolerans tanır, dokunuş testleri kabloyu sınar).
+    final GestureDetector g = tester.widget<GestureDetector>(find.descendant(
+      of: find.byKey(const ValueKey<String>('dot-p5')),
+      matching: find.byType(GestureDetector),
+    ));
+    g.onTap!();
     expect(tapped, 'p5');
   });
 
