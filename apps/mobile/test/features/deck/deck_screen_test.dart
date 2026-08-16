@@ -94,6 +94,15 @@ void main() {
           dateMs: DateTime(year, 6, 1, 12).millisecondsSinceEpoch,
           distanceNm: 12,
           stops: 1,
+          // ROTA BİRLEŞTİRME (v2.2): plan rotasını taşıyor.
+          routeOrigin: const RouteOrigin(
+              pos: GeoPoint(lat: 36.70, lon: 27.70), name: 'Datça'),
+          routeWaypoints: const <RouteWaypoint>[
+            RouteWaypoint(
+                pos: GeoPoint(lat: 36.75, lon: 28.93),
+                id: 'loc-1',
+                name: 'Göcek'),
+          ],
         ),
       ];
     await tester.pumpWidget(_app(trips: store));
@@ -102,6 +111,8 @@ void main() {
     // Plan görünür ama İSTATİSTİK DEĞİLDİR: sezon kartı yok (0-uydurma).
     expect(find.text('PLANLANDI'), findsOneWidget);
     expect(find.text('$year sezonu'), findsNothing);
+    // Rota taşıyan planda "Haritada aç" var (v2.2 birleştirme).
+    expect(find.byKey(const ValueKey<String>('trip-open-tp1')), findsOneWidget);
 
     // "Gerçekleşti ✓" → onay sayfası: süre çipi + not, sonra "Deftere işle".
     await tester.tap(find.byKey(const ValueKey<String>('trip-done-tp1')));
@@ -149,6 +160,8 @@ void main() {
     expect(store.active, isNull); // göç tek seferlik — anahtar silindi
     expect(store.data, hasLength(1));
     expect(store.data.first.status, TripStatus.planned);
+    // Göçen eski kayıt ROTA TAŞIMAZ → "Haritada aç" dürüstçe yok (v2.2).
+    expect(find.text('Haritada aç'), findsNothing);
   });
 
   test('GERİYE UYUM: eski başlat/bitir JSON kaydı GERÇEKLEŞTİ olarak, '
@@ -170,6 +183,52 @@ void main() {
     expect(round!.status, TripStatus.done);
     expect(round.durMin, 90);
     expect(round.distanceNm, 6.2);
+  });
+
+  test('ROTA BİRLEŞTİRME (v2.2): plandaki rota JSON gidiş-dönüşünde kayıpsız; '
+      'rotasız kayıt hasRoute=false kalır', () {
+    const SeaTripLog planned = SeaTripLog(
+      id: 'tp1',
+      name: 'Datça turu',
+      status: TripStatus.planned,
+      dateMs: 1000000,
+      distanceNm: 12,
+      stops: 1,
+      routeOrigin:
+          RouteOrigin(pos: GeoPoint(lat: 36.70, lon: 27.70), name: 'Datça'),
+      routeWaypoints: <RouteWaypoint>[
+        RouteWaypoint(
+            pos: GeoPoint(lat: 36.75, lon: 28.93), id: 'loc-1', name: 'Göcek'),
+        RouteWaypoint(pos: GeoPoint(lat: 36.72, lon: 28.92)),
+      ],
+    );
+    final SeaTripLog? round = SeaTripLog.fromJson(planned.toJson());
+    expect(round, isNotNull);
+    expect(round!.hasRoute, isTrue);
+    expect(round.routeOrigin!.pos.lat, 36.70);
+    expect(round.routeOrigin!.name, 'Datça');
+    expect(round.routeOrigin!.isDevice, isFalse);
+    expect(round.routeWaypoints, hasLength(2));
+    expect(round.routeWaypoints!.first.id, 'loc-1');
+    expect(round.routeWaypoints!.first.name, 'Göcek');
+    expect(round.routeWaypoints![1].id, isNull);
+
+    // GERÇEKLEŞTİ'ye geçiş rota verisini DÜŞÜRMEZ (copyWith taşır).
+    final SeaTripLog done =
+        planned.copyWith(status: TripStatus.done, dateMs: 2000000, durMin: 120);
+    expect(done.hasRoute, isTrue);
+    expect(done.routeWaypoints, hasLength(2));
+
+    // Rotasız kayıt (eski plan): hasRoute false — "Haritada aç" çıkmaz.
+    const SeaTripLog old = SeaTripLog(
+      id: 'tp0',
+      name: 'Eski plan',
+      status: TripStatus.planned,
+      dateMs: 500,
+      distanceNm: 5,
+    );
+    expect(old.hasRoute, isFalse);
+    expect(SeaTripLog.fromJson(old.toJson())!.hasRoute, isFalse);
   });
 
   testWidgets('Rotalarım: kayıtlı rota İSMİYLE listelenir',

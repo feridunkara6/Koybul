@@ -717,7 +717,7 @@ Future<void> _saveRouteDialog(
   final bool? ok = await showDialog<bool>(
     context: context,
     builder: (BuildContext dialogContext) => AlertDialog(
-      title: Text(t.routeSaveTitle),
+      title: Text(t.routeAddToSaved),
       content: TextField(
         controller: nameCtrl,
         autofocus: true,
@@ -1315,12 +1315,31 @@ class _RouteChip extends ConsumerWidget {
                   icon: const DocklyIcon(DocklyIcons.checkCircle, size: 17),
                   onPressed: () => showChecklistSheet(context),
                 ),
+                // ROTA BİRLEŞTİRME (kurucu onayı 2026-08): "Rotayı kaydet"
+                // ayrı düğme olmaktan çıktı — tek ana eylem "Seyri planla"
+                // (plan rotayı da taşır). Şablon isteyen azınlık için eylem
+                // taşma menüsünde "Rotalarım'a ekle" adıyla yaşar; iki
+                // benzer isimli düğmenin karar yükü kalktı.
                 if (onSave != null)
-                  IconButton(
-                    icon: const DocklyIcon(DocklyIcons.bookmark, size: 17),
-                    tooltip: t.routeSaveTitle,
-                    visualDensity: VisualDensity.compact,
-                    onPressed: onSave,
+                  PopupMenuButton<int>(
+                    key: const ValueKey<String>('route-chip-menu'),
+                    tooltip: t.routeMoreTooltip,
+                    icon: const DocklyIcon(DocklyIcons.moreVert, size: 17),
+                    padding: EdgeInsets.zero,
+                    onSelected: (int _) => onSave!(),
+                    itemBuilder: (BuildContext c) => <PopupMenuEntry<int>>[
+                      PopupMenuItem<int>(
+                        value: 0,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const DocklyIcon(DocklyIcons.bookmark, size: 16),
+                            const SizedBox(width: 10),
+                            Text(t.routeAddToSaved),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 // AYRINTI AÇ/KAPA — ok yönü durumu anlatır.
                 IconButton(
@@ -1592,6 +1611,10 @@ class _RouteChip extends ConsumerWidget {
                     ),
                 distanceNm: route.distanceNm,
                 stops: stopCount,
+                // ROTA BİRLEŞTİRME (v2.2): plan rotayı da taşır — Defter'deki
+                // PLANLANDI kartından "Haritada aç" ile geri çağrılır.
+                origin: origin,
+                waypoints: waypoints,
               ),
             ),
           ],
@@ -1628,12 +1651,18 @@ class _PlanTripRow extends ConsumerWidget {
     required this.name,
     required this.distanceNm,
     required this.stops,
+    this.origin,
+    this.waypoints = const <RouteWaypoint>[],
   });
 
   final L10n t;
   final String name;
   final double distanceNm;
   final int stops;
+
+  /// Rota verisi (v2.2): plana gömülür — "Haritada aç" bununla çalışır.
+  final RouteOrigin? origin;
+  final List<RouteWaypoint> waypoints;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1681,6 +1710,11 @@ class _PlanTripRow extends ConsumerWidget {
                 dateMs: now,
                 distanceNm: distanceNm,
                 stops: stops,
+                // Rota plana gömülür (v2.2) — başlangıç yoksa (olmamalı)
+                // rota verisi dürüstçe boş kalır.
+                routeOrigin: origin,
+                routeWaypoints:
+                    origin == null || waypoints.isEmpty ? null : waypoints,
               ));
           ref.read(plannedRouteSeqProvider.notifier).state = routeSeq;
           if (!context.mounted) return;

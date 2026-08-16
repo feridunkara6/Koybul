@@ -116,6 +116,14 @@ abstract final class DocklyIcons {
     '<line x1="10" y1="14" x2="21" y2="3"/>',
   );
 
+  /// Taşma menüsü (rota çipi birleştirmesi 2026-08): üç dikey nokta —
+  /// ikincil eylemler tek CTA kuralını bozmadan burada toplanır.
+  static const DocklyIconData moreVert = DocklyIconData(
+    '<circle cx="12" cy="5" r="1.7" fill="#000000" stroke="none"/>'
+    '<circle cx="12" cy="12" r="1.7" fill="#000000" stroke="none"/>'
+    '<circle cx="12" cy="19" r="1.7" fill="#000000" stroke="none"/>',
+  );
+
   /// Paylaş (2026-08 UX paketi): üç düğümlü klasik paylaşım işareti.
   static const DocklyIconData share = DocklyIconData(
     '<circle cx="18" cy="5" r="3"/>'

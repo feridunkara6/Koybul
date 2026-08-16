@@ -477,6 +477,11 @@ void main() {
     expect(trips.data.first.status, TripStatus.planned);
     expect(trips.data.first.distanceNm, greaterThan(0));
     expect(trips.data.first.durMin, isNull);
+    // ROTA BİRLEŞTİRME (v2.2): plan rotayı da taşır — Defter'deki karttan
+    // "Haritada aç" bu veriyle çalışır.
+    expect(trips.data.first.hasRoute, isTrue);
+    expect(trips.data.first.routeOrigin!.isDevice, isTrue);
+    expect(trips.data.first.routeWaypoints, hasLength(1));
     expect(find.textContaining('PLANLANDI'), findsOneWidget);
 
     // Düğme yerini onay satırına bırakır — aynı rota İKİ KEZ planlanamaz

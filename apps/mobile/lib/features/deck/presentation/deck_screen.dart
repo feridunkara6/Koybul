@@ -1,8 +1,14 @@
+import 'dart:async' show unawaited;
+
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../../core/origin_provider.dart';
+import '../../location/application/location_controller.dart';
+import '../../map/application/map_controller.dart';
+import '../../shell/application/shell_tab_provider.dart';
 import '../../logbook/application/logbook_controller.dart';
 import '../../logbook/domain/log_entry.dart';
 import '../../logbook/presentation/logbook_screen.dart'
@@ -341,18 +347,63 @@ class _PlannedTripCard extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 8),
-          FilledButton(
-            key: ValueKey<String>('trip-done-${trip.id}'),
-            style: FilledButton.styleFrom(
-              minimumSize: const Size(0, 40),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-            ),
-            onPressed: () => _showMarkDoneSheet(context, trip),
-            child: Text(t.tripMarkDone),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: <Widget>[
+              FilledButton(
+                key: ValueKey<String>('trip-done-${trip.id}'),
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size(0, 40),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                ),
+                onPressed: () => _showMarkDoneSheet(context, trip),
+                child: Text(t.tripMarkDone),
+              ),
+              // ROTA BİRLEŞTİRME (v2.2, kurucu onayı 2026-08): plan rotayı
+              // taşıyorsa buradan haritaya geri çağrılır — kayıtlı rotayla
+              // AYNI dürüst yol: çizgi saklanmaz, aynı motorla yeniden
+              // hesaplanır. Rotasız eski planlarda düğme çıkmaz (0-uydurma).
+              if (trip.hasRoute)
+                OutlinedButton(
+                  key: ValueKey<String>('trip-open-${trip.id}'),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(0, 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                  ),
+                  onPressed: () => _openOnMap(context, ref),
+                  child: Text(t.savedOpenBtn),
+                ),
+            ],
           ),
         ],
       ),
     );
+  }
+
+  /// "Haritada aç" — kayıtlı rota kartıyla aynı akış: Konumum başlangıçlı
+  /// planda GPS yoksa izin akışı kendiliğinden başlar; izin gelmezse dürüst
+  /// uyarı. Rota kurulunca Keşfet sekmesine dönülür.
+  Future<void> _openOnMap(BuildContext context, WidgetRef ref) async {
+    final RouteOrigin origin = trip.routeOrigin!;
+    if (origin.isDevice && ref.read(devicePositionProvider) == null) {
+      await ref.read(locationControllerProvider.notifier).locateMe();
+      if (!context.mounted) return;
+      if (ref.read(devicePositionProvider) == null) {
+        final L10n t = ref.read(l10nProvider);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(
+            content: Text(t.routeNeedOrigin),
+            duration: const Duration(seconds: 6),
+          ));
+        return;
+      }
+    }
+    unawaited(ref
+        .read(mapControllerProvider.notifier)
+        .openSavedRoute(origin, trip.routeWaypoints!, name: trip.name));
+    ref.read(shellTabProvider.notifier).state = 0; // Keşfet'e dön
   }
 }
 
