@@ -1315,32 +1315,11 @@ class _RouteChip extends ConsumerWidget {
                   icon: const DocklyIcon(DocklyIcons.checkCircle, size: 17),
                   onPressed: () => showChecklistSheet(context),
                 ),
-                // ROTA BİRLEŞTİRME (kurucu onayı 2026-08): "Rotayı kaydet"
-                // ayrı düğme olmaktan çıktı — tek ana eylem "Seyri planla"
-                // (plan rotayı da taşır). Şablon isteyen azınlık için eylem
-                // taşma menüsünde "Rotalarım'a ekle" adıyla yaşar; iki
-                // benzer isimli düğmenin karar yükü kalktı.
-                if (onSave != null)
-                  PopupMenuButton<int>(
-                    key: const ValueKey<String>('route-chip-menu'),
-                    tooltip: t.routeMoreTooltip,
-                    icon: const DocklyIcon(DocklyIcons.moreVert, size: 17),
-                    padding: EdgeInsets.zero,
-                    onSelected: (int _) => onSave!(),
-                    itemBuilder: (BuildContext c) => <PopupMenuEntry<int>>[
-                      PopupMenuItem<int>(
-                        value: 0,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            const DocklyIcon(DocklyIcons.bookmark, size: 16),
-                            const SizedBox(width: 10),
-                            Text(t.routeAddToSaved),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                // ROTA BİRLEŞTİRME (kurucu onayı 2026-08, revizyon): kaydet
+                // eylemi başlıktaki yer imi ikonundan çıktı; "Seyri planla"nın
+                // YANINDA eş boy, turkuaz "Rotalarım'a ekle" düğmesi oldu —
+                // bkz. _PlanTripRow (kurucu isteği: iki eylem yan yana,
+                // aynı tasarım, farklı renk).
                 // AYRINTI AÇ/KAPA — ok yönü durumu anlatır.
                 IconButton(
                   key: const ValueKey<String>('route-chip-toggle'),
@@ -1615,6 +1594,9 @@ class _RouteChip extends ConsumerWidget {
                 // PLANLANDI kartından "Haritada aç" ile geri çağrılır.
                 origin: origin,
                 waypoints: waypoints,
+                // "Rotalarım'a ekle" — planla düğmesinin yanındaki turkuaz
+                // kardeş (kurucu isteği 2026-08).
+                onAddToSaved: onSave,
               ),
             ),
           ],
@@ -1641,9 +1623,10 @@ class _RouteChip extends ConsumerWidget {
 final StateProvider<int?> plannedRouteSeqProvider =
     StateProvider<int?>((ref) => null);
 
-/// SEYİR PLANI SATIRI (rota çipinin altı, v2.1): tek eylem "Seyri planla".
-/// Dokununca sefer, Defter'in Seyirler bölümüne PLANLANDI durumunda düşer;
-/// onay mesajı beklentiyi sabitler ("yaptığında Gerçekleşti'yi işaretle").
+/// SEYİR PLANI SATIRI (rota çipinin altı, v2.2): iki eş boy kardeş düğme —
+/// MAVİ "Seyri planla" (sefer niyeti: Defter'e PLANLANDI düşer, rota plana
+/// gömülür) ve TURKUAZ "Rotalarım'a ekle" (tarihsiz şablon rota). Renk
+/// ayrımı işlevi anlatır, tasarım/boy birdir (kurucu isteği 2026-08).
 /// Navigasyon başlatma/GPS iması taşıyan hiçbir söz kullanılmaz.
 class _PlanTripRow extends ConsumerWidget {
   const _PlanTripRow({
@@ -1653,6 +1636,7 @@ class _PlanTripRow extends ConsumerWidget {
     required this.stops,
     this.origin,
     this.waypoints = const <RouteWaypoint>[],
+    this.onAddToSaved,
   });
 
   final L10n t;
@@ -1664,6 +1648,10 @@ class _PlanTripRow extends ConsumerWidget {
   final RouteOrigin? origin;
   final List<RouteWaypoint> waypoints;
 
+  /// "Rotalarım'a ekle" (kurucu isteği 2026-08): planla düğmesinin yanında
+  /// AYNI boy/tasarımda, TURKUAZ kardeş düğme — şablon rotalar için.
+  final VoidCallback? onAddToSaved;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
@@ -1671,61 +1659,93 @@ class _PlanTripRow extends ConsumerWidget {
         ref.watch(mapControllerProvider.select((MapState s) => s.routeSeq));
     final bool alreadyPlanned =
         ref.watch(plannedRouteSeqProvider) == routeSeq;
-    if (alreadyPlanned) {
-      // Bu rota deftere eklendi — düğme yerine sakin bir onay satırı.
-      return Row(
-        children: <Widget>[
-          const DocklyIcon(DocklyIcons.checkCircle,
-              size: 14, color: DocklyColors.success),
-          const SizedBox(width: 5),
-          Expanded(
-            child: Text(
-              t.tripPlannedShort,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
+    // İkincil eylem: turkuaz "Rotalarım'a ekle" — planla ile eş boy/biçim,
+    // renk ayrıştırır (mavi = sefer niyeti, turkuaz = şablon rota). Rota
+    // planlandıktan SONRA da görünür kalır: kaptan önce planlayıp sonra
+    // şablon olarak da saklayabilir.
+    final Widget? saveBtn = onAddToSaved == null
+        ? null
+        : FilledButton.icon(
+            key: const ValueKey<String>('route-add-saved'),
+            style: FilledButton.styleFrom(
+              backgroundColor: DocklyColors.accentTurquoise,
+              foregroundColor: DocklyColors.brandDeep,
+              minimumSize: const Size(0, 36),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              visualDensity: VisualDensity.compact,
             ),
+            onPressed: onAddToSaved,
+            icon: const DocklyIcon(DocklyIcons.bookmark,
+                size: 15, color: DocklyColors.brandDeep),
+            label: Text(t.routeAddToSaved),
+          );
+    if (alreadyPlanned) {
+      // Bu rota deftere eklendi — planla düğmesi yerini sakin bir onay
+      // satırına bırakır; "Rotalarım'a ekle" yanında durmaya devam eder.
+      return Wrap(
+        spacing: 10,
+        runSpacing: 8,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: <Widget>[
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const DocklyIcon(DocklyIcons.checkCircle,
+                  size: 14, color: DocklyColors.success),
+              const SizedBox(width: 5),
+              Text(
+                t.tripPlannedShort,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
           ),
+          if (saveBtn != null) saveBtn,
         ],
       );
     }
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: FilledButton.icon(
-        key: const ValueKey<String>('trip-plan'),
-        style: FilledButton.styleFrom(
-          minimumSize: const Size(0, 36),
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          visualDensity: VisualDensity.compact,
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: <Widget>[
+        FilledButton.icon(
+          key: const ValueKey<String>('trip-plan'),
+          style: FilledButton.styleFrom(
+            minimumSize: const Size(0, 36),
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            visualDensity: VisualDensity.compact,
+          ),
+          onPressed: () async {
+            final int now = DateTime.now().millisecondsSinceEpoch;
+            await ref.read(tripLogProvider.notifier).add(SeaTripLog(
+                  id: 't$now',
+                  name: name,
+                  status: TripStatus.planned,
+                  dateMs: now,
+                  distanceNm: distanceNm,
+                  stops: stops,
+                  // Rota plana gömülür (v2.2) — başlangıç yoksa (olmamalı)
+                  // rota verisi dürüstçe boş kalır.
+                  routeOrigin: origin,
+                  routeWaypoints:
+                      origin == null || waypoints.isEmpty ? null : waypoints,
+                ));
+            ref.read(plannedRouteSeqProvider.notifier).state = routeSeq;
+            if (!context.mounted) return;
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text(t.tripPlannedSnack)));
+          },
+          icon: const DocklyIcon(DocklyIcons.sailing,
+              size: 15, color: Colors.white),
+          label: Text(t.tripPlanBtn),
         ),
-        onPressed: () async {
-          final int now = DateTime.now().millisecondsSinceEpoch;
-          await ref.read(tripLogProvider.notifier).add(SeaTripLog(
-                id: 't$now',
-                name: name,
-                status: TripStatus.planned,
-                dateMs: now,
-                distanceNm: distanceNm,
-                stops: stops,
-                // Rota plana gömülür (v2.2) — başlangıç yoksa (olmamalı)
-                // rota verisi dürüstçe boş kalır.
-                routeOrigin: origin,
-                routeWaypoints:
-                    origin == null || waypoints.isEmpty ? null : waypoints,
-              ));
-          ref.read(plannedRouteSeqProvider.notifier).state = routeSeq;
-          if (!context.mounted) return;
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(t.tripPlannedSnack)));
-        },
-        icon: const DocklyIcon(DocklyIcons.sailing,
-            size: 15, color: Colors.white),
-        label: Text(t.tripPlanBtn),
-      ),
+        if (saveBtn != null) saveBtn,
+      ],
     );
   }
 }

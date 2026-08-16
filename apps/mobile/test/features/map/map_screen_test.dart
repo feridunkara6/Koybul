@@ -469,6 +469,10 @@ void main() {
     await tester.pump(const Duration(seconds: 6));
     await tester.pumpAndSettle();
 
+    // İKİ KARDEŞ DÜĞME (kurucu isteği 2026-08): planla'nın yanında turkuaz
+    // "Rotalarım'a ekle" de durur — eş boy, farklı renk.
+    expect(find.byKey(const ValueKey<String>('route-add-saved')), findsOneWidget);
+
     // Planla: kayıt PLANLANDI olarak depoya düşer, onay mesajı görünür.
     // (Önce depo doğrulanır — mesaj bulunamazsa neden ayrışsın.)
     await tester.tap(find.byKey(const ValueKey<String>('trip-plan')));
@@ -485,9 +489,12 @@ void main() {
     expect(find.textContaining('PLANLANDI'), findsOneWidget);
 
     // Düğme yerini onay satırına bırakır — aynı rota İKİ KEZ planlanamaz
-    // (çifte kayıt = şişirilmiş defter; tasarım raporu §6).
+    // (çifte kayıt = şişirilmiş defter; tasarım raporu §6). "Rotalarım'a
+    // ekle" ise DURMAYA DEVAM eder: kaptan planladıktan sonra şablon
+    // olarak da saklayabilir.
     expect(find.byKey(const ValueKey<String>('trip-plan')), findsNothing);
     expect(find.textContaining('Defter\'e eklendi'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('route-add-saved')), findsOneWidget);
 
     // Snackbar zamanlayıcısını akıt.
     await tester.pump(const Duration(seconds: 6));
