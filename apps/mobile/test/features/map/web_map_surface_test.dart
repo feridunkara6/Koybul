@@ -128,6 +128,60 @@ void main() {
     expect(_docklyIcon(DocklyIcons.errorOutline), findsNothing);
   });
 
+  testWidgets('KALABALIK SAHNE (perf tur 2): 90+ pinde hafif nokta çizilir, '
+      'seçili pin tam damla kalır, noktaya dokunuş pini seçer',
+      (WidgetTester tester) async {
+    // Açılış kamerası (38.85, 28.05 · zoom 7) içinde kalan 120 pin.
+    final List<LocationPin> many = <LocationPin>[
+      for (int i = 0; i < 120; i++)
+        LocationPin(
+          id: 'p$i',
+          name: 'Koy $i',
+          type: 'cove',
+          position: GeoPoint(
+            lat: 38.3 + 0.1 * (i ~/ 12),
+            lon: 27.3 + 0.12 * (i % 12),
+          ),
+          ratingAvg: null,
+          priceTier: 'unknown',
+        ),
+    ];
+    String? tapped;
+    final MapSurfaceData data = MapSurfaceData(
+      pins: many,
+      clusters: const <Cluster>[],
+      selectedPinId: 'p0',
+    );
+    await tester.pumpWidget(ProviderScope(
+      child: MaterialApp(
+        home: Scaffold(
+          body: Builder(
+            builder: (BuildContext context) => webMapSurfaceBuilder(
+              context,
+              data,
+              MapSurfaceCallbacks(
+                onViewportChanged: (MapViewport _) {},
+                onPinTap: (String id) => tapped = id,
+                onClusterTap: (_) {},
+              ),
+            ),
+          ),
+        ),
+      ),
+    ));
+    await tester.pump();
+
+    // Noktalar sahnede (örnek biri), tam damlanın tip ikonu YALNIZ seçili
+    // pinde — 120 ikon değil 1 ikon çiziliyor (kasmayı kesen fark bu).
+    expect(find.byKey(const ValueKey<String>('dot-p5')), findsOneWidget);
+    expect(_docklyIcon(DocklyIcons.forLocationType('cove')), findsOneWidget);
+
+    // Nokta dokunuşu tam damlayla aynı işi yapar: pin seçilir.
+    await tester.tap(find.byKey(const ValueKey<String>('dot-p5')));
+    await tester.pump();
+    expect(tapped, 'p5');
+  });
+
   // --- KULLANICI DOSTU SÜRÜKLEME (2026-08): tutamaç noktası üretimi ---
   group('legHandlePoints', () {
     // 1° enlem ≈ 60 nm — mesafeleri enlem farkıyla kurmak kolay.

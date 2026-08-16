@@ -167,6 +167,12 @@ class _WebMapSurface extends ConsumerStatefulWidget {
 /// pin modu. Eşik GEÇİLİRKEN debounce beklenmez — pinler anında istenir.
 const int _minPinZoom = 9;
 
+/// KALABALIK SAHNE eşiği (perf tur 2, 2026-08): görünümde bundan çok pin
+/// varsa tam damla yerine hafif nokta çizilir. 90, orta sınıf telefonda
+/// tam damlaların hâlâ akıcı kaldığı ölçülü bir üst sınırdır; tipik yakın
+/// keşif sahnesi (20-60 pin) her zaman tam damla görür.
+const int _densePinThreshold = 90;
+
 /// Süren tutamaç sürüklemesi (ROTA DÜZENLEME 2026-08). Sürükleme boyunca
 /// rota YENİDEN HESAPLANMAZ (A* pahalı) — kesikli önizleme çizgisi ve hayalet
 /// tutamaç gösterilir; parmak kalkınca kontrolcü gerçek rotayı hesaplar.
@@ -495,6 +501,17 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface>
     // hissi asıl orada) animasyon durur; kalabalıkta pinler düz belirir.
     final bool dropIn = widget.data.pins.length <= 60 &&
         !MediaQuery.of(context).disableAnimations;
+    // PERF TUR 2 (kasma şikâyeti 2026-08, "noktaların çok olduğu yerler"):
+    // KALABALIK SAHNE MODU. 750+ kayıtla, pin zoom'unun alt ucunda (9-11)
+    // tek görünümde yüzlerce pin oluyor; her biri gölgeli/ikonlu/kendi
+    // boyama katmanında tam damla olarak çizilince tarayıcı (CanvasKit)
+    // kompozisyonu kare düşürüyordu. Eşik üstünde pinler HAFİF NOKTAYA iner:
+    // tip renkli düz daire — gölgesiz, ikonsuz, katmansız. Dokunuş aynen
+    // çalışır; SEÇİLİ pin her zaman tam damla kalır (kimlik kaybolmaz).
+    // Yakınlaşınca (pin sayısı eşiğin altına inince) tam damlalar geri gelir —
+    // keşif hissi asıl orada. Uyum rozeti nokta modunda çizilmez (o
+    // yoğunlukta zaten okunmuyordu); dokununca alt kart uyumu söyler.
+    final bool dense = widget.data.pins.length > _densePinThreshold;
     return FlutterMap(
       mapController: _map,
       options: MapOptions(
@@ -632,33 +649,52 @@ class _WebMapSurfaceState extends ConsumerState<_WebMapSurface>
               ),
             // Tekil pinler — damla form, tip rengi, beyaz kontur + beyaz ikon.
             // Damlanın ucu koordinata basar (alignment: topCenter).
+            // KALABALIK SAHNEDE (dense) seçili olmayan pin HAFİF NOKTA olur —
+            // gölge/ikon/katman maliyeti sıfırlanır, kasma biter (perf tur 2).
             for (final LocationPin p in widget.data.pins)
-              Marker(
-                // AÇILIŞ HİSSİ (onaylı E7): pin İLK göründüğünde küçükten
-                // büyüyerek "damlar". Anahtar MARKER'da olmalı — MarkerLayer
-                // öğeleri marker anahtarıyla eşler; anahtar çocukta kalırsa
-                // her kaydırmada animasyon yeniden oynar (denetim bulgusu).
-                key: ValueKey<String>('pin-drop-${p.id}'),
-                point: LatLng(p.position.lat, p.position.lon),
-                width: 44,
-                height: 44,
-                alignment: Alignment.topCenter,
-                child: RepaintBoundary(
-                  child: _DropIn(
-                    animate: dropIn,
-                    child: _PinMarker(
+              if (dense && p.id != widget.data.selectedPinId)
+                Marker(
+                  key: ValueKey<String>('pin-dot-${p.id}'),
+                  point: LatLng(p.position.lat, p.position.lon),
+                  width: 26, // dokunma hedefi; görsel nokta 18px çizilir
+                  height: 26,
+                  // İç anahtar: widget testleri belirli noktayı bulup
+                  // dokunabilsin (Marker anahtarı ağaç içinde aranamıyor).
+                  child: KeyedSubtree(
+                    key: ValueKey<String>('dot-${p.id}'),
+                    child: _MiniPinMarker(
                       type: p.type,
-                      selected: p.id == widget.data.selectedPinId,
-                      fit: computeBoatFit(
-                        boat: boat,
-                        maxBoatLengthM: p.maxBoatLengthM,
-                        maxDraftM: p.maxDraftM,
-                      ),
                       onTap: () => widget.callbacks.onPinTap(p.id),
                     ),
                   ),
+                )
+              else
+                Marker(
+                  // AÇILIŞ HİSSİ (onaylı E7): pin İLK göründüğünde küçükten
+                  // büyüyerek "damlar". Anahtar MARKER'da olmalı — MarkerLayer
+                  // öğeleri marker anahtarıyla eşler; anahtar çocukta kalırsa
+                  // her kaydırmada animasyon yeniden oynar (denetim bulgusu).
+                  key: ValueKey<String>('pin-drop-${p.id}'),
+                  point: LatLng(p.position.lat, p.position.lon),
+                  width: 44,
+                  height: 44,
+                  alignment: Alignment.topCenter,
+                  child: RepaintBoundary(
+                    child: _DropIn(
+                      animate: dropIn,
+                      child: _PinMarker(
+                        type: p.type,
+                        selected: p.id == widget.data.selectedPinId,
+                        fit: computeBoatFit(
+                          boat: boat,
+                          maxBoatLengthM: p.maxBoatLengthM,
+                          maxDraftM: p.maxDraftM,
+                        ),
+                        onTap: () => widget.callbacks.onPinTap(p.id),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
             // --- ROTA DÜZENLEME işaretçileri (pinlerin ÜSTÜNDE) ---
             // A NOKTASI (rota planlama 2026-08): başlangıç GPS değilse rozet.
             if (widget.data.routeOriginBadge != null)
@@ -811,6 +847,36 @@ class _DropIn extends StatelessWidget {
       builder: (BuildContext context, double s, Widget? c) =>
           Transform.scale(scale: s, child: c),
       child: child,
+    );
+  }
+}
+
+/// KALABALIK SAHNE noktası (perf tur 2, 2026-08): tip renkli düz daire +
+/// ince beyaz kontur. Bilinçli olarak GÖLGESİZ, İKONSUZ ve RepaintBoundary'siz
+/// — yüzlerce örneği tek boyama geçişinde ucuza çizilsin diye. Dokunuş tam
+/// damlayla aynı işi yapar (pin seçilir, alt kart açılır).
+class _MiniPinMarker extends StatelessWidget {
+  const _MiniPinMarker({required this.type, required this.onTap});
+
+  final String type;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Center(
+        child: Container(
+          width: 18,
+          height: 18,
+          decoration: BoxDecoration(
+            color: DocklyMapColors.forType(type),
+            shape: BoxShape.circle,
+            border: Border.all(color: const Color(0xFFFFFFFF), width: 1.8),
+          ),
+        ),
+      ),
     );
   }
 }
