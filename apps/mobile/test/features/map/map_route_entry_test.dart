@@ -3,6 +3,7 @@ import 'package:dockly_mobile/features/checklist/application/checklist_controlle
 import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
 import 'package:dockly_mobile/features/location/application/location_controller.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
+import 'package:dockly_mobile/features/map/domain/map_state.dart';
 import 'package:dockly_mobile/features/map/presentation/map_screen.dart';
 import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
@@ -96,6 +97,12 @@ void main() {
     await tester.tap(find.byKey(_btn));
     await tester.pumpAndSettle();
 
+    // ROTA PLANLAYICI (kurucu isteği 2026-08): önce mod sorulur.
+    expect(find.byKey(const ValueKey<String>('plan-from-me')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('plan-two-points')), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey<String>('plan-from-me')));
+    await tester.pumpAndSettle();
+
     // Seçim kipi: arama ekranı ne istediğini söylüyor.
     expect(find.byType(SearchScreen), findsOneWidget);
     expect(find.text('Nereye gitmek istiyorsun?'), findsOneWidget);
@@ -153,6 +160,8 @@ void main() {
 
     await tester.tap(find.byKey(_btn));
     await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey<String>('plan-from-me')));
+    await tester.pumpAndSettle();
     expect(find.byType(SearchScreen), findsOneWidget);
 
     // Geri (arama ekranında AppBar geri düğmesi var).
@@ -164,5 +173,51 @@ void main() {
         ProviderScope.containerOf(tester.element(find.byType(MapScreen)));
     expect(c.read(mapControllerProvider).route, isNull);
     expect(find.byKey(_btn), findsOneWidget);
+  });
+
+  testWidgets('İKİ NOKTA ARASI (A → B, kurucu isteği 2026-08): GPS hiç '
+      'istenmez — hedef aranır, başlangıç haritadan seçilir, rota kurulur',
+      (WidgetTester tester) async {
+    final FakeSearchGateway search = FakeSearchGateway(
+      results: <LocationSummary>[sampleSummary('loc-9', 'Ekincik Koyu')],
+    );
+    // Konum servisi BİLEREK "izin yok" döner: A→B akışı GPS'e dokunmadığı
+    // için buna rağmen uçtan uca çalışmalıdır.
+    await tester.pumpWidget(_app(search, location: FakeLocationService(null)));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(_btn));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey<String>('plan-two-points')));
+    await tester.pumpAndSettle();
+
+    // Hedef adıyla aranır ve seçilir.
+    expect(find.byType(SearchScreen), findsOneWidget);
+    await tester.enterText(find.byType(TextField), 'ekincik');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ekincik Koyu'));
+    await tester.pumpAndSettle();
+
+    // Rota HENÜZ yok; BAŞLANGIÇ SEÇ modu açık (haritada şerit).
+    final ProviderContainer c =
+        ProviderScope.containerOf(tester.element(find.byType(MapScreen)));
+    expect(c.read(mapControllerProvider).route, isNull);
+    expect(c.read(mapControllerProvider).pickingOrigin, isTrue);
+
+    // Haritaya dokunuş = A noktası (yüzey sahte; kontrolcü yolu birebir).
+    await c
+        .read(mapControllerProvider.notifier)
+        .originPicked(const GeoPoint(lat: 36.80, lon: 28.90));
+    await tester.pumpAndSettle();
+
+    // Rota kuruldu: başlangıç GPS DEĞİL, hedef seçilen kayıt.
+    final MapState s = c.read(mapControllerProvider);
+    expect(s.route, isNotNull);
+    expect(s.pickingOrigin, isFalse);
+    expect(s.routeOrigin!.isDevice, isFalse);
+    expect(s.routeWaypoints.single.id, 'loc-9');
+
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
   });
 }

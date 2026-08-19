@@ -1084,9 +1084,12 @@ class _SosButton extends ConsumerWidget {
 /// P0-2, 2026-08: sağ altta ETİKETLİ FAB). Uygulamanın imza özelliği artık
 /// adıyla kendini anlatıyor ve tek elle kullanımda başparmağın tam altında.
 ///
-/// Akış AYNEN: hedefi ADIYLA arat → seç → mevcut `startSeaRoute` akışı
-/// devralır (konum izni, gerekirse başlangıç menüsü). Yeni bir rota mantığı
-/// YAZILMADI; yalnız var olan yeteneğin kapısı görünür kılındı.
+/// Akış (rota planlayıcı, kurucu isteği 2026-08): önce MOD sorulur —
+/// "Konumumdan" (hedef ara → `startSeaRoute` akıllı akışı: izin gerekirse
+/// istenir) ya da "İki nokta arası (A → B)" (hedef ara → BAŞLANGIÇ SEÇ
+/// modu; GPS'e hiç dokunulmaz — konum paylaşılmışken bile kaptan A'yı
+/// kendisi seçebilir). Yeni rota mantığı YAZILMADI; kontrolcünün var olan
+/// `beginOriginPick` yeteneğinin kapısı görünür kılındı.
 class _RouteStartButton extends ConsumerWidget {
   const _RouteStartButton();
 
@@ -1106,6 +1109,53 @@ class _RouteStartButton extends ConsumerWidget {
       icon: const DocklyIcon(DocklyIcons.compass, size: 20, color: Colors.white),
       label: Text(t.routePlanFab),
       onPressed: () async {
+        // ROTA PLANLAYICI (kurucu isteği 2026-08): İKİ NOKTA ARASI planlama
+        // görünür kapıya kavuştu. Eskiden A→B ancak konum izni REDDEDİLİRSE
+        // açılan yedek menüde saklıydı; konum paylaşan kaptan başlangıcı
+        // hiç seçemiyordu. Artık düğme önce modu sorar:
+        //  • Konumumdan — bilinen akıllı akış (izin gerekirse istenir).
+        //  • İki nokta arası (A → B) — GPS'e HİÇ dokunmaz: hedef seçilir,
+        //    sonra BAŞLANGIÇ SEÇ modu açılır (haritaya ya da koya dokun).
+        //    Konum paylaşılmış olsa bile kaptan A'yı kendisi belirler.
+        final String? mode = await showModalBottomSheet<String>(
+          context: context,
+          useSafeArea: true,
+          showDragHandle: true,
+          builder: (BuildContext sheetContext) => Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+                child: Text(
+                  t.routePlanFab,
+                  style: Theme.of(sheetContext)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w800),
+                ),
+              ),
+              ListTile(
+                key: const ValueKey<String>('plan-from-me'),
+                leading: const DocklyIcon(DocklyIcons.sailing,
+                    color: DocklyColors.brandPrimary),
+                title: Text(t.routeFromDeviceOpt),
+                subtitle: Text(t.routePlanFromMeSub),
+                onTap: () => Navigator.of(sheetContext).pop('me'),
+              ),
+              ListTile(
+                key: const ValueKey<String>('plan-two-points'),
+                leading: const DocklyIcon(DocklyIcons.place,
+                    color: DocklyColors.brandPrimary),
+                title: Text(t.routePlanTwoPoints),
+                subtitle: Text(t.routePlanTwoPointsSub),
+                onTap: () => Navigator.of(sheetContext).pop('ab'),
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
+        );
+        if (mode == null || !context.mounted) return;
         final LocationSummary? picked =
             await Navigator.of(context).push<LocationSummary>(
           MaterialPageRoute<LocationSummary>(
@@ -1114,6 +1164,16 @@ class _RouteStartButton extends ConsumerWidget {
           ),
         );
         if (picked == null || !context.mounted) return;
+        if (mode == 'ab') {
+          // A→B: hedef bekletilir, BAŞLANGIÇ SEÇ modu açılır (şerit çıkar:
+          // haritaya ya da bir koya dokun) — konum izni hiç istenmez.
+          ref.read(mapControllerProvider.notifier).beginOriginPick(
+                destPos: picked.position,
+                destId: picked.id,
+                destName: picked.name,
+              );
+          return;
+        }
         await startSeaRoute(
           context,
           ref,
