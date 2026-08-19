@@ -55,17 +55,6 @@ class MapScreen extends ConsumerWidget {
         // rotası günde-bir kontrol sorusunu tetiklememeli — soru kullanıcının
         // İLK GERÇEK rotasına saklanır (kalıcı hak yakılmaz).
         if (prev != null && next > prev) {
-          // YENİ ROTA → ayrıntı kararı BİR KEZ burada verilir ve o rota
-          // boyunca sabit kalır. (İnceleme dersi: karar her çizimde yeniden
-          // hesaplansaydı, kaptan 2. durağı eklediği anda çip kapanır ve
-          // "+ Nokta ekle" düğmesi elinden kaçardı.)
-          final int stops = ref
-              .read(mapControllerProvider)
-              .routeWaypoints
-              .where((RouteWaypoint w) => w.isStop)
-              .length;
-          ref.read(routeChipExpandedProvider.notifier).state =
-              stops < kRouteChipAutoCollapseStops;
           if (!ref.read(onboardingControllerProvider).tourActive) {
             ref.read(checklistProvider.notifier).maybePrompt();
           }
@@ -308,15 +297,8 @@ class MapScreen extends ConsumerWidget {
                             route: state.route!,
                             wind: state.routeWind,
                             waypoints: state.routeWaypoints,
-                            origin: state.routeOrigin,
-                            onClear: controller.clearRoute,
-                            onRemoveStop: controller.removeWaypoint,
-                            onSave: () =>
-                                _saveRouteDialog(context, ref, state),
                             label: state.routeLabel,
-                            onChangeOrigin: () =>
-                                showRouteOriginMenu(context, ref),
-                            onAddPoint: controller.beginAddPoint,
+                            onClear: controller.clearRoute,
                           ),
                           ),
                         ),
@@ -1193,61 +1175,31 @@ class _MapSearchPill extends ConsumerWidget {
   }
 }
 
-/// ROTA ÇİPİ AYRINTI DURUMU (kullanıcı isteği 2026-08: "çok nokta ekleyince
-/// ekranı kaplıyor"). null = OTOMATİK: kısa rotada açık, çok duraklı rotada
-/// kapalı. Kaptan bir kez dokunursa tercihi (true/false) o rota boyunca
-/// korunur; yeni rota çizilince otomatiğe döner.
-final StateProvider<bool?> routeChipExpandedProvider =
-    StateProvider<bool?>((ref) => null);
-
-/// Bu sayıya ULAŞAN durak sayısında (2 ve üzeri) çip kendini toplar.
-const int kRouteChipAutoCollapseStops = 2;
-
-/// Deniz rotası bilgi ekranı 2.0 (kullanıcı isteği 2026-08): başlıkta rota
-/// adı; altında MESAFE / SÜRE / DURAK istatistik satırı (üç eşit sütun —
-/// çok duraklı rotada da süre HER ZAMAN görünür); sonra başlangıç satırı,
-/// durak listesi, dürüst uyarı notu ve (analiz gelince) rüzgâr satırları.
-/// Kapat düğmesi rotayı haritadan kaldırır.
+/// ROTA ÖZET HAPI + AYRINTI SAYFASI (kurucu isteği 2026-08: "bilgi ekranı
+/// telefonlarda ekranı kaplıyor"). Eski geniş bilgi çipi ve katlama makinesi
+/// emekli edildi: rota çizilince üstte YALNIZ kompakt bir özet hapı durur —
+/// ad + mesafe/süre/durak; harita hep görünür. Ayrıntının tamamı (istatistik
+/// üçlüsü, Seyri planla / Rotalarım'a ekle, başlangıç, durak listesi, rüzgâr
+/// analizi, dürüstlük notu) hapa dokununca ALTTAN AÇILAN, sürüklenip
+/// büyütülebilen sayfada yaşar (haritacılık uygulamalarının yön özeti
+/// deseni). GÜVENLİK İLKESİ KORUNDU: rüzgâr uyarısı ve olağan dışı rota
+/// notu (kuş uçuşu / kıyıda biter) sayfa açılmadan da hapta görünür.
 class _RouteChip extends ConsumerWidget {
   const _RouteChip({
     required this.route,
     required this.onClear,
     this.wind,
     this.waypoints = const <RouteWaypoint>[],
-    this.origin,
-    this.onRemoveStop,
-    this.onSave,
-    this.onChangeOrigin,
-    this.onAddPoint,
     this.label,
   });
-
-  /// KAYITLI ROTA adı (kullanıcı isteği 2026-08): kayıttan açılan rotanın
-  /// kullanıcı verdiği ismi başlıkta görünür.
-  final String? label;
 
   final SeaRoutePlan route;
   final RouteWindReport? wind;
   final VoidCallback onClear;
-
-  /// Rotanın sıralı ara noktaları (duraklar + tutamaç noktaları).
   final List<RouteWaypoint> waypoints;
 
-  /// Rotanın başlangıcı — çipte "A:" satırı (rota planlama 2026-08).
-  final RouteOrigin? origin;
-
-  /// Çipteki ✕ ile durak çıkarma (dizin, durum listesine göredir).
-  final void Function(int wpIndex)? onRemoveStop;
-
-  /// Rotayı kaydet (yer imi simgesi).
-  final VoidCallback? onSave;
-
-  /// Başlangıcı değiştir ("A:" satırındaki bağlantı).
-  final VoidCallback? onChangeOrigin;
-
-  /// NOKTA EKLE modunu açar (kullanıcı isteği 2026-08): dokunarak ara nokta /
-  /// durak ekleme — mobilde sürüklemeye alternatif en kolay yol.
-  final VoidCallback? onAddPoint;
+  /// KAYITLI ROTA adı — hap başlığında görünür.
+  final String? label;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1259,363 +1211,395 @@ class _RouteChip extends ConsumerWidget {
     final String eta = h > 0
         ? L10n.fmt2(t.etaHmFmt, '$h', '$min')
         : L10n.fmt(t.etaMFmt, '$min');
-    // Dürüstlük notu: rota tahminîdir; koya ulaşmadıysa ya da motor
-    // çalışmadıysa (kuş uçuşu) bunu AÇIKÇA söyleriz.
-    final String note = !route.viaSea
-        ? t.routeDirectNote
-        : (route.reachedGoal ? t.routeApproxNote : t.routeCoastNote);
-    final RouteWindReport? w = wind;
     final int stopCount =
         waypoints.where((RouteWaypoint x) => x.isStop).length;
-    // AYRINTI KATLAMA (kullanıcı isteği 2026-08: "çok nokta ekleyince ekranı
-    // kaplıyor"). Otomatik kural: 2+ duraklı rotada çip kendini toplar;
-    // kaptan ok düğmesiyle her an açıp kapatabilir. KAPALIYKEN DE görünenler:
-    // rota adı, mesafe/süre/durak ve (varsa) RÜZGÂR UYARISI — güvenlik
-    // bilgisi asla gizlenmez.
-    final bool? override = ref.watch(routeChipExpandedProvider);
-    // null yalnız ilk karede olur (rota kurulurken); o an açık gösterilir.
-    final bool expanded = override ?? true;
-    // Yükseklik tavanı: AYRINTI bölümü ekranın %34'ünü aşamaz (çipin tamamı
-    // başlık+istatistik+seyir satırıyla birlikte ~%52'de kalır); içerik
-    // uzarsa kaydırılır — harita her zaman görünür kalır.
-    final double maxDetail = MediaQuery.sizeOf(context).height * 0.34;
+    final String meta = <String>[
+      '≈ ${_fmtNm(route.distanceNm)} ${t.nmUnit}',
+      '~$eta',
+      if (stopCount >= 2) L10n.fmt(t.routeStopsFmt, '$stopCount'),
+    ].join(' · ');
+    final RouteWindReport? w = wind;
+    // Hap altı UYARI satırı — güvenlik bilgisi sayfaya saklanmaz: önce
+    // rüzgâr uyarısı, o yoksa olağan dışı rota notu (kuş uçuşu / kıyıda
+    // biter). Olağan "tahminî" notu sayfada durur; '≈' zaten tahmini söyler.
+    final String? warnLine = (w != null && w.warn)
+        ? L10n.fmt2(t.routeWindFmt, w.worst.windKn.toStringAsFixed(0),
+                t.windExposedLabel(dir8Tr(w.worst.windDirDeg))) +
+            (w.arrival != null
+                ? ' · ${L10n.fmt2(t.routeArrivalExposedFmt, t.windExposedLabel(w.arrival!.dirTr), w.arrival!.windKn.toStringAsFixed(0))}'
+                : '')
+        : (!route.viaSea
+            ? t.routeDirectNote
+            : (route.reachedGoal ? null : t.routeCoastNote));
+    final Color warnColor = (w != null && w.strong)
+        ? DocklyColors.error
+        : ((w != null && w.warn)
+            ? DocklyColors.warning
+            : theme.colorScheme.onSurfaceVariant);
     return Material(
       elevation: 2,
       borderRadius: BorderRadius.circular(14),
       color: theme.colorScheme.surface,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 8, 4, 10),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // BAŞLIK (bilgi ekranı 2.0, 2026-08): kayıtlı rota adı — yoksa
-            // genel başlık. Sayılar artık başlıkta sıkışmaz; alttaki
-            // istatistik satırında HER ZAMAN okunur.
-            Row(
-              children: <Widget>[
-                const DocklyIcon(
-                  DocklyIcons.navigation,
-                  size: 16,
-                  color: DocklyColors.brandPrimary,
-                ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    label ?? t.routeChipTitle,
-                    style: theme.textTheme.titleSmall,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                // SEYİR ÖNCESİ KONTROL: liste çipten her an açılabilir.
-                IconButton(
-                  tooltip: t.checklistTooltip,
-                  visualDensity: VisualDensity.compact,
-                  icon: const DocklyIcon(DocklyIcons.checkCircle, size: 17),
-                  onPressed: () => showChecklistSheet(context),
-                ),
-                // ROTA BİRLEŞTİRME (kurucu onayı 2026-08, revizyon): kaydet
-                // eylemi başlıktaki yer imi ikonundan çıktı; "Seyri planla"nın
-                // YANINDA eş boy, turkuaz "Rotalarım'a ekle" düğmesi oldu —
-                // bkz. _PlanTripRow (kurucu isteği: iki eylem yan yana,
-                // aynı tasarım, farklı renk).
-                // AYRINTI AÇ/KAPA — ok yönü durumu anlatır.
-                IconButton(
-                  key: const ValueKey<String>('route-chip-toggle'),
-                  icon: Transform.rotate(
-                    angle: expanded ? -1.5708 : 1.5708,
-                    child: const DocklyIcon(DocklyIcons.arrowForward, size: 17),
-                  ),
-                  tooltip: expanded ? t.routeChipCollapse : t.routeChipExpand,
-                  visualDensity: VisualDensity.compact,
-                  onPressed: () => ref
-                      .read(routeChipExpandedProvider.notifier)
-                      .state = !expanded,
-                ),
-                IconButton(
-                  icon: const DocklyIcon(DocklyIcons.close, size: 18),
-                  tooltip: t.routeClearTooltip,
-                  visualDensity: VisualDensity.compact,
-                  onPressed: onClear,
-                ),
-              ],
-            ),
-            // İSTATİSTİK SATIRI: mesafe / süre / durak — üç eşit sütun.
-            // Uzun değer sütununa sığmazsa yazı KÜÇÜLÜR, asla kesilmez
-            // ("toplam süre ekrana sığmıyor" düzeltmesi).
-            Padding(
-              padding: const EdgeInsets.only(top: 2, bottom: 4, right: 8),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: _RouteStat(
-                      caption: t.routeStatDistance,
-                      value: '≈ ${_fmtNm(route.distanceNm)} ${t.nmUnit}',
-                    ),
-                  ),
-                  Expanded(
-                    child: _RouteStat(
-                      caption: t.routeStatDuration,
-                      value: '~$eta',
-                    ),
-                  ),
-                  Expanded(
-                    child: _RouteStat(
-                      caption: t.routeStatStops,
-                      value: '$stopCount',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // DÜRÜSTLÜK NOTU — KATLANMAZ (inceleme dersi 2026-08): mesafe ve
-            // süre görünürken "bu rota tahminîdir / kıyıda biter" uyarısı
-            // gizlenemez. Kapalıyken iki satırla sınırlanır.
-            Padding(
-              padding: const EdgeInsets.only(right: 8, top: 2),
-              child: Text(
-                note,
-                maxLines: expanded ? null : 2,
-                overflow: expanded ? null : TextOverflow.ellipsis,
-                style: theme.textTheme.bodySmall
-                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-              ),
-            ),
-            // AYRINTILAR (katlanabilir): başlangıç, duraklar ve rüzgâr
-            // satırları. Tavanı aşarsa içerik kaydırılır.
-            if (expanded)
-              ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: maxDetail),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                // BAŞLANGIÇ satırı (rota planlama 2026-08): A noktası + değiştir.
-                if (origin != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2, right: 8),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Flexible(
-                          child: Text(
-                            L10n.fmt(
-                              t.routeOriginFmt,
-                              origin!.name ??
-                                  (origin!.isDevice
-                                      ? t.routeOriginDevice
-                                      : t.routeOriginPicked),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.bodySmall
-                                ?.copyWith(fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        if (onChangeOrigin != null) ...<Widget>[
-                          const SizedBox(width: 6),
-                          InkWell(
-                            borderRadius: BorderRadius.circular(8),
-                            onTap: onChangeOrigin,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 2),
-                              child: Text(
-                                t.routeOriginChange,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: DocklyColors.brandPrimary,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                        // + NOKTA EKLE (kullanıcı isteği 2026-08): dokunarak
-                        // ara nokta/durak ekleme modu — mobilde en kolay yol.
-                        if (onAddPoint != null) ...<Widget>[
-                          const SizedBox(width: 8),
-                          InkWell(
-                            borderRadius: BorderRadius.circular(8),
-                            onTap: onAddPoint,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 2),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  const DocklyIcon(DocklyIcons.place,
-                                      size: 12, color: DocklyColors.brandPrimary),
-                                  const SizedBox(width: 3),
-                                  Text(
-                                    t.routeAddPointBtn,
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: DocklyColors.brandPrimary,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                // DURAK LİSTESİ: 2+ durakta sıralı hap listesi; hedef dışındakiler
-                // ✕ ile çıkarılabilir (mesafe/süre tüm bacakların toplamıdır).
-                if (stopCount >= 2)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4, bottom: 4, right: 8),
-                    child: Wrap(
-                      spacing: 6,
-                      runSpacing: 4,
-                      children: <Widget>[
-                        for (final (int wpIndex, int number, RouteWaypoint wp)
-                            in _numberedStops())
-                          _StopPill(
-                            number: number,
-                            name: wp.name ?? '',
-                            isLast: wpIndex == waypoints.length - 1,
-                            removeTooltip: t.routeStopRemoveTooltip,
-                            onRemove: onRemoveStop == null ||
-                                    wpIndex == waypoints.length - 1
-                                ? null
-                                : () => onRemoveStop!(wpIndex),
-                          ),
-                      ],
-                    ),
-                  ),
-                // RÜZGÂR SATIRI (Rota v2): rapor geldiyse — eşik renkleri rüzgâr
-                // rozetiyle aynı (16 kn turuncu, 25 kn kırmızı).
-                if (w != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4, right: 8),
-                    child: Text(
-                      L10n.fmt2(
-                            t.routeWindFmt,
-                            w.worst.windKn.toStringAsFixed(0),
-                            t.windExposedLabel(dir8Tr(w.worst.windDirDeg)),
-                          ) +
-                          (w.anyHeadwind ? ' · ${t.routeWindHeadwind}' : ''),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        fontWeight: w.warn ? FontWeight.w700 : FontWeight.w500,
-                        color: w.strong
-                            ? DocklyColors.error
-                            : (w.warn
-                                ? DocklyColors.warning
-                                : theme.colorScheme.onSurfaceVariant),
-                      ),
-                    ),
-                  ),
-                if (w != null && w.arrival != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4, right: 8),
-                    child: Text(
-                      L10n.fmt2(
-                        t.routeArrivalExposedFmt,
-                        t.windExposedLabel(w.arrival!.dirTr),
-                        w.arrival!.windKn.toStringAsFixed(0),
-                      ),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: w.arrival!.windKn >= kRouteWindStrongKn
-                            ? DocklyColors.error
-                            : DocklyColors.warning,
-                      ),
-                    ),
-                  ),
-                    ],
-                  ),
-                ),
-              )
-            // KAPALIYKEN: güvenlik bilgisi gizlenmez — rüzgâr uyarısı varsa
-            // tek satır olarak durur, gerisi "aç" düğmesinin arkasındadır.
-            else if (w != null && w.warn)
-              Padding(
-                padding: const EdgeInsets.only(top: 2, right: 8),
-                child: Row(
+      child: InkWell(
+        key: const ValueKey<String>('route-summary'),
+        borderRadius: BorderRadius.circular(14),
+        onTap: () => showRouteDetailSheet(context, ref),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 8, 4, 8),
+          child: Row(
+            children: <Widget>[
+              const DocklyIcon(DocklyIcons.navigation,
+                  size: 16, color: DocklyColors.brandPrimary),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    DocklyIcon(
-                      DocklyIcons.errorOutline,
-                      size: 13,
-                      color: w.strong
-                          ? DocklyColors.error
-                          : DocklyColors.warning,
+                    Text(
+                      label ?? t.routeChipTitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleSmall
+                          ?.copyWith(fontWeight: FontWeight.w800),
                     ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        L10n.fmt2(
-                              t.routeWindFmt,
-                              w.worst.windKn.toStringAsFixed(0),
-                              t.windExposedLabel(dir8Tr(w.worst.windDirDeg)),
-                            ) +
-                            // Varışta koy rüzgâra açıksa bu, gecenin en
-                            // önemli bilgisidir — kapalıyken de söylenir.
-                            (w.arrival != null
-                                ? ' · ${L10n.fmt2(t.routeArrivalExposedFmt, t.windExposedLabel(w.arrival!.dirTr), w.arrival!.windKn.toStringAsFixed(0))}'
-                                : ''),
-                        maxLines: 2,
+                    Text(
+                      meta,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if (warnLine != null)
+                      Text(
+                        warnLine,
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodySmall?.copyWith(
+                          color: warnColor,
                           fontWeight: FontWeight.w700,
-                          color: w.strong
-                              ? DocklyColors.error
-                              : DocklyColors.warning,
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),
-            // SEYİR PLANI (v2.1 "Planla → Gerçekleşti", kurucu onayı
-            // 2026-08): eski "Seyri başlat/bitir" çifti KALDIRILDI — canlı
-            // navigasyon beklentisi yaratıyor ve teknede açık tutulmayan
-            // uygulamada çöp süre üretiyordu (tasarım raporu §1/§9). Tek
-            // dürüst eylem: "Seyri planla" → sefer Defter'e PLANLANDI
-            // düşer; kaptan yaptığında Defter'den "Gerçekleşti"yi işaretler.
-            Padding(
-              padding: const EdgeInsets.only(top: 8, right: 8),
-              child: _PlanTripRow(
-                t: t,
-                name: label ??
-                    suggestRouteName(
-                      origin?.name ??
-                          (origin?.isDevice == true
-                              ? t.routeOriginDevice
-                              : t.routeOriginPicked),
-                      waypoints,
-                    ),
-                distanceNm: route.distanceNm,
-                stops: stopCount,
-                // ROTA BİRLEŞTİRME (v2.2): plan rotayı da taşır — Defter'deki
-                // PLANLANDI kartından "Haritada aç" ile geri çağrılır.
-                origin: origin,
-                waypoints: waypoints,
-                // "Rotalarım'a ekle" — planla düğmesinin yanındaki turkuaz
-                // kardeş (kurucu isteği 2026-08).
-                onAddToSaved: onSave,
+              // Ayrıntı ipucu: yukarı bakan ok — "dokun, sayfa açılsın".
+              Transform.rotate(
+                angle: -1.5708,
+                child: DocklyIcon(DocklyIcons.arrowForward,
+                    size: 15, color: theme.colorScheme.onSurfaceVariant),
               ),
-            ),
-          ],
+              IconButton(
+                icon: const DocklyIcon(DocklyIcons.close, size: 18),
+                tooltip: t.routeClearTooltip,
+                visualDensity: VisualDensity.compact,
+                onPressed: onClear,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
 
-  /// Duraklar (isimli ara noktalar), rota sırasına göre numaralanmış:
-  /// (durum dizini, sıra numarası, ara nokta).
-  List<(int, int, RouteWaypoint)> _numberedStops() {
-    final List<(int, int, RouteWaypoint)> out = <(int, int, RouteWaypoint)>[];
-    int n = 0;
-    for (int i = 0; i < waypoints.length; i++) {
-      final RouteWaypoint w = waypoints[i];
-      if (w.isStop) out.add((i, ++n, w));
-    }
-    return out;
+/// Rota ayrıntı sayfasını alttan açar. [mapContext] HARİTA ekranının
+/// context'idir — sayfadan başlatılan akışlar (başlangıç menüsü, kaydet
+/// diyaloğu) sayfa kapansa da onun üstünden yaşar.
+void showRouteDetailSheet(BuildContext mapContext, WidgetRef ref) {
+  showModalBottomSheet<void>(
+    context: mapContext,
+    isScrollControlled: true,
+    showDragHandle: true,
+    useSafeArea: true,
+    builder: (BuildContext sheetCtx) => DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.6,
+      minChildSize: 0.4,
+      maxChildSize: 0.92,
+      builder: (BuildContext c, ScrollController scroll) => _RouteDetailSheet(
+        scroll: scroll,
+        // Harita etkileşimi isteyen modlar sayfayı kapatıp devam eder.
+        onChangeOrigin: () {
+          Navigator.of(sheetCtx).pop();
+          showRouteOriginMenu(mapContext, ref);
+        },
+        onAddPoint: () {
+          Navigator.of(sheetCtx).pop();
+          ref.read(mapControllerProvider.notifier).beginAddPoint();
+        },
+        onSave: () => _saveRouteDialog(
+            mapContext, ref, ref.read(mapControllerProvider)),
+        onOpenChecklist: () => showChecklistSheet(sheetCtx),
+      ),
+    ),
+  );
+}
+
+/// Rota ayrıntı sayfası içeriği — durumu DOĞRUDAN sağlayıcıdan izler:
+/// sayfa açıkken durak eklense/çıkarılsa ya da rüzgâr analizi gelse liste
+/// anında güncellenir (donmuş kopya yok).
+class _RouteDetailSheet extends ConsumerWidget {
+  const _RouteDetailSheet({
+    required this.scroll,
+    required this.onChangeOrigin,
+    required this.onAddPoint,
+    required this.onSave,
+    required this.onOpenChecklist,
+  });
+
+  final ScrollController scroll;
+  final VoidCallback onChangeOrigin;
+  final VoidCallback onAddPoint;
+  final VoidCallback onSave;
+  final VoidCallback onOpenChecklist;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final ThemeData theme = Theme.of(context);
+    final MapState state = ref.watch(mapControllerProvider);
+    final SeaRoutePlan? route = state.route;
+    // Sayfa açıkken rota kapatılırsa (kenar durum) boş içerik kalmasın.
+    if (route == null) return const SizedBox.shrink();
+    final List<RouteWaypoint> waypoints = state.routeWaypoints;
+    final RouteOrigin? origin = state.routeOrigin;
+    final RouteWindReport? w = state.routeWind;
+    final String? label = state.routeLabel;
+    final double hours = route.etaHoursAtCruise;
+    final int h = hours.floor();
+    final int min = ((hours - h) * 60).round();
+    final String eta = h > 0
+        ? L10n.fmt2(t.etaHmFmt, '$h', '$min')
+        : L10n.fmt(t.etaMFmt, '$min');
+    final String note = !route.viaSea
+        ? t.routeDirectNote
+        : (route.reachedGoal ? t.routeApproxNote : t.routeCoastNote);
+    final int stopCount =
+        waypoints.where((RouteWaypoint x) => x.isStop).length;
+    return ListView(
+      controller: scroll,
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            const DocklyIcon(DocklyIcons.navigation,
+                size: 16, color: DocklyColors.brandPrimary),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Text(
+                label ?? t.routeChipTitle,
+                style: theme.textTheme.titleMedium
+                    ?.copyWith(fontWeight: FontWeight.w800),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            // SEYİR ÖNCESİ KONTROL: liste sayfadan her an açılabilir.
+            IconButton(
+              tooltip: t.checklistTooltip,
+              visualDensity: VisualDensity.compact,
+              icon: const DocklyIcon(DocklyIcons.checkCircle, size: 17),
+              onPressed: onOpenChecklist,
+            ),
+          ],
+        ),
+        // İSTATİSTİK SATIRI: mesafe / süre / durak — üç eşit sütun.
+        Padding(
+          padding: const EdgeInsets.only(top: 2, bottom: 4),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: _RouteStat(
+                  caption: t.routeStatDistance,
+                  value: '≈ ${_fmtNm(route.distanceNm)} ${t.nmUnit}',
+                ),
+              ),
+              Expanded(
+                child: _RouteStat(
+                  caption: t.routeStatDuration,
+                  value: '~$eta',
+                ),
+              ),
+              Expanded(
+                child: _RouteStat(
+                  caption: t.routeStatStops,
+                  value: '$stopCount',
+                ),
+              ),
+            ],
+          ),
+        ),
+        // DÜRÜSTLÜK NOTU: rota tahminîdir; kuş uçuşu/kıyıda bitiş açıkça söylenir.
+        Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: Text(
+            note,
+            style: theme.textTheme.bodySmall
+                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          ),
+        ),
+        // SEYİR PLANI + ROTALARIM (v2.2 birleştirme): iki eş boy kardeş düğme.
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: _PlanTripRow(
+            t: t,
+            name: label ??
+                suggestRouteName(
+                  origin?.name ??
+                      (origin?.isDevice == true
+                          ? t.routeOriginDevice
+                          : t.routeOriginPicked),
+                  waypoints,
+                ),
+            distanceNm: route.distanceNm,
+            stops: stopCount,
+            origin: origin,
+            waypoints: waypoints,
+            onAddToSaved: onSave,
+          ),
+        ),
+        // BAŞLANGIÇ satırı: A noktası + değiştir + Nokta ekle.
+        if (origin != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: <Widget>[
+                Text(
+                  L10n.fmt(
+                    t.routeOriginFmt,
+                    origin.name ??
+                        (origin.isDevice
+                            ? t.routeOriginDevice
+                            : t.routeOriginPicked),
+                  ),
+                  style: theme.textTheme.bodySmall
+                      ?.copyWith(fontWeight: FontWeight.w600),
+                ),
+                InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: onChangeOrigin,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 5, vertical: 2),
+                    child: Text(
+                      t.routeOriginChange,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: DocklyColors.brandPrimary,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                ),
+                // + NOKTA EKLE: dokunma modu haritayı ister — sayfa kapanır.
+                InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: onAddPoint,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 5, vertical: 2),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        const DocklyIcon(DocklyIcons.place,
+                            size: 12, color: DocklyColors.brandPrimary),
+                        const SizedBox(width: 3),
+                        Text(
+                          t.routeAddPointBtn,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: DocklyColors.brandPrimary,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        // DURAK LİSTESİ: sıralı haplar; hedef dışındakiler ✕ ile çıkarılır.
+        if (stopCount >= 2)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Wrap(
+              spacing: 6,
+              runSpacing: 4,
+              children: <Widget>[
+                for (final (int wpIndex, int number, RouteWaypoint wp)
+                    in _numberedStops(waypoints))
+                  _StopPill(
+                    number: number,
+                    name: wp.name ?? '',
+                    isLast: wpIndex == waypoints.length - 1,
+                    removeTooltip: t.routeStopRemoveTooltip,
+                    onRemove: wpIndex == waypoints.length - 1
+                        ? null
+                        : () => ref
+                            .read(mapControllerProvider.notifier)
+                            .removeWaypoint(wpIndex),
+                  ),
+              ],
+            ),
+          ),
+        // RÜZGÂR SATIRLARI (Rota v2): eşik renkleri rüzgâr rozetiyle aynı.
+        if (w != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(
+              L10n.fmt2(
+                    t.routeWindFmt,
+                    w.worst.windKn.toStringAsFixed(0),
+                    t.windExposedLabel(dir8Tr(w.worst.windDirDeg)),
+                  ) +
+                  (w.anyHeadwind ? ' · ${t.routeWindHeadwind}' : ''),
+              style: theme.textTheme.bodySmall?.copyWith(
+                fontWeight: w.warn ? FontWeight.w700 : FontWeight.w500,
+                color: w.strong
+                    ? DocklyColors.error
+                    : (w.warn
+                        ? DocklyColors.warning
+                        : theme.colorScheme.onSurfaceVariant),
+              ),
+            ),
+          ),
+        if (w != null && w.arrival != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              L10n.fmt2(
+                t.routeArrivalExposedFmt,
+                t.windExposedLabel(w.arrival!.dirTr),
+                w.arrival!.windKn.toStringAsFixed(0),
+              ),
+              style: theme.textTheme.bodySmall?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: w.arrival!.windKn >= kRouteWindStrongKn
+                    ? DocklyColors.error
+                    : DocklyColors.warning,
+              ),
+            ),
+          ),
+      ],
+    );
   }
+}
+
+/// Duraklar (isimli ara noktalar), rota sırasına göre numaralanmış:
+/// (durum dizini, sıra numarası, ara nokta).
+List<(int, int, RouteWaypoint)> _numberedStops(List<RouteWaypoint> waypoints) {
+  final List<(int, int, RouteWaypoint)> out = <(int, int, RouteWaypoint)>[];
+  int n = 0;
+  for (int i = 0; i < waypoints.length; i++) {
+    final RouteWaypoint w = waypoints[i];
+    if (w.isStop) out.add((i, ++n, w));
+  }
+  return out;
 }
 
 /// Bu rota bu oturumda deftere planlandı mı? (routeSeq ile eşleştirilir —

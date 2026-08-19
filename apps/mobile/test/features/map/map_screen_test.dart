@@ -469,8 +469,14 @@ void main() {
     await tester.pump(const Duration(seconds: 6));
     await tester.pumpAndSettle();
 
-    // İKİ KARDEŞ DÜĞME (kurucu isteği 2026-08): planla'nın yanında turkuaz
-    // "Rotalarım'a ekle" de durur — eş boy, farklı renk.
+    // ROTA ÖZET HAPI (kurucu isteği 2026-08, "ekranı kaplıyor"): planla ve
+    // diğer ayrıntılar artık ALTTAN AÇILAN sayfada — önce hapa dokunulur.
+    expect(find.byKey(const ValueKey<String>('trip-plan')), findsNothing);
+    await tester.tap(find.byKey(const ValueKey<String>('route-summary')));
+    await tester.pumpAndSettle();
+
+    // İKİ KARDEŞ DÜĞME (kurucu isteği 2026-08): sayfada planla'nın yanında
+    // turkuaz "Rotalarım'a ekle" de durur — eş boy, farklı renk.
     expect(find.byKey(const ValueKey<String>('route-add-saved')), findsOneWidget);
 
     // Planla: kayıt PLANLANDI olarak depoya düşer, onay mesajı görünür.
@@ -501,8 +507,8 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('ROTA ÇİPİ KATLAMA (kullanıcı isteği 2026-08): çok duraklı '
-      'rotada çip kendini toplar; ok düğmesi ayrıntıları açar',
+  testWidgets('ROTA ÖZET HAPI (kurucu isteği 2026-08): rota harita kaplamaz — '
+      'kompakt hap durur; ayrıntılar alttan açılan CANLI sayfada',
       (WidgetTester tester) async {
     await tester.pumpWidget(_app(
       FakeMapGateway(result: pinResult),
@@ -512,7 +518,6 @@ void main() {
 
     final ProviderContainer c =
         ProviderScope.containerOf(tester.element(find.byType(MapScreen)));
-    // İki duraklı kayıtlı rota aç → çip OTOMATİK toplanır.
     await c.read(mapControllerProvider.notifier).openSavedRoute(
       const RouteOrigin(pos: GeoPoint(lat: 36.75, lon: 28.93), name: 'Göcek'),
       const <RouteWaypoint>[
@@ -525,29 +530,25 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Başlık ve istatistikler DURUR; durak listesi ve başlangıç satırı gizli.
+    // HAPTA yalnız kimlik + özet: ad var; durak listesi ve düğmeler YOK —
+    // harita nefes alır (telefonda ekran kaplama şikâyetinin çözümü).
     expect(find.text('Üç koy turu'), findsOneWidget);
-    expect(find.text('DURAK'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('route-summary')), findsOneWidget);
     expect(find.text('Bedri Rahmi'), findsNothing);
-    expect(find.text('Boynuz Bükü'), findsNothing);
-    // DÜRÜSTLÜK NOTU katlanmaz: kapalıyken de görünür.
-    expect(find.textContaining('Tahminî deniz rotası'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('trip-plan')), findsNothing);
 
-    // Ok düğmesi ayrıntıları açar.
-    await tester.tap(find.byKey(const ValueKey<String>('route-chip-toggle')));
+    // Hapa dokun → ayrıntı sayfası: istatistikler, duraklar, düğmeler.
+    await tester.tap(find.byKey(const ValueKey<String>('route-summary')));
     await tester.pumpAndSettle();
+    expect(find.text('DURAK'), findsOneWidget);
     expect(find.text('Bedri Rahmi'), findsOneWidget);
     expect(find.text('Boynuz Bükü'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('trip-plan')), findsOneWidget);
+    // Dürüstlük notu sayfada okunur.
+    expect(find.textContaining('Tahminî deniz rotası'), findsOneWidget);
 
-    // Tekrar dokunmak kapatır.
-    await tester.tap(find.byKey(const ValueKey<String>('route-chip-toggle')));
-    await tester.pumpAndSettle();
-    expect(find.text('Bedri Rahmi'), findsNothing);
-
-    // DÜZENLEME SIRASINDA KAPANMAZ (inceleme dersi): kaptan açtıysa, durak
-    // eklense bile açık kalır.
-    await tester.tap(find.byKey(const ValueKey<String>('route-chip-toggle')));
-    await tester.pumpAndSettle();
+    // SAYFA CANLIDIR: açıkken durak eklenirse liste ANINDA güncellenir
+    // (donmuş kopya yok — sağlayıcıdan izlenir).
     await c.read(mapControllerProvider.notifier).addStop(
           const GeoPoint(lat: 36.68, lon: 28.88),
           'loc-x',
@@ -556,6 +557,12 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Kille Koyu'), findsOneWidget);
     expect(find.text('Bedri Rahmi'), findsOneWidget);
+
+    // Sayfa dışına dokun → sayfa kapanır, hap yerinde kalır.
+    await tester.tapAt(const Offset(200, 30));
+    await tester.pumpAndSettle();
+    expect(find.text('Bedri Rahmi'), findsNothing);
+    expect(find.text('Üç koy turu'), findsOneWidget);
 
     // Zamanlayıcı artıklarını akıt.
     await tester.pump(const Duration(seconds: 6));
