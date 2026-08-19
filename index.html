@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html style="background:#0B1B2B">
+<head>
+  <base href="/">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Koybul — koy, marina ve bağlama noktalarını keşfet. Denizde yerini bul.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0B1B2B">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Koybul">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <!-- PERF (2026-08): sık kullanılan sunuculara TLS bağlantısı önceden açılır —
+       ilk veri/karo isteği el sıkışma beklemez (~100-300ms kazanç/başına).
+       API fetch CORS modunda çalıştığı için crossorigin; karo sunucuları
+       görsel (no-cors) olduğundan düz preconnect. -->
+  <link rel="preconnect" href="https://dockly-proje.onrender.com" crossorigin>
+  <link rel="preconnect" href="https://api.maptiler.com">
+  <link rel="preconnect" href="https://tiles.openseamap.org">
+  <!-- Kapak fotograflari (Wikimedia Commons) - Faz 2 -->
+  <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+  <!-- Motor ön-yüklemesi (2026-08): ana uygulama ve çizim motoru dosyaları,
+       açılış ekranı görünür görünmez İNDİRİLMEYE başlar (sırada beklemez). -->
+  <link rel="preload" href="main.dart.js" as="script">
+  <link rel="preload" href="canvaskit/canvaskit.wasm" as="fetch" type="application/wasm" crossorigin>
+  <title>Koybul — Denizde yerini bul</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    /* HTML ön-açılış katmanı (Koybul Marka Yüzeyi): Flutter motoru inerken
+       BEYAZ EKRAN yerine anında marka yüzeyi görünür. Flutter ilk karesini
+       çizince yumuşakça silinir (flutter-first-frame).
+
+       BOYUT SÖZLEŞMESİ (kullanıcı kararı 2026-08): --mark, Flutter'daki
+       koybulMarkHeight() ile BİREBİR aynı formüldür →
+       clamp(150px, ekranın kısa kenarı × %32, 240px) — açılışta JS ile TEK KEZ
+       hesaplanıp px olarak DONDURULUR (araç çubuğu/pencere oynaması etkisiz). Bütün ölçüler bu
+       değişkenden türediği için devralma anında logo asla büyümez/küçülmez.
+       TEK animasyon: dalga üzerinde giden yelkenli (Flutter'da da aynısı). */
+    html, body { margin: 0; padding: 0; height: 100%; }
+    /* FONT KİLİDİ (kullanıcı kararı 2026-08, "logo büyüyor" kök nedeni):
+       "Koybul" yazısı eskiden tam Poppins dosyası ağdan inince yeniden
+       çizilip GENİŞLİYORDU (258→275px ölçüldü). Artık yalnız açılışta
+       geçen harfleri içeren minicik alt-küme fontlar (1,2+1,6 KB) sayfaya
+       GÖMÜLÜDÜR — ağ isteği yok, ilk kareden doğru font, büyüme imkânsız. */
+    @font-face {
+      font-family: 'Poppins'; font-weight: 700; font-display: block;
+      src: url(data:font/woff;base64,d09GRgABAAAAAATcAAwAAAAABZgABAEGAAAAAAAAAAAAAAAAAAAAAAAAAABHUE9TAAAEjAAAACAAAAAgRHZMdUdTVUIAAASsAAAALgAAADAfSCdrT1MvMgAAAxwAAABKAAAAYFrWYGRjbWFwAAADaAAAAEQAAABcAYwBnmdseWYAAAEcAAABXAAAAXSlIW5RaGVhZAAAAqgAAAA2AAAANhpRJHFoaGVhAAAC/AAAACAAAAAkC/wBX2htdHgAAALgAAAAHAAAABwQEwEObG9jYQAAApgAAAAQAAAAEAETAYRtYXhwAAACeAAAAB0AAAAgAB0BB25hbWUAAAOsAAAAygAAAYIf9zbOcG9zdAAABHgAAAATAAAAIP+4ADJ4nEWPv0sCYRzGv+9XsGiJ6/QglSCPzint7rwXNRDt8s5fNTjYDwgicGtwdDQ1GlqbGgsiun+gyWajpaC/IBeloSEoKt/rzYjGZ3iez/MBAmkAvMAuTAHMewRZ0AVRJ4Q8PjvOsMdeSIBQdotddkfi7JKdAkLafcdj7MMMzAEA1TVJ8vu8XjmsRPw/fUmRw16/T9I1ahCyncrVs9l6bnlz1nFe7bhu27qeR++S1apW23Ysso599nlUKGYyxVIGYPwIBnzfAyDyQwMH+6MQzwghTt5FCtMQBJAUxYjTfzylRvyPPGyXyp1KpVNeO6yoOVPVVrLqpNXaqLYtq82x1kneNPP2qpnnvKT7gTWMgo/DBdkYmygGF/lVELDmBLZoZo9epVQthdHRQ3lhMblfIBa7T6TTCRLjRddlb9jgKxM8EFn06KKIDXZ23Xy6OWhi9KtHQhhk52TnG3d+ZDp4nGNgZGBgYGeYwMDDUMLAxgDiIQAzAxMAGjIBJQAAAAAAAAAAGQBJAFYAgQCkALoAAQAAAAQBBp3vk4JfDzz1AAMD6AAAAADYpKnIAAAAANsWNsn9zv2iCa0EVAABAAcAAgAAAAAAAAH0AAACuQA+AqcAPgEnAD4CfQAcAqIAOQJ4//94nGNgZGBgkfq3iCGFc+7fcz8lONcyAEVQADsAnhEGZHicY2BhzmTaw8DKwMDUxRTBwMDgDaEZ4xiMGP2AfAYOBjhgZEACniFu/gwLGLwZKlmk/i1iSGHJZyqGqWHSYzoIpBQYWAD62grsAAB4nGNgYGBiYGBgBmIRIMkIplkYPIA0HwMHUI6NwZshiSGHIZ+hlKHy/3+gOAr//7b/C/5P/z/1/4T/vWDdSAAAcTcTHnicdY67DgFRFEXXMJ6FKJVKCo/IRIQKiURFoVJ6E6/MmMLv+AKlr/IN9lwjQsjNzd1nn7XPuUCCMVEsOwVcdJ/aIqPqqSMkuYY6Sp1bqG1y3EMdI23FQx0nZ2XpcuDIGZc1S1acyFOjam6ekZy53qGhjmL2eKZ25WzUm5pEG1/vSp5r+gUz6aSER5OKzlLZgPCZUFbqwE5u4C2kfc2dKXuW97mr+FV3VG3F9vW3HgNaP373YoKeo21VHUd7G3/JN/VJlF7EAy+qOOQAAHicY2BmAIP/WxmMGLAAACzCAeoAAAEAAAAKABwAHgABREZMVAAIAAQAAAAA//8AAAAAAAB4nGNgZGBg4GLQYdBjYHZx8wlhEElJLTNikAOSiQxyDCxAWYb//xngAAClPAb2AAA=) format('woff');
+    }
+    @font-face {
+      font-family: 'Poppins'; font-weight: 400; font-display: block;
+      src: url(data:font/woff;base64,d09GRgABAAAAAAZQAAwAAAAAB6AABAEGAAAAAAAAAAAAAAAAAAAAAAAAAABHUE9TAAAGAAAAACAAAAAgRHZMdUdTVUIAAAYgAAAALgAAADAfSCdrT1MvMgAABHAAAABJAAAAYFlyXWVjbWFwAAAEvAAAAGAAAACEAicC+2dseWYAAAEcAAACggAAAxBCie+gaGVhZAAAA+AAAAA2AAAANhrJJGFoaGVhAAAEUAAAACAAAAAkDHUCDGhtdHgAAAQYAAAAOAAAADgaowK+bG9jYQAAA8AAAAAeAAAAHgXdBQ5tYXhwAAADoAAAAB0AAAAgACQBDm5hbWUAAAUcAAAA0AAAAZojJDkzcG9zdAAABewAAAATAAAAIP+4ADJ4nF2RS0wTURSG7z3VVkGifUyBFoztDCXyqG2n05I09JEMbWm1vFqxTEsiBjVATCSGSlCQxujCxEZWuJAlEOLaSIKJC3dudGMCqTv2LkViB89tMRiTO5N7cv/7f+een1DSdXRI1skcqSfE7JC8PtFj5kxaflAQLM0836wVLBaBfYQAuYa/VdgmdcRIUM6EWp7Xiwaf5HWwDV3dyGY3Znd3n78sPVtchO3M2vT0mxHYrqyUlosrlXLV5egnzMM+MRA7IQYGrBnZHe0ceuhPORy8XavlTGaz6PH5pE8zfYk5WS70x6atikIfeDIiLjHjwUV/BKNL6ZFiPOiahH11bybncud7g3m3Ox9irE5kjZ6wGKwREbxU5Tkk4T9Wp1xIhO+15nLWqVh/QaZfGCnt8aQZj95digZc1F5pueMOxYsjvTm3KxcMMVjwmBWBbtJELuF0dLaqpV88Jnl9tZc6AYE6G0Q0auL0ZDwwcGHC/HQitRCVFwZTDyPjzgFX300dHaMNrUOK3zlwK7qcyTzpkwvJWLL9Rgo5QXR/D78wsfP4pn8ya9Tz+onj3LoUePw3umylDJgfZfmRTZyGhhAjajcV2K+0YF09gR5w1nLl8MzL5sI2IoeN051HY8OxeEZRrHmUzc+qH6hveHTsuvoVhFSHs+ZAs+hQX82U4+21yx+z4abXmNqhd3xd/QZClvURPzoAEVsyYXGSBeZiYiOT9CAqlnxP+HYAof1pECrloY4r0tRVGlE/DyGVdjOXc6oKbeiiw4LyRo1oNEKb+m585vvk2y0Qfu/RM3BRlekOai+jZg21Zwnx2zibRG2SjXtFG9QXtE49oPeTySQtJRJ/ANMjs84AAHicY2BkYGDgY5jKwMNQxsDGAOIhADMDEwAblgEzAAAAAAAAAAAAABYAOQBvAKUA2QD2AQMBJAE6AV0BcwGIAAAAAQAAAAQBBj2ybaxfDzz1AAMD6AAAAADYpKm+AAAAANsWNsz97f3ECgcEKQAAAAcAAgAAAAAAAAH0AAABCwAAANIALALDAE0CpABNAqQAKwJsACsA9gA+APYATQKAAE0BdQBNAoAASAIzAAwBxwApeJxjYGRgYJH6t4ghhfPt37c/87jYGYAiKIAPAKOBBot4nGNgYQ5mnMDAysDA1MUUwcDA4A2hGeMYjBg9gHyQFAwwMiABzxA3f4YDDAoMVSxS/xYxpLDkMxXD1DCpMO0CUgoMLADfDQqFAAAAeJxjYGBgYmBgYAZiESDJCKZZGAqAtASDAFCEg0GBQY/BhSGJIZUhkyGHIY+hiKGUoer/f6AKmEwKkkzl////H/6/8n///0X/F/6f93/O/9n/Z/yf9n8y2GysAABK1B8QeJyFjrsOAVEURdcYj1CoVSIqCo+IQtCIRKIiotJ5DuKVYQq/4wt8gQ9T2XNNIiMSubm5++y79jkHSDDBxoomgZvuW1ukVb11RPoeaJs2j0BHyfIMdIyUlQl0nKyVp8uRE1dcNjisuZCjRtXcHGM5S71DQ53EHDib2pWz1d/cJDp4etfyXPNfMJ0uSpxpUtFxlPUJjxllpY7s5freStpT34WyV3nhWcWveqSZjvgdU/F9bdhjQOvHjmHSJ+qaXNWpa4fGH/7DhrlSmHsBe+A+dnicY2BmAIP/WxmMGLAAACzCAeoAAAEAAAAKABwAHgABREZMVAAIAAQAAAAA//8AAAAAAAB4nGNgZGBg4GLQYdBjYHZx8wlhEElJLTNikAOSiQxyDCxAWYb//xngAAClPAb2AAA=) format('woff');
+    }
+    :root { --mark: clamp(150px, 32vmin, 240px); }
+    #koybul-splash {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: linear-gradient(180deg, #0B1220 0%, #0E3052 100%);
+      transition: opacity .45s ease;
+      font-family: 'Poppins', -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    /* Dikey konum Flutter yüzeyiyle hizalı (blok merkezi ekranın %35'inde). */
+    #koybul-splash .icerik { transform: translateY(-15vh); text-align: center; }
+    #koybul-splash .isaret {
+      width: calc(var(--mark) * 0.7693); height: var(--mark);
+    }
+    #koybul-splash .ad {
+      font-weight: 700; letter-spacing: -1px; line-height: 1;
+      font-size: calc(var(--mark) * 0.354);
+      margin-top: calc(var(--mark) * 0.169);
+      color: #F2F5F9;
+    }
+    #koybul-splash .slogan {
+      font-size: calc(var(--mark) * 0.131);
+      margin-top: calc(var(--mark) * 0.077);
+      color: #93A1B8;
+    }
+    #koybul-splash .m-body { fill: #F2F5F9; }
+    #koybul-splash .m-disc { fill: #0A2540; }
+    #koybul-splash .m-wave { stroke: #F2F5F9; }
+    #koybul-splash .m-sail { fill: #2EC4B6; }
+    #koybul-splash.gunduz {
+      background: linear-gradient(180deg, #F7FAFD 0%, #E9F2F9 100%);
+    }
+    #koybul-splash.gunduz .ad { color: #0A2540; }
+    #koybul-splash.gunduz .slogan { color: #5B6B84; }
+    #koybul-splash.gunduz .m-body { fill: #0A2540; }
+    #koybul-splash.gunduz .m-disc { fill: #FFFFFF; }
+    #koybul-splash.gunduz .m-wave { stroke: #0A2540; }
+    /* Yükleme göstergesi: dalga üzerinde giden yelkenli — TEK animasyon. */
+    #koybul-splash .yukleme {
+      position: absolute; bottom: 8%;
+      width: calc(var(--mark) * 1.15); height: calc(var(--mark) * 0.30);
+    }
+    #koybul-splash .dalga { position: absolute; inset: 0; width: 100%; height: 100%; }
+    #koybul-splash .dalga path {
+      fill: none; stroke: rgba(242, 245, 249, .30);
+      stroke-width: 1.6; stroke-linecap: round;
+    }
+    #koybul-splash.gunduz .dalga path { stroke: rgba(10, 37, 64, .30); }
+    #koybul-splash .tekne {
+      position: absolute; bottom: 30%;
+      width: calc(var(--mark) * 0.17); height: calc(var(--mark) * 0.15);
+      left: -6%; animation: kb-yol 3.2s linear infinite;
+    }
+    #koybul-splash .tekne-sallan {
+      animation: kb-salla .8s ease-in-out infinite alternate;
+      transform-origin: 50% 92%;
+    }
+    #koybul-splash .tekne .yelken { fill: #2EC4B6; }
+    #koybul-splash .tekne .govde {
+      fill: none; stroke: #F2F5F9; stroke-width: 2.2; stroke-linecap: round;
+    }
+    #koybul-splash.gunduz .tekne .govde { stroke: #0A2540; }
+    @keyframes kb-yol {
+      0% { left: -6%; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { left: 92%; opacity: 0; }
+    }
+    @keyframes kb-salla {
+      from { transform: translateY(-5%) rotate(-5deg); }
+      to { transform: translateY(5%) rotate(5deg); }
+    }
+  </style>
+</head>
+<body>
+  <div id="koybul-splash">
+    <div class="icerik">
+      <!-- viewBox işarete birebir kırpılmıştır (birim 20..80 × 10..88):
+           işaret yüksekliği tam --mark değeridir — Flutter'daki çizimle
+           piksel piksel aynı; devralmada büyüme/küçülme olmaz. -->
+      <svg class="isaret" viewBox="20 10 60 78" aria-label="Koybul">
+        <path class="m-body" d="M50 10 C66.6 10 80 23.4 80 40 C80 51.5 73.5 61.5 64 66.5 L52.5 86 C51.4 87.9 48.6 87.9 47.5 86 L36 66.5 C26.5 61.5 20 51.5 20 40 C20 23.4 33.4 10 50 10 Z"/>
+        <circle class="m-disc" cx="50" cy="40" r="20"/>
+        <path class="m-wave" d="M36.5 45.5 Q50 53.5 63.5 45.5" fill="none" stroke-width="4.6" stroke-linecap="round"/>
+        <path class="m-sail" d="M49 24.5 C54.5 29.5 58.5 35 59.5 41.5 L49 41.5 Z"/>
+      </svg>
+      <div class="ad">Koybul</div>
+      <div class="slogan">Denizde yerini bul.</div>
+    </div>
+    <div class="yukleme">
+      <svg class="dalga" viewBox="0 0 100 26" preserveAspectRatio="none">
+        <path d="M0 17 Q12.5 8 25 17 T50 17 T75 17 T100 17"/>
+      </svg>
+      <svg class="tekne" viewBox="-10 -14 20 20">
+        <g class="tekne-sallan">
+          <path class="yelken" d="M0 -12 C4.6 -8.2 8.2 -3.6 9 -1.2 L0 -1.2 Z"/>
+          <path class="govde" d="M-8 0 Q0 5 8 0"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var s = document.getElementById('koybul-splash');
+      // BOYUT KİLİDİ (kullanıcı kararı 2026-08): işaret boyutu açılışta BİR
+      // KEZ hesaplanır ve sabit px olarak yazılır — Safari araç çubuğunun
+      // daralması, pencere/viewport oynaması logoyu ASLA yeniden boyutlayamaz.
+      var vmin = Math.min(window.innerWidth, window.innerHeight);
+      var mark = Math.max(150, Math.min(vmin * 0.32, 240));
+      document.documentElement.style.setProperty('--mark', mark.toFixed(1) + 'px');
+      var h = new Date().getHours();
+      if (!(h >= 19 || h < 7)) s.classList.add('gunduz');
+      // TEK-RESSAM KURALI (2026-08): web'in açılışı YALNIZ bu katmandır —
+      // Flutter web'de ikinci bir açılış çizmez. Katman, uygulamanın ilk
+      // karesi çizilene VE en az MIN_SURE kadar marka süresi dolana kadar
+      // durur; sonra doğrudan hazır haritaya yumuşakça açılır. Logo tek kez
+      // çizildiği için oynaması/boyut değiştirmesi imkânsızdır.
+      //
+      // FAZ 1 (hız): taban süre 1800 → 600 ms. Asıl bekleme zaten
+      // 'flutter-first-frame' olayıdır; taban yalnız markanın bir flaş gibi
+      // çakıp kaybolmasını önler. Hızlı bağlantıda açılış ~1,2 sn kısalır.
+      var t0 = Date.now();
+      var MIN_SURE = 600;
+      function kaldir() {
+        s.style.opacity = '0';
+        setTimeout(function () { s.remove(); }, 500);
+      }
+      window.addEventListener('flutter-first-frame', function () {
+        var kalan = MIN_SURE - (Date.now() - t0);
+        setTimeout(kaldir, kalan > 0 ? kalan : 0);
+      });
+    })();
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
