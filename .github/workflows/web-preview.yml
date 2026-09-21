@@ -68,7 +68,6 @@ jobs:
           flutter build web --release \
             --web-renderer canvaskit \
             --no-web-resources-cdn \
-            --no-tree-shake-icons \
             --dart-define=API_BASE_URL="$API_BASE_URL" \
             --dart-define=FLAVOR="$FLAVOR" \
             --dart-define=ESRI_TILE_KEY=${{ secrets.ESRI_TILE_KEY }} \
