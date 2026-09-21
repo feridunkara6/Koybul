@@ -10539,7 +10539,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'akyarlar-balikci-barinagi', 3, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
   'Akyarlar Balıkçı Barınağı', 'Bodrum merkeze 22 km uzaklıkta, Akyarlar Su Ürünleri Kooperatifi tarafından işletilen 120 m mendirekli ve 65 tekne kapasiteli balıkçı barınağı. Plaj önünde 4-8 m derinlikte kum zemine demirlenebilir; batı rüzgârlarından korunaklı ancak güney rüzgârlarına açıktır. Su ve elektrik mevcuttur.',
-  ST_SetSRID(ST_MakePoint(27.292204, 36.967168), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.29316, 36.96818), 4326)::geography,
   NULL, NULL, 4.0, 8.0,
   65, 'unknown', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -10898,7 +10898,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'altinoluk-balikci-barinagi', 3, 'draft', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-edremit'),
   'Altınoluk Balıkçı Barınağı', 'Edremit Körfezi''nin kuzey kıyısında, Altınoluk''ta yer alan ve bakanlık envanterine kayıtlı balıkçı barınağı. 2016 tarihli seyir notlarına göre barınak poyraza çok açıktır; içeride balıkçı kooperatifi satış yeri ve gezi tekneleri için iskele bulunur.',
-  ST_SetSRID(ST_MakePoint(26.73935, 39.58234), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.74404, 39.56538), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'unknown', 'import'
 ON CONFLICT (slug) DO NOTHING;

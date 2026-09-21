@@ -14,7 +14,7 @@
       "districtSlug": "mugla-bodrum",
       "lat": 37.004972,
       "lon": 27.385389,
-      "coordSource": "turkeymarinas",
+      "coordSource": "OpenStreetMap/Overpass (2026-09-21): Akyarlar'daki iskele alanı (man_made=pier, area) merkezi — 36.96818, 27.29316. Önceki turkeymarinas değeri ~150 m güneybatıdaydı; OSM'in haritalanmış iskelesine hizalandı. (OSM'de hemen açıkta 'At 5 Meter' adlı demirleme işareti de mevcut — nottaki derinlik gözlemiyle uyumlu.)",
       "descriptionTr": "Bodrum yarımadasının güneyinde, Bitez ile Gümbet koyları arasında yer alan Adaboğazı (Akvaryum) Koyu, berrak suyuyla ünlü bir demirleme yeridir. Batı rüzgârlarına karşı yeterli korunma sağlar; tekneler demirde salınabilir veya kıçtan karaya halat verebilir. Ortadaki adacığın çevresi sığdır ve koy gün içinde günübirlik gezi tekneleri nedeniyle çok kalabalık olur.",
       "berthCount": null,
       "maxLoaM": null,
@@ -175,8 +175,8 @@
       "typeCode": "municipal_pier",
       "provinceSlug": "mugla",
       "districtSlug": "mugla-bodrum",
-      "lat": 36.967168,
-      "lon": 27.292204,
+      "lat": 36.96818,
+      "lon": 27.29316,
       "coordSource": "turkeymarinas",
       "descriptionTr": "Bodrum merkeze 22 km uzaklıkta, Akyarlar Su Ürünleri Kooperatifi tarafından işletilen 120 m mendirekli ve 65 tekne kapasiteli balıkçı barınağı. Plaj önünde 4-8 m derinlikte kum zemine demirlenebilir; batı rüzgârlarından korunaklı ancak güney rüzgârlarına açıktır. Su ve elektrik mevcuttur.",
       "berthCount": 65,
@@ -199,7 +199,7 @@
         "https://turkeymarinas.blogspot.com/2016/07/akyarlar-fishing-port.html"
       ],
       "confidence": "high",
-      "missingNotes": "Bağlama ücreti, telefon, VHF kanalı kaynakta yok. Derinlikler barınak önündeki demirleme alanına aittir; kaynak sığlaşmaya dikkat çekiyor ('Depts suddenly shallow')."
+      "missingNotes": "Bağlama ücreti, telefon, VHF kanalı kaynakta yok. Derinlikler barınak önündeki demirleme alanına aittir; kaynak sığlaşmaya dikkat çekiyor ('Depts suddenly shallow'). | KOORDİNAT DÜZELTMESİ (FAZ 3, 2026-09-21): OSM iskele alanına hizalandı."
     },
     {
       "slug": "mazi-koyu-demirleme",
@@ -800,9 +800,9 @@
       "typeCode": "municipal_pier",
       "provinceSlug": "balikesir",
       "districtSlug": "balikesir-edremit",
-      "lat": 39.58234,
-      "lon": 26.73935,
-      "coordSource": "wikipedia (yerleşim merkezi)",
+      "lat": 39.56538,
+      "lon": 26.74404,
+      "coordSource": "OpenStreetMap/Overpass (2026-09-21): barınak mendireği ucundaki sabit kırmızı liman feneri (seamark:light F R, yükseklik 10 m) — 39.56538, 26.74404. Önceki değer Wikipedia'daki YERLEŞİM MERKEZİydi (~2 km içeride); kayıt kıyıdaki barınağa taşındı.",
       "descriptionTr": "Edremit Körfezi'nin kuzey kıyısında, Altınoluk'ta yer alan ve bakanlık envanterine kayıtlı balıkçı barınağı. 2016 tarihli seyir notlarına göre barınak poyraza çok açıktır; içeride balıkçı kooperatifi satış yeri ve gezi tekneleri için iskele bulunur.",
       "berthCount": null,
       "maxLoaM": null,
@@ -822,7 +822,7 @@
         "https://www.motorboatdergi.com/ismail-oruc-kuzey-ege-barinak-notlari-3.html"
       ],
       "confidence": "medium",
-      "missingNotes": "Koordinat izinli kaynakta bulunamadı — null. Derinlik, kapasite, ücret, telefon yok. swellExposure=high, 2016 tarihli 'poyraza çok açık' gözlemine dayanır (poyrazda içeri deniz girdiği, mendireğin ~100 m uzatılması gerektiği aktarılmış); mendirek o tarihten sonra uzatıldıysa güncel durum farklı olabilir. Koordinat Altınoluk yerleşim merkezine aittir; barınak kıyıdadır — hassasiyet düşük olduğundan taslak."
+      "missingNotes": "Koordinat izinli kaynakta bulunamadı — null. Derinlik, kapasite, ücret, telefon yok. swellExposure=high, 2016 tarihli 'poyraza çok açık' gözlemine dayanır (poyrazda içeri deniz girdiği, mendireğin ~100 m uzatılması gerektiği aktarılmış); mendirek o tarihten sonra uzatıldıysa güncel durum farklı olabilir. Koordinat Altınoluk yerleşim merkezine aittir; barınak kıyıdadır — hassasiyet düşük olduğundan taslak. | KOORDİNAT DÜZELTMESİ (FAZ 3, 2026-09-21): yerleşim merkezi → barınak mendirek feneri konumu (OSM)."
     },
     {
       "slug": "anadolu-kavagi-barinma-yeri",
