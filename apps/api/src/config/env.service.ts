@@ -22,4 +22,9 @@ export class EnvService {
   get deriaEnabled(): boolean {
     return this.env.DERIA_ENABLED;
   }
+
+  /** Premium detay kilidi zorlanıyor mu? (lansmanda panelden 'true' yapılır) */
+  get premiumEnforce(): boolean {
+    return this.env.PREMIUM_ENFORCE;
+  }
 }

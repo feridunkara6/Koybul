@@ -330,4 +330,17 @@ export interface LocationDetail {
   shelteredDirs: string | null;
   userContext: null;
   counts: { reviews: number; photos: number };
+  /**
+   * ERİŞİM DÜZEYİ (P1, kurucu onayı 2026-09-21, premium v3 raporu §3):
+   * 'full' = tam veri. 'teaser' = VİTRİN — yalnız kimlik + konum + kapak
+   * fotoğrafı + güvenlik özeti (derinlik/zemin/korunak/rüzgâr) dolu; kilitli
+   * alanlar boş/null döner ve İSTEMCİYE HİÇ İNMEZ (kilit sunucudadır).
+   * PREMIUM_ENFORCE kapalıyken her zaman 'full'.
+   */
+  access: 'full' | 'teaser';
+  /**
+   * Kalan keşif hakkı — yalnız HESAPLI üye teaser görürken dolar (kilit
+   * ekranındaki "Keşif hakkınla aç (2 kaldı)" satırı); diğer tüm durumlarda null.
+   */
+  explorationRemaining: number | null;
 }

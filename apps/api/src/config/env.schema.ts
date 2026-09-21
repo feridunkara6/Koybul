@@ -66,6 +66,21 @@ export const envSchema = z.object({
       z.enum(['true', 'false']).default('true'),
     )
     .transform((v) => v === 'true'),
+  /**
+   * PREMIUM KİLİDİ (P1, kurucu onayı 2026-09-21, premium v3 raporu §3):
+   * 'true' ⇒ koy detayı ücretsiz istekte VİTRİN'e iner (isim + koordinat +
+   * kapak fotoğrafı + güvenlik özeti); tam veri yalnız premium/keşif-hakkı
+   * doğrulanmış isteğe döner. Varsayılan 'false': davranış bugünkünün AYNISI —
+   * bayrak, mobil paywall ekranları yayında olana dek KAPALI tutulur ve panelden
+   * yeniden dağıtım gerekmeden açılır (DERIA_ENABLED ile aynı desen; yalnız
+   * 'true'/'false' kabul edilir, yanlış yazım önyüklemeyi hatayla durdurur).
+   */
+  PREMIUM_ENFORCE: z
+    .preprocess(
+      (v) => (typeof v === 'string' ? v.trim().toLowerCase() : v),
+      z.enum(['true', 'false']).default('false'),
+    )
+    .transform((v) => v === 'true'),
 });
 
 export type Env = z.infer<typeof envSchema>;

@@ -13,6 +13,7 @@ import {
 import { RateLimiterService } from '../../infrastructure/redis/rate-limiter.service';
 import { JtiBlacklistService } from '../../infrastructure/redis/jti-blacklist.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from '../../common/guards/optional-jwt.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 
 @Module({
@@ -23,6 +24,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
     RateLimiterService,
     JtiBlacklistService,
     JwtAuthGuard,
+    OptionalJwtAuthGuard,
     RolesGuard,
     { provide: FIREBASE_TOKEN_VERIFIER, useClass: GoogleJwksFirebaseVerifier },
     { provide: SESSION_REPOSITORY, useClass: PrismaSessionRepository },
@@ -32,6 +34,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
     SessionService,
     TokenSigner,
     JwtAuthGuard,
+    OptionalJwtAuthGuard,
     RolesGuard,
     RateLimiterService,
     JtiBlacklistService,

@@ -33,6 +33,7 @@ export type ProblemType =
   | 'duplicate-review'
   | 'duplicate-request'
   | 'validation-error'
+  | 'quota-exceeded'
   | 'rate-limited'
   | 'payload-too-large'
   | 'service-unavailable'
@@ -48,6 +49,8 @@ const CATALOG: Record<ProblemType, { status: HttpStatus; title: string }> = {
   'duplicate-review': { status: HttpStatus.CONFLICT, title: 'Bu noktaya zaten yorumunuz var' },
   'duplicate-request': { status: HttpStatus.CONFLICT, title: 'Bu tarihlere aktif talebiniz var' },
   'validation-error': { status: HttpStatus.UNPROCESSABLE_ENTITY, title: 'Doğrulama hatası' },
+  // Keşif hakkı tavanı (P1, premium v3 raporu K2) — mobil bu tipe paywall açar.
+  'quota-exceeded': { status: HttpStatus.FORBIDDEN, title: 'Aylık keşif hakkı doldu' },
   'rate-limited': { status: HttpStatus.TOO_MANY_REQUESTS, title: 'Çok fazla istek' },
   'payload-too-large': { status: HttpStatus.PAYLOAD_TOO_LARGE, title: 'İçerik çok büyük' },
   'service-unavailable': {

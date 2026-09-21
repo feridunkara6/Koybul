@@ -64,4 +64,14 @@ describe('validateEnv (fail-fast, docs/24 §16)', () => {
     expect(() => validateEnv({ ...VALID, READ_RATE_LIMIT_PER_MIN: '0' })).toThrow(/READ_RATE/);
     expect(() => validateEnv({ ...VALID, WRITE_RATE_LIMIT_PER_MIN: '-5' })).toThrow(/WRITE_RATE/);
   });
+
+  it('PREMIUM_ENFORCE: varsayılan KAPALI; true/false kabul; yanlış yazım düşürür (P1)', () => {
+    // Varsayılan false — bayrak, mobil paywall yayında olana dek kapalı durur.
+    expect(validateEnv(VALID).PREMIUM_ENFORCE).toBe(false);
+    expect(validateEnv({ ...VALID, PREMIUM_ENFORCE: 'true' }).PREMIUM_ENFORCE).toBe(true);
+    expect(validateEnv({ ...VALID, PREMIUM_ENFORCE: ' TRUE ' }).PREMIUM_ENFORCE).toBe(true);
+    expect(validateEnv({ ...VALID, PREMIUM_ENFORCE: 'false' }).PREMIUM_ENFORCE).toBe(false);
+    // '1'/'on' gibi yazımlar SESSİZCE kapalı kalmasın: önyükleme hatayla durur.
+    expect(() => validateEnv({ ...VALID, PREMIUM_ENFORCE: '1' })).toThrow(/PREMIUM_ENFORCE/);
+  });
 });

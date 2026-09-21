@@ -1,5 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { LOCATIONS_REPOSITORY, LocationsRepository } from '../domain/locations.repository';
+import { Inject, Injectable, Optional } from '@nestjs/common';
+import {
+  DetailData,
+  LOCATIONS_REPOSITORY,
+  LocationsRepository,
+} from '../domain/locations.repository';
+import { PremiumAccessService } from '../../premium/application/premium-access.service';
+import { Principal } from '../../../core/auth/principal';
+import { toTeaserDetail } from '../domain/teaser';
 import { PIN_CAP, parseBbox, quantizeBbox } from '../domain/bbox';
 import { CLUSTER_CAP, MIN_PIN_ZOOM, clusterCellSizeDeg, parseZoom } from '../domain/cluster';
 import { NM_TO_M, parseNearbyQuery } from '../domain/nearby';
@@ -33,7 +40,15 @@ function pickI18nField(
 /** Harita/lokasyon sorguları — doğrulama + tavan/truncation orkestrasyonu. */
 @Injectable()
 export class LocationsService {
-  constructor(@Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository) {}
+  constructor(
+    @Inject(LOCATIONS_REPOSITORY) private readonly repo: LocationsRepository,
+    /**
+     * Premium erişim kararı (P1). @Optional: birim testleri servis kurarken
+     * vermek zorunda değildir — verilmezse her detay 'full' döner (bugünkü
+     * davranış); üretimde modül her zaman sağlar.
+     */
+    @Optional() private readonly premium?: PremiumAccessService,
+  ) {}
 
   /**
    * Harita bbox sorgusu (docs/23 §9.5). Ham bbox doğrulanır, %1 grid'e kuantalanır.
@@ -118,10 +133,44 @@ export class LocationsService {
    * (alt-tip birleşimi) ve `rating.dimensions` (yorum-türevli) dahil.
    * `media.cover`/`userContext` ilgili alt sistemlerle gelecek (şimdilik null).
    */
-  async detail(idOrSlug: string, locale: string): Promise<LocationDetail> {
+  async detail(
+    idOrSlug: string,
+    locale: string,
+    viewer?: Principal | null,
+  ): Promise<LocationDetail> {
     const d = await this.repo.findDetail(idOrSlug);
     if (!d) throw new AppProblem('not-found');
 
+    const full = this.mapDetail(d, locale);
+    // PREMIUM KİLİDİ (P1, premium v3 raporu §3): karar sunucuda; kilitli veri
+    // istemciye hiç inmez. Bayrak kapalıyken accessFor 'full' der — davranış
+    // bugünkünün aynısı.
+    if (!this.premium) return full;
+    const decision = await this.premium.accessFor(viewer ?? null, full.id);
+    if (decision.access === 'full') return full;
+    return { ...toTeaserDetail(full), explorationRemaining: decision.explorationRemaining };
+  }
+
+  /**
+   * KEŞİF HAKKI (P1, premium v3 raporu K2): hesaplı üye bu koyu bu ay için tam
+   * açar; dönen gövde TAM detaydır (ikinci istek gerekmez) + kalan hak sayısı.
+   * Tavan doluysa PremiumAccessService 'quota-exceeded' (403) fırlatır.
+   */
+  async unlock(
+    idOrSlug: string,
+    locale: string,
+    principal: Principal,
+  ): Promise<{ remaining: number; detail: LocationDetail }> {
+    if (!this.premium) throw new AppProblem('service-unavailable');
+    const d = await this.repo.findDetail(idOrSlug);
+    if (!d) throw new AppProblem('not-found');
+
+    const { remaining } = await this.premium.unlock(principal, d.id);
+    return { remaining, detail: this.mapDetail(d, locale) };
+  }
+
+  /** Repo satırını API gövdesine eşler — erişim kararından bağımsız TAM harita. */
+  private mapDetail(d: DetailData, locale: string): LocationDetail {
     return {
       id: d.id,
       slug: d.slug,
@@ -156,6 +205,8 @@ export class LocationsService {
       shelteredDirs: d.shelteredDirs ?? null,
       userContext: null,
       counts: { reviews: d.reviewCount, photos: d.photoCount },
+      access: 'full',
+      explorationRemaining: null,
     };
   }
 

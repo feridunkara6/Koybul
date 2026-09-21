@@ -8,12 +8,16 @@ import {
   Param,
   Post,
   Query,
+  Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { z } from 'zod';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
-import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
+import { AuthedRequest, JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from '../../../common/guards/optional-jwt.guard';
 import { Principal } from '../../../core/auth/principal';
 import { LocationsService } from '../application/locations.service';
 import {
@@ -105,12 +109,40 @@ export class LocationsController {
    */
   @Get(':idOrSlug')
   @Header('Cache-Control', 'public, max-age=300, s-maxage=300, stale-while-revalidate=600')
-  @Header('Vary', 'Accept-Language')
+  @Header('Vary', 'Accept-Language, Authorization')
+  @UseGuards(OptionalJwtAuthGuard)
   async detail(
+    @Req() req: AuthedRequest,
+    @Res({ passthrough: true }) res: Response,
     @Param('idOrSlug') idOrSlug: string,
     @Headers('accept-language') acceptLanguage?: string,
   ): Promise<LocationDetail> {
-    return this.locations.detail(idOrSlug, resolveLocale(acceptLanguage));
+    // PREMIUM (P1): kimlik İSTEĞE BAĞLIDIR — anonim istek vitrin görür (bayrak
+    // açıkken), kimlikli istek premium/keşif-hakkı kararına göre tam veri alır.
+    // Kimlikli yanıt kişiye özeldir → paylaşımlı cache'e yazılmaz (private);
+    // anonim yanıt eskisi gibi public cache'lenir. Vary: Authorization,
+    // aradaki cache'lerin iki yanıtı karıştırmasını engeller.
+    if (req.principal) {
+      res.setHeader('Cache-Control', 'private, max-age=60');
+    }
+    return this.locations.detail(idOrSlug, resolveLocale(acceptLanguage), req.principal ?? null);
+  }
+
+  /**
+   * KEŞİF HAKKI (P1, premium v3 raporu K2): hesaplı üye bu koyu bu ay için tam
+   * açar (ayda 3). Dönen gövde TAM detay + kalan hak — ikinci istek gerekmez.
+   * Tavan doluysa 403 `quota-exceeded` (mobil paywall açar). POST: cache'lenmez.
+   */
+  @Post(':idOrSlug/unlock')
+  @UseGuards(JwtAuthGuard, AccountGuard)
+  @RequireAccount()
+  @HttpCode(200)
+  async unlock(
+    @CurrentUser() principal: Principal,
+    @Param('idOrSlug') idOrSlug: string,
+    @Headers('accept-language') acceptLanguage?: string,
+  ): Promise<{ remaining: number; detail: LocationDetail }> {
+    return this.locations.unlock(idOrSlug, resolveLocale(acceptLanguage), principal);
   }
 
   /**
