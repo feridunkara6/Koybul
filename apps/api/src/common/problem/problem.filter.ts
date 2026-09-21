@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
+import * as Sentry from '@sentry/node';
 import { Request, Response } from 'express';
 import { ZodError } from 'zod';
 import { currentRequestId } from '../context/request-context';
@@ -43,6 +44,14 @@ export class GlobalProblemFilter implements ExceptionFilter {
         { event: 'server_error', status: body.status, requestId, instance, err },
         'Sunucu hatası',
       );
+      // Sentry (FAZ 0 K5, 2026-09): DSN tanımlıysa beklenmeyen 5xx Sentry'ye de
+      // gider — log etiketi `server_error` yerinde kalır, iki kanal birlikte
+      // çalışır. DSN yoksa bu satır tamamen sessizdir.
+      if (process.env.SENTRY_DSN) {
+        Sentry.captureException(
+          exception instanceof Error ? exception : new Error(String(exception)),
+        );
+      }
     }
     res.status(body.status).type(PROBLEM_CONTENT_TYPE).json(body);
   }

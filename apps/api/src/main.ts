@@ -1,4 +1,5 @@
 import { join } from 'path';
+import * as Sentry from '@sentry/node';
 import compression from 'compression';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -10,6 +11,26 @@ import { runBootSeed } from './infrastructure/seed/boot-seed';
 import { runBootMigrations } from './infrastructure/migrate/boot-migrate';
 
 async function bootstrap(): Promise<void> {
+  // Sentry (FAZ 0 K5, 2026-09): SENTRY_DSN verilmişse hata izleme açılır;
+  // verilmemişse HİÇBİR ŞEY değişmez (yerel/CI ortamları DSN'siz çalışır —
+  // rehber: docs/implementation/monitoring-kurulum-rehberi.md §3). PII
+  // maskeleme: Authorization/Cookie başlıkları olaydan çıkarılır — token
+  // asla Sentry'ye gitmez.
+  if (process.env.SENTRY_DSN) {
+    Sentry.init({
+      dsn: process.env.SENTRY_DSN,
+      environment: process.env.SENTRY_ENVIRONMENT ?? process.env.NODE_ENV ?? 'production',
+      tracesSampleRate: 0.1,
+      beforeSend(event) {
+        if (event.request?.headers) {
+          delete event.request.headers['authorization'];
+          delete event.request.headers['cookie'];
+        }
+        return event;
+      },
+    });
+  }
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { bufferLogs: true });
   const logger = app.get(Logger);
   app.useLogger(logger);
