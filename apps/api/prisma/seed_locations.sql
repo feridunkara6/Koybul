@@ -22549,6 +22549,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/alanya-marina/kapak')
 WHERE slug = 'alanya-marina' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/alanya-marina/kapak');
+-- --- albatros-marina-marmaris ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/albatros-marina-marmaris/kapak', 'image/webp', 1920, 1080,
+  'https://albatrosmarina.com/wp-content/uploads/revslider/o/1/14394b94951a40c71daf6678e87b2542.webp', 'Fotoğraf: Albatros Marina Marmaris (resmî site)', NULL, 'https://albatrosmarina.com/', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'albatros-marina-marmaris' AND m.storage_key = 'ext/albatros-marina-marmaris/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/albatros-marina-marmaris/kapak')
+WHERE slug = 'albatros-marina-marmaris' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/albatros-marina-marmaris/kapak');
 -- --- alibey-cunda-adasi-limani ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -22837,6 +22855,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/cinarcik-balikci-barinagi/kapak')
 WHERE slug = 'cinarcik-balikci-barinagi' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/cinarcik-balikci-barinagi/kapak');
+-- --- club-marina-gocek ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/club-marina-gocek/kapak', 'image/jpeg', 1357, 800,
+  'https://www.clubmarina.com.tr/wp-content/uploads/2018/08/003-1357x800.jpg', 'Fotoğraf: Club Marina Göcek (resmî site)', NULL, 'https://www.clubmarina.com.tr/', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'club-marina-gocek' AND m.storage_key = 'ext/club-marina-gocek/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/club-marina-gocek/kapak')
+WHERE slug = 'club-marina-gocek' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/club-marina-gocek/kapak');
 -- --- d-marin-gocek ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -22981,6 +23017,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/domuz-island-koyu/kapak')
 WHERE slug = 'domuz-island-koyu' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/domuz-island-koyu/kapak');
+-- --- ece-saray-marina ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/ece-saray-marina/kapak', 'image/jpeg', 1280, 768,
+  'https://ecesaray.com.tr/marina/wp-content/uploads/2022/04/ecesaray-drone.jpg', 'Fotoğraf: Ece Saray Marina & Resort (resmî site)', NULL, 'https://ecesaray.com.tr/marina/en/', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'ece-saray-marina' AND m.storage_key = 'ext/ece-saray-marina/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/ece-saray-marina/kapak')
+WHERE slug = 'ece-saray-marina' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/ece-saray-marina/kapak');
 -- --- eceabat-balikci-barinagi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -23287,6 +23341,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/gokceada-kuzu-limani/kapak')
 WHERE slug = 'gokceada-kuzu-limani' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/gokceada-kuzu-limani/kapak');
+-- --- gokova-oren-marina ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/gokova-oren-marina/kapak', 'image/jpeg', 1920, 786,
+  'https://www.seturmarinas.com/Upload/MarinaPictures/607e3a96dd3144c8ab717dc403636ef7.jpg', 'Fotoğraf: Setur Ören Rib & Refit Park (resmî site)', NULL, 'https://www.seturmarinas.com/marinalar/oren-rib-refit-park', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'gokova-oren-marina' AND m.storage_key = 'ext/gokova-oren-marina/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/gokova-oren-marina/kapak')
+WHERE slug = 'gokova-oren-marina' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/gokova-oren-marina/kapak');
 -- --- golturkbuku-balikci-barinagi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -24259,6 +24331,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/port-alacati-marina/kapak')
 WHERE slug = 'port-alacati-marina' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/port-alacati-marina/kapak');
+-- --- port-iasos-marina ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/port-iasos-marina/kapak', 'image/jpeg', 1600, 600,
+  'https://www.portiasos.com/images/slide1.jpg', 'Fotoğraf: Port Iasos Marina (resmî site)', NULL, 'https://www.portiasos.com/', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'port-iasos-marina' AND m.storage_key = 'ext/port-iasos-marina/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/port-iasos-marina/kapak')
+WHERE slug = 'port-iasos-marina' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/port-iasos-marina/kapak');
 -- --- pythagorio-limani-samos ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)
@@ -24565,6 +24655,24 @@ UPDATE locations SET cover_media_id =
   (SELECT id FROM media WHERE storage_key = 'ext/siralibuk-koyu/kapak')
 WHERE slug = 'siralibuk-koyu' AND cover_media_id IS DISTINCT FROM
   (SELECT id FROM media WHERE storage_key = 'ext/siralibuk-koyu/kapak');
+-- --- skopea-marina ---
+INSERT INTO media (media_type, storage_key, mime_type, width, height,
+  external_url, credit, license_code, source_url, moderation_status)
+VALUES ('photo', 'ext/skopea-marina/kapak', 'image/jpeg', 1400, 751,
+  'https://www.skopeamarina.com.tr/wp-content/uploads/2021/11/skopea-03-1-1400x751.jpg', 'Fotoğraf: Skopea Marina Göcek (resmî site)', NULL, 'https://www.skopeamarina.com.tr/', 'approved')
+ON CONFLICT (storage_key) DO UPDATE SET
+  mime_type = EXCLUDED.mime_type, width = EXCLUDED.width,
+  height = EXCLUDED.height, external_url = EXCLUDED.external_url,
+  credit = EXCLUDED.credit, license_code = EXCLUDED.license_code,
+  source_url = EXCLUDED.source_url, updated_at = now();
+INSERT INTO location_media (location_id, media_id, is_cover, sort_order)
+SELECT l.id, m.id, true, 1 FROM locations l, media m
+WHERE l.slug = 'skopea-marina' AND m.storage_key = 'ext/skopea-marina/kapak'
+ON CONFLICT (location_id, media_id) DO NOTHING;
+UPDATE locations SET cover_media_id =
+  (SELECT id FROM media WHERE storage_key = 'ext/skopea-marina/kapak')
+WHERE slug = 'skopea-marina' AND cover_media_id IS DISTINCT FROM
+  (SELECT id FROM media WHERE storage_key = 'ext/skopea-marina/kapak');
 -- --- sultanice-balikci-barinagi ---
 INSERT INTO media (media_type, storage_key, mime_type, width, height,
   external_url, credit, license_code, source_url, moderation_status)

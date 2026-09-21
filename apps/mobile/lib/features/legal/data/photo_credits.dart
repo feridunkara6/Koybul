@@ -66,6 +66,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     sourceUrl: 'https://www.alanyamarina.com.tr',
   ),
   PhotoCredit(
+    place: 'Albatros Marina Marmaris',
+    credit: 'Fotoğraf: Albatros Marina Marmaris (resmî site)',
+    license: '',
+    sourceUrl: 'https://albatrosmarina.com/',
+  ),
+  PhotoCredit(
     place: 'Alibey Cunda Adasi Limani',
     credit: 'collage bird\'s eye v…',
     license: 'CC BY-SA 3.0',
@@ -162,6 +168,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:%C3%87%C4%B1narc%C4%B1k_-_panoramio_(39).jpg',
   ),
   PhotoCredit(
+    place: 'Club Marina Gocek',
+    credit: 'Fotoğraf: Club Marina Göcek (resmî site)',
+    license: '',
+    sourceUrl: 'https://www.clubmarina.com.tr/',
+  ),
+  PhotoCredit(
     place: 'D Marin Gocek',
     credit: 'Poet Laureate',
     license: 'CC BY 2.0',
@@ -208,6 +220,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     credit: 'Jorge Franganillo',
     license: 'CC BY 3.0',
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Domuz_Adas%C4%B1_-_panoramio.jpg',
+  ),
+  PhotoCredit(
+    place: 'Ece Saray Marina',
+    credit: 'Fotoğraf: Ece Saray Marina & Resort (resmî site)',
+    license: '',
+    sourceUrl: 'https://ecesaray.com.tr/marina/en/',
   ),
   PhotoCredit(
     place: 'Eceabat Balikci Barinagi',
@@ -310,6 +328,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     credit: 'Bilderbrei',
     license: 'CC BY-SA 3.0',
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:G%C3%B6kceada_Kuzu_Limani_1.jpg',
+  ),
+  PhotoCredit(
+    place: 'Gokova Oren Marina',
+    credit: 'Fotoğraf: Setur Ören Rib & Refit Park (resmî site)',
+    license: '',
+    sourceUrl: 'https://www.seturmarinas.com/marinalar/oren-rib-refit-park',
   ),
   PhotoCredit(
     place: 'Golturkbuku Balikci Barinagi',
@@ -636,6 +660,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Cesme_-_Alacati_Marina_-_panoramio.jpg',
   ),
   PhotoCredit(
+    place: 'Port Iasos Marina',
+    credit: 'Fotoğraf: Port Iasos Marina (resmî site)',
+    license: '',
+    sourceUrl: 'https://www.portiasos.com/',
+  ),
+  PhotoCredit(
     place: 'Pythagorio Limani Samos',
     credit: 'Orthodox33',
     license: 'Public domain',
@@ -736,6 +766,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     credit: 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)',
     license: '',
     sourceUrl: 'https://deria.gov.tr',
+  ),
+  PhotoCredit(
+    place: 'Skopea Marina',
+    credit: 'Fotoğraf: Skopea Marina Göcek (resmî site)',
+    license: '',
+    sourceUrl: 'https://www.skopeamarina.com.tr/',
   ),
   PhotoCredit(
     place: 'Sultanice Balikci Barinagi',
