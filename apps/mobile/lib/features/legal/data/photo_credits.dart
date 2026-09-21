@@ -1,4 +1,4 @@
-/// FOTOĞRAF ATIF LİSTESİ — ÜRETİLMİŞ DOSYA (FAZ 0 K4, 2026-09).
+/// FOTOĞRAF ATIF LİSTESİ — ÜRETİLMİŞ DOSYA (FAZ 0 K4, 2026-09; FAZ 3 TUR 1 güncellemesi).
 ///
 /// Kaynak: apps/api/prisma/data/kapak_fotograflari.json — uygulamadaki her
 /// kapak fotoğrafının atıf kaydı (fotoğrafçı/kaynak, lisans, kaynak sayfası).
@@ -36,6 +36,12 @@ class PhotoCredit {
 /// Tüm kapak fotoğraflarının atıfları (konum kimliğine göre sıralı).
 const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
   PhotoCredit(
+    place: 'Adakoy Marina Marmaris',
+    credit: 'Bir_Ege_Hikayesi ©',
+    license: 'CC BY 3.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:48700_Adak%C3%B6y-Marmaris-Mu%C4%9Fla,_Turkey_-_panoramio_(1).jpg',
+  ),
+  PhotoCredit(
     place: 'Adamas Limani Milos',
     credit: 'Klearchos Kapoutsis from Santorini, Greece',
     license: 'CC BY 2.0',
@@ -58,6 +64,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     credit: 'Fotoğraf: Alanya Marina (resmî site)',
     license: '',
     sourceUrl: 'https://www.alanyamarina.com.tr',
+  ),
+  PhotoCredit(
+    place: 'Alibey Cunda Adasi Limani',
+    credit: 'collage bird\'s eye v…',
+    license: 'CC BY-SA 3.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Cunda_Adas%C4%B1_(Alibey)_Ayval%C4%B1k_-_panoramio.jpg',
   ),
   PhotoCredit(
     place: 'Antalya Kaleici Yat Limani',
@@ -84,6 +96,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Bardak%C3%A7%C4%B1_Beach.jpg',
   ),
   PhotoCredit(
+    place: 'Bayindir Limanagzi Kas Demirleme',
+    credit: 'Tugceeakgunn91',
+    license: 'CC BY-SA 4.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Antalya_-_Ka%C5%9F_-Limana%C4%9Fz%C4%B1.jpg',
+  ),
+  PhotoCredit(
     place: 'Bedri Rahmi Samandira Sahasi',
     credit: 'Raicem',
     license: 'CC BY-SA 4.0',
@@ -94,6 +112,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     credit: 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)',
     license: '',
     sourceUrl: 'https://deria.gov.tr',
+  ),
+  PhotoCredit(
+    place: 'Bitez Koyu Demirleme',
+    credit: 'Tanya Dedyukhina',
+    license: 'CC BY 3.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Bodrum_Bitez_bay_-_panoramio.jpg',
   ),
   PhotoCredit(
     place: 'Bogsak Koyu',
@@ -240,6 +264,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Garip%C3%A7e,_Sar%C4%B1yer.jpg',
   ),
   PhotoCredit(
+    place: 'Gemiler Adasi Demirleme',
+    credit: 'Cobija',
+    license: 'CC0 1.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Gemiler_Adas%C4%B1_ve_koy_panoramik.jpg',
+  ),
+  PhotoCredit(
     place: 'Gemlik Balikci Barinagi',
     credit: 'Mustafa DUMAN',
     license: 'CC BY 3.0',
@@ -282,10 +312,28 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:G%C3%B6kceada_Kuzu_Limani_1.jpg',
   ),
   PhotoCredit(
+    place: 'Golturkbuku Balikci Barinagi',
+    credit: 'bynyalcin',
+    license: 'CC BY 3.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:G%C3%B6lt%C3%BCrkb%C3%BCk%C3%BC-Bodrum-Mu%C4%9Fla,_Turkey_-_panoramio_(2).jpg',
+  ),
+  PhotoCredit(
     place: 'Gumusluk Iskeleleri',
     credit: 'Koray',
     license: 'CC BY-SA 4.0',
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:G%C3%BCm%C3%BC%C5%9Fl%C3%BCk,_Bodrum.jpg',
+  ),
+  PhotoCredit(
+    place: 'Gumusluk Koyu Demirleme',
+    credit: 'Bright estrellas',
+    license: 'CC BY-SA 4.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Bodrum_G%C3%BCm%C3%BC%C5%9Fl%C3%BCk.jpg',
+  ),
+  PhotoCredit(
+    place: 'Gundogan Balikci Barinagi',
+    credit: 'Şadi Bora Karamanoğlu',
+    license: 'CC BY-SA 4.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Gundogan.jpg',
   ),
   PhotoCredit(
     place: 'Guneyli Balikci Barinagi',
@@ -336,6 +384,24 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     sourceUrl: 'https://deria.gov.tr',
   ),
   PhotoCredit(
+    place: 'Izmir Marina',
+    credit: 'BSRF',
+    license: 'CC BY-SA 4.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:%C4%B0zmir_Marina,_May_2023_02.jpg',
+  ),
+  PhotoCredit(
+    place: 'Kale Pansiyon Iskelesi',
+    credit: 'Josep M. Gracia',
+    license: 'CC BY-SA 4.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:KAL_-_Panoramic_view_of_Kalekoy_and_Simena_Castle,_Turkey,_2021.jpg',
+  ),
+  PhotoCredit(
+    place: 'Kalekoy Simena Restoran Pontonlari',
+    credit: 'Seynaeve',
+    license: 'CC BY-SA 3.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Simena_0230.jpg',
+  ),
+  PhotoCredit(
     place: 'Kalymnos Pothia Limani',
     credit: 'Κ. Καλογερόπουλος Kalogeropoulos',
     license: 'CC BY-SA 3.0',
@@ -346,6 +412,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     credit: 'Stu\'s Images',
     license: 'CC BY-SA 3.0',
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Venetian_Fortress,_Heraklion,_Crete.JPG',
+  ),
+  PhotoCredit(
+    place: 'Kara Ada Demirleme',
+    credit: 'Alessandro57',
+    license: 'Public domain',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:KaraAda20060920.jpg',
   ),
   PhotoCredit(
     place: 'Karatas Fisher Limani',
@@ -438,10 +510,22 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Lakka_bay_20210606.jpg',
   ),
   PhotoCredit(
+    place: 'Letoonia Marinet Fethiye',
+    credit: 'Николай Максимович',
+    license: 'CC BY 3.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Letoonia_club,_Fethiye_-_panoramio.jpg',
+  ),
+  PhotoCredit(
     place: 'Lindos Koyu',
     credit: 'Ввласенко',
     license: 'CC BY-SA 3.0',
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Pier_at_Lindos._Rhodes,_Greece.jpg',
+  ),
+  PhotoCredit(
+    place: 'Loryma Restaurant Bozukkale',
+    credit: 'Marmaracalypso',
+    license: 'CC BY-SA 4.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Loryma_(3).jpg',
   ),
   PhotoCredit(
     place: 'Marinturk Gocek Exclusive',
@@ -472,6 +556,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     credit: 'Michal Osmenda from Brussels, Belgium',
     license: 'CC BY-SA 2.0',
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Bodrum_marina,_Turkey_(5653802003).jpg',
+  ),
+  PhotoCredit(
+    place: 'My Marina Ekincik',
+    credit: 'Николай Максимович',
+    license: 'CC BY 3.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Ekincik_My_Marina_-_panoramio_(3).jpg',
   ),
   PhotoCredit(
     place: 'Naoussa Limani Paros',
@@ -514,6 +604,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     credit: 'Fotoğraf: DERİA (Türkiye Çevre Ajansı)',
     license: '',
     sourceUrl: 'https://deria.gov.tr',
+  ),
+  PhotoCredit(
+    place: 'Palamutbuku Balikci Barinagi',
+    credit: 'Semih Ekinci',
+    license: 'CC BY-SA 3.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Palamutbuku_Island_-_Palamutb%C3%BCk%C3%BC_Adas%C4%B1_-_panoramio.jpg',
   ),
   PhotoCredit(
     place: 'Patara Koyu',
@@ -570,6 +666,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Sarsala_Bay_in_Dalaman_from_above.jpg',
   ),
   PhotoCredit(
+    place: 'Sedir Adasi Demirleme',
+    credit: 'Semih Ekinci',
+    license: 'CC BY-SA 3.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Cleopatra_Beach_-_Sedir_Island_-_Kleopatra_Plaj%C4%B1_-_Sedir_Adas%C4%B1_-_panoramio.jpg',
+  ),
+  PhotoCredit(
     place: 'Setur Antalya Marina',
     credit: 'Fotoğraf: Setur Antalya Marina (resmî site)',
     license: '',
@@ -616,6 +718,12 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     credit: 'Fotoğraf: Setur Yalova Marina (resmî site)',
     license: '',
     sourceUrl: 'https://www.seturmarinas.com/en/marinas/yalova',
+  ),
+  PhotoCredit(
+    place: 'Sig Liman Selimiye',
+    credit: 'Elelicht',
+    license: 'CC BY-SA 3.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Selimiye_3.JPG',
   ),
   PhotoCredit(
     place: 'Sigacik Balikci Barinagi',
@@ -672,10 +780,34 @@ const List<PhotoCredit> kPhotoCredits = <PhotoCredit>[
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Livadhia_Tilos_2.jpg',
   ),
   PhotoCredit(
+    place: 'Torba Balikci Barinagi',
+    credit: 'Dw updike',
+    license: 'CC BY-SA 4.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Torba_Bay.JPG',
+  ),
+  PhotoCredit(
     place: 'Toslaklar Koyu',
     credit: 'Yılmaz Kilim',
     license: 'CC BY 3.0',
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Toslaklar_Koyu_-_panoramio.jpg',
+  ),
+  PhotoCredit(
+    place: 'Ucagiz Rihtimi',
+    credit: 'Dosseman',
+    license: 'CC BY-SA 4.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:%C3%9C%C3%A7a%C4%9F%C4%B1z_0043.jpg',
+  ),
+  PhotoCredit(
+    place: 'Vlychada Marina Santorini',
+    credit: 'Dietmar Rabich',
+    license: 'CC BY-SA 4.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Santorin_(GR),_Exomytis,_Marina_Exomitis-Vlychada_--_2017_--_2819.jpg',
+  ),
+  PhotoCredit(
+    place: 'Yalikavak Marina',
+    credit: 'CeeGee',
+    license: 'CC0 1.0',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Yal%C4%B1kavakMarina_(2).jpg',
   ),
   PhotoCredit(
     place: 'Yalova Balikci Barinagi',
