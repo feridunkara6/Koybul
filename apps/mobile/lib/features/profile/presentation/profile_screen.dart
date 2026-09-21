@@ -13,6 +13,7 @@ import '../../emergency/presentation/emergency_screen.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../favorites/presentation/favorites_screen.dart';
 import '../../legal/presentation/legal_screen.dart';
+import '../../legal/presentation/sources_screen.dart';
 import '../../route/presentation/saved_routes_screen.dart';
 import '../../shell/application/shell_tab_provider.dart';
 
@@ -127,6 +128,17 @@ class ProfileScreen extends ConsumerWidget {
             label: t.legalRow,
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute<void>(builder: (_) => const LegalScreen()),
+            ),
+          ),
+          const SizedBox(height: 12),
+          // KAYNAKLAR VE LİSANSLAR (FAZ 0 K4, 2026-09): harita/hava/veri/
+          // fotoğraf atıflarının tek vitrini — CC atıf şartının merkezi
+          // karşılığı ve mağaza incelemesinin bakacağı yer.
+          _NavRow(
+            icon: DocklyIcons.viewList,
+            label: t.srcRow,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const SourcesScreen()),
             ),
           ),
         ],
