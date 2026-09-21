@@ -21,10 +21,16 @@
   <link rel="preconnect" href="https://tiles.openseamap.org">
   <!-- Kapak fotograflari (Wikimedia Commons) - Faz 2 -->
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
-  <!-- Motor ön-yüklemesi (2026-08): ana uygulama ve çizim motoru dosyaları,
-       açılış ekranı görünür görünmez İNDİRİLMEYE başlar (sırada beklemez). -->
+  <!-- Motor ön-yüklemesi (2026-08): ana uygulama dosyası, açılış ekranı
+       görünür görünmez İNDİRİLMEYE başlar (sırada beklemez).
+       FAZ 1 HIZ DÜZELTMESİ (2026-09): canvaskit.wasm ön-yüklemesi KALDIRILDI.
+       Nedeni: Flutter, Chromium tabanlı tarayıcılarda (Chrome/Edge/Android)
+       motorun canvaskit/chromium/canvaskit.wasm sürümünü kullanır; buradaki
+       satır ise HER tarayıcıya öteki sürümü (6,8 MB) indirtiyordu — yani
+       kullanıcıların büyük kısmı motoru İKİ KEZ indiriyordu. Doğru sürümü
+       flutter_bootstrap zaten anında seçip indirir; ön-yükleme kazancı
+       (~100-300 ms) çifte indirme kaybının (saniyeler) yanında hiçtir. -->
   <link rel="preload" href="main.dart.js" as="script">
-  <link rel="preload" href="canvaskit/canvaskit.wasm" as="fetch" type="application/wasm" crossorigin>
   <title>Koybul — Denizde yerini bul</title>
   <link rel="manifest" href="manifest.json">
   <style>
