@@ -956,8 +956,15 @@ class _ApproachNoteCard extends ConsumerWidget {
 }
 
 /// Deniz-rota önizleme bölümü (P2 → bölüm kartı, 2026-08). Yön (pusula + ok) +
-/// kuşuçuşu deniz mili + kaba süre. Başlangıç (harita konumu) yoksa gizlenir.
-/// ROTA ÇİZ eylemi artık yapışkan çubukta — her an erişilebilir.
+/// kuşuçuşu deniz mili + kaba süre.
+///
+/// BAŞLANGIÇ = GERÇEK KONUM (FAZ 2 cila, S10 denetim bulgusu, kurucu onayı
+/// 2026-09): eskiden başlangıç HARİTA MERKEZİYDİ — konum paylaşmayan kaptan,
+/// haritayı nereye kaydırdıysa oradan hesaplanmış "135 nm" gibi anlamsız bir
+/// mesafe görüyor ve gerçek sanabiliyordu. Artık yalnız cihazın GERÇEK (GPS)
+/// konumu kullanılır; konum paylaşılmadıysa bu kart HİÇ çizilmez — yanıltıcı
+/// sayı üretmektense sessiz kalır. Rota çizmek isteyen kaptan için yapışkan
+/// çubuktaki "Deniz rotası" (GPS'siz A→B dahil) her an erişilebilir.
 class _SeaRouteRow extends ConsumerWidget {
   const _SeaRouteRow({required this.destination, this.accent});
 
@@ -969,7 +976,7 @@ class _SeaRouteRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final L10n t = ref.watch(l10nProvider);
-    final GeoPoint? origin = ref.watch(originProvider);
+    final GeoPoint? origin = ref.watch(devicePositionProvider);
     if (origin == null) return const SizedBox.shrink();
     final SeaRoutePreview route = computeSeaRoute(origin, destination);
     if (route.distanceNm < 0.05) return const SizedBox.shrink();

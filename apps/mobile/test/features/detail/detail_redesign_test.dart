@@ -245,7 +245,10 @@ void main() {
     await tester.pumpWidget(_app(
       sampleAnchorageDetail,
       extra: <Override>[
-        originProvider.overrideWith((ref) => const GeoPoint(lat: 36.0, lon: 29.5)),
+        // S10 düzeltmesi (FAZ 2, 2026-09): önizleme artık HARİTA MERKEZİNİ
+        // değil GERÇEK (GPS) konumu kullanır — test de onu verir.
+        devicePositionProvider
+            .overrideWith((ref) => const GeoPoint(lat: 36.0, lon: 29.5)),
       ],
     ));
     await tester.pumpAndSettle();

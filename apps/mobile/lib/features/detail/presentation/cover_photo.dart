@@ -32,26 +32,50 @@ class CoverPhoto extends StatelessWidget {
               // ekranda bile 16:9 kapak kutusuna yeter. Commons'un 1280'lik
               // önizlemeleri bu tavandan etkilenmez (kaynak zaten küçük).
               cacheWidth: 1600,
-              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? progress) {
-                if (progress == null) return child;
-                return const ColoredBox(
-                  color: Color(0x11000000),
-                  child: Center(
-                    child: SizedBox(
-                      width: 22,
-                      height: 22,
-                      child: CircularProgressIndicator(strokeWidth: 2),
+              // YUMUŞAK GELİŞ (FAZ 2 cila, kurucu onayı 2026-09): eski hâlinde
+              // yer tutucu YARI SAYDAM SİYAHTI (karanlık kare izlenimi) ve foto
+              // inince PAT diye beliriyordu. Artık yer tutucu temanın açık
+              // yüzey rengidir ve foto üstüne 300 ms'de yumuşakça açılır.
+              // Önbellekten anında gelen kare animasyonsuz gösterilir (tekrar
+              // ziyarette gereksiz solma yok). Yer tutucu fotoğrafın ALTINDA
+              // durduğu için geçiş anında boşluk/yanıp sönme olmaz.
+              frameBuilder: (BuildContext context, Widget child, int? frame,
+                  bool wasSynchronouslyLoaded) {
+                if (wasSynchronouslyLoaded) return child;
+                final ThemeData theme = Theme.of(context);
+                return Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    ColoredBox(
+                      color: theme.colorScheme.surfaceContainerHighest,
+                      child: frame == null
+                          ? const Center(
+                              child: SizedBox(
+                                width: 22,
+                                height: 22,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                            )
+                          : null,
                     ),
-                  ),
+                    AnimatedOpacity(
+                      opacity: frame == null ? 0 : 1,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      child: child,
+                    ),
+                  ],
                 );
               },
               errorBuilder: (BuildContext context, Object error, StackTrace? stack) {
+                final ThemeData theme = Theme.of(context);
                 return ColoredBox(
-                  color: const Color(0x11000000),
+                  color: theme.colorScheme.surfaceContainerHighest,
                   child: Center(
                     child: DocklyIcon(
                       DocklyIcons.imageOff,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
                 );

@@ -71,7 +71,7 @@ void main() {
     expect(_docklyIcon(DocklyIcons.openInNew), findsOneWidget);
   });
 
-  testWidgets('origin biliniyorsa deniz yolu bölümü gösterilir (P2)',
+  testWidgets('GPS konumu biliniyorsa deniz yolu bölümü gösterilir (P2)',
       (WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(
@@ -82,7 +82,8 @@ void main() {
           reviewsGatewayProvider.overrideWithValue(FakeReviewsGateway()),
       weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
       deriaGatewayProvider.overrideWithValue(FakeDeriaGateway()),
-          originProvider.overrideWith((ref) => const GeoPoint(lat: 40.0, lon: 28.93)),
+          devicePositionProvider
+              .overrideWith((ref) => const GeoPoint(lat: 40.0, lon: 28.93)),
         ],
         child: const MaterialApp(home: LocationDetailScreen(idOrSlug: 'loc-1')),
       ),
@@ -91,6 +92,28 @@ void main() {
     // Deniz yolu bölümü listede aşağıda olabilir → görünene dek kaydır.
     await tester.scrollUntilVisible(find.textContaining('Deniz yolu'), 200);
     expect(find.textContaining('Deniz yolu'), findsOneWidget);
+  });
+
+  testWidgets('S10 DÜZELTMESİ (FAZ 2, kurucu onayı 2026-09): GPS YOKKEN harita '
+      'merkezi ne olursa olsun deniz yolu önizlemesi ÇİZİLMEZ — yanıltıcı '
+      '"düz çizgi mesafe" sayısı üretilmez', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: <Override>[
+          communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
+          locationDetailGatewayProvider.overrideWithValue(FakeLocationDetailGateway()),
+          nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
+          reviewsGatewayProvider.overrideWithValue(FakeReviewsGateway()),
+          weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
+          deriaGatewayProvider.overrideWithValue(FakeDeriaGateway()),
+          // Harita merkezi DOLU (kaptan haritayı gezdirmiş) ama GPS YOK:
+          originProvider.overrideWith((ref) => const GeoPoint(lat: 40.0, lon: 28.93)),
+        ],
+        child: const MaterialApp(home: LocationDetailScreen(idOrSlug: 'loc-1')),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Deniz yolu'), findsNothing);
   });
 
   testWidgets('hata → mesaj + tekrar dene', (WidgetTester tester) async {
