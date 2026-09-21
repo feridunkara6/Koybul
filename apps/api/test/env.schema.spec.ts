@@ -74,4 +74,28 @@ describe('validateEnv (fail-fast, docs/24 §16)', () => {
     // '1'/'on' gibi yazımlar SESSİZCE kapalı kalmasın: önyükleme hatayla durur.
     expect(() => validateEnv({ ...VALID, PREMIUM_ENFORCE: '1' })).toThrow(/PREMIUM_ENFORCE/);
   });
+
+  it('APPLE_IAP_*: ya dördü birden ya hiçbiri; ortam varsayılanı sandbox (P2)', () => {
+    // Hiçbiri yok → geçerli, uçlar 503 döner (Sentry deseni).
+    expect(validateEnv(VALID).APPLE_IAP_ISSUER_ID).toBeUndefined();
+    expect(validateEnv(VALID).APPLE_IAP_ENVIRONMENT).toBe('sandbox');
+
+    const full = {
+      ...VALID,
+      APPLE_IAP_ISSUER_ID: 'issuer-1',
+      APPLE_IAP_KEY_ID: 'KEY123',
+      // PEM kalıbı BİLEREK kullanılmıyor (bu dosyanın başındaki gitleaks dersi).
+      APPLE_IAP_PRIVATE_KEY_P8: 'BEGIN sahte p8 anahtari (test fixture)',
+      APPLE_IAP_BUNDLE_ID: 'com.koybul.app',
+    };
+    expect(validateEnv(full).APPLE_IAP_BUNDLE_ID).toBe('com.koybul.app');
+    expect(
+      validateEnv({ ...full, APPLE_IAP_ENVIRONMENT: 'production' }).APPLE_IAP_ENVIRONMENT,
+    ).toBe('production');
+
+    // Kısmi yapılandırma en sinsi hata sınıfıdır — önyükleme durmalı.
+    const { APPLE_IAP_BUNDLE_ID: _omitted, ...partial } = full;
+    expect(() => validateEnv(partial)).toThrow(/APPLE_IAP_BUNDLE_ID/);
+    expect(() => validateEnv({ ...VALID, APPLE_IAP_KEY_ID: 'KEY123' })).toThrow(/APPLE_IAP/);
+  });
 });

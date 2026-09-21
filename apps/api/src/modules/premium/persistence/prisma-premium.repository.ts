@@ -18,6 +18,16 @@ export class PrismaPremiumRepository implements PremiumRepository {
     return row?.premiumUntil ?? null;
   }
 
+  async findSubscription(
+    userId: string,
+  ): Promise<{ premiumUntil: Date | null; productId: string | null }> {
+    const row = await this.prisma.user.findFirst({
+      where: { id: userId, deletedAt: null },
+      select: { premiumUntil: true, premiumProductId: true },
+    });
+    return { premiumUntil: row?.premiumUntil ?? null, productId: row?.premiumProductId ?? null };
+  }
+
   async countUnlocks(userId: string, monthKey: string): Promise<number> {
     return this.prisma.explorationUnlock.count({ where: { userId, monthKey } });
   }
@@ -51,6 +61,30 @@ export class PrismaPremiumRepository implements PremiumRepository {
 
       await tx.explorationUnlock.create({ data: { userId, locationId, monthKey } });
       return 'created';
+    });
+  }
+
+  async findUserIdByOriginalTransactionId(originalTransactionId: string): Promise<string | null> {
+    const row = await this.prisma.user.findUnique({
+      where: { appleOriginalTransactionId: originalTransactionId },
+      select: { id: true },
+    });
+    return row?.id ?? null;
+  }
+
+  async saveSubscription(
+    userId: string,
+    state: { premiumUntil: Date | null; productId: string | null; originalTransactionId: string },
+  ): Promise<void> {
+    // Altyapı yolu (bildirim işleyici kullanıcı bağlamı DIŞINDA da çağırır);
+    // users tablosunda RLS'in IS NULL kolu bu yazmaya izin verir.
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        premiumUntil: state.premiumUntil,
+        premiumProductId: state.productId,
+        appleOriginalTransactionId: state.originalTransactionId,
+      },
     });
   }
 }

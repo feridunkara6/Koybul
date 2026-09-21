@@ -30,6 +30,18 @@ class FakeRepo implements PremiumRepository {
   findPremiumUntil(userId: string): Promise<Date | null> {
     return Promise.resolve(this.premiumUntilByUser.get(userId) ?? null);
   }
+  findSubscription(userId: string): Promise<{ premiumUntil: Date | null; productId: null }> {
+    return Promise.resolve({
+      premiumUntil: this.premiumUntilByUser.get(userId) ?? null,
+      productId: null,
+    });
+  }
+  findUserIdByOriginalTransactionId(): Promise<string | null> {
+    return Promise.resolve(null);
+  }
+  saveSubscription(): Promise<void> {
+    return Promise.resolve();
+  }
   countUnlocks(userId: string, monthKey: string): Promise<number> {
     let n = 0;
     for (const k of this.unlocks) {

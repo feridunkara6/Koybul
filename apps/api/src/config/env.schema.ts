@@ -4,84 +4,119 @@ import { z } from 'zod';
  * Ortam değişkeni şeması (docs/24 §16 — fail-fast).
  * Eksik/yanlış değişkende uygulama HİÇ ayağa kalkmaz.
  */
-export const envSchema = z.object({
-  NODE_ENV: z.enum(['development', 'staging', 'production', 'test']),
-  PORT: z.coerce.number().int().min(1).max(65535).default(3000),
-  DATABASE_URL: z.string().url().startsWith('postgresql://'),
-  REDIS_URL: z.string().url().startsWith('redis://'),
-  LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error']).default('info'),
-  /** Graceful shutdown süresi (ms) — ALB deregistration delay ile hizalı. */
-  SHUTDOWN_TIMEOUT_MS: z.coerce.number().int().positive().default(10_000),
-  /** Firebase ID token doğrulaması (docs/23 §3.1): aud/iss pinning için proje kimliği. */
-  FIREBASE_PROJECT_ID: z.string().min(1),
-  /** RS256 imzalama anahtarları (PEM, PKCS8/SPKI). Kaynak: SSM (docs/28 §5). */
-  JWT_PRIVATE_KEY_PEM: z.string().includes('BEGIN'),
-  JWT_PUBLIC_KEY_PEM: z.string().includes('BEGIN'),
-  /** Anahtar rotasyonu için key id (docs/23 §3.2). */
-  JWT_KID: z.string().min(1).default('dockly-k1'),
-  ACCESS_TOKEN_TTL_SEC: z.coerce.number().int().min(60).max(3600).default(900),
-  REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().min(1).max(365).default(60),
-  /** /auth uçları IP başına dakikalık tavan (docs/30 §1). */
-  AUTH_RATE_LIMIT_PER_MIN: z.coerce.number().int().min(1).default(10),
-  /**
-   * Genel hız sınırları — IP başına dakikalık tavan (bulgu 2026-08: 26 uçtan
-   * yalnız 2'si sınırlıydı; /weather açık bir vekildi). Okuma cömert, yazma
-   * dar: harita gezinmesi çok istek üretir, içerik gönderimi üretmez.
-   */
-  READ_RATE_LIMIT_PER_MIN: z.coerce.number().int().min(1).default(300),
-  WRITE_RATE_LIMIT_PER_MIN: z.coerce.number().int().min(1).default(60),
-  /**
-   * İzleme (monitoring) — OPSİYONEL (Faz A.6 iskeleti, docs/implementation/monitoring-kurulum-rehberi.md).
-   * DSN verilmezse Sentry devre dışı; hata izleme ara çözümü log tabanlı alarmdır
-   * (5xx logları `event: 'server_error'` etiketiyle akar). SDK bağlanınca burası okunur.
-   */
-  SENTRY_DSN: z.string().url().optional(),
-  SENTRY_ENVIRONMENT: z.enum(['development', 'staging', 'production', 'test']).optional(),
-  /**
-   * MODERATÖR LİSTESİ — virgülle ayrılmış e-posta adresleri.
-   *
-   * NEDEN VAR: `roles` tablosunda moderatör rolü baştan beri tanımlı ama onu
-   * kimseye VEREN bir yol yoktu; herkes `user` olarak kaydoluyordu. Sonuç:
-   * incelemeye düşen not sonsuza kadar orada kalıyor ve Moderasyon ekranı
-   * hiç kimseye açılmıyordu (bulgu 2026-08, topluluk adım 4 sonrası).
-   *
-   * Buradaki adresle GİRİŞ YAPILDIĞI AN hesap moderatöre yükseltilir; rol
-   * veritabanına yazılır, yani listeden sonradan çıkarılsa bile geri
-   * düşmez (yetki alma işi bilinçli olarak elle yapılır).
-   *
-   * Boş bırakılabilir: o zaman kimse otomatik yükseltilmez.
-   */
-  MODERATOR_EMAILS: z.string().optional(),
-  /**
-   * DERİA tonoz doluluğu (Göcek) — panel anahtarı. 'false' yazılırsa sunucu
-   * DERİA'ya hiç istek atmaz ve uç nokta boş liste döner (mobil göstergeyi
-   * kendiliğinden gizler). Kaynak tarafında bir sorun/istek olursa yeniden
-   * dağıtım GEREKMEDEN kapatılabilsin diye var. Varsayılan: açık.
-   * Yalnız 'true'/'false' kabul edilir — '0'/'off' gibi bir yazım sessizce
-   * açık bırakmasın diye önyükleme HATAYLA durur (dosyanın genel ilkesi).
-   */
-  DERIA_ENABLED: z
-    .preprocess(
-      (v) => (typeof v === 'string' ? v.trim().toLowerCase() : v),
-      z.enum(['true', 'false']).default('true'),
-    )
-    .transform((v) => v === 'true'),
-  /**
-   * PREMIUM KİLİDİ (P1, kurucu onayı 2026-09-21, premium v3 raporu §3):
-   * 'true' ⇒ koy detayı ücretsiz istekte VİTRİN'e iner (isim + koordinat +
-   * kapak fotoğrafı + güvenlik özeti); tam veri yalnız premium/keşif-hakkı
-   * doğrulanmış isteğe döner. Varsayılan 'false': davranış bugünkünün AYNISI —
-   * bayrak, mobil paywall ekranları yayında olana dek KAPALI tutulur ve panelden
-   * yeniden dağıtım gerekmeden açılır (DERIA_ENABLED ile aynı desen; yalnız
-   * 'true'/'false' kabul edilir, yanlış yazım önyüklemeyi hatayla durdurur).
-   */
-  PREMIUM_ENFORCE: z
-    .preprocess(
-      (v) => (typeof v === 'string' ? v.trim().toLowerCase() : v),
-      z.enum(['true', 'false']).default('false'),
-    )
-    .transform((v) => v === 'true'),
-});
+export const envSchema = z
+  .object({
+    NODE_ENV: z.enum(['development', 'staging', 'production', 'test']),
+    PORT: z.coerce.number().int().min(1).max(65535).default(3000),
+    DATABASE_URL: z.string().url().startsWith('postgresql://'),
+    REDIS_URL: z.string().url().startsWith('redis://'),
+    LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error']).default('info'),
+    /** Graceful shutdown süresi (ms) — ALB deregistration delay ile hizalı. */
+    SHUTDOWN_TIMEOUT_MS: z.coerce.number().int().positive().default(10_000),
+    /** Firebase ID token doğrulaması (docs/23 §3.1): aud/iss pinning için proje kimliği. */
+    FIREBASE_PROJECT_ID: z.string().min(1),
+    /** RS256 imzalama anahtarları (PEM, PKCS8/SPKI). Kaynak: SSM (docs/28 §5). */
+    JWT_PRIVATE_KEY_PEM: z.string().includes('BEGIN'),
+    JWT_PUBLIC_KEY_PEM: z.string().includes('BEGIN'),
+    /** Anahtar rotasyonu için key id (docs/23 §3.2). */
+    JWT_KID: z.string().min(1).default('dockly-k1'),
+    ACCESS_TOKEN_TTL_SEC: z.coerce.number().int().min(60).max(3600).default(900),
+    REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().min(1).max(365).default(60),
+    /** /auth uçları IP başına dakikalık tavan (docs/30 §1). */
+    AUTH_RATE_LIMIT_PER_MIN: z.coerce.number().int().min(1).default(10),
+    /**
+     * Genel hız sınırları — IP başına dakikalık tavan (bulgu 2026-08: 26 uçtan
+     * yalnız 2'si sınırlıydı; /weather açık bir vekildi). Okuma cömert, yazma
+     * dar: harita gezinmesi çok istek üretir, içerik gönderimi üretmez.
+     */
+    READ_RATE_LIMIT_PER_MIN: z.coerce.number().int().min(1).default(300),
+    WRITE_RATE_LIMIT_PER_MIN: z.coerce.number().int().min(1).default(60),
+    /**
+     * İzleme (monitoring) — OPSİYONEL (Faz A.6 iskeleti, docs/implementation/monitoring-kurulum-rehberi.md).
+     * DSN verilmezse Sentry devre dışı; hata izleme ara çözümü log tabanlı alarmdır
+     * (5xx logları `event: 'server_error'` etiketiyle akar). SDK bağlanınca burası okunur.
+     */
+    SENTRY_DSN: z.string().url().optional(),
+    SENTRY_ENVIRONMENT: z.enum(['development', 'staging', 'production', 'test']).optional(),
+    /**
+     * MODERATÖR LİSTESİ — virgülle ayrılmış e-posta adresleri.
+     *
+     * NEDEN VAR: `roles` tablosunda moderatör rolü baştan beri tanımlı ama onu
+     * kimseye VEREN bir yol yoktu; herkes `user` olarak kaydoluyordu. Sonuç:
+     * incelemeye düşen not sonsuza kadar orada kalıyor ve Moderasyon ekranı
+     * hiç kimseye açılmıyordu (bulgu 2026-08, topluluk adım 4 sonrası).
+     *
+     * Buradaki adresle GİRİŞ YAPILDIĞI AN hesap moderatöre yükseltilir; rol
+     * veritabanına yazılır, yani listeden sonradan çıkarılsa bile geri
+     * düşmez (yetki alma işi bilinçli olarak elle yapılır).
+     *
+     * Boş bırakılabilir: o zaman kimse otomatik yükseltilmez.
+     */
+    MODERATOR_EMAILS: z.string().optional(),
+    /**
+     * DERİA tonoz doluluğu (Göcek) — panel anahtarı. 'false' yazılırsa sunucu
+     * DERİA'ya hiç istek atmaz ve uç nokta boş liste döner (mobil göstergeyi
+     * kendiliğinden gizler). Kaynak tarafında bir sorun/istek olursa yeniden
+     * dağıtım GEREKMEDEN kapatılabilsin diye var. Varsayılan: açık.
+     * Yalnız 'true'/'false' kabul edilir — '0'/'off' gibi bir yazım sessizce
+     * açık bırakmasın diye önyükleme HATAYLA durur (dosyanın genel ilkesi).
+     */
+    DERIA_ENABLED: z
+      .preprocess(
+        (v) => (typeof v === 'string' ? v.trim().toLowerCase() : v),
+        z.enum(['true', 'false']).default('true'),
+      )
+      .transform((v) => v === 'true'),
+    /**
+     * PREMIUM KİLİDİ (P1, kurucu onayı 2026-09-21, premium v3 raporu §3):
+     * 'true' ⇒ koy detayı ücretsiz istekte VİTRİN'e iner (isim + koordinat +
+     * kapak fotoğrafı + güvenlik özeti); tam veri yalnız premium/keşif-hakkı
+     * doğrulanmış isteğe döner. Varsayılan 'false': davranış bugünkünün AYNISI —
+     * bayrak, mobil paywall ekranları yayında olana dek KAPALI tutulur ve panelden
+     * yeniden dağıtım gerekmeden açılır (DERIA_ENABLED ile aynı desen; yalnız
+     * 'true'/'false' kabul edilir, yanlış yazım önyüklemeyi hatayla durdurur).
+     */
+    PREMIUM_ENFORCE: z
+      .preprocess(
+        (v) => (typeof v === 'string' ? v.trim().toLowerCase() : v),
+        z.enum(['true', 'false']).default('false'),
+      )
+      .transform((v) => v === 'true'),
+    /**
+     * APPLE ABONELİK DOĞRULAMASI (P2, kurucu onayı 2026-09-21) — App Store Server
+     * API erişimi. Değerler App Store Connect → Users and Access → Integrations →
+     * In-App Purchase anahtarından gelir ve YALNIZ hosting paneline girilir.
+     * DÖRDÜ BİRDEN verilmelidir ya da hiçbiri (aşağıdaki superRefine): eksik
+     * yapılandırma sessizce "premium çalışmıyor" üretmesin, önyükleme dursun.
+     * Hiçbiri yokken abonelik uçları kibarca 503 döner (Sentry deseni).
+     */
+    APPLE_IAP_ISSUER_ID: z.string().min(1).optional(),
+    APPLE_IAP_KEY_ID: z.string().min(1).optional(),
+    APPLE_IAP_PRIVATE_KEY_P8: z.string().includes('BEGIN').optional(),
+    APPLE_IAP_BUNDLE_ID: z.string().min(1).optional(),
+    /** Apple ortamı: TestFlight/sandbox testi 'sandbox', mağaza 'production'. */
+    APPLE_IAP_ENVIRONMENT: z.enum(['sandbox', 'production']).default('sandbox'),
+  })
+  .superRefine((env, ctx) => {
+    // Apple anahtarı ya TAM ya HİÇ: kısmi yapılandırma en sinsi hata sınıfıdır
+    // (uygulama açılır, satın alma sessizce çalışmaz). Fail-fast ilkesi (§16).
+    const appleKeys = [
+      'APPLE_IAP_ISSUER_ID',
+      'APPLE_IAP_KEY_ID',
+      'APPLE_IAP_PRIVATE_KEY_P8',
+      'APPLE_IAP_BUNDLE_ID',
+    ] as const;
+    const set = appleKeys.filter((k) => env[k] !== undefined);
+    if (set.length > 0 && set.length < appleKeys.length) {
+      for (const k of appleKeys.filter((x) => env[x] === undefined)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [k],
+          message: `${k} eksik — Apple IAP değişkenleri ya dördü birden verilir ya hiçbiri.`,
+        });
+      }
+    }
+  });
 
 export type Env = z.infer<typeof envSchema>;
 

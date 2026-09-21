@@ -10,6 +10,11 @@ export interface PremiumRepository {
    */
   findPremiumUntil(userId: string): Promise<Date | null>;
 
+  /** premiumUntil + son bilinen ürün (P2, /premium/me gövdesi için). */
+  findSubscription(
+    userId: string,
+  ): Promise<{ premiumUntil: Date | null; productId: string | null }>;
+
   /** Bu ay (monthKey) bu kullanıcının açtığı FARKLI koy sayısı. */
   countUnlocks(userId: string, monthKey: string): Promise<number>;
 
@@ -29,6 +34,22 @@ export interface PremiumRepository {
     monthKey: string,
     monthlyLimit: number,
   ): Promise<'created' | 'existing' | 'quota'>;
+
+  /**
+   * Bu Apple aboneliği (originalTransactionId) hangi hesaba bağlı? Yoksa null.
+   * (P2: bir abonelik TEK hesaba bağlanır — ux_users_apple_original_transaction_id.)
+   */
+  findUserIdByOriginalTransactionId(originalTransactionId: string): Promise<string | null>;
+
+  /**
+   * Apple'dan doğrulanmış GÜNCEL durumu kullanıcıya yazar (P2). premiumUntil
+   * geçmişte olabilir (bitmiş abonelik) — alan yine yazılır: "eski abone"
+   * bilgisi kayıtların salt-okunur korunması için gereklidir.
+   */
+  saveSubscription(
+    userId: string,
+    state: { premiumUntil: Date | null; productId: string | null; originalTransactionId: string },
+  ): Promise<void>;
 }
 
 export const PREMIUM_REPOSITORY = Symbol('PREMIUM_REPOSITORY');

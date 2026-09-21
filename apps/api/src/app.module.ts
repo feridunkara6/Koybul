@@ -17,6 +17,7 @@ import { LocationsModule } from './modules/locations/locations.module';
 import { WeatherModule } from './modules/weather/weather.module';
 import { DeriaModule } from './modules/deria/deria.module';
 import { CommunityModule } from './modules/community/community.module';
+import { PremiumModule } from './modules/premium/premium.module';
 
 /** PII redaksiyon listesi (docs/24 §12, docs/29 SEC-04). */
 const REDACT_PATHS = [
@@ -55,6 +56,7 @@ const REDACT_PATHS = [
     WeatherModule,
     DeriaModule,
     CommunityModule,
+    PremiumModule,
   ],
 })
 export class AppModule implements NestModule {
