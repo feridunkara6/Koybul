@@ -87,6 +87,11 @@ class MapController extends Notifier<MapState> {
   List<LocationPin> _pinCachePins = const <LocationPin>[];
   DateTime? _pinCacheAt;
 
+  /// Ekranda DURAN verinin kaynağının zamanı (FAZ 2 cila, S11): önbellekten
+  /// geldiyse kayıt zamanı, ağdan geldiyse iniş anı. Çevrimdışına düşünce
+  /// şerit "ne kadar eski" bilgisini buradan söyler. null = bilinmiyor.
+  DateTime? _shownDataAt;
+
   @override
   MapState build() {
     ref.onDispose(() => _debounce?.cancel());
@@ -164,6 +169,7 @@ class MapController extends Notifier<MapState> {
       if (seq == _seq && warm != null && !warm.isEmpty && !state.hasData) {
         state = state.copyWith(
             pins: spreadCoincidentPins(warm.pins), clusters: warm.clusters);
+        _shownDataAt = warm.savedAt;
       }
       if (seq != _seq) return;
     }
@@ -186,6 +192,7 @@ class MapController extends Notifier<MapState> {
         hasLoadedOnce: true,
         isOffline: false,
       );
+      _shownDataAt = DateTime.now();
       // Çevrimdışı görünüm için son başarılı veriyi sakla (en iyi çaba;
       // filtresiz genel görünümü bozmasın diye yalnız filtre yokken).
       if (state.types.isEmpty && (result.locations.isNotEmpty || result.clusters.isNotEmpty)) {
@@ -201,6 +208,9 @@ class MapController extends Notifier<MapState> {
           clearFailure: true,
           hasLoadedOnce: true,
           isOffline: true,
+          // Şerit "ne kadar eski" diyebilsin (S11): ekrandaki veri sıcak
+          // başlangıçtan geldiyse kayıt zamanı, ağdan geldiyse iniş anı.
+          offlineDataAt: _shownDataAt,
         );
         return;
       }
@@ -221,6 +231,7 @@ class MapController extends Notifier<MapState> {
             // Şerit "ne kadar eski" diyebilsin (S11): verinin kayıt zamanı.
             offlineDataAt: cached.savedAt,
           );
+          _shownDataAt = cached.savedAt;
           return;
         }
       }
