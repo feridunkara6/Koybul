@@ -218,6 +218,8 @@ class MapController extends Notifier<MapState> {
             clearFailure: true,
             hasLoadedOnce: true,
             isOffline: true,
+            // Şerit "ne kadar eski" diyebilsin (S11): verinin kayıt zamanı.
+            offlineDataAt: cached.savedAt,
           );
           return;
         }

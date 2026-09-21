@@ -18,6 +18,7 @@ class MapState {
     this.hasLoadedOnce = false,
     this.types = const <String>{},
     this.isOffline = false,
+    this.offlineDataAt,
     this.route,
     this.isRouting = false,
     this.routeSeq = 0,
@@ -47,6 +48,12 @@ class MapState {
   /// Çevrimdışı görünüm: ağ hatasında cihazdaki son başarılı veri gösteriliyor.
   /// Bir sonraki başarılı yüklemede kapanır.
   final bool isOffline;
+
+  /// Çevrimdışı gösterilen verinin KAYIT ZAMANI (FAZ 2 cila, S11 bulgusu,
+  /// kurucu onayı 2026-09): şerit "ne kadar eski" bilgisini bununla söyler.
+  /// null = yaş bilinmiyor (bu oturumda az önce inen veri) → şerit sade kalır.
+  /// Yalnız [isOffline] doğruyken okunur; taze yüklemede anlamı yoktur.
+  final DateTime? offlineDataAt;
 
   /// Çizili deniz rotası (kullanıcı "Deniz rotası"na dokundu). null = yok.
   final SeaRoutePlan? route;
@@ -135,6 +142,7 @@ class MapState {
     bool? hasLoadedOnce,
     Set<String>? types,
     bool? isOffline,
+    DateTime? offlineDataAt,
     SeaRoutePlan? route,
     bool clearRoute = false,
     bool? isRouting,
@@ -163,6 +171,7 @@ class MapState {
       hasLoadedOnce: hasLoadedOnce ?? this.hasLoadedOnce,
       types: types ?? this.types,
       isOffline: isOffline ?? this.isOffline,
+      offlineDataAt: offlineDataAt ?? this.offlineDataAt,
       route: clearRoute ? null : (route ?? this.route),
       isRouting: isRouting ?? this.isRouting,
       routeSeq: routeSeq ?? this.routeSeq,

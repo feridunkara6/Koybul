@@ -799,12 +799,31 @@ class _CenterProgress extends ConsumerWidget {
 
 /// Çevrimdışı bilgi şeridi: bağlantı yokken cihazdaki son görülen limanların
 /// gösterildiğini söyler. Haritayı gezdirmek yeniden denemeyi tetikler.
+///
+/// VERİ YAŞI (FAZ 2 cila, S11 bulgusu, kurucu onayı 2026-09): gösterilen veri
+/// cihaz önbelleğinden geldiyse şerit "· 3 sa önce" gibi yaşını da söyler —
+/// kaptan haritadaki bilginin ne kadar bayat olduğunu bilerek karar verir.
+/// Yaş bilinmiyorsa (bu oturumda inen taze veri) şerit sade kalır.
 class _OfflineBanner extends ConsumerWidget {
   const _OfflineBanner();
+
+  /// Kaba yaş etiketi: dk → sa → gün. Sıfır/negatif fark "1 dk" sayılır
+  /// (saat kayması gibi uçlarda saçma "-3 dk" yazmamak için).
+  static String _age(L10n t, DateTime savedAt) {
+    final Duration d = DateTime.now().difference(savedAt);
+    final int mins = d.inMinutes < 1 ? 1 : d.inMinutes;
+    if (mins < 60) return '$mins ${t.minUnit}';
+    if (d.inHours < 48) return '${d.inHours} ${t.hourUnit}';
+    return '${d.inDays} ${t.dayUnit}';
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
+    final L10n t = ref.watch(l10nProvider);
+    final DateTime? savedAt = ref.watch(
+      mapControllerProvider.select((MapState s) => s.offlineDataAt),
+    );
     return Material(
       elevation: 2,
       borderRadius: BorderRadius.circular(999),
@@ -821,7 +840,9 @@ class _OfflineBanner extends ConsumerWidget {
             ),
             const SizedBox(width: 6),
             Text(
-              ref.watch(l10nProvider).offlineBanner,
+              savedAt == null
+                  ? t.offlineBanner
+                  : L10n.fmt(t.offlineSavedFmt, _age(t, savedAt)),
               style: theme.textTheme.bodySmall
                   ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
             ),

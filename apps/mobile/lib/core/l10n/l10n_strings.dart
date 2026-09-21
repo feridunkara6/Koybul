@@ -150,6 +150,8 @@ class L10n {
     required this.mapViewTooltip,
     required this.listViewTooltip,
     required this.offlineBanner,
+    required this.offlineSavedFmt,
+    required this.dayUnit,
     required this.emptyArea,
     required this.tooManyHint,
     required this.loadingHarbors,
@@ -650,6 +652,9 @@ class L10n {
   final String locateTooltip, locDenied, locLocated;
   final String mapViewTooltip, listViewTooltip;
   final String offlineBanner, emptyArea, tooManyHint, loadingHarbors, nmUnit;
+
+  // Çevrimdışı şeridin veri-yaşı eki (FAZ 2 cila, 2026-09).
+  final String offlineSavedFmt, dayUnit;
 
   // --- Paket 3a: detay ekosistemi ---
   final String closeTooltip, noRatingShort, detailBtn;
@@ -1317,6 +1322,8 @@ const L10n _tr = L10n(
   mapViewTooltip: 'Harita görünümü',
   listViewTooltip: 'Liste görünümü',
   offlineBanner: 'Çevrimdışı — son görülen limanlar',
+  offlineSavedFmt: 'Çevrimdışı — son görülen limanlar · {0} önce',
+  dayUnit: 'gün',
   emptyArea: 'Bu bölgede henüz liman yok. Haritayı kaydırmayı deneyin.\nKoybul şimdilik Ege ve Akdeniz kıyılarını kapsıyor.',
   tooManyHint: 'Bu bölgede çok fazla liman var — daha fazlasını görmek için yakınlaştırın.',
   loadingHarbors: 'Limanlar yükleniyor…\nİlk açılışta bu 1 dakikayı bulabilir.',
@@ -1982,6 +1989,8 @@ const L10n _en = L10n(
   mapViewTooltip: 'Map view',
   listViewTooltip: 'List view',
   offlineBanner: 'Offline — last seen harbors',
+  offlineSavedFmt: 'Offline — last seen harbors · {0} ago',
+  dayUnit: 'd',
   emptyArea: 'No harbors in this area yet. Try panning the map.\nKoybul currently covers the Aegean and Mediterranean coasts.',
   tooManyHint: 'Too many harbors here — zoom in to see more.',
   loadingHarbors: 'Loading harbors…\nFirst launch can take up to a minute.',
@@ -2647,6 +2656,8 @@ const L10n _es = L10n(
   mapViewTooltip: 'Vista de mapa',
   listViewTooltip: 'Vista de lista',
   offlineBanner: 'Sin conexión — últimos puertos vistos',
+  offlineSavedFmt: 'Sin conexión — últimos puertos vistos · hace {0}',
+  dayUnit: 'd',
   emptyArea: 'Aún no hay puertos en esta zona. Mueve el mapa.\nKoybul cubre por ahora las costas del Egeo y el Mediterráneo.',
   tooManyHint: 'Demasiados puertos aquí: acerca el mapa para ver más.',
   loadingHarbors: 'Cargando puertos…\nEl primer inicio puede tardar un minuto.',
@@ -3312,6 +3323,8 @@ const L10n _ru = L10n(
   mapViewTooltip: 'Карта',
   listViewTooltip: 'Список',
   offlineBanner: 'Офлайн — последние гавани',
+  offlineSavedFmt: 'Офлайн — последние гавани · {0} назад',
+  dayUnit: 'дн',
   emptyArea: 'В этом районе пока нет гаваней. Подвиньте карту.\nПока Koybul покрывает побережья Эгейского и Средиземного морей.',
   tooManyHint: 'Слишком много гаваней — приблизьте карту.',
   loadingHarbors: 'Загрузка гаваней…\nПервый запуск может занять до минуты.',

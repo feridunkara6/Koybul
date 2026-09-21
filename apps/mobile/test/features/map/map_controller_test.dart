@@ -246,6 +246,9 @@ void main() {
     expect(state.isOffline, isTrue);
     expect(state.pins.single.id, 'loc-1');
     expect(state.failure, isNull); // veri gösteriliyor → tam-ekran hata yok
+    // S11 (FAZ 2, 2026-09): şerit "ne kadar eski" diyebilsin — kayıt zamanı
+    // önbellekten duruma taşınır.
+    expect(state.offlineDataAt, DateTime(2026));
   });
 
   test('ağ hatası + önbellek boş → eski davranış (failure)', () async {

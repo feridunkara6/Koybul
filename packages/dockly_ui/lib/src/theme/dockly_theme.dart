@@ -43,6 +43,22 @@ ThemeData buildDocklyTheme(Brightness brightness) {
     useMaterial3: true,
     colorScheme: scheme,
     scaffoldBackgroundColor: bgBase,
+    // SAYFA GEÇİŞLERİ (FAZ 2 cila, S3 "geçiş takılması" bulgusu, kurucu onayı
+    // 2026-09): varsayılan Zoom geçişi CanvasKit web'de sayfanın anlık
+    // görüntüsünü alıp büyüttüğü için ilk açılışlarda gözle görülür
+    // takılıyordu (arama → koy detayı). Hafif yukarı-kayan solma her
+    // platformda ucuzdur ve aynı yönü anlatır; iPhone/iPad'de ise alışılmış
+    // kenardan-kaydırma geçişi aynen korunur.
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: <TargetPlatform, PageTransitionsBuilder>{
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+        TargetPlatform.linux: FadeUpwardsPageTransitionsBuilder(),
+        TargetPlatform.windows: FadeUpwardsPageTransitionsBuilder(),
+        TargetPlatform.fuchsia: FadeUpwardsPageTransitionsBuilder(),
+      },
+    ),
     dividerColor: hairline,
     dividerTheme: DividerThemeData(color: hairline, thickness: 1, space: 1),
     appBarTheme: AppBarTheme(
