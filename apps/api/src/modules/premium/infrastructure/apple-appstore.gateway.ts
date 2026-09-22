@@ -72,14 +72,24 @@ export class AppleAppStoreGateway implements AppleSubscriptionGateway {
       }[];
     };
 
+    // P3 notu: Apple bu uca HERHANGİ bir işlem kimliğiyle sorulmayı destekler
+    // (istemci ilk satın almada türev transactionId gönderebilir). Yanıttaki
+    // originalTransactionId KANONİK kimliktir ve veritabanına O yazılır; eşleşme
+    // varsa tercih edilir, yoksa ilk kayıt kullanılır (yanıt zaten bu aboneye aittir).
+    let fallback: AppleSubscriptionState | null = null;
     for (const group of body.data ?? []) {
       for (const t of group.lastTransactions ?? []) {
-        if (t.originalTransactionId !== originalTransactionId) continue;
         const info = t.signedTransactionInfo ? decodeJwsPayload(t.signedTransactionInfo) : null;
+        const canonical =
+          typeof t.originalTransactionId === 'string'
+            ? t.originalTransactionId
+            : typeof info?.originalTransactionId === 'string'
+              ? info.originalTransactionId
+              : originalTransactionId;
         const expiresMs = typeof info?.expiresDate === 'number' ? info.expiresDate : null;
         const status = typeof t.status === 'number' ? t.status : 0;
-        return {
-          originalTransactionId,
+        const state: AppleSubscriptionState = {
+          originalTransactionId: canonical,
           productId: typeof info?.productId === 'string' ? info.productId : null,
           // Bitiş tarihi ÇÖZÜLEMEDİYSE hak da verilmez: premiumUntil'siz
           // "aktif" yazmak tutarsız durum üretir (uydurma tarih de yazılmaz).
@@ -87,9 +97,11 @@ export class AppleAppStoreGateway implements AppleSubscriptionGateway {
           appleStatus: status,
           expiresAt: expiresMs !== null ? new Date(expiresMs) : null,
         };
+        if (canonical === originalTransactionId) return state;
+        fallback ??= state;
       }
     }
-    return null;
+    return fallback;
   }
 
   /** ES256 App Store Server API JWT'si (aud sabit, bid = uygulama kimliği). */

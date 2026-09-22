@@ -29,6 +29,11 @@ dependencies:
   # Refresh token mobilde Keychain/Keystore'da (mağaza fazı, denetim bulgusu);
   # web'de shared_preferences sürer (rotasyon + aile iptaliyle dengeli karar).
   flutter_secure_storage: ^9.2.2
+  # Uygulama içi abonelik (P3, kurucu onayı 2026-09-21): App Store StoreKit
+  # köprüsü. Yalnız iOS/Android'de derlenir (koşullu import,
+  # features/premium/infrastructure/purchase_gateway_*.dart); web'de satın
+  # alma yoktur — paket ekranı iOS uygulamasına yönlendirir (karar K6).
+  in_app_purchase: ^3.2.0
   dockly_api:
     path: ../../packages/dockly_api
   dockly_core:

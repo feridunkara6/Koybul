@@ -12,6 +12,7 @@ import '../../deck/presentation/deck_screen.dart' show deckSegmentProvider;
 import '../../emergency/presentation/emergency_screen.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../favorites/presentation/favorites_screen.dart';
+import '../../premium/presentation/premium_screen.dart';
 import '../../legal/presentation/legal_screen.dart';
 import '../../legal/presentation/sources_screen.dart';
 import '../../route/presentation/saved_routes_screen.dart';
@@ -73,6 +74,17 @@ class ProfileScreen extends ConsumerWidget {
           // DİL — az yer kaplayan tek satır; menü aşağı açılır.
           const _LanguageRow(),
           const SizedBox(height: 16),
+          // KOYBUL PREMIUM (P3, premium v3 raporu §5 dokunuş noktası 6):
+          // profilde SADE bir satır — rozet/kampanya yok, arayan bulsun.
+          // Sıkmama sözleşmesi: paket ekranı yalnız dokununca açılır.
+          _NavRow(
+            icon: DocklyIcons.award,
+            label: t.premRow,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const PremiumScreen()),
+            ),
+          ),
+          const SizedBox(height: 12),
           // KAYITLARIM (v2.0 geçiş dönemi): eski Kayıtlarım sekmesi Profil'e
           // indi. Ekran şimdilik rotaları da listeler; satır etiketi ekran
           // başlığıyla AYNI kalır ki kaptan nereye gittiğini bilsin. Favori
