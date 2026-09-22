@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/origin_provider.dart';
 import '../../../core/providers.dart';
+import '../../premium/application/premium_controller.dart';
+import '../../route/application/route_quota_controller.dart';
 import '../../route/application/route_wind_advisor.dart';
 import '../../route/application/sea_route_engine.dart';
 import '../../route/domain/route_wind.dart';
@@ -279,6 +281,7 @@ class MapController extends Notifier<MapState> {
       RouteOrigin(pos: gps, isDevice: true),
       <RouteWaypoint>[RouteWaypoint(pos: destination, id: idOrSlug, name: name)],
       editing: false,
+      consume: true, // kullanıcı başlatan YENİ rota → günlük kota işler (K3)
     );
   }
 
@@ -429,7 +432,8 @@ class MapController extends Notifier<MapState> {
     _pendingDestPos = null;
     _pendingDestId = null;
     _pendingDestName = null;
-    await _planTrip(origin, wps, editing: false);
+    // Bekleyen hedefe İLK plan = kullanıcı başlatan YENİ rota → kota işler.
+    await _planTrip(origin, wps, editing: false, consume: true);
   }
 
   /// ROTA DÜZENLEME (2026-08, kullanıcı onaylı): koyu DURAK olarak ekler.
@@ -439,6 +443,15 @@ class MapController extends Notifier<MapState> {
     final RouteOrigin? origin = state.routeOrigin;
     if (state.route == null || origin == null || state.isRouting) return;
     if (state.routeWaypoints.any((RouteWaypoint w) => w.id == idOrSlug)) return;
+    // ÇOK DURAKLI ROTA = PREMIUM (P4b, kurucu onayı — premium v3 K4): hedef
+    // zaten ilk duraktır; buradan eklenen her koy rotayı çok duraklı yapar.
+    // Ücretsizde rota OLDUĞU GİBİ KALIR, yalnız tanıtım sinyali verilir.
+    // (Haritaya dokunarak ARA NOKTA eklemek — addPointAt/insertVia — durak
+    // değildir, herkese açıktır: rota düzeltme cezalandırılmaz.)
+    if (!ref.read(isPremiumActiveProvider)) {
+      state = state.copyWith(multiStopBlockSeq: state.multiStopBlockSeq + 1);
+      return;
+    }
     final List<RouteWaypoint> wps =
         List<RouteWaypoint>.of(state.routeWaypoints);
     // İŞARETLEME SIRASI = SEYİR SIRASI (kullanıcı kararı 2026-08): yeni durak
@@ -514,7 +527,16 @@ class MapController extends Notifier<MapState> {
     required bool editing,
     String? label,
     bool focus = false,
+    // GÜNLÜK KOTA (P4b, K3): yalnız kullanıcı başlatan YENİ rotalarda true.
+    // Kayıtlı rota açmak ve rota düzenlemek hak YEMEZ (sıkmama sözleşmesi).
+    bool consume = false,
   }) async {
+    if (consume &&
+        !await ref.read(routeQuotaControllerProvider.notifier).tryConsume()) {
+      // Bugünün hakkı doldu: hesap hiç başlamaz, arayüz kota sayfası gösterir.
+      state = state.copyWith(routeQuotaBlockSeq: state.routeQuotaBlockSeq + 1);
+      return;
+    }
     state = state.copyWith(isRouting: true);
     final int req = ++_routeReq; // stale koruması (rota istekleri arasında)
     SeaTrip? trip;

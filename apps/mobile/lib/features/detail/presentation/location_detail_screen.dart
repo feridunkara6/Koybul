@@ -35,6 +35,7 @@ import '../application/location_detail_controller.dart';
 import '../domain/anchorage_notes.dart';
 import '../domain/approach_note.dart';
 import 'cover_photo.dart';
+import 'premium_lock_card.dart';
 import 'maritime_info_panel.dart';
 import '../../weather/presentation/weather_card.dart';
 import '../../weather/presentation/wind_warning_badge.dart';
@@ -129,6 +130,14 @@ class _DetailContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
     final L10n t = ref.watch(l10nProvider);
+    // VİTRİN MODU (P4, kurucu onayı 2026-09-22 — premium v3 raporu §3):
+    // sunucu 'teaser' dediyse kilitli alanlar ZATEN İNMEMİŞTİR (boş gelir) —
+    // boş bölümler kendiliğinden çizilmez; burada yalnız (1) kilit kartı
+    // eklenir, (2) ayrı uçlardan beslendiği için sunucu kilidinin KAPSAMADIĞI
+    // bölümler (hava kartı, kaptan notları, yorumlar, doluluk) gizlenir.
+    // Güvenlik katmanı AÇIK kalır: bir-bakışta şeridi, rüzgâr uyarısı ve
+    // tehlike uyarıları vitrinin parçasıdır (rapor K1 — can güvenliği).
+    final bool teaser = detail.isTeaser;
     // Denizci bilgileri: yalnız DOLU alanlar stat'a çevrilir (uydurma veri
     // yok). Derinlik ve zemin artık "Bir Bakışta" şeridinde — burada tekrar
     // edilmez (tasarım 2026-08).
@@ -163,7 +172,23 @@ class _DetailContent extends ConsumerWidget {
         // Fotoğraf varsa kapak kalır; kimlik kartı her durumda çizilir —
         // fotoğrafsız koylarda boş gri alan yerine dolu, profesyonel bir giriş.
         if (detail.media.cover != null) ...<Widget>[
-          CoverPhoto(cover: detail.media.cover!),
+          // Vitrinde kapak AÇIK kalır; rozet "1/6 · kalanı Premium'da" der —
+          // FAZ 3 fotoğraf yatırımı satış vitrini olarak çalışır (rapor §3).
+          if (teaser && detail.counts.photos > 1)
+            Stack(
+              children: <Widget>[
+                CoverPhoto(cover: detail.media.cover!),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: _PhotoCountBadge(
+                    label: L10n.fmt(t.detPhotoBadgeFmt, '${detail.counts.photos}'),
+                  ),
+                ),
+              ],
+            )
+          else
+            CoverPhoto(cover: detail.media.cover!),
           const SizedBox(height: 12),
         ],
         _HeroCard(detail: detail),
@@ -194,16 +219,22 @@ class _DetailContent extends ConsumerWidget {
 
         _SeaRouteRow(destination: detail.position, accent: ink),
 
+        // KİLİT KARTI (P4): vitrinde sayfanın TEK premium çağrısı — güvenlik
+        // özetinin altında, kilitli içeriği anlatır; Premium ya da keşif hakkı.
+        if (teaser) PremiumLockCard(detail: detail),
+
         // DERİA TONOZ DOLULUĞU (kurucu kararı 2026-08): Göcek'teki TÜÇA
         // şamandıra sahalarında "bu gece kaç tonoz boş" canlı gösterilir;
         // rezervasyon BİZDE YAPILMAZ, kutu deria.gov.tr'ye yönlendirir.
         // Eşlenmemiş kayıtlar/veri yok/bayat → kutu HİÇ çizilmez.
-        DeriaAvailabilityBox(slug: detail.slug),
+        if (!teaser) DeriaAvailabilityBox(slug: detail.slug),
 
         // DOLULUK yukarıda (kullanıcı isteği 2026-08): "yer var mı?" sorusu
         // sayfanın dibinde beklemez; DOLULUK BİLDİR düğmesi buradadır.
         // (Demirleme tiplerinde aynı düğme alttaki yapışkan çubukta.)
-        if (occupancySupported(detail.type) && !_isAnchoringType(detail.type))
+        if (!teaser &&
+            occupancySupported(detail.type) &&
+            !_isAnchoringType(detail.type))
           OccupancyRow(idOrSlug: detail.id, position: detail.position),
 
         // İLETİŞİM yukarıda (kullanıcı isteği 2026-08): kaptan yer ayırtmak
@@ -254,16 +285,17 @@ class _DetailContent extends ConsumerWidget {
         ),
 
         // Rüzgâr & Hava — noktanın 48 saatlik tahmini (MET Norway, atıflı).
-        WeatherCard(position: detail.position, accent: ink),
+        if (!teaser) WeatherCard(position: detail.position, accent: ink),
 
         // KAPTAN NOTLARI (2026-08): denizcilerin bıraktığı tarihli, tipli bilgi.
         // Yorumlardan AYRI: yorum değerlendirmedir, not bilgidir.
-        NotesSection(
-          locationId: detail.id,
-          locationName: detail.name,
-          position: detail.position,
-          accent: ink,
-        ),
+        if (!teaser)
+          NotesSection(
+            locationId: detail.id,
+            locationName: detail.name,
+            position: detail.position,
+            accent: ink,
+          ),
 
         // HAKKINDA aşağıda (önem sırası 2026-08): tanıtım metni, karar verdiren
         // verilerden sonra gelir — içerik aynen korunur.
@@ -275,7 +307,8 @@ class _DetailContent extends ConsumerWidget {
             child: Text(about, style: theme.textTheme.bodyMedium?.copyWith(height: 1.45)),
           ),
 
-        ReviewsSection(idOrSlug: detail.id, locationName: detail.name, accent: ink),
+        if (!teaser)
+          ReviewsSection(idOrSlug: detail.id, locationName: detail.name, accent: ink),
         NearbyAlternatives(
           locationId: detail.id,
           position: detail.position,
@@ -1598,6 +1631,33 @@ class _NoteRow extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Vitrin kapağındaki fotoğraf sayacı rozeti (P4): "1/6 · kalanı Premium'da".
+/// Vitrini kapatmaz, isteği doğurur — premium v3 raporu §6 taslak 9.
+class _PhotoCountBadge extends StatelessWidget {
+  const _PhotoCountBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: DocklyColors.brandDeep.withValues(alpha: 0.78),
+        borderRadius: BorderRadius.circular(99),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }

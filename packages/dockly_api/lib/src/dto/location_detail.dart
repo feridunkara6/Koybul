@@ -30,6 +30,8 @@ class LocationDetail {
     this.windExposedDirs,
     this.seabed,
     this.shelteredDirs,
+    this.access = 'full',
+    this.explorationRemaining,
   });
 
   final String id;
@@ -72,6 +74,18 @@ class LocationDetail {
   /// de doluysa kaynak "her yönden korunaklı" demiştir (geriye uyumlu: null).
   final String? shelteredDirs;
 
+  /// ERİŞİM DÜZEYİ (P4, kurucu onayı 2026-09-22 — premium v3 raporu §3):
+  /// 'full' = tam veri; 'teaser' = VİTRİN — sunucu kilitli alanları hiç
+  /// göndermez (boş liste/null gelir), ekran kilit kartını çizer.
+  /// Eski sunucu alanı hiç göndermez → varsayılan 'full' (geriye uyumlu).
+  final String access;
+
+  /// Kalan keşif hakkı — yalnız HESAPLI üye teaser görürken dolar
+  /// ("Keşif hakkınla aç (2 kaldı)" satırı); diğer durumlarda null.
+  final int? explorationRemaining;
+
+  bool get isTeaser => access == 'teaser';
+
   factory LocationDetail.fromJson(Map<String, dynamic> json) {
     List<T> list<T>(String key, T Function(Map<String, dynamic>) fromJson) =>
         (json[key] as List<dynamic>? ?? const <dynamic>[])
@@ -107,6 +121,8 @@ class LocationDetail {
       windExposedDirs: json['windExposedDirs'] as String?,
       seabed: json['seabed'] as String?,
       shelteredDirs: json['shelteredDirs'] as String?,
+      access: json['access'] as String? ?? 'full',
+      explorationRemaining: (json['explorationRemaining'] as num?)?.toInt(),
     );
   }
 }

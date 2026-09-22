@@ -109,12 +109,46 @@ class LocationsApi {
   }
 
   /// Liman detayı (docs/23 §10 #12, §11.3). id veya slug; bulunamazsa `NotFoundFailure`.
-  Future<LocationDetail> detail(String idOrSlug) async {
+  ///
+  /// [accessToken] İSTEĞE BAĞLIDIR (P4, premium v3 raporu §9): verilirse
+  /// sunucu premium/keşif-hakkı kararını kimliğe göre verir (tam veri);
+  /// verilmezse anonim vitrin yanıtı gelir (bayrak açıkken). Bozuk token
+  /// sunucudan 401 döner — sessizce anonim SAYILMAZ.
+  Future<LocationDetail> detail(String idOrSlug, {String? accessToken}) async {
     return _call(() async {
       final res = await _dio.get<Map<String, dynamic>>(
         '/v1/locations/${Uri.encodeComponent(idOrSlug)}',
+        options: accessToken == null
+            ? null
+            : Options(
+                headers: <String, dynamic>{'Authorization': 'Bearer $accessToken'},
+              ),
       );
       return LocationDetail.fromJson(res.data!);
+    });
+  }
+
+  /// KEŞİF HAKKI (P4, premium v3 raporu K2): üye bu koyu bu ay için tam açar
+  /// (ayda 3). HESAP ister. Dönen gövde TAM detay + kalan hak — ikinci istek
+  /// gerekmez. Tavan doluysa sunucu 403 `quota-exceeded` döner (mapDioError
+  /// bunu ForbiddenFailure'a çevirir; arayüz paywall açar).
+  Future<({int remaining, LocationDetail detail})> unlock({
+    required String idOrSlug,
+    required String accessToken,
+  }) async {
+    return _call(() async {
+      final res = await _dio.post<Map<String, dynamic>>(
+        '/v1/locations/${Uri.encodeComponent(idOrSlug)}/unlock',
+        options: Options(
+          headers: <String, dynamic>{'Authorization': 'Bearer $accessToken'},
+        ),
+      );
+      final Map<String, dynamic> body = res.data!;
+      return (
+        remaining: (body['remaining'] as num).toInt(),
+        detail:
+            LocationDetail.fromJson(body['detail'] as Map<String, dynamic>),
+      );
     });
   }
 

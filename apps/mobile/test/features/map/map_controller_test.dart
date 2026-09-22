@@ -9,6 +9,8 @@ import 'package:dockly_mobile/features/map/data/shared_prefs_map_cache.dart';
 import 'package:dockly_mobile/features/map/domain/map_cache.dart';
 import 'package:dockly_mobile/features/map/domain/map_state.dart';
 import 'package:dockly_mobile/features/map/domain/map_viewport.dart';
+import 'package:dockly_mobile/features/premium/application/premium_controller.dart';
+import 'package:dockly_mobile/features/route/application/route_quota_controller.dart';
 import 'package:dockly_mobile/features/route/application/route_wind_advisor.dart';
 import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
 import 'package:dockly_mobile/features/route/domain/route_wind.dart';
@@ -91,6 +93,10 @@ ProviderContainer _containerWith(
   FakeBundledSnapshot? snapshot,
   FakeSeaRouteEngine? routeEngine,
   RouteWindReport? windReport,
+  // P4b: mevcut rota testleri KOTA/KİLİT olmadan (premium) çalışır — kota
+  // davranışı kendi testlerinde `premium: false` ile ayrıca denenir.
+  bool premium = true,
+  FakeRouteQuotaStore? quotaStore,
 }) {
   lastFakeAdvisor = null; // önceki testten sarkmasın (determinizm)
   final container = ProviderContainer(
@@ -106,6 +112,8 @@ ProviderContainer _containerWith(
       routeWindAdvisorProvider.overrideWith(
         (ref) => lastFakeAdvisor = FakeRouteWindAdvisor(ref, windReport),
       ),
+      isPremiumActiveProvider.overrideWithValue(premium),
+      routeQuotaStoreProvider.overrideWithValue(quotaStore ?? FakeRouteQuotaStore()),
     ],
   );
   addTearDown(container.dispose);
@@ -991,5 +999,127 @@ void main() {
     await firstFuture;
     expect(_state(container).pins, isEmpty);
     expect(_state(container).clusters.single.count, 34);
+  });
+
+  // --- GÜNLÜK ROTA KOTASI + ÇOK DURAK KİLİDİ (P4b, kurucu onayı 2026-09-22,
+  // premium v3 K3/K4). Sözleşme: ücretsiz günde 3 YENİ rota; kayıtlı rota
+  // açmak ve düzenlemek hak yemez; çok durak yalnız premium; premium sınırsız.
+
+  const SeaRoutePlan kotaPlan = SeaRoutePlan(
+    points: <GeoPoint>[GeoPoint(lat: 36.76, lon: 28.96), GeoPoint(lat: 36.75, lon: 28.93)],
+    distanceNm: 2,
+    reachedGoal: true,
+    viaSea: true,
+  );
+
+  test('KOTA (K3): ücretsizde 4. yeni rota ENGELLENİR — motor hiç çağrılmaz, '
+      'kota sinyali artar; ilk 3 rota serbest', () async {
+    final engine = FakeSeaRouteEngine(kotaPlan);
+    final container = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: engine, premium: false);
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+
+    for (int i = 1; i <= 3; i++) {
+      await _ctrl(container).routeToPin(testPin);
+      expect(_state(container).route, isNotNull, reason: 'rota $i serbest');
+      _ctrl(container).clearRoute();
+    }
+    expect(engine.calls, 3);
+    expect(container.read(routeQuotaControllerProvider).used, 3);
+
+    await _ctrl(container).routeToPin(testPin); // 4. deneme — hak yok
+    final MapState s = _state(container);
+    expect(s.route, isNull);
+    expect(engine.calls, 3); // motor 4. kez ÇAĞRILMADI (pil/işlemci yanmaz)
+    expect(s.routeQuotaBlockSeq, 1); // arayüz kota sayfasını bununla açar
+    expect(s.routeFailSeq, 0); // "hesaplanamadı" akışı DEĞİL
+  });
+
+  test('KOTA (K3): kayıtlı rota açmak ve rota düzenlemek hak YEMEZ', () async {
+    final container = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: FakeSeaRouteEngine(kotaPlan), premium: false);
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+
+    await _ctrl(container).openSavedRoute(
+      const RouteOrigin(pos: GeoPoint(lat: 36.76, lon: 28.96)),
+      const <RouteWaypoint>[
+        RouteWaypoint(pos: GeoPoint(lat: 36.75, lon: 28.93), id: 'loc-1', name: 'A'),
+      ],
+      name: 'Deneme',
+    );
+    expect(_state(container).route, isNotNull);
+    expect(container.read(routeQuotaControllerProvider).used, 0); // hak yenmedi
+
+    // Düzenleme (ara nokta) de hak yemez.
+    await _ctrl(container).insertVia(0, const GeoPoint(lat: 36.70, lon: 28.90));
+    expect(container.read(routeQuotaControllerProvider).used, 0);
+    expect(_state(container).routeQuotaBlockSeq, 0);
+  });
+
+  test('KOTA (K3): sayaç CİHAZDA sürer — bugün 3 kullanılmışsa yeni oturumda da doludur; '
+      'gün değişince sıfırlanır', () async {
+    final String today = RouteQuotaController.dayKeyFor(DateTime.now());
+    // Bugünün 3 hakkı DAHA ÖNCE kullanılmış (uygulama yeniden açıldı).
+    final container = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: FakeSeaRouteEngine(kotaPlan),
+        premium: false,
+        quotaStore: FakeRouteQuotaStore(today, 3));
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin);
+    expect(_state(container).route, isNull);
+    expect(_state(container).routeQuotaBlockSeq, 1);
+
+    // DÜNÜN dolu sayacı bugünü bağlamaz (gece yarısı devri).
+    final container2 = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: FakeSeaRouteEngine(kotaPlan),
+        premium: false,
+        quotaStore: FakeRouteQuotaStore('2020-01-01', 3));
+    await _ctrl(container2).loadViewport(pinViewport);
+    _shareLocation(container2);
+    await _ctrl(container2).routeToPin(testPin);
+    expect(_state(container2).route, isNotNull);
+    expect(container2.read(routeQuotaControllerProvider).used, 1);
+  });
+
+  test('KOTA: premium SINIRSIZ — 4. rota da çizilir, sayaç işlemez', () async {
+    final engine = FakeSeaRouteEngine(kotaPlan);
+    final container = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: engine); // premium: true (varsayılan)
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    for (int i = 0; i < 4; i++) {
+      await _ctrl(container).routeToPin(testPin);
+      expect(_state(container).route, isNotNull);
+      _ctrl(container).clearRoute();
+    }
+    expect(engine.calls, 4);
+    expect(_state(container).routeQuotaBlockSeq, 0);
+  });
+
+  test('ÇOK DURAK (K4): ücretsizde addStop ROTAYI BOZMADAN kilit sinyali verir; '
+      'ara nokta (insertVia) serbest kalır', () async {
+    final engine = FakeSeaRouteEngine(kotaPlan);
+    final container = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: engine, premium: false);
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin);
+    expect(engine.calls, 1);
+
+    await _ctrl(container)
+        .addStop(const GeoPoint(lat: 36.75, lon: 28.94), 'loc-2', 'Kille Koyu');
+    final MapState s = _state(container);
+    expect(s.routeWaypoints, hasLength(1)); // durak EKLENMEDİ
+    expect(s.route, isNotNull); // mevcut rota olduğu gibi duruyor
+    expect(engine.calls, 1); // yeniden hesap yok
+    expect(s.multiStopBlockSeq, 1); // arayüz premium tanıtımını bununla açar
+
+    // Haritaya dokunarak ARA NOKTA eklemek durak değildir — herkese açık.
+    await _ctrl(container).insertVia(0, const GeoPoint(lat: 36.70, lon: 28.90));
+    expect(_state(container).routeWaypoints, hasLength(2));
+    expect(_state(container).multiStopBlockSeq, 1); // sinyal artmadı
   });
 }

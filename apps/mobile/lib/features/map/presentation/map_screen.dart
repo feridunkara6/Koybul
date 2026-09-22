@@ -17,6 +17,9 @@ import '../../nearby/presentation/nearby_sheet.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/presentation/onboarding_overlay.dart';
 import '../../onboarding/presentation/tour_targets.dart';
+import '../../premium/application/premium_controller.dart';
+import '../../premium/presentation/premium_screen.dart';
+import '../../route/application/route_quota_controller.dart';
 import '../../route/application/saved_routes_controller.dart';
 import '../../route/domain/route_wind.dart';
 import '../../route/domain/saved_route.dart';
@@ -98,6 +101,41 @@ class MapScreen extends ConsumerWidget {
               SnackBar(content: Text(ref.read(l10nProvider).originPickFail)),
             );
         }
+      },
+    );
+    // GÜNLÜK ROTA KOTASI DOLDU (P4b, premium v3 K3): dürüst kota sayfası —
+    // ne olduğunu, ne zaman yenileneceğini ve neyin hak YEMEDİĞİNİ söyler.
+    ref.listen<int>(
+      mapControllerProvider.select((MapState s) => s.routeQuotaBlockSeq),
+      (int? prev, int next) {
+        if (next > (prev ?? 0)) _showRouteQuotaSheet(context, ref);
+      },
+    );
+    // ÇOK DURAKLI ROTA KİLİDİ (P4b, premium v3 K4): rota bozulmaz, yalnız
+    // premium tanıtımı gösterilir (kilit dokunulan yerde — sıkmama sözleşmesi).
+    ref.listen<int>(
+      mapControllerProvider.select((MapState s) => s.multiStopBlockSeq),
+      (int? prev, int next) {
+        if (next > (prev ?? 0)) _showMultiStopSheet(context, ref);
+      },
+    );
+    // GÖRÜNÜR SAYAÇ (kurucu onayı — K3 "görünür sayaç"): ücretsiz kullanıcı her
+    // yeni rotada kısa "bugün X/3" notu görür; premium'da sayaç hiç görünmez.
+    // consumeSeq YALNIZ başarılı hak kullanımında artar — depodan tazeleme
+    // (uygulama açılışı) bildirim tetiklemez.
+    ref.listen<int>(
+      routeQuotaControllerProvider.select((RouteQuotaState s) => s.consumeSeq),
+      (int? prev, int next) {
+        if (prev == null || next <= prev) return;
+        final RouteQuotaState q = ref.read(routeQuotaControllerProvider);
+        if (q.unlimited) return;
+        final L10n t = ref.read(l10nProvider);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(
+            content:
+                Text(L10n.fmt2(t.rqUsedFmt, '${q.used}', '$kRouteDailyLimit')),
+          ));
       },
     );
     // İlk ara nokta eklenince tek seferlik ipucu: taşımak için sürükle,
@@ -691,6 +729,14 @@ Future<void> _saveRouteDialog(
   final RouteOrigin? origin = state.routeOrigin;
   final SeaRoutePlan? route = state.route;
   if (origin == null || route == null || state.routeWaypoints.isEmpty) return;
+  // KAYIT YUVALARI (P4b, kurucu onayı — premium v3 K5): ücretsizde 3 yuva.
+  // Yuvalar doluysa ad diyaloğu HİÇ açılmaz — dürüst yuva sayfası çıkar
+  // (bir kaydı silmek her zaman serbest; premium sınırsız kaydeder).
+  if (!ref.read(isPremiumActiveProvider) &&
+      ref.read(savedRoutesProvider).length >= kFreeRouteSlots) {
+    await _showRouteSlotsSheet(context, ref);
+    return;
+  }
   final String originLabel =
       origin.name ?? (origin.isDevice ? t.routeOriginDevice : t.routeOriginPicked);
   final TextEditingController nameCtrl = TextEditingController(
@@ -758,6 +804,140 @@ Future<void> _saveRouteDialog(
         },
       ),
     ));
+}
+
+/// Ücretsiz hesabın ROTA KAYIT YUVASI sayısı (P4b, kurucu onayı — K5).
+const int kFreeRouteSlots = 3;
+
+/// PREMIUM ALT SAYFALARININ ortak gövdesi (P4b): başlık + açıklama + tek
+/// premium çağrısı + saygılı vazgeçme. SIKMAMA SÖZLEŞMESİ: sayfa yalnız
+/// kullanıcının DOKUNDUĞU kilitte açılır, kaydırarak/dokunarak kapanır.
+Future<void> _showPremiumGateSheet(
+  BuildContext context, {
+  required String title,
+  required String body,
+  required String ctaLabel,
+  required String dismissLabel,
+  Widget? extra,
+}) {
+  return showModalBottomSheet<void>(
+    context: context,
+    showDragHandle: true,
+    isScrollControlled: true,
+    builder: (BuildContext sheetContext) {
+      final ThemeData theme = Theme.of(sheetContext);
+      return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Text(title,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleLarge),
+              const SizedBox(height: 10),
+              Text(
+                body,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              ),
+              if (extra != null) ...<Widget>[
+                const SizedBox(height: 12),
+                extra,
+              ],
+              const SizedBox(height: 16),
+              FilledButton(
+                onPressed: () {
+                  Navigator.of(sheetContext).pop();
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                        builder: (_) => const PremiumScreen()),
+                  );
+                },
+                child: Text(ctaLabel),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(sheetContext).pop(),
+                child: Text(dismissLabel),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+/// GÜNLÜK ROTA KOTASI sayfası (P4b, K3 — taslak 8): dolu 3/3 göstergesi,
+/// gece yarısı yenilenme sözü ve "kayıtlı rota / düzenleme hak yemez" notu.
+Future<void> _showRouteQuotaSheet(BuildContext context, WidgetRef ref) {
+  final L10n t = ref.read(l10nProvider);
+  final ThemeData theme = Theme.of(context);
+  return _showPremiumGateSheet(
+    context,
+    title: t.rqTitle,
+    body: t.rqBody,
+    ctaLabel: t.rqPremiumBtn,
+    dismissLabel: t.rqWaitBtn,
+    extra: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        // 3/3 dolu sayaç çubuğu — bugünkü hakların tamamı kullanıldı.
+        Row(
+          children: <Widget>[
+            for (int i = 0; i < kRouteDailyLimit; i++)
+              Expanded(
+                child: Container(
+                  height: 6,
+                  margin: EdgeInsets.only(
+                      left: i == 0 ? 0 : 4,
+                      right: i == kRouteDailyLimit - 1 ? 0 : 4),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary,
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Text(
+          t.rqSavedNote,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.bodySmall
+              ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+        ),
+      ],
+    ),
+  );
+}
+
+/// ÇOK DURAKLI ROTA sayfası (P4b, K4): mevcut rota bozulmadı — yalnız birden
+/// çok koyu tek seyirde birleştirmenin Premium olduğu anlatılır.
+Future<void> _showMultiStopSheet(BuildContext context, WidgetRef ref) {
+  final L10n t = ref.read(l10nProvider);
+  return _showPremiumGateSheet(
+    context,
+    title: t.msTitle,
+    body: t.msBody,
+    ctaLabel: t.detLockCta,
+    dismissLabel: t.cancelLabel,
+  );
+}
+
+/// KAYIT YUVALARI DOLU sayfası (P4b, K5): 3/3 yuva — silmek serbest,
+/// sınırsız kayıt Premium'da.
+Future<void> _showRouteSlotsSheet(BuildContext context, WidgetRef ref) {
+  final L10n t = ref.read(l10nProvider);
+  return _showPremiumGateSheet(
+    context,
+    title: t.rsSlotsTitle,
+    body: t.rsSlotsBody,
+    ctaLabel: t.detLockCta,
+    dismissLabel: t.cancelLabel,
+  );
 }
 
 /// Duraklardan numaralı harita rozetleri (1, 2, …). Tek duraklı rotada (yalnız

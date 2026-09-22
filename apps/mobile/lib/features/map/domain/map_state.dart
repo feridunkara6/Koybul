@@ -33,6 +33,8 @@ class MapState {
     this.originPickFailSeq = 0,
     this.routeLabel,
     this.routeFocus = false,
+    this.routeQuotaBlockSeq = 0,
+    this.multiStopBlockSeq = 0,
   });
 
   final List<LocationPin> pins;
@@ -110,6 +112,16 @@ class MapState {
   /// her başarısızlıkta artar; arayüz kısa bir uyarı gösterir.
   final int originPickFailSeq;
 
+  /// GÜNLÜK ROTA KOTASI DOLDU sinyali (P4b, premium v3 K3): ücretsiz kullanıcı
+  /// günün 3. rotasından SONRA yeni rota istediğinde artar — arayüz kota
+  /// sayfasını (alt sayfa) gösterir; rota hesabı hiç başlamaz.
+  final int routeQuotaBlockSeq;
+
+  /// ÇOK DURAKLI ROTA KİLİDİ sinyali (P4b, premium v3 K4): ücretsiz kullanıcı
+  /// rotaya İKİNCİ DURAK eklemeye çalıştığında artar — arayüz premium tanıtım
+  /// alt sayfasını gösterir; mevcut rota olduğu gibi kalır.
+  final int multiStopBlockSeq;
+
   /// En az bir yükleme tamamlandı mı? İlk yükleme bitmeden "boş durum" GÖSTERİLMEZ
   /// (aksi halde açılışta kısa süre yanlış "liman yok" mesajı yanıp söner — P9).
   final bool hasLoadedOnce;
@@ -160,6 +172,8 @@ class MapState {
     String? routeLabel,
     bool clearRouteLabel = false,
     bool? routeFocus,
+    int? routeQuotaBlockSeq,
+    int? multiStopBlockSeq,
   }) {
     return MapState(
       pins: pins ?? this.pins,
@@ -193,6 +207,8 @@ class MapState {
           ? null
           : (routeLabel ?? this.routeLabel),
       routeFocus: clearRoute ? false : (routeFocus ?? this.routeFocus),
+      routeQuotaBlockSeq: routeQuotaBlockSeq ?? this.routeQuotaBlockSeq,
+      multiStopBlockSeq: multiStopBlockSeq ?? this.multiStopBlockSeq,
     );
   }
 }

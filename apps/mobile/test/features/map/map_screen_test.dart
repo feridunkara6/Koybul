@@ -7,6 +7,7 @@ import 'package:dockly_mobile/features/boat/domain/my_boat.dart';
 import 'package:dockly_mobile/features/checklist/application/checklist_controller.dart';
 import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
 import 'package:dockly_mobile/features/deck/domain/sea_trip_log.dart';
+import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
 import 'package:dockly_mobile/features/map/domain/map_cache.dart';
 import 'package:dockly_mobile/features/map/presentation/location_bottom_card.dart';
@@ -22,7 +23,11 @@ import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart
 import 'package:dockly_mobile/features/location/application/location_controller.dart';
 
 import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
+import 'package:dockly_mobile/features/premium/application/premium_controller.dart';
+import 'package:dockly_mobile/features/route/application/route_quota_controller.dart';
+import 'package:dockly_mobile/features/route/application/saved_routes_controller.dart';
 import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
+import 'package:dockly_mobile/features/route/domain/saved_route.dart';
 import 'package:dockly_mobile/features/route/domain/sea_router.dart';
 import 'package:dockly_mobile/features/route/domain/sea_trip.dart';
 import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
@@ -76,6 +81,9 @@ Widget _app(
   SeaRouteEngine? routeEngine,
   FakeChecklistStore? checklist,
   FakeTripStore? trips,
+  // P4b: ekran testleri varsayılan PREMIUM çalışır (kota/kilit kendi
+  // testlerinde `premium: false` ile denenir; mevcut senaryolar değişmez).
+  bool premium = true,
 }) {
   return ProviderScope(
     overrides: <Override>[
@@ -101,6 +109,9 @@ Widget _app(
       // Hava ağ geçidi HER ZAMAN sahte (rota rüzgâr analizi ağa çıkmasın).
       weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
       if (boat != null) myBoatProvider.overrideWith(() => _FixedBoat(boat)),
+      isPremiumActiveProvider.overrideWithValue(premium),
+      // Kota deposu HER ZAMAN sahte (gerçek shared_preferences'a gitmesin).
+      routeQuotaStoreProvider.overrideWithValue(FakeRouteQuotaStore()),
     ],
     child: const MaterialApp(home: MapScreen()),
   );
@@ -626,6 +637,139 @@ void main() {
     expect(find.byKey(const ValueKey<String>('pin-loc-2')), findsOneWidget);
 
     // Zamanlayıcı artıklarını akıt (kontrol şeridi/snackbar vb.).
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
+  });
+
+  // --- P4b (kurucu onayı 2026-09-22): rota kotası / çok durak / kayıt
+  // yuvaları — kilit yalnız DOKUNULAN yerde, dürüst anlatım, rota bozulmaz.
+
+  testWidgets('KOTA SAYFASI (K3): ücretsizde 4. rota denemesi kota sayfasını '
+      'açar; sayaç bildirimi her rotada görünür', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(
+      FakeMapGateway(result: pinResult),
+      routeEngine: _FakeRouteEngine(),
+      premium: false,
+    ));
+    await tester.pumpAndSettle();
+    final ProviderContainer c =
+        ProviderScope.containerOf(tester.element(find.byType(MapScreen)));
+    c.read(devicePositionProvider.notifier).state =
+        const GeoPoint(lat: 36.76, lon: 28.96);
+
+    // 1. rota: çizilir + GÖRÜNÜR SAYAÇ bildirimi (kurucu şartı K3).
+    await c.read(mapControllerProvider.notifier).routeToPin(testPin);
+    await tester.pump();
+    expect(find.textContaining('1/3'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
+
+    // 2. ve 3. rota serbest.
+    for (int i = 0; i < 2; i++) {
+      c.read(mapControllerProvider.notifier).clearRoute();
+      await c.read(mapControllerProvider.notifier).routeToPin(testPin);
+      await tester.pump(const Duration(seconds: 6));
+      await tester.pumpAndSettle();
+    }
+    expect(c.read(mapControllerProvider).route, isNotNull);
+
+    // 4. deneme: rota ÇİZİLMEZ, dürüst kota sayfası açılır.
+    c.read(mapControllerProvider.notifier).clearRoute();
+    await c.read(mapControllerProvider.notifier).routeToPin(testPin);
+    await tester.pumpAndSettle();
+    expect(c.read(mapControllerProvider).route, isNull);
+    expect(find.text('Bugünün rotaları doldu (3/3)'), findsOneWidget);
+    // Dürüst notlar: yarın yenilenir + kayıtlı rota/düzenleme hak yemez.
+    expect(find.textContaining('gece yarısı'), findsOneWidget);
+    expect(find.textContaining('hak yemez'), findsOneWidget);
+
+    // Saygılı kapanış: "Yarını beklerim" sayfayı kapatır, başka şey açılmaz.
+    await tester.tap(find.text('Yarını beklerim'));
+    await tester.pumpAndSettle();
+    expect(find.text('Bugünün rotaları doldu (3/3)'), findsNothing);
+  });
+
+  testWidgets('ÇOK DURAK SAYFASI (K4): ücretsizde durak ekleme denemesi premium '
+      'sayfasını açar; rota bozulmaz', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(
+      FakeMapGateway(result: pinResult),
+      routeEngine: _FakeRouteEngine(),
+      premium: false,
+    ));
+    await tester.pumpAndSettle();
+    final ProviderContainer c =
+        ProviderScope.containerOf(tester.element(find.byType(MapScreen)));
+
+    // Kayıtlı rota açmak hak yemez (K3) — kota sayfası da açılmaz.
+    await c.read(mapControllerProvider.notifier).openSavedRoute(
+      const RouteOrigin(pos: GeoPoint(lat: 36.75, lon: 28.93), name: 'Göcek'),
+      const <RouteWaypoint>[
+        RouteWaypoint(pos: GeoPoint(lat: 36.72, lon: 28.92), name: 'Bedri Rahmi'),
+      ],
+      name: 'Tek koy',
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Bugünün rotaları doldu (3/3)'), findsNothing);
+
+    await c.read(mapControllerProvider.notifier).addStop(
+          const GeoPoint(lat: 36.68, lon: 28.88), 'loc-x', 'Kille Koyu');
+    await tester.pumpAndSettle();
+    expect(find.text("Çok duraklı rota Premium'da"), findsOneWidget);
+    expect(c.read(mapControllerProvider).routeWaypoints, hasLength(1));
+    expect(c.read(mapControllerProvider).route, isNotNull); // rota duruyor
+
+    await tester.tapAt(const Offset(200, 30)); // sayfa dışına dokun → kapanır
+    await tester.pumpAndSettle();
+    expect(find.text("Çok duraklı rota Premium'da"), findsNothing);
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('KAYIT YUVALARI (K5): ücretsizde 3 yuva doluyken kaydetme yuva '
+      'sayfasını açar — ad diyaloğu HİÇ açılmaz', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(
+      FakeMapGateway(result: pinResult),
+      routeEngine: _FakeRouteEngine(),
+      premium: false,
+    ));
+    await tester.pumpAndSettle();
+    final ProviderContainer c =
+        ProviderScope.containerOf(tester.element(find.byType(MapScreen)));
+
+    // 3 yuva dolu (cihaz kayıtları).
+    for (int i = 0; i < 3; i++) {
+      await c.read(savedRoutesProvider.notifier).add(SavedRoute(
+            id: 'r$i',
+            name: 'Rota $i',
+            origin: const RouteOrigin(pos: GeoPoint(lat: 36.75, lon: 28.93)),
+            waypoints: const <RouteWaypoint>[
+              RouteWaypoint(pos: GeoPoint(lat: 36.72, lon: 28.92), name: 'K'),
+            ],
+            distanceNm: 2,
+            savedAtMs: 1000 + i,
+          ));
+    }
+
+    // Rota aç → özet hapı → sayfadaki "Rotalarım\'a ekle".
+    await c.read(mapControllerProvider.notifier).openSavedRoute(
+      const RouteOrigin(pos: GeoPoint(lat: 36.75, lon: 28.93), name: 'Göcek'),
+      const <RouteWaypoint>[
+        RouteWaypoint(pos: GeoPoint(lat: 36.72, lon: 28.92), name: 'Bedri Rahmi'),
+      ],
+      name: 'Dördüncü rota',
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey<String>('route-summary')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey<String>('route-add-saved')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Kayıt yuvaların doldu (3/3)'), findsOneWidget);
+    expect(find.byType(TextField), findsNothing); // ad diyaloğu açılmadı
+    expect(c.read(savedRoutesProvider), hasLength(3)); // kayıt EKLENMEDİ
+
+    await tester.tapAt(const Offset(200, 30));
+    await tester.pumpAndSettle();
     await tester.pump(const Duration(seconds: 6));
     await tester.pumpAndSettle();
   });

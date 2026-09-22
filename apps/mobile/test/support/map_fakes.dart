@@ -5,6 +5,7 @@ import 'package:dockly_core/dockly_core.dart';
 import 'package:dockly_mobile/features/map/domain/map_cache.dart';
 import 'package:dockly_mobile/features/map/domain/map_locations_gateway.dart';
 import 'package:dockly_mobile/features/map/domain/map_viewport.dart';
+import 'package:dockly_mobile/features/route/application/route_quota_controller.dart';
 
 const Bbox testBbox = Bbox(minLon: 28.90, minLat: 36.70, maxLon: 29.00, maxLat: 36.80);
 const MapViewport pinViewport = MapViewport(bbox: testBbox, zoom: 13);
@@ -81,5 +82,26 @@ class FakeMapCache implements MapCache {
   Future<void> save(List<LocationPin> pins, List<Cluster> clusters) async {
     saveCount += 1;
     cached = CachedMap(pins: pins, clusters: clusters, savedAt: DateTime(2026));
+  }
+}
+
+/// Sahte ROTA KOTASI deposu (P4b) — bellek içi; cihaz deposuna asla gidilmez.
+class FakeRouteQuotaStore implements RouteQuotaStore {
+  FakeRouteQuotaStore([this.day, this.used]);
+
+  String? day;
+  int? used;
+
+  @override
+  Future<(String, int)?> load() async {
+    final String? d = day;
+    final int? u = used;
+    return (d == null || u == null) ? null : (d, u);
+  }
+
+  @override
+  Future<void> save(String dayKey, int usedCount) async {
+    day = dayKey;
+    used = usedCount;
   }
 }

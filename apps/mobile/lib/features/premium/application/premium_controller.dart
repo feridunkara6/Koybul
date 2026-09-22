@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers.dart';
 import '../../auth/application/auth_controller.dart';
 import '../../auth/domain/auth_state.dart';
+import '../data/premium_offline_cache.dart';
 import '../domain/purchase_gateway.dart';
 import '../infrastructure/purchase_gateway_factory.dart';
 
@@ -57,12 +58,31 @@ final Provider<PurchaseGateway> purchaseGatewayProvider =
 
 /// Abonelik + keşif hakkı durumu. Hesapsız (misafir/çıkış) durumda null —
 /// ekranlar bunu "premium yok" diye okur; sunucuya boşuna istek atılmaz.
+///
+/// ÇEVRİMDIŞI KORUMA (P4b, premium v3 raporu §9): denizde ağ yokken premium
+/// SIFIRLANMAZ — son başarılı yanıtın bitiş tarihi cihazda saklanır; tarih
+/// geçmediyse premium sürer, geçtiyse biter (uydurma uzatma yok).
 final FutureProvider<PremiumMe?> premiumMeProvider =
     FutureProvider<PremiumMe?>((ref) async {
   final AuthState auth = ref.watch(authControllerProvider);
   if (auth is! Authenticated || auth.isGuest) return null;
-  return ref.watch(premiumBackendProvider).me();
+  try {
+    final PremiumMe me = await ref.watch(premiumBackendProvider).me();
+    await PremiumOfflineCache.save(me); // en iyi çaba — hata yutulur
+    return me;
+  } on AppFailure {
+    final PremiumMe? cached = await PremiumOfflineCache.read();
+    if (cached != null) return cached;
+    rethrow;
+  }
 });
+
+/// PREMIUM ETKİN Mİ? — kota/kilit kararlarının tek senkron kaynağı (P4b).
+/// Durum yüklenmemiş/hatalı/hesapsızken false: kapılar güvenli tarafta kalır
+/// (premium'a haksız kapı DEĞİL, ücretsiz kurala düşüş).
+final Provider<bool> isPremiumActiveProvider = Provider<bool>(
+  (ref) => ref.watch(premiumMeProvider).valueOrNull?.active ?? false,
+);
 
 /// Paket ekranının akış durumu.
 enum PurchasePhase {
