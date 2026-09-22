@@ -66,12 +66,14 @@ final FutureProvider<PremiumMe?> premiumMeProvider =
     FutureProvider<PremiumMe?>((ref) async {
   final AuthState auth = ref.watch(authControllerProvider);
   if (auth is! Authenticated || auth.isGuest) return null;
+  final PremiumOfflineStore offline = ref.watch(premiumOfflineStoreProvider);
   try {
     final PremiumMe me = await ref.watch(premiumBackendProvider).me();
-    await PremiumOfflineCache.save(me); // en iyi çaba — hata yutulur
+    // İz BEKLENMEDEN yazılır (en iyi çaba): ekran depo yüzünden gecikmez.
+    unawaited(offline.save(me));
     return me;
   } on AppFailure {
-    final PremiumMe? cached = await PremiumOfflineCache.read();
+    final PremiumMe? cached = await offline.read();
     if (cached != null) return cached;
     rethrow;
   }

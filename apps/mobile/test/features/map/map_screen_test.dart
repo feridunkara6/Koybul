@@ -38,6 +38,7 @@ import '../../support/checklist_fakes.dart';
 import '../../support/map_fakes.dart';
 import '../../support/nearby_fakes.dart';
 import '../../support/onboarding_fakes.dart';
+import '../../support/saved_routes_fakes.dart';
 import '../../support/search_fakes.dart';
 import '../../support/trip_fakes.dart';
 import '../../support/weather_fakes.dart';
@@ -112,6 +113,9 @@ Widget _app(
       isPremiumActiveProvider.overrideWithValue(premium),
       // Kota deposu HER ZAMAN sahte (gerçek shared_preferences'a gitmesin).
       routeQuotaStoreProvider.overrideWithValue(FakeRouteQuotaStore()),
+      // Kayıtlı rota deposu da HER ZAMAN sahte (aynı depo kuralı — K5
+      // yuva testi gerçek depoda sonsuza dek beklerdi).
+      savedRoutesStoreProvider.overrideWithValue(FakeSavedRoutesStore()),
     ],
     child: const MaterialApp(home: MapScreen()),
   );

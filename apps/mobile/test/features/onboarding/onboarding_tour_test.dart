@@ -11,6 +11,8 @@ import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart
 import 'package:dockly_mobile/features/onboarding/domain/onboarding_store.dart';
 import 'package:dockly_mobile/features/onboarding/presentation/tour_targets.dart';
 import 'package:dockly_api/dockly_api.dart' show GeoPoint, MapResult;
+import 'package:dockly_mobile/features/premium/application/premium_controller.dart';
+import 'package:dockly_mobile/features/route/application/route_quota_controller.dart';
 import 'package:dockly_mobile/features/route/application/saved_routes_controller.dart';
 import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
 import 'package:dockly_mobile/features/route/domain/sea_router.dart';
@@ -67,6 +69,10 @@ Widget _app(FakeOnboardingStore store, {MapResult mapResult = pinResult}) {
   return ProviderScope(
     overrides: <Override>[
       mapLocationsGatewayProvider.overrideWithValue(FakeMapGateway(result: mapResult)),
+      // P4b: harita kota sayacını izler — deposu HER ZAMAN sahte; tur
+      // kota konusu değil, premium (sınırsız) çalışır.
+      isPremiumActiveProvider.overrideWithValue(true),
+      routeQuotaStoreProvider.overrideWithValue(FakeRouteQuotaStore()),
       mapSurfaceBuilderProvider.overrideWithValue(fakeMapSurfaceBuilder()),
       mapDebounceProvider.overrideWithValue(Duration.zero),
       mapCacheProvider.overrideWithValue(FakeMapCache()),
@@ -92,6 +98,10 @@ Widget _mapOnly(FakeOnboardingStore store) {
   return ProviderScope(
     overrides: <Override>[
       mapLocationsGatewayProvider.overrideWithValue(FakeMapGateway(result: pinResult)),
+      // P4b: harita kota sayacını izler — deposu HER ZAMAN sahte; tur
+      // kota konusu değil, premium (sınırsız) çalışır.
+      isPremiumActiveProvider.overrideWithValue(true),
+      routeQuotaStoreProvider.overrideWithValue(FakeRouteQuotaStore()),
       mapSurfaceBuilderProvider.overrideWithValue(fakeMapSurfaceBuilder()),
       mapDebounceProvider.overrideWithValue(Duration.zero),
       mapCacheProvider.overrideWithValue(FakeMapCache()),

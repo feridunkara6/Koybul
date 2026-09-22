@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../support/auth_fakes.dart';
+import '../../support/premium_fakes.dart';
 
 /// PREMIUM ÇEVRİMDIŞI HAFIZASI (P4b, premium v3 §7 "denizde internet yok").
 /// Sözleşme: son başarılı /premium/me yanıtının bitiş tarihi cihazda saklanır;
@@ -41,55 +42,63 @@ class _OfflineBackend implements PremiumBackend {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUp(() => SharedPreferences.setMockInitialValues(<String, Object>{}));
+  // Gerçek depo yalnız BU dosyada, mock değerlerle denenir (depo kuralı:
+  // widget testleri hep sahte kullanır; burada saf test ortamı — takılmaz).
+  group('SharedPrefsPremiumOfflineStore', () {
+    const SharedPrefsPremiumOfflineStore store =
+        SharedPrefsPremiumOfflineStore();
 
-  test('save→read: aktif üyelik tarihiyle geri gelir; keşif sayaçları '
-      'çevrimdışı BİLİNMEZ (dürüstçe 0)', () async {
-    final DateTime until = DateTime.now().add(const Duration(days: 200));
-    await PremiumOfflineCache.save(
-        _me(active: true, until: until, productId: 'koybul.premium.yillik'));
+    setUp(() => SharedPreferences.setMockInitialValues(<String, Object>{}));
 
-    final PremiumMe? cached = await PremiumOfflineCache.read();
-    expect(cached, isNotNull);
-    expect(cached!.active, isTrue);
-    expect(cached.until!.millisecondsSinceEpoch, until.millisecondsSinceEpoch);
-    expect(cached.productId, 'koybul.premium.yillik');
-    expect(cached.explorationRemaining, 0); // uydurma sayaç yok
-  });
+    test('save→read: aktif üyelik tarihiyle geri gelir; keşif sayaçları '
+        'çevrimdışı BİLİNMEZ (dürüstçe 0)', () async {
+      final DateTime until = DateTime.now().add(const Duration(days: 200));
+      await store.save(
+          _me(active: true, until: until, productId: 'koybul.premium.yillik'));
 
-  test('SÜRESİ GEÇMİŞ iz null döner (çevrimdışı af yok — tarih tek hakem)', () async {
-    await PremiumOfflineCache.save(_me(
-      active: true,
-      until: DateTime.now().add(const Duration(seconds: 1)),
-    ));
-    // Tarihi geçmiş izi taklit et: geçmiş tarihle yeniden yaz.
-    await PremiumOfflineCache.save(_me(
-      active: true,
-      until: DateTime.now().subtract(const Duration(days: 1)),
-    ));
-    expect(await PremiumOfflineCache.read(), isNull);
-  });
+      final PremiumMe? cached = await store.read();
+      expect(cached, isNotNull);
+      expect(cached!.active, isTrue);
+      expect(cached.until!.millisecondsSinceEpoch, until.millisecondsSinceEpoch);
+      expect(cached.productId, 'koybul.premium.yillik');
+      expect(cached.explorationRemaining, 0); // uydurma sayaç yok
+    });
 
-  test('aktif OLMAYAN durum izi SİLER (bitmiş üyelik "aktif" taşınmaz)', () async {
-    await PremiumOfflineCache.save(_me(
-      active: true,
-      until: DateTime.now().add(const Duration(days: 30)),
-    ));
-    expect(await PremiumOfflineCache.read(), isNotNull);
+    test('SÜRESİ GEÇMİŞ iz null döner (çevrimdışı af yok — tarih tek hakem)',
+        () async {
+      await store.save(_me(
+        active: true,
+        until: DateTime.now().subtract(const Duration(days: 1)),
+      ));
+      expect(await store.read(), isNull);
+    });
 
-    await PremiumOfflineCache.save(_me(active: false, until: null));
-    expect(await PremiumOfflineCache.read(), isNull);
+    test('aktif OLMAYAN durum izi SİLER (bitmiş üyelik "aktif" taşınmaz)',
+        () async {
+      await store.save(_me(
+        active: true,
+        until: DateTime.now().add(const Duration(days: 30)),
+      ));
+      expect(await store.read(), isNotNull);
+
+      await store.save(_me(active: false, until: null));
+      expect(await store.read(), isNull);
+    });
   });
 
   test('premiumMeProvider: sunucuya ULAŞILAMAYINCA cihazdaki geçerli iz döner — '
       'denizde premium sıfırlanmaz', () async {
-    final DateTime until = DateTime.now().add(const Duration(days: 90));
-    await PremiumOfflineCache.save(_me(active: true, until: until));
-
     final backend = _OfflineBackend();
+    final store = FakePremiumOfflineStore(
+      toRead: _me(
+        active: true,
+        until: DateTime.now().add(const Duration(days: 90)),
+      ),
+    );
     final container = ProviderContainer(overrides: <Override>[
       signedInAuthOverride(),
       premiumBackendProvider.overrideWithValue(backend),
+      premiumOfflineStoreProvider.overrideWithValue(store),
     ]);
     addTearDown(container.dispose);
 
@@ -99,8 +108,27 @@ void main() {
     expect(me!.active, isTrue);
 
     // isPremiumActiveProvider da aynı karara bağlanır (kota sınırsız çalışır).
-    await container.read(premiumMeProvider.future);
     expect(container.read(isPremiumActiveProvider), isTrue);
+  });
+
+  test('premiumMeProvider: sunucu BAŞARILIYSA iz cihaza yazılır (en iyi çaba)',
+      () async {
+    final store = FakePremiumOfflineStore();
+    final PremiumMe active =
+        _me(active: true, until: DateTime.utc(2027, 9, 21));
+    final container = ProviderContainer(overrides: <Override>[
+      signedInAuthOverride(),
+      premiumBackendProvider.overrideWithValue(_FixedBackend(active)),
+      premiumOfflineStoreProvider.overrideWithValue(store),
+    ]);
+    addTearDown(container.dispose);
+
+    final PremiumMe? me = await container.read(premiumMeProvider.future);
+    expect(me!.active, isTrue);
+    // Yazma beklenmeden yapılır — mikro görevlerin bitmesine izin ver.
+    await Future<void>.delayed(Duration.zero);
+    expect(store.saved, isNotNull);
+    expect(store.saved!.until, DateTime.utc(2027, 9, 21));
   });
 
   test('premiumMeProvider: ağ yok VE iz de yoksa hata YÜZEYE çıkar '
@@ -108,12 +136,26 @@ void main() {
     final container = ProviderContainer(overrides: <Override>[
       signedInAuthOverride(),
       premiumBackendProvider.overrideWithValue(_OfflineBackend()),
+      premiumOfflineStoreProvider.overrideWithValue(FakePremiumOfflineStore()),
     ]);
     addTearDown(container.dispose);
-    await expectLater(
-        container.read(premiumMeProvider.future), throwsA(isA<NetworkFailure>()));
+    await expectLater(container.read(premiumMeProvider.future),
+        throwsA(isA<NetworkFailure>()));
     // Kota kapıları güvenli tarafta: hata = premium DEĞİL (haksız kapama yok,
     // ücretsiz kurala düşüş).
     expect(container.read(isPremiumActiveProvider), isFalse);
   });
+}
+
+class _FixedBackend implements PremiumBackend {
+  _FixedBackend(this.current);
+
+  final PremiumMe current;
+
+  @override
+  Future<PremiumMe> me() async => current;
+
+  @override
+  Future<PremiumLinkResult> link(String transactionId) =>
+      throw UnimplementedError();
 }

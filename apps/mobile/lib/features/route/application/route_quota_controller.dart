@@ -93,8 +93,11 @@ class RouteQuotaController extends Notifier<RouteQuotaState> {
 
   /// Bir "yeni rota" hakkı kullanmayı dener. Premium'da her zaman true.
   Future<bool> tryConsume() async {
-    await (_hydration ??= _hydrate());
+    // Premium'da depo hiç beklenmez — sınırsızda sayacın önemi yok (ve depo
+    // yavaş/tıkalıysa rota çizimi buna takılmamalı).
     if (state.unlimited) return true;
+    await (_hydration ??= _hydrate());
+    if (state.unlimited) return true; // bekleme sırasında premium açılmış olabilir
 
     // Gece yarısı devri: gün değiştiyse sayaç sıfırlanır.
     final String today = dayKeyFor(nowProvider());

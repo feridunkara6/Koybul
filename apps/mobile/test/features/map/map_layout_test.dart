@@ -7,6 +7,8 @@ import 'package:dockly_mobile/features/map/presentation/map_screen.dart';
 import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
+import 'package:dockly_mobile/features/premium/application/premium_controller.dart';
+import 'package:dockly_mobile/features/route/application/route_quota_controller.dart';
 import 'package:dockly_mobile/features/search/application/search_controller.dart';
 import 'package:dockly_mobile/features/search/presentation/search_screen.dart';
 import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
@@ -33,6 +35,9 @@ import '../../support/weather_fakes.dart';
 Widget _app() {
   return ProviderScope(
     overrides: <Override>[
+      // P4b: kota deposu sahte + premium (bu dosyanın konusu yerleşim).
+      isPremiumActiveProvider.overrideWithValue(true),
+      routeQuotaStoreProvider.overrideWithValue(FakeRouteQuotaStore()),
       mapLocationsGatewayProvider
           .overrideWithValue(FakeMapGateway(result: pinResult)),
       mapSurfaceBuilderProvider.overrideWithValue(fakeMapSurfaceBuilder()),

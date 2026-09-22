@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_mobile/features/premium/application/premium_controller.dart';
+import 'package:dockly_mobile/features/premium/data/premium_offline_cache.dart';
 import 'package:dockly_mobile/features/premium/domain/purchase_gateway.dart';
 import 'package:dockly_mobile/features/premium/presentation/premium_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/auth_fakes.dart';
+import '../../support/premium_fakes.dart';
 
 /// KOYBUL PREMIUM paket ekranı (P3). Kurallar burada sabitlenir:
 /// - fiyat KODDAN gelmez, mağazadan (sahtede bile öyle);
@@ -107,7 +109,12 @@ const PremiumPackage _monthly = PremiumPackage(
 
 Widget _app(List<Override> overrides) {
   return ProviderScope(
-    overrides: overrides,
+    overrides: <Override>[
+      // Çevrimdışı iz deposu HER ZAMAN sahte (depo kuralı, P4b): gerçek
+      // shared_preferences testte sonsuza dek bekletir.
+      premiumOfflineStoreProvider.overrideWithValue(FakePremiumOfflineStore()),
+      ...overrides,
+    ],
     child: const MaterialApp(home: PremiumScreen()),
   );
 }

@@ -8,6 +8,8 @@ import 'package:dockly_mobile/features/map/presentation/map_screen.dart';
 import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
+import 'package:dockly_mobile/features/premium/application/premium_controller.dart';
+import 'package:dockly_mobile/features/route/application/route_quota_controller.dart';
 import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
 import 'package:dockly_mobile/features/route/domain/sea_router.dart';
 import 'package:dockly_mobile/features/route/domain/sea_trip.dart';
@@ -64,6 +66,10 @@ Widget _app(FakeSearchGateway search, {FakeLocationService? location}) {
       tripStoreProvider.overrideWithValue(FakeTripStore()),
       weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
       onboardingStoreProvider.overrideWithValue(doneOnboardingStore()),
+      // P4b: rota girişi testleri kota/kilit KONUSU DEĞİL — premium (sınırsız)
+      // çalışır; kota deposu da depo kuralı gereği sahtedir.
+      isPremiumActiveProvider.overrideWithValue(true),
+      routeQuotaStoreProvider.overrideWithValue(FakeRouteQuotaStore()),
       seaRouteEngineProvider.overrideWithValue(_FakeRouteEngine()),
       searchGatewayProvider.overrideWithValue(search),
       searchDebounceProvider.overrideWithValue(Duration.zero),
