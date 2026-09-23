@@ -1,5 +1,6 @@
 import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
 import 'package:dockly_mobile/features/boat/domain/my_boat.dart';
+import 'package:dockly_mobile/features/premium/data/premium_offline_cache.dart';
 import 'package:dockly_mobile/features/deck/presentation/deck_screen.dart'
     show deckSegmentProvider;
 import 'package:dockly_mobile/features/logbook/presentation/logbook_screen.dart';
@@ -8,6 +9,8 @@ import 'package:dockly_mobile/features/shell/application/shell_tab_provider.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../../support/premium_fakes.dart';
 
 /// Sabit tekne döndüren kontrolcü (depolamaya gitmez).
 class _FixedBoat extends MyBoatController {
@@ -21,6 +24,10 @@ Widget _app({MyBoat? boat}) {
   return ProviderScope(
     overrides: <Override>[
       if (boat != null) myBoatProvider.overrideWith(() => _FixedBoat(boat)),
+      // KAPTAN KARTI başlığı premium rozetini izler (Konsept A, 2026-09-23);
+      // depo kuralı (docs/15): gerçek SharedPreferences testte ASLA —
+      // premium çevrimdışı deposu bellek-içi sahteyle değiştirilir.
+      premiumOfflineStoreProvider.overrideWithValue(FakePremiumOfflineStore()),
     ],
     child: const MaterialApp(home: ProfileScreen()),
   );

@@ -4,6 +4,7 @@ import 'package:dockly_mobile/features/detail/application/location_detail_contro
 import 'package:dockly_mobile/features/detail/presentation/location_detail_screen.dart';
 import 'package:dockly_mobile/features/emergency/presentation/emergency_screen.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
+import 'package:dockly_mobile/features/premium/data/premium_offline_cache.dart';
 import 'package:dockly_mobile/features/profile/presentation/profile_screen.dart';
 import 'package:dockly_mobile/features/reviews/application/reviews_controller.dart';
 import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
@@ -18,6 +19,7 @@ import '../../support/community_fakes.dart';
 import '../../support/deria_fakes.dart';
 import '../../support/detail_fakes.dart';
 import '../../support/nearby_fakes.dart';
+import '../../support/premium_fakes.dart';
 import '../../support/reviews_fakes.dart';
 import '../../support/search_fakes.dart';
 import '../../support/weather_fakes.dart';
@@ -26,6 +28,9 @@ Widget _app({AppLocale? locale}) {
   return ProviderScope(
     overrides: <Override>[
       communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
+      // Kaptan Kartı başlığı premium rozetini izler (2026-09-23); depo
+      // kuralı (docs/15): gerçek SharedPreferences testte asla.
+      premiumOfflineStoreProvider.overrideWithValue(FakePremiumOfflineStore()),
       if (locale != null)
         appLocaleProvider.overrideWith(() => AppLocaleController(locale)),
     ],

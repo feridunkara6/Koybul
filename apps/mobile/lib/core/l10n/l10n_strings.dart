@@ -104,6 +104,10 @@ class L10n {
     required this.monthShort,
     required this.navProfile,
     required this.profileTitle,
+    required this.profileGroupSea,
+    required this.profileGroupApp,
+    required this.profileGroupAbout,
+    required this.profileGuestHello,
     required this.emergencyTitle,
     required this.emergencySub,
     required this.sectionBoat,
@@ -676,6 +680,7 @@ class L10n {
   final List<String> weekdayShort;
   final List<String> monthShort;
   final String profileTitle, emergencyTitle, emergencySub;
+  final String profileGroupSea, profileGroupApp, profileGroupAbout, profileGuestHello;
   final String sectionBoat, boatEmptyBody, boatDeckBridge, boatDefineCta;
   final String boatLengthFmt, boatDraftFmt, boatDraftUnknown, editLabel, removeLabel;
   final String sectionAccount, accTitle, accBody, accCta, accOpen, signOut;
@@ -1307,6 +1312,10 @@ const L10n _tr = L10n(
   monthShort: <String>['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'],
   navProfile: 'Profil',
   profileTitle: 'Profil',
+  profileGroupSea: 'Denizcilik',
+  profileGroupApp: 'Uygulama',
+  profileGroupAbout: 'Hakkında',
+  profileGuestHello: 'Hoş geldin, Kaptan',
   emergencyTitle: 'Acil Durum',
   emergencySub: '158 · 112 · VHF 16 · MAYDAY şablonu · denizci alfabesi',
   sectionBoat: 'Teknem',
@@ -2016,6 +2025,10 @@ const L10n _en = L10n(
   monthShort: <String>['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
   navProfile: 'Profile',
   profileTitle: 'Profile',
+  profileGroupSea: 'Seafaring',
+  profileGroupApp: 'App',
+  profileGroupAbout: 'About',
+  profileGuestHello: 'Welcome, captain',
   emergencyTitle: 'Emergency',
   emergencySub: '158 · 112 · VHF 16 · MAYDAY template · phonetic alphabet',
   sectionBoat: 'My Boat',
@@ -2725,6 +2738,10 @@ const L10n _es = L10n(
   monthShort: <String>['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
   navProfile: 'Perfil',
   profileTitle: 'Perfil',
+  profileGroupSea: 'Navegación',
+  profileGroupApp: 'Aplicación',
+  profileGroupAbout: 'Acerca de',
+  profileGuestHello: 'Bienvenido, capitán',
   emergencyTitle: 'Emergencia',
   emergencySub: '158 · 112 · VHF 16 · plantilla MAYDAY · alfabeto náutico',
   sectionBoat: 'Mi barco',
@@ -3434,6 +3451,10 @@ const L10n _ru = L10n(
   monthShort: <String>['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'],
   navProfile: 'Профиль',
   profileTitle: 'Профиль',
+  profileGroupSea: 'Мореходство',
+  profileGroupApp: 'Приложение',
+  profileGroupAbout: 'О приложении',
+  profileGuestHello: 'Добро пожаловать, капитан',
   emergencyTitle: 'Экстренная помощь',
   emergencySub: '158 · 112 · УКВ 16 · шаблон MAYDAY · фонетический алфавит',
   sectionBoat: 'Моя лодка',

@@ -1,9 +1,12 @@
 import 'package:dockly_mobile/features/legal/data/photo_credits.dart';
 import 'package:dockly_mobile/features/legal/presentation/sources_screen.dart';
+import 'package:dockly_mobile/features/premium/data/premium_offline_cache.dart';
 import 'package:dockly_mobile/features/profile/presentation/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../../support/premium_fakes.dart';
 
 /// KAYNAKLAR VE LİSANSLAR (FAZ 0 K4). Lisans/mağaza denetiminin baktığı yol:
 /// Profil → Kaynaklar ve lisanslar → harita/hava/veri kartları + fotoğraf
@@ -56,7 +59,15 @@ void main() {
     addTearDown(tester.view.reset);
 
     await tester.pumpWidget(
-      const ProviderScope(child: MaterialApp(home: ProfileScreen())),
+      ProviderScope(
+        // Kaptan Kartı başlığı premium rozetini izler (2026-09-23); depo
+        // kuralı (docs/15): gerçek SharedPreferences testte asla.
+        overrides: <Override>[
+          premiumOfflineStoreProvider
+              .overrideWithValue(FakePremiumOfflineStore()),
+        ],
+        child: const MaterialApp(home: ProfileScreen()),
+      ),
     );
     await tester.pumpAndSettle();
 

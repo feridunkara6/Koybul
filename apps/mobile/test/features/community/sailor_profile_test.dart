@@ -6,6 +6,7 @@ import 'package:dockly_mobile/features/community/application/community_controlle
 import 'package:dockly_mobile/features/community/application/reputation_controller.dart';
 import 'package:dockly_mobile/features/community/presentation/badges_screen.dart';
 import 'package:dockly_mobile/features/community/presentation/sailor_profile_card.dart';
+import 'package:dockly_mobile/features/premium/data/premium_offline_cache.dart';
 import 'package:dockly_mobile/features/profile/presentation/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../support/auth_fakes.dart';
 import '../../support/community_fakes.dart';
 import '../../support/maintenance_fakes.dart';
+import '../../support/premium_fakes.dart';
 import '../../support/trip_fakes.dart';
 
 /// "Denizci Profilim" kartı — YENİ EVİ PROFİL (Teknem Konsept A, kullanıcı
@@ -39,6 +41,10 @@ void main() {
         overrides: <Override>[
           tripStoreProvider.overrideWithValue(FakeTripStore()),
           communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
+          // Kaptan Kartı başlığı premium rozetini izler (2026-09-23); depo
+          // kuralı (docs/15): gerçek SharedPreferences testte asla.
+          premiumOfflineStoreProvider
+              .overrideWithValue(FakePremiumOfflineStore()),
           ...extra,
         ],
         child: const MaterialApp(home: ProfileScreen()),
