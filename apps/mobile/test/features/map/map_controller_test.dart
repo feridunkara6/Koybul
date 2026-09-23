@@ -163,6 +163,23 @@ void main() {
     expect(origin.lon, moreOrLessEquals(28.95, epsilon: 0.001)); // (28.90+29.00)/2
   });
 
+  test('GERÇEK CİHAZ DERSİ (2026-09): tavanı aşan bbox sunucuya KIRPILMIŞ gider '
+      '— açılışta 422 "Geçersiz bbox" bir daha yaşanmaz', () async {
+    final gateway = FakeMapGateway(result: clusterResult);
+    final container = _containerWith(gateway);
+    // Telefon açılış görünümü: tüm Türkiye (~11°) — sunucu tavanı 5°.
+    await _ctrl(container).loadViewport(const MapViewport(
+      bbox: Bbox(minLon: 29.6, minLat: 35.5, maxLon: 40.8, maxLat: 42.5),
+      zoom: 5,
+    ));
+    final Bbox sent = gateway.calls.single.bbox;
+    expect(sent.maxLon - sent.minLon, lessThanOrEqualTo(5.0));
+    expect(sent.maxLat - sent.minLat, lessThanOrEqualTo(5.0));
+    // Merkez korunur — kullanıcı baktığı yerin verisini alır.
+    expect((sent.minLon + sent.maxLon) / 2, closeTo(35.2, 1e-9));
+    expect(_state(container).clusters, isNotEmpty); // veri ekrana geldi
+  });
+
   test('loadViewport başarı → pin modu verisi', () async {
     final container = _containerWith(FakeMapGateway(result: pinResult));
     await _ctrl(container).loadViewport(pinViewport);

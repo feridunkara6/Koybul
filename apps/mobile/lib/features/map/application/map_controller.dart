@@ -117,6 +117,10 @@ class MapController extends Notifier<MapState> {
   /// Anında (debounce'suz) yükleme — retry ve debounce zamanlayıcısı kullanır.
   /// Eş zamanlı çağrılarda yalnız en son yanıt uygulanır (stale koruması).
   Future<void> loadViewport(MapViewport viewport, {List<String>? types}) async {
+    // SUNUCU TAVANI (gerçek cihaz dersi 2026-09): telefonda uzak görünümün ham
+    // bbox'ı 5° sınırını aşar ve sunucu 422 döndürürdü — harita hiç dolmazdı.
+    // Görünüm merkez sabit kalarak kırpılır; sığıyorsa aynı nesne döner.
+    viewport = viewport.clamped();
     _lastRequested = viewport;
     // Turun "açılış görünümüne dön" özelliği için son görünüm yayınlanır.
     ref.read(lastViewportProvider.notifier).state = viewport;

@@ -72,5 +72,7 @@ workflows:
       app_store_connect:
         auth: integration
         submit_to_testflight: true
-        beta_groups:
-          - Moorira Test
+        # beta_groups BİLEREK YOK (TestFlight dersi 2026-09): "Moorira Test"
+        # bir İÇ (internal) test grubudur — iç gruplar her yeni derlemeyi
+        # kendiliğinden alır ve Apple API'si iç gruba elle derleme eklemeye
+        # izin vermez. Buraya grup yazmak derlemeyi kırmızı bitiriyordu.
