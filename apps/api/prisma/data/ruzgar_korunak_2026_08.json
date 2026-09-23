@@ -273,6 +273,92 @@
    "kaynak": "https://boatscribe.com/journal/itineraries/mooring-in-skopea-limani-gocek",
    "not": "Tam korunak — açık ifade ('safe in any wind direction'). karyayolu tepe sağanaklarına ('koy güney ve batı tepelerinden rüzgar alır, sağanaklar yapar') dikkat çekiyor; bu katabatik hamledir, denize açıklık değildir (dosya kuralı).",
    "tam_korunak": true
+  },
+  "asi-ici-koyu": {
+   "yonler": [
+    "KB"
+   ],
+   "alinti": "well protected against the wind blowing from Northwest",
+   "kaynak": "https://gotosailing.com/asi-koyu-marmaris"
+  },
+  "baba-island-koyu": {
+   "yonler": [
+    "B",
+    "G"
+   ],
+   "alinti": "Batı ve güney rüzgarlarına karşı koruma sağlar",
+   "kaynak": "https://www.wikiderya.org/wiki/baba-adasi"
+  },
+  "binlik-samandira-sahasi": {
+   "yonler": [
+    "K",
+    "D"
+   ],
+   "alinti": "kuzeyli ve kısmen doğulu rüzgarlara karşı koruyan",
+   "kaynak": "https://www.wikiderya.org/wiki/kuyrucak-koyu"
+  },
+  "canak-koyu-gokova": {
+   "yonler": [
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "alinti": "Kuzey hariç tüm havalara kapalıdır",
+   "kaynak": "https://www.wikiderya.org/wiki/canak-koyu"
+  },
+  "gebekse-koyu": {
+   "yonler": [
+    "KB"
+   ],
+   "alinti": "Melteme rüzgarından korunaklı",
+   "kaynak": "https://www.wikiderya.org/wiki/gebekse"
+  },
+  "gerbeske-koyu": {
+   "yonler": [
+    "KB"
+   ],
+   "alinti": "Melteme rüzgarından korunaklı",
+   "kaynak": "https://www.wikiderya.org/wiki/gebekse"
+  },
+  "gonlucek-buku": {
+   "yonler": [
+    "KB"
+   ],
+   "alinti": "western shore shelter from meltemi winds",
+   "kaynak": "https://www.wikiderya.org/wiki/g%C3%B6nl%C3%BCcek-g%C3%BCnl%C3%BCcek-b%C3%BCk%C3%BC"
+  },
+  "gunluk-atbuku-samandira-sahasi": {
+   "yonler": [
+    "G"
+   ],
+   "alinti": "Güneyli havalar için iyi bir kaçış noktasıdır",
+   "kaynak": "https://www.wikiderya.org/wiki/atbuku"
+  },
+  "karacasogut-koyu": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "alinti": "a winter port, providing all-round shelters",
+   "kaynak": "https://turkeymarinas.blogspot.com/2018/10/karacasogut-anchorage.html",
+   "tam_korunak": true
+  },
+  "papuc-koyu": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "kuzey rüzgârlarından korunmuş sakin sularla",
+   "kaynak": "https://blog.yachtdunyasi.com/pabuc-burnu/"
   }
  }
 }

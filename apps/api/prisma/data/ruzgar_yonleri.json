@@ -422,6 +422,49 @@
   "yesilkoy-firnaz-koyu": [
    "G",
    "GD"
+  ],
+  "abdireis-koyu": [
+   "B"
+  ],
+  "asarcik-gokce-koyu": [
+   "D"
+  ],
+  "bestas-kalevezi-demirleme": [
+   "G",
+   "GD",
+   "D"
+  ],
+  "canak-koyu-gokova": [
+   "K"
+  ],
+  "ciglik-koyu": [
+   "GD"
+  ],
+  "gebekse-koyu": [
+   "KD"
+  ],
+  "gerbeske-koyu": [
+   "KD"
+  ],
+  "hurmali-buk-koyu": [
+   "G"
+  ],
+  "kargi-camel-koyu": [
+   "B"
+  ],
+  "kargi-koyu": [
+   "D"
+  ],
+  "kargicik-buku": [
+   "B"
+  ],
+  "kuleli-koyu": [
+   "B"
+  ],
+  "marti-samandira-sahasi": [
+   "KD",
+   "K",
+   "KB"
   ]
  },
  "kaynaklar_2026_08": {
@@ -432,6 +475,58 @@
   "ornos-koyu-mykonos": {
    "alinti": "the bay is open to the S",
    "kaynak": "https://mygreekcharter.com/anchorage/ormos-ornos/"
+  },
+  "abdireis-koyu": {
+   "alinti": "This cove is open to west",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/05/abdireis-cove-anchorage.html"
+  },
+  "asarcik-gokce-koyu": {
+   "alinti": "east-facing mouth; sheltered from other directions",
+   "kaynak": "https://www.guletcharter.com/amos-bay"
+  },
+  "bestas-kalevezi-demirleme": {
+   "alinti": "dangerous winds from south to east",
+   "kaynak": "https://my-sea.com/en/poi/turkey/fethiye-to-antalya/gemiler-adas/cold-water-bay/d196b24c-2d7a-4b1b-a94d-ea1e9b6e089c"
+  },
+  "canak-koyu-gokova": {
+   "alinti": "Kuzey hariç tüm havalara kapalıdır",
+   "kaynak": "https://www.wikiderya.org/wiki/canak-koyu"
+  },
+  "ciglik-koyu": {
+   "alinti": "Güneydoğu yönüne açık",
+   "kaynak": "https://www.wikiderya.org/wiki/ciglik-koyu"
+  },
+  "gebekse-koyu": {
+   "alinti": "Kuzey-doğu yönlerine açık",
+   "kaynak": "https://www.wikiderya.org/wiki/gebekse"
+  },
+  "gerbeske-koyu": {
+   "alinti": "Kuzey-doğu yönlerine açık",
+   "kaynak": "https://www.wikiderya.org/wiki/gebekse"
+  },
+  "hurmali-buk-koyu": {
+   "alinti": "Güneyden eserse rüzgara açık",
+   "kaynak": "https://www.wikiderya.org/wiki/azmak-b%C3%BCk%C3%BC-hurmal%C4%B1-b%C3%BCk"
+  },
+  "kargi-camel-koyu": {
+   "alinti": "open to the west",
+   "kaynak": "https://blog.medgulets.com/turkey/bodrum/camel-beach"
+  },
+  "kargi-koyu": {
+   "alinti": "Melteme kapali, doguya acik bir koydur",
+   "kaynak": "https://karyayolu.wordpress.com/karia-kiyilari/koylar/kargi-koyu-koycegiz-limani/"
+  },
+  "kargicik-buku": {
+   "alinti": "Hava batiya donerse tekneler zorlansa da demirleme yapilabilir",
+   "kaynak": "https://www.wikiderya.org/wiki/kargicik-koyu"
+  },
+  "kuleli-koyu": {
+   "alinti": "ağzı kısmen batıya baktığından öğleden sonra meltem ve solugan alır",
+   "kaynak": "https://www.wikiderya.org/index.php/wiki/kuleli-koyu"
+  },
+  "marti-samandira-sahasi": {
+   "alinti": "open from NE round to NW",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/05/yavansu-marti-cove-anchorage.html"
   }
  }
 }

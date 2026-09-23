@@ -34,6 +34,10 @@ dependencies:
   # features/premium/infrastructure/purchase_gateway_*.dart); web'de satın
   # alma yoktur — paket ekranı iOS uygulamasına yönlendirir (karar K6).
   in_app_purchase: ^3.2.0
+  # Harita pin rozetleri (2026-09 kurucu bulgusu "noktalar ikon olsun"):
+  # DocklyIcons SVG glifleri ekran dışında PNG'ye çizilip Mapbox stiline
+  # kaydedilir. dockly_ui ile aynı sürüm ailesi.
+  flutter_svg: ^2.0.10+1
   dockly_api:
     path: ../../packages/dockly_api
   dockly_core:

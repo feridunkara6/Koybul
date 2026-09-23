@@ -1,16 +1,19 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:dockly_api/dockly_api.dart' show Bbox, Cluster, LocationPin;
-import 'package:dockly_ui/dockly_ui.dart' show DocklyMapColors;
+import 'package:dockly_ui/dockly_ui.dart' show DocklyIconData, DocklyMapColors;
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import '../domain/map_viewport.dart';
+import 'map_pin_images.dart';
 import 'map_surface.dart';
 
 /// Gerçek Mapbox harita yüzeyi (docs/13 §5.1) — `MapSurface` soyutlamasını uygular.
 /// Erişim token'ı bootstrap'ta `MapboxOptions.setAccessToken` ile verilir (repoya
-/// gömülmez, `--dart-define` ile gelir). Pin'ler daire, cluster'lar sayı balonu.
+/// gömülmez, `--dart-define` ile gelir). Pin'ler tip rozetidir (tip renginde
+/// daire + beyaz tip glifi — bkz. map_pin_images.dart), cluster'lar sayı balonu.
 ///
 /// Render stratejisi (Faz B.2 → PERF turu 2026-08, "kaydırınca kasıyor"):
 /// 1. FARK (diff): eklenen pin yaratılır, kaybolan silinir, yalnız seçim durumu
@@ -38,12 +41,16 @@ class MapboxMapSurface extends StatefulWidget {
 
 class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
   MapboxMap? _map;
-  CircleAnnotationManager? _circles; // pinler
+  PointAnnotationManager? _pins; // pin rozetleri (tip ikonu taşıyan resimler)
   CircleAnnotationManager? _clusterCircles; // küme balonları (ayrı yönetici)
   PointAnnotationManager? _labels; // küme sayıları
 
   /// pinId → çizili annotation (fark için).
-  final Map<String, CircleAnnotation> _pinAnnotations = <String, CircleAnnotation>{};
+  final Map<String, PointAnnotation> _pinAnnotations = <String, PointAnnotation>{};
+
+  /// Rozet PNG'leri BİR KEZ çizilir, stil yeniden yüklenirse baytlar buradan
+  /// tekrar kaydedilir (stil yüklemesi resimleri silebilir).
+  final Map<String, Uint8List> _pinImagePngs = <String, Uint8List>{};
 
   /// annotationId → pinId (dokunma çözümü için).
   final Map<String, String> _annotationToPin = <String, String>{};
@@ -76,10 +83,38 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
     _disposed = true;
     _idleTimer?.cancel();
     _map = null;
-    _circles = null;
+    _pins = null;
     _clusterCircles = null;
     _labels = null;
     super.dispose();
+  }
+
+  /// PİN ROZETLERİNİ STİLE KAYDET (kurucu bulgusu 2026-09-23: "noktalara
+  /// yaklaşınca ikonlar belli olmuyor"): her `location_type` için tip renginde
+  /// daire + beyaz glif PNG'si üretilir ve `addStyleImage` ile verilir; pinler
+  /// `PointAnnotation(iconImage:)` üzerinden bu rozetleri kullanır. Stil
+  /// yeniden yüklenirse resimler silinebileceği için çağrı İDEMPOTENTTİR
+  /// (baytlar önbellekte, aynı kimliğe yeniden kayıt zararsız).
+  Future<void> _registerPinImages(MapboxMap map) async {
+    for (final MapEntry<String, ({int fillArgb, DocklyIconData icon})> spec
+        in mapPinBadgeSpecs().entries) {
+      final Uint8List png = _pinImagePngs[spec.key] ??= await renderPinBadgePng(
+        fillArgb: spec.value.fillArgb,
+        icon: spec.value.icon,
+      );
+      if (_disposed) return;
+      final int px = (kPinBadgeLogicalSize * kPinImageScale).round();
+      await map.style.addStyleImage(
+        spec.key,
+        kPinImageScale,
+        MbxImage(width: px, height: px, data: png),
+        false, // sdf değil — çok renkli bitmap
+        const <ImageStretches?>[],
+        const <ImageStretches?>[],
+        null,
+      );
+      if (_disposed) return;
+    }
   }
 
   Future<void> _onMapCreated(MapboxMap map) async {
@@ -102,16 +137,28 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
     // Mesafe bilgisi rota çipinde deniz mili olarak zaten veriliyor.
     await map.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
     if (_disposed) return;
-    _circles = await map.annotations.createCircleAnnotationManager();
+    // Rozet resimleri ANNOTASYONLARDAN ÖNCE kaydedilir — ilk pin yaratıldığında
+    // iconImage çözülebilsin (kayıtsız kimlik = görünmez pin).
+    await _registerPinImages(map);
+    if (_disposed) return;
+    _pins = await map.annotations.createPointAnnotationManager();
     _clusterCircles = await map.annotations.createCircleAnnotationManager();
     _labels = await map.annotations.createPointAnnotationManager();
     if (_disposed) return;
-    _circles!.tapEvents(onTap: _onPinCircleTap);
+    _pins!.tapEvents(onTap: _onPinTap);
     _clusterCircles!.tapEvents(onTap: _onClusterCircleTap);
     await _render();
   }
 
-  void _onPinCircleTap(CircleAnnotation annotation) {
+  /// Stil yeniden yüklenirse (tema/stil değişimi) kayıtlı resimler silinebilir —
+  /// önbellekten yeniden kaydedilir; annotasyonlar zaten kendi katmanında durur.
+  void _onStyleLoaded(StyleLoadedEventData data) {
+    final MapboxMap? map = _map;
+    if (map == null || _disposed) return;
+    unawaited(_registerPinImages(map));
+  }
+
+  void _onPinTap(PointAnnotation annotation) {
     final String? pinId = _annotationToPin[annotation.id];
     if (pinId != null) widget.callbacks.onPinTap(pinId);
   }
@@ -208,10 +255,10 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
   }
 
   Future<void> _renderOnce() async {
-    final CircleAnnotationManager? circles = _circles;
+    final PointAnnotationManager? pins = _pins;
     final CircleAnnotationManager? clusterCircles = _clusterCircles;
     final PointAnnotationManager? labels = _labels;
-    if (circles == null || clusterCircles == null || labels == null || _disposed) {
+    if (pins == null || clusterCircles == null || labels == null || _disposed) {
       return;
     }
 
@@ -239,16 +286,16 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
         _pinAnnotations.keys.where((String id) => !newPinIds.contains(id)).toList();
     final bool rebuildAll = goneIds.length > 20;
     if (rebuildAll) {
-      await circles.deleteAll();
+      await pins.deleteAll();
       if (_disposed) return;
       _pinAnnotations.clear();
       _annotationToPin.clear();
     } else {
       for (final String id in goneIds) {
-        final CircleAnnotation? ann = _pinAnnotations.remove(id);
+        final PointAnnotation? ann = _pinAnnotations.remove(id);
         if (ann != null) {
           _annotationToPin.remove(ann.id);
-          await circles.delete(ann);
+          await pins.delete(ann);
           if (_disposed) return;
         }
       }
@@ -257,10 +304,10 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
       // olabilir, örneğin seçim ilk kez yapılırken.)
       if (selectedId != _lastSelectedPinId) {
         for (final String? id in <String?>[selectedId, _lastSelectedPinId]) {
-          final CircleAnnotation? ann = id == null ? null : _pinAnnotations.remove(id);
+          final PointAnnotation? ann = id == null ? null : _pinAnnotations.remove(id);
           if (ann != null) {
             _annotationToPin.remove(ann.id);
-            await circles.delete(ann);
+            await pins.delete(ann);
             if (_disposed) return;
           }
         }
@@ -273,22 +320,21 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
         if (!_pinAnnotations.containsKey(pin.id)) pin,
     ];
     if (toCreate.isNotEmpty) {
-      final List<CircleAnnotationOptions> options = <CircleAnnotationOptions>[
+      final List<PointAnnotationOptions> options = <PointAnnotationOptions>[
         for (final LocationPin pin in toCreate)
-          CircleAnnotationOptions(
+          PointAnnotationOptions(
             geometry: Point(coordinates: Position(pin.position.lon, pin.position.lat)),
-            // Dolgu = location_type kanonik rengi (docs/09 §1.4); seçili pin
-            // 1.3× ölçek + beyaz halka (renk değişmez — renk tip anlamına rezerve).
-            circleColor: DocklyMapColors.argbForType(pin.type),
-            circleRadius: pin.id == selectedId ? 9.1 : 7.0,
-            circleStrokeColor: DocklyMapColors.strokeArgb,
-            circleStrokeWidth: 2.0,
+            // Rozet = location_type kanonik rengi + tip glifi (docs/09 §1.4;
+            // kurucu bulgusu 2026-09-23 "ikonlar belli olmuyor"). Seçili pin
+            // 1.3× ölçek (renk/glif değişmez — renk tip anlamına rezerve).
+            iconImage: mapPinImageId(pin.type),
+            iconSize: pin.id == selectedId ? 1.3 : 1.0,
           ),
       ];
-      final List<CircleAnnotation?> created = await circles.createMulti(options);
+      final List<PointAnnotation?> created = await pins.createMulti(options);
       if (_disposed) return;
       for (int i = 0; i < toCreate.length && i < created.length; i++) {
-        final CircleAnnotation? ann = created[i];
+        final PointAnnotation? ann = created[i];
         if (ann == null) continue;
         _pinAnnotations[toCreate[i].id] = ann;
         _annotationToPin[ann.id] = toCreate[i].id;
@@ -354,6 +400,7 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
     return MapWidget(
       key: const ValueKey<String>('dockly-mapbox'),
       onMapCreated: _onMapCreated,
+      onStyleLoadedListener: _onStyleLoaded,
       onCameraChangeListener: _onCameraChanged,
     );
   }

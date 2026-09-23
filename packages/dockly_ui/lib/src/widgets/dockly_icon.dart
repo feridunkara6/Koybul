@@ -19,6 +19,12 @@ class DocklyIconData {
       'fill="none" stroke="#000000" stroke-width="2" '
       'stroke-linecap="round" stroke-linejoin="round">$_body</svg>';
 
+  /// Tam SVG belgesi (24×24 grid, siyah çizgi) — widget dışında çizim yapan
+  /// tüketiciler için (ör. harita pin rozetleri: SVG'yi `vg.loadPicture` ile
+  /// resme çevirip Mapbox'a PNG olarak kaydederler, 2026-09 "noktalar ikon
+  /// olsun" kurucu bulgusu). Renk, çizen tarafta `ColorFilter` ile verilir.
+  String get svgMarkup => _svg;
+
   @override
   bool operator ==(Object other) =>
       other is DocklyIconData && other._body == _body;
@@ -234,7 +240,28 @@ abstract final class DocklyIcons {
     '<path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>',
   );
 
-  // Denizcilik / tekne
+  // Denizcilik / tekne — harita pin glifleri de buradan beslenir (docs/09 §1.4;
+  // 2026-09 kurucu bulgusu: "noktalara yaklaşınca ikonlar belli olmuyor").
+  /// Şamandıra (can simidi biçimi — buoy tipi pin glifi).
+  static const DocklyIconData lifeBuoy = DocklyIconData(
+    '<circle cx="12" cy="12" r="10"/>'
+    '<circle cx="12" cy="12" r="4"/>'
+    '<line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/>'
+    '<line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/>'
+    '<line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/>'
+    '<line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/>',
+  );
+
+  /// İskele (kazıklı ahşap iskele + su çizgisi — pier tipleri pin glifi).
+  static const DocklyIconData pier = DocklyIconData(
+    '<path d="M3 9h18"/>'
+    '<path d="M6 9v8"/>'
+    '<path d="M12 9v8"/>'
+    '<path d="M18 9v8"/>'
+    '<path d="M2 20c1.7 0 1.7-1 3.3-1s1.7 1 3.4 1 1.6-1 3.3-1 1.7 1 3.3 1 '
+    '1.7-1 3.4-1 1.6 1 3.3 1"/>',
+  );
+
   static const DocklyIconData sailing = DocklyIconData(
     '<path d="M22 18H2a4 4 0 0 0 4 4h12a4 4 0 0 0 4-4z"/>'
     '<path d="M21 14 10 2 3 14h18z"/>'
