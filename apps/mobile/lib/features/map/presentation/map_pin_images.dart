@@ -86,7 +86,7 @@ Future<Uint8List> renderPinBadgePng({
   required DocklyIconData icon,
 }) async {
   final int px = (kPinBadgeLogicalSize * kPinImageScale).round(); // 78
-  final double strokeW = 2 * kPinImageScale; // beyaz halka: 2 dp
+  const double strokeW = 2 * kPinImageScale; // beyaz halka: 2 dp
   final double half = px / 2;
   // Halka, dış kenardan taşmasın: yarıçap = yarı boy - halka/2 (- 1px pay).
   final double radius = half - strokeW / 2 - 1;
@@ -102,7 +102,7 @@ Future<Uint8List> renderPinBadgePng({
     ui.Paint()
       ..style = ui.PaintingStyle.stroke
       ..strokeWidth = strokeW
-      ..color = ui.Color(DocklyMapColors.strokeArgb),
+      ..color = const ui.Color(DocklyMapColors.strokeArgb),
   );
 
   try {
@@ -117,7 +117,7 @@ Future<Uint8List> renderPinBadgePng({
     canvas.saveLayer(
       bounds,
       ui.Paint()
-        ..colorFilter = ui.ColorFilter.mode(
+        ..colorFilter = const ui.ColorFilter.mode(
           ui.Color(DocklyMapColors.strokeArgb),
           ui.BlendMode.srcIn,
         ),
