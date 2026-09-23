@@ -635,8 +635,15 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
       // HARİTA DOKUNUŞU (Rota Modu paketi 2026-09-23 — eksik parça): web
       // yüzeyinde vardı, Mapbox'ta HİÇ bağlanmamıştı. "Başlangıç seç" ve
       // "+ nokta ekle" modları telefonda bu dinleyiciyle çalışır.
+      // NOT (CI 2026-09-23): onTapListener 2.22'de "deprecated" işaretli ama
+      // tam çalışır; önerilen addInteraction API'sine geçiş ayrı, riskli bir
+      // iştir (annotation tap'leriyle etkileşimi cihazda doğrulanmalı) —
+      // bilinçli olarak şimdilik bu kararlı yol kullanılır.
+      // ignore: deprecated_member_use
       onTapListener: (MapContentGestureContext ctx) {
-        widget.callbacks.onMapTap(GeoPoint(
+        // onMapTap isteğe bağlı (web/liste yüzeyleri vermeyebilir) — null
+        // güvenli çağrı (CI: unchecked_use_of_nullable_value).
+        widget.callbacks.onMapTap?.call(GeoPoint(
           lat: ctx.point.coordinates.lat.toDouble(),
           lon: ctx.point.coordinates.lng.toDouble(),
         ));
