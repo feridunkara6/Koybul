@@ -47,19 +47,35 @@ void main() {
   test('her rozet gerçek, çözülebilir bir PNG olarak çizilir (beklenen boyutta)',
       () async {
     final int px = (kPinBadgeLogicalSize * kPinImageScale).round();
-    for (final MapEntry<String, ({int fillArgb, DocklyIconData icon})> spec
-        in mapPinBadgeSpecs().entries) {
-      final Uint8List png = await renderPinBadgePng(
-        fillArgb: spec.value.fillArgb,
-        icon: spec.value.icon,
-      );
-      expect(png, isNotEmpty, reason: spec.key);
+    Future<void> check(String id, Uint8List png) async {
+      expect(png, isNotEmpty, reason: id);
       final ui.Codec codec = await ui.instantiateImageCodec(png);
       final ui.FrameInfo frame = await codec.getNextFrame();
-      expect(frame.image.width, px, reason: spec.key);
-      expect(frame.image.height, px, reason: spec.key);
+      expect(frame.image.width, px, reason: id);
+      expect(frame.image.height, px, reason: id);
       frame.image.dispose();
       codec.dispose();
+    }
+
+    for (final MapEntry<String, ({int fillArgb, DocklyIconData icon})> spec
+        in mapPinBadgeSpecs().entries) {
+      await check(
+          spec.key,
+          await renderPinBadgePng(
+              fillArgb: spec.value.fillArgb, icon: spec.value.icon));
+    }
+    // Rota/imleç rozetleri (Rota Modu 2026-09-23) — glifsiz durak rozeti
+    // dahil hepsi çizilebilir olmalı (kayıtsız iconImage = görünmez işaretçi).
+    for (final MapEntry<String,
+            ({int fillArgb, int ringArgb, DocklyIconData? icon})> spec
+        in mapRouteBadgeSpecs().entries) {
+      await check(
+          spec.key,
+          await renderPinBadgePng(
+            fillArgb: spec.value.fillArgb,
+            ringArgb: spec.value.ringArgb,
+            icon: spec.value.icon,
+          ));
     }
   });
 }

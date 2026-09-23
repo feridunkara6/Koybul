@@ -1,6 +1,6 @@
 {
-  "yontem": "GSHHG tam cozunurluk kiyi cizgisi (GSHHS_f_L1) ile nokta-poligon denetimi: karada kalan isaretciler, kurucu talimatiyla (2026-09-23: 'imlecleri koylarin icine kaydir, hepsi koyun icinde olsun') en yakin kiyidan suya tasindi. Demirleme/samandira kiyidan ~60 m, iskele/marina ~25 m aciga konur; tasima siniri 2,5 km (asani elle arastirilir). Kayit kimligi ve diger alanlar degismez; batch dosyalarindaki kaynak koordinat korunur, duzeltme bu dosyadan uygulanir (uretec hem INSERT'e hem UPDATE'e isler).",
-  "kaynak": "GSHHS_f_L1.shp — GSHHG 'f' (WVS/WDBII kamu kaynakli; dagitim: github.com/pelson/gshhs-unpacked)",
+  "yontem": "Iki asamali duzeltme (2026-09-23, kurucu talimatlari): (1) GSHHG tam cozunurluk kiyi cizgisi (GSHHS_f_L1) ile nokta-poligon denetimi — karada kalan isaretciler en yakin kiyidan suya tasindi (demirleme/samandira ~60 m, iskele ~25 m aciga; sinir 2,5 km). (2) MARINALAR: koordinatlar kaynakli arastirmayla dogrulandi ('kaynak' alani kayit basina URL tasir; resmi site/isletmeci = yuksek, denizcilik dizini = orta guven). Kaynakli deger geometrik tasimayi EZER. Kayit kimligi ve diger alanlar degismez; batch dosyalarindaki ham koordinat korunur, duzeltme bu dosyadan uygulanir (uretec hem INSERT'e hem UPDATE'e isler).",
+  "kaynak": "GSHHS_f_L1.shp (github.com/pelson/gshhs-unpacked) + kayit basina 'kaynak' URL'leri",
   "tarih": "2026-09-23",
   "duzeltmeler": [
     {
@@ -23,17 +23,21 @@
       "slug": "adakoy-marina-marmaris",
       "eskiLat": 36.819405,
       "eskiLon": 28.292989,
-      "lat": 36.819781,
-      "lon": 28.292989,
-      "tasimaM": 42
+      "lat": 36.819167,
+      "lon": 28.293,
+      "tasimaM": 26,
+      "kaynak": "https://www.navily.com/port/marmaris-adakoy-marina/2682",
+      "guven": "orta"
     },
     {
       "slug": "aganlar-marina-bodrum",
       "eskiLat": 37.0136,
       "eskiLon": 27.4512,
-      "lat": 37.0136,
-      "lon": 27.450135,
-      "tasimaM": 94
+      "lat": 37.013639,
+      "lon": 27.451233,
+      "tasimaM": 5,
+      "kaynak": "https://aganlar.com/",
+      "guven": "yuksek"
     },
     {
       "slug": "aganlar-tersane-yakit",
@@ -68,12 +72,14 @@
       "tasimaM": 116
     },
     {
-      "slug": "agia-pelagia-marina-kefalonya",
-      "eskiLat": 38.102,
-      "eskiLon": 20.5145,
-      "lat": 38.101533,
-      "lon": 20.515614,
-      "tasimaM": 110
+      "slug": "agios-kosmas-marina",
+      "eskiLat": 37.8806,
+      "eskiLon": 23.7247,
+      "lat": 37.877167,
+      "lon": 23.7275,
+      "tasimaM": 453,
+      "kaynak": "https://www.navily.com/port/agios-kosmas-marina/1476",
+      "guven": "yuksek"
     },
     {
       "slug": "agios-nikolaos-limani-zakinthos",
@@ -82,6 +88,16 @@
       "lat": 37.906807,
       "lon": 20.708085,
       "tasimaM": 149
+    },
+    {
+      "slug": "agios-nikolaos-marina-girit",
+      "eskiLat": 35.186056,
+      "eskiLon": 25.718444,
+      "lat": 35.186167,
+      "lon": 25.718333,
+      "tasimaM": 16,
+      "kaynak": "https://www.navily.com/port/marina-of-agios-nikolaos/1426",
+      "guven": "yuksek"
     },
     {
       "slug": "akarca-balikci-barinagi",
@@ -151,9 +167,11 @@
       "slug": "alanya-marina",
       "eskiLat": 36.5569,
       "eskiLon": 31.9519,
-      "lat": 36.549349,
-      "lon": 31.955916,
-      "tasimaM": 911
+      "lat": 36.55775,
+      "lon": 31.94723,
+      "tasimaM": 427,
+      "kaynak": "https://www.predictwind.com/marinas/trkiye/antalya/alanya-marina",
+      "guven": "yuksek"
     },
     {
       "slug": "alanya-marina-yakit",
@@ -164,12 +182,32 @@
       "tasimaM": 914
     },
     {
+      "slug": "albatros-marina-marmaris",
+      "eskiLat": 36.8439,
+      "eskiLon": 28.2856,
+      "lat": 36.84475,
+      "lon": 28.285833,
+      "tasimaM": 97,
+      "kaynak": "https://www.dockwalk.com/superports/albatros-marina--847",
+      "guven": "yuksek"
+    },
+    {
       "slug": "aliaga-balikci-barinagi",
       "eskiLat": 38.824356,
       "eskiLon": 26.893138,
       "lat": 38.824781,
       "lon": 26.893138,
       "tasimaM": 47
+    },
+    {
+      "slug": "alimos-marina",
+      "eskiLat": 37.9113,
+      "eskiLon": 23.7005,
+      "lat": 37.913201,
+      "lon": 23.707289,
+      "tasimaM": 631,
+      "kaynak": "https://greek-marinas.gr/en/marinas/alimos-marina/",
+      "guven": "orta"
     },
     {
       "slug": "altinova-balikci-barinagi",
@@ -199,9 +237,11 @@
       "slug": "antalya-kaleici-yat-limani",
       "eskiLat": 36.883833,
       "eskiLon": 30.703,
-      "lat": 36.877653,
-      "lon": 30.699781,
-      "tasimaM": 743
+      "lat": 36.8843,
+      "lon": 30.70185,
+      "tasimaM": 115,
+      "kaynak": "https://www.cruiserswiki.org/wiki/Antalya_Old_Harbor",
+      "guven": "orta"
     },
     {
       "slug": "anthony-quinn-koyu",
@@ -226,6 +266,16 @@
       "lat": 37.316389,
       "lon": 27.465208,
       "tasimaM": 67
+    },
+    {
+      "slug": "argostoli-marina-kefalonya",
+      "eskiLat": 38.180833,
+      "eskiLon": 20.4955,
+      "lat": 38.1805,
+      "lon": 20.495,
+      "tasimaM": 57,
+      "kaynak": "https://www.navily.com/port/argostoli-marina/1442",
+      "guven": "yuksek"
     },
     {
       "slug": "armutlu-su-koyu",
@@ -292,12 +342,32 @@
       "tasimaM": 273
     },
     {
+      "slug": "atakoy-marina",
+      "eskiLat": 40.9728,
+      "eskiLon": 28.8819,
+      "lat": 40.971433,
+      "lon": 28.87595,
+      "tasimaM": 521,
+      "kaynak": "https://www.cruiserswiki.org/wiki/Atakoy_Marina",
+      "guven": "yuksek"
+    },
+    {
       "slug": "atbuku-maden-koyu",
       "eskiLat": 36.433833,
       "eskiLon": 30.483667,
       "lat": 36.428257,
       "lon": 30.487787,
       "tasimaM": 720
+    },
+    {
+      "slug": "athens-marina",
+      "eskiLat": 37.9414,
+      "eskiLon": 23.6655,
+      "lat": 37.941167,
+      "lon": 23.669667,
+      "tasimaM": 366,
+      "kaynak": "https://www.navily.com/port/athens-marina/1412",
+      "guven": "yuksek"
     },
     {
       "slug": "ayas-koyu",
@@ -495,9 +565,11 @@
       "slug": "bozcaada-limani",
       "eskiLat": 39.834725,
       "eskiLon": 26.076004,
-      "lat": 39.83473,
-      "lon": 26.076534,
-      "tasimaM": 45
+      "lat": 39.8355,
+      "lon": 26.074667,
+      "tasimaM": 143,
+      "kaynak": "https://www.navily.com/port/bozcaada-limani/1618",
+      "guven": "yuksek"
     },
     {
       "slug": "bozukkale-loryma-demirleme",
@@ -506,6 +578,16 @@
       "lat": 36.575696,
       "lon": 28.011657,
       "tasimaM": 76
+    },
+    {
+      "slug": "burhaniye-oren-yat-limani",
+      "eskiLat": 39.4847,
+      "eskiLon": 26.9267,
+      "lat": 39.4855,
+      "lon": 26.923333,
+      "tasimaM": 302,
+      "kaynak": "https://www.burhaniye.bel.tr/Hizmetler/Hizmet_Detay.aspx?ID=53",
+      "guven": "yuksek"
     },
     {
       "slug": "buyuk-boncuklu-koyu",
@@ -591,9 +673,11 @@
       "slug": "canakkale-yat-limani",
       "eskiLat": 40.1534,
       "eskiLon": 26.406,
-      "lat": 40.154963,
-      "lon": 26.400082,
-      "tasimaM": 531
+      "lat": 40.1525,
+      "lon": 26.4045,
+      "tasimaM": 162,
+      "kaynak": "https://www.navily.com/port/canakkale-municipality-marina/1602",
+      "guven": "orta"
     },
     {
       "slug": "candarli-limani",
@@ -639,17 +723,21 @@
       "slug": "club-marina-gocek",
       "eskiLat": 36.7467,
       "eskiLon": 28.925,
-      "lat": 36.748992,
-      "lon": 28.925919,
-      "tasimaM": 267
+      "lat": 36.749167,
+      "lon": 28.9255,
+      "tasimaM": 277,
+      "kaynak": "https://www.navily.com/port/club-marina/1657",
+      "guven": "orta"
     },
     {
       "slug": "d-marin-didim",
       "eskiLat": 37.3406,
       "eskiLon": 27.2594,
-      "lat": 37.338525,
-      "lon": 27.2594,
-      "tasimaM": 230
+      "lat": 37.336667,
+      "lon": 27.262222,
+      "tasimaM": 503,
+      "kaynak": "https://www.d-marin.com/en/marinas/didim/",
+      "guven": "yuksek"
     },
     {
       "slug": "d-marin-didim-yakit",
@@ -663,9 +751,21 @@
       "slug": "d-marin-gocek",
       "eskiLat": 36.7483,
       "eskiLon": 28.9428,
-      "lat": 36.748913,
-      "lon": 28.942323,
-      "tasimaM": 80
+      "lat": 36.748333,
+      "lon": 28.942778,
+      "tasimaM": 4,
+      "kaynak": "https://www.d-marin.com/en/marinas/gocek/",
+      "guven": "yuksek"
+    },
+    {
+      "slug": "d-marin-turgutreis",
+      "eskiLat": 37.0019,
+      "eskiLon": 27.2561,
+      "lat": 37.001944,
+      "lon": 27.256111,
+      "tasimaM": 5,
+      "kaynak": "https://www.d-marin.com/en/marinas/turgutreis/",
+      "guven": "yuksek"
     },
     {
       "slug": "dalyankoy-koyu-demirleme",
@@ -682,6 +782,16 @@
       "lat": 36.65841,
       "lon": 28.044468,
       "tasimaM": 62
+    },
+    {
+      "slug": "datca-yat-limani",
+      "eskiLat": 36.72153,
+      "eskiLon": 27.688497,
+      "lat": 36.7225,
+      "lon": 27.689167,
+      "tasimaM": 123,
+      "kaynak": "https://www.navily.com/port/datca/1646",
+      "guven": "orta"
     },
     {
       "slug": "dead-sea-koyu",
@@ -780,6 +890,16 @@
       "tasimaM": 105
     },
     {
+      "slug": "ece-saray-marina",
+      "eskiLat": 36.6244,
+      "eskiLon": 29.1016,
+      "lat": 36.62295,
+      "lon": 29.101346,
+      "tasimaM": 163,
+      "kaynak": "https://ecesaray.com.tr/marina/en/contact/",
+      "guven": "yuksek"
+    },
+    {
       "slug": "ekincik-koy-rihtimi",
       "eskiLat": 36.828556,
       "eskiLon": 28.54875,
@@ -863,9 +983,11 @@
       "slug": "finikas-marina-syros",
       "eskiLat": 37.397306,
       "eskiLon": 24.87625,
-      "lat": 37.396908,
-      "lon": 24.876825,
-      "tasimaM": 67
+      "lat": 37.3975,
+      "lon": 24.876333,
+      "tasimaM": 23,
+      "kaynak": "https://www.navily.com/port/finikas-marina/1497",
+      "guven": "yuksek"
     },
     {
       "slug": "fiskardo-limani",
@@ -884,6 +1006,26 @@
       "tasimaM": 57
     },
     {
+      "slug": "flisvos-marina",
+      "eskiLat": 37.9363,
+      "eskiLon": 23.68,
+      "lat": 37.935333,
+      "lon": 23.679,
+      "tasimaM": 139,
+      "kaynak": "https://www.flisvosmarina.com/location-and-access/",
+      "guven": "yuksek"
+    },
+    {
+      "slug": "g-marina-kemer",
+      "eskiLat": 36.599625,
+      "eskiLon": 30.573331,
+      "lat": 36.599444,
+      "lon": 30.573056,
+      "tasimaM": 32,
+      "kaynak": "https://www.yachtdigest.com/en/ports-turkey/marina-kemer-g/",
+      "guven": "yuksek"
+    },
+    {
       "slug": "gaios-limani-paksos",
       "eskiLat": 39.2005,
       "eskiLon": 20.1854,
@@ -898,6 +1040,16 @@
       "lat": 39.007465,
       "lon": 26.782165,
       "tasimaM": 105
+    },
+    {
+      "slug": "gazipasa-gold-marina",
+      "eskiLat": 36.2638,
+      "eskiLon": 32.28,
+      "lat": 36.264167,
+      "lon": 32.278833,
+      "tasimaM": 112,
+      "kaynak": "https://www.navily.com/port/gazipasa/9703",
+      "guven": "yuksek"
     },
     {
       "slug": "gemiler-adasi-demirleme",
@@ -983,9 +1135,11 @@
       "slug": "gocek-village-port-marina",
       "eskiLat": 36.7567,
       "eskiLon": 28.9283,
-      "lat": 36.755231,
-      "lon": 28.930173,
-      "tasimaM": 233
+      "lat": 36.755,
+      "lon": 28.932833,
+      "tasimaM": 445,
+      "kaynak": "https://www.navily.com/port/marinturk-gocek-village-port/1654",
+      "guven": "orta"
     },
     {
       "slug": "gokkaya-koyu-kekova",
@@ -1007,9 +1161,11 @@
       "slug": "gokova-oren-marina",
       "eskiLat": 37.031417,
       "eskiLon": 27.981972,
-      "lat": 37.031025,
-      "lon": 27.981972,
-      "tasimaM": 44
+      "lat": 37.023936,
+      "lon": 27.903725,
+      "tasimaM": 6984,
+      "kaynak": "https://www.seturmarinas.com/en/marinas/oren-rib-refit-park",
+      "guven": "yuksek"
     },
     {
       "slug": "golturkbuku-balikci-barinagi",
@@ -1034,6 +1190,26 @@
       "lat": 35.336567,
       "lon": 25.299088,
       "tasimaM": 149
+    },
+    {
+      "slug": "gouvia-marina",
+      "eskiLat": 39.6517,
+      "eskiLon": 19.8517,
+      "lat": 39.648611,
+      "lon": 19.8525,
+      "tasimaM": 350,
+      "kaynak": "https://www.d-marin.com/en/marinas/gouvia/",
+      "guven": "yuksek"
+    },
+    {
+      "slug": "gulluk-marina",
+      "eskiLat": 37.239943,
+      "eskiLon": 27.594036,
+      "lat": 37.228833,
+      "lon": 27.5875,
+      "tasimaM": 1362,
+      "kaynak": "https://www.navily.com/port/gulluk-marina/1634",
+      "guven": "orta"
     },
     {
       "slug": "gumbet-iskelesi",
@@ -1087,17 +1263,11 @@
       "slug": "guzelce-marina",
       "eskiLat": 40.9998,
       "eskiLon": 28.5097,
-      "lat": 40.998142,
-      "lon": 28.50687,
-      "tasimaM": 300
-    },
-    {
-      "slug": "guzelyali-yat-limani",
-      "eskiLat": 40.356167,
-      "eskiLon": 28.932167,
-      "lat": 40.35649,
-      "lon": 28.932169,
-      "tasimaM": 36
+      "lat": 40.998833,
+      "lon": 28.5095,
+      "tasimaM": 109,
+      "kaynak": "https://www.navily.com/port/guzelce-marina/1616",
+      "guven": "yuksek"
     },
     {
       "slug": "hacidede-deresi-koyu",
@@ -1183,9 +1353,11 @@
       "slug": "ic-cesme-marina",
       "eskiLat": 38.3233,
       "eskiLon": 26.3004,
-      "lat": 38.3233,
-      "lon": 26.300102,
-      "tasimaM": 26
+      "lat": 38.32175,
+      "lon": 26.301278,
+      "tasimaM": 188,
+      "kaynak": "https://www.dockwalk.com/superports/cesme-marina--471",
+      "guven": "yuksek"
     },
     {
       "slug": "icmekiyisi-koyu",
@@ -1228,12 +1400,14 @@
       "tasimaM": 88
     },
     {
-      "slug": "ispark-istinye-tekne-park",
-      "eskiLat": 41.113667,
-      "eskiLon": 29.057167,
-      "lat": 41.111041,
-      "lon": 29.055748,
-      "tasimaM": 315
+      "slug": "ispark-tarabya-tekne-park",
+      "eskiLat": 41.138466,
+      "eskiLon": 29.057901,
+      "lat": 41.138333,
+      "lon": 29.056333,
+      "tasimaM": 132,
+      "kaynak": "https://www.navily.com/port/istmarin-tarabya/20007",
+      "guven": "yuksek"
     },
     {
       "slug": "istinye-tekne-park-yakit",
@@ -1247,9 +1421,11 @@
       "slug": "izmir-marina",
       "eskiLat": 38.4056,
       "eskiLon": 27.066,
-      "lat": 38.406352,
-      "lon": 27.064726,
-      "tasimaM": 139
+      "lat": 38.40599,
+      "lon": 27.06792,
+      "tasimaM": 173,
+      "kaynak": "https://www.predictwind.com/marinas/trkiye/izmir-province/izmir-marina",
+      "guven": "yuksek"
     },
     {
       "slug": "kabatepe-balikci-barinagi",
@@ -1260,12 +1436,32 @@
       "tasimaM": 384
     },
     {
+      "slug": "kairos-marina",
+      "eskiLat": 36.7718,
+      "eskiLon": 27.6195,
+      "lat": 36.7705,
+      "lon": 27.617,
+      "tasimaM": 265,
+      "kaynak": "https://www.navily.com/port/kairos-marina/2709",
+      "guven": "yuksek"
+    },
+    {
       "slug": "kalabak-balikci-barinagi",
       "eskiLat": 38.358069,
       "eskiLon": 26.812259,
       "lat": 38.358349,
       "lon": 26.811794,
       "tasimaM": 51
+    },
+    {
+      "slug": "kalamata-marina",
+      "eskiLat": 37.0217,
+      "eskiLon": 22.1217,
+      "lat": 37.0256,
+      "lon": 22.1075,
+      "tasimaM": 1331,
+      "kaynak": "https://marinas.com/view/marina/lwcenmq_Kalamata_Marina_Kalamata_Greece",
+      "guven": "yuksek"
     },
     {
       "slug": "kalantos-koyu-naxos",
@@ -1279,9 +1475,11 @@
       "slug": "kalantos-marina-naxos",
       "eskiLat": 36.935167,
       "eskiLon": 25.473778,
-      "lat": 36.934251,
-      "lon": 25.475034,
-      "tasimaM": 151
+      "lat": 36.935,
+      "lon": 25.474167,
+      "tasimaM": 39,
+      "kaynak": "https://www.navily.com/port/marina-kalantos/3218",
+      "guven": "orta"
     },
     {
       "slug": "kalem-adasi-koyu",
@@ -1295,9 +1493,11 @@
       "slug": "kalymnos-pothia-limani",
       "eskiLat": 36.950194,
       "eskiLon": 26.986167,
-      "lat": 36.949329,
-      "lon": 26.986744,
-      "tasimaM": 109
+      "lat": 36.949167,
+      "lon": 26.983833,
+      "tasimaM": 236,
+      "kaynak": "https://www.navily.com/port/port-of-kalimnos/1547",
+      "guven": "orta"
     },
     {
       "slug": "kamari-iskelesi-kefalos",
@@ -1567,9 +1767,11 @@
       "slug": "kiyi-istanbul-marina",
       "eskiLat": 41.0156,
       "eskiLon": 28.5822,
-      "lat": 41.015094,
-      "lon": 28.58131,
-      "tasimaM": 93
+      "lat": 41.015833,
+      "lon": 28.580333,
+      "tasimaM": 158,
+      "kaynak": "https://www.navily.com/port/kiyi-istanbul-marina/2746",
+      "guven": "yuksek"
     },
     {
       "slug": "kizilada-koyu",
@@ -1623,9 +1825,11 @@
       "slug": "kleopatra-marina",
       "eskiLat": 38.9517,
       "eskiLon": 20.7653,
-      "lat": 38.952374,
-      "lon": 20.764107,
-      "tasimaM": 127
+      "lat": 38.951667,
+      "lon": 20.765278,
+      "tasimaM": 4,
+      "kaynak": "https://greek-marinas.gr/en/marinas/kleopatra-marina/",
+      "guven": "yuksek"
     },
     {
       "slug": "kocabahce-iskelesi",
@@ -1652,12 +1856,24 @@
       "tasimaM": 778
     },
     {
+      "slug": "kos-eski-liman-mandraki",
+      "eskiLat": 36.895361,
+      "eskiLon": 27.288861,
+      "lat": 36.8955,
+      "lon": 27.289167,
+      "tasimaM": 31,
+      "kaynak": "https://www.navily.com/port/mandraki-habour/2055",
+      "guven": "yuksek"
+    },
+    {
       "slug": "kos-marina",
       "eskiLat": 36.8932,
       "eskiLon": 27.301,
-      "lat": 36.89398,
-      "lon": 27.30101,
-      "tasimaM": 87
+      "lat": 36.891667,
+      "lon": 27.3025,
+      "tasimaM": 216,
+      "kaynak": "https://www.navily.com/port/kos-marina/1423",
+      "guven": "orta"
     },
     {
       "slug": "kucuk-boncuklu-koyu",
@@ -1695,9 +1911,11 @@
       "slug": "kumkuyu-marina",
       "eskiLat": 36.5304,
       "eskiLon": 34.2302,
-      "lat": 36.521843,
-      "lon": 34.237604,
-      "tasimaM": 1157
+      "lat": 36.529167,
+      "lon": 34.2295,
+      "tasimaM": 150,
+      "kaynak": "https://www.navily.com/port/kumkuyu-marina/2684",
+      "guven": "yuksek"
     },
     {
       "slug": "kumlubuk-koyu",
@@ -1724,6 +1942,16 @@
       "tasimaM": 117
     },
     {
+      "slug": "kursunlu-marina",
+      "eskiLat": 40.364802,
+      "eskiLon": 29.034433,
+      "lat": 40.364167,
+      "lon": 29.033333,
+      "tasimaM": 117,
+      "kaynak": "https://www.navily.com/port/kursunlu-marina/6739",
+      "guven": "orta"
+    },
+    {
       "slug": "kuzbuku-yacht-club",
       "eskiLat": 36.706111,
       "eskiLon": 28.024444,
@@ -1743,9 +1971,11 @@
       "slug": "lakki-marina-leros",
       "eskiLat": 37.129722,
       "eskiLon": 26.849139,
-      "lat": 37.128536,
-      "lon": 26.85016,
-      "tasimaM": 160
+      "lat": 37.128833,
+      "lon": 26.848667,
+      "tasimaM": 107,
+      "kaynak": "https://www.navily.com/port/lakki-town-marina/9748",
+      "guven": "yuksek"
     },
     {
       "slug": "lakkos-koyu-thymaina",
@@ -1775,9 +2005,11 @@
       "slug": "lefkas-marina",
       "eskiLat": 38.83,
       "eskiLon": 20.7133,
-      "lat": 38.83145,
-      "lon": 20.714273,
-      "tasimaM": 182
+      "lat": 38.829722,
+      "lon": 20.714167,
+      "tasimaM": 81,
+      "kaynak": "https://greek-marinas.gr/en/marinas/lefkas-marina/",
+      "guven": "yuksek"
     },
     {
       "slug": "lefkas-yakit-iskelesi",
@@ -1788,20 +2020,34 @@
       "tasimaM": 182
     },
     {
+      "slug": "leros-marina",
+      "eskiLat": 37.1293,
+      "eskiLon": 26.8567,
+      "lat": 37.128417,
+      "lon": 26.855694,
+      "tasimaM": 132,
+      "kaynak": "https://lerosmarina.gr/",
+      "guven": "yuksek"
+    },
+    {
       "slug": "letoonia-marinet-fethiye",
       "eskiLat": 36.635848,
       "eskiLon": 29.099131,
-      "lat": 36.636503,
-      "lon": 29.099165,
-      "tasimaM": 73
+      "lat": 36.6355,
+      "lon": 29.099167,
+      "tasimaM": 39,
+      "kaynak": "https://www.navily.com/port/letoonia/26201",
+      "guven": "orta"
     },
     {
       "slug": "limia-marina-sakiz",
       "eskiLat": 38.469583,
       "eskiLon": 25.918,
-      "lat": 38.468564,
-      "lon": 25.918422,
-      "tasimaM": 119
+      "lat": 38.469667,
+      "lon": 25.9175,
+      "tasimaM": 44,
+      "kaynak": "https://www.navily.com/de/port/limnia-marina/1539",
+      "guven": "orta"
     },
     {
       "slug": "limnos-plaji-sakiz",
@@ -1863,25 +2109,41 @@
       "slug": "marinturk-gocek-exclusive",
       "eskiLat": 36.7557,
       "eskiLon": 28.9237,
-      "lat": 36.753344,
-      "lon": 28.927451,
-      "tasimaM": 424
+      "lat": 36.743333,
+      "lon": 28.926333,
+      "tasimaM": 1393,
+      "kaynak": "https://www.navily.com/port/marinturk-gocek-exclusive-marina/2683",
+      "guven": "yuksek"
+    },
+    {
+      "slug": "marinturk-istanbul-city-port",
+      "eskiLat": 40.8705,
+      "eskiLon": 29.2375,
+      "lat": 40.871389,
+      "lon": 29.238056,
+      "tasimaM": 109,
+      "kaynak": "https://www.marinturk.com.tr/en/contact/istanbul-city-port",
+      "guven": "yuksek"
     },
     {
       "slug": "marmara-adasi-limani",
       "eskiLat": 40.583862,
       "eskiLon": 27.561121,
-      "lat": 40.581883,
-      "lon": 27.558949,
-      "tasimaM": 286
+      "lat": 40.584833,
+      "lon": 27.560167,
+      "tasimaM": 134,
+      "kaynak": "https://www.cruiserswiki.org/wiki/Marmara_Islands",
+      "guven": "yuksek"
     },
     {
       "slug": "marti-marina-orhaniye",
       "eskiLat": 36.7583,
       "eskiLon": 28.1417,
-      "lat": 36.757446,
-      "lon": 28.13261,
-      "tasimaM": 814
+      "lat": 36.771374,
+      "lon": 28.126774,
+      "tasimaM": 1967,
+      "kaynak": "https://marinas.com/view/marina/z4creqe_Marti_Marina_and_Yacht_Club_Orhaniye_Turkey",
+      "guven": "orta"
     },
     {
       "slug": "mavi-magaralar-zakinthos",
@@ -1927,9 +2189,31 @@
       "slug": "mesolongi-marina",
       "eskiLat": 38.3613,
       "eskiLon": 21.4267,
-      "lat": 38.368106,
-      "lon": 21.41563,
-      "tasimaM": 1224
+      "lat": 38.36197,
+      "lon": 21.41702,
+      "tasimaM": 846,
+      "kaynak": "https://greek-marinas.gr/en/marinas/messolonghi-marina/",
+      "guven": "yuksek"
+    },
+    {
+      "slug": "midilli-marina",
+      "eskiLat": 39.0987,
+      "eskiLon": 26.5578,
+      "lat": 39.097833,
+      "lon": 26.557833,
+      "tasimaM": 96,
+      "kaynak": "https://www.navily.com/port/setur-mytilini-marina/1420",
+      "guven": "yuksek"
+    },
+    {
+      "slug": "milta-bodrum-marina",
+      "eskiLat": 37.0345,
+      "eskiLon": 27.4262,
+      "lat": 37.033333,
+      "lon": 27.430556,
+      "tasimaM": 407,
+      "kaynak": "https://www.miltabodrummarina.com/en/marina-history/",
+      "guven": "yuksek"
     },
     {
       "slug": "mimoza-koyu",
@@ -1951,9 +2235,11 @@
       "slug": "my-marina-ekincik",
       "eskiLat": 36.8242,
       "eskiLon": 28.5655,
-      "lat": 36.8242,
-      "lon": 28.565108,
-      "tasimaM": 35
+      "lat": 36.828333,
+      "lon": 28.565,
+      "tasimaM": 461,
+      "kaynak": "https://www.mymarinayachtclub.com/",
+      "guven": "orta"
     },
     {
       "slug": "naoussa-limani-paros",
@@ -1988,6 +2274,16 @@
       "tasimaM": 1327
     },
     {
+      "slug": "netsel-marmaris-marina",
+      "eskiLat": 36.8506,
+      "eskiLon": 28.2772,
+      "lat": 36.851282,
+      "lon": 28.276923,
+      "tasimaM": 80,
+      "kaynak": "https://www.netselmarina.com/Home/Contact",
+      "guven": "yuksek"
+    },
+    {
       "slug": "nisyros-mandraki-limani",
       "eskiLat": 36.614,
       "eskiLon": 27.139444,
@@ -2002,6 +2298,16 @@
       "lat": 36.173972,
       "lon": 29.649925,
       "tasimaM": 155
+    },
+    {
+      "slug": "oasis-marina-yeni-foca",
+      "eskiLat": 38.743667,
+      "eskiLon": 26.838722,
+      "lat": 38.743833,
+      "lon": 26.840833,
+      "tasimaM": 184,
+      "kaynak": "https://www.navily.com/port/oasis-marina/5861",
+      "guven": "yuksek"
     },
     {
       "slug": "ocaklar-koyu-balikci-barinagi",
@@ -2031,9 +2337,11 @@
       "slug": "olympic-marine",
       "eskiLat": 37.6983,
       "eskiLon": 24.055,
-      "lat": 37.696087,
-      "lon": 24.057668,
-      "tasimaM": 340
+      "lat": 37.695928,
+      "lon": 24.05964,
+      "tasimaM": 485,
+      "kaynak": "https://marinas.com/view/marina/2gc8glq_Olympic_Marina_Lavrio__Greece",
+      "guven": "yuksek"
     },
     {
       "slug": "osmanaga-samandira-sahasi",
@@ -2127,25 +2435,31 @@
       "slug": "poros-marina-kefalonya",
       "eskiLat": 38.147167,
       "eskiLon": 20.781167,
-      "lat": 38.14747,
-      "lon": 20.781626,
-      "tasimaM": 52
+      "lat": 38.147167,
+      "lon": 20.78,
+      "tasimaM": 102,
+      "kaynak": "https://www.navily.com/port/poros/20738",
+      "guven": "orta"
     },
     {
       "slug": "port-alacati-marina",
       "eskiLat": 38.25875,
       "eskiLon": 26.37793,
-      "lat": 38.25877,
-      "lon": 26.379835,
-      "tasimaM": 166
+      "lat": 38.255278,
+      "lon": 26.383056,
+      "tasimaM": 590,
+      "kaynak": "https://www.yachtdigest.com/en/ports-turkey/port-alacati-marina/",
+      "guven": "orta"
     },
     {
       "slug": "porto-carras-marina",
       "eskiLat": 40.0689,
       "eskiLon": 23.7847,
-      "lat": 40.069742,
-      "lon": 23.783944,
-      "tasimaM": 113
+      "lat": 40.075333,
+      "lon": 23.793833,
+      "tasimaM": 1054,
+      "kaynak": "https://www.navily.com/port/porto-carras-marina/1419",
+      "guven": "yuksek"
     },
     {
       "slug": "poseidon-selimiye",
@@ -2164,6 +2478,16 @@
       "tasimaM": 321
     },
     {
+      "slug": "pupa-yat-marina",
+      "eskiLat": 36.828889,
+      "eskiLon": 28.310556,
+      "lat": 36.829161,
+      "lon": 28.310531,
+      "tasimaM": 30,
+      "kaynak": "https://marinas.com/view/marina/x1clexp_Pupa_Yacht_Marina_Marmaris_-_Mu%C4%9Fla_Turkey",
+      "guven": "orta"
+    },
+    {
       "slug": "pyrgaki-plaji-naxos",
       "eskiLat": 36.976361,
       "eskiLon": 25.398972,
@@ -2180,12 +2504,14 @@
       "tasimaM": 82
     },
     {
-      "slug": "rodos-mandraki-limani",
-      "eskiLat": 36.45113,
-      "eskiLon": 28.22615,
-      "lat": 36.451108,
-      "lon": 28.228188,
-      "tasimaM": 182
+      "slug": "rodos-marina",
+      "eskiLat": 36.4363,
+      "eskiLon": 28.2404,
+      "lat": 36.4345,
+      "lon": 28.239167,
+      "tasimaM": 228,
+      "kaynak": "https://www.navily.com/port/rhodes-marina/1424",
+      "guven": "yuksek"
     },
     {
       "slug": "rosemary-cokertme",
@@ -2231,9 +2557,21 @@
       "slug": "samos-marina",
       "eskiLat": 37.6956,
       "eskiLon": 26.9583,
-      "lat": 37.693243,
-      "lon": 26.963131,
-      "tasimaM": 499
+      "lat": 37.695556,
+      "lon": 26.958333,
+      "tasimaM": 6,
+      "kaynak": "https://samosmarina.gr/location-access/",
+      "guven": "yuksek"
+    },
+    {
+      "slug": "sani-marina",
+      "eskiLat": 40.0974,
+      "eskiLon": 23.3062,
+      "lat": 40.098333,
+      "lon": 23.310833,
+      "tasimaM": 407,
+      "kaynak": "https://www.navily.com/port/sani-marina/1418",
+      "guven": "yuksek"
     },
     {
       "slug": "sapli-island-koyu",
@@ -2263,9 +2601,11 @@
       "slug": "selanik-aretsou-marina",
       "eskiLat": 40.5806,
       "eskiLon": 22.9472,
-      "lat": 40.576883,
-      "lon": 22.943144,
-      "tasimaM": 536
+      "lat": 40.573667,
+      "lon": 22.946333,
+      "tasimaM": 773,
+      "kaynak": "https://www.navily.com/port/aretsou-marina-thessaloniki/1417",
+      "guven": "yuksek"
     },
     {
       "slug": "selimpasa-balikci-barinagi",
@@ -2284,20 +2624,54 @@
       "tasimaM": 67
     },
     {
+      "slug": "setur-antalya-marina",
+      "eskiLat": 36.8348,
+      "eskiLon": 30.6148,
+      "lat": 36.83475,
+      "lon": 30.614778,
+      "tasimaM": 6,
+      "kaynak": "https://www.seturmarinas.com/en/marinas/antalya",
+      "guven": "yuksek"
+    },
+    {
+      "slug": "setur-ayvalik-marina",
+      "eskiLat": 39.3141,
+      "eskiLon": 26.688,
+      "lat": 39.314056,
+      "lon": 26.687972,
+      "tasimaM": 5,
+      "kaynak": "https://www.seturmarinas.com/en/marinas/ayvalik",
+      "guven": "yuksek"
+    },
+    {
+      "slug": "setur-cesme-marina",
+      "eskiLat": 38.3237,
+      "eskiLon": 26.3456,
+      "lat": 38.323722,
+      "lon": 26.345556,
+      "tasimaM": 5,
+      "kaynak": "https://www.seturmarinas.com/en/marinas/cesme",
+      "guven": "yuksek"
+    },
+    {
       "slug": "setur-finike-marina",
       "eskiLat": 36.2947,
       "eskiLon": 30.1526,
-      "lat": 36.294211,
-      "lon": 30.153305,
-      "tasimaM": 83
+      "lat": 36.294694,
+      "lon": 30.152556,
+      "tasimaM": 4,
+      "kaynak": "https://www.seturmarinas.com/en/marinas/finike",
+      "guven": "yuksek"
     },
     {
       "slug": "setur-kalamis-fenerbahce-marina",
       "eskiLat": 40.9769,
       "eskiLon": 29.0358,
-      "lat": 40.976235,
-      "lon": 29.034601,
-      "tasimaM": 125
+      "lat": 40.976944,
+      "lon": 29.035806,
+      "tasimaM": 5,
+      "kaynak": "https://www.seturmarinas.com/en/marinas/kalamis-fenerbahce",
+      "guven": "yuksek"
     },
     {
       "slug": "setur-kalamis-yakit",
@@ -2306,6 +2680,36 @@
       "lat": 40.976852,
       "lon": 29.034,
       "tasimaM": 277
+    },
+    {
+      "slug": "setur-kas-marina",
+      "eskiLat": 36.2053,
+      "eskiLon": 29.6242,
+      "lat": 36.205278,
+      "lon": 29.624167,
+      "tasimaM": 4,
+      "kaynak": "https://www.seturmarinas.com/en/marinas/makmarin-kas",
+      "guven": "yuksek"
+    },
+    {
+      "slug": "setur-kusadasi-marina",
+      "eskiLat": 37.8685,
+      "eskiLon": 27.2605,
+      "lat": 37.868472,
+      "lon": 27.260472,
+      "tasimaM": 4,
+      "kaynak": "https://www.seturmarinas.com/en/marinas/kusadasi",
+      "guven": "yuksek"
+    },
+    {
+      "slug": "setur-yalova-marina",
+      "eskiLat": 40.6614,
+      "eskiLon": 29.2745,
+      "lat": 40.661444,
+      "lon": 29.2745,
+      "tasimaM": 5,
+      "kaynak": "https://www.seturmarinas.com/en/marinas/yalova",
+      "guven": "yuksek"
     },
     {
       "slug": "side-fish-harbour-balikci-barinagi",
@@ -2324,6 +2728,16 @@
       "tasimaM": 72
     },
     {
+      "slug": "silivri-marina",
+      "eskiLat": 41.073008,
+      "eskiLon": 28.23938,
+      "lat": 41.072833,
+      "lon": 28.242167,
+      "tasimaM": 234,
+      "kaynak": "https://www.navily.com/port/silivri/1617",
+      "guven": "orta"
+    },
+    {
       "slug": "sipahili-koyu-gulnar",
       "eskiLat": 36.159085,
       "eskiLon": 33.461762,
@@ -2332,12 +2746,24 @@
       "tasimaM": 1631
     },
     {
+      "slug": "sitia-marina-girit",
+      "eskiLat": 35.207444,
+      "eskiLon": 26.108667,
+      "lat": 35.208,
+      "lon": 26.108,
+      "tasimaM": 86,
+      "kaynak": "https://www.navily.com/port/marina-sitia/1562",
+      "guven": "orta"
+    },
+    {
       "slug": "skopea-marina",
       "eskiLat": 36.7548,
       "eskiLon": 28.9392,
-      "lat": 36.754358,
-      "lon": 28.9392,
-      "tasimaM": 49
+      "lat": 36.754167,
+      "lon": 28.938667,
+      "tasimaM": 85,
+      "kaynak": "https://www.navily.com/port/skopea-marina/1655",
+      "guven": "orta"
     },
     {
       "slug": "soguksu-koyu-aydincik",
@@ -2436,6 +2862,16 @@
       "tasimaM": 1006
     },
     {
+      "slug": "tekirdag-marina",
+      "eskiLat": 40.974681,
+      "eskiLon": 27.523027,
+      "lat": 40.976333,
+      "lon": 27.524667,
+      "tasimaM": 229,
+      "kaynak": "https://www.navily.com/port/tekirdag-yat-limani/19917",
+      "guven": "orta"
+    },
+    {
       "slug": "tekmen-koyu",
       "eskiLat": 36.10957362,
       "eskiLon": 33.11004981,
@@ -2458,6 +2894,16 @@
       "lat": 38.160801,
       "lon": 26.80037,
       "tasimaM": 144
+    },
+    {
+      "slug": "teos-marina",
+      "eskiLat": 38.1958,
+      "eskiLon": 26.7825,
+      "lat": 38.193333,
+      "lon": 26.782167,
+      "tasimaM": 275,
+      "kaynak": "https://www.navily.com/port/teos-marina/1629",
+      "guven": "yuksek"
     },
     {
       "slug": "tersane-adasi-koyu",
@@ -2508,6 +2954,16 @@
       "tasimaM": 1118
     },
     {
+      "slug": "tourlos-marina-mykonos",
+      "eskiLat": 37.465302,
+      "eskiLon": 25.322599,
+      "lat": 37.464667,
+      "lon": 25.326167,
+      "tasimaM": 322,
+      "kaynak": "https://www.navily.com/port/tourlos-mykonos-port/1688",
+      "guven": "orta"
+    },
+    {
       "slug": "turunc-iskelesi",
       "eskiLat": 36.772146,
       "eskiLon": 28.249443,
@@ -2524,6 +2980,16 @@
       "tasimaM": 265
     },
     {
+      "slug": "viaport-marina",
+      "eskiLat": 40.8158,
+      "eskiLon": 29.3188,
+      "lat": 40.817195,
+      "lon": 29.316177,
+      "tasimaM": 269,
+      "kaynak": "https://www.waterwayguide.com/marina/viaport-marina",
+      "guven": "yuksek"
+    },
+    {
       "slug": "villa-julia-iskelesi",
       "eskiLat": 36.661073,
       "eskiLon": 28.081637,
@@ -2535,9 +3001,11 @@
       "slug": "vlychada-marina-santorini",
       "eskiLat": 36.336601,
       "eskiLon": 25.434999,
-      "lat": 36.335166,
-      "lon": 25.433971,
-      "tasimaM": 184
+      "lat": 36.336667,
+      "lon": 25.435,
+      "tasimaM": 7,
+      "kaynak": "https://www.navily.com/port/vlikhada/1416",
+      "guven": "orta"
     },
     {
       "slug": "vlychadia-samandira-sahasi",
@@ -2548,12 +3016,24 @@
       "tasimaM": 218
     },
     {
+      "slug": "vouliagmeni-marina",
+      "eskiLat": 37.7217,
+      "eskiLon": 23.775,
+      "lat": 37.803312,
+      "lon": 23.773514,
+      "tasimaM": 9060,
+      "kaynak": "https://marinas.com/view/marina/vgczexq_Vouliagmeni_Marina_Vouliagmeni_Greece",
+      "guven": "yuksek"
+    },
+    {
       "slug": "west-istanbul-marina",
       "eskiLat": 40.9628,
       "eskiLon": 28.6636,
-      "lat": 40.961033,
-      "lon": 28.665105,
-      "tasimaM": 233
+      "lat": 40.962778,
+      "lon": 28.663611,
+      "tasimaM": 3,
+      "kaynak": "https://www.westistanbulmarina.com/contact",
+      "guven": "yuksek"
     },
     {
       "slug": "west-istanbul-marina-yakit",
@@ -2575,9 +3055,21 @@
       "slug": "yacht-classic-marina-fethiye",
       "eskiLat": 36.622859,
       "eskiLon": 29.098562,
-      "lat": 36.623118,
-      "lon": 29.098555,
-      "tasimaM": 29
+      "lat": 36.621769,
+      "lon": 29.09974,
+      "tasimaM": 160,
+      "kaynak": "https://yachtclassichotel.com/en/marina/",
+      "guven": "yuksek"
+    },
+    {
+      "slug": "yacht-marin-marmaris",
+      "eskiLat": 36.8197,
+      "eskiLon": 28.3092,
+      "lat": 36.81806,
+      "lon": 28.30918,
+      "tasimaM": 182,
+      "kaynak": "https://www.predictwind.com/marinas/trkiye/mula/marmaris-yacht-marina",
+      "guven": "yuksek"
     },
     {
       "slug": "yaglica-koyu",
@@ -2610,14 +3102,6 @@
       "lat": 37.108748,
       "lon": 27.291343,
       "tasimaM": 122
-    },
-    {
-      "slug": "yalikavak-marina",
-      "eskiLat": 37.105,
-      "eskiLon": 27.2855,
-      "lat": 37.105173,
-      "lon": 27.285228,
-      "tasimaM": 31
     },
     {
       "slug": "yalikavak-marina-yakit",
@@ -2703,9 +3187,21 @@
       "slug": "zakinthos-marina",
       "eskiLat": 37.783944,
       "eskiLon": 20.902194,
-      "lat": 37.783469,
-      "lon": 20.902194,
-      "tasimaM": 53
+      "lat": 37.7825,
+      "lon": 20.904667,
+      "tasimaM": 270,
+      "kaynak": "https://www.navily.com/port/zakynthos-public-port/30190",
+      "guven": "orta"
+    },
+    {
+      "slug": "zea-marina",
+      "eskiLat": 37.9367,
+      "eskiLon": 23.6483,
+      "lat": 37.934722,
+      "lon": 23.649444,
+      "tasimaM": 241,
+      "kaynak": "https://www.d-marin.com/en/marinas/zea/",
+      "guven": "yuksek"
     },
     {
       "slug": "zeytin-adasi-samandira-sahasi",

@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:dockly_api/dockly_api.dart' show Bbox, Cluster, LocationPin;
+import 'package:dockly_api/dockly_api.dart'
+    show Bbox, Cluster, GeoPoint, LocationPin;
 import 'package:dockly_ui/dockly_ui.dart' show DocklyIconData, DocklyMapColors;
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -44,6 +45,15 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
   PointAnnotationManager? _pins; // pin rozetleri (tip ikonu taşıyan resimler)
   CircleAnnotationManager? _clusterCircles; // küme balonları (ayrı yönetici)
   PointAnnotationManager? _labels; // küme sayıları
+  PolylineAnnotationManager? _routeLines; // rota çizgisi (bacaklar)
+  PointAnnotationManager? _routeMarks; // rota işaretçileri (A/duraklar/varış)
+  PointAnnotationManager? _deviceMark; // kaptanın GPS imleci (tekne rozeti)
+
+  /// Son çizilen rota imzası — değişmediyse rotaya HİÇ dokunulmaz (perf).
+  int _lastRouteSig = 0;
+
+  /// Son çizilen GPS imleci konumu.
+  GeoPoint? _lastDevicePos;
 
   /// pinId → çizili annotation (fark için).
   final Map<String, PointAnnotation> _pinAnnotations = <String, PointAnnotation>{};
@@ -127,6 +137,9 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
     _pins = null;
     _clusterCircles = null;
     _labels = null;
+    _routeLines = null;
+    _routeMarks = null;
+    _deviceMark = null;
     super.dispose();
   }
 
@@ -137,16 +150,10 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
   /// yeniden yüklenirse resimler silinebileceği için çağrı İDEMPOTENTTİR
   /// (baytlar önbellekte, aynı kimliğe yeniden kayıt zararsız).
   Future<void> _registerPinImages(MapboxMap map) async {
-    for (final MapEntry<String, ({int fillArgb, DocklyIconData icon})> spec
-        in mapPinBadgeSpecs().entries) {
-      final Uint8List png = _pinImagePngs[spec.key] ??= await renderPinBadgePng(
-        fillArgb: spec.value.fillArgb,
-        icon: spec.value.icon,
-      );
-      if (_disposed) return;
-      final int px = (kPinBadgeLogicalSize * kPinImageScale).round();
+    final int px = (kPinBadgeLogicalSize * kPinImageScale).round();
+    Future<bool> add(String id, Uint8List png) async {
       await map.style.addStyleImage(
-        spec.key,
+        id,
         kPinImageScale,
         MbxImage(width: px, height: px, data: png),
         false, // sdf değil — çok renkli bitmap
@@ -154,7 +161,28 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
         const <ImageStretches?>[],
         null,
       );
-      if (_disposed) return;
+      return _disposed;
+    }
+
+    for (final MapEntry<String, ({int fillArgb, DocklyIconData icon})> spec
+        in mapPinBadgeSpecs().entries) {
+      final Uint8List png = _pinImagePngs[spec.key] ??= await renderPinBadgePng(
+        fillArgb: spec.value.fillArgb,
+        icon: spec.value.icon,
+      );
+      if (_disposed || await add(spec.key, png)) return;
+    }
+    // Rota/imleç rozetleri (Rota Modu 2026-09-23): başlangıç, varış, durak
+    // zemini ve GPS teknesi — aynı boru hattı, aynı keskinlik.
+    for (final MapEntry<String,
+            ({int fillArgb, int ringArgb, DocklyIconData? icon})> spec
+        in mapRouteBadgeSpecs().entries) {
+      final Uint8List png = _pinImagePngs[spec.key] ??= await renderPinBadgePng(
+        fillArgb: spec.value.fillArgb,
+        ringArgb: spec.value.ringArgb,
+        icon: spec.value.icon,
+      );
+      if (_disposed || await add(spec.key, png)) return;
     }
   }
 
@@ -182,9 +210,14 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
     // iconImage çözülebilsin (kayıtsız kimlik = görünmez pin).
     await _registerPinImages(map);
     if (_disposed) return;
+    // Katman sırası = yaratılış sırası: rota çizgisi EN ALTTA, üstünde
+    // pinler/kümeler, en üstte rota işaretçileri ve GPS teknesi.
+    _routeLines = await map.annotations.createPolylineAnnotationManager();
     _pins = await map.annotations.createPointAnnotationManager();
     _clusterCircles = await map.annotations.createCircleAnnotationManager();
     _labels = await map.annotations.createPointAnnotationManager();
+    _routeMarks = await map.annotations.createPointAnnotationManager();
+    _deviceMark = await map.annotations.createPointAnnotationManager();
     if (_disposed) return;
     _pins!.tapEvents(onTap: _onPinTap);
     _clusterCircles!.tapEvents(onTap: _onClusterCircleTap);
@@ -326,6 +359,120 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
     return true;
   }
 
+  /// Rota içerik imzası — rota değişmediyse (en sık durum) çizime hiç
+  /// dokunulmaz. routeSeq yeterli değil: düzenlemeler (durak ekle/taşı)
+  /// routeSeq'i artırmaz; imza bacak uçları + duraklar üzerinden kurulur.
+  static int _routeSignature(MapSurfaceData d) {
+    final List<List<GeoPoint>>? legs = d.routeLegPoints ??
+        (d.routePoints == null ? null : <List<GeoPoint>>[d.routePoints!]);
+    if (legs == null || legs.isEmpty) return 0;
+    final List<Object?> parts = <Object?>[legs.length];
+    for (final List<GeoPoint> l in legs) {
+      if (l.isEmpty) continue;
+      parts
+        ..add(l.length)
+        ..add(l.first.lat)
+        ..add(l.first.lon)
+        ..add(l.last.lat)
+        ..add(l.last.lon);
+    }
+    for (final MapRouteStop s in d.routeStops) {
+      parts
+        ..add(s.number)
+        ..add(s.pos.lat)
+        ..add(s.pos.lon);
+    }
+    final GeoPoint? ob = d.routeOriginBadge;
+    if (ob != null) {
+      parts
+        ..add(ob.lat)
+        ..add(ob.lon);
+    }
+    return Object.hashAll(parts);
+  }
+
+  /// Rota çizgisi rengi — marka birincil (docs/09; web yüzeyiyle aynı ton).
+  static const int _routeLineArgb = 0xFF0C7BDC;
+
+  /// ROTA ÇİZİMİ (kritik eksik, kurucu onayı 2026-09-23: rota çizgisi yalnız
+  /// web'de vardı — telefonda rota kurulunca haritada HİÇBİR ŞEY çizilmiyordu):
+  /// bacak başına kalın marka-mavisi çizgi + başlangıç (yelken rozeti),
+  /// numaralı duraklar (beyaz rozet) ve varış (yeşil flama rozeti).
+  Future<void> _renderRoute(MapSurfaceData data, int sig) async {
+    final PolylineAnnotationManager? lines = _routeLines;
+    final PointAnnotationManager? marks = _routeMarks;
+    if (lines == null || marks == null || _disposed) return;
+    await lines.deleteAll();
+    if (_disposed) return;
+    await marks.deleteAll();
+    if (_disposed) return;
+    _lastRouteSig = sig;
+    if (sig == 0) return; // rota yok — temizlik yeterli
+    final List<List<GeoPoint>> legs = data.routeLegPoints ??
+        <List<GeoPoint>>[if (data.routePoints != null) data.routePoints!];
+    await lines.createMulti(<PolylineAnnotationOptions>[
+      for (final List<GeoPoint> leg in legs)
+        if (leg.length >= 2)
+          PolylineAnnotationOptions(
+            geometry: LineString(coordinates: <Position>[
+              for (final GeoPoint p in leg) Position(p.lon, p.lat),
+            ]),
+            lineColor: _routeLineArgb,
+            lineWidth: 5.0,
+            lineOpacity: 0.95,
+          ),
+    ]);
+    if (_disposed) return;
+    // İşaretçiler: başlangıç + duraklar (sonuncusu VARIŞ = yeşil flama).
+    final List<PointAnnotationOptions> markOpts = <PointAnnotationOptions>[];
+    final GeoPoint? start = data.routeOriginBadge ??
+        (legs.isNotEmpty && legs.first.isNotEmpty ? legs.first.first : null);
+    if (start != null) {
+      markOpts.add(PointAnnotationOptions(
+        geometry: Point(coordinates: Position(start.lon, start.lat)),
+        iconImage: kRouteStartImageId,
+      ));
+    }
+    final List<MapRouteStop> stops = data.routeStops;
+    for (int i = 0; i < stops.length; i++) {
+      final bool isDest = i == stops.length - 1;
+      markOpts.add(PointAnnotationOptions(
+        geometry:
+            Point(coordinates: Position(stops[i].pos.lon, stops[i].pos.lat)),
+        iconImage: isDest ? kRouteDestImageId : kRouteStopImageId,
+        textField: isDest ? null : '${stops[i].number}',
+        textSize: 12.0,
+        textColor: _routeLineArgb,
+      ));
+    }
+    if (stops.isEmpty && legs.isNotEmpty && legs.last.isNotEmpty) {
+      // Duraksız düz rota — varış flaması son noktaya.
+      final GeoPoint dest = legs.last.last;
+      markOpts.add(PointAnnotationOptions(
+        geometry: Point(coordinates: Position(dest.lon, dest.lat)),
+        iconImage: kRouteDestImageId,
+      ));
+    }
+    if (markOpts.isNotEmpty) await marks.createMulti(markOpts);
+  }
+
+  /// GPS TEKNE İMLECİ (eksik parça): kaptanın konumu artık telefonda da
+  /// görünür — web'deki yelkenli imlecin Mapbox karşılığı.
+  Future<void> _renderDeviceMark(GeoPoint? pos) async {
+    final PointAnnotationManager? mark = _deviceMark;
+    if (mark == null || _disposed) return;
+    _lastDevicePos = pos;
+    await mark.deleteAll();
+    if (_disposed || pos == null) return;
+    await mark.create(PointAnnotationOptions(
+      geometry: Point(coordinates: Position(pos.lon, pos.lat)),
+      iconImage: kDeviceBoatImageId,
+    ));
+  }
+
+  static bool _samePos(GeoPoint? a, GeoPoint? b) =>
+      identical(a, b) || (a != null && b != null && a.lat == b.lat && a.lon == b.lon);
+
   Future<void> _renderOnce() async {
     final PointAnnotationManager? pins = _pins;
     final CircleAnnotationManager? clusterCircles = _clusterCircles;
@@ -336,6 +483,17 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
 
     final MapSurfaceData data = widget.data;
     final String? selectedId = data.selectedPinId;
+
+    // --- ROTA + GPS İMLECİ: kendi değişim algılarıyla, pinlerden bağımsız ---
+    final int routeSig = _routeSignature(data);
+    if (routeSig != _lastRouteSig) {
+      await _renderRoute(data, routeSig);
+      if (_disposed) return;
+    }
+    if (!_samePos(data.devicePosition, _lastDevicePos)) {
+      await _renderDeviceMark(data.devicePosition);
+      if (_disposed) return;
+    }
 
     // --- PINLER: fark uygula ---
     final Set<String> newPinIds = <String>{for (final LocationPin p in data.pins) p.id};
@@ -474,6 +632,15 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
       onMapCreated: _onMapCreated,
       onStyleLoadedListener: _onStyleLoaded,
       onCameraChangeListener: _onCameraChanged,
+      // HARİTA DOKUNUŞU (Rota Modu paketi 2026-09-23 — eksik parça): web
+      // yüzeyinde vardı, Mapbox'ta HİÇ bağlanmamıştı. "Başlangıç seç" ve
+      // "+ nokta ekle" modları telefonda bu dinleyiciyle çalışır.
+      onTapListener: (MapContentGestureContext ctx) {
+        widget.callbacks.onMapTap(GeoPoint(
+          lat: ctx.point.coordinates.lat.toDouble(),
+          lon: ctx.point.coordinates.lng.toDouble(),
+        ));
+      },
     );
   }
 }

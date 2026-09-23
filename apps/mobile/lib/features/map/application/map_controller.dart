@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_core/dockly_core.dart';
@@ -383,12 +384,37 @@ class MapController extends Notifier<MapState> {
   Future<void> routeTo(GeoPoint destination, String idOrSlug, {String? name}) async {
     final GeoPoint? gps = ref.read(devicePositionProvider);
     if (gps == null || state.isRouting) return;
+    // KARADAN BAŞLAMA (kurucu isteği 2026-09-23: "konumum kara ise en yakın
+    // deniz lokasyonu seçilsin"): evden/karadan plan yapan kaptanın GPS'i
+    // karadadır — rota "başlayamadı" demek yerine başlangıç en yakın deniz
+    // noktasına oturtulur. Belirgin taşındıysa (>60 m) tek seferlik not
+    // gösterilir (originSnappedSeq). Su bulunamazsa (maske kapsamı dışı,
+    // açık deniz) eski davranış: GPS olduğu gibi kullanılır.
+    GeoPoint start = gps;
+    final GeoPoint? snapped =
+        await ref.read(seaRouteEngineProvider).snapWater(gps);
+    if (state.isRouting) return; // bu beklerken başka rota başladıysa çekil
+    if (snapped != null) {
+      if (_distMeters(gps, snapped) > 60) {
+        state = state.copyWith(originSnappedSeq: state.originSnappedSeq + 1);
+      }
+      start = snapped;
+    }
     await _planTrip(
-      RouteOrigin(pos: gps, isDevice: true),
+      RouteOrigin(pos: start, isDevice: true),
       <RouteWaypoint>[RouteWaypoint(pos: destination, id: idOrSlug, name: name)],
       editing: false,
       consume: true, // kullanıcı başlatan YENİ rota → günlük kota işler (K3)
     );
+  }
+
+  /// İki nokta arası yaklaşık mesafe (m) — kıyıya taşıma eşiği için yeterli.
+  static double _distMeters(GeoPoint a, GeoPoint b) {
+    final double dLat = (a.lat - b.lat) * 111000;
+    final double dLon = (a.lon - b.lon) *
+        111000 *
+        math.cos(a.lat * math.pi / 180);
+    return math.sqrt(dLat * dLat + dLon * dLon);
   }
 
   // --- ROTA PLANLAMA (2026-08, kullanıcı onaylı): konumdan bağımsız A→B ---
@@ -687,9 +713,10 @@ class MapController extends Notifier<MapState> {
       // yalnız rota+duraklar görünür. Düzenlemede mevcut mod korunur;
       // yeni (kayıtsız) rota odak modunu KAPATIR.
       routeFocus: editing ? null : focus,
-      // Odak açılırken eski pin seçimi kapanır — alt kart, haritada artık
-      // çizilmeyen bir imleci anlatmasın (inceleme dersi 2026-08).
-      clearSelection: !editing && focus,
+      // YENİ rota çizilince pin seçimi kapanır (Rota Modu, kurucu onayı
+      // 2026-09-23): temiz seyir ekranı alt kartla değil rota eylem kartıyla
+      // açılır; düzenlemede mevcut seçim durumu korunur.
+      clearSelection: !editing,
       clearRouteWind: true, // yeni rota → eski rüzgâr raporu geçersiz
     );
     // RÜZGÂR ANALİZİ (Rota v2): arka planda, en iyi çaba — rota çizimi bunu

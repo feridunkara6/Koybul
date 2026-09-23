@@ -35,6 +35,7 @@ class MapState {
     this.routeFocus = false,
     this.routeQuotaBlockSeq = 0,
     this.multiStopBlockSeq = 0,
+    this.originSnappedSeq = 0,
   });
 
   final List<LocationPin> pins;
@@ -122,6 +123,11 @@ class MapState {
   /// alt sayfasını gösterir; mevcut rota olduğu gibi kalır.
   final int multiStopBlockSeq;
 
+  /// BAŞLANGIÇ KIYIYA TAŞINDI sinyali (kurucu isteği 2026-09-23: "konumum
+  /// kara ise en yakın deniz noktası seçilsin"): GPS karadayken rota kurulup
+  /// başlangıç denize oturtulunca artar — arayüz tek seferlik kısa not gösterir.
+  final int originSnappedSeq;
+
   /// En az bir yükleme tamamlandı mı? İlk yükleme bitmeden "boş durum" GÖSTERİLMEZ
   /// (aksi halde açılışta kısa süre yanlış "liman yok" mesajı yanıp söner — P9).
   final bool hasLoadedOnce;
@@ -174,6 +180,7 @@ class MapState {
     bool? routeFocus,
     int? routeQuotaBlockSeq,
     int? multiStopBlockSeq,
+    int? originSnappedSeq,
   }) {
     return MapState(
       pins: pins ?? this.pins,
@@ -209,6 +216,7 @@ class MapState {
       routeFocus: clearRoute ? false : (routeFocus ?? this.routeFocus),
       routeQuotaBlockSeq: routeQuotaBlockSeq ?? this.routeQuotaBlockSeq,
       multiStopBlockSeq: multiStopBlockSeq ?? this.multiStopBlockSeq,
+      originSnappedSeq: originSnappedSeq ?? this.originSnappedSeq,
     );
   }
 }

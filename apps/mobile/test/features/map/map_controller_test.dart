@@ -54,9 +54,12 @@ class FakeSeaRouteEngine extends SeaRouteEngine {
     return plan;
   }
 
+  /// Doluysa suya oturtma BU noktayı döndürür (karadan başlama senaryosu).
+  GeoPoint? snapTo;
+
   @override
   Future<GeoPoint?> snapWater(GeoPoint p) async =>
-      snapFails ? null : p; // varlık yüklemesi YOK
+      snapFails ? null : (snapTo ?? p); // varlık yüklemesi YOK
 }
 
 /// Sahte rüzgâr danışmanı — ağa/varlığa gidilmez; verilen rapor döner.
@@ -590,6 +593,53 @@ void main() {
     expect(state.route, same(plan));
     expect(state.isRouting, isFalse);
     expect(state.routeSeq, 1);
+  });
+
+  test('KARADAN BAŞLAMA (kurucu isteği 2026-09-23): GPS karadaysa başlangıç '
+      'en yakın denize oturtulur ve tek seferlik sinyal artar', () async {
+    const plan = SeaRoutePlan(
+      points: <GeoPoint>[
+        GeoPoint(lat: 36.755, lon: 28.955),
+        GeoPoint(lat: 36.70, lon: 28.90),
+      ],
+      distanceNm: 5,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    // GPS (36.76, 28.96) karada; en yakın deniz ~600 m güneybatıda.
+    final engine = FakeSeaRouteEngine(plan)
+      ..snapTo = const GeoPoint(lat: 36.755, lon: 28.955);
+    final container =
+        _containerWith(FakeMapGateway(result: pinResult), routeEngine: engine);
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin);
+    final state = _state(container);
+    expect(state.route, same(plan));
+    // Rota SUYA OTURTULMUŞ başlangıçtan hesaplandı (GPS'ten değil).
+    expect(engine.lastFrom!.lat, closeTo(36.755, 1e-9));
+    expect(engine.lastFrom!.lon, closeTo(28.955, 1e-9));
+    expect(state.routeOrigin!.pos.lat, closeTo(36.755, 1e-9));
+    // Kaptan bilgilendirilir: "başlangıç kıyıya taşındı" sinyali bir kez.
+    expect(state.originSnappedSeq, 1);
+  });
+
+  test('KARADAN BAŞLAMA: GPS zaten sudaysa (oturtma yerinde bırakır) '
+      'sinyal ARTMAZ — gereksiz not gösterilmez', () async {
+    const plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.76, lon: 28.96)],
+      distanceNm: 5,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final engine = FakeSeaRouteEngine(plan); // snapWater aynı noktayı döndürür
+    final container =
+        _containerWith(FakeMapGateway(result: pinResult), routeEngine: engine);
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin);
+    expect(_state(container).originSnappedSeq, 0);
+    expect(engine.lastFrom!.lat, closeTo(36.76, 1e-9));
   });
 
   test('KARA YASAĞI: motor rota bulamazsa ÇİZGİ ÇİZİLMEZ, hata sinyali artar', () async {

@@ -153,6 +153,21 @@ class MapScreen extends ConsumerWidget {
         }
       },
     );
+    // BAŞLANGIÇ KIYIYA TAŞINDI bildirimi (kurucu isteği 2026-09-23): GPS
+    // karadayken rota kurulunca tek seferlik kısa not — kaptan başlangıcın
+    // neden konumunda olmadığını bilir; rota sessizce "yanlış" görünmez.
+    ref.listen<int>(
+      mapControllerProvider.select((MapState s) => s.originSnappedSeq),
+      (int? prev, int next) {
+        if (prev != null && next > prev) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text(ref.read(l10nProvider).routeOriginSnapped)),
+            );
+        }
+      },
+    );
     final MapSurfaceBuilder surfaceBuilder = ref.watch(mapSurfaceBuilderProvider);
     // YENİ KULLANICI TANITIMI (2026-08): karşılama + tur + ilk-dokunuş ipuçları.
     final OnboardingState onb = ref.watch(onboardingControllerProvider);
@@ -163,8 +178,19 @@ class MapScreen extends ConsumerWidget {
     // gizlenir; sahnede sadece rota ve durakları vardır. "+ Nokta ekle" ve
     // "başlangıç seç" modlarında süzgeç GEÇİCİ kalkar (inceleme dersi:
     // "koya dokunursan durak olur" sözü tutulmalı — koylar görünmeli).
-    final bool focusOn =
-        state.routeFocus && !state.addingPoint && !state.pickingOrigin;
+    // ROTA MODU (Konsept 1, kurucu onayı 2026-09-23): HERHANGİ bir rota
+    // açıkken harita "temiz seyir ekranı"na girer — arama hapı, filtre
+    // çipleri, yan düğmeler, yakın rayı ve rotayla ilgisiz noktalar gizlenir;
+    // ekranda rota çizgisi + işaretçiler + üst başlık + alt eylem kartı kalır.
+    // "+ nokta" ve "başlangıç seç" modlarında geçici olarak normale dönülür
+    // (koya dokunmak için koylar görünmeli — inceleme dersi).
+    final bool routeMode = state.route != null &&
+        !state.addingPoint &&
+        !state.pickingOrigin &&
+        !isList;
+    final bool focusOn = (state.routeFocus || state.route != null) &&
+        !state.addingPoint &&
+        !state.pickingOrigin;
     final Set<String> focusStopIds = focusOn
         ? <String>{
             for (final RouteWaypoint w in state.routeWaypoints)
@@ -250,55 +276,60 @@ class MapScreen extends ConsumerWidget {
           // TAM GENİŞLİK ARAMA HAPI. Google/Apple Maps alışkanlığı: "ne
           // yapacağım?" sorusunun evrensel cevabı ekranın tepesindeki arama
           // kutusudur. Eski sağ-kolon arama düğmesinin işlevi buraya taşındı.
-          Positioned(
-            top: 12,
-            left: 12,
-            right: 12,
-            child: SafeArea(
-              child: KeyedSubtree(
-                key: tourKeySearch,
-                child: const _MapSearchPill(),
+          // ROTA MODUNDA GİZLİ (Konsept 1): arama ve süzme rota göreviyle
+          // ilgisizdir — × ile çıkınca geri gelirler.
+          if (!routeMode)
+            Positioned(
+              top: 12,
+              left: 12,
+              right: 12,
+              child: SafeArea(
+                child: KeyedSubtree(
+                  key: tourKeySearch,
+                  child: const _MapSearchPill(),
+                ),
               ),
             ),
-          ),
           // Tip filtre çipleri arama hapının HEMEN ALTINA indi (P0-2):
           // önce "ara", sonra "süz" — okuma sırası doğal hiyerarşiyi izler.
-          Positioned(
-            top: 66, // 12 (hap üstü) + 46 (hap) + 8 (ara)
-            left: 0,
-            right: 0,
-            child: SafeArea(
-              // Tur hedefi (v3): "Filtreler" adımı bu şeridi okla gösterir.
-              child: KeyedSubtree(
-                key: tourKeyChips,
-                child: _TypeFilterRow(selected: state.types),
+          if (!routeMode)
+            Positioned(
+              top: 66, // 12 (hap üstü) + 46 (hap) + 8 (ara)
+              left: 0,
+              right: 0,
+              child: SafeArea(
+                // Tur hedefi (v3): "Filtreler" adımı bu şeridi okla gösterir.
+                child: KeyedSubtree(
+                  key: tourKeyChips,
+                  child: _TypeFilterRow(selected: state.types),
+                ),
               ),
             ),
-          ),
           // SAĞ KOLON SADELEŞTİ (P0-2): eskiden dört eş yuvarlak düğme üst
           // üsteydi (SOS→Konumum→Arama→Rota) ve panik butonu en işlek
           // noktadaydı. Artık yalnız İKİNCİL araçlar burada: Konumum +
           // harita↔liste. Arama üstteki hapa, rota sağ alttaki etiketli
           // FAB'a, SOS sol alt köşeye taşındı — işlev birebir aynı.
-          Positioned(
-            top: 114, // 66 (çip üstü) + 40 (çip şeridi) + 8 (ara)
-            right: 12,
-            child: SafeArea(
-              child: Column(
-                children: <Widget>[
-                  KeyedSubtree(key: tourKeyLocate, child: const LocateButton()),
-                  if (state.pins.isNotEmpty) ...<Widget>[
-                    const SizedBox(height: 8),
-                    _ViewToggle(
-                      isList: isList,
-                      onToggle: () =>
-                          ref.read(mapViewIsListProvider.notifier).state = !isList,
-                    ),
+          if (!routeMode)
+            Positioned(
+              top: 114, // 66 (çip üstü) + 40 (çip şeridi) + 8 (ara)
+              right: 12,
+              child: SafeArea(
+                child: Column(
+                  children: <Widget>[
+                    KeyedSubtree(key: tourKeyLocate, child: const LocateButton()),
+                    if (state.pins.isNotEmpty) ...<Widget>[
+                      const SizedBox(height: 8),
+                      _ViewToggle(
+                        isList: isList,
+                        onToggle: () =>
+                            ref.read(mapViewIsListProvider.notifier).state = !isList,
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
-          ),
           if (state.isLoading && state.hasData)
             const Positioned(
               top: 0,
@@ -306,24 +337,26 @@ class MapScreen extends ConsumerWidget {
               right: 0,
               child: LinearProgressIndicator(minHeight: 3),
             ),
-          // Üst-orta bilgi katmanı: çevrimdışı şeridi + deniz rotası çipi.
-          if (state.isOffline || state.route != null)
+          // Üst-orta bilgi katmanı: çevrimdışı şeridi + (rota modu DIŞINDA)
+          // deniz rotası çipi. Rota modunda çipin yerini üst başlık + alt
+          // eylem kartı alır (Konsept 1, kurucu onayı 2026-09-23).
+          if (state.isOffline || (state.route != null && !routeMode))
             Positioned(
               // P0-2: üst katman artık hap (46) + çipler (40) — bilgi çipi
-              // onların altından başlar.
-              top: 114,
+              // onların altından başlar. Rota modunda üst boş → tepeye yaslanır.
+              top: routeMode ? 12 : 114,
               // ROTA BİLGİ EKRANI 2.0 (kullanıcı isteği 2026-08): çip artık
               // ekranın genişliğini kullanır — "küçük kalıyor" düzeltmesi.
               // Sağda 64: Konumum/liste düğme sütunuyla çakışmaz.
               left: 12,
-              right: 64,
+              right: routeMode ? 12 : 64,
               child: SafeArea(
                 child: Column(
                   children: <Widget>[
                     if (state.isOffline) const Center(child: _OfflineBanner()),
-                    if (state.isOffline && state.route != null)
+                    if (state.isOffline && state.route != null && !routeMode)
                       const SizedBox(height: 8),
-                    if (state.route != null)
+                    if (state.route != null && !routeMode)
                       Center(
                         // Tur hedefi (örnekli tur v5): "rotanı düzenle" adımı
                         // bu bilgi kartını vurgular.
@@ -345,6 +378,51 @@ class MapScreen extends ConsumerWidget {
                 ),
               ),
             ),
+          // ROTA MODU — ÜST BAŞLIK: rota adı + kapat (Konsept 1).
+          if (routeMode)
+            Positioned(
+              top: state.isOffline ? 56 : 12,
+              left: 12,
+              right: 12,
+              child: SafeArea(
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 480),
+                    child: KeyedSubtree(
+                      key: tourKeyRouteChip,
+                      child: _RouteModeTopBar(
+                        label: state.routeLabel,
+                        waypoints: state.routeWaypoints,
+                        onClear: controller.clearRoute,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          // ROTA MODU — ALT EYLEM KARTI: mesafe/süre/rüzgâr + büyük düğmeler.
+          if (routeMode && selectedPin == null)
+            Positioned(
+              left: 12,
+              right: 12,
+              bottom: 12,
+              child: SafeArea(
+                top: false,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 480),
+                    child: _RouteModeActionCard(
+                      route: state.route!,
+                      wind: state.routeWind,
+                      waypoints: state.routeWaypoints,
+                      onAddPoint: controller.beginAddPoint,
+                      onSave: () => _saveRouteDialog(context, ref, state),
+                      onDetail: () => showRouteDetailSheet(context, ref),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           if (state.truncated) const _TruncatedHint(),
           if (state.isLoading && !state.hasData)
             const Positioned.fill(child: _CenterProgress()),
@@ -358,7 +436,7 @@ class MapScreen extends ConsumerWidget {
             ),
           // "Yakınındaki Limanlar" alt-sayfası (tasarım §07 peek durumu):
           // harita modunda, seçili pin yokken. Pin seçilince yerini karta bırakır.
-          if (!isList && selectedPin == null)
+          if (!isList && selectedPin == null && !routeMode)
             const Positioned(left: 0, right: 0, bottom: 0, child: NearbySheet()),
           // SOS SOL ALTTA, YALNIZ (P0-2, kullanıcı onayı 2026-08): panik
           // butonunun değeri ayrıksılığındadır — onu bulunur kılan boyutu
@@ -370,7 +448,9 @@ class MapScreen extends ConsumerWidget {
           // aynı yerdedir.
           Positioned(
             left: 12,
-            bottom: 78, // yakın rayının (katlı ~62) üstünde
+            // Rota modunda alt eylem kartının ÜSTÜNE çıkar (kartla çakışmaz);
+            // SOS bilerek HER modda görünür kalır — emniyet düğmesi gizlenmez.
+            bottom: routeMode ? 150 : 78, // yakın rayının (katlı ~62) üstünde
             child: SafeArea(
               top: false,
               child: KeyedSubtree(key: tourKeySos, child: const _SosButton()),
@@ -1450,6 +1530,187 @@ class _MapSearchPill extends ConsumerWidget {
 /// büyütülebilen sayfada yaşar (haritacılık uygulamalarının yön özeti
 /// deseni). GÜVENLİK İLKESİ KORUNDU: rüzgâr uyarısı ve olağan dışı rota
 /// notu (kuş uçuşu / kıyıda biter) sayfa açılmadan da hapta görünür.
+/// ROTA MODU ÜST BAŞLIĞI (Konsept 1, kurucu onayı 2026-09-23): ince bar —
+/// rota adı (kayıtlı ad ya da "A → B") + kapat. Ayrıntı alttaki kartta.
+class _RouteModeTopBar extends ConsumerWidget {
+  const _RouteModeTopBar({
+    required this.waypoints,
+    required this.onClear,
+    this.label,
+  });
+
+  final List<RouteWaypoint> waypoints;
+  final VoidCallback onClear;
+  final String? label;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final ThemeData theme = Theme.of(context);
+    // Başlık: kayıtlı ad > son durağın adı > genel başlık.
+    final String? destName = waypoints.isEmpty ? null : waypoints.last.name;
+    final String title = label ?? destName ?? t.routeChipTitle;
+    return Material(
+      elevation: 3,
+      borderRadius: BorderRadius.circular(14),
+      color: theme.colorScheme.surface,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 6, 4, 6),
+        child: Row(
+          children: <Widget>[
+            const DocklyIcon(DocklyIcons.navigation,
+                size: 16, color: DocklyColors.brandPrimary),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.titleSmall
+                    ?.copyWith(fontWeight: FontWeight.w800),
+              ),
+            ),
+            IconButton(
+              icon: const DocklyIcon(DocklyIcons.close, size: 18),
+              tooltip: t.routeClearTooltip,
+              visualDensity: VisualDensity.compact,
+              onPressed: onClear,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// ROTA MODU ALT EYLEM KARTI (Konsept 1): üç bilgi kutusu (mesafe / süre /
+/// rüzgâr) + üç büyük düğme (+ nokta, kaydet, özet). Bilgi kutularına
+/// dokununca ayrıntı sayfası açılır — eski çipin 'route-summary' sözleşmesi
+/// (ve widget testleri) burada yaşar.
+class _RouteModeActionCard extends ConsumerWidget {
+  const _RouteModeActionCard({
+    required this.route,
+    required this.waypoints,
+    required this.onAddPoint,
+    required this.onSave,
+    required this.onDetail,
+    this.wind,
+  });
+
+  final SeaRoutePlan route;
+  final RouteWindReport? wind;
+  final List<RouteWaypoint> waypoints;
+  final VoidCallback onAddPoint;
+  final VoidCallback onSave;
+  final VoidCallback onDetail;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final ThemeData theme = Theme.of(context);
+    final double hours = route.etaHoursAtCruise;
+    final int h = hours.floor();
+    final int min = ((hours - h) * 60).round();
+    final String eta =
+        h > 0 ? L10n.fmt2(t.etaHmFmt, '$h', '$min') : L10n.fmt(t.etaMFmt, '$min');
+    final RouteWindReport? w = wind;
+    // Rüzgâr kutusu: uyarı varsa kn + renk; yoksa sakin onay.
+    final bool warn = w != null && w.warn;
+    final bool strong = w != null && w.strong;
+    final Color windColor = strong
+        ? DocklyColors.error
+        : (warn ? DocklyColors.warning : DocklyColors.success);
+    final String windText =
+        w == null ? '—' : '${w.worst.windKn.toStringAsFixed(0)} kn';
+    Widget stat(String value, String label, {Color? color}) => Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerLow,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: <Widget>[
+                Text(value,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w800, color: color)),
+                Text(label,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.4)),
+              ],
+            ),
+          ),
+        );
+    return Material(
+      elevation: 8,
+      shadowColor: Colors.black.withValues(alpha: 0.3),
+      borderRadius: BorderRadius.circular(18),
+      color: theme.colorScheme.surface,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            InkWell(
+              key: const ValueKey<String>('route-summary'),
+              borderRadius: BorderRadius.circular(12),
+              onTap: onDetail,
+              child: Row(
+                children: <Widget>[
+                  stat('≈ ${_fmtNm(route.distanceNm)} ${t.nmUnit}',
+                      t.routeDistCap),
+                  const SizedBox(width: 8),
+                  stat('~$eta', t.routeEtaCap),
+                  const SizedBox(width: 8),
+                  stat(windText, t.todayWindCap, color: windColor),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: onAddPoint,
+                    style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(0, 42)),
+                    child: Text(t.routeAddPointBtn,
+                        maxLines: 1, overflow: TextOverflow.ellipsis),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: onSave,
+                    style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(0, 42)),
+                    child: Text(t.saveLabel,
+                        maxLines: 1, overflow: TextOverflow.ellipsis),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: FilledButton(
+                    onPressed: onDetail,
+                    style:
+                        FilledButton.styleFrom(minimumSize: const Size(0, 42)),
+                    child: Text(t.routeChipTitle,
+                        maxLines: 1, overflow: TextOverflow.ellipsis),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _RouteChip extends ConsumerWidget {
   const _RouteChip({
     required this.route,

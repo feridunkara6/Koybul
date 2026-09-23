@@ -551,7 +551,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'setur-kalamis-fenerbahce-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-kadikoy'),
   'Setur Kalamış & Fenerbahçe Marina', 'İstanbul Kadıköy''de yer alan marina 1.278 deniz ve 220 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.',
-  ST_SetSRID(ST_MakePoint(29.034601, 40.976235), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(29.035806, 40.976944), 4326)::geography,
   65, NULL, NULL, 6.5,
   1278, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -591,7 +591,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'setur-yalova-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'yalova-merkez'),
   'Setur Yalova Marina', 'Yalova merkez sahilinde yer alan marina 225 deniz ve 70 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.',
-  ST_SetSRID(ST_MakePoint(29.2745, 40.6614), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(29.2745, 40.661444), 4326)::geography,
   40, NULL, NULL, 5,
   225, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -631,7 +631,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'setur-ayvalik-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-ayvalik'),
   'Setur Ayvalık Marina', 'Ayvalık ilçe merkezinde yer alan marina 200 deniz ve 30 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.',
-  ST_SetSRID(ST_MakePoint(26.688, 39.3141), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.687972, 39.314056), 4326)::geography,
   40, NULL, NULL, 4.7,
   200, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -671,7 +671,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'setur-cesme-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-cesme'),
   'Setur Çeşme Marina', 'Çeşme Altınyunus mevkiinde yer alan marina 186 deniz ve 60 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.',
-  ST_SetSRID(ST_MakePoint(26.3456, 38.3237), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.345556, 38.323722), 4326)::geography,
   45, NULL, NULL, 5.5,
   186, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -711,7 +711,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'setur-kusadasi-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'aydin-kusadasi'),
   'Setur Kuşadası Marina', 'Kuşadası ilçe merkezinde yer alan marina 557 deniz ve 100 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.',
-  ST_SetSRID(ST_MakePoint(27.2605, 37.8685), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.260472, 37.868472), 4326)::geography,
   90, NULL, NULL, 5,
   557, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -751,7 +751,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'netsel-marmaris-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
   'Netsel Marmaris Marina', 'Marmaris ilçe merkezinde yer alan marina 701 tekne kapasiteli deniz bağlama alanına sahiptir. Setur Marinas bünyesinde işletilmektedir.',
-  ST_SetSRID(ST_MakePoint(28.2772, 36.8506), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.276923, 36.851282), 4326)::geography,
   90, NULL, 3.5, 18,
   701, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -791,7 +791,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'setur-finike-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-finike'),
   'Setur Finike Marina', 'Finike ilçe merkezinde yer alan marina 284 deniz ve 100 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.',
-  ST_SetSRID(ST_MakePoint(30.153305, 36.294211), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(30.152556, 36.294694), 4326)::geography,
   35, NULL, NULL, 4.5,
   284, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -831,7 +831,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'setur-antalya-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-konyaalti'),
   'Setur Antalya Marina', 'Antalya Konyaaltı''nda Büyük Liman mevkiinde yer alan marina 198 deniz ve 150 kara kapasitesine sahiptir. Setur Marinas tarafından işletilmektedir.',
-  ST_SetSRID(ST_MakePoint(30.6148, 36.8348), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(30.614778, 36.83475), 4326)::geography,
   90, NULL, NULL, 5.5,
   198, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -871,7 +871,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'setur-kas-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kas'),
   'Setur Kaş Marina', 'Kaş Bucak Denizi''nde yer alan marina 447 deniz ve 120 kara kapasitesine sahiptir. Setur Marinas bünyesinde Makmarin Kaş Marina adıyla işletilmektedir.',
-  ST_SetSRID(ST_MakePoint(29.6242, 36.2053), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(29.624167, 36.205278), 4326)::geography,
   120, NULL, NULL, 30,
   447, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -951,7 +951,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'd-marin-gocek', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
   'D-Marin Göcek', 'Fethiye''nin Göcek mahallesinde yer alan marina 380 deniz bağlama ve 150 tekne kara park kapasitesine sahiptir. D-Marin tarafından işletilmektedir.',
-  ST_SetSRID(ST_MakePoint(28.942323, 36.748913), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.942778, 36.748333), 4326)::geography,
   85, NULL, NULL, NULL,
   380, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -987,7 +987,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'd-marin-turgutreis', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
   'D-Marin Turgutreis', 'Bodrum Turgutreis''te yer alan marina 532 deniz bağlama ve 150 çekek (kara) kapasitesine sahiptir. D-Marin tarafından işletilmektedir.',
-  ST_SetSRID(ST_MakePoint(27.2561, 37.0019), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.256111, 37.001944), 4326)::geography,
   75, NULL, NULL, NULL,
   532, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1019,7 +1019,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'd-marin-didim', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'aydin-didim'),
   'D-Marin Didim', 'Didim''de yer alan marina, 90''ı süperyat olmak üzere 591 deniz bağlama kapasitesine sahiptir. D-Marin tarafından işletilmektedir.',
-  ST_SetSRID(ST_MakePoint(27.2594, 37.338525), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.262222, 37.336667), 4326)::geography,
   70, 6, NULL, NULL,
   591, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1051,7 +1051,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'yalikavak-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
   'Yalıkavak Marina', 'Bodrum Yalıkavak''ta yer alan 620 yat kapasiteli marina; daha önce Palmarina adıyla hizmet veren tesis Yalıkavak Marina adını almıştır.',
-  ST_SetSRID(ST_MakePoint(27.285228, 37.105173), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.2855, 37.105), 4326)::geography,
   140, NULL, NULL, NULL,
   620, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1099,7 +1099,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'milta-bodrum-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
   'Milta Bodrum Marina', 'Bodrum kent merkezinde yer alan marina Doğan Holding bünyesinde işletilmektedir. Mavi Bayrak ve 5 Altın Çıpa ödüllerine sahiptir.',
-  ST_SetSRID(ST_MakePoint(27.4262, 37.0345), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.430556, 37.033333), 4326)::geography,
   70, 7, NULL, NULL,
   425, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1139,7 +1139,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'ece-saray-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
   'Ece Saray Marina & Resort', 'Fethiye Karagözler mevkiinde yer alan marina, 50 metreye kadar tekneler için 350 bağlama kapasitesi sunmaktadır. Mavi Bayrak ve 5 Altın Çıpa sahibidir.',
-  ST_SetSRID(ST_MakePoint(29.1016, 36.6244), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(29.101346, 36.62295), 4326)::geography,
   50, NULL, NULL, NULL,
   350, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1183,7 +1183,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'gocek-village-port-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
   'Göcek Village Port Marina', 'Göcek''te yer alan marina (eski adıyla Marintürk Göcek Village Port) Setur Marinas tarafından işletilmektedir. Denizde 220, karada 200 tekne kapasitesi ve çekek alanı bulunmaktadır.',
-  ST_SetSRID(ST_MakePoint(28.930173, 36.755231), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.932833, 36.755), 4326)::geography,
   50, NULL, NULL, NULL,
   220, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1223,7 +1223,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'club-marina-gocek', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
   'Club Marina', '1990 yılında kurulan Club Marina, Göcek Büngüş Koyu''nda yer alan doğal korunaklı bir marinadır ve mega yatlara hizmet verebilmektedir.',
-  ST_SetSRID(ST_MakePoint(28.925919, 36.748992), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.9255, 36.749167), 4326)::geography,
   80, NULL, NULL, NULL,
   100, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1267,7 +1267,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'skopea-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
   'Skopea Marina', '1989 yılında kurulan Skopea Marina, Göcek merkez sahil şeridinde yer almaktadır ve 110 metreye kadar teknelere hizmet verebilmektedir.',
-  ST_SetSRID(ST_MakePoint(28.9392, 36.754358), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.938667, 36.754167), 4326)::geography,
   110, NULL, NULL, NULL,
   80, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1307,7 +1307,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'marti-marina-orhaniye', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
   'Martı Marina', 'Marmaris''in Orhaniye mevkiinde yer alan marina Martı Hotels & Marinas tarafından işletilmektedir. Yakıt istasyonu ve teknik servis hizmetleri bulunmaktadır.',
-  ST_SetSRID(ST_MakePoint(28.13261, 36.757446), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.126774, 36.771374), 4326)::geography,
   NULL, 4, NULL, NULL,
   380, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1351,7 +1351,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'my-marina-ekincik', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-koycegiz'),
   'My Marina Yacht Club', 'Köyceğiz''e bağlı Ekincik Koyu''nda restoran ve yat bağlama iskelesi hizmeti veren küçük bir tesistir. Nisan-Ekim döneminde sezonluk olarak faaliyet göstermektedir.',
-  ST_SetSRID(ST_MakePoint(28.565108, 36.8242), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.565, 36.828333), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1392,7 +1392,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'yacht-marin-marmaris', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
   'Yacht Marin Marmaris', 'Marmaris Adaköy Yalancı Boğaz mevkiinde yer alan büyük bir marinadır; Marmaris Yacht Marina adıyla da bilinir. Denizde 750 tekne kapasitesi ve büyük bir çekek sahası bulunmaktadır.',
-  ST_SetSRID(ST_MakePoint(28.3092, 36.8197), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.30918, 36.81806), 4326)::geography,
   75, NULL, NULL, NULL,
   750, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1432,7 +1432,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'albatros-marina-marmaris', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
   'Albatros Marina', 'Marmaris merkezinin yaklaşık 3 km doğusunda 1982''de kurulan marina, denizde 44 tekne bağlama kapasitesi ve karada 150 tekne için çekek alanı sunmaktadır.',
-  ST_SetSRID(ST_MakePoint(28.2856, 36.8439), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.285833, 36.84475), 4326)::geography,
   NULL, NULL, NULL, NULL,
   44, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1512,7 +1512,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'atakoy-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-bakirkoy'),
   'Ataköy Marina', 'İstanbul Bakırköy''de yer alan marina denizde 1000 tekneye bağlama imkânı sunmaktadır. Akaryakıt istasyonu ve teknik bakım-onarım hizmetleri bulunmaktadır.',
-  ST_SetSRID(ST_MakePoint(28.8819, 40.9728), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.87595, 40.971433), 4326)::geography,
   30, NULL, NULL, NULL,
   1000, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1560,7 +1560,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'viaport-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-tuzla'),
   'Viaport Marina', 'İstanbul Tuzla''da Viaport alışveriş ve eğlence kompleksi içinde 2015 yılında açılan marinadır.',
-  ST_SetSRID(ST_MakePoint(29.3188, 40.8158), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(29.316177, 40.817195), 4326)::geography,
   80, NULL, NULL, NULL,
   750, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1600,7 +1600,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'west-istanbul-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-beylikduzu'),
   'West Istanbul Marina', 'İstanbul Beylikdüzü''nde denizde 600 tekne bağlama, karada 300 tekne kapasitesine sahip marinadır. 75 ve 700 ton kapasiteli travel liftleri ile bakım-onarım ve refit hizmetleri sunar; gümrük kapısı bulunan giriş limanıdır.',
-  ST_SetSRID(ST_MakePoint(28.665105, 40.961033), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.663611, 40.962778), 4326)::geography,
   NULL, NULL, NULL, NULL,
   600, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1648,7 +1648,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'marinturk-istanbul-city-port', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-pendik'),
   'Marinturk İstanbul City Port', 'İstanbul Pendik''te yer alan marina yüzer pontonlarla 785 bağlama kapasitesine sahiptir. 200 tona kadar tekne çekme-indirme imkânı ve bakım-onarım hizmetleri bulunmaktadır.',
-  ST_SetSRID(ST_MakePoint(29.2375, 40.8705), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(29.238056, 40.871389), 4326)::geography,
   NULL, NULL, NULL, NULL,
   785, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1696,7 +1696,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'teos-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-seferihisar'),
   'Teos Marina', 'İzmir''in Seferihisar ilçesi Sığacık''ta 2010 yılından beri hizmet veren yat limanıdır. Denizde yaklaşık 480, karada 80 tekne kapasitesine sahiptir.',
-  ST_SetSRID(ST_MakePoint(26.7825, 38.1958), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.782167, 38.193333), 4326)::geography,
   40, NULL, NULL, NULL,
   480, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1732,7 +1732,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'port-alacati-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-cesme'),
   'Port Alaçatı Marina', 'İzmir''in Çeşme ilçesi Alaçatı''da yat limanı ile konut ve otel alanlarını birleştiren bir deniz yerleşimidir.',
-  ST_SetSRID(ST_MakePoint(26.379835, 38.25877), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.383056, 38.255278), 4326)::geography,
   NULL, NULL, NULL, NULL,
   260, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1804,7 +1804,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'ic-cesme-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-cesme'),
   'Çeşme Marina', 'Çeşme ilçe merkezinde IC Holding ve Camper & Nicholsons ortaklığında işletilen, 60 metreye kadar teknelere hizmet veren yat limanıdır. Gümrük ve pasaport işlemlerinin yapılabildiği bir giriş limanıdır.',
-  ST_SetSRID(ST_MakePoint(26.300102, 38.3233), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.301278, 38.32175), 4326)::geography,
   60, NULL, NULL, NULL,
   400, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1840,7 +1840,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'g-marina-kemer', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-kemer'),
   'G-Marina Kemer', 'Kemer ilçe merkezinde yer alan marina (eski adıyla Kemer Türkiz Marina) denizde 230 ve karada 140 tekne kapasitesine sahiptir. 2016''dan bu yana Mavi Yeşil International Tourism Ltd. tarafından işletilmektedir.',
-  ST_SetSRID(ST_MakePoint(30.573331, 36.599625), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(30.573056, 36.599444), 4326)::geography,
   NULL, NULL, NULL, NULL,
   230, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1888,7 +1888,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'alanya-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-alanya'),
   'Alanya Marina', '10 Şubat 2011''de açılan Alanya Marina, denizde 287 ve karada 150 tekne kapasitesine sahiptir. 100 ton kapasiteli travel lift bulunmaktadır.',
-  ST_SetSRID(ST_MakePoint(31.955916, 36.549349), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(31.94723, 36.55775), 4326)::geography,
   NULL, NULL, NULL, NULL,
   287, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -1944,7 +1944,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'izmir-marina', 2, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-balcova'),
   'İzmir Marina', 'Eski Levent Marina, İzmir Büyükşehir Belediyesi iştiraki İZDENİZ A.Ş. tarafından devralınarak İzmir Marina adıyla işletilmektedir. Balçova''daki tesiste 7/24 elektrik-su, güvenlik, dalgıç ve tekne yıkama hizmetleri bulunmaktadır.',
-  ST_SetSRID(ST_MakePoint(27.064726, 38.406352), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.06792, 38.40599), 4326)::geography,
   NULL, NULL, NULL, 5,
   71, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -2295,7 +2295,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'canakkale-yat-limani', 2, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-merkez'),
   'Çanakkale Yat Limanı', 'Çanakkale kent merkezindeki kordonda yer alan, belediye tarafından işletilen 120 yat kapasiteli limandır. Geçici hudut kapısı statüsüyle transitlog işlemleri yapılabilmektedir.',
-  ST_SetSRID(ST_MakePoint(26.400082, 40.154963), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.4045, 40.1525), 4326)::geography,
   NULL, NULL, NULL, NULL,
   120, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -2365,7 +2365,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'guzelyali-yat-limani', 2, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'bursa-mudanya'),
   'Güzelyalı Yat Limanı', 'Mudanya Güzelyalı''daki liman 2020''den bu yana Bursa Büyükşehir Belediyesi iştiraki BURULAŞ tarafından işletilmektedir. 58 yat ve 60 balıkçı teknesi kapasiteli tesis 7/24 güvenlik ve kamera sistemiyle izlenmektedir.',
-  ST_SetSRID(ST_MakePoint(28.932169, 40.35649), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.932167, 40.356167), 4326)::geography,
   NULL, NULL, NULL, NULL,
   58, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -2401,7 +2401,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'ispark-istinye-tekne-park', 2, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-sariyer'),
   'İSPARK İstinye Tekne Park', 'İstinye Koyu''nda İBB iştiraki İSPARK tarafından işletilen, yüzer iskeleli 180 tekne kapasiteli tekne parktır. Su, elektrik, WC ve güvenlik hizmetleri sunulmakta; günlükten yıllığa abonelik uygulanmaktadır.',
-  ST_SetSRID(ST_MakePoint(29.055748, 41.111041), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(29.057167, 41.113667), 4326)::geography,
   NULL, NULL, NULL, NULL,
   180, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -2437,7 +2437,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'ispark-tarabya-tekne-park', 2, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-sariyer'),
   'İSPARK Tarabya Tekne Park', 'Tarabya Koyu''nda İBB iştiraki İSPARK tarafından işletilen yüzer iskeleli tekne parktır; işletmeci 265 tekne kapasitesi bildirmektedir. Su, elektrik, WC ve güvenlik hizmetleri sunulmaktadır.',
-  ST_SetSRID(ST_MakePoint(29.057901, 41.138466), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(29.056333, 41.138333), 4326)::geography,
   NULL, NULL, NULL, NULL,
   265, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -2473,7 +2473,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'antalya-kaleici-yat-limani', 2, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-muratpasa'),
   'Antalya Kaleiçi Yat Limanı', 'Antalya''nın tarihi Kaleiçi eski limanında yer alan, büyükşehir belediyesi şirketi tarafından işletilen 65 yat kapasiteli limandır. 24 saat palamar ve güvenlik hizmeti verilmekte, günübirlik gezi tekneleri de limanı yoğun kullanmaktadır.',
-  ST_SetSRID(ST_MakePoint(30.699781, 36.877653), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(30.70185, 36.8843), 4326)::geography,
   NULL, NULL, NULL, NULL,
   65, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -3872,7 +3872,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'marmara-adasi-limani', 2, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-marmara'),
   'Marmara Adası Limanı', 'Marmara Adası merkez yerleşimindeki belediye limanı; yaklaşık 125 tekne kapasitelidir ve kuzey rıhtımda 6-8 misafir yat baştan/kıçtan kara bağlanabilir. Hâkim kuzey/kuzeydoğu rüzgârlarında korunma iyidir, dağdan sağanak rüzgâr inebilir. Rıhtım dibi 1,5-2,5 m; su çekimi büyük tekneler rıhtım açığında demirlemelidir.',
-  ST_SetSRID(ST_MakePoint(27.558949, 40.581883), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.560167, 40.584833), 4326)::geography,
   NULL, NULL, 1.5, 7,
   125, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -4080,7 +4080,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'bozcaada-limani', 2, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'canakkale-bozcaada'),
   'Bozcaada Limanı', 'Bozcaada''nın kuzeydoğusunda, kalenin dibindeki ana liman. Ziyaretçi tekneler dalgakıran boyunca kıçtan kara veya aborda bağlanır; kıyıdan ~40 m açıkta zincir donanımı vardır. Doğu-güneydoğu rüzgârları dışında her yönden yeterli korunak sağlar. Rıhtımda 13 su/elektrik noktası bulunur. Resmî yat kapasitesi 30 (TKYGM listesi); balıkçı tekneleriyle birlikte toplam ~125 tekne barındırır. Azami su çekimi ~3 m. Tankerle yakıt ikmali, kızak/çekek, buz ve halat temini bildirilmektedir.',
-  ST_SetSRID(ST_MakePoint(26.076534, 39.83473), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.074667, 39.8355), 4326)::geography,
   NULL, 3, NULL, 3,
   30, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -4188,7 +4188,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'burhaniye-oren-yat-limani', 2, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'balikesir-burhaniye'),
   'Burhaniye (Ören) Yat Limanı', 'Edremit Körfezi''nin güneydoğusunda, Burhaniye İskele/Ören mevkiindeki belediye işletmeli yat limanı ve bitişik balıkçı barınağı. Kapasite ~250 tekne; giriş sorunsuz, liman içinde 3-4 m derinlik. Ana dalgakıran 537 m; kızak mevcuttur. Bölgede kuzey sektör rüzgârları hâkimdir, bağlanırken yardım alınması tavsiye edilir. 2023-24''te yenileme çalışmaları yapılmış ve kıyı tesisi işletme belgesi alınmıştır. Tankerle yakıt ikmali yapılabilir, çevrede yat malzemecisi vardır.',
-  ST_SetSRID(ST_MakePoint(26.9267, 39.4847), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.923333, 39.4855), 4326)::geography,
   NULL, NULL, 3, 4,
   250, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -4492,7 +4492,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'oasis-marina-yeni-foca', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'izmir-foca'),
   'Oasis Marina Yeni Foça', 'Yeni Foça''daki eski yat limanında hizmete giren özel marina; 8-30 m arası teknelere hizmet verir. 7/24 palamar, elektrik-su, güvenlik/kamera, duş-WC, çamaşırhane, yakıt ve atık su istasyonu, çekek ve bakım hizmetleri mevcuttur. Deniz hudut kapısı (Port of Entry) statüsündedir. Koy batıya açıktır; marina mendirek içinde korunaklıdır.',
-  ST_SetSRID(ST_MakePoint(26.838722, 38.743667), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.840833, 38.743833), 4326)::geography,
   30, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -4770,7 +4770,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'guzelce-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-buyukcekmece'),
   'Güzelce Marina', 'Büyükçekmece''de özel marina; 250 deniz ve 120 kara bağlama kapasitesiyle 60 m''ye kadar yat kabul eder.',
-  ST_SetSRID(ST_MakePoint(28.50687, 40.998142), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.5095, 40.998833), 4326)::geography,
   60, NULL, NULL, NULL,
   250, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -4806,7 +4806,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'kiyi-istanbul-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-buyukcekmece'),
   'Kıyı İstanbul Marina', 'Büyükçekmece Kıyı İstanbul kompleksinde yer alan özel marina.',
-  ST_SetSRID(ST_MakePoint(28.58131, 41.015094), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.580333, 41.015833), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -4838,7 +4838,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'kumkuyu-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mersin-erdemli'),
   'Kumkuyu Marina', 'Erdemli Kumkuyu''da 200 tekne kapasiteli özel marina; 80 tonluk travel-lift ve teknik servis atölyeleri bulunur.',
-  ST_SetSRID(ST_MakePoint(34.237604, 36.521843), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(34.2295, 36.529167), 4326)::geography,
   NULL, NULL, NULL, NULL,
   200, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -4878,7 +4878,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'gazipasa-gold-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'antalya-gazipasa'),
   'Gazipaşa Gold Marina', 'Gazipaşa''da yeni hizmete giren özel marina; Selinus Antik Kenti yakınında.',
-  ST_SetSRID(ST_MakePoint(32.28, 36.2638), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(32.278833, 36.264167), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -4910,7 +4910,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'kairos-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
   'Kairos Marina', 'Datça''da 246 deniz ve 256 kara kapasiteli özel marina.',
-  ST_SetSRID(ST_MakePoint(27.6195, 36.7718), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.617, 36.7705), 4326)::geography,
   NULL, NULL, NULL, NULL,
   246, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -4934,7 +4934,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'marinturk-gocek-exclusive', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
   'Göcek Exclusive Marina', 'Göcek Poruklu Koyu''nda Setur Marinas tarafından işletilen özel marina (eski adıyla Marintürk Göcek Exclusive).',
-  ST_SetSRID(ST_MakePoint(28.927451, 36.753344), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.926333, 36.743333), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -4962,7 +4962,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'aganlar-marina-bodrum', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-bodrum'),
   'Aganlar Marina', 'Bodrum''da marina ve yat çekek yeri.',
-  ST_SetSRID(ST_MakePoint(27.450135, 37.0136), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.451233, 37.013639), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -4986,7 +4986,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'gouvia-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-korfu'),
   'Gouvia Marina', 'Korfu''da 1.235 bağlama ve 520 kara kapasiteli büyük marina; 80 m''ye kadar yat kabul eder.',
-  ST_SetSRID(ST_MakePoint(19.8517, 39.6517), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(19.8525, 39.648611), 4326)::geography,
   80, 5.5, NULL, NULL,
   1235, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5010,7 +5010,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'kleopatra-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-preveza'),
   'Kleopatra Marina', 'Aktion-Preveza''da marina ve 1.000 kapasiteli dev çekek sahası; kışlama merkezi.',
-  ST_SetSRID(ST_MakePoint(20.764107, 38.952374), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(20.765278, 38.951667), 4326)::geography,
   30, 8, NULL, NULL,
   100, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5034,7 +5034,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'lefkas-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-lefkada'),
   'Lefkas Marina', 'Lefkada''da 620 bağlama ve 280 kara kapasiteli marina.',
-  ST_SetSRID(ST_MakePoint(20.714273, 38.83145), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(20.714167, 38.829722), 4326)::geography,
   45, 4, NULL, NULL,
   620, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5058,7 +5058,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'mesolongi-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-mesolongi'),
   'Messolonghi Marina', 'Mesolongi lagününde büyüyen marina; 230 kara kapasitesi.',
-  ST_SetSRID(ST_MakePoint(21.41563, 38.368106), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(21.41702, 38.36197), 4326)::geography,
   50, 6, NULL, NULL,
   180, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5082,7 +5082,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'kalamata-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kalamata'),
   'Kalamata Marina', 'Mora''nın güneyinde, Kalamata şehir merkezine bitişik marina.',
-  ST_SetSRID(ST_MakePoint(22.1217, 37.0217), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(22.1075, 37.0256), 4326)::geography,
   25, 3, NULL, NULL,
   250, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5106,7 +5106,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'zea-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
   'Zea Marina', 'Pire''nin tarihi marinası; 670 bağlama, kıçtankara 80 m''ye, aborda 150 m''ye kadar.',
-  ST_SetSRID(ST_MakePoint(23.6483, 37.9367), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(23.649444, 37.934722), 4326)::geography,
   80, 9, NULL, NULL,
   670, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5130,7 +5130,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'athens-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
   'Athens Marina', 'Neo Faliro''da mega ve süper yatlara özel marina; 130 m''ye kadar.',
-  ST_SetSRID(ST_MakePoint(23.6655, 37.9414), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(23.669667, 37.941167), 4326)::geography,
   130, NULL, NULL, NULL,
   130, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5154,7 +5154,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'flisvos-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
   'Flisvos Marina', 'Paleo Faliro''da mega yat odaklı marina; kapasitenin yarısı 35 m üzeri yatlara ayrılmıştır.',
-  ST_SetSRID(ST_MakePoint(23.68, 37.9363), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(23.679, 37.935333), 4326)::geography,
   90, NULL, NULL, NULL,
   303, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5178,7 +5178,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'alimos-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
   'Alimos Marina', 'Atina''nın ve Yunanistan''ın en büyük marinalarından; 1.080 bağlama, 600 kara.',
-  ST_SetSRID(ST_MakePoint(23.7005, 37.9113), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(23.707289, 37.913201), 4326)::geography,
   40, NULL, NULL, 6.5,
   1080, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5202,7 +5202,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'agios-kosmas-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
   'Agios Kosmas Marina', 'Elliniko''da (eski havalimanı sahili) 337 bağlama kapasiteli marina; 80 m''ye kadar.',
-  ST_SetSRID(ST_MakePoint(23.7247, 37.8806), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(23.7275, 37.877167), 4326)::geography,
   80, NULL, NULL, NULL,
   337, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5226,7 +5226,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'vouliagmeni-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
   'Vouliagmeni Marina', 'Atina Rivierası''nın prestijli koy marinası.',
-  ST_SetSRID(ST_MakePoint(23.775, 37.7217), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(23.773514, 37.803312), 4326)::geography,
   50, NULL, NULL, 8,
   115, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5250,7 +5250,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'olympic-marine', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-atina'),
   'Olympic Marine', 'Lavrio/Sounio''da 680 bağlama ve 700 kara kapasiteli büyük marina ve çekek merkezi.',
-  ST_SetSRID(ST_MakePoint(24.057668, 37.696087), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(24.05964, 37.695928), 4326)::geography,
   40, NULL, NULL, NULL,
   680, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5274,7 +5274,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'selanik-aretsou-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-selanik'),
   'Thessaloniki Aretsou Marina', 'Selanik Kalamaria''da şehir marinası.',
-  ST_SetSRID(ST_MakePoint(22.943144, 40.576883), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(22.946333, 40.573667), 4326)::geography,
   27, NULL, NULL, NULL,
   242, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5298,7 +5298,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'sani-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-halkidiki'),
   'Sani Marina', 'Halkidiki Kassandra''da Sani Resort bünyesinde butik marina.',
-  ST_SetSRID(ST_MakePoint(23.3062, 40.0974), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(23.310833, 40.098333), 4326)::geography,
   27, NULL, NULL, NULL,
   215, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5322,7 +5322,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'porto-carras-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-halkidiki'),
   'Porto Carras Marina', 'Sithonia Neos Marmaras''ta resort marinası; 55 m''ye kadar yat kabul eder.',
-  ST_SetSRID(ST_MakePoint(23.783944, 40.069742), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(23.793833, 40.075333), 4326)::geography,
   55, 5.5, NULL, NULL,
   315, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5346,7 +5346,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'midilli-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-midilli'),
   'Mytilene Marina', 'Midilli (Lesvos) adasında marina; Ayvalık''ın karşı kıyısı.',
-  ST_SetSRID(ST_MakePoint(26.5578, 39.0987), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.557833, 39.097833), 4326)::geography,
   25, NULL, NULL, NULL,
   222, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5370,7 +5370,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'samos-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-samos'),
   'Samos Marina', 'Pythagorio''da (Samos) 260 bağlama ve 170 kara kapasiteli marina; Kuşadası''nın karşısı.',
-  ST_SetSRID(ST_MakePoint(26.963131, 37.693243), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.958333, 37.695556), 4326)::geography,
   50, 4, NULL, NULL,
   260, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5394,7 +5394,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'leros-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-leros'),
   'Leros Marina', 'Lakki (Leros) doğal limanında marina ve 500 kapasiteli çekek sahası; 160 tonluk lift.',
-  ST_SetSRID(ST_MakePoint(26.8567, 37.1293), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.855694, 37.128417), 4326)::geography,
   NULL, NULL, NULL, NULL,
   220, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5418,7 +5418,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'kos-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kos'),
   'Kos Marina', 'Kos (İstanköy) adasında tam donanımlı marina; Bodrum''un karşı kıyısı. 100 tonluk travel-lift.',
-  ST_SetSRID(ST_MakePoint(27.30101, 36.89398), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.3025, 36.891667), 4326)::geography,
   80, 5, NULL, NULL,
   250, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5458,7 +5458,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'rodos-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-rodos'),
   'Rhodes Marina', 'Rodos adasında 600 bağlama kapasiteli marina; mega yat kabul eder.',
-  ST_SetSRID(ST_MakePoint(28.2404, 36.4363), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.239167, 36.4345), 4326)::geography,
   61, NULL, NULL, NULL,
   600, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -5568,7 +5568,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'rodos-mandraki-limani', 2, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-rodos'),
   'Mandraki Limanı (Rodos)', 'Rodos''un tarihî yat limanı — antik Kolossos''un yerinde, üç yel değirmeni manzaralı. Kıçtankara bağlama; rıhtımda su + 220V, tankerle yakıt, ofis yanında WC/sıcak duş. Yer ayırtma en az 48 saat önce önerilir; dipte eski tonoz hatları olduğundan bol kaloma bırakın.',
-  ST_SetSRID(ST_MakePoint(28.228188, 36.451108), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.22615, 36.45113), 4326)::geography,
   30, NULL, NULL, NULL,
   175, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -6354,7 +6354,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'kalymnos-pothia-limani', 2, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kalymnos'),
   'Pothia Limanı (Kalymnos)', 'Sünger dalgıçlarının adası Kalymnos''un ana limanı Pothia''da rıhtımlı küçük marina. Su çekimi ~3 m; feribot giriş-çıkışlarında rıhtımda çalkantı olabilir. Bodrum''un karşı kıyısı — Türkiye''den kısa geçiş.',
-  ST_SetSRID(ST_MakePoint(26.986744, 36.949329), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.983833, 36.949167), 4326)::geography,
   NULL, 3, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -6462,7 +6462,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'lakki-marina-leros', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-leros'),
   'Lakki Marina (Leros)', 'Leros''un korunaklı Lakki körfezinde küçük, sakin marina; her tekneye iki tonoz halatı verilir. Derinlik ~7 m. WC/duş yok — sade ama güler yüzlü bir duraklama. (Aynı körfezdeki büyük Leros Marina ayrı kayıttır.)',
-  ST_SetSRID(ST_MakePoint(26.85016, 37.128536), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.848667, 37.128833), 4326)::geography,
   NULL, NULL, NULL, 7,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -6486,7 +6486,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'kos-eski-liman-mandraki', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kos'),
   'Kos Eski Limanı (Mandraki)', 'Kos kalesinin dibindeki tarihî eski liman; özel işletmeli küçük marina — rehber ''gerçek bir mücevher, birinci sınıf hizmet'' diye aktarıyor. ~4 m derinlik; rıhtımda su ve elektrik. Bodrum karşısı. (Adanın büyük Kos Marina''sı ayrı kayıttır.)',
-  ST_SetSRID(ST_MakePoint(27.288861, 36.895361), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.289167, 36.8955), 4326)::geography,
   NULL, NULL, NULL, 4,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -6617,7 +6617,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'limia-marina-sakiz', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-sakiz'),
   'Limia Marina (Sakız)', 'Sakız''ın kuzeybatısında, Volissos yakınındaki Limnia koyunda küçük marina; su ve elektrik ÜCRETSİZ. Su çekimi ~3,5 m. Çeşme-Karaburun karşısındaki sakin alternatif.',
-  ST_SetSRID(ST_MakePoint(25.918422, 38.468564), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(25.9175, 38.469667), 4326)::geography,
   NULL, 3.5, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -7037,7 +7037,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'kalantos-marina-naxos', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-naxos'),
   'Kalantos Marina (Naxos)', 'Naxos''un güney ucunda, meltemiden saklanan Kalantos koyundaki küçük marina; su çekimi ~3 m. Kiklad geçişlerinde güney rotasının sığınağı.',
-  ST_SetSRID(ST_MakePoint(25.475034, 36.934251), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(25.474167, 36.935), 4326)::geography,
   NULL, 3, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -7244,7 +7244,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'finikas-marina-syros', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-syros'),
   'Finikas Marina (Syros)', 'Syros''un güneybatısındaki sakin Finikas koyunda marina; su çekimi ~6,5 m. Gündüz su, çağrıyla motorin, akşam 8''e dek duş. Ücret örneği: 45 ft yat için ~20€. Rehber ''gerçekten hoş ve sakin bir nokta'' diyor.',
-  ST_SetSRID(ST_MakePoint(24.876825, 37.396908), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(24.876333, 37.3975), 4326)::geography,
   NULL, 6.5, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -7348,7 +7348,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'argostoli-marina-kefalonya', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kefalonya'),
   'Argostoli Marina (Kefalonya)', 'Kefalonya''nın başkenti Argostoli''nin marinası; su çekimi ~3,5 m. DİKKAT: limana neta girer ve geri yıkama yapar — bol usturmaça ile bağlanın.',
-  ST_SetSRID(ST_MakePoint(20.4955, 38.180833), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(20.495, 38.1805), 4326)::geography,
   NULL, 3.5, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -7372,7 +7372,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'agia-pelagia-marina-kefalonya', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kefalonya'),
   'Agia Pelagia Marina (Kefalonya)', 'Kefalonya''nın güneyinde küçük marina; su çekimi ~3 m, VHF 73. Gecelik ücret örneği ~20€ (elektrik hariç).',
-  ST_SetSRID(ST_MakePoint(20.515614, 38.101533), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(20.5145, 38.102), 4326)::geography,
   NULL, 3, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -7396,7 +7396,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'poros-marina-kefalonya', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-kefalonya'),
   'Poros Marina (Kefalonya)', 'Kefalonya''nın doğu kıyısında Poros marinası; su çekimi ~2,8 m, VHF 12.',
-  ST_SetSRID(ST_MakePoint(20.781626, 38.14747), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(20.78, 38.147167), 4326)::geography,
   NULL, 2.8, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -7435,7 +7435,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'zakinthos-marina', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-zakinthos'),
   'Zakynthos Marina', 'Zakynthos kentinin marinası; su çekimi ~7 m — derin tekneler için rahat. Rehber ''olağanüstü misafirperverlik, netadan ve rüzgârdan mükemmel korunma'' diye aktarıyor.',
-  ST_SetSRID(ST_MakePoint(20.902194, 37.783469), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(20.904667, 37.7825), 4326)::geography,
   NULL, 7, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -7654,7 +7654,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'agios-nikolaos-marina-girit', 1, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-girit'),
   'Agios Nikolaos Marina (Girit)', 'Doğu Girit''in Mirabello körfezindeki Agios Nikolaos marinası; VHF 72, su çekimi ~8 m — derin tekneler için rahat. Rehber ''Yunanistan''da gerçek bir mücevher, personeli harika'' diye aktarıyor.',
-  ST_SetSRID(ST_MakePoint(25.718444, 35.186056), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(25.718333, 35.186167), 4326)::geography,
   NULL, 8, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -7678,7 +7678,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'sitia-marina-girit', 2, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-girit'),
   'Sitia Marina (Girit)', 'Girit''in kuzeydoğu ucundaki Sitia limanı; VHF 12, rıhtımda elektrik ve su, restoranlar yakın. ÖNEMLİ: yer için varıştan bir gün önce liman kaptanını arayın (ikinci telefon).',
-  ST_SetSRID(ST_MakePoint(26.108667, 35.207444), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(26.108, 35.208), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -7995,7 +7995,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'gulluk-marina', 2, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
   'Güllük Limanı', 'Güllük Körfezi''nin doğu yakasında belediye/kooperatif limanı; Milas-Bodrum Havalimanı''na 8 km. VHF 16''dan ''Güllük Marina'' çağrılır. Dönüş alanında 7-8 m, kum-çamur zeminde iyi tutuş; demir sahası ~20 m. Su, elektrik, sintine alımı ve tankerle yakıt vardır. Kaynağa (2016) göre gümrüklü giriş-çıkış limanıdır.',
-  ST_SetSRID(ST_MakePoint(27.594036, 37.239943), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.5875, 37.228833), 4326)::geography,
   NULL, NULL, 7, 8,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -9007,7 +9007,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'gokova-oren-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-milas'),
   'Setur Ören Rib & Refit Park', 'Gökova Körfezi''nin kuzey kıyısındaki eski Setur Gökova Ören Marina, ''Ören Rib & Refit Park'' adıyla çekek ve bakım-onarım tesisine dönüştürülmüştür. 150 tekne kapasiteli kara parkı, 50 m''ye kadar tekneler için 240 ton amfibik lift, 70 ton travel lift ve üç kapalı hangar bulunur. Ziyaretçi teknelere denizde bağlama hizmeti sunmaz; çekek, kışlama ve refit için hizmet verir.',
-  ST_SetSRID(ST_MakePoint(27.981972, 37.031025), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.903725, 37.023936), 4326)::geography,
   NULL, NULL, NULL, NULL,
   410, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -9167,7 +9167,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'tourlos-marina-mykonos', 2, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-mykonos'),
   'Tourlos Marina (Mykonos Yeni Limanı)', 'Mykonos''un yeni limanındaki yat bölümü; ~40 ponton yeri, maksimum boy 25 m, derinlik 3-5 m. İki giriş vardır (güney kırmızı, kuzey yeşil fener); güney rıhtım daha korunaklıdır. Su-elektrik pontonlarda; yakıt mini tankerle; Wi-Fi, duş-WC ve mekanik tamir bulunur. DİKKAT: meltem K/KB''den doğrudan marinaya eser — Mykonos, Kikladlar''ın en rüzgârlı adalarındandır. Kasabaya 20 dk yürüyüş ya da otobüs.',
-  ST_SetSRID(ST_MakePoint(25.322599, 37.465302), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(25.326167, 37.464667), 4326)::geography,
   25, NULL, 3, 5,
   40, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -9407,7 +9407,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'adakoy-marina-marmaris', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
   'Adaköy Marina', 'Marmaris Adaköy yarımadasında özel marina; 200 bağlama yeri — 150 m''ye kadar teknelere kıçtan ya da aborda. VHF 73. 400 amperlik elektrik altyapısı, içme suyu, 75 ton kapasiteli travel lift ve 15.000 m² beton kara sahası; 7/24 güvenlik ve CCTV. Yat kulübü, restoran-bar, havuz, spor salonu ve tenis kortları vardır.',
-  ST_SetSRID(ST_MakePoint(28.292989, 36.819781), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.293, 36.819167), 4326)::geography,
   150, NULL, NULL, NULL,
   200, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -9916,7 +9916,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'letoonia-marinet-fethiye', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
   'Letoonia Marinet', 'Fethiye Körfezi''nde Paçariz Burnu''ndaki Letoonia tatil köyünün küçük marinası; 30 yat kapasitesi. Su ve elektrik bağlanır; restoran-bar tesis içindedir. Tesisin batısında 10-15 m''ye demirlenebilir. Yakıt, Fethiye merkezden tankerle ikmal edilir. Paçariz feneri: yeşil çakar/3 sn, 4 mil.',
-  ST_SetSRID(ST_MakePoint(29.099165, 36.636503), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(29.099167, 36.6355), 4326)::geography,
   NULL, NULL, NULL, NULL,
   30, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -10097,7 +10097,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'yacht-classic-marina-fethiye', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-fethiye'),
   'Yacht Classic Hotel & Marina', 'Fethiye merkezde, kasabaya 5 dk yürüme mesafesinde otel marinası — resmî listedeki ''Yacht Otel Club & Marina'' eksiği. Modern T-iskelede tonoz (lazy line) düzeniyle 30 yat. Yakıt ve kumanya ikmali yapılır; duş, havuz, sauna, hamam, çamaşırhane ve internet vardır; Mori Restaurant ve BluBar tesis içindedir. Mürettebat değişimi için bilinen duraktır; çeyrek asırdır işletmededir.',
-  ST_SetSRID(ST_MakePoint(29.098555, 36.623118), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(29.09974, 36.621769), 4326)::geography,
   NULL, NULL, NULL, NULL,
   30, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -10355,7 +10355,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'vlychada-marina-santorini', 2, 'published', 'GR',
   (SELECT id FROM admin_areas WHERE country_code = 'GR' AND level = 'province' AND slug = 'gr-santorini'),
   'Vlychada Marina (Santorini)', 'Santorini''nin güney ucundaki tek gerçek marina; ~200 yer. Fırtınada adada bağlanılabilecek TEK liman budur; doğu rıhtımı GD ve batılıdan iyi korur. ÇOK ÖNEMLİ UYARI: girişte su 1,7 m''DEN AZDIR ve tehlikelidir — iç dalgakıran yakınında batık kaya vardır, girişte DIŞ dalgakırana yakın seyredin; derin çekişli tekneler girmeden liman idaresini arasın. Volkanik yüzen taş kuzeybatı köşede birikebilir — limanda motoru çalıştırırken soğutma emişini tıkayabilir. Su-elektrik rıhtımda; yakıt mini tankerle.',
-  ST_SetSRID(ST_MakePoint(25.433971, 36.335166), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(25.435, 36.336667), 4326)::geography,
   NULL, NULL, NULL, 1.7,
   200, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -10619,7 +10619,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'datca-yat-limani', 2, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-datca'),
   'Datça Yat Limanı (Belediye Rıhtımı)', 'Datça ilçe merkezindeki liman rıhtımı belediye tarafından işletilir; rıhtımın yanaşma kapasitesi 60 teknedir. Demirleme 5 m derinlikte, zemin yoğun yosun ve kumdur; liman güneye açıktır ve dağ geçidinden inen ''Datça meltemi'' ile Deveboynu (Krio) Burnu civarındaki sert sağanak rüzgarlara dikkat edilmelidir.',
-  ST_SetSRID(ST_MakePoint(27.688497, 36.72153), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.689167, 36.7225), 4326)::geography,
   10, NULL, 5, 6,
   60, 'unknown', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -11792,7 +11792,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'kursunlu-marina', 2, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'bursa-gemlik'),
   'Kurşunlu Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. Kaynakta kapasite 85 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su, elektrik bulunur.',
-  ST_SetSRID(ST_MakePoint(29.034433, 40.364802), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(29.033333, 40.364167), 4326)::geography,
   NULL, NULL, NULL, NULL,
   85, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -12521,7 +12521,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'silivri-marina', 2, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'istanbul-silivri'),
   'Silivri Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. VHF kanal 16. Kaynağa göre su bulunur.',
-  ST_SetSRID(ST_MakePoint(28.23938, 41.073008), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.242167, 41.072833), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -12564,7 +12564,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'tekirdag-marina', 2, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'province' AND slug = 'tekirdag'),
   'Tekirdağ Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. Kaynakta kapasite 200 tekne olarak yayımlanmış. VHF kanal 16. Kaynağa göre su bulunur.',
-  ST_SetSRID(ST_MakePoint(27.523027, 40.974681), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(27.524667, 40.976333), 4326)::geography,
   NULL, NULL, NULL, NULL,
   200, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -15394,7 +15394,7 @@ INSERT INTO locations (id, slug, location_type_id, status, country_code, admin_a
 SELECT gen_random_uuid(), 'pupa-yat-marina', 1, 'published', 'TR',
   (SELECT id FROM admin_areas WHERE country_code = 'TR' AND level = 'district' AND slug = 'mugla-marmaris'),
   'Pupa Yat Marina', 'turkeymarinas rehberinde koordinat ve tesis bilgileriyle belgelenmiş yat bağlama limanı. VHF kanal 72. Kaynağa göre yakıt bulunur.',
-  ST_SetSRID(ST_MakePoint(28.310556, 36.828889), 4326)::geography,
+  ST_SetSRID(ST_MakePoint(28.310531, 36.829161), 4326)::geography,
   NULL, NULL, NULL, NULL,
   NULL, 'paid', 'import'
 ON CONFLICT (slug) DO NOTHING;
@@ -23606,15 +23606,15 @@ WHERE location_id = (SELECT id FROM locations WHERE slug = 'gocek-belediye-iskel
 -- ======================================================================
 -- KOORDİNAT DÜZELTMELERİ — mevcut veritabanlarına akar (idempotent).
 -- Kaynak: koordinat_duzeltmeleri_*.json (yöntem/kaynak dosya başında).
--- --- koordinat_duzeltmeleri_2026_09.json: 341 nokta ---
+-- --- koordinat_duzeltmeleri_2026_09.json: 381 nokta ---
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.385904, 37.004596), 4326)::geography
 WHERE slug = 'adabogazi-akvaryum-demirleme'; -- suya taşıma 62 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.851493, 36.644693), 4326)::geography
 WHERE slug = 'adaia-gocek-restaurant'; -- suya taşıma 26 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.292989, 36.819781), 4326)::geography
-WHERE slug = 'adakoy-marina-marmaris'; -- suya taşıma 42 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.450135, 37.0136), 4326)::geography
-WHERE slug = 'aganlar-marina-bodrum'; -- suya taşıma 94 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.293, 36.819167), 4326)::geography
+WHERE slug = 'adakoy-marina-marmaris'; -- suya taşıma 26 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.451233, 37.013639), 4326)::geography
+WHERE slug = 'aganlar-marina-bodrum'; -- suya taşıma 5 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.450135, 37.013639), 4326)::geography
 WHERE slug = 'aganlar-tersane-yakit'; -- suya taşıma 96 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.96647, 37.456887), 4326)::geography
@@ -23623,10 +23623,12 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.149185, 38.299334), 4
 WHERE slug = 'agia-ermioni-limani-sakiz'; -- suya taşıma 131 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.884861, 38.478209), 4326)::geography
 WHERE slug = 'agia-markella-sakiz'; -- suya taşıma 116 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.515614, 38.101533), 4326)::geography
-WHERE slug = 'agia-pelagia-marina-kefalonya'; -- suya taşıma 110 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(23.7275, 37.877167), 4326)::geography
+WHERE slug = 'agios-kosmas-marina'; -- suya taşıma 453 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.708085, 37.906807), 4326)::geography
 WHERE slug = 'agios-nikolaos-limani-zakinthos'; -- suya taşıma 149 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.718333, 35.186167), 4326)::geography
+WHERE slug = 'agios-nikolaos-marina-girit'; -- suya taşıma 16 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.812575, 38.164132), 4326)::geography
 WHERE slug = 'akarca-balikci-barinagi'; -- suya taşıma 93 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(34.144576, 36.447488), 4326)::geography
@@ -23643,26 +23645,32 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.29316, 36.967692), 43
 WHERE slug = 'akyarlar-balikci-barinagi'; -- suya taşıma 54 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(32.008509, 36.533531), 4326)::geography
 WHERE slug = 'alanya-balikci-limani'; -- suya taşıma 785 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(31.955916, 36.549349), 4326)::geography
-WHERE slug = 'alanya-marina'; -- suya taşıma 911 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(31.94723, 36.55775), 4326)::geography
+WHERE slug = 'alanya-marina'; -- suya taşıma 427 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(31.955915, 36.549348), 4326)::geography
 WHERE slug = 'alanya-marina-yakit'; -- suya taşıma 914 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.285833, 36.84475), 4326)::geography
+WHERE slug = 'albatros-marina-marmaris'; -- suya taşıma 97 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.893138, 38.824781), 4326)::geography
 WHERE slug = 'aliaga-balikci-barinagi'; -- suya taşıma 47 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(23.707289, 37.913201), 4326)::geography
+WHERE slug = 'alimos-marina'; -- suya taşıma 631 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.735053, 39.210688), 4326)::geography
 WHERE slug = 'altinova-balikci-barinagi'; -- suya taşıma 48 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.71868, 40.968495), 4326)::geography
 WHERE slug = 'ambarli-balikci-barinagi'; -- suya taşıma 114 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.52568, 38.629842), 4326)::geography
 WHERE slug = 'ambarseki-balikci-barinagi'; -- suya taşıma 80 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(30.699781, 36.877653), 4326)::geography
-WHERE slug = 'antalya-kaleici-yat-limani'; -- suya taşıma 743 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(30.70185, 36.8843), 4326)::geography
+WHERE slug = 'antalya-kaleici-yat-limani'; -- suya taşıma 115 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.209814, 36.319037), 4326)::geography
 WHERE slug = 'anthony-quinn-koyu'; -- suya taşıma 97 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.146023, 36.650107), 4326)::geography
 WHERE slug = 'arap-island-cove-koyu'; -- suya taşıma 142 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.465208, 37.316389), 4326)::geography
 WHERE slug = 'ardicliagil-koyu'; -- suya taşıma 67 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.495, 38.1805), 4326)::geography
+WHERE slug = 'argostoli-marina-kefalonya'; -- suya taşıma 57 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.677417, 36.69053), 4326)::geography
 WHERE slug = 'armutlu-su-koyu'; -- suya taşıma 124 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.867329, 40.385097), 4326)::geography
@@ -23679,8 +23687,12 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.538349, 38.37913), 43
 WHERE slug = 'assos-limani-kefalonya'; -- suya taşıma 53 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.439052, 40.768479), 4326)::geography
 WHERE slug = 'atabay-marina'; -- suya taşıma 273 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.87595, 40.971433), 4326)::geography
+WHERE slug = 'atakoy-marina'; -- suya taşıma 521 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(30.487787, 36.428257), 4326)::geography
 WHERE slug = 'atbuku-maden-koyu'; -- suya taşıma 720 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(23.669667, 37.941167), 4326)::geography
+WHERE slug = 'athens-marina'; -- suya taşıma 366 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(34.193524, 36.48673), 4326)::geography
 WHERE slug = 'ayas-koyu'; -- suya taşıma 1327 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(33.335971, 36.134401), 4326)::geography
@@ -23729,10 +23741,12 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.567788, 38.573633), 4
 WHERE slug = 'boyabagi-koyu'; -- suya taşıma 205 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.047658, 36.674882), 4326)::geography
 WHERE slug = 'bozburun-yacht-club'; -- suya taşıma 74 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.076534, 39.83473), 4326)::geography
-WHERE slug = 'bozcaada-limani'; -- suya taşıma 45 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.074667, 39.8355), 4326)::geography
+WHERE slug = 'bozcaada-limani'; -- suya taşıma 143 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.011657, 36.575696), 4326)::geography
 WHERE slug = 'bozukkale-loryma-demirleme'; -- suya taşıma 76 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.923333, 39.4855), 4326)::geography
+WHERE slug = 'burhaniye-oren-yat-limani'; -- suya taşıma 302 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.076303, 36.622548), 4326)::geography
 WHERE slug = 'buyuk-boncuklu-koyu'; -- suya taşıma 84 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.110485, 40.859003), 4326)::geography
@@ -23753,8 +23767,8 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(34.628557, 36.790308), 4
 WHERE slug = 'camlibel-marina'; -- suya taşıma 95 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.906909, 36.22103), 4326)::geography
 WHERE slug = 'camlik-koyu'; -- suya taşıma 110 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.400082, 40.154963), 4326)::geography
-WHERE slug = 'canakkale-yat-limani'; -- suya taşıma 531 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.4045, 40.1525), 4326)::geography
+WHERE slug = 'canakkale-yat-limani'; -- suya taşıma 162 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.937386, 38.935907), 4326)::geography
 WHERE slug = 'candarli-limani'; -- suya taşıma 105 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.022734, 36.792381), 4326)::geography
@@ -23765,18 +23779,22 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.528404, 40.606587), 4
 WHERE slug = 'cinarli-koyu-balikci-barinagi'; -- suya taşıma 150 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(33.688323, 36.149876), 4326)::geography
 WHERE slug = 'cleopatra-koyu'; -- suya taşıma 985 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.925919, 36.748992), 4326)::geography
-WHERE slug = 'club-marina-gocek'; -- suya taşıma 267 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.2594, 37.338525), 4326)::geography
-WHERE slug = 'd-marin-didim'; -- suya taşıma 230 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.9255, 36.749167), 4326)::geography
+WHERE slug = 'club-marina-gocek'; -- suya taşıma 277 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.262222, 37.336667), 4326)::geography
+WHERE slug = 'd-marin-didim'; -- suya taşıma 503 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.26217, 37.338525), 4326)::geography
 WHERE slug = 'd-marin-didim-yakit'; -- suya taşıma 46 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.942323, 36.748913), 4326)::geography
-WHERE slug = 'd-marin-gocek'; -- suya taşıma 80 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.942778, 36.748333), 4326)::geography
+WHERE slug = 'd-marin-gocek'; -- suya taşıma 4 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.256111, 37.001944), 4326)::geography
+WHERE slug = 'd-marin-turgutreis'; -- suya taşıma 5 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.3186, 38.359644), 4326)::geography
 WHERE slug = 'dalyankoy-koyu-demirleme'; -- suya taşıma 139 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.044468, 36.65841), 4326)::geography
 WHERE slug = 'datbuku'; -- suya taşıma 62 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.689167, 36.7225), 4326)::geography
+WHERE slug = 'datca-yat-limani'; -- suya taşıma 123 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.111881, 36.546609), 4326)::geography
 WHERE slug = 'dead-sea-koyu'; -- suya taşıma 84 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.825228, 36.181256), 4326)::geography
@@ -23801,6 +23819,8 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.633767, 38.197516), 4
 WHERE slug = 'duverlik-merdivenli-demirleme'; -- suya taşıma 115 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.327097, 40.366389), 4326)::geography
 WHERE slug = 'ece-limani'; -- suya taşıma 105 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.101346, 36.62295), 4326)::geography
+WHERE slug = 'ece-saray-marina'; -- suya taşıma 163 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.549827, 36.828544), 4326)::geography
 WHERE slug = 'ekincik-koy-rihtimi'; -- suya taşıma 96 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.487651, 40.544316), 4326)::geography
@@ -23821,16 +23841,22 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.105768, 36.623239), 4
 WHERE slug = 'fethiye-limani'; -- suya taşıma 45 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.652472, 37.90343), 4326)::geography
 WHERE slug = 'filippoi-plaji-zakinthos'; -- suya taşıma 208 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(24.876825, 37.396908), 4326)::geography
-WHERE slug = 'finikas-marina-syros'; -- suya taşıma 67 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(24.876333, 37.3975), 4326)::geography
+WHERE slug = 'finikas-marina-syros'; -- suya taşıma 23 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.578177, 38.460807), 4326)::geography
 WHERE slug = 'fiskardo-limani'; -- suya taşıma 128 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.884187, 40.478302), 4326)::geography
 WHERE slug = 'fistikli-village-balikci-barinagi'; -- suya taşıma 57 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(23.679, 37.935333), 4326)::geography
+WHERE slug = 'flisvos-marina'; -- suya taşıma 139 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(30.573056, 36.599444), 4326)::geography
+WHERE slug = 'g-marina-kemer'; -- suya taşıma 32 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.186417, 39.200496), 4326)::geography
 WHERE slug = 'gaios-limani-paksos'; -- suya taşıma 87 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.782165, 39.007465), 4326)::geography
 WHERE slug = 'garip-adasi-demirleme'; -- suya taşıma 105 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(32.278833, 36.264167), 4326)::geography
+WHERE slug = 'gazipasa-gold-marina'; -- suya taşıma 112 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.06849, 36.556763), 4326)::geography
 WHERE slug = 'gemiler-adasi-demirleme'; -- suya taşıma 176 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.151056, 40.423522), 4326)::geography
@@ -23851,20 +23877,24 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.947242, 36.740954), 4
 WHERE slug = 'gocek-dogu-samandira-sahasi'; -- suya taşıma 126 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.926003, 36.748964), 4326)::geography
 WHERE slug = 'gocek-lukoil-yakit-iskelesi'; -- suya taşıma 133 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.930173, 36.755231), 4326)::geography
-WHERE slug = 'gocek-village-port-marina'; -- suya taşıma 233 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.932833, 36.755), 4326)::geography
+WHERE slug = 'gocek-village-port-marina'; -- suya taşıma 445 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.891823, 36.211094), 4326)::geography
 WHERE slug = 'gokkaya-koyu-kekova'; -- suya taşıma 75 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(30.137359, 36.269921), 4326)::geography
 WHERE slug = 'gokliman-finike'; -- suya taşıma 425 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.981972, 37.031025), 4326)::geography
-WHERE slug = 'gokova-oren-marina'; -- suya taşıma 44 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.903725, 37.023936), 4326)::geography
+WHERE slug = 'gokova-oren-marina'; -- suya taşıma 6984 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.380141, 37.129736), 4326)::geography
 WHERE slug = 'golturkbuku-balikci-barinagi'; -- suya taşıma 156 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.812737, 39.438947), 4326)::geography
 WHERE slug = 'gomec-balikci-barinagi'; -- suya taşıma 43 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.299088, 35.336567), 4326)::geography
 WHERE slug = 'gouves-limani-girit'; -- suya taşıma 149 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(19.8525, 39.648611), 4326)::geography
+WHERE slug = 'gouvia-marina'; -- suya taşıma 350 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.5875, 37.228833), 4326)::geography
+WHERE slug = 'gulluk-marina'; -- suya taşıma 1362 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.400607, 37.023852), 4326)::geography
 WHERE slug = 'gumbet-iskelesi'; -- suya taşıma 137 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.234852, 37.054315), 4326)::geography
@@ -23877,10 +23907,8 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.578618, 37.13688), 43
 WHERE slug = 'guvercinlik-balikci-barinagi'; -- suya taşıma 180 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.891667, 38.378142), 4326)::geography
 WHERE slug = 'guzelbahce-fishing-harbour-and-balikci-barinagi'; -- suya taşıma 40 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.50687, 40.998142), 4326)::geography
-WHERE slug = 'guzelce-marina'; -- suya taşıma 300 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.932169, 40.35649), 4326)::geography
-WHERE slug = 'guzelyali-yat-limani'; -- suya taşıma 36 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.5095, 40.998833), 4326)::geography
+WHERE slug = 'guzelce-marina'; -- suya taşıma 109 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.903919, 36.669444), 4326)::geography
 WHERE slug = 'hacidede-deresi-koyu'; -- suya taşıma 134 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.613375, 36.222594), 4326)::geography
@@ -23901,8 +23929,8 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.158054, 36.923195), 4
 WHERE slug = 'hirsiz-koyu'; -- suya taşıma 100 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(23.466775, 37.352291), 4326)::geography
 WHERE slug = 'hydra-limani'; -- suya taşıma 203 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.300102, 38.3233), 4326)::geography
-WHERE slug = 'ic-cesme-marina'; -- suya taşıma 26 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.301278, 38.32175), 4326)::geography
+WHERE slug = 'ic-cesme-marina'; -- suya taşıma 188 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.567731, 38.581668), 4326)::geography
 WHERE slug = 'icmekiyisi-koyu'; -- suya taşıma 156 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.238156, 36.801441), 4326)::geography
@@ -23913,24 +23941,28 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.928446, 36.737585), 4
 WHERE slug = 'inceburun-samandira-sahasi'; -- suya taşıma 167 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(36.037346, 36.533771), 4326)::geography
 WHERE slug = 'iskenderun-fisher-limani'; -- suya taşıma 88 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.055748, 41.111041), 4326)::geography
-WHERE slug = 'ispark-istinye-tekne-park'; -- suya taşıma 315 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.056333, 41.138333), 4326)::geography
+WHERE slug = 'ispark-tarabya-tekne-park'; -- suya taşıma 132 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.055731, 41.111047), 4326)::geography
 WHERE slug = 'istinye-tekne-park-yakit'; -- suya taşıma 438 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.064726, 38.406352), 4326)::geography
-WHERE slug = 'izmir-marina'; -- suya taşıma 139 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.06792, 38.40599), 4326)::geography
+WHERE slug = 'izmir-marina'; -- suya taşıma 173 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.261695, 40.201562), 4326)::geography
 WHERE slug = 'kabatepe-balikci-barinagi'; -- suya taşıma 384 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.617, 36.7705), 4326)::geography
+WHERE slug = 'kairos-marina'; -- suya taşıma 265 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.811794, 38.358349), 4326)::geography
 WHERE slug = 'kalabak-balikci-barinagi'; -- suya taşıma 51 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(22.1075, 37.0256), 4326)::geography
+WHERE slug = 'kalamata-marina'; -- suya taşıma 1331 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.470435, 36.932495), 4326)::geography
 WHERE slug = 'kalantos-koyu-naxos'; -- suya taşıma 280 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.475034, 36.934251), 4326)::geography
-WHERE slug = 'kalantos-marina-naxos'; -- suya taşıma 151 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.474167, 36.935), 4326)::geography
+WHERE slug = 'kalantos-marina-naxos'; -- suya taşıma 39 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.791781, 39.004754), 4326)::geography
 WHERE slug = 'kalem-adasi-koyu'; -- suya taşıma 149 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.986744, 36.949329), 4326)::geography
-WHERE slug = 'kalymnos-pothia-limani'; -- suya taşıma 109 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.983833, 36.949167), 4326)::geography
+WHERE slug = 'kalymnos-pothia-limani'; -- suya taşıma 236 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.973225, 36.736667), 4326)::geography
 WHERE slug = 'kamari-iskelesi-kefalos'; -- suya taşıma 50 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.05061, 36.731034), 4326)::geography
@@ -23997,8 +24029,8 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.042713, 36.671496), 4
 WHERE slug = 'kiseli-adasi'; -- suya taşıma 154 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.817734, 36.175016), 4326)::geography
 WHERE slug = 'kisle-bogazi-koyu'; -- suya taşıma 96 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.58131, 41.015094), 4326)::geography
-WHERE slug = 'kiyi-istanbul-marina'; -- suya taşıma 93 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.580333, 41.015833), 4326)::geography
+WHERE slug = 'kiyi-istanbul-marina'; -- suya taşıma 158 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.038063, 36.668186), 4326)::geography
 WHERE slug = 'kizilada-koyu'; -- suya taşıma 173 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.575659, 36.683054), 4326)::geography
@@ -24011,16 +24043,18 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(34.122736, 36.433547), 4
 WHERE slug = 'kizlarhamami-koyu'; -- suya taşıma 968 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.438096, 37.577056), 4326)::geography
 WHERE slug = 'kleftolimano-koyu-thymaina'; -- suya taşıma 189 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.764107, 38.952374), 4326)::geography
-WHERE slug = 'kleopatra-marina'; -- suya taşıma 127 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.765278, 38.951667), 4326)::geography
+WHERE slug = 'kleopatra-marina'; -- suya taşıma 4 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.008328, 36.698944), 4326)::geography
 WHERE slug = 'kocabahce-iskelesi'; -- suya taşıma 94 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(30.406337, 36.256615), 4326)::geography
 WHERE slug = 'korsan-koyu-kumluca'; -- suya taşıma 124 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(33.679717, 36.150732), 4326)::geography
 WHERE slug = 'korsan-koyu-silifke'; -- suya taşıma 778 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.30101, 36.89398), 4326)::geography
-WHERE slug = 'kos-marina'; -- suya taşıma 87 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.289167, 36.8955), 4326)::geography
+WHERE slug = 'kos-eski-liman-mandraki'; -- suya taşıma 31 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.3025, 36.891667), 4326)::geography
+WHERE slug = 'kos-marina'; -- suya taşıma 216 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.076611, 36.630902), 4326)::geography
 WHERE slug = 'kucuk-boncuklu-koyu'; -- suya taşıma 177 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.103109, 40.9411), 4326)::geography
@@ -24029,34 +24063,38 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.056573, 36.880269), 4
 WHERE slug = 'kufre-koyu'; -- suya taşıma 69 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.075347, 36.644934), 4326)::geography
 WHERE slug = 'kuleli-koyu'; -- suya taşıma 115 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(34.237604, 36.521843), 4326)::geography
-WHERE slug = 'kumkuyu-marina'; -- suya taşıma 1157 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(34.2295, 36.529167), 4326)::geography
+WHERE slug = 'kumkuyu-marina'; -- suya taşıma 150 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.274996, 36.747624), 4326)::geography
 WHERE slug = 'kumlubuk-koyu'; -- suya taşıma 264 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.274996, 36.747308), 4326)::geography
 WHERE slug = 'kumlubuku-yacht-club'; -- suya taşıma 229 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.829062, 40.385629), 4326)::geography
 WHERE slug = 'kumyaka-balikci-barinagi'; -- suya taşıma 117 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.033333, 40.364167), 4326)::geography
+WHERE slug = 'kursunlu-marina'; -- suya taşıma 117 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.025584, 36.706819), 4326)::geography
 WHERE slug = 'kuzbuku-yacht-club'; -- suya taşıma 128 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.140259, 39.241638), 4326)::geography
 WHERE slug = 'lakka-koyu-paksos'; -- suya taşıma 730 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.85016, 37.128536), 4326)::geography
-WHERE slug = 'lakki-marina-leros'; -- suya taşıma 160 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.848667, 37.128833), 4326)::geography
+WHERE slug = 'lakki-marina-leros'; -- suya taşıma 107 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.454421, 37.572143), 4326)::geography
 WHERE slug = 'lakkos-koyu-thymaina'; -- suya taşıma 98 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.571767, 40.281392), 4326)::geography
 WHERE slug = 'lapseki-balikci-barinagi'; -- suya taşıma 296 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(24.941306, 37.430958), 4326)::geography
 WHERE slug = 'lazaretta-tonozlari-syros'; -- suya taşıma 88 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.714273, 38.83145), 4326)::geography
-WHERE slug = 'lefkas-marina'; -- suya taşıma 182 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.714167, 38.829722), 4326)::geography
+WHERE slug = 'lefkas-marina'; -- suya taşıma 81 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.714273, 38.83145), 4326)::geography
 WHERE slug = 'lefkas-yakit-iskelesi'; -- suya taşıma 182 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.099165, 36.636503), 4326)::geography
-WHERE slug = 'letoonia-marinet-fethiye'; -- suya taşıma 73 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.918422, 38.468564), 4326)::geography
-WHERE slug = 'limia-marina-sakiz'; -- suya taşıma 119 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.855694, 37.128417), 4326)::geography
+WHERE slug = 'leros-marina'; -- suya taşıma 132 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.099167, 36.6355), 4326)::geography
+WHERE slug = 'letoonia-marinet-fethiye'; -- suya taşıma 39 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.9175, 38.469667), 4326)::geography
+WHERE slug = 'limia-marina-sakiz'; -- suya taşıma 44 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.909262, 38.470725), 4326)::geography
 WHERE slug = 'limnos-plaji-sakiz'; -- suya taşıma 160 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(34.267722, 36.556059), 4326)::geography
@@ -24071,12 +24109,14 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.853359, 36.83233), 43
 WHERE slug = 'maltezi-plaji-amorgos'; -- suya taşıma 373 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(32.896686, 36.077378), 4326)::geography
 WHERE slug = 'mamure-kalesi-demirleme'; -- suya taşıma 466 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.927451, 36.753344), 4326)::geography
-WHERE slug = 'marinturk-gocek-exclusive'; -- suya taşıma 424 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.558949, 40.581883), 4326)::geography
-WHERE slug = 'marmara-adasi-limani'; -- suya taşıma 286 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.13261, 36.757446), 4326)::geography
-WHERE slug = 'marti-marina-orhaniye'; -- suya taşıma 814 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.926333, 36.743333), 4326)::geography
+WHERE slug = 'marinturk-gocek-exclusive'; -- suya taşıma 1393 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.238056, 40.871389), 4326)::geography
+WHERE slug = 'marinturk-istanbul-city-port'; -- suya taşıma 109 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.560167, 40.584833), 4326)::geography
+WHERE slug = 'marmara-adasi-limani'; -- suya taşıma 134 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.126774, 36.771374), 4326)::geography
+WHERE slug = 'marti-marina-orhaniye'; -- suya taşıma 1967 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.706881, 37.930054), 4326)::geography
 WHERE slug = 'mavi-magaralar-zakinthos'; -- suya taşıma 123 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.176722, 37.98482), 4326)::geography
@@ -24087,14 +24127,18 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.088072, 36.563605), 4
 WHERE slug = 'mersin-koyu'; -- suya taşıma 84 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(34.577698, 36.769404), 4326)::geography
 WHERE slug = 'mersin-yat-limani-yakit'; -- suya taşıma 315 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(21.41563, 38.368106), 4326)::geography
-WHERE slug = 'mesolongi-marina'; -- suya taşıma 1224 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(21.41702, 38.36197), 4326)::geography
+WHERE slug = 'mesolongi-marina'; -- suya taşıma 846 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.557833, 39.097833), 4326)::geography
+WHERE slug = 'midilli-marina'; -- suya taşıma 96 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.430556, 37.033333), 4326)::geography
+WHERE slug = 'milta-bodrum-marina'; -- suya taşıma 407 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.524314, 38.639028), 4326)::geography
 WHERE slug = 'mimoza-koyu'; -- suya taşıma 131 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.167822, 39.367991), 4326)::geography
 WHERE slug = 'molyvos-limani'; -- suya taşıma 75 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.565108, 36.8242), 4326)::geography
-WHERE slug = 'my-marina-ekincik'; -- suya taşıma 35 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.565, 36.828333), 4326)::geography
+WHERE slug = 'my-marina-ekincik'; -- suya taşıma 461 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.235771, 37.124876), 4326)::geography
 WHERE slug = 'naoussa-limani-paros'; -- suya taşıma 153 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.0325, 40.477636), 4326)::geography
@@ -24103,18 +24147,22 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.680592, 40.495541), 4
 WHERE slug = 'narlikoy-balikci-barinagi'; -- suya taşıma 225 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(34.122895, 36.434119), 4326)::geography
 WHERE slug = 'narlikuyu-koyu'; -- suya taşıma 1327 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.276923, 36.851282), 4326)::geography
+WHERE slug = 'netsel-marmaris-marina'; -- suya taşıma 80 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.139444, 36.614753), 4326)::geography
 WHERE slug = 'nisyros-mandraki-limani'; -- suya taşıma 84 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.649925, 36.173972), 4326)::geography
 WHERE slug = 'nuris-beach-iskelesi-kas'; -- suya taşıma 155 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.840833, 38.743833), 4326)::geography
+WHERE slug = 'oasis-marina-yeni-foca'; -- suya taşıma 184 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.75011, 40.44246), 4326)::geography
 WHERE slug = 'ocaklar-koyu-balikci-barinagi'; -- suya taşıma 301 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.573462, 36.683538), 4326)::geography
 WHERE slug = 'oguns-place-hayitbuku'; -- suya taşıma 139 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(30.480043, 36.394625), 4326)::geography
 WHERE slug = 'olimpos-koyu'; -- suya taşıma 389 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(24.057668, 37.696087), 4326)::geography
-WHERE slug = 'olympic-marine'; -- suya taşıma 340 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(24.05964, 37.695928), 4326)::geography
+WHERE slug = 'olympic-marine'; -- suya taşıma 485 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.922462, 36.733198), 4326)::geography
 WHERE slug = 'osmanaga-samandira-sahasi'; -- suya taşıma 113 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.093975, 36.708964), 4326)::geography
@@ -24137,22 +24185,24 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(30.558416, 36.527028), 4
 WHERE slug = 'phaselis-koylari-demirleme'; -- suya taşıma 670 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.797975, 39.018447), 4326)::geography
 WHERE slug = 'pissa-koyu-demirleme'; -- suya taşıma 75 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.781626, 38.14747), 4326)::geography
-WHERE slug = 'poros-marina-kefalonya'; -- suya taşıma 52 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.379835, 38.25877), 4326)::geography
-WHERE slug = 'port-alacati-marina'; -- suya taşıma 166 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(23.783944, 40.069742), 4326)::geography
-WHERE slug = 'porto-carras-marina'; -- suya taşıma 113 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.78, 38.147167), 4326)::geography
+WHERE slug = 'poros-marina-kefalonya'; -- suya taşıma 102 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.383056, 38.255278), 4326)::geography
+WHERE slug = 'port-alacati-marina'; -- suya taşıma 590 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(23.793833, 40.075333), 4326)::geography
+WHERE slug = 'porto-carras-marina'; -- suya taşıma 1054 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.101561, 36.708125), 4326)::geography
 WHERE slug = 'poseidon-selimiye'; -- suya taşıma 183 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.637046, 40.497547), 4326)::geography
 WHERE slug = 'poyrazli-koyu-pasalimani'; -- suya taşıma 321 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.310531, 36.829161), 4326)::geography
+WHERE slug = 'pupa-yat-marina'; -- suya taşıma 30 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.398988, 36.975734), 4326)::geography
 WHERE slug = 'pyrgaki-plaji-naxos'; -- suya taşıma 70 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.887784, 36.633491), 4326)::geography
 WHERE slug = 'ragged-bay'; -- suya taşıma 82 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.228188, 36.451108), 4326)::geography
-WHERE slug = 'rodos-mandraki-limani'; -- suya taşıma 182 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.239167, 36.4345), 4326)::geography
+WHERE slug = 'rodos-marina'; -- suya taşıma 228 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.79264, 37.004863), 4326)::geography
 WHERE slug = 'rosemary-cokertme'; -- suya taşıma 107 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.048166, 36.678148), 4326)::geography
@@ -24163,34 +24213,52 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.005129, 41.018706), 4
 WHERE slug = 'salacak-balikci-barinagi'; -- suya taşıma 239 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.535248, 37.159766), 4326)::geography
 WHERE slug = 'salih-adasi-demirleme'; -- suya taşıma 121 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.963131, 37.693243), 4326)::geography
-WHERE slug = 'samos-marina'; -- suya taşıma 499 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.958333, 37.695556), 4326)::geography
+WHERE slug = 'samos-marina'; -- suya taşıma 6 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(23.310833, 40.098333), 4326)::geography
+WHERE slug = 'sani-marina'; -- suya taşıma 407 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.408041, 37.411776), 4326)::geography
 WHERE slug = 'sapli-island-koyu'; -- suya taşıma 170 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.858153, 36.657594), 4326)::geography
 WHERE slug = 'sarsala-restaurant'; -- suya taşıma 122 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.206776, 36.994742), 4326)::geography
 WHERE slug = 'sedir-adasi-demirleme'; -- suya taşıma 68 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(22.943144, 40.576883), 4326)::geography
-WHERE slug = 'selanik-aretsou-marina'; -- suya taşıma 536 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(22.946333, 40.573667), 4326)::geography
+WHERE slug = 'selanik-aretsou-marina'; -- suya taşıma 773 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.367361, 41.050081), 4326)::geography
 WHERE slug = 'selimpasa-balikci-barinagi'; -- suya taşıma 198 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.537154, 36.79843), 4326)::geography
 WHERE slug = 'semizce-coves-koyu'; -- suya taşıma 67 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(30.153305, 36.294211), 4326)::geography
-WHERE slug = 'setur-finike-marina'; -- suya taşıma 83 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.034601, 40.976235), 4326)::geography
-WHERE slug = 'setur-kalamis-fenerbahce-marina'; -- suya taşıma 125 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(30.614778, 36.83475), 4326)::geography
+WHERE slug = 'setur-antalya-marina'; -- suya taşıma 6 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.687972, 39.314056), 4326)::geography
+WHERE slug = 'setur-ayvalik-marina'; -- suya taşıma 5 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.345556, 38.323722), 4326)::geography
+WHERE slug = 'setur-cesme-marina'; -- suya taşıma 5 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(30.152556, 36.294694), 4326)::geography
+WHERE slug = 'setur-finike-marina'; -- suya taşıma 4 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.035806, 40.976944), 4326)::geography
+WHERE slug = 'setur-kalamis-fenerbahce-marina'; -- suya taşıma 5 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.034, 40.976852), 4326)::geography
 WHERE slug = 'setur-kalamis-yakit'; -- suya taşıma 277 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.624167, 36.205278), 4326)::geography
+WHERE slug = 'setur-kas-marina'; -- suya taşıma 4 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.260472, 37.868472), 4326)::geography
+WHERE slug = 'setur-kusadasi-marina'; -- suya taşıma 4 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.2745, 40.661444), 4326)::geography
+WHERE slug = 'setur-yalova-marina'; -- suya taşıma 5 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(31.384291, 36.766715), 4326)::geography
 WHERE slug = 'side-fish-harbour-balikci-barinagi'; -- suya taşıma 55 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.770365, 38.200614), 4326)::geography
 WHERE slug = 'sigacik-balikci-barinagi'; -- suya taşıma 72 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.242167, 41.072833), 4326)::geography
+WHERE slug = 'silivri-marina'; -- suya taşıma 234 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(33.472939, 36.14749), 4326)::geography
 WHERE slug = 'sipahili-koyu-gulnar'; -- suya taşıma 1631 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.9392, 36.754358), 4326)::geography
-WHERE slug = 'skopea-marina'; -- suya taşıma 49 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.108, 35.208), 4326)::geography
+WHERE slug = 'sitia-marina-girit'; -- suya taşıma 86 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.938667, 36.754167), 4326)::geography
+WHERE slug = 'skopea-marina'; -- suya taşıma 85 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(33.289084, 36.120654), 4326)::geography
 WHERE slug = 'soguksu-koyu-aydincik'; -- suya taşıma 1299 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.209875, 39.464967), 4326)::geography
@@ -24215,12 +24283,16 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.570163, 40.765229), 4
 WHERE slug = 'tavsancil-balikci-barinagi'; -- suya taşıma 191 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(33.148547, 36.124877), 4326)::geography
 WHERE slug = 'tekeli-koyu'; -- suya taşıma 1006 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.524667, 40.976333), 4326)::geography
+WHERE slug = 'tekirdag-marina'; -- suya taşıma 229 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(33.124368, 36.104794), 4326)::geography
 WHERE slug = 'tekmen-koyu'; -- suya taşıma 1389 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.923516, 36.995629), 4326)::geography
 WHERE slug = 'telendos-demirleme'; -- suya taşıma 166 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.80037, 38.160801), 4326)::geography
 WHERE slug = 'teos-limani-demirleme'; -- suya taşıma 144 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.782167, 38.193333), 4326)::geography
+WHERE slug = 'teos-marina'; -- suya taşıma 275 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.914805, 36.676711), 4326)::geography
 WHERE slug = 'tersane-adasi-koyu'; -- suya taşıma 152 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.455251, 37.581753), 4326)::geography
@@ -24233,24 +24305,32 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.45648, 37.087162), 43
 WHERE slug = 'torba-balikci-barinagi'; -- suya taşıma 111 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(33.024074, 36.084024), 4326)::geography
 WHERE slug = 'toslaklar-koyu'; -- suya taşıma 1118 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.326167, 37.464667), 4326)::geography
+WHERE slug = 'tourlos-marina-mykonos'; -- suya taşıma 322 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.25147, 36.773446), 4326)::geography
 WHERE slug = 'turunc-iskelesi'; -- suya taşıma 231 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.710829, 38.542308), 4326)::geography
 WHERE slug = 'urla-iskele-balikci-barinagi'; -- suya taşıma 265 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.316177, 40.817195), 4326)::geography
+WHERE slug = 'viaport-marina'; -- suya taşıma 269 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.081637, 36.660192), 4326)::geography
 WHERE slug = 'villa-julia-iskelesi'; -- suya taşıma 98 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.433971, 36.335166), 4326)::geography
-WHERE slug = 'vlychada-marina-santorini'; -- suya taşıma 184 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(25.435, 36.336667), 4326)::geography
+WHERE slug = 'vlychada-marina-santorini'; -- suya taşıma 7 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.96684, 36.928887), 4326)::geography
 WHERE slug = 'vlychadia-samandira-sahasi'; -- suya taşıma 218 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.665105, 40.961033), 4326)::geography
-WHERE slug = 'west-istanbul-marina'; -- suya taşıma 233 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(23.773514, 37.803312), 4326)::geography
+WHERE slug = 'vouliagmeni-marina'; -- suya taşıma 9060 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.663611, 40.962778), 4326)::geography
+WHERE slug = 'west-istanbul-marina'; -- suya taşıma 3 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.665105, 40.961033), 4326)::geography
 WHERE slug = 'west-istanbul-marina-yakit'; -- suya taşıma 233 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(26.247824, 38.264901), 4326)::geography
 WHERE slug = 'westward-of-alacati-bay'; -- suya taşıma 299 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.098555, 36.623118), 4326)::geography
-WHERE slug = 'yacht-classic-marina-fethiye'; -- suya taşıma 29 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.09974, 36.621769), 4326)::geography
+WHERE slug = 'yacht-classic-marina-fethiye'; -- suya taşıma 160 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.30918, 36.81806), 4326)::geography
+WHERE slug = 'yacht-marin-marmaris'; -- suya taşıma 182 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(29.783757, 36.142486), 4326)::geography
 WHERE slug = 'yaglica-koyu'; -- suya taşıma 193 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(32.560133, 36.09486), 4326)::geography
@@ -24259,8 +24339,6 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.529709, 36.990709), 4
 WHERE slug = 'yaliciftlik-koyu'; -- suya taşıma 123 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.291343, 37.108748), 4326)::geography
 WHERE slug = 'yalikavak-balikci-limani'; -- suya taşıma 122 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.285228, 37.105173), 4326)::geography
-WHERE slug = 'yalikavak-marina'; -- suya taşıma 31 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(27.284465, 37.1048), 4326)::geography
 WHERE slug = 'yalikavak-marina-yakit'; -- suya taşıma 275 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(34.091697, 36.410711), 4326)::geography
@@ -24281,8 +24359,10 @@ UPDATE locations SET position = ST_SetSRID(ST_MakePoint(32.942484, 36.095192), 4
 WHERE slug = 'yogunduvar-fisher-limani'; -- suya taşıma 368 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(35.800143, 36.76021), 4326)::geography
 WHERE slug = 'yumurtalik-balikci-barinagi'; -- suya taşıma 994 m
-UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.902194, 37.783469), 4326)::geography
-WHERE slug = 'zakinthos-marina'; -- suya taşıma 53 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(20.904667, 37.7825), 4326)::geography
+WHERE slug = 'zakinthos-marina'; -- suya taşıma 270 m
+UPDATE locations SET position = ST_SetSRID(ST_MakePoint(23.649444, 37.934722), 4326)::geography
+WHERE slug = 'zea-marina'; -- suya taşıma 241 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.931084, 36.699264), 4326)::geography
 WHERE slug = 'zeytin-adasi-samandira-sahasi'; -- suya taşıma 132 m
 UPDATE locations SET position = ST_SetSRID(ST_MakePoint(28.891571, 40.976037), 4326)::geography

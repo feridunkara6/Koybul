@@ -78,12 +78,49 @@ Map<String, ({int fillArgb, DocklyIconData icon})> mapPinBadgeSpecs() =>
       ),
     };
 
-/// Tek bir rozeti PNG baytlarına çizer: tip renginde daire + beyaz halka +
-/// ortalanmış beyaz glif. Glif SVG'si bozuk çıkarsa (beklenmez) rozet düz
-/// renkli daire olarak kalır — pin asla görünmez olmaz.
+/// ROTA/İMLEÇ ROZETLERİ (Rota Modu, kurucu onayı 2026-09-23): rota çizgisinin
+/// başı-sonu ve GPS imleci de pin rozetleriyle aynı boru hattından üretilir.
+/// - route-start: lacivert + yelken (başlangıç)
+/// - route-dest : yeşil + flama (varış)
+/// - route-stop : beyaz + marka halkası (numara annotation metniyle basılır)
+/// - device-boat: marka mavisi + yelken (kaptanın GPS konumu)
+const String kRouteStartImageId = 'route-start';
+const String kRouteDestImageId = 'route-dest';
+const String kRouteStopImageId = 'route-stop';
+const String kDeviceBoatImageId = 'device-boat';
+
+Map<String, ({int fillArgb, int ringArgb, DocklyIconData? icon})>
+    mapRouteBadgeSpecs() =>
+        <String, ({int fillArgb, int ringArgb, DocklyIconData? icon})>{
+          kRouteStartImageId: (
+            fillArgb: 0xFF0A2540, // DocklyColors.brandDeep
+            ringArgb: DocklyMapColors.strokeArgb,
+            icon: DocklyIcons.sailing,
+          ),
+          kRouteDestImageId: (
+            fillArgb: 0xFF30A46C, // DocklyColors.success
+            ringArgb: DocklyMapColors.strokeArgb,
+            icon: DocklyIcons.flag,
+          ),
+          kRouteStopImageId: (
+            fillArgb: 0xFFFFFFFF,
+            ringArgb: 0xFF0C7BDC, // DocklyColors.brandPrimary
+            icon: null, // numara, annotation metni olarak üstüne basılır
+          ),
+          kDeviceBoatImageId: (
+            fillArgb: 0xFF0C7BDC,
+            ringArgb: DocklyMapColors.strokeArgb,
+            icon: DocklyIcons.sailing,
+          ),
+        };
+
+/// Tek bir rozeti PNG baytlarına çizer: dolgu dairesi + [ringArgb] halka +
+/// (varsa) ortalanmış beyaz glif. Glif SVG'si bozuk çıkarsa (beklenmez)
+/// rozet düz renkli daire olarak kalır — pin asla görünmez olmaz.
 Future<Uint8List> renderPinBadgePng({
   required int fillArgb,
-  required DocklyIconData icon,
+  DocklyIconData? icon,
+  int ringArgb = DocklyMapColors.strokeArgb,
 }) async {
   final int px = (kPinBadgeLogicalSize * kPinImageScale).round(); // 78
   const double strokeW = 2 * kPinImageScale; // beyaz halka: 2 dp
@@ -102,8 +139,21 @@ Future<Uint8List> renderPinBadgePng({
     ui.Paint()
       ..style = ui.PaintingStyle.stroke
       ..strokeWidth = strokeW
-      ..color = const ui.Color(DocklyMapColors.strokeArgb),
+      ..color = ui.Color(ringArgb),
   );
+
+  if (icon == null) {
+    // Glifsiz rozet (ör. numaralı durak zemini) — daire yeterli.
+    final ui.Image image0 = await recorder.endRecording().toImage(px, px);
+    try {
+      final ByteData? bytes0 =
+          await image0.toByteData(format: ui.ImageByteFormat.png);
+      if (bytes0 == null) throw StateError('Pin rozeti PNG kodlanamadı');
+      return bytes0.buffer.asUint8List();
+    } finally {
+      image0.dispose();
+    }
+  }
 
   try {
     final PictureInfo glyph =
