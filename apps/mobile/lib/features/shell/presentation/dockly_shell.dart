@@ -11,6 +11,7 @@ import '../../map/presentation/map_screen.dart'
     show MapScreen, todayInviteDismissedProvider;
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/presentation/onboarding_overlay.dart';
+import '../../premium/presentation/premium_intro_gate.dart';
 import '../../profile/presentation/profile_screen.dart';
 import '../../today/presentation/today_screen.dart';
 import '../application/shell_tab_provider.dart';
@@ -157,7 +158,10 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
         ),
       ),
     );
-    return Stack(
+    // KAYIT SONRASI PREMIUM TANITIMI (kurucu isteği 2026-09-23): kapı kabuğu
+    // sarar — giriş eylemini izler, cihaz başına bir kez paket ekranını açar.
+    return PremiumIntroGate(
+        child: Stack(
       children: <Widget>[
         shell,
         if (tourStep >= 0)
@@ -186,7 +190,7 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
             child: const _TourInvite(),
           ),
       ],
-    );
+    ));
   }
 }
 

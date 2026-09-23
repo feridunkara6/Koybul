@@ -94,6 +94,16 @@ class MapController extends Notifier<MapState> {
   /// şerit "ne kadar eski" bilgisini buradan söyler. null = bilinmiyor.
   DateTime? _shownDataAt;
 
+  /// Son BAŞARILI ağ yanıtının anı (sakin kalma penceresi için) — sıcak
+  /// başlangıç/önbellek zamanları buna yazılmaz, yalnız gerçek ağ başarısı.
+  DateTime? _lastNetSuccessAt;
+
+  /// Taze başarıdan sonra tek tük hatada şerit çıkarmama süresi.
+  static const Duration _offlineGrace = Duration(seconds: 45);
+
+  /// Testlerde sabitlenebilir saat; üretimde gerçek saat (kota deseniyle aynı).
+  DateTime Function() nowProvider = DateTime.now;
+
   @override
   MapState build() {
     ref.onDispose(() => _debounce?.cancel());
@@ -198,7 +208,8 @@ class MapController extends Notifier<MapState> {
         hasLoadedOnce: true,
         isOffline: false,
       );
-      _shownDataAt = DateTime.now();
+      _shownDataAt = nowProvider();
+      _lastNetSuccessAt = _shownDataAt;
       // Çevrimdışı görünüm için son başarılı veriyi sakla (en iyi çaba;
       // filtresiz genel görünümü bozmasın diye yalnız filtre yokken).
       if (state.types.isEmpty && (result.locations.isNotEmpty || result.clusters.isNotEmpty)) {
@@ -206,6 +217,19 @@ class MapController extends Notifier<MapState> {
       }
     } on AppFailure catch (failure) {
       if (seq != _seq) return;
+      // SAKİN KALMA PENCERESİ (gerçek cihaz dersi 2026-09, kurucu bulgusu):
+      // hızlı kaydırma sırasında tek bir istek tökezlerse (yavaş sunucu,
+      // anlık kopma) çevrimdışı şerit YANIP SÖNMEZ — az önce (≤45 sn) ağdan
+      // taze veri geldiyse sessiz kalınır; bir sonraki kaydırma zaten yeniden
+      // dener. Şerit yalnız GERÇEKTEN kopunca (taze başarı yokken) çıkar.
+      final DateTime? lastOk = _lastNetSuccessAt;
+      if (state.hasData &&
+          lastOk != null &&
+          nowProvider().difference(lastOk) <= _offlineGrace) {
+        state = state.copyWith(
+            isLoading: false, clearFailure: true, hasLoadedOnce: true);
+        return;
+      }
       // Ekranda veri VARSA (sıcak başlangıç ya da önceki yükleme): tam-ekran
       // hata yerine çevrimdışı şerit — veri korunur, gezinmek yeniden dener.
       if (state.hasData) {

@@ -71,8 +71,14 @@ workflows:
     publishing:
       app_store_connect:
         auth: integration
-        submit_to_testflight: true
-        # beta_groups BİLEREK YOK (TestFlight dersi 2026-09): "Moorira Test"
-        # bir İÇ (internal) test grubudur — iç gruplar her yeni derlemeyi
-        # kendiliğinden alır ve Apple API'si iç gruba elle derleme eklemeye
-        # izin vermez. Buraya grup yazmak derlemeyi kırmızı bitiriyordu.
+        # submit_to_testflight BİLEREK KAPALI (TestFlight dersi 2026-09):
+        # true olunca Codemagic paketi DIŞ test incelemesine (beta review)
+        # gönderiyor ve App Store Connect'te "Test Information" boş olduğu
+        # için derleme kırmızı bitiyordu. İÇ test için inceleme GEREKMEZ —
+        # paket yüklendikten sonra iç test grubu onu kendiliğinden görür.
+        # Dış test (arkadaşlara link) istenirse: önce ASC → TestFlight →
+        # Test Information doldurulur, sonra bu satır true yapılır.
+        submit_to_testflight: false
+        # beta_groups BİLEREK YOK: "Moorira Test" bir İÇ (internal) test
+        # grubudur — iç gruplar her yeni derlemeyi kendiliğinden alır ve
+        # Apple API'si iç gruba elle derleme eklemeye izin vermez.

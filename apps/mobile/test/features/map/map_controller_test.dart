@@ -198,21 +198,34 @@ void main() {
     expect(_state(container).pins, isEmpty);
   });
 
-  test('veri varken hata → önceki marker korunur + çevrimdışı şerit (tam-ekran hata YOK)', () async {
+  test('SAKİN KALMA (gerçek cihaz dersi 2026-09): taze başarıdan hemen sonra tek '
+      'hata şerit YAKMAZ; başarı ESKİYİNCE hata çevrimdışı şeridi açar', () async {
     final gateway = FakeMapGateway(result: pinResult);
     final container = _containerWith(gateway);
-    await _ctrl(container).loadViewport(pinViewport);
+    final MapController ctrl = _ctrl(container);
+    DateTime now = DateTime(2026, 9, 23, 12, 0, 0);
+    ctrl.nowProvider = () => now;
+
+    await ctrl.loadViewport(pinViewport);
     expect(_state(container).pins, hasLength(1));
 
+    // Hızlı kaydırma sırasında tek tökezleme: veri az önce ağdan geldi →
+    // şerit yanıp sönmez, veri korunur, gezinmek zaten yeniden dener.
     gateway.error = const NetworkFailure();
-    await _ctrl(container).loadViewport(clusterViewport);
-    final state = _state(container);
-    // Yeni sözleşme: ekranda veri varsa hata bindirilmez; veri korunur ve
-    // çevrimdışı şerit gösterilir (gezinmek yeniden dener).
+    await ctrl.loadViewport(clusterViewport);
+    MapState state = _state(container);
     expect(state.failure, isNull);
-    expect(state.isOffline, isTrue);
+    expect(state.isOffline, isFalse); // sakin kalma penceresi
     expect(state.isLoading, isFalse);
     expect(state.pins, hasLength(1)); // eski veri silinmedi
+
+    // Başarının üstünden 46 sn geçti → artık gerçek kopukluk: dürüst şerit.
+    now = now.add(const Duration(seconds: 46));
+    await ctrl.loadViewport(clusterViewport);
+    state = _state(container);
+    expect(state.failure, isNull);
+    expect(state.isOffline, isTrue);
+    expect(state.pins, hasLength(1));
   });
 
   test('retry: hatadan sonra başarıyla toparlar', () async {

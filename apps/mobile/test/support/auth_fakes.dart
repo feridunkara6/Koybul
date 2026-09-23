@@ -81,3 +81,19 @@ class FakeAuthRepository implements AuthRepository {
     deleted = true;
   }
 }
+
+/// Durumu TESTTEN değiştirilebilen oturum kontrolcüsü — giriş/çıkış GEÇİŞİNİ
+/// sınayan testler için (kayıt sonrası premium tanıtımı, P5).
+class SwitchableAuthController extends AuthController {
+  SwitchableAuthController(this._initial);
+
+  final AuthState _initial;
+
+  @override
+  AuthState build() => _initial;
+
+  /// Testin elinden durum geçişi: ör. Unauthenticated → Authenticated(üye).
+  void switchTo(AuthState next) {
+    state = next;
+  }
+}

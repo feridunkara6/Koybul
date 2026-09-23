@@ -86,6 +86,24 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
     _map = map;
     await map.setCamera(_initialCamera);
     if (_disposed) return;
+    // SÜS YERLEŞİMİ (gerçek cihaz dersi 2026-09, kurucu bulgusu): pusula
+    // varsayılan sağ üstte, bizim arama hapı + sağ düğme kolonunun ALTINDA
+    // kalıyordu ve harita kuzeye bakarken kendini gizliyordu — "kaybolmuş"
+    // görünüyordu. Denizci uygulamasında pusula HER ZAMAN görünür ve boş
+    // olan SOL tarafta, çiplerin altında durur. Ölçek çubuğu da hemen altına
+    // alınır (varsayılan yeri arama hapının arkasıydı).
+    await map.compass.updateSettings(CompassSettings(
+      position: OrnamentPosition.TOP_LEFT,
+      marginTop: 118,
+      marginLeft: 12,
+      fadeWhenFacingNorth: false, // kaptan pusulayı hep görür
+    ));
+    await map.scaleBar.updateSettings(ScaleBarSettings(
+      position: OrnamentPosition.TOP_LEFT,
+      marginTop: 168,
+      marginLeft: 12,
+    ));
+    if (_disposed) return;
     _circles = await map.annotations.createCircleAnnotationManager();
     _clusterCircles = await map.annotations.createCircleAnnotationManager();
     _labels = await map.annotations.createPointAnnotationManager();
