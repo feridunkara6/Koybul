@@ -77,8 +77,13 @@ def main():
         lats = [m["lat"] for m in members]
         clusters.append({
             "position": {
-                "lat": round(sum(lats) / len(lats), 5),
-                "lon": round(sum(lons) / len(lons), 5),
+                # math.fsum: SÜRÜMDEN BAĞIMSIZ toplam (CI dersi 2026-09-23:
+                # Python 3.12 sum()'ın kayan nokta hassasiyetini değiştirdi —
+                # 3.11'de üretilen dosya 3.12'li CI'da son basamakta farklı
+                # yuvarlanıp tazelik denetimini kırmıştı; fsum her sürümde
+                # bit-bit aynı, doğru yuvarlanmış sonucu verir).
+                "lat": round(math.fsum(lats) / len(lats), 5),
+                "lon": round(math.fsum(lons) / len(lons), 5),
             },
             "count": len(members),
             # bbox = üyelerin gerçek kapsamı (balona dokununca kamera hedefi).
