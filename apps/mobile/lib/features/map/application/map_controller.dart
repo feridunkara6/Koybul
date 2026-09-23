@@ -121,10 +121,41 @@ class MapController extends Notifier<MapState> {
 
   MapLocationsGateway get _gateway => ref.read(mapLocationsGatewayProvider);
 
+  /// Bu görünüm ağa çıkmadan bellek-içi önbellekten servis edilebilir mi?
+  /// (loadViewport'taki hızlı yolların koşullarıyla BİREBİR aynı — orası
+  /// değişirse burası da değişmeli.)
+  bool _cacheCanServe(MapViewport viewport, List<String>? types) {
+    final List<String>? effectiveTypes =
+        types ?? (state.types.isEmpty ? null : state.types.toList(growable: false));
+    if (effectiveTypes != null) return false;
+    if (viewport.zoom >= _minPinZoom) {
+      return _pinCacheBbox != null &&
+          _pinCacheAt != null &&
+          nowProvider().difference(_pinCacheAt!) <= _pinCacheTtl &&
+          _containsBbox(_pinCacheBbox!, viewport.bbox);
+    }
+    return _clusterCacheBbox != null &&
+        _clusterCacheAt != null &&
+        _clusterCacheZoom == viewport.zoom &&
+        nowProvider().difference(_clusterCacheAt!) <= _pinCacheTtl &&
+        _containsBbox(_clusterCacheBbox!, viewport.bbox);
+  }
+
   /// Harita kaydırılınca/zoom'lanınca çağrılır — aynı görünüm tekrarlanmaz,
   /// hızlı değişimler debounce ile tek isteğe indirgenir.
+  ///
+  /// HIZ (kurucu bulgusu 2026-09-23 "koylar geç yükleniyor"): görünüm zaten
+  /// bellekteki geniş alanın içindeyse debounce BEKLENMEZ — önbellekten
+  /// servis bedavadır, kare anında dolar. Debounce yalnız ağa çıkacak
+  /// istekleri tek isteğe indirger.
   void onViewportChanged(MapViewport viewport, {List<String>? types}) {
     if (viewport == _lastRequested) return;
+    final MapViewport clamped = viewport.clamped();
+    if (_cacheCanServe(clamped, types)) {
+      _debounce?.cancel();
+      unawaited(loadViewport(viewport, types: types));
+      return;
+    }
     _lastRequested = viewport;
     _debounce?.cancel();
     _debounce = Timer(

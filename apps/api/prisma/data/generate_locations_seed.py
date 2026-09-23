@@ -986,6 +986,55 @@ def emit_media(here, records):
     return "\n".join(out)
 
 
+def apply_koordinat(here, records):
+    """Koordinat düzeltmeleri (koordinat_duzeltmeleri_*.json) — kurucu talimatı
+    2026-09-23: karada görünen işaretçiler koyun/limanın SUYUNA taşınır.
+
+    Kaynak koordinat batch dosyasında korunur; düzeltme burada uygulanır:
+    - kayıtlar bellekte güncellenir → taze kurulum (INSERT) yeni koordinatı alır,
+    - idempotent UPDATE üretilir → mevcut veritabanları da düzelir
+      (ana bölüm ON CONFLICT DO NOTHING olduğundan INSERT'e akmaz).
+    Tutarlılık: eskiLat/eskiLon batch'teki değerle BİREBİR eşleşmeli — batch
+    koordinatı elle düzeltilirse bu dosya da güncellenmek zorunda (drift kilidi).
+    """
+    files = sorted(here.glob("koordinat_duzeltmeleri_*.json"))
+    if not files:
+        return ""
+    by = {r["slug"]: r for r in records}
+    out = ["", "-- " + "=" * 70,
+           "-- KOORDİNAT DÜZELTMELERİ — mevcut veritabanlarına akar (idempotent).",
+           "-- Kaynak: koordinat_duzeltmeleri_*.json (yöntem/kaynak dosya başında)."]
+    errors = []
+    for f in files:
+        data = json.loads(f.read_text(encoding="utf-8"))
+        out.append(f"-- --- {f.name}: {len(data['duzeltmeler'])} nokta ---")
+        for c in data["duzeltmeler"]:
+            s = c["slug"]
+            r = by.get(s)
+            if r is None:
+                errors.append(f"koordinat: bilinmeyen slug {s}")
+                continue
+            if abs(r["lat"] - c["eskiLat"]) > 1e-9 or abs(r["lon"] - c["eskiLon"]) > 1e-9:
+                errors.append(
+                    f"koordinat {s}: batch koordinatı değişmiş "
+                    f"({r['lat']},{r['lon']} ≠ eski {c['eskiLat']},{c['eskiLon']}) — "
+                    f"düzeltme dosyasını güncelleyin ya da girdiyi silin")
+                continue
+            r["lat"], r["lon"] = c["lat"], c["lon"]
+            out.append(
+                "UPDATE locations SET position = "
+                f"ST_SetSRID(ST_MakePoint({c['lon']}, {c['lat']}), 4326)::geography\n"
+                f"WHERE slug = {q(s)}; -- suya taşıma {c['tasimaM']} m"
+            )
+    if errors:
+        for e in errors:
+            print(f"HATA: {e}", file=sys.stderr)
+        sys.exit(1)
+    out.append("")
+    print(f"koordinat: {sum(len(json.loads(f.read_text(encoding='utf-8'))['duzeltmeler']) for f in files)} nokta suya taşındı")
+    return "\n".join(out)
+
+
 def emit_corrections(here, records):
     """Doğrulama turu düzeltmeleri (corrections_*.json) → idempotent SQL.
 
@@ -1055,6 +1104,9 @@ def main():
         records.extend(data["records"])
         batch_names.append(data["batch"])
     data = {"batch": " + ".join(batch_names), "collectedAt": "2026-07-07/08, 2026-07-11"}
+    # Koordinat düzeltmeleri VALIDATE'ten önce uygulanır (kayıtlar bellekte
+    # güncellenir; ülke-kutusu denetimi de düzeltilmiş koordinatı görür).
+    koordinat_sql = apply_koordinat(here, records)
     errors, warnings = validate(records)
     for w in warnings:
         print(f"UYARI: {w}")
@@ -1071,6 +1123,7 @@ def main():
     # yaklaşma, i18n'den SONRA: birleşik (notlu) metin taban çeviriyi ezmeli.
     sql += emit_yaklasma(here, records)
     sql += emit_corrections(here, records)
+    sql += koordinat_sql
     sql += emit_tamamlama(here, records)
     sql += emit_media(here, records)
     (here.parent / "seed_locations.sql").write_text(sql, encoding="utf-8")

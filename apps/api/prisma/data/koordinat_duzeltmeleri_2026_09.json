@@ -1,0 +1,2735 @@
+{
+  "yontem": "GSHHG tam cozunurluk kiyi cizgisi (GSHHS_f_L1) ile nokta-poligon denetimi: karada kalan isaretciler, kurucu talimatiyla (2026-09-23: 'imlecleri koylarin icine kaydir, hepsi koyun icinde olsun') en yakin kiyidan suya tasindi. Demirleme/samandira kiyidan ~60 m, iskele/marina ~25 m aciga konur; tasima siniri 2,5 km (asani elle arastirilir). Kayit kimligi ve diger alanlar degismez; batch dosyalarindaki kaynak koordinat korunur, duzeltme bu dosyadan uygulanir (uretec hem INSERT'e hem UPDATE'e isler).",
+  "kaynak": "GSHHS_f_L1.shp — GSHHG 'f' (WVS/WDBII kamu kaynakli; dagitim: github.com/pelson/gshhs-unpacked)",
+  "tarih": "2026-09-23",
+  "duzeltmeler": [
+    {
+      "slug": "adabogazi-akvaryum-demirleme",
+      "eskiLat": 37.004972,
+      "eskiLon": 27.385389,
+      "lat": 37.004596,
+      "lon": 27.385904,
+      "tasimaM": 62
+    },
+    {
+      "slug": "adaia-gocek-restaurant",
+      "eskiLat": 36.6447,
+      "eskiLon": 28.8512,
+      "lat": 36.644693,
+      "lon": 28.851493,
+      "tasimaM": 26
+    },
+    {
+      "slug": "adakoy-marina-marmaris",
+      "eskiLat": 36.819405,
+      "eskiLon": 28.292989,
+      "lat": 36.819781,
+      "lon": 28.292989,
+      "tasimaM": 42
+    },
+    {
+      "slug": "aganlar-marina-bodrum",
+      "eskiLat": 37.0136,
+      "eskiLon": 27.4512,
+      "lat": 37.0136,
+      "lon": 27.450135,
+      "tasimaM": 94
+    },
+    {
+      "slug": "aganlar-tersane-yakit",
+      "eskiLat": 37.013639,
+      "eskiLon": 27.451222,
+      "lat": 37.013639,
+      "lon": 27.450135,
+      "tasimaM": 96
+    },
+    {
+      "slug": "agathonisi-agios-georgios",
+      "eskiLat": 37.457523,
+      "eskiLon": 26.966928,
+      "lat": 37.456887,
+      "lon": 26.96647,
+      "tasimaM": 81
+    },
+    {
+      "slug": "agia-ermioni-limani-sakiz",
+      "eskiLat": 38.3005,
+      "eskiLon": 26.148944,
+      "lat": 38.299334,
+      "lon": 26.149185,
+      "tasimaM": 131
+    },
+    {
+      "slug": "agia-markella-sakiz",
+      "eskiLat": 38.47925,
+      "eskiLon": 25.884861,
+      "lat": 38.478209,
+      "lon": 25.884861,
+      "tasimaM": 116
+    },
+    {
+      "slug": "agia-pelagia-marina-kefalonya",
+      "eskiLat": 38.102,
+      "eskiLon": 20.5145,
+      "lat": 38.101533,
+      "lon": 20.515614,
+      "tasimaM": 110
+    },
+    {
+      "slug": "agios-nikolaos-limani-zakinthos",
+      "eskiLat": 37.905972,
+      "eskiLon": 20.70675,
+      "lat": 37.906807,
+      "lon": 20.708085,
+      "tasimaM": 149
+    },
+    {
+      "slug": "akarca-balikci-barinagi",
+      "eskiLat": 38.164132,
+      "eskiLon": 26.813641,
+      "lat": 38.164132,
+      "lon": 26.812575,
+      "tasimaM": 93
+    },
+    {
+      "slug": "akkum-koyu",
+      "eskiLat": 36.459004,
+      "eskiLon": 34.133592,
+      "lat": 36.447488,
+      "lon": 34.144576,
+      "tasimaM": 1611
+    },
+    {
+      "slug": "akliman",
+      "eskiLat": 36.251019,
+      "eskiLon": 30.117998,
+      "lat": 36.249896,
+      "lon": 30.116271,
+      "tasimaM": 199
+    },
+    {
+      "slug": "aksazlar-koyu",
+      "eskiLat": 36.630906,
+      "eskiLon": 29.094082,
+      "lat": 36.629876,
+      "lon": 29.094082,
+      "tasimaM": 114
+    },
+    {
+      "slug": "aktas-akvaryum-koyu",
+      "eskiLat": 38.216716,
+      "eskiLon": 26.765787,
+      "lat": 38.214039,
+      "lon": 26.764742,
+      "tasimaM": 311
+    },
+    {
+      "slug": "akyar-koyu",
+      "eskiLat": 36.436348,
+      "eskiLon": 34.112496,
+      "lat": 36.43402,
+      "lon": 34.12273,
+      "tasimaM": 950
+    },
+    {
+      "slug": "akyarlar-balikci-barinagi",
+      "eskiLat": 36.96818,
+      "eskiLon": 27.29316,
+      "lat": 36.967692,
+      "lon": 27.29316,
+      "tasimaM": 54
+    },
+    {
+      "slug": "alanya-balikci-limani",
+      "eskiLat": 36.539532,
+      "eskiLon": 32.00386,
+      "lat": 36.533531,
+      "lon": 32.008509,
+      "tasimaM": 785
+    },
+    {
+      "slug": "alanya-marina",
+      "eskiLat": 36.5569,
+      "eskiLon": 31.9519,
+      "lat": 36.549349,
+      "lon": 31.955916,
+      "tasimaM": 911
+    },
+    {
+      "slug": "alanya-marina-yakit",
+      "eskiLat": 36.556944,
+      "eskiLon": 31.951944,
+      "lat": 36.549348,
+      "lon": 31.955915,
+      "tasimaM": 914
+    },
+    {
+      "slug": "aliaga-balikci-barinagi",
+      "eskiLat": 38.824356,
+      "eskiLon": 26.893138,
+      "lat": 38.824781,
+      "lon": 26.893138,
+      "tasimaM": 47
+    },
+    {
+      "slug": "altinova-balikci-barinagi",
+      "eskiLat": 39.210427,
+      "eskiLon": 26.734608,
+      "lat": 39.210688,
+      "lon": 26.735053,
+      "tasimaM": 48
+    },
+    {
+      "slug": "ambarli-balikci-barinagi",
+      "eskiLat": 40.969523,
+      "eskiLon": 28.71869,
+      "lat": 40.968495,
+      "lon": 28.71868,
+      "tasimaM": 114
+    },
+    {
+      "slug": "ambarseki-balikci-barinagi",
+      "eskiLat": 38.630285,
+      "eskiLon": 26.524953,
+      "lat": 38.629842,
+      "lon": 26.52568,
+      "tasimaM": 80
+    },
+    {
+      "slug": "antalya-kaleici-yat-limani",
+      "eskiLat": 36.883833,
+      "eskiLon": 30.703,
+      "lat": 36.877653,
+      "lon": 30.699781,
+      "tasimaM": 743
+    },
+    {
+      "slug": "anthony-quinn-koyu",
+      "eskiLat": 36.31991,
+      "eskiLon": 28.20977,
+      "lat": 36.319037,
+      "lon": 28.209814,
+      "tasimaM": 97
+    },
+    {
+      "slug": "arap-island-cove-koyu",
+      "eskiLat": 36.648827,
+      "eskiLon": 28.14599,
+      "lat": 36.650107,
+      "lon": 28.146023,
+      "tasimaM": 142
+    },
+    {
+      "slug": "ardicliagil-koyu",
+      "eskiLat": 37.316389,
+      "eskiLon": 27.464444,
+      "lat": 37.316389,
+      "lon": 27.465208,
+      "tasimaM": 67
+    },
+    {
+      "slug": "armutlu-su-koyu",
+      "eskiLat": 36.689833,
+      "eskiLon": 27.676333,
+      "lat": 36.69053,
+      "lon": 27.677417,
+      "tasimaM": 124
+    },
+    {
+      "slug": "arnavutkoy-marina",
+      "eskiLat": 40.384613,
+      "eskiLon": 28.866436,
+      "lat": 40.385097,
+      "lon": 28.867329,
+      "tasimaM": 93
+    },
+    {
+      "slug": "asagiyapici-balikci-barinagi",
+      "eskiLat": 40.393494,
+      "eskiLon": 27.902289,
+      "lat": 40.392752,
+      "lon": 27.903568,
+      "tasimaM": 136
+    },
+    {
+      "slug": "asarcik-gokce-koyu",
+      "eskiLat": 36.760485,
+      "eskiLon": 28.267832,
+      "lat": 36.761729,
+      "lon": 28.268646,
+      "tasimaM": 156
+    },
+    {
+      "slug": "asi-ici-koyu",
+      "eskiLat": 36.722276,
+      "eskiLon": 28.648451,
+      "lat": 36.721458,
+      "lon": 28.647178,
+      "tasimaM": 145
+    },
+    {
+      "slug": "asirli-adasi",
+      "eskiLat": 36.2106,
+      "eskiLon": 29.9011,
+      "lat": 36.212591,
+      "lon": 29.900735,
+      "tasimaM": 223
+    },
+    {
+      "slug": "assos-limani-kefalonya",
+      "eskiLat": 38.378833,
+      "eskiLon": 20.538833,
+      "lat": 38.37913,
+      "lon": 20.538349,
+      "tasimaM": 53
+    },
+    {
+      "slug": "atabay-marina",
+      "eskiLat": 40.770833,
+      "eskiLon": 29.44,
+      "lat": 40.768479,
+      "lon": 29.439052,
+      "tasimaM": 273
+    },
+    {
+      "slug": "atbuku-maden-koyu",
+      "eskiLat": 36.433833,
+      "eskiLon": 30.483667,
+      "lat": 36.428257,
+      "lon": 30.487787,
+      "tasimaM": 720
+    },
+    {
+      "slug": "ayas-koyu",
+      "eskiLat": 36.484712,
+      "eskiLon": 34.178867,
+      "lat": 36.48673,
+      "lon": 34.193524,
+      "tasimaM": 1327
+    },
+    {
+      "slug": "aydincik-balikci-limani",
+      "eskiLat": 36.145639,
+      "eskiLon": 33.32575,
+      "lat": 36.134401,
+      "lon": 33.335971,
+      "tasimaM": 1548
+    },
+    {
+      "slug": "ayin-koyu",
+      "eskiLat": 36.925306,
+      "eskiLon": 28.140393,
+      "lat": 36.927587,
+      "lon": 28.140931,
+      "tasimaM": 258
+    },
+    {
+      "slug": "azmak-iskelesi-ciftlik",
+      "eskiLat": 36.716057,
+      "eskiLon": 28.238285,
+      "lat": 36.716073,
+      "lon": 28.239022,
+      "tasimaM": 66
+    },
+    {
+      "slug": "baba-island-koyu",
+      "eskiLat": 36.693278,
+      "eskiLon": 28.693306,
+      "lat": 36.692407,
+      "lon": 28.694535,
+      "tasimaM": 146
+    },
+    {
+      "slug": "babakale-balikci-barinagi",
+      "eskiLat": 39.47917,
+      "eskiLon": 26.06417,
+      "lat": 39.47918,
+      "lon": 26.063439,
+      "tasimaM": 63
+    },
+    {
+      "slug": "bademli-deniz-ilicasi-koyu",
+      "eskiLat": 38.9972,
+      "eskiLon": 26.7988,
+      "lat": 38.9972,
+      "lon": 26.798054,
+      "tasimaM": 64
+    },
+    {
+      "slug": "bakirkoy-balikci-barinagi",
+      "eskiLat": 40.973511,
+      "eskiLon": 28.878063,
+      "lat": 40.972112,
+      "lon": 28.880437,
+      "tasimaM": 252
+    },
+    {
+      "slug": "ballisu-koyu",
+      "eskiLat": 36.934418,
+      "eskiLon": 28.111415,
+      "lat": 36.935951,
+      "lon": 28.111442,
+      "tasimaM": 170
+    },
+    {
+      "slug": "barbaros-koyu",
+      "eskiLat": 36.242107,
+      "eskiLon": 33.805632,
+      "lat": 36.2434,
+      "lon": 33.818554,
+      "tasimaM": 1166
+    },
+    {
+      "slug": "bardakci-koyu",
+      "eskiLat": 37.027875,
+      "eskiLon": 27.418167,
+      "lat": 37.027884,
+      "lon": 27.419413,
+      "tasimaM": 110
+    },
+    {
+      "slug": "batikkaya-buku-demirleme",
+      "eskiLat": 36.642556,
+      "eskiLon": 29.086,
+      "lat": 36.644274,
+      "lon": 29.08597,
+      "tasimaM": 191
+    },
+    {
+      "slug": "bedri-rahmi-samandira-sahasi",
+      "eskiLat": 36.6905,
+      "eskiLon": 28.8668,
+      "lat": 36.68985,
+      "lon": 28.867845,
+      "tasimaM": 118
+    },
+    {
+      "slug": "behramkale-assos-limani",
+      "eskiLat": 39.485354,
+      "eskiLon": 26.339133,
+      "lat": 39.484294,
+      "lon": 26.340913,
+      "tasimaM": 193
+    },
+    {
+      "slug": "bekar-koyu",
+      "eskiLat": 36.858171,
+      "eskiLon": 28.029848,
+      "lat": 36.858782,
+      "lon": 28.030739,
+      "tasimaM": 104
+    },
+    {
+      "slug": "bergos-port-guest-house-limani",
+      "eskiLat": 39.467107,
+      "eskiLon": 26.2363,
+      "lat": 39.467104,
+      "lon": 26.235907,
+      "tasimaM": 34
+    },
+    {
+      "slug": "beykoz-balikci-barinagi",
+      "eskiLat": 41.129034,
+      "eskiLon": 29.093945,
+      "lat": 41.127405,
+      "lon": 29.089312,
+      "tasimaM": 427
+    },
+    {
+      "slug": "black-kavos-girit",
+      "eskiLat": 35.272917,
+      "eskiLon": 26.254972,
+      "lat": 35.27429,
+      "lon": 26.254949,
+      "tasimaM": 152
+    },
+    {
+      "slug": "bogsak-koyu",
+      "eskiLat": 36.270981,
+      "eskiLon": 33.815928,
+      "lat": 36.268957,
+      "lon": 33.821896,
+      "tasimaM": 579
+    },
+    {
+      "slug": "bolme-kormen-island-koyu",
+      "eskiLat": 38.030569,
+      "eskiLon": 26.865847,
+      "lat": 38.031791,
+      "lon": 26.865847,
+      "tasimaM": 136
+    },
+    {
+      "slug": "borina-yacht-club",
+      "eskiLat": 36.7606,
+      "eskiLon": 28.129727,
+      "lat": 36.760599,
+      "lon": 28.129264,
+      "tasimaM": 41
+    },
+    {
+      "slug": "bostanci-balikci-barinagi",
+      "eskiLat": 40.950139,
+      "eskiLon": 29.094833,
+      "lat": 40.947689,
+      "lon": 29.09314,
+      "tasimaM": 307
+    },
+    {
+      "slug": "boyabagi-koyu",
+      "eskiLat": 38.573623,
+      "eskiLon": 26.565422,
+      "lat": 38.573633,
+      "lon": 26.567788,
+      "tasimaM": 205
+    },
+    {
+      "slug": "bozburun-yacht-club",
+      "eskiLat": 36.6753,
+      "eskiLon": 28.0483,
+      "lat": 36.674882,
+      "lon": 28.047658,
+      "tasimaM": 74
+    },
+    {
+      "slug": "bozcaada-limani",
+      "eskiLat": 39.834725,
+      "eskiLon": 26.076004,
+      "lat": 39.83473,
+      "lon": 26.076534,
+      "tasimaM": 45
+    },
+    {
+      "slug": "bozukkale-loryma-demirleme",
+      "eskiLat": 36.576377,
+      "eskiLon": 28.011648,
+      "lat": 36.575696,
+      "lon": 28.011657,
+      "tasimaM": 76
+    },
+    {
+      "slug": "buyuk-boncuklu-koyu",
+      "eskiLat": 36.621861,
+      "eskiLon": 29.076694,
+      "lat": 36.622548,
+      "lon": 29.076303,
+      "tasimaM": 84
+    },
+    {
+      "slug": "buyukada-kuzey-demirleme",
+      "eskiLat": 40.859,
+      "eskiLon": 29.1112,
+      "lat": 40.859003,
+      "lon": 29.110485,
+      "tasimaM": 60
+    },
+    {
+      "slug": "buyukeceli-koyu-gulnar",
+      "eskiLat": 36.156028,
+      "eskiLon": 33.575833,
+      "lat": 36.154892,
+      "lon": 33.582712,
+      "tasimaM": 629
+    },
+    {
+      "slug": "buyukova-samandira-sahasi",
+      "eskiLat": 36.704737,
+      "eskiLon": 28.906372,
+      "lat": 36.703911,
+      "lon": 28.907714,
+      "tasimaM": 151
+    },
+    {
+      "slug": "buzaglik-koyu",
+      "eskiLat": 36.226167,
+      "eskiLon": 29.9045,
+      "lat": 36.226132,
+      "lon": 29.907772,
+      "tasimaM": 293
+    },
+    {
+      "slug": "cam-limani-koyu-heybeliada",
+      "eskiLat": 40.87,
+      "eskiLon": 29.085,
+      "lat": 40.865709,
+      "lon": 29.083107,
+      "tasimaM": 502
+    },
+    {
+      "slug": "camalti-koyu",
+      "eskiLat": 36.85987,
+      "eskiLon": 28.022417,
+      "lat": 36.860433,
+      "lon": 28.023325,
+      "tasimaM": 102
+    },
+    {
+      "slug": "camcagiz-limani",
+      "eskiLat": 38.208333,
+      "eskiLon": 26.772167,
+      "lat": 38.20833,
+      "lon": 26.771379,
+      "tasimaM": 69
+    },
+    {
+      "slug": "camlibel-marina",
+      "eskiLat": 36.790846,
+      "eskiLon": 34.627719,
+      "lat": 36.790308,
+      "lon": 34.628557,
+      "tasimaM": 95
+    },
+    {
+      "slug": "camlik-koyu",
+      "eskiLat": 36.220419,
+      "eskiLon": 29.905939,
+      "lat": 36.22103,
+      "lon": 29.906909,
+      "tasimaM": 110
+    },
+    {
+      "slug": "canakkale-yat-limani",
+      "eskiLat": 40.1534,
+      "eskiLon": 26.406,
+      "lat": 40.154963,
+      "lon": 26.400082,
+      "tasimaM": 531
+    },
+    {
+      "slug": "candarli-limani",
+      "eskiLat": 38.935922,
+      "eskiLon": 26.936167,
+      "lat": 38.935907,
+      "lon": 26.937386,
+      "tasimaM": 105
+    },
+    {
+      "slug": "cati-coves-koyu",
+      "eskiLat": 36.792359,
+      "eskiLon": 28.021667,
+      "lat": 36.792381,
+      "lon": 28.022734,
+      "tasimaM": 95
+    },
+    {
+      "slug": "cennet-marine-yacht-club",
+      "eskiLat": 36.753066,
+      "eskiLon": 28.129472,
+      "lat": 36.754794,
+      "lon": 28.129455,
+      "tasimaM": 192
+    },
+    {
+      "slug": "cinarli-koyu-balikci-barinagi",
+      "eskiLat": 40.607386,
+      "eskiLon": 27.529837,
+      "lat": 40.606587,
+      "lon": 27.528404,
+      "tasimaM": 150
+    },
+    {
+      "slug": "cleopatra-koyu",
+      "eskiLat": 36.158749,
+      "eskiLon": 33.688323,
+      "lat": 36.149876,
+      "lon": 33.688323,
+      "tasimaM": 985
+    },
+    {
+      "slug": "club-marina-gocek",
+      "eskiLat": 36.7467,
+      "eskiLon": 28.925,
+      "lat": 36.748992,
+      "lon": 28.925919,
+      "tasimaM": 267
+    },
+    {
+      "slug": "d-marin-didim",
+      "eskiLat": 37.3406,
+      "eskiLon": 27.2594,
+      "lat": 37.338525,
+      "lon": 27.2594,
+      "tasimaM": 230
+    },
+    {
+      "slug": "d-marin-didim-yakit",
+      "eskiLat": 37.33894,
+      "eskiLon": 27.26217,
+      "lat": 37.338525,
+      "lon": 27.26217,
+      "tasimaM": 46
+    },
+    {
+      "slug": "d-marin-gocek",
+      "eskiLat": 36.7483,
+      "eskiLon": 28.9428,
+      "lat": 36.748913,
+      "lon": 28.942323,
+      "tasimaM": 80
+    },
+    {
+      "slug": "dalyankoy-koyu-demirleme",
+      "eskiLat": 38.359667,
+      "eskiLon": 26.317,
+      "lat": 38.359644,
+      "lon": 26.3186,
+      "tasimaM": 139
+    },
+    {
+      "slug": "datbuku",
+      "eskiLat": 36.658074,
+      "eskiLon": 28.043906,
+      "lat": 36.65841,
+      "lon": 28.044468,
+      "tasimaM": 62
+    },
+    {
+      "slug": "dead-sea-koyu",
+      "eskiLat": 36.546599,
+      "eskiLon": 29.110942,
+      "lat": 36.546609,
+      "lon": 29.111881,
+      "tasimaM": 84
+    },
+    {
+      "slug": "degirmenlik-koyu",
+      "eskiLat": 36.18125,
+      "eskiLon": 29.823417,
+      "lat": 36.181256,
+      "lon": 29.825228,
+      "tasimaM": 162
+    },
+    {
+      "slug": "demircili-koyu-balikci-barinagi",
+      "eskiLat": 38.207184,
+      "eskiLon": 26.686354,
+      "lat": 38.207184,
+      "lon": 26.685907,
+      "tasimaM": 39
+    },
+    {
+      "slug": "deniz-restaurant-delikyol",
+      "eskiLat": 36.726113,
+      "eskiLon": 28.130128,
+      "lat": 36.726683,
+      "lon": 28.129239,
+      "tasimaM": 101
+    },
+    {
+      "slug": "denizgiren-balikci-barinagi",
+      "eskiLat": 38.568191,
+      "eskiLon": 26.362609,
+      "lat": 38.568407,
+      "lon": 26.361811,
+      "tasimaM": 73
+    },
+    {
+      "slug": "denizkoy-koyu",
+      "eskiLat": 38.953489,
+      "eskiLon": 26.807723,
+      "lat": 38.953015,
+      "lon": 26.808507,
+      "tasimaM": 86
+    },
+    {
+      "slug": "doganlar-koyu-balikci-barinagi",
+      "eskiLat": 40.520359,
+      "eskiLon": 27.747603,
+      "lat": 40.520359,
+      "lon": 27.744232,
+      "tasimaM": 284
+    },
+    {
+      "slug": "domuz-island-koyu",
+      "eskiLat": 36.668278,
+      "eskiLon": 28.900769,
+      "lat": 36.668348,
+      "lon": 28.901894,
+      "tasimaM": 100
+    },
+    {
+      "slug": "dortyol-fisher-limani",
+      "eskiLat": 36.822402,
+      "eskiLon": 36.168693,
+      "lat": 36.821254,
+      "lon": 36.166646,
+      "tasimaM": 222
+    },
+    {
+      "slug": "dutliman-koyu-balikci-barinagi",
+      "eskiLat": 40.375367,
+      "eskiLon": 28.050078,
+      "lat": 40.376436,
+      "lon": 28.050099,
+      "tasimaM": 119
+    },
+    {
+      "slug": "duverlik-merdivenli-demirleme",
+      "eskiLat": 38.198287,
+      "eskiLon": 26.63288,
+      "lat": 38.197516,
+      "lon": 26.633767,
+      "tasimaM": 115
+    },
+    {
+      "slug": "ece-limani",
+      "eskiLat": 40.366389,
+      "eskiLon": 26.328333,
+      "lat": 40.366389,
+      "lon": 26.327097,
+      "tasimaM": 105
+    },
+    {
+      "slug": "ekincik-koy-rihtimi",
+      "eskiLat": 36.828556,
+      "eskiLon": 28.54875,
+      "lat": 36.828544,
+      "lon": 28.549827,
+      "tasimaM": 96
+    },
+    {
+      "slug": "ekinlik-adasi-balikci-barinagi",
+      "eskiLat": 40.546334,
+      "eskiLon": 27.487638,
+      "lat": 40.544316,
+      "lon": 27.487651,
+      "tasimaM": 224
+    },
+    {
+      "slug": "ekinlik-adasi-demirleme",
+      "eskiLat": 40.537833,
+      "eskiLon": 27.466667,
+      "lat": 40.535828,
+      "lon": 27.468777,
+      "tasimaM": 285
+    },
+    {
+      "slug": "erdemli-fisher-limani",
+      "eskiLat": 36.607789,
+      "eskiLon": 34.325681,
+      "lat": 36.601892,
+      "lon": 34.332637,
+      "tasimaM": 901
+    },
+    {
+      "slug": "ermoupoli-limani-syros",
+      "eskiLat": 37.440528,
+      "eskiLon": 24.942389,
+      "lat": 37.440291,
+      "lon": 24.942764,
+      "tasimaM": 42
+    },
+    {
+      "slug": "ersoy-restaurant-orhaniye",
+      "eskiLat": 36.753,
+      "eskiLon": 28.1295,
+      "lat": 36.754794,
+      "lon": 28.129482,
+      "tasimaM": 199
+    },
+    {
+      "slug": "esenkoy-balikci-barinagi",
+      "eskiLat": 40.534189,
+      "eskiLon": 28.781632,
+      "lat": 40.535968,
+      "lon": 28.778536,
+      "tasimaM": 327
+    },
+    {
+      "slug": "fakdere-koyu",
+      "eskiLat": 36.150833,
+      "eskiLon": 29.666667,
+      "lat": 36.150328,
+      "lon": 29.667425,
+      "tasimaM": 88
+    },
+    {
+      "slug": "fethiye-limani",
+      "eskiLat": 36.622984,
+      "eskiLon": 29.106163,
+      "lat": 36.623239,
+      "lon": 29.105768,
+      "tasimaM": 45
+    },
+    {
+      "slug": "filippoi-plaji-zakinthos",
+      "eskiLat": 37.901556,
+      "eskiLon": 20.652472,
+      "lat": 37.90343,
+      "lon": 20.652472,
+      "tasimaM": 208
+    },
+    {
+      "slug": "finikas-marina-syros",
+      "eskiLat": 37.397306,
+      "eskiLon": 24.87625,
+      "lat": 37.396908,
+      "lon": 24.876825,
+      "tasimaM": 67
+    },
+    {
+      "slug": "fiskardo-limani",
+      "eskiLat": 38.4608,
+      "eskiLon": 20.5767,
+      "lat": 38.460807,
+      "lon": 20.578177,
+      "tasimaM": 128
+    },
+    {
+      "slug": "fistikli-village-balikci-barinagi",
+      "eskiLat": 40.478611,
+      "eskiLon": 28.884722,
+      "lat": 40.478302,
+      "lon": 28.884187,
+      "tasimaM": 57
+    },
+    {
+      "slug": "gaios-limani-paksos",
+      "eskiLat": 39.2005,
+      "eskiLon": 20.1854,
+      "lat": 39.200496,
+      "lon": 20.186417,
+      "tasimaM": 87
+    },
+    {
+      "slug": "garip-adasi-demirleme",
+      "eskiLat": 39.007469,
+      "eskiLon": 26.78338,
+      "lat": 39.007465,
+      "lon": 26.782165,
+      "tasimaM": 105
+    },
+    {
+      "slug": "gemiler-adasi-demirleme",
+      "eskiLat": 36.555177,
+      "eskiLon": 29.06849,
+      "lat": 36.556763,
+      "lon": 29.06849,
+      "tasimaM": 176
+    },
+    {
+      "slug": "gemlik-balikci-barinagi",
+      "eskiLat": 40.423333,
+      "eskiLon": 29.151389,
+      "lat": 40.423522,
+      "lon": 29.151056,
+      "tasimaM": 35
+    },
+    {
+      "slug": "gerbekse-koyu",
+      "eskiLat": 36.700511,
+      "eskiLon": 28.22525,
+      "lat": 36.698163,
+      "lon": 28.22528,
+      "tasimaM": 261
+    },
+    {
+      "slug": "gereme-koyu",
+      "eskiLat": 36.785496,
+      "eskiLon": 27.720821,
+      "lat": 36.786776,
+      "lon": 27.720832,
+      "tasimaM": 142
+    },
+    {
+      "slug": "gerence-armonika-koyu",
+      "eskiLat": 36.677672,
+      "eskiLon": 27.516491,
+      "lat": 36.676515,
+      "lon": 27.516491,
+      "tasimaM": 128
+    },
+    {
+      "slug": "gevil-koyu",
+      "eskiLat": 38.213311,
+      "eskiLon": 26.743157,
+      "lat": 38.212369,
+      "lon": 26.74314,
+      "tasimaM": 105
+    },
+    {
+      "slug": "gobun-restaurant",
+      "eskiLat": 36.6416,
+      "eskiLon": 28.8933,
+      "lat": 36.639354,
+      "lon": 28.893281,
+      "tasimaM": 249
+    },
+    {
+      "slug": "gocek-belediye-iskelesi",
+      "eskiLat": 36.754444,
+      "eskiLon": 28.946667,
+      "lat": 36.751934,
+      "lon": 28.943122,
+      "tasimaM": 421
+    },
+    {
+      "slug": "gocek-dogu-samandira-sahasi",
+      "eskiLat": 36.740954,
+      "eskiLon": 28.948664,
+      "lat": 36.740954,
+      "lon": 28.947242,
+      "tasimaM": 126
+    },
+    {
+      "slug": "gocek-lukoil-yakit-iskelesi",
+      "eskiLat": 36.748169,
+      "eskiLon": 28.924889,
+      "lat": 36.748964,
+      "lon": 28.926003,
+      "tasimaM": 133
+    },
+    {
+      "slug": "gocek-village-port-marina",
+      "eskiLat": 36.7567,
+      "eskiLon": 28.9283,
+      "lat": 36.755231,
+      "lon": 28.930173,
+      "tasimaM": 233
+    },
+    {
+      "slug": "gokkaya-koyu-kekova",
+      "eskiLat": 36.210667,
+      "eskiLon": 29.891167,
+      "lat": 36.211094,
+      "lon": 29.891823,
+      "tasimaM": 75
+    },
+    {
+      "slug": "gokliman-finike",
+      "eskiLat": 36.273627,
+      "eskiLon": 30.138559,
+      "lat": 36.269921,
+      "lon": 30.137359,
+      "tasimaM": 425
+    },
+    {
+      "slug": "gokova-oren-marina",
+      "eskiLat": 37.031417,
+      "eskiLon": 27.981972,
+      "lat": 37.031025,
+      "lon": 27.981972,
+      "tasimaM": 44
+    },
+    {
+      "slug": "golturkbuku-balikci-barinagi",
+      "eskiLat": 37.128611,
+      "eskiLon": 27.379083,
+      "lat": 37.129736,
+      "lon": 27.380141,
+      "tasimaM": 156
+    },
+    {
+      "slug": "gomec-balikci-barinagi",
+      "eskiLat": 39.438564,
+      "eskiLon": 26.812737,
+      "lat": 39.438947,
+      "lon": 26.812737,
+      "tasimaM": 43
+    },
+    {
+      "slug": "gouves-limani-girit",
+      "eskiLat": 35.335667,
+      "eskiLon": 25.300306,
+      "lat": 35.336567,
+      "lon": 25.299088,
+      "tasimaM": 149
+    },
+    {
+      "slug": "gumbet-iskelesi",
+      "eskiLat": 37.023076,
+      "eskiLon": 27.401812,
+      "lat": 37.023852,
+      "lon": 27.400607,
+      "tasimaM": 137
+    },
+    {
+      "slug": "gumusluk-iskeleleri",
+      "eskiLat": 37.054465,
+      "eskiLon": 27.235087,
+      "lat": 37.054315,
+      "lon": 27.234852,
+      "tasimaM": 27
+    },
+    {
+      "slug": "guneyli-balikci-barinagi",
+      "eskiLat": 40.508219,
+      "eskiLon": 26.693379,
+      "lat": 40.510614,
+      "lon": 26.693237,
+      "tasimaM": 266
+    },
+    {
+      "slug": "gure-balikci-barinagi",
+      "eskiLat": 39.584279,
+      "eskiLon": 26.879929,
+      "lat": 39.583896,
+      "lon": 26.880553,
+      "tasimaM": 68
+    },
+    {
+      "slug": "guvercinlik-balikci-barinagi",
+      "eskiLat": 37.135861,
+      "eskiLon": 27.580194,
+      "lat": 37.13688,
+      "lon": 27.578618,
+      "tasimaM": 180
+    },
+    {
+      "slug": "guzelbahce-fishing-harbour-and-balikci-barinagi",
+      "eskiLat": 38.377778,
+      "eskiLon": 26.891667,
+      "lat": 38.378142,
+      "lon": 26.891667,
+      "tasimaM": 40
+    },
+    {
+      "slug": "guzelce-marina",
+      "eskiLat": 40.9998,
+      "eskiLon": 28.5097,
+      "lat": 40.998142,
+      "lon": 28.50687,
+      "tasimaM": 300
+    },
+    {
+      "slug": "guzelyali-yat-limani",
+      "eskiLat": 40.356167,
+      "eskiLon": 28.932167,
+      "lat": 40.35649,
+      "lon": 28.932169,
+      "tasimaM": 36
+    },
+    {
+      "slug": "hacidede-deresi-koyu",
+      "eskiLat": 36.669409,
+      "eskiLon": 28.90542,
+      "lat": 36.669444,
+      "lon": 28.903919,
+      "tasimaM": 134
+    },
+    {
+      "slug": "halki-emporios-rihtimi",
+      "eskiLat": 36.222806,
+      "eskiLon": 27.613056,
+      "lat": 36.222594,
+      "lon": 27.613375,
+      "tasimaM": 37
+    },
+    {
+      "slug": "hamam-koyu-demirleme",
+      "eskiLat": 36.641,
+      "eskiLon": 28.8553,
+      "lat": 36.641773,
+      "lon": 28.855261,
+      "tasimaM": 86
+    },
+    {
+      "slug": "hamidiye-koyu",
+      "eskiLat": 36.193333,
+      "eskiLon": 29.87,
+      "lat": 36.191652,
+      "lon": 29.87267,
+      "tasimaM": 303
+    },
+    {
+      "slug": "harem-balikci-barinagi",
+      "eskiLat": 41.013996,
+      "eskiLon": 29.009602,
+      "lat": 41.014046,
+      "lon": 29.006781,
+      "tasimaM": 236
+    },
+    {
+      "slug": "hayitli-koyu",
+      "eskiLat": 38.989672,
+      "eskiLon": 26.798677,
+      "lat": 38.989672,
+      "lon": 26.797194,
+      "tasimaM": 128
+    },
+    {
+      "slug": "hereke-balikci-barinagi",
+      "eskiLat": 40.782528,
+      "eskiLon": 29.617639,
+      "lat": 40.780201,
+      "lon": 29.615614,
+      "tasimaM": 309
+    },
+    {
+      "slug": "hersonissos-limani-girit",
+      "eskiLat": 35.321944,
+      "eskiLon": 25.393083,
+      "lat": 35.32195,
+      "lon": 25.393991,
+      "tasimaM": 82
+    },
+    {
+      "slug": "hirsiz-koyu",
+      "eskiLat": 36.923333,
+      "eskiLon": 28.159167,
+      "lat": 36.923195,
+      "lon": 28.158054,
+      "tasimaM": 100
+    },
+    {
+      "slug": "hydra-limani",
+      "eskiLat": 37.350601,
+      "eskiLon": 23.4659,
+      "lat": 37.352291,
+      "lon": 23.466775,
+      "tasimaM": 203
+    },
+    {
+      "slug": "ic-cesme-marina",
+      "eskiLat": 38.3233,
+      "eskiLon": 26.3004,
+      "lat": 38.3233,
+      "lon": 26.300102,
+      "tasimaM": 26
+    },
+    {
+      "slug": "icmekiyisi-koyu",
+      "eskiLat": 38.58166,
+      "eskiLon": 26.565936,
+      "lat": 38.581668,
+      "lon": 26.567731,
+      "tasimaM": 156
+    },
+    {
+      "slug": "icmeler-iskelesi",
+      "eskiLat": 36.800371,
+      "eskiLon": 28.238995,
+      "lat": 36.801441,
+      "lon": 28.238156,
+      "tasimaM": 140
+    },
+    {
+      "slug": "ilhankoy-balikci-barinagi",
+      "eskiLat": 40.504502,
+      "eskiLon": 27.691601,
+      "lat": 40.504502,
+      "lon": 27.690093,
+      "tasimaM": 127
+    },
+    {
+      "slug": "inceburun-samandira-sahasi",
+      "eskiLat": 36.736111,
+      "eskiLon": 28.928056,
+      "lat": 36.737585,
+      "lon": 28.928446,
+      "tasimaM": 167
+    },
+    {
+      "slug": "iskenderun-fisher-limani",
+      "eskiLat": 36.533056,
+      "eskiLon": 36.037778,
+      "lat": 36.533771,
+      "lon": 36.037346,
+      "tasimaM": 88
+    },
+    {
+      "slug": "ispark-istinye-tekne-park",
+      "eskiLat": 41.113667,
+      "eskiLon": 29.057167,
+      "lat": 41.111041,
+      "lon": 29.055748,
+      "tasimaM": 315
+    },
+    {
+      "slug": "istinye-tekne-park-yakit",
+      "eskiLat": 41.1146,
+      "eskiLon": 29.058,
+      "lat": 41.111047,
+      "lon": 29.055731,
+      "tasimaM": 438
+    },
+    {
+      "slug": "izmir-marina",
+      "eskiLat": 38.4056,
+      "eskiLon": 27.066,
+      "lat": 38.406352,
+      "lon": 27.064726,
+      "tasimaM": 139
+    },
+    {
+      "slug": "kabatepe-balikci-barinagi",
+      "eskiLat": 40.202739,
+      "eskiLon": 26.265959,
+      "lat": 40.201562,
+      "lon": 26.261695,
+      "tasimaM": 384
+    },
+    {
+      "slug": "kalabak-balikci-barinagi",
+      "eskiLat": 38.358069,
+      "eskiLon": 26.812259,
+      "lat": 38.358349,
+      "lon": 26.811794,
+      "tasimaM": 51
+    },
+    {
+      "slug": "kalantos-koyu-naxos",
+      "eskiLat": 36.934333,
+      "eskiLon": 25.468278,
+      "lat": 36.932495,
+      "lon": 25.470435,
+      "tasimaM": 280
+    },
+    {
+      "slug": "kalantos-marina-naxos",
+      "eskiLat": 36.935167,
+      "eskiLon": 25.473778,
+      "lat": 36.934251,
+      "lon": 25.475034,
+      "tasimaM": 151
+    },
+    {
+      "slug": "kalem-adasi-koyu",
+      "eskiLat": 39.003946,
+      "eskiLon": 26.793163,
+      "lat": 39.004754,
+      "lon": 26.791781,
+      "tasimaM": 149
+    },
+    {
+      "slug": "kalymnos-pothia-limani",
+      "eskiLat": 36.950194,
+      "eskiLon": 26.986167,
+      "lat": 36.949329,
+      "lon": 26.986744,
+      "tasimaM": 109
+    },
+    {
+      "slug": "kamari-iskelesi-kefalos",
+      "eskiLat": 36.736667,
+      "eskiLon": 26.972667,
+      "lat": 36.736667,
+      "lon": 26.973225,
+      "tasimaM": 50
+    },
+    {
+      "slug": "kameriye-adasi-selimiye",
+      "eskiLat": 36.7301,
+      "eskiLon": 28.053117,
+      "lat": 36.731034,
+      "lon": 28.05061,
+      "tasimaM": 246
+    },
+    {
+      "slug": "kandiye-limani-girit",
+      "eskiLat": 35.343361,
+      "eskiLon": 25.138194,
+      "lat": 35.345614,
+      "lon": 25.138194,
+      "tasimaM": 250
+    },
+    {
+      "slug": "kapakli-koyu-balikci-barinagi",
+      "eskiLat": 40.461102,
+      "eskiLon": 28.965397,
+      "lat": 40.460875,
+      "lon": 28.964999,
+      "tasimaM": 42
+    },
+    {
+      "slug": "karaburun-balikci-barinagi-karaburun",
+      "eskiLat": 38.658506,
+      "eskiLon": 26.362719,
+      "lat": 38.659779,
+      "lon": 26.362487,
+      "tasimaM": 143
+    },
+    {
+      "slug": "karaca-island-koyu",
+      "eskiLat": 36.96237,
+      "eskiLon": 28.194185,
+      "lat": 36.963235,
+      "lon": 28.192785,
+      "tasimaM": 157
+    },
+    {
+      "slug": "karacabey-kursunlu-balikci-barinagi",
+      "eskiLat": 40.393042,
+      "eskiLon": 28.516405,
+      "lat": 40.393915,
+      "lon": 28.516643,
+      "tasimaM": 99
+    },
+    {
+      "slug": "karacaoren-adasi-demirleme",
+      "eskiLat": 36.540464,
+      "eskiLon": 29.059238,
+      "lat": 36.540489,
+      "lon": 29.058066,
+      "tasimaM": 105
+    },
+    {
+      "slug": "karacaoren-koyu",
+      "eskiLat": 36.54443,
+      "eskiLon": 29.011128,
+      "lat": 36.543174,
+      "lon": 29.011115,
+      "tasimaM": 139
+    },
+    {
+      "slug": "karacasogut-halk-iskelesi",
+      "eskiLat": 36.942128,
+      "eskiLon": 28.187965,
+      "lat": 36.942688,
+      "lon": 28.1889,
+      "tasimaM": 104
+    },
+    {
+      "slug": "karacasogut-koyu",
+      "eskiLat": 36.943232,
+      "eskiLon": 28.186229,
+      "lat": 36.94357,
+      "lon": 28.186891,
+      "tasimaM": 70
+    },
+    {
+      "slug": "karaduvar-fisher-limani",
+      "eskiLat": 36.805152,
+      "eskiLon": 34.697199,
+      "lat": 36.803477,
+      "lon": 34.697206,
+      "tasimaM": 186
+    },
+    {
+      "slug": "karaloz-limani-kekova",
+      "eskiLat": 36.183333,
+      "eskiLon": 29.888333,
+      "lat": 36.18338,
+      "lon": 29.889446,
+      "tasimaM": 100
+    },
+    {
+      "slug": "karamursel-eregli-balikci-barinagi",
+      "eskiLat": 40.701944,
+      "eskiLon": 29.659722,
+      "lat": 40.703945,
+      "lon": 29.658183,
+      "tasimaM": 257
+    },
+    {
+      "slug": "karaoz-koyu",
+      "eskiLat": 36.271784,
+      "eskiLon": 30.407445,
+      "lat": 36.26574,
+      "lon": 30.404805,
+      "tasimaM": 711
+    },
+    {
+      "slug": "karapinar-cove-and-shelter-koyu",
+      "eskiLat": 38.381542,
+      "eskiLon": 26.630881,
+      "lat": 38.382381,
+      "lon": 26.632246,
+      "tasimaM": 151
+    },
+    {
+      "slug": "kardamena-limani",
+      "eskiLat": 36.781861,
+      "eskiLon": 27.144583,
+      "lat": 36.780977,
+      "lon": 27.145956,
+      "tasimaM": 157
+    },
+    {
+      "slug": "kargi-camel-koyu",
+      "eskiLat": 37.010242,
+      "eskiLon": 27.359407,
+      "lat": 37.011107,
+      "lon": 27.357286,
+      "tasimaM": 211
+    },
+    {
+      "slug": "kargicak-koyu",
+      "eskiLat": 36.755107,
+      "eskiLon": 28.632809,
+      "lat": 36.75593,
+      "lon": 28.632809,
+      "tasimaM": 91
+    },
+    {
+      "slug": "karia-bel-iskelesi-bozburun",
+      "eskiLat": 36.67595,
+      "eskiLon": 28.048696,
+      "lat": 36.676697,
+      "lon": 28.047609,
+      "tasimaM": 127
+    },
+    {
+      "slug": "karsiyaka-balikci-barinagi",
+      "eskiLat": 40.439611,
+      "eskiLon": 28.00141,
+      "lat": 40.439182,
+      "lon": 28.001516,
+      "tasimaM": 48
+    },
+    {
+      "slug": "kas-belediye-limani",
+      "eskiLat": 36.1993,
+      "eskiLon": 29.6404,
+      "lat": 36.198469,
+      "lon": 29.6404,
+      "tasimaM": 92
+    },
+    {
+      "slug": "kastellorizo-meis-rihtimi",
+      "eskiLat": 36.15103,
+      "eskiLon": 29.59206,
+      "lat": 36.15142,
+      "lon": 29.59148,
+      "tasimaM": 68
+    },
+    {
+      "slug": "katapola-limani-amorgos",
+      "eskiLat": 36.828701,
+      "eskiLon": 25.8652,
+      "lat": 36.82814,
+      "lon": 25.864361,
+      "tasimaM": 97
+    },
+    {
+      "slug": "katranci-koyu",
+      "eskiLat": 36.7053,
+      "eskiLon": 29.0333,
+      "lat": 36.706788,
+      "lon": 29.03322,
+      "tasimaM": 165
+    },
+    {
+      "slug": "kayabasi-restaurant-mazi",
+      "eskiLat": 36.998075,
+      "eskiLon": 27.745775,
+      "lat": 36.996842,
+      "lon": 27.745762,
+      "tasimaM": 137
+    },
+    {
+      "slug": "kaynarpinar-balikci-barinagi",
+      "eskiLat": 38.560337,
+      "eskiLon": 26.569304,
+      "lat": 38.560337,
+      "lon": 26.570677,
+      "tasimaM": 119
+    },
+    {
+      "slug": "keci-buku-demirleme",
+      "eskiLat": 36.751,
+      "eskiLon": 28.1299,
+      "lat": 36.755112,
+      "lon": 28.129859,
+      "tasimaM": 456
+    },
+    {
+      "slug": "kekova-tersane-koyu",
+      "eskiLat": 36.172167,
+      "eskiLon": 29.846333,
+      "lat": 36.174284,
+      "lon": 29.846277,
+      "tasimaM": 235
+    },
+    {
+      "slug": "kemer-koyu-balikci-barinagi",
+      "eskiLat": 40.422663,
+      "eskiLon": 27.064994,
+      "lat": 40.426418,
+      "lon": 27.060581,
+      "tasimaM": 559
+    },
+    {
+      "slug": "kille-buku",
+      "eskiLat": 36.6997,
+      "eskiLon": 28.8778,
+      "lat": 36.699683,
+      "lon": 28.878582,
+      "tasimaM": 70
+    },
+    {
+      "slug": "kiseli-adasi",
+      "eskiLat": 36.67142,
+      "eskiLon": 28.04098,
+      "lat": 36.671496,
+      "lon": 28.042713,
+      "tasimaM": 154
+    },
+    {
+      "slug": "kisle-bogazi-koyu",
+      "eskiLat": 36.175,
+      "eskiLon": 29.816667,
+      "lat": 36.175016,
+      "lon": 29.817734,
+      "tasimaM": 96
+    },
+    {
+      "slug": "kiyi-istanbul-marina",
+      "eskiLat": 41.0156,
+      "eskiLon": 28.5822,
+      "lat": 41.015094,
+      "lon": 28.58131,
+      "tasimaM": 93
+    },
+    {
+      "slug": "kizilada-koyu",
+      "eskiLat": 36.667214,
+      "eskiLon": 28.036539,
+      "lat": 36.668186,
+      "lon": 28.038063,
+      "tasimaM": 173
+    },
+    {
+      "slug": "kizilbuk-koyu",
+      "eskiLat": 36.683883,
+      "eskiLon": 27.576969,
+      "lat": 36.683054,
+      "lon": 27.575659,
+      "tasimaM": 149
+    },
+    {
+      "slug": "kizilkuyruk-koyu-demirleme",
+      "eskiLat": 36.618333,
+      "eskiLon": 28.871667,
+      "lat": 36.619276,
+      "lon": 28.871692,
+      "tasimaM": 105
+    },
+    {
+      "slug": "kizkalesi-koyu",
+      "eskiLat": 36.462916,
+      "eskiLon": 34.149288,
+      "lat": 36.452521,
+      "lon": 34.16129,
+      "tasimaM": 1575
+    },
+    {
+      "slug": "kizlarhamami-koyu",
+      "eskiLat": 36.433767,
+      "eskiLon": 34.111895,
+      "lat": 36.433547,
+      "lon": 34.122736,
+      "tasimaM": 968
+    },
+    {
+      "slug": "kleftolimano-koyu-thymaina",
+      "eskiLat": 37.577056,
+      "eskiLon": 26.44025,
+      "lat": 37.577056,
+      "lon": 26.438096,
+      "tasimaM": 189
+    },
+    {
+      "slug": "kleopatra-marina",
+      "eskiLat": 38.9517,
+      "eskiLon": 20.7653,
+      "lat": 38.952374,
+      "lon": 20.764107,
+      "tasimaM": 127
+    },
+    {
+      "slug": "kocabahce-iskelesi",
+      "eskiLat": 36.698111,
+      "eskiLon": 28.008139,
+      "lat": 36.698944,
+      "lon": 28.008328,
+      "tasimaM": 94
+    },
+    {
+      "slug": "korsan-koyu-kumluca",
+      "eskiLat": 36.256607,
+      "eskiLon": 30.407723,
+      "lat": 36.256615,
+      "lon": 30.406337,
+      "tasimaM": 124
+    },
+    {
+      "slug": "korsan-koyu-silifke",
+      "eskiLat": 36.157085,
+      "eskiLon": 33.683388,
+      "lat": 36.150732,
+      "lon": 33.679717,
+      "tasimaM": 778
+    },
+    {
+      "slug": "kos-marina",
+      "eskiLat": 36.8932,
+      "eskiLon": 27.301,
+      "lat": 36.89398,
+      "lon": 27.30101,
+      "tasimaM": 87
+    },
+    {
+      "slug": "kucuk-boncuklu-koyu",
+      "eskiLat": 36.629306,
+      "eskiLon": 29.076611,
+      "lat": 36.630902,
+      "lon": 29.076611,
+      "tasimaM": 177
+    },
+    {
+      "slug": "kucukyali-balikci-barinagi",
+      "eskiLat": 40.942639,
+      "eskiLon": 29.105806,
+      "lat": 40.9411,
+      "lon": 29.103109,
+      "tasimaM": 283
+    },
+    {
+      "slug": "kufre-koyu",
+      "eskiLat": 36.88065,
+      "eskiLon": 28.055964,
+      "lat": 36.880269,
+      "lon": 28.056573,
+      "tasimaM": 69
+    },
+    {
+      "slug": "kuleli-koyu",
+      "eskiLat": 36.644297,
+      "eskiLon": 29.076371,
+      "lat": 36.644934,
+      "lon": 29.075347,
+      "tasimaM": 115
+    },
+    {
+      "slug": "kumkuyu-marina",
+      "eskiLat": 36.5304,
+      "eskiLon": 34.2302,
+      "lat": 36.521843,
+      "lon": 34.237604,
+      "tasimaM": 1157
+    },
+    {
+      "slug": "kumlubuk-koyu",
+      "eskiLat": 36.745246,
+      "eskiLon": 28.274996,
+      "lat": 36.747624,
+      "lon": 28.274996,
+      "tasimaM": 264
+    },
+    {
+      "slug": "kumlubuku-yacht-club",
+      "eskiLat": 36.745246,
+      "eskiLon": 28.274996,
+      "lat": 36.747308,
+      "lon": 28.274996,
+      "tasimaM": 229
+    },
+    {
+      "slug": "kumyaka-balikci-barinagi",
+      "eskiLat": 40.384575,
+      "eskiLon": 28.829031,
+      "lat": 40.385629,
+      "lon": 28.829062,
+      "tasimaM": 117
+    },
+    {
+      "slug": "kuzbuku-yacht-club",
+      "eskiLat": 36.706111,
+      "eskiLon": 28.024444,
+      "lat": 36.706819,
+      "lon": 28.025584,
+      "tasimaM": 128
+    },
+    {
+      "slug": "lakka-koyu-paksos",
+      "eskiLat": 39.235901,
+      "eskiLon": 20.136101,
+      "lat": 39.241638,
+      "lon": 20.140259,
+      "tasimaM": 730
+    },
+    {
+      "slug": "lakki-marina-leros",
+      "eskiLat": 37.129722,
+      "eskiLon": 26.849139,
+      "lat": 37.128536,
+      "lon": 26.85016,
+      "tasimaM": 160
+    },
+    {
+      "slug": "lakkos-koyu-thymaina",
+      "eskiLat": 37.572167,
+      "eskiLon": 26.453306,
+      "lat": 37.572143,
+      "lon": 26.454421,
+      "tasimaM": 98
+    },
+    {
+      "slug": "lapseki-balikci-barinagi",
+      "eskiLat": 40.278725,
+      "eskiLon": 26.571767,
+      "lat": 40.281392,
+      "lon": 26.571767,
+      "tasimaM": 296
+    },
+    {
+      "slug": "lazaretta-tonozlari-syros",
+      "eskiLat": 37.430167,
+      "eskiLon": 24.941306,
+      "lat": 37.430958,
+      "lon": 24.941306,
+      "tasimaM": 88
+    },
+    {
+      "slug": "lefkas-marina",
+      "eskiLat": 38.83,
+      "eskiLon": 20.7133,
+      "lat": 38.83145,
+      "lon": 20.714273,
+      "tasimaM": 182
+    },
+    {
+      "slug": "lefkas-yakit-iskelesi",
+      "eskiLat": 38.83,
+      "eskiLon": 20.7133,
+      "lat": 38.83145,
+      "lon": 20.714273,
+      "tasimaM": 182
+    },
+    {
+      "slug": "letoonia-marinet-fethiye",
+      "eskiLat": 36.635848,
+      "eskiLon": 29.099131,
+      "lat": 36.636503,
+      "lon": 29.099165,
+      "tasimaM": 73
+    },
+    {
+      "slug": "limia-marina-sakiz",
+      "eskiLat": 38.469583,
+      "eskiLon": 25.918,
+      "lat": 38.468564,
+      "lon": 25.918422,
+      "tasimaM": 119
+    },
+    {
+      "slug": "limnos-plaji-sakiz",
+      "eskiLat": 38.472167,
+      "eskiLon": 25.909222,
+      "lat": 38.470725,
+      "lon": 25.909262,
+      "tasimaM": 160
+    },
+    {
+      "slug": "limonlu-fisher-limani",
+      "eskiLat": 36.564833,
+      "eskiLon": 34.257278,
+      "lat": 36.556059,
+      "lon": 34.267722,
+      "tasimaM": 1347
+    },
+    {
+      "slug": "lindos-koyu",
+      "eskiLat": 36.09539,
+      "eskiLon": 28.08342,
+      "lat": 36.09539,
+      "lon": 28.087725,
+      "tasimaM": 386
+    },
+    {
+      "slug": "lipsi-limani",
+      "eskiLat": 37.294389,
+      "eskiLon": 26.767389,
+      "lat": 37.294808,
+      "lon": 26.767389,
+      "tasimaM": 47
+    },
+    {
+      "slug": "loryma-restaurant-bozukkale",
+      "eskiLat": 36.576377,
+      "eskiLon": 28.011648,
+      "lat": 36.576011,
+      "lon": 28.011653,
+      "tasimaM": 41
+    },
+    {
+      "slug": "maltezi-plaji-amorgos",
+      "eskiLat": 36.83569,
+      "eskiLon": 25.8533,
+      "lat": 36.83233,
+      "lon": 25.853359,
+      "tasimaM": 373
+    },
+    {
+      "slug": "mamure-kalesi-demirleme",
+      "eskiLat": 36.081569,
+      "eskiLon": 32.896323,
+      "lat": 36.077378,
+      "lon": 32.896686,
+      "tasimaM": 466
+    },
+    {
+      "slug": "marinturk-gocek-exclusive",
+      "eskiLat": 36.7557,
+      "eskiLon": 28.9237,
+      "lat": 36.753344,
+      "lon": 28.927451,
+      "tasimaM": 424
+    },
+    {
+      "slug": "marmara-adasi-limani",
+      "eskiLat": 40.583862,
+      "eskiLon": 27.561121,
+      "lat": 40.581883,
+      "lon": 27.558949,
+      "tasimaM": 286
+    },
+    {
+      "slug": "marti-marina-orhaniye",
+      "eskiLat": 36.7583,
+      "eskiLon": 28.1417,
+      "lat": 36.757446,
+      "lon": 28.13261,
+      "tasimaM": 814
+    },
+    {
+      "slug": "mavi-magaralar-zakinthos",
+      "eskiLat": 37.930083,
+      "eskiLon": 20.705472,
+      "lat": 37.930054,
+      "lon": 20.706881,
+      "tasimaM": 123
+    },
+    {
+      "slug": "maydanoz-koyu",
+      "eskiLat": 37.985771,
+      "eskiLon": 27.176722,
+      "lat": 37.98482,
+      "lon": 27.176722,
+      "tasimaM": 106
+    },
+    {
+      "slug": "mercimek-buku-demirleme",
+      "eskiLat": 36.669681,
+      "eskiLon": 28.025025,
+      "lat": 36.669681,
+      "lon": 28.026035,
+      "tasimaM": 90
+    },
+    {
+      "slug": "mersin-koyu",
+      "eskiLat": 36.5636,
+      "eskiLon": 29.08902,
+      "lat": 36.563605,
+      "lon": 29.088072,
+      "tasimaM": 84
+    },
+    {
+      "slug": "mersin-yat-limani-yakit",
+      "eskiLat": 36.771667,
+      "eskiLon": 34.575556,
+      "lat": 36.769404,
+      "lon": 34.577698,
+      "tasimaM": 315
+    },
+    {
+      "slug": "mesolongi-marina",
+      "eskiLat": 38.3613,
+      "eskiLon": 21.4267,
+      "lat": 38.368106,
+      "lon": 21.41563,
+      "tasimaM": 1224
+    },
+    {
+      "slug": "mimoza-koyu",
+      "eskiLat": 38.640185,
+      "eskiLon": 26.523992,
+      "lat": 38.639028,
+      "lon": 26.524314,
+      "tasimaM": 131
+    },
+    {
+      "slug": "molyvos-limani",
+      "eskiLat": 39.368389,
+      "eskiLon": 26.168528,
+      "lat": 39.367991,
+      "lon": 26.167822,
+      "tasimaM": 75
+    },
+    {
+      "slug": "my-marina-ekincik",
+      "eskiLat": 36.8242,
+      "eskiLon": 28.5655,
+      "lat": 36.8242,
+      "lon": 28.565108,
+      "tasimaM": 35
+    },
+    {
+      "slug": "naoussa-limani-paros",
+      "eskiLat": 37.124001,
+      "eskiLon": 25.237101,
+      "lat": 37.124876,
+      "lon": 25.235771,
+      "tasimaM": 153
+    },
+    {
+      "slug": "narli-koyu-balikci-barinagi",
+      "eskiLat": 40.479167,
+      "eskiLon": 29.0325,
+      "lat": 40.477636,
+      "lon": 29.0325,
+      "tasimaM": 170
+    },
+    {
+      "slug": "narlikoy-balikci-barinagi",
+      "eskiLat": 40.494324,
+      "eskiLon": 27.68273,
+      "lat": 40.495541,
+      "lon": 27.680592,
+      "tasimaM": 225
+    },
+    {
+      "slug": "narlikuyu-koyu",
+      "eskiLat": 36.443793,
+      "eskiLon": 34.114162,
+      "lat": 36.434119,
+      "lon": 34.122895,
+      "tasimaM": 1327
+    },
+    {
+      "slug": "nisyros-mandraki-limani",
+      "eskiLat": 36.614,
+      "eskiLon": 27.139444,
+      "lat": 36.614753,
+      "lon": 27.139444,
+      "tasimaM": 84
+    },
+    {
+      "slug": "nuris-beach-iskelesi-kas",
+      "eskiLat": 36.172594,
+      "eskiLon": 29.650217,
+      "lat": 36.173972,
+      "lon": 29.649925,
+      "tasimaM": 155
+    },
+    {
+      "slug": "ocaklar-koyu-balikci-barinagi",
+      "eskiLat": 40.442446,
+      "eskiLon": 27.753677,
+      "lat": 40.44246,
+      "lon": 27.75011,
+      "tasimaM": 301
+    },
+    {
+      "slug": "oguns-place-hayitbuku",
+      "eskiLat": 36.684334,
+      "eskiLon": 27.572252,
+      "lat": 36.683538,
+      "lon": 27.573462,
+      "tasimaM": 139
+    },
+    {
+      "slug": "olimpos-koyu",
+      "eskiLat": 36.396874,
+      "eskiLon": 30.476705,
+      "lat": 36.394625,
+      "lon": 30.480043,
+      "tasimaM": 389
+    },
+    {
+      "slug": "olympic-marine",
+      "eskiLat": 37.6983,
+      "eskiLon": 24.055,
+      "lat": 37.696087,
+      "lon": 24.057668,
+      "tasimaM": 340
+    },
+    {
+      "slug": "osmanaga-samandira-sahasi",
+      "eskiLat": 36.73421728255958,
+      "eskiLon": 28.92247268412472,
+      "lat": 36.733198,
+      "lon": 28.922462,
+      "tasimaM": 113
+    },
+    {
+      "slug": "osmans-place-selimiye",
+      "eskiLat": 36.70775,
+      "eskiLon": 28.093944,
+      "lat": 36.708964,
+      "lon": 28.093975,
+      "tasimaM": 135
+    },
+    {
+      "slug": "ozdere-balikci-barinagi",
+      "eskiLat": 38.009334,
+      "eskiLon": 27.10628,
+      "lat": 38.009087,
+      "lon": 27.105882,
+      "tasimaM": 44
+    },
+    {
+      "slug": "palamutbuku-balikci-barinagi",
+      "eskiLat": 36.66963,
+      "eskiLon": 27.503762,
+      "lat": 36.669301,
+      "lon": 27.504271,
+      "tasimaM": 58
+    },
+    {
+      "slug": "pali-limani-nisyros",
+      "eskiLat": 36.619139,
+      "eskiLon": 27.171361,
+      "lat": 36.620611,
+      "lon": 27.171688,
+      "tasimaM": 166
+    },
+    {
+      "slug": "papaz-koyu",
+      "eskiLat": 36.275039,
+      "eskiLon": 30.391386,
+      "lat": 36.268155,
+      "lon": 30.390757,
+      "tasimaM": 766
+    },
+    {
+      "slug": "parikia-limani-paros",
+      "eskiLat": 37.087806,
+      "eskiLon": 25.15275,
+      "lat": 37.088118,
+      "lon": 25.152753,
+      "tasimaM": 35
+    },
+    {
+      "slug": "patmos-kampos-koyu",
+      "eskiLat": 37.350083,
+      "eskiLon": 26.567278,
+      "lat": 37.349484,
+      "lon": 26.568268,
+      "tasimaM": 110
+    },
+    {
+      "slug": "patmos-skala-rihtimi",
+      "eskiLat": 37.328694,
+      "eskiLon": 26.545333,
+      "lat": 37.328669,
+      "lon": 26.546517,
+      "tasimaM": 105
+    },
+    {
+      "slug": "phaselis-koylari-demirleme",
+      "eskiLat": 36.52361,
+      "eskiLon": 30.55222,
+      "lat": 36.527028,
+      "lon": 30.558416,
+      "tasimaM": 670
+    },
+    {
+      "slug": "pissa-koyu-demirleme",
+      "eskiLat": 39.018434,
+      "eskiLon": 26.79884,
+      "lat": 39.018447,
+      "lon": 26.797975,
+      "tasimaM": 75
+    },
+    {
+      "slug": "poros-marina-kefalonya",
+      "eskiLat": 38.147167,
+      "eskiLon": 20.781167,
+      "lat": 38.14747,
+      "lon": 20.781626,
+      "tasimaM": 52
+    },
+    {
+      "slug": "port-alacati-marina",
+      "eskiLat": 38.25875,
+      "eskiLon": 26.37793,
+      "lat": 38.25877,
+      "lon": 26.379835,
+      "tasimaM": 166
+    },
+    {
+      "slug": "porto-carras-marina",
+      "eskiLat": 40.0689,
+      "eskiLon": 23.7847,
+      "lat": 40.069742,
+      "lon": 23.783944,
+      "tasimaM": 113
+    },
+    {
+      "slug": "poseidon-selimiye",
+      "eskiLat": 36.706601,
+      "eskiLon": 28.102339,
+      "lat": 36.708125,
+      "lon": 28.101561,
+      "tasimaM": 183
+    },
+    {
+      "slug": "poyrazli-koyu-pasalimani",
+      "eskiLat": 40.49577,
+      "eskiLon": 27.63404,
+      "lat": 40.497547,
+      "lon": 27.637046,
+      "tasimaM": 321
+    },
+    {
+      "slug": "pyrgaki-plaji-naxos",
+      "eskiLat": 36.976361,
+      "eskiLon": 25.398972,
+      "lat": 36.975734,
+      "lon": 25.398988,
+      "tasimaM": 70
+    },
+    {
+      "slug": "ragged-bay",
+      "eskiLat": 36.633023,
+      "eskiLon": 28.887073,
+      "lat": 36.633491,
+      "lon": 28.887784,
+      "tasimaM": 82
+    },
+    {
+      "slug": "rodos-mandraki-limani",
+      "eskiLat": 36.45113,
+      "eskiLon": 28.22615,
+      "lat": 36.451108,
+      "lon": 28.228188,
+      "tasimaM": 182
+    },
+    {
+      "slug": "rosemary-cokertme",
+      "eskiLat": 37.00544,
+      "eskiLon": 27.793611,
+      "lat": 37.004863,
+      "lon": 27.79264,
+      "tasimaM": 107
+    },
+    {
+      "slug": "sabrinas-house-and-iskelesi",
+      "eskiLat": 36.677279,
+      "eskiLon": 28.049473,
+      "lat": 36.678148,
+      "lon": 28.048166,
+      "tasimaM": 151
+    },
+    {
+      "slug": "saipkoy-alti-balikci-barinagi",
+      "eskiLat": 38.662735,
+      "eskiLon": 26.518002,
+      "lat": 38.663169,
+      "lon": 26.518002,
+      "tasimaM": 48
+    },
+    {
+      "slug": "salacak-balikci-barinagi",
+      "eskiLat": 41.018685,
+      "eskiLon": 29.00798,
+      "lat": 41.018706,
+      "lon": 29.005129,
+      "tasimaM": 239
+    },
+    {
+      "slug": "salih-adasi-demirleme",
+      "eskiLat": 37.160454,
+      "eskiLon": 27.534194,
+      "lat": 37.159766,
+      "lon": 27.535248,
+      "tasimaM": 121
+    },
+    {
+      "slug": "samos-marina",
+      "eskiLat": 37.6956,
+      "eskiLon": 26.9583,
+      "lat": 37.693243,
+      "lon": 26.963131,
+      "tasimaM": 499
+    },
+    {
+      "slug": "sapli-island-koyu",
+      "eskiLat": 37.411776,
+      "eskiLon": 27.409975,
+      "lat": 37.411776,
+      "lon": 27.408041,
+      "tasimaM": 170
+    },
+    {
+      "slug": "sarsala-restaurant",
+      "eskiLat": 36.657,
+      "eskiLon": 28.857,
+      "lat": 36.657594,
+      "lon": 28.858153,
+      "tasimaM": 122
+    },
+    {
+      "slug": "sedir-adasi-demirleme",
+      "eskiLat": 36.994373,
+      "eskiLon": 28.207395,
+      "lat": 36.994742,
+      "lon": 28.206776,
+      "tasimaM": 68
+    },
+    {
+      "slug": "selanik-aretsou-marina",
+      "eskiLat": 40.5806,
+      "eskiLon": 22.9472,
+      "lat": 40.576883,
+      "lon": 22.943144,
+      "tasimaM": 536
+    },
+    {
+      "slug": "selimpasa-balikci-barinagi",
+      "eskiLat": 41.051861,
+      "eskiLon": 28.367361,
+      "lat": 41.050081,
+      "lon": 28.367361,
+      "tasimaM": 198
+    },
+    {
+      "slug": "semizce-coves-koyu",
+      "eskiLat": 36.797826,
+      "eskiLon": 28.537154,
+      "lat": 36.79843,
+      "lon": 28.537154,
+      "tasimaM": 67
+    },
+    {
+      "slug": "setur-finike-marina",
+      "eskiLat": 36.2947,
+      "eskiLon": 30.1526,
+      "lat": 36.294211,
+      "lon": 30.153305,
+      "tasimaM": 83
+    },
+    {
+      "slug": "setur-kalamis-fenerbahce-marina",
+      "eskiLat": 40.9769,
+      "eskiLon": 29.0358,
+      "lat": 40.976235,
+      "lon": 29.034601,
+      "tasimaM": 125
+    },
+    {
+      "slug": "setur-kalamis-yakit",
+      "eskiLat": 40.978333,
+      "eskiLon": 29.036667,
+      "lat": 40.976852,
+      "lon": 29.034,
+      "tasimaM": 277
+    },
+    {
+      "slug": "side-fish-harbour-balikci-barinagi",
+      "eskiLat": 36.766548,
+      "eskiLon": 31.384875,
+      "lat": 36.766715,
+      "lon": 31.384291,
+      "tasimaM": 55
+    },
+    {
+      "slug": "sigacik-balikci-barinagi",
+      "eskiLat": 38.199962,
+      "eskiLon": 26.770365,
+      "lat": 38.200614,
+      "lon": 26.770365,
+      "tasimaM": 72
+    },
+    {
+      "slug": "sipahili-koyu-gulnar",
+      "eskiLat": 36.159085,
+      "eskiLon": 33.461762,
+      "lat": 36.14749,
+      "lon": 33.472939,
+      "tasimaM": 1631
+    },
+    {
+      "slug": "skopea-marina",
+      "eskiLat": 36.7548,
+      "eskiLon": 28.9392,
+      "lat": 36.754358,
+      "lon": 28.9392,
+      "tasimaM": 49
+    },
+    {
+      "slug": "soguksu-koyu-aydincik",
+      "eskiLat": 36.13235,
+      "eskiLon": 33.289661,
+      "lat": 36.120654,
+      "lon": 33.289084,
+      "tasimaM": 1299
+    },
+    {
+      "slug": "sokakagzi-balikci-barinagi",
+      "eskiLat": 39.464995,
+      "eskiLon": 26.208254,
+      "lat": 39.464967,
+      "lon": 26.209875,
+      "tasimaM": 139
+    },
+    {
+      "slug": "sovalye-adasi-demirleme",
+      "eskiLat": 36.65144,
+      "eskiLon": 29.102621,
+      "lat": 36.650411,
+      "lon": 29.10422,
+      "tasimaM": 183
+    },
+    {
+      "slug": "spetses-baltiza-limani",
+      "eskiLat": 37.262199,
+      "eskiLon": 23.164801,
+      "lat": 37.262684,
+      "lon": 23.165567,
+      "tasimaM": 86
+    },
+    {
+      "slug": "sultanice-balikci-barinagi",
+      "eskiLat": 40.592117,
+      "eskiLon": 26.126803,
+      "lat": 40.591895,
+      "lon": 26.126465,
+      "tasimaM": 38
+    },
+    {
+      "slug": "suluada-koyu",
+      "eskiLat": 36.219165,
+      "eskiLon": 30.409673,
+      "lat": 36.219137,
+      "lon": 30.400608,
+      "tasimaM": 812
+    },
+    {
+      "slug": "susanoglu-koyu",
+      "eskiLat": 36.417162,
+      "eskiLon": 34.0868,
+      "lat": 36.409897,
+      "lon": 34.08935,
+      "tasimaM": 838
+    },
+    {
+      "slug": "symi-panormitis-iskelesi",
+      "eskiLat": 36.55169,
+      "eskiLon": 27.84868,
+      "lat": 36.552483,
+      "lon": 27.847531,
+      "tasimaM": 135
+    },
+    {
+      "slug": "tatlisu-balikci-barinagi",
+      "eskiLat": 40.406771,
+      "eskiLon": 27.921479,
+      "lat": 40.406363,
+      "lon": 27.92216,
+      "tasimaM": 73
+    },
+    {
+      "slug": "tatlisu-koyu",
+      "eskiLat": 36.46719,
+      "eskiLon": 30.509243,
+      "lat": 36.467503,
+      "lon": 30.51606,
+      "tasimaM": 610
+    },
+    {
+      "slug": "tavsancil-balikci-barinagi",
+      "eskiLat": 40.766667,
+      "eskiLon": 29.568917,
+      "lat": 40.765229,
+      "lon": 29.570163,
+      "tasimaM": 191
+    },
+    {
+      "slug": "tekeli-koyu",
+      "eskiLat": 36.133466,
+      "eskiLon": 33.144951,
+      "lat": 36.124877,
+      "lon": 33.148547,
+      "tasimaM": 1006
+    },
+    {
+      "slug": "tekmen-koyu",
+      "eskiLat": 36.10957362,
+      "eskiLon": 33.11004981,
+      "lat": 36.104794,
+      "lon": 33.124368,
+      "tasimaM": 1389
+    },
+    {
+      "slug": "telendos-demirleme",
+      "eskiLat": 36.996194,
+      "eskiLon": 26.921778,
+      "lat": 36.995629,
+      "lon": 26.923516,
+      "tasimaM": 166
+    },
+    {
+      "slug": "teos-limani-demirleme",
+      "eskiLat": 38.16,
+      "eskiLon": 26.801667,
+      "lat": 38.160801,
+      "lon": 26.80037,
+      "tasimaM": 144
+    },
+    {
+      "slug": "tersane-adasi-koyu",
+      "eskiLat": 36.6754,
+      "eskiLon": 28.9153,
+      "lat": 36.676711,
+      "lon": 28.914805,
+      "tasimaM": 152
+    },
+    {
+      "slug": "thymaina-guney-koyu",
+      "eskiLat": 37.580472,
+      "eskiLon": 26.454611,
+      "lat": 37.581753,
+      "lon": 26.455251,
+      "tasimaM": 153
+    },
+    {
+      "slug": "thymaina-iskelesi",
+      "eskiLat": 37.582444,
+      "eskiLon": 26.454528,
+      "lat": 37.582444,
+      "lon": 26.45484,
+      "tasimaM": 27
+    },
+    {
+      "slug": "tilos-livadia-rihtimi",
+      "eskiLat": 36.4167,
+      "eskiLon": 27.3858,
+      "lat": 36.4167,
+      "lon": 27.387363,
+      "tasimaM": 140
+    },
+    {
+      "slug": "torba-balikci-barinagi",
+      "eskiLat": 37.087167,
+      "eskiLon": 27.455222,
+      "lat": 37.087162,
+      "lon": 27.45648,
+      "tasimaM": 111
+    },
+    {
+      "slug": "toslaklar-koyu",
+      "eskiLat": 36.093935,
+      "eskiLon": 33.026302,
+      "lat": 36.084024,
+      "lon": 33.024074,
+      "tasimaM": 1118
+    },
+    {
+      "slug": "turunc-iskelesi",
+      "eskiLat": 36.772146,
+      "eskiLon": 28.249443,
+      "lat": 36.773446,
+      "lon": 28.25147,
+      "tasimaM": 231
+    },
+    {
+      "slug": "urla-iskele-balikci-barinagi",
+      "eskiLat": 38.539922,
+      "eskiLon": 26.710829,
+      "lat": 38.542308,
+      "lon": 26.710829,
+      "tasimaM": 265
+    },
+    {
+      "slug": "villa-julia-iskelesi",
+      "eskiLat": 36.661073,
+      "eskiLon": 28.081637,
+      "lat": 36.660192,
+      "lon": 28.081637,
+      "tasimaM": 98
+    },
+    {
+      "slug": "vlychada-marina-santorini",
+      "eskiLat": 36.336601,
+      "eskiLon": 25.434999,
+      "lat": 36.335166,
+      "lon": 25.433971,
+      "tasimaM": 184
+    },
+    {
+      "slug": "vlychadia-samandira-sahasi",
+      "eskiLat": 36.930167,
+      "eskiLon": 26.964972,
+      "lat": 36.928887,
+      "lon": 26.96684,
+      "tasimaM": 218
+    },
+    {
+      "slug": "west-istanbul-marina",
+      "eskiLat": 40.9628,
+      "eskiLon": 28.6636,
+      "lat": 40.961033,
+      "lon": 28.665105,
+      "tasimaM": 233
+    },
+    {
+      "slug": "west-istanbul-marina-yakit",
+      "eskiLat": 40.9628,
+      "eskiLon": 28.6636,
+      "lat": 40.961033,
+      "lon": 28.665105,
+      "tasimaM": 233
+    },
+    {
+      "slug": "westward-of-alacati-bay",
+      "eskiLat": 38.267334,
+      "eskiLon": 26.246348,
+      "lat": 38.264901,
+      "lon": 26.247824,
+      "tasimaM": 299
+    },
+    {
+      "slug": "yacht-classic-marina-fethiye",
+      "eskiLat": 36.622859,
+      "eskiLon": 29.098562,
+      "lat": 36.623118,
+      "lon": 29.098555,
+      "tasimaM": 29
+    },
+    {
+      "slug": "yaglica-koyu",
+      "eskiLat": 36.141346,
+      "eskiLon": 29.782127,
+      "lat": 36.142486,
+      "lon": 29.783757,
+      "tasimaM": 193
+    },
+    {
+      "slug": "yakacik-koyu-gazipasa",
+      "eskiLat": 36.096114,
+      "eskiLon": 32.560166,
+      "lat": 36.09486,
+      "lon": 32.560133,
+      "tasimaM": 139
+    },
+    {
+      "slug": "yaliciftlik-koyu",
+      "eskiLat": 36.991822,
+      "eskiLon": 27.529709,
+      "lat": 36.990709,
+      "lon": 27.529709,
+      "tasimaM": 123
+    },
+    {
+      "slug": "yalikavak-balikci-limani",
+      "eskiLat": 37.108083,
+      "eskiLon": 27.292441,
+      "lat": 37.108748,
+      "lon": 27.291343,
+      "tasimaM": 122
+    },
+    {
+      "slug": "yalikavak-marina",
+      "eskiLat": 37.105,
+      "eskiLon": 27.2855,
+      "lat": 37.105173,
+      "lon": 27.285228,
+      "tasimaM": 31
+    },
+    {
+      "slug": "yalikavak-marina-yakit",
+      "eskiLat": 37.102322,
+      "eskiLon": 27.284529,
+      "lat": 37.1048,
+      "lon": 27.284465,
+      "tasimaM": 275
+    },
+    {
+      "slug": "yaprakli-koy-koyu",
+      "eskiLat": 36.419778,
+      "eskiLon": 34.090722,
+      "lat": 36.410711,
+      "lon": 34.091697,
+      "tasimaM": 1010
+    },
+    {
+      "slug": "yarimada-koyu-demirleme",
+      "eskiLat": 38.204936,
+      "eskiLon": 26.689185,
+      "lat": 38.204177,
+      "lon": 26.69047,
+      "tasimaM": 140
+    },
+    {
+      "slug": "yassica-adalari",
+      "eskiLat": 36.7105,
+      "eskiLon": 28.9322,
+      "lat": 36.710549,
+      "lon": 28.934405,
+      "tasimaM": 196
+    },
+    {
+      "slug": "yaz-limani-samandira-sahasi",
+      "eskiLat": 36.676471,
+      "eskiLon": 28.930263,
+      "lat": 36.677607,
+      "lon": 28.931972,
+      "tasimaM": 198
+    },
+    {
+      "slug": "yenice-balikci-barinagi",
+      "eskiLat": 40.388875,
+      "eskiLon": 28.111169,
+      "lat": 40.388887,
+      "lon": 28.109275,
+      "tasimaM": 160
+    },
+    {
+      "slug": "yesilkoy-firnaz-koyu",
+      "eskiLat": 36.261124,
+      "eskiLon": 29.36938,
+      "lat": 36.261124,
+      "lon": 29.371031,
+      "tasimaM": 148
+    },
+    {
+      "slug": "yesilkoy-marina",
+      "eskiLat": 40.955278,
+      "eskiLon": 28.825833,
+      "lat": 40.951847,
+      "lon": 28.824029,
+      "tasimaM": 410
+    },
+    {
+      "slug": "yogunduvar-fisher-limani",
+      "eskiLat": 36.098504,
+      "eskiLon": 32.942314,
+      "lat": 36.095192,
+      "lon": 32.942484,
+      "tasimaM": 368
+    },
+    {
+      "slug": "yumurtalik-balikci-barinagi",
+      "eskiLat": 36.767309,
+      "eskiLon": 35.793329,
+      "lat": 36.76021,
+      "lon": 35.800143,
+      "tasimaM": 994
+    },
+    {
+      "slug": "zakinthos-marina",
+      "eskiLat": 37.783944,
+      "eskiLon": 20.902194,
+      "lat": 37.783469,
+      "lon": 20.902194,
+      "tasimaM": 53
+    },
+    {
+      "slug": "zeytin-adasi-samandira-sahasi",
+      "eskiLat": 36.699202,
+      "eskiLon": 28.929604,
+      "lat": 36.699264,
+      "lon": 28.931084,
+      "tasimaM": 132
+    },
+    {
+      "slug": "zeytinburnu-limani",
+      "eskiLat": 40.980057,
+      "eskiLon": 28.893387,
+      "lat": 40.976037,
+      "lon": 28.891571,
+      "tasimaM": 471
+    },
+    {
+      "slug": "zeytinli-island-koyu",
+      "eskiLat": 36.700167,
+      "eskiLon": 28.926172,
+      "lat": 36.701763,
+      "lon": 28.926172,
+      "tasimaM": 177
+    }
+  ]
+}

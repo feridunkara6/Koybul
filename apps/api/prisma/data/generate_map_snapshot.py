@@ -48,6 +48,17 @@ def main():
             continue
         with open(path, encoding="utf-8") as fh:
             records.extend(json.load(fh)["records"])
+    # Koordinat düzeltmeleri (koordinat_duzeltmeleri_*.json, 2026-09-23):
+    # seed üreteciyle AYNI kaynak — balon ortalamaları da düzeltilmiş
+    # (suya taşınmış) koordinatlarla hesaplanır.
+    by = {r["slug"]: r for r in records}
+    import glob as _glob
+    for kf in sorted(_glob.glob(os.path.join(HERE, "koordinat_duzeltmeleri_*.json"))):
+        with open(kf, encoding="utf-8") as fh:
+            for c in json.load(fh)["duzeltmeler"]:
+                r = by.get(c["slug"])
+                if r is not None:
+                    r["lat"], r["lon"] = c["lat"], c["lon"]
     pub = [r for r in records if r.get("status") == "published"]
     if len(pub) < 100:  # emniyet: veri kaynağı bozuksa yarım dosya üretme
         print(f"HATA: yayınlı kayıt beklenmedik kadar az ({len(pub)})")

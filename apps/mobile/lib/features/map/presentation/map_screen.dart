@@ -1131,81 +1131,132 @@ class _TodayInviteCard extends ConsumerWidget {
     final ThemeData theme = Theme.of(context);
     // GÖRÜNÜRLÜK KARARI ÇAĞIRANDA (yukarıdaki nota bakınız): bu widget her
     // zaman Positioned döner — Stack'in boyutunu asla bozmaz.
+    //
+    // TASARIM YENİLEME (kurucu bulgusu 2026-09-23: "basit ve kötü duruyor"):
+    // tam-genişlik düz şerit yerine ORTALANMIŞ, dar (≤400) bir kart; solda
+    // gün-ışığı degrade rozeti, sağda hap biçimli dolgu CTA. Kapatma, kartın
+    // İÇİNDE köşe düğmesi olarak durur — satırı sıkıştırmaz. Amber tonları
+    // öncekiyle aynı ailedir (yıldız özellik vurgusu, E1).
     return Positioned(
-      left: 12,
-      right: 12,
+      left: 16,
+      right: 16,
       // Yakın rayının (kapalı hâlde ~62 px) ve SOS + "Rota planla" FAB
       // bandının (P0-2: bottom 78, ~56 boy) ÜSTÜNDE durur — ne rayı
       // ne köşe düğmelerini örter.
-      bottom: 142,
+      bottom: 148,
       child: SafeArea(
         top: false,
-        child: Material(
-          elevation: 8,
-          borderRadius: BorderRadius.circular(16),
-          color: theme.colorScheme.surface,
-          child: InkWell(
-            key: const ValueKey<String>('today-invite'),
-            borderRadius: BorderRadius.circular(16),
-            onTap: () {
-              ref.read(todayInviteDismissedProvider.notifier).state = true;
-              ref.read(shellTabProvider.notifier).state = 1; // Bugün
-            },
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 10, 6, 10),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF59E0B).withValues(alpha: 0.16),
-                      borderRadius: BorderRadius.circular(11),
-                    ),
-                    child: const Center(
-                      child: DocklyIcon(DocklyIcons.star,
-                          size: 18, color: Color(0xFFB45309)),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Material(
+              elevation: 10,
+              shadowColor: Colors.black.withValues(alpha: 0.35),
+              borderRadius: BorderRadius.circular(18),
+              color: theme.colorScheme.surface,
+              child: InkWell(
+                key: const ValueKey<String>('today-invite'),
+                borderRadius: BorderRadius.circular(18),
+                onTap: () {
+                  ref.read(todayInviteDismissedProvider.notifier).state = true;
+                  ref.read(shellTabProvider.notifier).state = 1; // Bugün
+                },
+                child: Ink(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: const Color(0xFFF59E0B).withValues(alpha: 0.35),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 12, 8, 12),
+                    child: Row(
                       children: <Widget>[
-                        Text(
-                          t.todayInviteTitle,
-                          style: theme.textTheme.titleSmall
-                              ?.copyWith(fontWeight: FontWeight.w800),
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: <Color>[
+                                Color(0xFFFBBF24),
+                                Color(0xFFD97706),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(13),
+                          ),
+                          child: const Center(
+                            child: DocklyIcon(DocklyIcons.exploreOutlined,
+                                size: 20, color: Colors.white),
+                          ),
                         ),
-                        Text(
-                          t.todayInviteBody,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodySmall?.copyWith(
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                t.todayInviteTitle,
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: -0.2,
+                                ),
+                              ),
+                              const SizedBox(height: 1),
+                              Text(
+                                t.todayInviteBody,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        // Hap CTA — kartla birlikte dokunulur (ayrı hedef değil).
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 7),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFB45309),
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                t.todayInviteCta,
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              const DocklyIcon(DocklyIcons.arrowForward,
+                                  size: 12, color: Colors.white),
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          key: const ValueKey<String>('today-invite-close'),
+                          tooltip: t.todayInviteDismiss,
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(
+                              minWidth: 34, minHeight: 34),
+                          icon: DocklyIcon(DocklyIcons.close,
+                              size: 15,
                               color: theme.colorScheme.onSurfaceVariant),
+                          onPressed: () => ref
+                              .read(todayInviteDismissedProvider.notifier)
+                              .state = true,
                         ),
                       ],
                     ),
                   ),
-                  Text(
-                    t.todayInviteCta,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: const Color(0xFFB45309),
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  const SizedBox(width: 2),
-                  IconButton(
-                    key: const ValueKey<String>('today-invite-close'),
-                    tooltip: t.todayInviteDismiss,
-                    visualDensity: VisualDensity.compact,
-                    icon: DocklyIcon(DocklyIcons.close,
-                        size: 16, color: theme.colorScheme.onSurfaceVariant),
-                    onPressed: () => ref
-                        .read(todayInviteDismissedProvider.notifier)
-                        .state = true,
-                  ),
-                ],
+                ),
               ),
             ),
           ),

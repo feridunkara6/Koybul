@@ -434,6 +434,25 @@ void main() {
     expect(sent.bbox.maxLat, greaterThanOrEqualTo(clusterViewport.bbox.maxLat));
   });
 
+  test('HIZ (kurucu bulgusu 2026-09-23 "koylar geç yükleniyor"): önbellek '
+      'servis edebiliyorsa onViewportChanged debounce BEKLEMEZ — kare anında dolar', () async {
+    final gateway = FakeMapGateway(result: clusterResult);
+    final container =
+        _containerWith(gateway, debounce: const Duration(minutes: 5));
+    await _ctrl(container).loadViewport(clusterViewport); // ağ: önbellek dolar
+    expect(gateway.calls, hasLength(1));
+
+    // Geniş getirilen alanın İÇİNDE hafif kaydırma: 5 dakikalık debounce'a
+    // rağmen durum ANINDA (beklemeden, senkron) dolmalı ve ağa çıkılmamalı.
+    const MapViewport shifted = MapViewport(
+      bbox: Bbox(minLon: 28.92, minLat: 36.72, maxLon: 29.02, maxLat: 36.82),
+      zoom: 6,
+    );
+    _ctrl(container).onViewportChanged(shifted);
+    expect(_state(container).clusters.single.count, 34); // beklemeden geldi
+    expect(gateway.calls, hasLength(1)); // ağa da çıkılmadı
+  });
+
   test('hızlı yol: kapsanan alana yakınlaşınca ağa çıkılmaz — pinler anında süzülür', () async {
     final gateway = FakeMapGateway(result: pinResult);
     final container = _containerWith(gateway);

@@ -66,16 +66,57 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
   bool _disposed = false;
   Timer? _idleTimer;
 
-  /// Türkiye merkezli açılış görünümü (düşük zoom → cluster modu).
+  /// ZOOM ÖLÇEK KÖPRÜSÜ (kurucu bulgusu 2026-09-23: "ikonlar webteki oranda
+  /// görünsün"): Mapbox 512px karo kullanır, web (flutter_map/Leaflet) 256px —
+  /// AYNI görsel ölçekte Mapbox zoom sayısı webden 1 KÜÇÜKTÜR. Sunucu eşikleri
+  /// (pin modu zoom ≥ 9, docs/23 §9.5) web ölçeğinde tanımlıdır; bu yüzden
+  /// sunucuya bildirilen zoom'a +1 eklenir, dışarıdan gelen zoom istekleri
+  /// (odak/bölge) kameraya -1 ile uygulanır. Bu köprü olmadan telefonda
+  /// pinlerin ikona dönüşmesi için webden BİR SEVİYE fazla yaklaşmak
+  /// gerekiyordu ("noktalar nokta kalıyor" hissinin ikinci yarısı).
+  static const double _kZoomOffset = 1;
+
+  /// Açılış görünümü (kurucu kararı 2026-09-23: web ile aynı — Ege + Akdeniz
+  /// kıyısı odaklı açılır; tüm Türkiye değil). Mapbox 6 ≈ web 7; dikey telefon
+  /// ekranında İzmir–Kaş bandı ve Ege adaları tek bakışta görünür.
   static final CameraOptions _initialCamera = CameraOptions(
-    center: Point(coordinates: Position(35.2, 39.0)),
-    zoom: 5,
+    center: Point(coordinates: Position(28.5, 37.5)),
+    zoom: 6,
   );
 
   @override
   void didUpdateWidget(covariant MapboxMapSurface oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // ODAK İSTEĞİ (2026-09-23 eksik parça: "Konumum" ve açılış bölge seçimi
+    // web yüzeyinde çalışıyordu, Mapbox yüzeyinde YOK SAYILIYORDU): seq
+    // değiştiyse kamera istenen noktaya uçar. Zoom web ölçeğinde gelir
+    // (bölge 9, "Konumum" en az 12) — kameraya -1 köprüsüyle uygulanır.
+    final MapFocusRequest? f = widget.data.focus;
+    if (f != null && f.seq != oldWidget.data.focus?.seq) {
+      unawaited(_flyToFocus(f));
+    }
     unawaited(_render());
+  }
+
+  Future<void> _flyToFocus(MapFocusRequest f) async {
+    final MapboxMap? map = _map;
+    if (map == null || _disposed) return;
+    double webZoom = f.zoom ?? 12;
+    if (f.zoom == null) {
+      // "Konumum" davranışı (web ile aynı): en az 12 — mevcut daha yakınsa koru.
+      final CameraState cam = await map.getCameraState();
+      if (_disposed) return;
+      final double currentWeb = cam.zoom + _kZoomOffset;
+      if (currentWeb > webZoom) webZoom = currentWeb;
+    }
+    await map.flyTo(
+      CameraOptions(
+        center: Point(coordinates: Position(f.point.lon, f.point.lat)),
+        zoom: webZoom - _kZoomOffset,
+      ),
+      MapAnimationOptions(duration: 800),
+    );
+    // Uçuş bitince kamera olayları zaten görünümü bildirir (idle zamanlayıcı).
   }
 
   @override
@@ -148,6 +189,10 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
     _pins!.tapEvents(onTap: _onPinTap);
     _clusterCircles!.tapEvents(onTap: _onClusterCircleTap);
     await _render();
+    // Kuruluşta bekleyen odak isteği (açılış bölge/konum seçimi) uygulanır —
+    // web yüzeyiyle aynı davranış (_applyPendingFocus karşılığı).
+    final MapFocusRequest? pending = widget.data.focus;
+    if (pending != null) unawaited(_flyToFocus(pending));
   }
 
   /// Stil yeniden yüklenirse (tema/stil değişimi) kayıtlı resimler silinebilir —
@@ -174,10 +219,11 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
   /// Kamera hareket edince (debounce sonrası) görünen bbox + zoom bildirilir.
   void _onCameraChanged(CameraChangedEventData data) {
     _idleTimer?.cancel();
-    // 350→200 ms (perf, kurucu bulgusu 2026-09-23): parmak kalkar kalkmaz
-    // istek yola çıksın — önden geniş getirme sayesinde çoğu kaydırma zaten
-    // ağa hiç çıkmadan bellekten dolar.
-    _idleTimer = Timer(const Duration(milliseconds: 200), _reportViewport);
+    // 350→200→120 ms (perf turları, kurucu bulgusu "koylar geç yükleniyor"):
+    // parmak kalkar kalkmaz istek yola çıksın — önden geniş getirme sayesinde
+    // çoğu kaydırma zaten ağa çıkmadan bellekten dolar; bellekten dolan
+    // karede bu bekleme tek gecikmedir, o yüzden kısa tutulur.
+    _idleTimer = Timer(const Duration(milliseconds: 120), _reportViewport);
   }
 
   Future<void> _reportViewport() async {
@@ -204,16 +250,26 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
           maxLon: ne.lng.toDouble(),
           maxLat: ne.lat.toDouble(),
         ),
-        zoom: camera.zoom.round(),
+        // Web ölçeğine köprü: sunucu eşikleri (pin zoom ≥ 9) web sayısıyla
+        // çalışır — Mapbox zoom'una +1 (bkz. _kZoomOffset).
+        zoom: (camera.zoom + _kZoomOffset).round(),
       ),
     );
   }
 
   Future<void> _flyToCluster(Cluster cluster) async {
-    await _map?.flyTo(
+    final MapboxMap? map = _map;
+    if (map == null || _disposed) return;
+    // Web ile aynı davranış: mevcut + 2.5, [9.5, 14] aralığına kıstırılır
+    // (web ölçeğinde) — tek dokunuşta "balon patlar", pinlere inilir.
+    final CameraState cam = await map.getCameraState();
+    if (_disposed) return;
+    final double webZoom =
+        (cam.zoom + _kZoomOffset + 2.5).clamp(9.5, 14.0).toDouble();
+    await map.flyTo(
       CameraOptions(
         center: Point(coordinates: Position(cluster.position.lon, cluster.position.lat)),
-        zoom: 12,
+        zoom: webZoom - _kZoomOffset,
       ),
       MapAnimationOptions(duration: 800),
     );
