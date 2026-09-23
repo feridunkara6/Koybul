@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { uuidv7 } from 'uuidv7';
 import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
@@ -22,15 +22,46 @@ import {
 import { screenText, shouldAutoPublish } from '../domain/prefilter';
 import { notePoints } from '../domain/scoring';
 import { ReputationService } from './reputation.service';
+import { PremiumAccessService } from '../../premium/application/premium-access.service';
 
 @Injectable()
 export class NotesService {
   constructor(
     @Inject(NOTES_REPOSITORY) private readonly notes: NotesRepository,
     private readonly reputation: ReputationService,
+    /**
+     * Premium erişim kararı (P5). @Optional: birim testleri servisi premium
+     * olmadan kurabilir — o zaman kilit uygulanmaz (bayrak kapalı gibi).
+     */
+    @Optional() private readonly premium?: PremiumAccessService,
   ) {}
 
-  listForLocation(locationId: string, filters: NoteListFilters): Promise<Note[]> {
+  /**
+   * Bir noktanın onaylı notları.
+   *
+   * PREMIUM KİLİDİ (P5, premium v3 §3/K1 — KAPTAN KURALI): vitrin gören
+   * kullanıcıya yalnız UYARI (hazard) notları iner — emniyet bilgisi ASLA
+   * kilitlenmez; deneyim/durum/geçiş notları Premium'dadır. Vitrinde açıkça
+   * uyarı dışı bir tür istenirse dürüst 403 `premium-required` döner (boş
+   * liste "not yok" yalanı olurdu). Bayrak kapalıyken davranış birebir eski.
+   */
+  async listForLocation(
+    locationId: string,
+    filters: NoteListFilters,
+    viewer?: Principal | null,
+  ): Promise<Note[]> {
+    if (this.premium?.enforced) {
+      const decision = await this.premium.accessFor(viewer ?? null, locationId);
+      if (decision.access === 'teaser') {
+        if (filters.kind !== undefined && filters.kind !== 'hazard') {
+          throw new AppProblem(
+            'premium-required',
+            'Kaptan notları Koybul Premium ile (ya da aylık keşif hakkıyla) açılır; emniyet uyarıları herkese açıktır.',
+          );
+        }
+        return this.notes.listForLocation(locationId, { ...filters, kind: 'hazard' });
+      }
+    }
     return this.notes.listForLocation(locationId, filters);
   }
 

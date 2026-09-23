@@ -3,17 +3,22 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   HttpCode,
   Param,
   Patch,
   Post,
   Query,
+  Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { z } from 'zod';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
-import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
+import { AuthedRequest, JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
+import { OptionalJwtAuthGuard } from '../../../common/guards/optional-jwt.guard';
 import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
 import {
@@ -116,14 +121,28 @@ const listSchema = z
 export class NotesController {
   constructor(private readonly notes: NotesService) {}
 
-  /** Anonim okuma — misafir her şeyi okur (PRD §5.3). */
+  /**
+   * Not okuma. Kimlik İSTEĞE BAĞLI (P5): bayrak açıkken vitrin gören kullanıcı
+   * yalnız UYARI notlarını alır (emniyet herkese açık — kaptan kuralı); tam
+   * erişim (premium/keşif hakkı) hepsini alır. Bayrak kapalıyken eski davranış.
+   */
   @Get('locations/:locationId/notes')
+  @Header('Vary', 'Authorization')
+  @UseGuards(OptionalJwtAuthGuard)
   async list(
+    @Req() req: AuthedRequest,
+    @Res({ passthrough: true }) res: Response,
     @Param('locationId') locationId: string,
     @Query() query: unknown,
   ): Promise<{ data: Note[] }> {
     const q = listSchema.parse(query ?? {});
-    return { data: await this.notes.listForLocation(this.uuid(locationId), q) };
+    // Kimlikli yanıt kişiye özeldir — paylaşımlı cache'e yazılmasın.
+    if (req.principal) {
+      res.setHeader('Cache-Control', 'private, max-age=60');
+    }
+    return {
+      data: await this.notes.listForLocation(this.uuid(locationId), q, req.principal ?? null),
+    };
   }
 
   /** "Yakında paylaşılanlar" — Bugün ekranının kaynağı. Anonim. */

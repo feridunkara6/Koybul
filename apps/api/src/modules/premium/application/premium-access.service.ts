@@ -36,6 +36,14 @@ export class PremiumAccessService {
     @Inject(PREMIUM_REPOSITORY) private readonly repo: PremiumRepository,
   ) {}
 
+  /**
+   * Bayrak açık mı? (P5) Kilitli okuma uçları (yorumlar, notlar) pahalı erişim
+   * kararına girmeden önce buna bakar — bayrak kapalıyken sıfır ek sorgu.
+   */
+  get enforced(): boolean {
+    return this.env.premiumEnforce;
+  }
+
   /** UTC takvim ayı anahtarı: 'YYYY-MM'. Sunucu saati esastır. */
   static monthKey(now: Date = new Date()): string {
     const y = now.getUTCFullYear();

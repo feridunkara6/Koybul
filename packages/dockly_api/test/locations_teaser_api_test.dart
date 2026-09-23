@@ -126,4 +126,49 @@ void main() {
       );
     });
   });
+
+  // --- KİLİTLİ OKUMA UÇLARI (P5, premium v3 §9): yorumlar/notlar kimlikle ---
+
+  group('LocationsApi.reviews — kimlikli okuma (P5)', () {
+    test('accessToken verilirse Authorization başlığı gider; verilmezse GİTMEZ', () async {
+      final adapter = FakeAdapter();
+      adapter.enqueueJson(200, <String, dynamic>{'data': <dynamic>[]});
+      await LocationsApi(_dio(adapter)).reviews('kille-koyu', accessToken: 'tok-1');
+      expect(adapter.received.single.headers['Authorization'], 'Bearer tok-1');
+
+      final adapter2 = FakeAdapter();
+      adapter2.enqueueJson(200, <String, dynamic>{'data': <dynamic>[]});
+      await LocationsApi(_dio(adapter2)).reviews('kille-koyu');
+      expect(adapter2.received.single.headers.containsKey('Authorization'), isFalse);
+    });
+
+    test('vitrin kilidi: 403 premium-required → ForbiddenFailure yüzeye çıkar', () async {
+      final adapter = FakeAdapter();
+      adapter.enqueueProblem(403, <String, dynamic>{
+        'type': 'https://api.dockly.app/problems/premium-required',
+        'title': 'Bu içerik Premium ile açılır',
+        'status': 403,
+      });
+      expect(
+        () => LocationsApi(_dio(adapter)).reviews('kille-koyu'),
+        throwsA(isA<ForbiddenFailure>()),
+      );
+    });
+  });
+
+  group('CommunityApi.notesForLocation — kimlikli okuma (P5)', () {
+    test('accessToken verilirse Authorization başlığı gider; verilmezse GİTMEZ', () async {
+      final adapter = FakeAdapter();
+      adapter.enqueueJson(200, <String, dynamic>{'data': <dynamic>[]});
+      await CommunityApi(_dio(adapter))
+          .notesForLocation('11111111-1111-1111-1111-111111111111', accessToken: 'tok-1');
+      expect(adapter.received.single.headers['Authorization'], 'Bearer tok-1');
+
+      final adapter2 = FakeAdapter();
+      adapter2.enqueueJson(200, <String, dynamic>{'data': <dynamic>[]});
+      await CommunityApi(_dio(adapter2))
+          .notesForLocation('11111111-1111-1111-1111-111111111111');
+      expect(adapter2.received.single.headers.containsKey('Authorization'), isFalse);
+    });
+  });
 }

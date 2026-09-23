@@ -122,6 +122,12 @@ export interface LocationsRepository {
    * en yeniden eskiye, `limit` ile tavanlanır. Lokasyon yoksa boş liste.
    */
   findReviews(idOrSlug: string, limit: number): Promise<ReviewItem[]>;
+
+  /**
+   * id/slug → yayınlanmış lokasyonun UUID'si; yoksa `null` (P5). Premium erişim
+   * kararı (yorum kilidi) detayın tamamını çekmeden kimliğe ihtiyaç duyar.
+   */
+  resolveId(idOrSlug: string): Promise<string | null>;
 }
 
 export const LOCATIONS_REPOSITORY = Symbol('LOCATIONS_REPOSITORY');

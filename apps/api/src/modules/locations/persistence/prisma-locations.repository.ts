@@ -642,6 +642,15 @@ export class PrismaLocationsRepository implements LocationsRepository {
     };
   }
 
+  async resolveId(idOrSlug: string): Promise<string | null> {
+    const where = UUID_RE.test(idOrSlug) ? { id: idOrSlug } : { slug: idOrSlug };
+    const loc = await this.prisma.location.findFirst({
+      where: { ...where, status: 'published', deletedAt: null },
+      select: { id: true },
+    });
+    return loc?.id ?? null;
+  }
+
   async findReviews(idOrSlug: string, limit: number): Promise<ReviewItem[]> {
     const where = UUID_RE.test(idOrSlug) ? { id: idOrSlug } : { slug: idOrSlug };
     const loc = await this.prisma.location.findFirst({

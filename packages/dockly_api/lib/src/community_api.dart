@@ -17,7 +17,16 @@ class CommunityApi {
       Options(headers: <String, dynamic>{'Authorization': 'Bearer $token'});
 
   /// Bir noktanın onaylı notları. Uyarılar listenin başında gelir.
-  Future<List<Note>> notesForLocation(String locationId, {NoteKind? kind, int limit = 20}) async {
+  ///
+  /// [accessToken] İSTEĞE BAĞLIDIR (P5, premium v3 §9): bayrak açıkken vitrin
+  /// gören istek yalnız UYARI notlarını alır (emniyet herkese açık — kaptan
+  /// kuralı); kimlikli tam erişim (premium/keşif hakkı) hepsini alır.
+  Future<List<Note>> notesForLocation(
+    String locationId, {
+    NoteKind? kind,
+    int limit = 20,
+    String? accessToken,
+  }) async {
     return _call(() async {
       final Response<Map<String, dynamic>> res = await _dio.get<Map<String, dynamic>>(
         '/v1/locations/$locationId/notes',
@@ -25,6 +34,7 @@ class CommunityApi {
           if (kind != null) 'kind': kind.wire,
           'limit': limit,
         },
+        options: accessToken == null ? null : _auth(accessToken),
       );
       return _list(res.data!, Note.fromJson);
     });

@@ -96,11 +96,20 @@ export class LocationsController {
    */
   @Get(':idOrSlug/reviews')
   @Header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
+  @Header('Vary', 'Authorization')
+  @UseGuards(OptionalJwtAuthGuard)
   async reviews(
+    @Req() req: AuthedRequest,
+    @Res({ passthrough: true }) res: Response,
     @Param('idOrSlug') idOrSlug: string,
     @Query('limit') limit?: string,
   ): Promise<{ data: ReviewItem[] }> {
-    return this.locations.reviews(idOrSlug, limit);
+    // PREMIUM (P5): kimlik isteğe bağlı — detaydaki desenle aynı. Kimlikli
+    // yanıt kişiye özel (private); anonim yanıt eskisi gibi public cache'lenir.
+    if (req.principal) {
+      res.setHeader('Cache-Control', 'private, max-age=60');
+    }
+    return this.locations.reviews(idOrSlug, limit, req.principal ?? null);
   }
 
   /**

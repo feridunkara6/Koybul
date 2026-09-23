@@ -85,6 +85,9 @@ class FakeRepo implements LocationsRepository {
   findReviews(): Promise<never[]> {
     return Promise.resolve([]);
   }
+  resolveId(): Promise<string | null> {
+    return Promise.resolve(null);
+  }
 }
 
 /** Sahte erişim kararı — birim test, kararı DIŞARIDAN verir. */

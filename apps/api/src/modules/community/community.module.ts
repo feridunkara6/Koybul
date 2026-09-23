@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from '../auth/auth.module';
+import { PremiumModule } from '../premium/premium.module';
 import { NotesService } from './application/notes.service';
 import { ReviewsService } from './application/reviews.service';
 import { ReportsService } from './application/reports.service';
@@ -23,7 +24,8 @@ import { ReputationController } from './presentation/reputation.controller';
 
 /** Topluluk modülü — Kaptan Notları, yorum yazma, şikâyet, moderasyon, itibar. */
 @Module({
-  imports: [AuthModule],
+  // PremiumModule (P5): not okuma ucundaki vitrin kilidi erişim kararını sorar.
+  imports: [AuthModule, PremiumModule],
   controllers: [
     NotesController,
     ReviewsController,

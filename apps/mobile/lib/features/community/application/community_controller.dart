@@ -19,8 +19,12 @@ final Provider<CommunityGateway> communityGatewayProvider = Provider<CommunityGa
 });
 
 /// Bir noktanın onaylı notları. `autoDispose`: detay kapanınca istek serbest kalır.
+///
+/// P5: oturum durumu İZLENİR — giriş/çıkışta liste yeniden çekilir (bayrak
+/// açıkken vitrin yalnız uyarıları alır; tam erişim açılınca hepsi gelir).
 final notesForLocationProvider =
     FutureProvider.autoDispose.family<List<Note>, String>((ref, String locationId) {
+  ref.watch(authControllerProvider);
   return ref.watch(communityGatewayProvider).notesForLocation(locationId);
 });
 

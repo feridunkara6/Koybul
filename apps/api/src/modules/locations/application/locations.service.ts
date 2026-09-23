@@ -121,8 +121,29 @@ export class LocationsService {
   /**
    * Bir lokasyonun onaylı yorumları (docs/23 §11.3). id veya slug ile; en yeni
    * önce, limit [1,50] varsayılan 10. Lokasyon yoksa boş liste.
+   *
+   * PREMIUM KİLİDİ (P5, premium v3 §9): yorum metinleri vitrinde KİLİTLİDİR —
+   * detay teaser dönerken bu uçtan sızmasın. Vitrin gören istekte dürüst 403
+   * `premium-required` döner (boş liste yalanı yok: puan sayısı vitrinde açık,
+   * "yorum yok" izlenimi yanlış olurdu). Bayrak kapalıyken davranış birebir eski.
    */
-  async reviews(idOrSlug: string, rawLimit: string | undefined): Promise<{ data: ReviewItem[] }> {
+  async reviews(
+    idOrSlug: string,
+    rawLimit: string | undefined,
+    viewer?: Principal | null,
+  ): Promise<{ data: ReviewItem[] }> {
+    if (this.premium?.enforced) {
+      const locationId = await this.repo.resolveId(idOrSlug);
+      if (locationId) {
+        const decision = await this.premium.accessFor(viewer ?? null, locationId);
+        if (decision.access === 'teaser') {
+          throw new AppProblem(
+            'premium-required',
+            'Kaptan yorumları Koybul Premium ile (ya da aylık keşif hakkıyla) açılır.',
+          );
+        }
+      }
+    }
     const data = await this.repo.findReviews(idOrSlug, parseReviewsLimit(rawLimit));
     return { data };
   }

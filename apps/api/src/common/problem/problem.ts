@@ -34,6 +34,7 @@ export type ProblemType =
   | 'duplicate-request'
   | 'validation-error'
   | 'quota-exceeded'
+  | 'premium-required'
   | 'rate-limited'
   | 'payload-too-large'
   | 'service-unavailable'
@@ -51,6 +52,9 @@ const CATALOG: Record<ProblemType, { status: HttpStatus; title: string }> = {
   'validation-error': { status: HttpStatus.UNPROCESSABLE_ENTITY, title: 'Doğrulama hatası' },
   // Keşif hakkı tavanı (P1, premium v3 raporu K2) — mobil bu tipe paywall açar.
   'quota-exceeded': { status: HttpStatus.FORBIDDEN, title: 'Aylık keşif hakkı doldu' },
+  // Kilitli içerik ucu (P5, premium v3 §9): vitrin gören kullanıcıya yorum
+  // listesi gibi kilitli veriler İNMEZ — boş liste yalanı yerine dürüst 403.
+  'premium-required': { status: HttpStatus.FORBIDDEN, title: 'Bu içerik Premium ile açılır' },
   'rate-limited': { status: HttpStatus.TOO_MANY_REQUESTS, title: 'Çok fazla istek' },
   'payload-too-large': { status: HttpStatus.PAYLOAD_TOO_LARGE, title: 'İçerik çok büyük' },
   'service-unavailable': {

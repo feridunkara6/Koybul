@@ -103,6 +103,9 @@ class FakeRepo implements LocationsRepository {
   findReviews(): Promise<never[]> {
     return Promise.resolve([]);
   }
+  resolveId(): Promise<string | null> {
+    return Promise.resolve(null);
+  }
 }
 
 describe('LocationsService.detail (docs/23 §11.3)', () => {

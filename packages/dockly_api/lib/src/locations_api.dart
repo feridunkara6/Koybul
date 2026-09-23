@@ -92,13 +92,20 @@ class LocationsApi {
   }
 
   /// Bir lokasyonun onaylı yorumları (docs/23 §11.3). En yeni önce; boş olabilir.
-  Future<List<Review>> reviews(String idOrSlug, {int? limit}) async {
+  ///
+  /// [accessToken] İSTEĞE BAĞLIDIR (P5, premium v3 §9): bayrak açıkken yorum
+  /// metinleri kilitlidir — kimlikli istek (premium/keşif hakkı) tam listeyi
+  /// alır; vitrin gören istek sunucudan 403 `premium-required` alır.
+  Future<List<Review>> reviews(String idOrSlug, {int? limit, String? accessToken}) async {
     return _call(() async {
       final res = await _dio.get<Map<String, dynamic>>(
         '/v1/locations/${Uri.encodeComponent(idOrSlug)}/reviews',
         queryParameters: <String, dynamic>{
           if (limit != null) 'limit': limit,
         },
+        options: accessToken == null
+            ? null
+            : Options(headers: <String, dynamic>{'Authorization': 'Bearer $accessToken'}),
       );
       final data = res.data!['data'] as List<dynamic>? ?? const <dynamic>[];
       return data

@@ -20,8 +20,13 @@ class ApiCommunityGateway implements CommunityGateway {
   }
 
   @override
-  Future<List<Note>> notesForLocation(String locationId) =>
-      _api.notesForLocation(locationId);
+  Future<List<Note>> notesForLocation(String locationId) async {
+    // P5 (premium v3 §9): oturum varsa kimlikli oku — bayrak açıkken uyarı
+    // dışı notlar kilitlidir; tam erişimli kullanıcı hepsini kimliğiyle alır.
+    // Oturum yoksa anonim gider (sunucu vitrine yalnız uyarıları verir).
+    final String? token = await _tokenProvider();
+    return _api.notesForLocation(locationId, accessToken: token);
+  }
 
   @override
   Future<List<NearbyNote>> nearbyNotes(GeoPoint position) =>
