@@ -89,6 +89,15 @@ class MapController extends Notifier<MapState> {
   List<LocationPin> _pinCachePins = const <LocationPin>[];
   DateTime? _pinCacheAt;
 
+  // Bellek-içi KÜME önbelleği (perf, kurucu bulgusu 2026-09-23): düşük
+  // yakınlaştırmada son başarılı, filtre-siz balon yanıtı. Küçük kaydırmalar
+  // önden geniş getirilen alanın içinde kaldıkça ağa hiç çıkılmaz. Balonlar
+  // zoom'a bağlı üretildiğinden yalnız AYNI zoom değerinde yeniden kullanılır.
+  Bbox? _clusterCacheBbox;
+  List<Cluster> _clusterCacheClusters = const <Cluster>[];
+  int? _clusterCacheZoom;
+  DateTime? _clusterCacheAt;
+
   /// Ekranda DURAN verinin kaynağının zamanı (FAZ 2 cila, S11): önbellekten
   /// geldiyse kayıt zamanı, ağdan geldiyse iniş anı. Çevrimdışına düşünce
   /// şerit "ne kadar eski" bilgisini buradan söyler. null = bilinmiyor.
@@ -170,6 +179,31 @@ class MapController extends Notifier<MapState> {
       );
       return;
     }
+    // KÜME HIZLI YOLU (perf): balon modunda, istenen alan önbellekteki geniş
+    // alanın içindeyse ve zoom aynıysa ağa çıkılmaz — kaydırma anında dolar.
+    if (effectiveTypes == null &&
+        viewport.zoom < _minPinZoom &&
+        _clusterCacheBbox != null &&
+        _clusterCacheAt != null &&
+        _clusterCacheZoom == viewport.zoom &&
+        DateTime.now().difference(_clusterCacheAt!) <= _pinCacheTtl &&
+        _containsBbox(_clusterCacheBbox!, viewport.bbox)) {
+      state = state.copyWith(
+        pins: const <LocationPin>[],
+        clusters: _clusterCacheClusters,
+        truncated: false,
+        isLoading: false,
+        clearFailure: true,
+        hasLoadedOnce: true,
+        isOffline: false,
+      );
+      return;
+    }
+    // ÖNDEN GENİŞ GETİRME (perf): ağa görünenden geniş alan sorulur; küçük
+    // kaydırmalar yukarıdaki hızlı yollardan beslenir. Pin modunda pay daha
+    // küçüktür — sunucunun 500 sonuç tavanını (truncated) zorlamamak için.
+    final MapViewport fetchVp = viewport.expandedForFetch(
+        factor: viewport.zoom >= _minPinZoom ? 1.35 : 1.7);
     state = state.copyWith(isLoading: true, clearFailure: true);
     // SICAK BAŞLANGIÇ (algılanan hız): ilk yüklemede, taze veri gelene dek
     // cihazdaki son başarılı veri ANINDA gösterilir — açılışta boş harita ve
@@ -190,13 +224,19 @@ class MapController extends Notifier<MapState> {
       if (seq != _seq) return;
     }
     try {
-      final result = await _gateway.loadViewport(viewport, types: effectiveTypes);
+      final result = await _gateway.loadViewport(fetchVp, types: effectiveTypes);
       if (seq != _seq) return;
       // Hızlı yolun kaynağını güncelle: filtre-siz, tam pin yanıtları saklanır.
       if (effectiveTypes == null && viewport.zoom >= _minPinZoom && !result.truncated) {
-        _pinCacheBbox = viewport.bbox;
+        _pinCacheBbox = fetchVp.bbox; // geniş alan → sonraki kaydırmalar bedava
         _pinCachePins = result.locations;
         _pinCacheAt = DateTime.now();
+      }
+      if (effectiveTypes == null && viewport.zoom < _minPinZoom) {
+        _clusterCacheBbox = fetchVp.bbox;
+        _clusterCacheClusters = result.clusters;
+        _clusterCacheZoom = viewport.zoom;
+        _clusterCacheAt = DateTime.now();
       }
       state = state.copyWith(
         // Çakışık koordinatlı iğneler sunumda halkaya açılır (pin_spread).
@@ -279,6 +319,9 @@ class MapController extends Notifier<MapState> {
     _pinCacheBbox = null;
     _pinCacheAt = null;
     _pinCachePins = const <LocationPin>[];
+    _clusterCacheBbox = null;
+    _clusterCacheAt = null;
+    _clusterCacheClusters = const <Cluster>[];
     final viewport = _lastRequested;
     if (viewport != null) await loadViewport(viewport);
   }

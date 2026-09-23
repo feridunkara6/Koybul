@@ -31,6 +31,29 @@ void main() {
     expect(c.bbox.maxLat - c.bbox.minLat, closeTo(kMaxBboxEdgeDegrees, 1e-9));
   });
 
+  test('expandedForFetch (perf): merkez sabit büyür, zoom korunur', () {
+    const MapViewport v = MapViewport(
+      bbox: Bbox(minLon: 28.9, minLat: 36.7, maxLon: 29.0, maxLat: 36.8),
+      zoom: 13,
+    );
+    final MapViewport f = v.expandedForFetch(factor: 1.35);
+    expect(f.zoom, 13);
+    expect((f.bbox.minLon + f.bbox.maxLon) / 2, closeTo(28.95, 1e-9));
+    expect((f.bbox.minLat + f.bbox.maxLat) / 2, closeTo(36.75, 1e-9));
+    expect(f.bbox.maxLon - f.bbox.minLon, closeTo(0.135, 1e-9));
+    // Görüneni kapsar.
+    expect(f.bbox.minLon, lessThan(v.bbox.minLon));
+    expect(f.bbox.maxLat, greaterThan(v.bbox.maxLat));
+  });
+
+  test('expandedForFetch: tavandaki görünüm OLDUĞU GİBİ kalır (aynı nesne)', () {
+    const MapViewport v = MapViewport(
+      bbox: Bbox(minLon: 30.0, minLat: 36.0, maxLon: 34.8, maxLat: 40.8),
+      zoom: 5,
+    );
+    expect(identical(v.expandedForFetch(), v), isTrue);
+  });
+
   test('tek ekseni aşan görünümde diğer eksen OLDUĞU GİBİ kalır', () {
     const MapViewport v = MapViewport(
       bbox: Bbox(minLon: 26.0, minLat: 36.0, maxLon: 34.0, maxLat: 37.0),

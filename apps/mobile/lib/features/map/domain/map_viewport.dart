@@ -16,6 +16,35 @@ class MapViewport {
   final Bbox bbox;
   final int zoom;
 
+  /// ÖNDEN GENİŞ GETİRME (perf, kurucu bulgusu 2026-09-23: "kaydırınca
+  /// noktalar beklemeden dolmalı"): sunucudan görünenden [factor] kat geniş
+  /// alan istenir — küçük kaydırmalar bu alanın İÇİNDE kaldığı sürece ağa hiç
+  /// çıkılmaz, noktalar bellekten anında gelir. Kenarlar yine sunucu tavanını
+  /// ([maxEdgeDegrees]) aşmaz; merkez sabittir.
+  MapViewport expandedForFetch({
+    double factor = 1.7,
+    double maxEdgeDegrees = kMaxBboxEdgeDegrees,
+  }) {
+    final double lonSpan = bbox.maxLon - bbox.minLon;
+    final double latSpan = bbox.maxLat - bbox.minLat;
+    double newLon = lonSpan * factor;
+    double newLat = latSpan * factor;
+    if (newLon > maxEdgeDegrees) newLon = maxEdgeDegrees;
+    if (newLat > maxEdgeDegrees) newLat = maxEdgeDegrees;
+    if (newLon <= lonSpan && newLat <= latSpan) return this;
+    final double cLon = (bbox.minLon + bbox.maxLon) / 2;
+    final double cLat = (bbox.minLat + bbox.maxLat) / 2;
+    return MapViewport(
+      zoom: zoom,
+      bbox: Bbox(
+        minLon: cLon - newLon / 2,
+        maxLon: cLon + newLon / 2,
+        minLat: cLat - newLat / 2,
+        maxLat: cLat + newLat / 2,
+      ),
+    );
+  }
+
   /// Sunucu tavanına sığan görünüm: kenarlardan biri [maxEdgeDegrees]'i
   /// aşıyorsa bbox MERKEZİ SABİT kalarak o eksende kırpılır; sığıyorsa
   /// nesne OLDUĞU GİBİ döner (eşitlik bozulmaz, gereksiz yeniden yükleme yok).

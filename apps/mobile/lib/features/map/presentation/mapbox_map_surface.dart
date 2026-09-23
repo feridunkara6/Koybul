@@ -98,11 +98,9 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
       marginLeft: 12,
       fadeWhenFacingNorth: false, // kaptan pusulayı hep görür
     ));
-    await map.scaleBar.updateSettings(ScaleBarSettings(
-      position: OrnamentPosition.TOP_LEFT,
-      marginTop: 168,
-      marginLeft: 12,
-    ));
+    // Ölçek çubuğu KAPALI (kurucu kararı 2026-09-23: "çirkin durmuş, kaldır").
+    // Mesafe bilgisi rota çipinde deniz mili olarak zaten veriliyor.
+    await map.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
     if (_disposed) return;
     _circles = await map.annotations.createCircleAnnotationManager();
     _clusterCircles = await map.annotations.createCircleAnnotationManager();
@@ -129,7 +127,10 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
   /// Kamera hareket edince (debounce sonrası) görünen bbox + zoom bildirilir.
   void _onCameraChanged(CameraChangedEventData data) {
     _idleTimer?.cancel();
-    _idleTimer = Timer(const Duration(milliseconds: 350), _reportViewport);
+    // 350→200 ms (perf, kurucu bulgusu 2026-09-23): parmak kalkar kalkmaz
+    // istek yola çıksın — önden geniş getirme sayesinde çoğu kaydırma zaten
+    // ağa hiç çıkmadan bellekten dolar.
+    _idleTimer = Timer(const Duration(milliseconds: 200), _reportViewport);
   }
 
   Future<void> _reportViewport() async {

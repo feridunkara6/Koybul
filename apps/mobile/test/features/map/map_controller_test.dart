@@ -180,6 +180,49 @@ void main() {
     expect(_state(container).clusters, isNotEmpty); // veri ekrana geldi
   });
 
+  test('ÖNDEN GENİŞ GETİRME (perf, kurucu bulgusu 2026-09-23): pin isteği '
+      'görünenden geniş gider; küçük kaydırma ağa çıkmadan bellekten dolar', () async {
+    final gateway = FakeMapGateway(result: pinResult);
+    final container = _containerWith(gateway);
+    await _ctrl(container).loadViewport(pinViewport);
+    expect(gateway.calls, hasLength(1));
+    final Bbox sent = gateway.calls.single.bbox;
+    expect(sent.minLon, lessThan(pinViewport.bbox.minLon));
+    expect(sent.maxLon, greaterThan(pinViewport.bbox.maxLon));
+    expect(sent.minLat, lessThan(pinViewport.bbox.minLat));
+    expect(sent.maxLat, greaterThan(pinViewport.bbox.maxLat));
+
+    // Hafif kaydırılmış görünüm geniş alanın içinde → ağa YENİ İSTEK YOK.
+    const MapViewport shifted = MapViewport(
+      bbox: Bbox(minLon: 28.91, minLat: 36.71, maxLon: 29.01, maxLat: 36.81),
+      zoom: 13,
+    );
+    await _ctrl(container).loadViewport(shifted);
+    expect(gateway.calls, hasLength(1));
+    expect(_state(container).pins, isNotEmpty);
+  });
+
+  test('KÜME HIZLI YOLU (perf): aynı zoom içinde küçük kaydırma ağa çıkmaz; '
+      'zoom değişince taze balon istenir', () async {
+    final gateway = FakeMapGateway(result: clusterResult);
+    final container = _containerWith(gateway);
+    await _ctrl(container).loadViewport(clusterViewport); // zoom 6
+    expect(gateway.calls, hasLength(1));
+
+    const MapViewport shifted = MapViewport(
+      bbox: Bbox(minLon: 28.92, minLat: 36.72, maxLon: 29.02, maxLat: 36.82),
+      zoom: 6,
+    );
+    await _ctrl(container).loadViewport(shifted);
+    expect(gateway.calls, hasLength(1)); // bellekten geldi
+    expect(_state(container).clusters.single.count, 34);
+
+    // Zoom değişti → balonlar zoom'a bağlı üretilir, taze istek şart.
+    const MapViewport zoomedOut = MapViewport(bbox: testBbox, zoom: 5);
+    await _ctrl(container).loadViewport(zoomedOut);
+    expect(gateway.calls, hasLength(2));
+  });
+
   test('loadViewport başarı → pin modu verisi', () async {
     final container = _containerWith(FakeMapGateway(result: pinResult));
     await _ctrl(container).loadViewport(pinViewport);
