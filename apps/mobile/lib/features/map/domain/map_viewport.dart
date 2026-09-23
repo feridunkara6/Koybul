@@ -31,7 +31,10 @@ class MapViewport {
     double newLat = latSpan * factor;
     if (newLon > maxEdgeDegrees) newLon = maxEdgeDegrees;
     if (newLat > maxEdgeDegrees) newLat = maxEdgeDegrees;
-    if (newLon <= lonSpan && newLat <= latSpan) return this;
+    // 1e-9 payı KAYAN NOKTA TOZU içindir (CI dersi 2026-09-24): 34.8-30.0
+    // gibi farklar tam 4.8 çıkmaz (4.7999...97) ve tavandaki görünüm boşu
+    // boşuna yeniden kurulurdu — eşitlik bozulur, gereksiz yükleme doğardı.
+    if (newLon <= lonSpan + 1e-9 && newLat <= latSpan + 1e-9) return this;
     final double cLon = (bbox.minLon + bbox.maxLon) / 2;
     final double cLat = (bbox.minLat + bbox.maxLat) / 2;
     return MapViewport(

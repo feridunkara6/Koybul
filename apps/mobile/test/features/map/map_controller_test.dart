@@ -424,7 +424,14 @@ void main() {
     _ctrl(container).onViewportChanged(pinViewport);
     _ctrl(container).onViewportChanged(clusterViewport);
     await Future<void>.delayed(const Duration(milliseconds: 10));
-    expect(gateway.calls, contains(clusterViewport));
+    // Önden geniş getirme (perf 2026-09): ağa giden istek istenen görünümün
+    // BİREBİR AYNISI değil, onu KAPSAYAN geniş hâlidir — kapsamayı denetle.
+    final MapViewport sent = gateway.calls.last;
+    expect(sent.zoom, clusterViewport.zoom);
+    expect(sent.bbox.minLon, lessThanOrEqualTo(clusterViewport.bbox.minLon));
+    expect(sent.bbox.maxLon, greaterThanOrEqualTo(clusterViewport.bbox.maxLon));
+    expect(sent.bbox.minLat, lessThanOrEqualTo(clusterViewport.bbox.minLat));
+    expect(sent.bbox.maxLat, greaterThanOrEqualTo(clusterViewport.bbox.maxLat));
   });
 
   test('hızlı yol: kapsanan alana yakınlaşınca ağa çıkılmaz — pinler anında süzülür', () async {
