@@ -216,14 +216,30 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
     }
   }
 
-  /// Kamera hareket edince (debounce sonrası) görünen bbox + zoom bildirilir.
+  /// Son CANLI (sürükleme sürerken) görünüm bildirimi anı — akış ~4 Hz'e
+  /// kısılır ki platform kanalı boğulmasın.
+  DateTime? _lastLiveReportAt;
+
+  /// Kamera hareket edince görünen bbox + zoom bildirilir.
   void _onCameraChanged(CameraChangedEventData data) {
     _idleTimer?.cancel();
-    // 350→200→120 ms (perf turları, kurucu bulgusu "koylar geç yükleniyor"):
-    // parmak kalkar kalkmaz istek yola çıksın — önden geniş getirme sayesinde
-    // çoğu kaydırma zaten ağa çıkmadan bellekten dolar; bellekten dolan
-    // karede bu bekleme tek gecikmedir, o yüzden kısa tutulur.
-    _idleTimer = Timer(const Duration(milliseconds: 120), _reportViewport);
+    // 350→200→120→80 ms (perf turları, kurucu bulgusu "noktalar daha da
+    // hızlı gelsin"): parmak kalkar kalkmaz istek yola çıksın — önden geniş
+    // getirme sayesinde çoğu kaydırma ağa çıkmadan bellekten dolar; bellekten
+    // dolan karede bu bekleme tek gecikmedir, o yüzden kısa tutulur.
+    _idleTimer = Timer(const Duration(milliseconds: 80), _reportViewport);
+    // CANLI AKIŞ (kurucu bulgusu 2026-09-23, 3. hız turu): parmak DAHA
+    // KALKMADAN da görünüm ~250 ms'de bir bildirilir. Önbellek kapsıyorsa
+    // controller debounce'suz anında doldurur → pinler sürükleme sırasında
+    // belirir. Ağa çıkacak istekleri controller'ın debounce'u zaten tekler —
+    // bu akış ağ trafiği yaratmaz, yalnız bellekten kareyi erken doldurur.
+    final DateTime now = DateTime.now();
+    if (_lastLiveReportAt == null ||
+        now.difference(_lastLiveReportAt!) >=
+            const Duration(milliseconds: 250)) {
+      _lastLiveReportAt = now;
+      unawaited(_reportViewport());
+    }
   }
 
   Future<void> _reportViewport() async {

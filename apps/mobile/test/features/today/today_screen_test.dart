@@ -45,6 +45,11 @@ void main() {
 
   testWidgets('BUGÜN NEREYE?: yakın adaylar puan sırasıyla listelenir; '
       'bilgi eksikse rozet dürüstçe söyler', (WidgetTester tester) async {
+    // UZUN YÜZEY (2026-09-23): kontrol listesi kartı en üste taşınınca
+    // öneri bölümü aşağı kaydı — varsayılan 600px yüzeyde ListView alt
+    // kartları hiç KURMAZ (tembel kurulum) ve derin assert'ler boş bulurdu.
+    await tester.binding.setSurfaceSize(const Size(800, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     // İki aday: biri yakın (2 nm) biri uzak (15 nm). Detay kaydında açık
     // yön bilgisi YOK (sahte marina detayı) → ikisi de "bilgi yok" rozeti
     // alır; sıralamayı mesafe belirler.
@@ -135,6 +140,9 @@ void main() {
 
   testWidgets('öneri servisi hata verirse dürüst hata metni (bölüm kırılmaz)',
       (WidgetTester tester) async {
+    // Uzun yüzey: kontrol listesi üste taşındı, öneri bölümü aşağıda (2026-09-23).
+    await tester.binding.setSurfaceSize(const Size(800, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(ProviderScope(
       overrides: <Override>[
         originProvider.overrideWith(

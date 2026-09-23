@@ -233,8 +233,12 @@ class MapController extends Notifier<MapState> {
     // ÖNDEN GENİŞ GETİRME (perf): ağa görünenden geniş alan sorulur; küçük
     // kaydırmalar yukarıdaki hızlı yollardan beslenir. Pin modunda pay daha
     // küçüktür — sunucunun 500 sonuç tavanını (truncated) zorlamamak için.
+    // 1.35/1.7 → 1.6/2.2 (kurucu bulgusu 2026-09-23, 3. hız turu "daha da
+    // hızlı"): pencere büyüdükçe ardışık kaydırmaların çok daha büyük kısmı
+    // ağa hiç çıkmadan bellekten dolar. 721 yayınlı kayıtla 500 tavanı bu
+    // pencerede pratikte zorlanmaz (en yoğun bölge ~100 kayıt).
     final MapViewport fetchVp = viewport.expandedForFetch(
-        factor: viewport.zoom >= _minPinZoom ? 1.35 : 1.7);
+        factor: viewport.zoom >= _minPinZoom ? 1.6 : 2.2);
     state = state.copyWith(isLoading: true, clearFailure: true);
     // SICAK BAŞLANGIÇ (algılanan hız): ilk yüklemede, taze veri gelene dek
     // cihazdaki son başarılı veri ANINDA gösterilir — açılışta boş harita ve

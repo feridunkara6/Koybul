@@ -73,6 +73,11 @@ class TodayScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 4),
+            // SEYİR ÖNCESİ KONTROL — EN ÜSTTE (kurucu kararı 2026-09-23:
+            // "sayfanın üstlerine getir ki önemini görsün herkes"). Emniyet
+            // kültürü uygulamanın kimliğidir; kaptan sekmeyi açar açmaz
+            // önce kontrol listesini görür, sonra havaya ve öneriye geçer.
+            const _ChecklistCard(),
             // GÜNÜN ÖZETİ (onaylı E2): RÜZGÂR · EN İYİ SAAT · DENİZ.
             // Üçü de aynı tahminden türetilir; veri yoksa şerit çizilmez.
             if (pos != null) _DaySummaryStrip(pos: pos),
@@ -91,9 +96,6 @@ class TodayScreen extends ConsumerWidget {
             // BUGÜN NEREYE? — akıllı öneri (yalnız konum varken; konum
             // yokken hava kartındaki dürüst yönlendirme zaten görünür).
             if (pos != null) _SuggestSection(pos: pos),
-            // Seyir öncesi kontrol listesi — onaylı E2: ilerleme (0/10) ve
-            // "çıkmadan tamamla" uyarısı kartın üstünde görünür.
-            const _ChecklistCard(),
             // YAKINDA PAYLAŞILANLAR (topluluk 2026-08): listenin EN ALTINA
             // eklenir; üstündeki hiçbir kart yer değiştirmez. Konum yoksa ya
             // da yakında not yoksa kart hiç çizilmez (0-uydurma).
@@ -141,6 +143,18 @@ class _ChecklistCard extends ConsumerWidget {
               color: allDone
                   ? DocklyColors.success
                   : theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 8),
+          // İLERLEME ÇUBUĞU (kurucu kararı 2026-09-23 "önemini görsün"):
+          // kaç maddenin kaldığı tek bakışta görünür; tamamlanınca yeşil.
+          ClipRRect(
+            borderRadius: BorderRadius.circular(999),
+            child: LinearProgressIndicator(
+              value: s.ready ? checked / kChecklistItemCount : 0,
+              minHeight: 6,
+              backgroundColor: _amber.withValues(alpha: 0.15),
+              color: allDone ? DocklyColors.success : _amber,
             ),
           ),
           const SizedBox(height: 10),
