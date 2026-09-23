@@ -73,14 +73,14 @@ class TodayScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 4),
-            // SEYİR ÖNCESİ KONTROL — EN ÜSTTE (kurucu kararı 2026-09-23:
-            // "sayfanın üstlerine getir ki önemini görsün herkes"). Emniyet
-            // kültürü uygulamanın kimliğidir; kaptan sekmeyi açar açmaz
-            // önce kontrol listesini görür, sonra havaya ve öneriye geçer.
-            const _ChecklistCard(),
             // GÜNÜN ÖZETİ (onaylı E2): RÜZGÂR · EN İYİ SAAT · DENİZ.
             // Üçü de aynı tahminden türetilir; veri yoksa şerit çizilmez.
             if (pos != null) _DaySummaryStrip(pos: pos),
+            // SEYİR ÖNCESİ KONTROL — ÖZET KUTUCUKLARININ HEMEN ALTINDA
+            // (kurucu kararı 2026-09-23, 2. tur: "rüzgâr/en iyi saat/deniz
+            // kutucuklarının altına yerleştir"). Sayfanın üst bölgesinde
+            // kalır ki önemi görülsün; hava kartından ve öneriden önce gelir.
+            const _ChecklistCard(),
             // Günün havası — konum bilinmiyorsa dürüst yönlendirme.
             if (pos != null)
               WeatherCard(position: pos, accent: const Color(0xFFF59E0B))
