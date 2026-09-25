@@ -51,6 +51,12 @@ Widget _app(FakeAdminGateway gw) => ProviderScope(
 
 void main() {
   testWidgets('sayı kartları sunucu verisiyle dolar', (WidgetTester tester) async {
+    // CI dersi (bugün ekranı ile aynı): ListView TEMBELDİR — 600px'lik
+    // varsayılan test ekranında alttaki dürüstlük notu hiç inşa edilmez ve
+    // textContaining 0 bulur. Uzun ekranla tüm liste inşa edilir.
+    tester.view.physicalSize = const Size(800, 2000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
     await tester.pumpWidget(_app(FakeAdminGateway()));
     await tester.pumpAndSettle();
 
