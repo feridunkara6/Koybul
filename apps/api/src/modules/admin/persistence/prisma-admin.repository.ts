@@ -8,19 +8,34 @@ export class PrismaAdminRepository implements AdminRepository {
 
   async stats(now: Date): Promise<AdminStats> {
     const weekAgo = new Date(now.getTime() - 7 * 24 * 3600 * 1000);
-    const [totalUsers, guestUsers, newUsers7d, premiumActive, pendingModeration, totalReviews, totalNotes] =
-      await Promise.all([
-        this.prisma.user.count({ where: { isGuest: false, deletedAt: null } }),
-        this.prisma.user.count({ where: { isGuest: true, deletedAt: null } }),
-        this.prisma.user.count({
-          where: { isGuest: false, deletedAt: null, createdAt: { gte: weekAgo } },
-        }),
-        this.prisma.user.count({ where: { deletedAt: null, premiumUntil: { gt: now } } }),
-        this.prisma.moderationTask.count({ where: { status: 'pending' } }),
-        this.prisma.review.count(),
-        this.prisma.locationNote.count(),
-      ]);
-    return { totalUsers, guestUsers, newUsers7d, premiumActive, pendingModeration, totalReviews, totalNotes };
+    const [
+      totalUsers,
+      guestUsers,
+      newUsers7d,
+      premiumActive,
+      pendingModeration,
+      totalReviews,
+      totalNotes,
+    ] = await Promise.all([
+      this.prisma.user.count({ where: { isGuest: false, deletedAt: null } }),
+      this.prisma.user.count({ where: { isGuest: true, deletedAt: null } }),
+      this.prisma.user.count({
+        where: { isGuest: false, deletedAt: null, createdAt: { gte: weekAgo } },
+      }),
+      this.prisma.user.count({ where: { deletedAt: null, premiumUntil: { gt: now } } }),
+      this.prisma.moderationTask.count({ where: { status: 'pending' } }),
+      this.prisma.review.count(),
+      this.prisma.locationNote.count(),
+    ]);
+    return {
+      totalUsers,
+      guestUsers,
+      newUsers7d,
+      premiumActive,
+      pendingModeration,
+      totalReviews,
+      totalNotes,
+    };
   }
 
   async findUserByEmail(

@@ -23,9 +23,7 @@ class FakeAdminRepo implements AdminRepository {
   }
 
   async findUserByEmail(email: string) {
-    return this.user && this.user.email.toLowerCase() === email.toLowerCase()
-      ? this.user
-      : null;
+    return this.user && this.user.email.toLowerCase() === email.toLowerCase() ? this.user : null;
   }
 
   async setPremium(userId: string, until: Date, productId: string): Promise<void> {
