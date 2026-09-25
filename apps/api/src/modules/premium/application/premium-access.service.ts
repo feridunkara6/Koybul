@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { EnvService } from '../../../config/env.service';
 import { AppProblem } from '../../../common/problem/problem';
-import { Principal } from '../../../core/auth/principal';
+import { Principal, roleAtLeast } from '../../../core/auth/principal';
 import { PREMIUM_REPOSITORY, PremiumRepository } from '../domain/premium.repository';
 
 /**
@@ -71,6 +71,14 @@ export class PremiumAccessService {
     if (!this.env.premiumEnforce) return { access: 'full', explorationRemaining: null };
     if (!principal) return { access: 'teaser', explorationRemaining: null };
 
+    // YÖNETİCİ = PREMIUM (kurucu talebi 2026-09-25): admin ve üstü rol satın
+    // alma olmadan tam erişimlidir — kurucu premium deneyimi bedelsiz denetler.
+    // Karar ROL üzerinden verilir; premiumUntil alanına yazılmaz (Apple
+    // yansıması kirlenmesin, rol geri alınınca ayrıcalık da kendiliğinden düşer).
+    if (roleAtLeast(principal.role, 'admin')) {
+      return { access: 'full', explorationRemaining: null };
+    }
+
     if (await this.isPremium(principal.userId, now)) {
       return { access: 'full', explorationRemaining: null };
     }
@@ -98,7 +106,8 @@ export class PremiumAccessService {
     locationId: string,
     now: Date = new Date(),
   ): Promise<{ remaining: number }> {
-    if (await this.isPremium(principal.userId, now)) {
+    // Yönetici de premium gibi: hak tüketmez (zaten tam erişimi var).
+    if (roleAtLeast(principal.role, 'admin') || (await this.isPremium(principal.userId, now))) {
       return { remaining: 0 };
     }
     const month = PremiumAccessService.monthKey(now);

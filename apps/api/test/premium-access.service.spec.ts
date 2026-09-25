@@ -22,6 +22,10 @@ function guest(userId = 'guest-1'): Principal {
   return { userId, role: 'user', isGuest: true, familyId: 'f', jti: 'j' };
 }
 
+function admin(userId = 'admin-1'): Principal {
+  return { userId, role: 'admin', isGuest: false, familyId: 'f', jti: 'j' };
+}
+
 /** Bellek-içi sahte defter — gerçek repo ile aynı sözleşme. */
 class FakeRepo implements PremiumRepository {
   premiumUntilByUser = new Map<string, Date>();
@@ -170,5 +174,25 @@ describe('PremiumAccessService (P1 — premium v3 raporu §3, K2)', () => {
     const svc = new PremiumAccessService(env(true), repo);
     await svc.unlock(member('member-1'), 'loc-1', NOW);
     expect(repo.unlocks.size).toBe(0);
+  });
+
+  // YÖNETİCİ = PREMIUM (kurucu talebi 2026-09-25): satın alma kaydı olmadan
+  // tam erişim; keşif hakkı da tüketilmez. super_admin da aynı kapıdan geçer.
+  it('yönetici satın alma olmadan full görür; unlock hak tüketmez', async () => {
+    const repo = new FakeRepo(); // premiumUntil kaydı YOK
+    const svc = new PremiumAccessService(env(true), repo);
+
+    expect(await svc.accessFor(admin(), 'loc-1', NOW)).toEqual({
+      access: 'full',
+      explorationRemaining: null,
+    });
+    expect((await svc.unlock(admin(), 'loc-1', NOW)).remaining).toBe(0);
+    expect(repo.unlocks.size).toBe(0);
+
+    const superAdmin: Principal = { ...admin('sa-1'), role: 'super_admin' };
+    expect((await svc.accessFor(superAdmin, 'loc-9', NOW)).access).toBe('full');
+    // Moderatör yönetici DEĞİLDİR — sıradan üye kuralları geçerli.
+    const moderator: Principal = { ...admin('mod-1'), role: 'moderator' };
+    expect((await svc.accessFor(moderator, 'loc-9', NOW)).access).toBe('teaser');
   });
 });

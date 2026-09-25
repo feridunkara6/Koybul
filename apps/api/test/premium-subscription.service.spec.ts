@@ -124,6 +124,21 @@ describe('PremiumSubscriptionService (P2)', () => {
     expect(me.premium.until).toBe(PAST.toISOString());
   });
 
+  // YÖNETİCİ = PREMIUM (kurucu talebi 2026-09-25): abonelik kaydı olmasa da
+  // active=true döner; until yazılmaz (rol sürdükçe etkin, tarihle sınırlı değil).
+  it('me: yönetici abonelik kaydı olmadan active=true görür', async () => {
+    const adminUser: Principal = {
+      userId: 'a1',
+      role: 'admin',
+      isGuest: false,
+      familyId: 'f',
+      jti: 'j',
+    };
+    const me = await new PremiumSubscriptionService(new FakeRepo(), gateway({})).me(adminUser, NOW);
+    expect(me.premium.active).toBe(true);
+    expect(me.premium.until).toBeNull();
+  });
+
   it('link: Apple doğrular, hesaba yazar, gerçek durumu döner', async () => {
     const repo = new FakeRepo();
     const svc = new PremiumSubscriptionService(repo, gateway({ t1: activeState('t1') }));

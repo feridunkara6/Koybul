@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { AppProblem } from '../../../common/problem/problem';
-import { Principal } from '../../../core/auth/principal';
+import { Principal, roleAtLeast } from '../../../core/auth/principal';
 import {
   APPLE_SUBSCRIPTION_GATEWAY,
   AppleSubscriptionGateway,
@@ -39,9 +39,13 @@ export class PremiumSubscriptionService {
     const sub = await this.repo.findSubscription(principal.userId);
     const monthKey = PremiumAccessService.monthKey(now);
     const used = await this.repo.countUnlocks(principal.userId, monthKey);
+    // YÖNETİCİ = PREMIUM (kurucu talebi 2026-09-25): erişim kararıyla aynı
+    // kural (premium-access.service). Tarih yazılmaz — rol sürdükçe etkindir.
+    const roleActive = roleAtLeast(principal.role, 'admin');
     return {
       premium: {
-        active: sub.premiumUntil !== null && sub.premiumUntil.getTime() > now.getTime(),
+        active:
+          roleActive || (sub.premiumUntil !== null && sub.premiumUntil.getTime() > now.getTime()),
         until: sub.premiumUntil?.toISOString() ?? null,
         productId: sub.productId,
       },

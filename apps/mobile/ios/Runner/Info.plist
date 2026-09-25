@@ -35,6 +35,11 @@
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Konumun; sana en yakın koyları sıralamak, haritada teknenin yerini göstermek, rota başlangıcını belirlemek ve bulunduğun yerin hava tahminini almak için kullanılır. Uyarı notu yazarsan, notun oradan yazıldığını doğrulamak için konumun notla birlikte kaydedilir. Arka planda konum takibi yapılmaz.</string>
+	<!-- ITMS-90683 (2026-09-25): konum eklentisi (geolocator) "her zaman konum"
+	     API'lerine kod düzeyinde başvurduğu için Apple bu anahtarı da zorunlu
+	     tutuyor. Uygulama bu izni HİÇ İSTEMEZ; metin yine de dürüstçe açıklar. -->
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Koybul konumunu yalnız uygulama açıkken, en yakın koyları sıralamak ve haritada yerini göstermek için kullanır. Arka planda konum takibi yapılmaz; bu izin türü uygulama tarafından istenmez.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
