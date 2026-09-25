@@ -129,6 +129,8 @@ class L10n {
     required this.admGrantDoneFmt,
     required this.admNotFound,
     required this.admDownloadsNote,
+    required this.forgotPasswordBtn,
+    required this.resetMailSentFmt,
     required this.emergencyTitle,
     required this.emergencySub,
     required this.sectionBoat,
@@ -707,6 +709,7 @@ class L10n {
   final String admPending, admReviews, admNotes, admGrantTitle, admGrantHint;
   final String admEmailLabel, admMonthsFmt, admGrantBtn, admGrantDoneFmt, admNotFound;
   final String admDownloadsNote;
+  final String forgotPasswordBtn, resetMailSentFmt;
   final String sectionBoat, boatEmptyBody, boatDeckBridge, boatDefineCta;
   final String boatLengthFmt, boatDraftFmt, boatDraftUnknown, editLabel, removeLabel;
   final String sectionAccount, accTitle, accBody, accCta, accOpen, signOut;
@@ -1363,6 +1366,8 @@ const L10n _tr = L10n(
   admGrantDoneFmt: '{0} hesabına {1} tarihine kadar Premium tanımlandı.',
   admNotFound: 'Bu e-postayla kayıtlı bir hesap bulunamadı.',
   admDownloadsNote: 'İndirme sayısı Apple\'ın App Store Connect › Analytics ekranındadır; sunucu yalnız kayıtlı hesapları bilir.',
+  forgotPasswordBtn: 'Şifremi unuttum',
+  resetMailSentFmt: 'Sıfırlama bağlantısı {0} adresine gönderildi — gelen kutunu (ve gereksiz klasörünü) kontrol et.',
   emergencyTitle: 'Acil Durum',
   emergencySub: '158 · 112 · VHF 16 · MAYDAY şablonu · denizci alfabesi',
   sectionBoat: 'Teknem',
@@ -2097,6 +2102,8 @@ const L10n _en = L10n(
   admGrantDoneFmt: 'Premium granted to {0} until {1}.',
   admNotFound: 'No account is registered with this email.',
   admDownloadsNote: 'Download counts live in Apple\'s App Store Connect › Analytics; the server only knows registered accounts.',
+  forgotPasswordBtn: 'Forgot my password',
+  resetMailSentFmt: 'A reset link was sent to {0} — check your inbox (and spam folder).',
   emergencyTitle: 'Emergency',
   emergencySub: '158 · 112 · VHF 16 · MAYDAY template · phonetic alphabet',
   sectionBoat: 'My Boat',
@@ -2831,6 +2838,8 @@ const L10n _es = L10n(
   admGrantDoneFmt: 'Premium concedido a {0} hasta {1}.',
   admNotFound: 'No hay ninguna cuenta registrada con este email.',
   admDownloadsNote: 'Las descargas están en App Store Connect › Analytics de Apple; el servidor solo conoce las cuentas registradas.',
+  forgotPasswordBtn: 'Olvidé mi contraseña',
+  resetMailSentFmt: 'Se envió un enlace de restablecimiento a {0}; revisa tu bandeja (y el spam).',
   emergencyTitle: 'Emergencia',
   emergencySub: '158 · 112 · VHF 16 · plantilla MAYDAY · alfabeto náutico',
   sectionBoat: 'Mi barco',
@@ -3565,6 +3574,8 @@ const L10n _ru = L10n(
   admGrantDoneFmt: 'Premium выдан {0} до {1}.',
   admNotFound: 'Аккаунт с таким email не найден.',
   admDownloadsNote: 'Число загрузок — в App Store Connect › Analytics; сервер знает только зарегистрированные аккаунты.',
+  forgotPasswordBtn: 'Забыл пароль',
+  resetMailSentFmt: 'Ссылка для сброса отправлена на {0} — проверьте почту (и папку «Спам»).',
   emergencyTitle: 'Экстренная помощь',
   emergencySub: '158 · 112 · УКВ 16 · шаблон MAYDAY · фонетический алфавит',
   sectionBoat: 'Моя лодка',

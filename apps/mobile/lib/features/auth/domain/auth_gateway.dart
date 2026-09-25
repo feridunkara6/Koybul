@@ -17,6 +17,11 @@ abstract interface class AuthGateway {
   /// E-posta + şifre ile KAYIT (hesap oluşturur) → Firebase ID token.
   Future<String> registerWithEmail({required String email, required String password});
 
+  /// ŞİFREMİ UNUTTUM (kurucu talebi 2026-09-25): e-postaya sıfırlama
+  /// bağlantısı gönderir. Bağlantı Firebase'in barındırdığı sayfayı açar;
+  /// kullanıcı yeni şifresini orada belirler — uygulamada ek ekran gerekmez.
+  Future<void> sendPasswordReset(String email);
+
   /// Sağlayıcı tarafındaki oturumu kapatır (bizim sunucu oturumundan ayrı).
   Future<void> signOutProvider();
 
@@ -43,6 +48,9 @@ class StubAuthGateway implements AuthGateway {
   @override
   Future<String> registerWithEmail({required String email, required String password}) async =>
       throw _notReady;
+
+  @override
+  Future<void> sendPasswordReset(String email) async => throw _notReady;
 
   @override
   Future<void> signOutProvider() async {}

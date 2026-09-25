@@ -165,4 +165,82 @@ void main() {
     // Misafir kimliği "hesap açık" sayılmaz — giriş kartı durur.
     expect(find.text('Giriş yap veya kayıt ol'), findsOneWidget);
   });
+
+  // ŞİFREMİ UNUTTUM (kurucu talebi 2026-09-25): yalnız e-postayla çalışır,
+  // sıfırlama sağlayıcıya iletilir, yeşil onay satırı görünür; sayfa kapanmaz.
+  testWidgets('şifremi unuttum: e-posta ile sıfırlama gönderilir, onay görünür',
+      (WidgetTester tester) async {
+    final FakeResetGateway gw = FakeResetGateway();
+    await tester.pumpWidget(ProviderScope(
+      overrides: <Override>[
+        authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
+        authGatewayProvider.overrideWithValue(gw),
+      ],
+      child: const MaterialApp(
+        home: Scaffold(body: SingleChildScrollView(child: AccountSection())),
+      ),
+    ));
+    await _openSheet(tester);
+    // Şifre alanı BOŞ bırakılır — sıfırlama şifre istemez.
+    final Finder fields = find.descendant(
+      of: find.byType(SignInSheetBody),
+      matching: find.byType(TextField),
+    );
+    await tester.enterText(fields.at(0), 'kaptan@ornek.com');
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey<String>('forgot-password')));
+    await tester.pumpAndSettle();
+
+    expect(gw.resetEmails.single, 'kaptan@ornek.com');
+    expect(find.byKey(const ValueKey<String>('auth-info')), findsOneWidget);
+    expect(find.textContaining('kaptan@ornek.com'), findsWidgets);
+    expect(find.byType(SignInSheetBody), findsOneWidget); // sayfa açık kalır
+  });
+
+  testWidgets('şifremi unuttum: geçersiz e-postada doğrulama mesajı görünür',
+      (WidgetTester tester) async {
+    final FakeResetGateway gw = FakeResetGateway();
+    await tester.pumpWidget(ProviderScope(
+      overrides: <Override>[
+        authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
+        authGatewayProvider.overrideWithValue(gw),
+      ],
+      child: const MaterialApp(
+        home: Scaffold(body: SingleChildScrollView(child: AccountSection())),
+      ),
+    ));
+    await _openSheet(tester);
+    await tester.tap(find.byKey(const ValueKey<String>('forgot-password')));
+    await tester.pumpAndSettle();
+
+    expect(gw.resetEmails, isEmpty);
+    expect(find.byKey(const ValueKey<String>('auth-error')), findsOneWidget);
+  });
+}
+
+/// Sıfırlama çağrısını yakalayan sahte kimlik köprüsü.
+class FakeResetGateway implements AuthGateway {
+  final List<String> resetEmails = <String>[];
+
+  @override
+  Future<void> sendPasswordReset(String email) async => resetEmails.add(email);
+
+  @override
+  Future<String> obtainIdToken(AuthProviderKind kind) async => 'tok';
+
+  @override
+  Future<String> signInWithEmail(
+          {required String email, required String password}) async =>
+      'tok';
+
+  @override
+  Future<String> registerWithEmail(
+          {required String email, required String password}) async =>
+      'tok';
+
+  @override
+  Future<void> signOutProvider() async {}
+
+  @override
+  String? get currentEmail => null;
 }

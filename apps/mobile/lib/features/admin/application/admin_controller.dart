@@ -30,7 +30,7 @@ final Provider<bool> isAdminProvider = Provider<bool>((ref) {
 
 /// Panel sayıları — ekran her açılışta tazelenir (autoDispose) ve elle
 /// yenilenebilir (ref.invalidate).
-final FutureProvider<AdminStats> adminStatsProvider =
+final AutoDisposeFutureProvider<AdminStats> adminStatsProvider =
     FutureProvider.autoDispose<AdminStats>((ref) {
   return ref.watch(adminGatewayProvider).stats();
 });

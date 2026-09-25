@@ -265,6 +265,10 @@ class _SignInSheetBodyState extends ConsumerState<SignInSheetBody> {
   bool _busy = false;
   String? _error;
 
+  /// ŞİFREMİ UNUTTUM onayı (kurucu talebi 2026-09-25) — hata değil, yeşil
+  /// bilgi satırı olarak gösterilir; sayfa açık kalır.
+  String? _info;
+
   @override
   void dispose() {
     _email.dispose();
@@ -301,6 +305,49 @@ class _SignInSheetBodyState extends ConsumerState<SignInSheetBody> {
   Future<void> _submitGoogle() {
     return _run(() =>
         ref.read(authControllerProvider.notifier).signIn(AuthProviderKind.google));
+  }
+
+  /// ŞİFREMİ UNUTTUM: yalnız e-posta ister (şifre alanına bakılmaz);
+  /// sıfırlama bağlantısı Firebase'den gider, kullanıcı yeni şifresini
+  /// bağlantıdaki sayfada belirleyip uygulamaya döner.
+  Future<void> _forgotPassword() async {
+    final L10n t = ref.read(l10nProvider);
+    final String email = _email.text.trim();
+    if (email.isEmpty || !email.contains('@') || !email.contains('.')) {
+      setState(() {
+        _info = null;
+        _error = t.valEmail;
+      });
+      return;
+    }
+    setState(() {
+      _busy = true;
+      _error = null;
+      _info = null;
+    });
+    try {
+      await ref.read(authGatewayProvider).sendPasswordReset(email);
+      if (mounted) {
+        setState(() {
+          _busy = false;
+          _info = L10n.fmt(t.resetMailSentFmt, email);
+        });
+      }
+    } on AppFailure catch (f) {
+      if (mounted) {
+        setState(() {
+          _busy = false;
+          _error = f.message;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _busy = false;
+          _error = 'İşlem tamamlanamadı. Tekrar deneyin.';
+        });
+      }
+    }
   }
 
   Future<void> _run(Future<void> Function() action) async {
@@ -369,8 +416,24 @@ class _SignInSheetBodyState extends ConsumerState<SignInSheetBody> {
               border: const OutlineInputBorder(),
             ),
           ),
+          // ŞİFREMİ UNUTTUM (kurucu talebi 2026-09-25): şifre alanının hemen
+          // altında, sağa yaslı küçük bağlantı — yalnız e-posta ister.
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              key: const ValueKey<String>('forgot-password'),
+              onPressed: _busy ? null : _forgotPassword,
+              style: TextButton.styleFrom(
+                  visualDensity: VisualDensity.compact,
+                  padding: const EdgeInsets.symmetric(horizontal: 6)),
+              child: Text(t.forgotPasswordBtn,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.w700)),
+            ),
+          ),
           if (_error != null) ...<Widget>[
-            const SizedBox(height: 10),
+            const SizedBox(height: 4),
             Text(
               _error!,
               key: const ValueKey<String>('auth-error'),
@@ -378,7 +441,16 @@ class _SignInSheetBodyState extends ConsumerState<SignInSheetBody> {
                   ?.copyWith(color: theme.colorScheme.error),
             ),
           ],
-          const SizedBox(height: 16),
+          if (_info != null) ...<Widget>[
+            const SizedBox(height: 4),
+            Text(
+              _info!,
+              key: const ValueKey<String>('auth-info'),
+              style: theme.textTheme.bodySmall?.copyWith(
+                  color: DocklyColors.success, fontWeight: FontWeight.w600),
+            ),
+          ],
+          const SizedBox(height: 10),
           DocklyButton(
             label: _busy ? t.busyLabel : t.signInBtn,
             onPressed: _busy ? null : () => _submitEmail(register: false),

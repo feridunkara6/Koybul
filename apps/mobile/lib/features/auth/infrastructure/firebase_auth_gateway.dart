@@ -76,6 +76,17 @@ class FirebaseAuthGateway implements AuthGateway {
   }
 
   @override
+  Future<void> sendPasswordReset(String email) async {
+    // ŞİFREMİ UNUTTUM (kurucu talebi 2026-09-25): Firebase sıfırlama e-postası
+    // gönderir; kullanıcı bağlantıdaki sayfada yeni şifresini belirler.
+    // Hata eşlemesi giriş akışıyla AYNI dili konuşur (firebaseAuthErrorTr).
+    await _guard(() async {
+      await _auth.sendPasswordResetEmail(email: email);
+      return ''; // _guard String döndürür; burada değer kullanılmaz
+    });
+  }
+
+  @override
   Future<void> signOutProvider() async {
     try {
       await _auth.signOut();
