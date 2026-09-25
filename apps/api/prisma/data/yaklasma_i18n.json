@@ -569,6 +569,486 @@
    "en": "A reef extends 50-60 m east of the small islet off the bay; avoid this shallow patch on approach. Anchor in one of the three inlets and take a line ashore.",
    "es": "Un arrecife se extiende 50-60 m al este del islote frente a la bahía; evite ese bajo al aproximarse. Fondee en una de las tres ensenadas y dé un cabo a tierra.",
    "ru": "К востоку от островка перед бухтой на 50-60 м тянется риф; при подходе избегайте этой мели. Становитесь на якорь в одной из трёх бухточек и заводите конец на берег."
+  },
+  "salih-adasi-demirleme": {
+   "tr": "Zemin yer yer yosun lekeli kum olduğundan çapa tutuşu orta düzeydedir; demirledikten sonra çapanın iyice tuttuğunu kontrol edin.",
+   "en": "The bottom is sand with patches of weed, so holding is moderate; after anchoring, make sure the anchor has set well.",
+   "es": "El fondo es de arena con manchas de algas, por lo que el agarre es moderado; tras fondear, compruebe que el ancla haya agarrado bien.",
+   "ru": "Дно — песок с пятнами водорослей, держащая сила средняя; после постановки убедитесь, что якорь хорошо забрал."
+  },
+  "sarigerme-bay": {
+   "tr": "Uzun, kumlu ve sığ plajın önünde günübirlik demirleme yeridir; bölgede genellikle kuvvetli hakim KB rüzgârı estiğinden buna göre plan yapın.",
+   "en": "A daytime anchorage off a long, sandy and shallow beach; the prevailing NW wind often blows strongly here, so plan accordingly.",
+   "es": "Fondeadero de día frente a una playa larga, arenosa y poco profunda; el viento dominante del NO suele soplar fuerte, planifique en consecuencia.",
+   "ru": "Дневная якорная стоянка у длинного песчаного мелкого пляжа; здесь часто сильно дует господствующий СЗ ветер — планируйте с учётом этого."
+  },
+  "semizce-coves-koyu": {
+   "tr": "Girişte batıda kalan burnun açığında döküntü olduğundan burna yakın geçmeyin; zemin kum, yer yer eriştelik olup kıçtan kara demirleme önerilir. Bitişikteki Yılancık Adası ve Aksaz askeri bölgesine giriş yasaktır.",
+   "en": "Debris extends off the western point at the entrance, so do not pass close to it; the bottom is sand with patches of weed and anchoring stern-to is recommended. Entry to adjacent Yılancık Island and the Aksaz military zone is prohibited.",
+   "es": "Hay restos frente a la punta oeste de la entrada, no pase cerca de ella; el fondo es de arena con zonas de algas y se recomienda fondear de popa. Está prohibido entrar en la isla Yılancık y la zona militar de Aksaz contiguas.",
+   "ru": "У западного мыса на входе есть подводные обломки — не проходите близко; дно песчаное с участками травы, рекомендуется становиться кормой к берегу. Вход на соседний остров Йыланджик и военную зону Аксаз запрещён."
+  },
+  "seytanli-island-koyu": {
+   "tr": "Şeytanlı Ada'nın kuzeyindeki koyda yaz koşullarında yeterli demirleme yapılır; şamandıraya bağlanıp kıça baba/halat verilmesi yaygındır.",
+   "en": "In the bay north of Şeytanlı Island, anchoring is adequate in summer conditions; picking up a buoy and taking a stern line ashore is common.",
+   "es": "En la cala al norte de la isla Şeytanlı el fondeo es adecuado en condiciones de verano; es habitual amarrar a una boya y dar un cabo de popa a tierra.",
+   "ru": "В бухте к северу от острова Шейтанлы летом стоянка достаточно надёжна; обычно берут буй и заводят кормовой конец на берег."
+  },
+  "sogut-koyu": {
+   "tr": "Söğüt Adası ile Zeytin Adası'na bakan taraftaki koy soluğandan ve hakim yaz rüzgârından korunur; kum-çamur zemin 3-12 m derinlikte çapayı iyi tutar.",
+   "en": "The cove facing Söğüt Island and Zeytin Island is protected from swell and the prevailing summer wind; the sand-mud bottom in 3-12 m holds the anchor well.",
+   "es": "La cala orientada a las islas Söğüt y Zeytin está protegida de la marejada y del viento dominante de verano; el fondo de arena y fango en 3-12 m sujeta bien el ancla.",
+   "ru": "Бухта, обращённая к островам Сёгют и Зейтин, укрыта от зыби и господствующего летнего ветра; песчано-илистое дно на глубинах 3-12 м хорошо держит якорь."
+  },
+  "sucagiz-koyu": {
+   "tr": "Hisarönü Körfezi'nin kuzey kıyısındaki bu koy grubu geniş bir demirleme alanıdır; 25-40 metrelik megayatların dahi demirlediği bilinen bir duraktır.",
+   "en": "This group of coves on the northern shore of Hisarönü Gulf is a wide anchoring area; even megayachts of 25-40 metres are known to anchor here.",
+   "es": "Este grupo de calas en la costa norte del golfo de Hisarönü es una amplia zona de fondeo; se sabe que fondean aquí incluso megayates de 25-40 metros.",
+   "ru": "Эта группа бухт на северном берегу залива Хисарёню — обширная якорная стоянка; здесь становятся даже мегаяхты длиной 25-40 метров."
+  },
+  "tavsan-island-koyu": {
+   "tr": "Ada ile anakara arasındaki antik dalgakıran/geçit diz boyu sığ olduğundan aradan geçmeye çalışmayın; adada arkeolojik kazı nedeniyle karaya çıkış kısıtlıdır.",
+   "en": "The ancient breakwater/passage between the island and the mainland is knee-deep, so do not attempt to pass through; going ashore on the island is restricted due to archaeological excavations.",
+   "es": "El antiguo rompeolas/paso entre la isla y tierra firme tiene muy poca agua, no intente cruzarlo; el desembarco en la isla está restringido por las excavaciones arqueológicas.",
+   "ru": "Древний мол/проход между островом и материком совсем мелкий — не пытайтесь пройти через него; выход на остров ограничен из-за археологических раскопок."
+  },
+  "turunc-pinari-koyu": {
+   "tr": "Derinlik kıyıdan açığa doğru 1,5 metreden 20 metreye hızla artar; koydaki restoran iskelesine yanaşma veya kıçtan kara demirleme yaygındır.",
+   "en": "Depth increases quickly from 1,5 metres near the shore to 20 metres offshore; berthing at the restaurant jetty or anchoring stern-to is common.",
+   "es": "La profundidad aumenta rápidamente de 1,5 metros junto a la costa a 20 metros mar adentro; es habitual atracar en el muelle del restaurante o fondear de popa.",
+   "ru": "Глубина быстро растёт от 1,5 метра у берега до 20 метров мористее; обычно швартуются к ресторанному причалу или становятся кормой к берегу."
+  },
+  "yaliciftlik-koyu": {
+   "tr": "Gökova Körfezi'nin etkisiyle önündeki sular çoğunlukla sakin ve berraktır; kıyı bir bölümde çakıllı, doğu kesimlerde kumludur ve mavi yolculuk teknelerinin ilk gece durağı olarak kullanılır.",
+   "en": "Thanks to the Gulf of Gökova the waters here are mostly calm and clear; the shore is pebbly in one part and sandy to the east, and blue-cruise boats use it as a first overnight stop.",
+   "es": "Gracias al golfo de Gökova las aguas suelen ser tranquilas y claras; la costa es de guijarros en una parte y arenosa al este, y las goletas de crucero azul la usan como primera parada nocturna.",
+   "ru": "Благодаря заливу Гёкова вода здесь обычно спокойная и прозрачная; берег местами галечный, на востоке песчаный; гулеты «голубого круиза» используют бухту как первую ночную стоянку."
+  },
+  "yarim-liman": {
+   "tr": "Kazıklı Limanı'nın kuzeybatı kıyısındaki küçük koylardandır; yazın meltem eser, kışın lodos sertleşse de körfez içinde uygun konumlanmayla emniyetli demirleme mümkündür.",
+   "en": "One of the small coves on the northwest shore of Kazıklı Harbour; the summer breeze blows in and southerlies harden in winter, but with good positioning inside the gulf a safe anchorage is possible.",
+   "es": "Una de las pequeñas calas de la costa noroeste del puerto de Kazıklı; en verano sopla la brisa y en invierno el lodos arrecia, pero con buena posición dentro del golfo se puede fondear con seguridad.",
+   "ru": "Одна из малых бухт на северо-западном берегу гавани Казыклы; летом задувает бриз, зимой крепчает лодос, но при правильной постановке внутри залива стоянка безопасна."
+  },
+  "yaz-limani-samandira-sahasi": {
+   "tr": "Yassıca Adaları arasındaki geçitlerde sığlıklar bulunduğundan adacıklar arasından dikkatle geçin; demirleme noktaları 5-15 m derinlikte çamur zeminlidir.",
+   "en": "There are shoals in the passages between the Yassıca Islands, so thread between the islets with care; anchoring spots are on a mud bottom in 5-15 m.",
+   "es": "Hay bajos en los pasos entre las islas Yassıca, cruce entre los islotes con cuidado; los puntos de fondeo tienen fondo de fango en 5-15 m.",
+   "ru": "В проходах между островами Яссыджа есть отмели — идите между островками осторожно; якорные места на илистом дне на глубинах 5-15 м."
+  },
+  "zeytin-adasi-samandira-sahasi": {
+   "tr": "Zeytin ağaçlarıyla kaplı ada, bölgenin hakim batı-kuzeybatı rüzgârına iyi korunak sağlar; Zeytinli Ada ile Küçük Şeytanlı arasındaki geçit sığ olduğundan kullanmayın.",
+   "en": "The olive-covered island gives good shelter from the region's prevailing west-northwest wind; the passage between Zeytinli Island and Küçük Şeytanlı is shallow, do not use it.",
+   "es": "La isla cubierta de olivos da buen abrigo del viento dominante oeste-noroeste; el paso entre la isla Zeytinli y Küçük Şeytanlı es poco profundo, no lo use.",
+   "ru": "Покрытый оливами остров хорошо укрывает от господствующего западо-северо-западного ветра; проход между островом Зейтинли и Кючюк-Шейтанлы мелкий — не пользуйтесь им."
+  },
+  "zeytinli-island-koyu": {
+   "tr": "Hakim batı-kuzeybatı rüzgârında adanın sağladığı korunakta demirlenir; doğudaki Küçük Şeytanlı Ada geçidi sığdır, yeterli derinlik Şeytanlı Ada-Büyük Yassıca arasındaki boğazdadır.",
+   "en": "Anchor in the lee the island provides from the prevailing west-northwest wind; the Küçük Şeytanlı passage to the east is shallow, and adequate depth is in the channel between Şeytanlı Island and Büyük Yassıca.",
+   "es": "Fondee al socaire que da la isla frente al viento dominante oeste-noroeste; el paso de Küçük Şeytanlı al este es somero, y la profundidad adecuada está en el canal entre la isla Şeytanlı y Büyük Yassıca.",
+   "ru": "Становитесь под прикрытием острова от господствующего западо-северо-западного ветра; восточный проход Кючюк-Шейтанлы мелкий, достаточные глубины — в проливе между островом Шейтанлы и Бюйюк-Яссыджа."
+  },
+  "alacasu-cennet-koyu": {
+   "tr": "İç koyda 5-10 m derinlikte kum-kaya karışık zemine demirlenir; çapa yerini dikkatle seçin, iç koy rüzgârdan korunaklıyken dışarıda hafif dalga olabilir.",
+   "en": "In the inner cove anchor in 5-10 m on a mixed sand-rock bottom; choose your spot carefully — the inner cove is sheltered from wind while a light swell may run outside.",
+   "es": "En la cala interior fondee en 5-10 m sobre fondo mixto de arena y roca; elija bien el punto: la cala interior está abrigada del viento mientras fuera puede haber marejadilla.",
+   "ru": "Во внутренней бухте становитесь на глубинах 5-10 м на смешанном песчано-каменистом дне; выбирайте место внимательно — внутренняя бухта укрыта от ветра, снаружи возможна лёгкая зыбь."
+  },
+  "andrea-doria-koyu": {
+   "tr": "Finike merkezine yaklaşık 3 km mesafede, karadan erişimi olmayan, dik kayalıklarla çevrili bakir bir koydur; tekne ve yatların uğrak demirleme noktasıdır, Akdeniz foku ve caretta yaşam alanı olduğundan hassas davranın.",
+   "en": "About 3 km from Finike centre, a pristine cove ringed by steep cliffs with no land access; a favourite anchorage for boats and yachts — it is habitat of the Mediterranean monk seal and caretta turtles, so act with care.",
+   "es": "A unos 3 km del centro de Finike, una cala virgen rodeada de acantilados sin acceso por tierra; fondeadero frecuente de barcos y yates; es hábitat de la foca monje y de la tortuga caretta, actúe con cuidado.",
+   "ru": "Примерно в 3 км от центра Финике — нетронутая бухта в крутых скалах без сухопутного доступа; популярная стоянка яхт; здесь обитают тюлень-монах и черепахи каретта — ведите себя бережно."
+  },
+  "asar-aperlai-koyu": {
+   "tr": "Aperlai antik kenti kalıntılarının bulunduğu koy batılı rüzgârlara açıktır; hakim rüzgârda korunaksız kaldığından yalnız uygun havada demirleyin.",
+   "en": "The bay with the ruins of ancient Aperlai is open to westerly winds; it is unprotected in the prevailing wind, so anchor only in suitable weather.",
+   "es": "La bahía con las ruinas de la antigua Aperlai está abierta a los vientos del oeste; queda desprotegida con el viento dominante, fondee solo con buen tiempo.",
+   "ru": "Бухта с руинами древнего Аперлая открыта западным ветрам; при господствующем ветре она не защищена — становитесь только в подходящую погоду."
+  },
+  "asirli-adasi": {
+   "tr": "Aşırlı Adası'nın koruduğu Gökkaya Limanı her türlü havaya kapalıdır; 6-8 m derinlikteki balçık zeminde çapa rahat tutar, en rahat alarga kuzeybatı bölgesidir.",
+   "en": "Gökkaya Harbour, protected by Aşırlı Island, is closed to all weather; the anchor holds easily in the mud bottom in 6-8 m, and the most comfortable spot to lie at anchor is the northwest area.",
+   "es": "El puerto de Gökkaya, protegido por la isla Aşırlı, está cerrado a todo tiempo; el ancla agarra fácil en fondo de fango en 6-8 m, y la zona más cómoda para quedar fondeado es la noroeste.",
+   "ru": "Гавань Гёккая, прикрытая островом Аширлы, закрыта от любой погоды; якорь легко держит в иле на глубинах 6-8 м, спокойнее всего стоять в северо-западной части."
+  },
+  "atbuku-maden-koyu": {
+   "tr": "Karadan ulaşımı çok zor, tesissiz ve ıssız bir koydur; tekneyle ulaşım mümkündür, kıyısı ince çakıl/taşlıktır ve ihtiyaçlarınızı yanınızda getirin.",
+   "en": "A deserted cove with no facilities and very difficult land access; it is reachable by boat, the shore is fine pebble and stone — bring your own supplies.",
+   "es": "Cala desierta sin servicios y de acceso terrestre muy difícil; se llega en barco, la orilla es de piedra y grava fina; lleve sus propias provisiones.",
+   "ru": "Безлюдная бухта без инфраструктуры и с очень трудным сухопутным доступом; добраться можно на лодке, берег из мелкой гальки и камня — припасы берите с собой."
+  },
+  "ayisigi-koyu": {
+   "tr": "Yazın hakim kuzey esintilerinden korunmak için koyun kuzey kıyısına yakın, iyi tutan kum zemine demirlenir (kıyıya yakın eriştelik artar); kuzeyden yaklaşırken yarımadanın döküntüsünden yaklaşık yarım mil açık geçin. Liman başkanlığı talimatına göre koyda demirleme yılda en fazla 15 günle sınırlıdır ve kıyıya/ağaca halat bağlamak yasaktır.",
+   "en": "To shelter from the prevailing northerly breezes in summer, anchor close to the north shore on well-holding sand (weed increases near the shore); approaching from the north, keep about half a mile off the peninsula's debris. By harbourmaster's order, anchoring in the cove is limited to 15 days per year and tying lines ashore or to trees is forbidden.",
+   "es": "Para abrigarse de las brisas del norte en verano, fondee cerca de la costa norte sobre arena de buen agarre (las algas aumentan junto a la orilla); viniendo del norte, pase a media milla de los restos de la península. Por orden de la capitanía, el fondeo en la cala se limita a 15 días al año y está prohibido amarrar cabos a tierra o a los árboles.",
+   "ru": "Чтобы укрыться от летних северных бризов, становитесь ближе к северному берегу на хорошо держащем песке (у берега больше травы); подходя с севера, держитесь примерно в полумиле от каменистой осыпи полуострова. По распоряжению капитанства стоянка в бухте ограничена 15 днями в году, заводить концы на берег и деревья запрещено."
+  },
+  "buzaglik-koyu": {
+   "tr": "Gökkaya Limanı'nın kuzeydoğu kesimindeki bu demirleme alanına yaklaşırken kayalık adacıkların çevresindeki resiflere ve adacık grubunun batısındaki üzerinde 3,5 m su bulunan münferit kayaya dikkat edin; alan küçük adalarla genel olarak korunaklıdır.",
+   "en": "Approaching this anchorage in the northeast part of Gökkaya Harbour, watch the reefs around the rocky islets and the isolated rock with only 3,5 m over it west of the islet group; the area is generally well protected by the small islands.",
+   "es": "Al aproximarse a este fondeadero del noreste del puerto de Gökkaya, vigile los arrecifes alrededor de los islotes rocosos y la roca aislada con solo 3,5 m de agua al oeste del grupo; la zona está en general bien protegida por las islitas.",
+   "ru": "Подходя к этой стоянке в северо-восточной части гавани Гёккая, следите за рифами вокруг скалистых островков и одиночной скалой с глубиной всего 3,5 м к западу от группы; в целом район хорошо прикрыт островками."
+  },
+  "camlik-koyu": {
+   "tr": "Koy 250 m batıya karanın içine girer; girişte su altı kayası gibi bir tehdit yoktur. Koy ortasında 10-15 m derinliğe demirleyip batı yönündeki kıyıdan koltuk halatı alınır; güney kıyısına yakın birkaç su üstü kayası vardır ama manevrayı engellemez.",
+   "en": "The cove runs 250 m west into the land; there is no underwater-rock hazard at the entrance. Anchor in the middle in 10-15 m and take a stern line to the western shore; a few above-water rocks near the south shore do not hinder manoeuvring.",
+   "es": "La cala penetra 250 m hacia el oeste; no hay rocas sumergidas peligrosas en la entrada. Fondee en el centro en 10-15 m y dé un cabo de popa a la costa oeste; unas rocas emergidas junto a la orilla sur no estorban la maniobra.",
+   "ru": "Бухта вдаётся в берег на 250 м к западу; на входе нет опасных подводных камней. Становитесь в середине на 10-15 м и заводите кормовой конец на западный берег; несколько надводных камней у южного берега манёвру не мешают."
+  },
+  "cirali-liman-koyu": {
+   "tr": "Kuzeye açık plaj önü demirlik; yalnız yerleşik havada 5-6 m kumluk zemine demirlenir. Öğleden sonra hakim G-GD rüzgarı soluğan yapabildiğinden sabah ziyareti daha uygundur.",
+   "en": "A beach-front anchorage open to the north; anchor only in settled weather on sand in 5-6 m. The prevailing S-SE wind can raise swell in the afternoon, so a morning visit is preferable.",
+   "es": "Fondeadero frente a la playa abierto al norte; fondee solo con tiempo asentado sobre arena en 5-6 m. El viento dominante S-SE puede levantar marejada por la tarde, la visita matinal es preferible.",
+   "ru": "Открытая к северу стоянка у пляжа; становитесь только в устойчивую погоду на песке в 5-6 м. После полудня господствующий Ю-ЮВ ветер может развести зыбь — лучше приходить утром."
+  },
+  "coban-limani-kumluca": {
+   "tr": "Çam ağaçlarıyla çevrili, denizi duru ve sakin küçük bir koy; tekne turlarının rüzgar durumuna göre doğal liman gibi kullandığı bir duraktır. Zemin kayalık olduğundan yüzerken deniz ayakkabısı önerilir.",
+   "en": "A small cove ringed by pines with clear, calm water; boat tours use it like a natural harbour depending on the wind. The bottom is rocky, so swim shoes are recommended.",
+   "es": "Una pequeña cala rodeada de pinos con agua clara y tranquila; los barcos turísticos la usan como puerto natural según el viento. El fondo es rocoso, se recomiendan escarpines.",
+   "ru": "Маленькая бухта в соснах с прозрачной спокойной водой; экскурсионные лодки используют её как естественную гавань в зависимости от ветра. Дно каменистое — рекомендуется купальная обувь."
+  },
+  "degirmenlik-koyu": {
+   "tr": "Girişte 10 m olan derinlik koyun dibinde 2 m'ye düşer; kıvrılarak içeri giren bölümde 1 m'nin altındadır. İçerisi dar olduğundan tornistanla girip kıyıya 10-15 m mesafede kıçtan kara olmak pratiktir; sakin havalarda gecelenebilir.",
+   "en": "Depth falls from 10 m at the entrance to 2 m at the head, and under 1 m in the winding inner part. As it is narrow inside, entering in reverse and mooring stern-to 10-15 m off the shore is practical; you can stay overnight in calm weather.",
+   "es": "La profundidad baja de 10 m en la entrada a 2 m en el fondo, y a menos de 1 m en la parte interior sinuosa. Al ser estrecha por dentro, es práctico entrar en marcha atrás y amarrar de popa a 10-15 m de la orilla; se puede pernoctar con calma.",
+   "ru": "Глубина падает с 10 м на входе до 2 м в вершине, а в извилистой внутренней части — менее 1 м. Внутри тесно, поэтому удобно заходить задним ходом и становиться кормой в 10-15 м от берега; в тихую погоду можно ночевать."
+  },
+  "fakdere-koyu": {
+   "tr": "Uluburun'u sancağa alarak yaklaşılır ve burunla mesafeye dikkat edilir; girişteki adacık sancağa alınır, adacıkla kara arasındaki kanal geçişe uygun değildir. Koyun içi derindir, kıyılara yaklaştıkça yer yer döküntü vardır.",
+   "en": "Approach keeping Uluburun to starboard and mind your distance from the cape; leave the islet at the entrance to starboard — the channel between the islet and the shore is not passable. The cove is deep inside, with scattered debris as you close the shores.",
+   "es": "Aproxímese dejando Uluburun a estribor y cuide la distancia al cabo; deje el islote de la entrada a estribor: el canal entre el islote y tierra no es practicable. La cala es profunda por dentro, con restos dispersos al acercarse a las orillas.",
+   "ru": "Подходите, оставляя Улубурун справа, и держите дистанцию от мыса; островок на входе оставьте справа — проход между островком и берегом непроходим. Внутри бухта глубока, у берегов местами подводные обломки."
+  },
+  "gokliman-finike": {
+   "tr": "Navily kaydına göre kumluk zeminde demirlemeye izin verilen bir plaj önü demirliktir; kıyıda tekneye hizmet verecek tesis yoktur.",
+   "en": "According to the Navily entry, a beach-front anchorage where anchoring on the sandy bottom is permitted; there are no boat facilities ashore.",
+   "es": "Según la ficha de Navily, un fondeadero frente a la playa donde se permite fondear sobre arena; no hay servicios náuticos en tierra.",
+   "ru": "По данным Navily — стоянка у пляжа, где разрешена постановка на песчаное дно; на берегу нет никакой инфраструктуры для яхт."
+  },
+  "hamidiye-koyu": {
+   "tr": "Köylülerin balıkçı kayıklarını bıraktığı küçük bir koydur; sığ sulara dikkat ederek demirleyip kayalardan koltuk halatı alınabilir. İhtiyaçlar için tekneyle Üçağız'a geçilebilir.",
+   "en": "A small cove where villagers keep their fishing boats; anchor minding the shallows and take a stern line to the rocks. For supplies you can run across to Üçağız by boat.",
+   "es": "Una pequeña cala donde los lugareños dejan sus barcas; fondee atento a los bajos y dé un cabo de popa a las rocas. Para provisiones puede cruzar en barco a Üçağız.",
+   "ru": "Маленькая бухта, где сельчане держат рыбацкие лодки; становитесь, следя за отмелями, и заводите кормовой конец на камни. За припасами можно сходить на лодке в Учагыз."
+  },
+  "ince-burun-koyu": {
+   "tr": "Hakim G-GD rüzgarlarına iyi korunak veren, yalnız doğuya açık küçük bir koy; 5-6 m kuma demirlenir. İçeride yer az olduğundan başka tekneler varsa kıyıya halat almak gerekebilir.",
+   "en": "A small cove giving good shelter from the prevailing S-SE winds and open only to the east; anchor on sand in 5-6 m. Space is limited, so if other boats are in you may need a line ashore.",
+   "es": "Una pequeña cala con buen abrigo de los vientos dominantes S-SE, abierta solo al este; fondee sobre arena en 5-6 m. El espacio es escaso: con otros barcos dentro puede necesitar un cabo a tierra.",
+   "ru": "Небольшая бухта, хорошо укрытая от господствующих Ю-ЮВ ветров и открытая только на восток; становитесь на песке в 5-6 м. Места мало — при других лодках может понадобиться конец на берег."
+  },
+  "kalamar-koyu": {
+   "tr": "Kalkan merkeze bitişik, küçük ve kayalık sakin bir koy; Kalkan tekne turlarının yüzme molası verdiği bir duraktır, kıyısında beach club iskeleleri vardır.",
+   "en": "A small, rocky, calm cove adjoining Kalkan town; a swimming stop for Kalkan boat tours, with beach-club jetties along the shore.",
+   "es": "Una cala pequeña, rocosa y tranquila junto a Kalkan; parada de baño de los barcos turísticos, con muelles de clubes de playa en la orilla.",
+   "ru": "Маленькая скалистая тихая бухта рядом с Калканом; место купания экскурсионных лодок, у берега — причалы пляжных клубов."
+  },
+  "karaoz-koyu": {
+   "tr": "Merkez sahili havaya ve soluğana açık olduğundan günübirlik uygundur; girişte sancak taraftaki Korsan Koyu'nda alargada daha güvenli kalınır. Koyun içindeki girintiyi balıkçılar kullanır.",
+   "en": "The central beach is exposed to weather and swell, so it suits daytime stops; it is safer to lie at anchor in Korsan Cove on the starboard side of the entrance. Fishermen use the inlet inside the cove.",
+   "es": "La playa central está expuesta al tiempo y a la marejada, apta para el día; es más seguro quedar fondeado en la cala Korsan, a estribor de la entrada. Los pescadores usan la ensenada interior.",
+   "ru": "Центральный пляж открыт погоде и зыби — годится для дневной стоянки; безопаснее отстаиваться на рейде бухты Корсан по правую руку от входа. Внутренней бухточкой пользуются рыбаки."
+  },
+  "kisle-bogazi-koyu": {
+   "tr": "Suyu soğuk kaynaklarla beslenen bir Kekova koyudur; yaklaşırken önündeki adanın güneyinden geçilmemelidir.",
+   "en": "A Kekova cove fed by cold springs; on approach, do not pass south of the island in front of it.",
+   "es": "Una cala de Kekova alimentada por manantiales fríos; en la aproximación no pase por el sur de la isla que tiene delante.",
+   "ru": "Бухта Кековы с холодными родниками; на подходе не проходите южнее лежащего перед ней острова."
+  },
+  "korsan-koyu-kumluca": {
+   "tr": "Karaöz girişinde, iki tepe arasına dar bir girinti yapan ve tarih boyunca teknelerin fırtınadan sığındığı doğal liman niteliğinde bir koydur; Gelidonya Feneri yakınındadır ve kıyısında küçük bir mağara vardır.",
+   "en": "At the entrance to Karaöz, a narrow inlet between two hills — a natural harbour where boats have sheltered from storms throughout history; it lies near Gelidonya Lighthouse and has a small cave on its shore.",
+   "es": "En la entrada de Karaöz, una ensenada estrecha entre dos colinas: un puerto natural donde los barcos se han refugiado de las tormentas a lo largo de la historia; está cerca del faro de Gelidonya y tiene una pequeña cueva en la orilla.",
+   "ru": "У входа в Караёз узкая бухта между двумя холмами — естественная гавань, где суда укрывались от штормов во все времена; рядом маяк Гелидонья, на берегу небольшая пещера."
+  },
+  "olimpos-koyu": {
+   "tr": "Açık plaj önü demirlik: 4-12 m kumluk zemin iyi tutar, yavaş yaklaşıp iskandil takip edilmeli. Güney sektörüne açık olduğundan ancak yerleşik kuzey rüzgarı tahmini varken gecelenir.",
+   "en": "An open beach-front anchorage: sand in 4-12 m holds well; approach slowly watching the sounder. It is open to the southern sector, so stay overnight only with a settled northerly forecast.",
+   "es": "Fondeadero abierto frente a la playa: la arena en 4-12 m agarra bien; acérquese despacio vigilando la sonda. Está abierto al sector sur, pernocte solo con pronóstico asentado del norte.",
+   "ru": "Открытая стоянка у пляжа: песок на 4-12 м держит хорошо; подходите медленно, следя за эхолотом. Открыта южному сектору — ночуйте только при устойчивом прогнозе северного ветра."
+  },
+  "papaz-koyu": {
+   "tr": "Karaöz yakınında, kum zeminli ve barınaklı küçük bir aile koyu; Likya Yolu üzerindedir, kıyısında iskele ve basit tesisler vardır.",
+   "en": "Near Karaöz, a small sheltered family cove with a sandy bottom; it lies on the Lycian Way and has a jetty and simple facilities ashore.",
+   "es": "Cerca de Karaöz, una pequeña cala familiar abrigada con fondo de arena; está en el Camino Licio y tiene un muelle e instalaciones sencillas.",
+   "ru": "Возле Караёза маленькая укрытая «семейная» бухта с песчаным дном; лежит на Ликийской тропе, на берегу пристань и простая инфраструктура."
+  },
+  "patara-koyu": {
+   "tr": "Demirleme önerilmez: çok uzun ve sığ bir plaj önüdür, sığlığı nedeniyle çok deniz kaldırır; geçişlerde bile millerce açıktan geçilmesi önerilir.",
+   "en": "Anchoring is not recommended: a very long, shallow beach front that raises a lot of sea due to its shoals; even on passage it is advised to keep miles offshore.",
+   "es": "No se recomienda fondear: un frente de playa muy largo y somero que levanta mucha mar por sus bajos; incluso de paso se aconseja navegar a millas de la costa.",
+   "ru": "Якорная стоянка не рекомендуется: очень длинный мелководный пляж, на отмелях разводит сильную волну; даже транзитом советуют держаться в милях от берега."
+  },
+  "polemos-buku": {
+   "tr": "Çok korunaklı bir koydur; 5-10 m yumuşak çamura demirlenir. Ancak 40 knota ulaşabilen şiddetli hamle rüzgarları (gust) olduğundan demir iyice gömülmeli, taramaya karşı hazırlıklı olunmalıdır.",
+   "en": "A very well protected cove; anchor in 5-10 m in soft mud. However, violent gusts reaching 40 knots occur, so dig the anchor in well and be ready for dragging.",
+   "es": "Una cala muy protegida; fondee en 5-10 m sobre fango blando. Sin embargo se producen rachas violentas de hasta 40 nudos: entierre bien el ancla y esté atento al garreo.",
+   "ru": "Очень защищённая бухта; становитесь на 5-10 м в мягкий ил. Однако случаются шквалы до 40 узлов — хорошо заглубите якорь и будьте готовы к дрейфу."
+  },
+  "suluada-koyu": {
+   "tr": "Karadan ulaşımı olmayan açık deniz adası; Adrasan'dan tekneyle gelinir. Beyaz kumlu iki plajı ve tatlı su kaynağı vardır; kıyı çevresinde kayalık su altı yapıları bulunur.",
+   "en": "An offshore island with no land access, reached by boat from Adrasan; it has two white-sand beaches and a freshwater spring, with rocky underwater structures around the shore.",
+   "es": "Isla sin acceso terrestre a la que se llega en barco desde Adrasan; tiene dos playas de arena blanca y un manantial de agua dulce, con estructuras rocosas sumergidas alrededor.",
+   "ru": "Островок в открытом море без сухопутного доступа; добираются на лодке из Адрасана. Два пляжа с белым песком и источник пресной воды; вокруг берега подводные скалы."
+  },
+  "yaglica-koyu": {
+   "tr": "Kayalık uçurumlarla çevrili, fiyort benzeri dar girişli derin ve küçük bir koy; içeride dönüş alanı kısıtlıdır ve aynı anda ancak birkaç tekne barındırır.",
+   "en": "A deep little cove with a narrow fjord-like entrance ringed by rocky cliffs; turning room inside is limited and it holds only a few boats at a time.",
+   "es": "Una cala pequeña y profunda con entrada estrecha tipo fiordo entre acantilados; el espacio para virar es limitado y solo caben unos pocos barcos a la vez.",
+   "ru": "Глубокая маленькая бухта с узким фьордообразным входом среди скал; места для разворота мало, одновременно помещается лишь несколько лодок."
+  },
+  "bademli-liman": {
+   "tr": "Giriş yaklaşık 2,5 m, liman içi 2-3,5 m kumdur; işaret şamandırasından sonra iskeleye düz gitmek karaya oturtur, limanın kuzeyi çok sığdır. Garip ile Kalem adaları arası geçilmez; geceleri gündoğusu 30-40 knot esebilir, adalar arasında ve liman dışında da demirlenebilir.",
+   "en": "The entrance carries about 2,5 m and the harbour 2-3,5 m over sand; heading straight for the jetty after the marker buoy puts you aground, and the north of the harbour is very shallow. The passage between Garip and Kalem islands is not passable; at night the easterly can blow 30-40 knots, and you can also anchor between the islands or outside the harbour.",
+   "es": "La entrada tiene unos 2,5 m y el puerto 2-3,5 m sobre arena; ir recto al muelle tras la boya de señal hace varar, y el norte del puerto es muy somero. El paso entre las islas Garip y Kalem no es practicable; de noche el viento del este puede soplar 30-40 nudos, y también se puede fondear entre las islas o fuera del puerto.",
+   "ru": "На входе около 2,5 м, в гавани 2-3,5 м, песок; если после буя идти прямо на причал — сядете на мель, север гавани очень мелкий. Проход между островами Гарип и Калем непроходим; ночью восточный ветер может дуть 30-40 узлов, можно также становиться между островами или вне гавани."
+  },
+  "bolme-kormen-island-koyu": {
+   "tr": "Yaklaşırken koy girişinin batı yakasından ve Bölme (Körmen) Adası'nın kuzeyinden uzanan kayalara dikkat edin. Yaklaşık 5 m'de kum-ot zeminde demirlenir; koy boşken 4-5 tekne alır, meltemiden iyi korunur ama güneye açıktır.",
+   "en": "On approach beware the rocks running off the western side of the entrance and off the north of Bölme (Körmen) Island. Anchor in about 5 m on sand and weed; empty, the cove takes 4-5 boats, is well sheltered from the meltemi but open to the south.",
+   "es": "Al aproximarse, atento a las rocas que salen del lado oeste de la entrada y del norte de la isla Bölme (Körmen). Fondee en unos 5 m sobre arena y algas; vacía, la cala admite 4-5 barcos, bien abrigada del meltemi pero abierta al sur.",
+   "ru": "На подходе остерегайтесь камней у западной стороны входа и к северу от острова Бёльме (Кёрмен). Становитесь примерно на 5 м на песке с травой; пустая бухта вмещает 4-5 лодок, хорошо укрыта от мельтеми, но открыта на юг."
+  },
+  "buyuk-saip-ada-koyu": {
+   "tr": "Büyük Sahip (Saip) Adası'nın güneyinde demirlenir; bu demirleme alanı doğuya açıktır. Ada çevresinde deniz derin ve temizdir.",
+   "en": "Anchor south of Büyük Sahip (Saip) Island; this anchorage is open to the east. The sea around the island is deep and clean.",
+   "es": "Fondee al sur de la isla Büyük Sahip (Saip); este fondeadero está abierto al este. El mar alrededor de la isla es profundo y limpio.",
+   "ru": "Становитесь к югу от острова Бюйюк-Сахип (Саип); эта стоянка открыта на восток. Море вокруг острова глубокое и чистое."
+  },
+  "camcagiz-limani": {
+   "tr": "Sığacık Limanı'na en yakın demirlik; iyi hava demirliğidir ve doğu rüzgarlarına karşı savunmasızdır. Doğudaki 'Minaret Rocks' denilen kayalık falezlere dikkat ederek kumda salınarak demirlenir.",
+   "en": "The closest anchorage to Sığacık Harbour; a fair-weather anchorage exposed to easterly winds. Anchor free-swinging on sand, minding the rocky cliffs to the east known as the Minaret Rocks.",
+   "es": "El fondeadero más cercano al puerto de Sığacık; de buen tiempo y expuesto a los vientos del este. Fondee a la gira sobre arena, atento a los farallones del este llamados Minaret Rocks.",
+   "ru": "Ближайшая к гавани Сыгаджик стоянка; годится в хорошую погоду, открыта восточным ветрам. Становитесь свободно на песке, остерегаясь скал «Minaret Rocks» с востока."
+  },
+  "denizkoy-koyu": {
+   "tr": "Körfezin kuzeybatı köşesi kuzeyli rüzgarlarda iyi korunak verir; 2-7 m ot-kum zeminde demirlenir. Hakim batı rüzgarları içeri dalga sokar, kuzeyliler dağlardan daha sert eser; yerel teknelerin bağlama şamandıralarına dikkat.",
+   "en": "The northwest corner of the gulf gives good shelter in northerlies; anchor in 2-7 m on weed and sand. Prevailing westerlies send waves in and northerlies blow harder off the mountains; mind the local boats' mooring buoys.",
+   "es": "El rincón noroeste del golfo abriga bien con vientos del norte; fondee en 2-7 m sobre algas y arena. Los oestes dominantes meten ola y los nortes bajan más fuertes de las montañas; atento a las boyas de amarre locales.",
+   "ru": "Северо-западный угол залива хорошо укрывает при северных ветрах; становитесь на 2-7 м на траве и песке. Западные ветры заводят волну, северные срываются с гор сильнее; берегитесь местных швартовных буёв."
+  },
+  "denizyildizi-bodrum-koyu": {
+   "tr": "Kuzeye doğru giren, batı ucunda küçük bir bükü olan koy; 4-5 m'de kum ağırlıklı zeminde demirlenir. Güneyli rüzgarlar dışında güvenli bir demirliktir; batı büküsünde beach club iskelesi vardır.",
+   "en": "A cove running north with a small bight at its western end; anchor in 4-5 m on a mostly sand bottom. It is a safe anchorage except in southerlies; there is a beach-club jetty in the western bight.",
+   "es": "Una cala que penetra hacia el norte con una pequeña ensenada en su extremo oeste; fondee en 4-5 m sobre fondo mayormente de arena. Es segura salvo con vientos del sur; hay un muelle de beach club en la ensenada oeste.",
+   "ru": "Бухта, вдающаяся к северу, с маленьким заливчиком у западного края; становитесь на 4-5 м на преимущественно песчаном дне. Стоянка безопасна, кроме южных ветров; в западном заливчике причал пляжного клуба."
+  },
+  "garip-adasi-demirleme": {
+   "tr": "Bademli Limanı içinde, Garip ile Kalem adacıkları arasında 2-4 m kum zeminde demirlenir; sound her yönden korunaklıdır. Kuzey girişte resif ve sığlık, güney girişte burundan ~70 m uzanan resif vardır; kuzeyli kuvvetli havada akşamları doğudan 20-25 kt hamleler gelir.",
+   "en": "Inside Bademli Harbour, anchor between the Garip and Kalem islets in 2-4 m on sand; the sound is sheltered from all directions. There are reefs and shallows at the northern entrance and a reef running about 70 m off the point at the southern entrance; in strong northerlies gusts of 20-25 kt come from the east in the evenings.",
+   "es": "Dentro del puerto de Bademli, fondee entre los islotes Garip y Kalem en 2-4 m sobre arena; el paso está abrigado de todas las direcciones. Hay arrecifes y bajos en la entrada norte y un arrecife que sale unos 70 m de la punta en la entrada sur; con nortes fuertes llegan rachas de 20-25 kt del este por la tarde.",
+   "ru": "Внутри гавани Бадемли становитесь между островками Гарип и Калем на 2-4 м на песке; плёс укрыт со всех сторон. У северного входа рифы и отмели, у южного — риф, отходящий примерно на 70 м от мыса; при сильных северных ветрах вечерами с востока приходят шквалы 20-25 узлов."
+  },
+  "gevil-koyu": {
+   "tr": "Küçük Gevil dar bir koydur; 4-5 m kum-ot zeminde demirleyip gece kalışlarda mutlaka kıçtan karaya halat verin. İyi korunak sağlar ancak kuzeyli ve güneyli rüzgarlara açıktır; girişte iskele tarafında mağaralar görülür.",
+   "en": "Küçük Gevil is a narrow cove; anchor in 4-5 m on sand and weed and always take a stern line ashore for overnight stays. It shelters well but is open to northerly and southerly winds; caves are seen on the starboard side at the entrance.",
+   "es": "Küçük Gevil es una cala estrecha; fondee en 4-5 m sobre arena y algas y dé siempre un cabo de popa a tierra para pernoctar. Abriga bien pero está abierta a vientos del norte y del sur; se ven cuevas a estribor en la entrada.",
+   "ru": "Кючюк-Гевиль — узкая бухта; становитесь на 4-5 м на песке с травой и на ночь обязательно заводите кормовой конец на берег. Укрытие хорошее, но бухта открыта северным и южным ветрам; на входе по правому борту видны пещеры."
+  },
+  "hayitli-koyu": {
+   "tr": "Antik çağda liman olarak kullanılmış, fırtınalı günlerde gemilerin sığındığı bir koydur; önünde uzun kumsal ve tatil siteleri bulunur.",
+   "en": "A cove used as a harbour in antiquity where ships sheltered on stormy days; a long sandy beach and holiday estates lie along its front.",
+   "es": "Una cala usada como puerto en la antigüedad donde los barcos se refugiaban en días de tormenta; delante hay una playa larga de arena y urbanizaciones de veraneo.",
+   "ru": "Бухта, служившая гаванью в античности, где суда укрывались в шторм; вдоль берега длинный песчаный пляж и дачные посёлки."
+  },
+  "kara-ada-koyu": {
+   "tr": "Ada çevresinde çok sayıda resif vardır, dikkatli yaklaşın. Güneydeki üç koydan ortadaki en iyi korunağı verir; 3-10 m kum-ot zeminde demirlenir, kuvvetli kuzeylide karaya halat verin; koylar güneye açıktır ve gündüz gezi/dalış tekneleri yoğundur.",
+   "en": "There are many reefs around the island — approach carefully. Of the three southern coves the middle one shelters best; anchor in 3-10 m on sand and weed, take a line ashore in strong northerlies. The coves are open south and day-tripper/diving boats are busy in daytime.",
+   "es": "Hay muchos arrecifes alrededor de la isla: acérquese con cuidado. De las tres calas del sur, la central abriga mejor; fondee en 3-10 m sobre arena y algas, dé un cabo a tierra con norte fuerte. Las calas están abiertas al sur y de día abundan los barcos de excursión y buceo.",
+   "ru": "Вокруг острова много рифов — подходите осторожно. Из трёх южных бухт лучшая защита в средней; становитесь на 3-10 м на песке с травой, при сильном северном ветре заводите конец на берег. Бухты открыты на юг, днём много экскурсионных и дайв-ботов."
+  },
+  "karareis-koyu": {
+   "tr": "Koyu paralel kapatan burun sayesinde yazın deniz genellikle dalgasızdır; zaman zaman esen lodos kısa süreli deniz yapar. Kıyıdan kısa mesafede derinlik hızla artar.",
+   "en": "Thanks to the point closing the cove off in parallel, the sea inside is usually flat in summer; an occasional lodos raises a short-lived sea. Depth increases quickly a short way off the shore.",
+   "es": "Gracias a la punta que cierra la cala en paralelo, el mar interior suele estar llano en verano; un lodos ocasional levanta mar de corta duración. La profundidad aumenta rápido a poca distancia de la orilla.",
+   "ru": "Благодаря мысу, параллельно закрывающему бухту, летом внутри обычно гладко; изредка лодос ненадолго разводит волну. Недалеко от берега глубина быстро растёт."
+  },
+  "kargacik-koyu": {
+   "tr": "Kıyıya olabildiğince sokulun; ot zemin yaklaşık 5 m'de kuma döner. Kum serttir, demirin tutması birkaç deneme gerektirebilir; kuzeyli meltemiden ve batı dalgasından korunur ama güneye açıktır.",
+   "en": "Tuck in as close to the shore as you can; the weed bottom turns to sand at about 5 m. The sand is hard and the anchor may need a few tries to set; sheltered from the northerly meltemi and westerly swell but open to the south.",
+   "es": "Arrímese a la costa cuanto pueda; el fondo de algas pasa a arena hacia los 5 m. La arena es dura y el ancla puede requerir varios intentos; abrigada del meltemi del norte y de la marejada del oeste, pero abierta al sur.",
+   "ru": "Подходите как можно ближе к берегу; травяное дно сменяется песком примерно на 5 м. Песок плотный, якорь может забрать не с первой попытки; укрыто от северного мельтеми и западной зыби, но открыто на юг."
+  },
+  "klaros-denizpinari-koyu": {
+   "tr": "Derin bir koydur; kıyıdan kısa mesafe sonra derinlik hızla artar. Yatların dinlenme molası için kullandığı bir noktadır; antik Klaros Apollon Tapınağı yakındadır.",
+   "en": "A deep cove; depth increases quickly a short distance off the shore. A resting stop for yachts, near the ancient Temple of Apollo at Klaros.",
+   "es": "Una cala profunda; la profundidad aumenta rápido a poca distancia de la orilla. Parada de descanso para yates, cerca del antiguo templo de Apolo en Klaros.",
+   "ru": "Глубокая бухта; глубина быстро растёт недалеко от берега. Место отдыха яхт рядом с древним храмом Аполлона в Кларосе."
+  },
+  "maydanoz-koyu": {
+   "tr": "Kıyıya sokularak demirleyin; ot zemin yaklaşık 5 m'de kuma döner, kum sert olduğundan demir birkaç denemede tutabilir. Kuzeyli meltemiden ve batı dalgasından korunaklı, güneye açıktır (Navily de zemini kum olarak doğrular).",
+   "en": "Anchor tucked close to the shore; the weed bottom turns to sand at about 5 m, and as the sand is hard the anchor may take a few tries (Navily also confirms the sand bottom). Sheltered from the northerly meltemi and westerly swell, open to the south.",
+   "es": "Fondee arrimado a la costa; el fondo de algas pasa a arena hacia los 5 m y, al ser dura, el ancla puede requerir varios intentos (Navily también confirma la arena). Abrigada del meltemi del norte y la marejada del oeste, abierta al sur.",
+   "ru": "Становитесь ближе к берегу; трава сменяется песком примерно на 5 м, песок плотный — якорь может забрать не сразу (Navily также подтверждает песчаное дно). Укрыто от северного мельтеми и западной зыби, открыто на юг."
+  },
+  "notion-koyu": {
+   "tr": "Kıyıya olabildiğince sokulup yaklaşık 5 m'de, otun kuma döndüğü sert zemine demirlenir; sert kumda çapa zor tutar, birkaç deneme gerekebilir. Kuzey meltemisine ve batı dalgasına korunaklı, güneye açıktır.",
+   "en": "Tuck close in and anchor at about 5 m where the weed gives way to hard sand; the anchor sets with difficulty in the hard sand and may need several tries. Sheltered from the northern meltemi and westerly swell, open to the south.",
+   "es": "Arrímese y fondee hacia los 5 m donde las algas dan paso a arena dura; el ancla agarra con dificultad y puede requerir varios intentos. Abrigada del meltemi del norte y de la marejada del oeste, abierta al sur.",
+   "ru": "Подойдите ближе и становитесь примерно на 5 м, где трава сменяется плотным песком; якорь забирает с трудом, может понадобиться несколько попыток. Укрыто от северного мельтеми и западной зыби, открыто на юг."
+  },
+  "pasa-limani": {
+   "tr": "Çok sığ bir kumsal koyudur; kıyıdan 100-150 m açıkta bile su bel hizasını geçmez ve girişte kayalıklar vardır. Koy zaman zaman hayli dalgalı olabilir; demirleme için sığlığa dikkat edilmelidir.",
+   "en": "A very shallow beach cove; even 100-150 m off the shore the water is barely waist-deep and there are rocks at the entrance. The cove can get quite choppy at times; mind the shallows when anchoring.",
+   "es": "Una cala de playa muy somera; incluso a 100-150 m de la orilla el agua apenas llega a la cintura y hay rocas en la entrada. A veces se pone bastante agitada; vigile los bajos al fondear.",
+   "ru": "Очень мелкая пляжная бухта; даже в 100-150 м от берега вода едва по пояс, на входе камни. Временами бывает изрядная волна; при постановке следите за отмелями."
+  },
+  "pissa-koyu-demirleme": {
+   "tr": "Dikili-Bademli kıyısında, tesisi olmayan ıssız bir kumsal koydur; uzun kumlu sahilin önünde demirlenir. En yakın liman olanakları yaklaşık 1 km mesafedeki Bademli'dedir.",
+   "en": "On the Dikili–Bademli shore, a deserted sandy cove with no facilities; anchor off the long sandy beach. The nearest harbour facilities are at Bademli, about 1 km away.",
+   "es": "En la costa Dikili–Bademli, una cala arenosa desierta y sin servicios; fondee frente a la larga playa. Los servicios portuarios más cercanos están en Bademli, a 1 km.",
+   "ru": "На берегу Дикили–Бадемли пустынная песчаная бухта без инфраструктуры; становитесь напротив длинного пляжа. Ближайшие портовые услуги — в Бадемли, примерно в 1 км."
+  },
+  "sicaksu-koyu": {
+   "tr": "Bölme (Körmen) Adası'nın arkasına, 5 m kum-ot zemine demirlenir; adanın batı girişinden ve kuzeyinden denize uzanan kayalara dikkat edilmelidir. Meltemiye karşı korunak iyidir, koy güneye açıktır.",
+   "en": "Anchor behind Bölme (Körmen) Island in 5 m on sand and weed; beware the rocks running seaward from the island's western entrance and its north. Shelter from the meltemi is good; the cove is open to the south.",
+   "es": "Fondee tras la isla Bölme (Körmen) en 5 m sobre arena y algas; atento a las rocas que salen al mar desde la entrada oeste y el norte de la isla. El abrigo del meltemi es bueno; la cala está abierta al sur.",
+   "ru": "Становитесь за островом Бёльме (Кёрмен) на 5 м на песке с травой; берегитесь камней, уходящих в море от западного входа и с севера острова. От мельтеми укрытие хорошее; бухта открыта на юг."
+  },
+  "urkmez-koyu": {
+   "tr": "Antik Lebedos yerleşiminin bulunduğu Kısık Yarımadası'nın (175 m uzunluk, 61 m yükseklik) yanında, çamlık tepelerle çevrili bir demirleme yeridir; kaynakta zemin ve derinlik bilgisi verilmemektedir.",
+   "en": "An anchorage beside the Kısık Peninsula (175 m long, 61 m high), site of ancient Lebedos, ringed by pine-clad hills; the source gives no bottom or depth information.",
+   "es": "Fondeadero junto a la península de Kısık (175 m de largo, 61 m de alto), solar de la antigua Lebedos, entre colinas de pinos; la fuente no da datos de fondo ni de profundidad.",
+   "ru": "Стоянка у полуострова Кысык (длина 175 м, высота 61 м), места древнего Лебедоса, среди сосновых холмов; источник не сообщает грунт и глубины."
+  },
+  "sedef-koyu": {
+   "tr": "Didim Mavişehir'de sakin bir koy demirlemesidir; kaynak koyu dinlenilecek sakin mavi bir lagün olarak tanımlar, zemin ve derinlik bilgisi vermez.",
+   "en": "A calm cove anchorage at Didim Mavişehir; the source describes it as a quiet blue lagoon for resting and gives no bottom or depth information.",
+   "es": "Un fondeadero tranquilo en Didim Mavişehir; la fuente lo describe como una laguna azul y serena para descansar, sin datos de fondo ni de profundidad.",
+   "ru": "Тихая якорная стоянка в Дидим-Мавишехире; источник описывает её как спокойную голубую лагуну для отдыха, не сообщая грунт и глубины."
+  },
+  "zeytineli-koyu-demirleme": {
+   "tr": "Sakız Boğazı ile Sığacık arasındaki ıssız kıyıda demirleme; zemin kum ve deniz çayırı karışımıdır, ot yamalarında çapanın tutuşunu kontrol edin. Kıyıda tesis yoktur, plaja botla çıkılabilir.",
+   "en": "An anchorage on the deserted shore between the Chios Strait and Sığacık; the bottom is a mix of sand and seagrass, so check the anchor's set in the weed patches. There are no facilities ashore; you can land on the beach by dinghy.",
+   "es": "Fondeadero en la costa solitaria entre el estrecho de Quíos y Sığacık; el fondo es mezcla de arena y posidonia, compruebe el agarre en las manchas de algas. No hay servicios en tierra; se puede desembarcar en la playa con el anexo.",
+   "ru": "Стоянка на пустынном берегу между проливом Хиос и Сыгаджиком; дно — смесь песка и морской травы, в травяных пятнах проверяйте, забрал ли якорь. На берегу ничего нет; на пляж можно высадиться на тузике."
+  },
+  "altinkum-koyu": {
+   "tr": "Koyun kuzeybatı köşesinde 3-4 m kuma demirlenir; tutuş ve meltemi korunağı iyidir. Kasaba geceleri gürültülü olabileceğinden plajdan uzağa demirlemek önerilir.",
+   "en": "Anchor in the northwest corner of the bay in 3-4 m on sand; holding and shelter from the meltemi are good. The town can be noisy at night, so anchoring away from the beach is advised.",
+   "es": "Fondee en el rincón noroeste de la bahía en 3-4 m sobre arena; el agarre y el abrigo del meltemi son buenos. El pueblo puede ser ruidoso de noche, se aconseja fondear lejos de la playa.",
+   "ru": "Становитесь в северо-западном углу бухты на 3-4 м на песке; держит и укрывает от мельтеми хорошо. Ночью городок бывает шумным — лучше становиться подальше от пляжа."
+  },
+  "cam-limani-kusadasi": {
+   "tr": "Kuşadası Körfezi'nin kuzeyinde, Sünger Burnu'nun doğusundaki küçük koyda 3-8 m'ye, ot zemine demirlenir; emniyet için karaya halat verilmesi önerilir. Batı rüzgarlarına korunaklı, güneydoğuya açıktır.",
+   "en": "In the small cove east of Sünger Point in the north of Kuşadası Gulf, anchor in 3-8 m on a weed bottom; taking a line ashore is recommended for safety. Sheltered from westerlies, open to the southeast.",
+   "es": "En la pequeña cala al este de la punta Sünger, al norte del golfo de Kuşadası, fondee en 3-8 m sobre fondo de algas; por seguridad se recomienda dar un cabo a tierra. Abrigada de los oestes, abierta al sureste.",
+   "ru": "В маленькой бухте к востоку от мыса Сюнгер на севере залива Кушадасы становитесь на 3-8 м на травяном дне; для надёжности заведите конец на берег. Укрыта от западных ветров, открыта на юго-восток."
+  },
+  "cukurcuk-limani": {
+   "tr": "Doğu ve batı olmak üzere iki koluna 2-4 m'ye demirlenir; hakim kuzeylilere karşı korunak oldukça iyidir ancak burnu dolanan hafif soluğan koya girebilir.",
+   "en": "Anchor in 2-4 m in either the eastern or western arm; shelter from the prevailing northerlies is quite good, though a slight swell rounding the point may enter the cove.",
+   "es": "Fondee en 2-4 m en el brazo este u oeste; el abrigo de los nortes dominantes es bastante bueno, aunque puede entrar una marejadilla que dobla la punta.",
+   "ru": "Становитесь на 2-4 м в восточном или западном рукаве; от господствующих северных ветров укрытие довольно хорошее, хотя лёгкая зыбь, огибая мыс, может заходить в бухту."
+  },
+  "sandal-islet-koyu": {
+   "tr": "Sandal Adası'nın yaklaşık yarım mil doğusundaki koyda 3-5 m kum-ot zemine demirlenir; kuzey tarafı sığdır ve manevra alanı dardır. Çapanın iyi gömüldüğünden emin olup karaya halat verin; Dilek Boğazı geçişinde mola demirlemesi olarak kullanılır.",
+   "en": "In the cove about half a mile east of Sandal Island anchor in 3-5 m on sand and weed; the north side is shallow and manoeuvring room is tight. Make sure the anchor is well dug in and take a line ashore; it serves as a rest stop for the Dilek Strait passage.",
+   "es": "En la cala a media milla al este de la isla Sandal fondee en 3-5 m sobre arena y algas; el lado norte es somero y el espacio de maniobra escaso. Asegúrese de que el ancla esté bien enterrada y dé un cabo a tierra; sirve de parada en el paso del estrecho de Dilek.",
+   "ru": "В бухте примерно в полумиле к востоку от острова Сандал становитесь на 3-5 м на песке с травой; северная сторона мелкая, места для манёвра мало. Убедитесь, что якорь хорошо заглубился, и заведите конец на берег; стоянка служит привалом на переходе через пролив Дилек."
+  },
+  "su-island-koyu": {
+   "tr": "Koya tek giriş Tavşan Adası'nın güneyinden yapılır; ada çevresi kayalık resiflidir. Su Adası ile kara arasında 7-9 m'de ot zemine demirlenir, kıyıya doğru yavaşça sığlaşır; kuvvetli rüzgarda koya soluğan girdiğinden çapanın iyi gömüldüğünden emin olun.",
+   "en": "The only entrance is from the south of Tavşan Island, as the islands are ringed by rocky reefs. Anchor between Su Island and the mainland in 7-9 m on weed — it shoals gently towards the shore; in strong wind swell enters the cove, so make sure the anchor is well dug in.",
+   "es": "La única entrada es por el sur de la isla Tavşan, pues las islas están rodeadas de arrecifes. Fondee entre la isla Su y tierra firme en 7-9 m sobre algas — el fondo sube suave hacia la costa; con viento fuerte entra marejada, asegúrese de que el ancla esté bien enterrada.",
+   "ru": "Единственный вход — с юга острова Тавшан: вокруг островов скалистые рифы. Становитесь между островом Су и материком на 7-9 м на траве — к берегу плавно мелеет; при сильном ветре в бухту заходит зыбь, убедитесь, что якорь хорошо забрал."
+  },
+  "sapli-island-koyu": {
+   "tr": "Akbük yakınındaki Saplı Ada koyunda kum zemine demirlenir; demirleme serbesttir ve koyda iskele mevcuttur, tatlı su yoktur. Adayı karaya bağlayan sığ kumsal dile dikkat edilmelidir.",
+   "en": "In the Saplı Island cove near Akbük anchor on sand; anchoring is free and there is a jetty in the cove but no fresh water. Mind the shallow sand spit joining the island to the shore.",
+   "es": "En la cala de la isla Saplı, cerca de Akbük, fondee sobre arena; el fondeo es libre y hay un muelle en la cala, pero no hay agua dulce. Atento a la lengua de arena somera que une la isla con tierra.",
+   "ru": "В бухте острова Саплы возле Акбюка становитесь на песок; стоянка свободная, в бухте есть причал, пресной воды нет. Остерегайтесь мелкой песчаной косы, соединяющей остров с берегом."
+  },
+  "camlik-koyu-demirleme-ayvalik": {
+   "tr": "Çanak Tepe'nin altındaki çarpıcı koyda demirlenir; güneyden esen rüzgar dışında her yönden iyi korunak sağlar.",
+   "en": "Anchor in the striking cove below Çanak Hill; it gives good shelter from every direction except winds from the south.",
+   "es": "Fondee en la llamativa cala bajo la colina Çanak; ofrece buen abrigo de todas las direcciones salvo de los vientos del sur.",
+   "ru": "Становитесь в живописной бухте под холмом Чанак; она хорошо укрывает со всех сторон, кроме южных ветров."
+  },
+  "ortunc-koyu": {
+   "tr": "Alibey (Cunda) Adası'nın güneybatısında, Sivribe Burnu ile Pınar Boğazı arasındaki geniş koyda 3-10 m ot zemine demirlenir; çapanın iyi tuttuğundan emin olun, gecelemede güney kıyıdan karaya halat verin. Kuzeylilere yeterli korunak sağlar, batı rüzgarında koya soluğan girer.",
+   "en": "In the wide cove on the southwest of Alibey (Cunda) Island, between Sivribe Point and the Pınar Strait, anchor in 3-10 m on weed; make sure the anchor holds and run a line to the southern shore for overnight stays. It shelters adequately from northerlies; westerly wind sends swell in.",
+   "es": "En la cala amplia del suroeste de la isla Alibey (Cunda), entre la punta Sivribe y el paso Pınar, fondee en 3-10 m sobre algas; asegure el agarre y dé un cabo a la costa sur para pernoctar. Abriga bien de los nortes; con oeste entra marejada.",
+   "ru": "В широкой бухте на юго-западе острова Алибей (Джунда), между мысом Сиврибе и проливом Пынар, становитесь на 3-10 м на траве; убедитесь, что якорь держит, на ночь заведите конец на южный берег. От северных ветров укрывает достаточно; при западном заходит зыбь."
+  },
+  "pasa-koyu": {
+   "tr": "Ayvalık Çamlık'taki koy, kıyıya doğru uzak mesafeden itibaren yavaşça sığlaşır; koy ortasında yaklaşık 4 m su vardır ve plaj önünde demirlenir.",
+   "en": "The cove at Ayvalık Çamlık shoals gently from well offshore; there is about 4 m in the middle and you anchor off the beach.",
+   "es": "La cala de Ayvalık Çamlık pierde fondo suavemente desde lejos de la orilla; hay unos 4 m en el centro y se fondea frente a la playa.",
+   "ru": "Бухта в Айвалык-Чамлыке плавно мелеет издалека; в середине около 4 м, становятся напротив пляжа."
+  },
+  "patrica-koyu": {
+   "tr": "Alibey (Cunda) Adası'nın kuzeydoğusundaki geniş koyda 3-4 m'ye demirlenip salınılır; koy hemen her yönden korunak sağlar, yalnız güneydoğuya açıktır. Güvercin Adası'ndaki kalıntılar uzaktan seçilen iyi bir nirengidir.",
+   "en": "In the wide cove on the northeast of Alibey (Cunda) Island anchor in 3-4 m and swing free; the cove shelters from almost every direction and is open only to the southeast. The ruins on Güvercin Island make a good landmark from afar.",
+   "es": "En la cala amplia del noreste de la isla Alibey (Cunda) fondee en 3-4 m a la gira; abriga de casi todas las direcciones y solo está abierta al sureste. Las ruinas de la isla Güvercin son buena referencia desde lejos.",
+   "ru": "В широкой бухте на северо-востоке острова Алибей (Джунда) становитесь на 3-4 м свободно; бухта укрыта почти со всех сторон, открыта только на юго-восток. Руины на острове Гюверджин — хороший ориентир издалека."
+  },
+  "tuzla-koyu-pasalimani-demirlemesi": {
+   "tr": "Paşalimanı Adası'ndaki küçük bir köy limanıdır; kıyıda köy iskelesi bulunur, dalış noktası olarak da bilinir. Kaynakta demirleme derinliği ve zemin bilgisi verilmemiştir.",
+   "en": "A small village harbour on Paşalimanı Island; there is a village jetty ashore and it is also known as a diving spot. The source gives no anchoring depth or bottom information.",
+   "es": "Un pequeño puerto de aldea en la isla Paşalimanı; hay un muelle del pueblo y también se conoce como punto de buceo. La fuente no indica profundidad ni tipo de fondo.",
+   "ru": "Маленькая деревенская гавань на острове Пашалиманы; на берегу деревенский причал, место известно и как точка дайвинга. Источник не сообщает глубину и грунт."
+  },
+  "akkum-koyu": {
+   "tr": "Plaj önünde demirlemeye izinli bir demirlik; dip kum, kaya ve deniz çayırı karışımı olduğundan demirin tuttuğundan emin olunmalıdır.",
+   "en": "An anchorage off the beach where anchoring is permitted; the bottom is a mix of sand, rock and seagrass, so make sure the anchor has set.",
+   "es": "Fondeadero frente a la playa donde se permite fondear; el fondo es mezcla de arena, roca y posidonia, asegúrese de que el ancla haya agarrado.",
+   "ru": "Разрешённая стоянка у пляжа; дно — смесь песка, камня и морской травы, убедитесь, что якорь забрал."
+  },
+  "akyar-koyu": {
+   "tr": "Koy lodos-poyraz doğrultusunda uzanır; poyraz köşesi bolca solugan alır, kıçtan kara bağlanmak için lodos köşesi daha elverişlidir. Girişin iki yanı da rahat ve derin sudur; dip kıyılara doğru iri kayalık, demir alanı kumdur.",
+   "en": "The cove runs on a SW-NE axis; the poyraz corner takes plenty of swell, and the lodos corner is better for mooring stern-to. Both sides of the entrance are deep and clear; the bottom turns to large rocks towards the shores while the anchoring ground is sand.",
+   "es": "La cala corre en eje SO-NE; el rincón del poyraz recibe mucha marejada y el del lodos es mejor para amarrar de popa. Ambos lados de la entrada son profundos y limpios; el fondo pasa a rocas grandes hacia las orillas y la zona de fondeo es de arena.",
+   "ru": "Бухта вытянута по оси ЮЗ-СВ; «пойразный» угол сильно принимает зыбь, для стоянки кормой удобнее «лодосный» угол. Оба края входа глубокие и чистые; к берегам дно переходит в крупные камни, якорное место — песок."
+  },
+  "barbaros-koyu": {
+   "tr": "Girişte güney tarafına daha yakın bir batık kaya vardır; girişin iki yanında da yeterli derinlik bulunur. Kumsala fazla sokulmadan 6-7 metre derinlikte alargada demirlenir; kuzey ve güney yakaları kayalık, doğu ucundaki demir yeri kum ve küçük çakıldır.",
+   "en": "There is a sunken rock at the entrance closer to the south side; both sides of the entrance carry enough depth. Anchor off in 6-7 metres without closing the beach too much; the north and south shores are rocky and the anchoring spot at the east end is sand and small pebble.",
+   "es": "Hay una roca sumergida en la entrada, más cerca del lado sur; ambos lados tienen fondo suficiente. Fondee a la gira en 6-7 metros sin arrimarse mucho a la playa; las orillas norte y sur son rocosas y el punto de fondeo del extremo este es de arena y guijarro fino.",
+   "ru": "На входе, ближе к южной стороне, есть затопленная скала; по обеим сторонам входа глубины достаточны. Становитесь на рейде в 6-7 метрах, не прижимаясь к пляжу; северный и южный берега скалисты, якорное место у восточного края — песок с мелкой галькой."
+  },
+  "bogsak-koyu": {
+   "tr": "Boğsak Adası ile anakara arasındaki geçitten ortalayarak girilir, derinlik sorunu yoktur; 8-10 metre kumluk dibe demirlenir. Doğulu havada dalga oluşursa adanın rüzgâraltına kaçılabilir.",
+   "en": "Enter through the middle of the passage between Boğsak Island and the mainland — there is no depth problem; anchor in 8-10 metres on a sandy bottom. If an easterly raises waves you can shift to the island's lee.",
+   "es": "Entre por el centro del paso entre la isla Boğsak y tierra firme, sin problema de fondo; fondee en 8-10 metros sobre arena. Si el este levanta ola, puede pasar al socaire de la isla.",
+   "ru": "Заходите серединой пролива между островом Богсак и материком — глубин достаточно; становитесь на 8-10 метров на песчаном дне. Если восточный ветер разведёт волну, можно уйти под остров."
+  },
+  "dana-adasi": {
+   "tr": "Ada ile anakara arasındaki geçit (Kargıcak Boğazı) Kıbrıs feribotları ve küçük tekneler tarafından kullanılır; adanın kuzey kıyısı önündeki dip kumluktur. Antik çağda da fırtınada sığınılan bir demirlik olarak kayıtlıdır.",
+   "en": "The passage between the island and the mainland (Kargıcak Strait) is used by the Cyprus ferries and small craft; the bottom off the island's north shore is sand. It is recorded since antiquity as an anchorage for sheltering from storms.",
+   "es": "El paso entre la isla y tierra (estrecho de Kargıcak) lo usan los ferris de Chipre y embarcaciones menores; el fondo frente a la costa norte de la isla es de arena. Consta desde la antigüedad como fondeadero de refugio en tormentas.",
+   "ru": "Проливом между островом и материком (пролив Каргыджак) пользуются кипрские паромы и малые суда; дно у северного берега острова песчаное. Ещё с античности известен как штормовое укрытие."
+  },
+  "kizkalesi-koyu": {
+   "tr": "Adanın güneybatısında eski liman yapısına ait döküntüler vardır, dikkatle geçilmelidir; kıyıdan adaya kuzeydoğu doğrultusunda uzanan sualtı aydınlatma kabloları demirlerken gözetilmelidir. Sürekli solugan aldığından gece demirlemesi önerilmez.",
+   "en": "Southwest of the island there is debris from the old harbour works — pass with care; underwater lighting cables run NE from the shore to the island, mind them when anchoring. As constant swell comes in, overnight anchoring is not recommended.",
+   "es": "Al suroeste de la isla hay restos del antiguo puerto: pase con cuidado; cables submarinos de iluminación van del NE de la costa a la isla, téngalos en cuenta al fondear. Como entra marejada constante, no se recomienda pernoctar.",
+   "ru": "К юго-западу от острова — обломки древних портовых сооружений, проходите осторожно; с берега к острову в направлении СВ идут подводные кабели подсветки — учитывайте их при постановке. Из-за постоянной зыби ночная стоянка не рекомендуется."
+  },
+  "kizlarhamami-koyu": {
+   "tr": "Yöre halkının Kızlarhamamı dediği Akyar Bükü lodos-poyraz doğrultusundadır; poyraz köşesi bolca solugan alır, kıçtan kara için lodos köşesi elverişlidir. Giriş derin ve rahattır; dip kıyıya doğru iri kayalık, demir alanı kumdur.",
+   "en": "Akyar Bight, locally called Kızlarhamamı, runs on a SW-NE axis; the poyraz corner takes plenty of swell and the lodos corner suits mooring stern-to. The entrance is deep and easy; the bottom turns to large rocks towards the shore while the anchoring ground is sand.",
+   "es": "La ensenada de Akyar, llamada Kızlarhamamı por los lugareños, corre en eje SO-NE; el rincón del poyraz recibe mucha marejada y el del lodos conviene para amarrar de popa. La entrada es profunda y fácil; el fondo pasa a rocas grandes hacia la orilla y el fondeadero es de arena.",
+   "ru": "Бухта Акьяр, которую местные зовут Кызлархамамы, вытянута по оси ЮЗ-СВ; «пойразный» угол сильно принимает зыбь, для стоянки кормой удобен «лодосный». Вход глубокий и простой; к берегу дно переходит в крупные камни, якорное место — песок."
+  },
+  "mamure-kalesi-demirleme": {
+   "tr": "Kale önü ancak sığlıklara dikkat edilerek kısa süreli durulabilecek bir demirliktir; karaya çıkış botla yapılır. Uzun süre kalınacaksa Bozyazı barınağına bağlanılması önerilir.",
+   "en": "The castle front is an anchorage only for short stays and only with careful attention to the shallows; landing is by dinghy. For a longer stay, berthing in the Bozyazı harbour is recommended.",
+   "es": "Frente al castillo solo se puede fondear por poco tiempo y vigilando los bajos; el desembarco es con el anexo. Para estancias largas se recomienda amarrar en el puerto de Bozyazı.",
+   "ru": "Перед крепостью можно стоять лишь недолго и внимательно следя за отмелями; высадка — на тузике. Для длительной стоянки рекомендуют гавань Бозязы."
+  },
+  "narlikuyu-koyu": {
+   "tr": "Kuzeydoğu tarafındaki koyda bolca balıkçı tonozu vardır; demir atarken tonoza takılma riskine dikkat edilmelidir. Yazın restoranlar hizasında doğu-batı hattında çekilen şamandıra koyun içine girişi engeller; restoranlara yaklaştıkça derinlik 1-2 metreye düşer, solugana karşı kıçtan demirleme önerilir.",
+   "en": "The northeast cove has many fishermen's moorings — mind fouling them when anchoring. In summer a buoy line strung E-W off the restaurants bars entry into the cove; depth drops to 1-2 metres near the restaurants, and anchoring stern-to is advised against the swell.",
+   "es": "La cala del noreste tiene muchos muertos de pescadores: cuidado con engancharlos al fondear. En verano una línea de boyas E-O frente a los restaurantes cierra la entrada; el fondo baja a 1-2 metros cerca de los restaurantes, y contra la marejada se aconseja fondear de popa.",
+   "ru": "В северо-восточной бухточке много рыбацких якорных бочек — не зацепите их якорем. Летом линия буёв, натянутая с востока на запад у ресторанов, закрывает вход внутрь; у ресторанов глубина падает до 1-2 метров, против зыби советуют становиться кормой."
+  },
+  "simi-emporios-koyu": {
+   "tr": "Derinlikleri fazla olan geniş, açık bir koydur; kuzey kıyısındaki beyaz Aziz Mercurius manastırı yakınında demirleyip kıyıya halat verilmesi önerilir. Kuzey-doğu arası rüzgârlara açıktır.",
+   "en": "A wide, open bay with considerable depths; it is advised to anchor near the white monastery of St Mercurius on the north shore and take a line ashore. It is open to winds from north to east.",
+   "es": "Una bahía amplia y abierta de bastante fondo; se aconseja fondear cerca del monasterio blanco de San Mercurio en la costa norte y dar un cabo a tierra. Está abierta a los vientos del norte al este.",
+   "ru": "Широкая открытая бухта с большими глубинами; советуют становиться у белого монастыря Св. Меркурия на северном берегу и заводить конец на берег. Открыта ветрам от северного до восточного."
   }
  }
 }

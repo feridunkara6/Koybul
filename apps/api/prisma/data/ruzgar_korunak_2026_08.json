@@ -359,6 +359,270 @@
    ],
    "alinti": "kuzey rüzgârlarından korunmuş sakin sularla",
    "kaynak": "https://blog.yachtdunyasi.com/pabuc-burnu/"
+  },
+  "semizce-coves-koyu": {
+   "yonler": [
+    "B"
+   ],
+   "alinti": "batıda kalan burna yakın geçilmemesi önemli, açığında döküntü var",
+   "kaynak": "https://www.wikiderya.org/wiki/semizce-koyu"
+  },
+  "zeytin-adasi-samandira-sahasi": {
+   "yonler": [
+    "B",
+    "KB"
+   ],
+   "alinti": "affords good sheltering from the prevailing wind",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/05/zeytinli-island-anchorage.html"
+  },
+  "zeytinli-island-koyu": {
+   "yonler": [
+    "B",
+    "KB"
+   ],
+   "alinti": "densely covered with olive trees, affords good sheltering",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/05/zeytinli-island-anchorage.html"
+  },
+  "asirli-adasi": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "alinti": "6-8 metre derinlikteki balçıkta her türlü çapa rahatlıkla tutuyor",
+   "kaynak": "https://www.wikiderya.org/wiki/gokkaya-limani",
+   "tam_korunak": true
+  },
+  "ayisigi-koyu": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "kuzey esintilerinden korunmak için koyun kuzey kıyılarına yakın demirleme yapılır",
+   "kaynak": "https://www.wikiderya.org/wiki/ay%C4%B1%C5%9F%C4%B1%C4%9F%C4%B1"
+  },
+  "camlik-koyu": {
+   "yonler": [
+    "B"
+   ],
+   "alinti": "hakim rüzgara tamamen korunaklı",
+   "kaynak": "https://www.wikiderya.org/wiki/camli-liman-kekova"
+  },
+  "ince-burun-koyu": {
+   "yonler": [
+    "GD",
+    "G"
+   ],
+   "alinti": "Little room in here and you may have to take a line",
+   "kaynak": "https://www.cruiserswiki.org/wiki/Antalya"
+  },
+  "olimpos-koyu": {
+   "yonler": [
+    "K",
+    "KD",
+    "KB"
+   ],
+   "alinti": "S/SW exposure means overnight stays require settled northerly forecast",
+   "kaynak": "https://safetyanchoralarm.com/anchorages/turkey/finike-antalya/olympos-beach"
+  },
+  "bademli-liman": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "alinti": "Her havaya kapalı bir limana sahiptir",
+   "kaynak": "https://www.wikiderya.org/wiki/bademli",
+   "tam_korunak": true
+  },
+  "bolme-kormen-island-koyu": {
+   "yonler": [
+    "K",
+    "KB"
+   ],
+   "alinti": "good from the meltemi",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/09/bolme-kormen-island-anchorage.html"
+  },
+  "denizkoy-koyu": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "The northwest corner of the bay affords good shelter",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/10/denizkoy-cove-anchorage.html"
+  },
+  "garip-adasi-demirleme": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "alinti": "all round shelter with attractive settings",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/10/bademli-liman-anchorage.html",
+   "tam_korunak": true
+  },
+  "kalem-adasi-koyu": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "GD",
+    "G",
+    "GB",
+    "KB"
+   ],
+   "alinti": "3 - 6 m on a patch of sand",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/10/bademli-liman-anchorage.html"
+  },
+  "kara-ada-koyu": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "those coves are sheltered from north wind",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/10/kara-ada-anchorage.html"
+  },
+  "kargacik-koyu": {
+   "yonler": [
+    "K",
+    "B"
+   ],
+   "alinti": "shelter from the Northerly meltemi, and the waves from the west",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/09/kargacik-cove-anchorage.html"
+  },
+  "maydanoz-koyu": {
+   "yonler": [
+    "K",
+    "B"
+   ],
+   "alinti": "will give way to sand at about 5 m depth",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/09/maydanoz-cove-anchorage.html"
+  },
+  "notion-koyu": {
+   "yonler": [
+    "K",
+    "B"
+   ],
+   "alinti": "provides shelter from the Northerly meltemi, and the waves from the west",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/09/ahmetbeyli-cove-anchorage.html"
+  },
+  "sicaksu-koyu": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "good from the meltemi, although the anchorage is open to the south",
+   "kaynak": "https://www.cruiserswiki.org/wiki/Sigacik_Region"
+  },
+  "altinkum-koyu": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "Good holding and shelter from the meltemi",
+   "kaynak": "https://www.cruiserswiki.org/wiki/Gulluk_Korfesi"
+  },
+  "cam-limani-kusadasi": {
+   "yonler": [
+    "B"
+   ],
+   "alinti": "The cove is open to southeast",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/09/cam-limani-anchorage_17.html"
+  },
+  "cukurcuk-limani": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "Shelter is reasonably good from the prevailing northerlies",
+   "kaynak": "https://www.cruiserswiki.org/wiki/Gulluk_Korfesi"
+  },
+  "sandal-islet-koyu": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "Make sure that your anchor is well dug in",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/09/sandal-islet-cove-anchorage.html"
+  },
+  "su-island-koyu": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "ensures satisfying shelter from northern winds",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/09/su-island-anchorage.html"
+  },
+  "camlik-koyu-demirleme-ayvalik": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "B",
+    "KB"
+   ],
+   "alinti": "good shelter except for the wind from the S",
+   "kaynak": "https://www.cruiserswiki.org/wiki/Ayvalik"
+  },
+  "ortunc-koyu": {
+   "yonler": [
+    "K"
+   ],
+   "alinti": "affords adequate shelter for the northerlies",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/11/ortunc-cove-anchorage.html"
+  },
+  "patrica-koyu": {
+   "yonler": [
+    "K",
+    "KD",
+    "D",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "alinti": "affords all - round shelter but, it is open to southeast",
+   "kaynak": "https://turkeymarinas.blogspot.com/2016/11/patricia-koyu-gokceliman-anchorage.html"
+  },
+  "barbaros-koyu": {
+   "yonler": [
+    "K",
+    "KD",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "alinti": "Doğu haricinde her havaya limandır",
+   "kaynak": "https://www.wikiderya.org/wiki/barboros-koyu-tahti-koyu"
+  },
+  "bogsak-koyu": {
+   "yonler": [
+    "K",
+    "KD",
+    "GD",
+    "G",
+    "GB",
+    "B",
+    "KB"
+   ],
+   "alinti": "Dip kum, iyi demir tutuyor. Doğu hariç her havaya korunaklı",
+   "kaynak": "https://www.wikiderya.org/wiki/bogsak-koyu"
+  },
+  "simi-nanou-koyu": {
+   "yonler": [
+    "KB"
+   ],
+   "alinti": "good holding and therefore more than a mere lunch stop anchorage",
+   "kaynak": "https://sailingissues.com/greekislands/simi.html"
   }
  }
 }

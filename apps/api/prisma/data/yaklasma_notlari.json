@@ -384,6 +384,326 @@
   "ragged-bay": {
    "not": "Koy önündeki küçük adacığın 50-60 m doğusuna uzanan bir resif vardır; yaklaşırken bu sığlıktan kaçınılmalıdır. Üç girintiden birine demirleyip kıyıya halat verilmesi önerilir.",
    "url": "https://turkeymarinas.blogspot.com/2016/05/ragged-bay-anchorage.html?m=0"
+  },
+  "salih-adasi-demirleme": {
+   "not": "Zemin yer yer yosun lekeli kum olduğundan çapa tutuşu orta düzeydedir; demirledikten sonra çapanın iyice tuttuğunu kontrol edin.",
+   "url": "https://my-sea.com/en/poi/turkey/kusadasi-to-bodrum/salih-adas/anchorage/5f4913d9-15bd-410c-946d-3cc7152dca7d"
+  },
+  "sarigerme-bay": {
+   "not": "Uzun, kumlu ve sığ plajın önünde günübirlik demirleme yeridir; bölgede genellikle kuvvetli hakim KB rüzgârı estiğinden buna göre plan yapın.",
+   "url": "https://turkeymarinas.blogspot.com/2016/05/sarigerme-bay-anchorage.html"
+  },
+  "semizce-coves-koyu": {
+   "not": "Girişte batıda kalan burnun açığında döküntü olduğundan burna yakın geçmeyin; zemin kum, yer yer eriştelik olup kıçtan kara demirleme önerilir. Bitişikteki Yılancık Adası ve Aksaz askeri bölgesine giriş yasaktır.",
+   "url": "https://www.wikiderya.org/wiki/semizce-koyu"
+  },
+  "seytanli-island-koyu": {
+   "not": "Şeytanlı Ada'nın kuzeyindeki koyda yaz koşullarında yeterli demirleme yapılır; şamandıraya bağlanıp kıça baba/halat verilmesi yaygındır.",
+   "url": "https://turkeymarinas.blogspot.com/2016/05/seytanli-island-anchorage.html"
+  },
+  "sogut-koyu": {
+   "not": "Söğüt Adası ile Zeytin Adası'na bakan taraftaki koy soluğandan ve hakim yaz rüzgârından korunur; kum-çamur zemin 3-12 m derinlikte çapayı iyi tutar.",
+   "url": "https://blog.medgulets.com/turkey/marmaris/sogut-island"
+  },
+  "sucagiz-koyu": {
+   "not": "Hisarönü Körfezi'nin kuzey kıyısındaki bu koy grubu geniş bir demirleme alanıdır; 25-40 metrelik megayatların dahi demirlediği bilinen bir duraktır.",
+   "url": "https://www.maviyolculukrehberi.net/post/hisar%C3%B6n%C3%BC-2023-k%C4%B1y%C4%B1larda-evler-denizlerde-ev-gibi-tekneler-25-a%C4%9Fustos-2023"
+  },
+  "tavsan-island-koyu": {
+   "not": "Ada ile anakara arasındaki antik dalgakıran/geçit diz boyu sığ olduğundan aradan geçmeye çalışmayın; adada arkeolojik kazı nedeniyle karaya çıkış kısıtlıdır.",
+   "url": "https://turkeymarinas.blogspot.com/2016/07/tavsan-island-anchorage.html"
+  },
+  "turunc-pinari-koyu": {
+   "not": "Derinlik kıyıdan açığa doğru 1,5 metreden 20 metreye hızla artar; koydaki restoran iskelesine yanaşma veya kıçtan kara demirleme yaygındır.",
+   "url": "https://my-sea.com/en/poi/turkey/fethiye-to-antalya/fethiye/turunc-pnar/4a01cea4-5e97-4f5d-9be3-faab82c34b55"
+  },
+  "yaliciftlik-koyu": {
+   "not": "Gökova Körfezi'nin etkisiyle önündeki sular çoğunlukla sakin ve berraktır; kıyı bir bölümde çakıllı, doğu kesimlerde kumludur ve mavi yolculuk teknelerinin ilk gece durağı olarak kullanılır.",
+   "url": "https://bodrumguru.com/en/yaliciftlik-ciftlikkoy-guide/"
+  },
+  "yarim-liman": {
+   "not": "Kazıklı Limanı'nın kuzeybatı kıyısındaki küçük koylardandır; yazın meltem eser, kışın lodos sertleşse de körfez içinde uygun konumlanmayla emniyetli demirleme mümkündür.",
+   "url": "https://www.cilginrotalar.com/kazikli-koyu/"
+  },
+  "yaz-limani-samandira-sahasi": {
+   "not": "Yassıca Adaları arasındaki geçitlerde sığlıklar bulunduğundan adacıklar arasından dikkatle geçin; demirleme noktaları 5-15 m derinlikte çamur zeminlidir.",
+   "url": "https://seatv.world/location/fethiye-gocek/"
+  },
+  "zeytin-adasi-samandira-sahasi": {
+   "not": "Zeytin ağaçlarıyla kaplı ada, bölgenin hakim batı-kuzeybatı rüzgârına iyi korunak sağlar; Zeytinli Ada ile Küçük Şeytanlı arasındaki geçit sığ olduğundan kullanmayın.",
+   "url": "https://turkeymarinas.blogspot.com/2016/05/zeytinli-island-anchorage.html"
+  },
+  "zeytinli-island-koyu": {
+   "not": "Hakim batı-kuzeybatı rüzgârında adanın sağladığı korunakta demirlenir; doğudaki Küçük Şeytanlı Ada geçidi sığdır, yeterli derinlik Şeytanlı Ada-Büyük Yassıca arasındaki boğazdadır.",
+   "url": "https://turkeymarinas.blogspot.com/2016/05/zeytinli-island-anchorage.html"
+  },
+  "alacasu-cennet-koyu": {
+   "not": "İç koyda 5-10 m derinlikte kum-kaya karışık zemine demirlenir; çapa yerini dikkatle seçin, iç koy rüzgârdan korunaklıyken dışarıda hafif dalga olabilir.",
+   "url": "https://www.limancepte.com/en/blog/alacasu-cennet-koyu-kemer-rehberi/"
+  },
+  "andrea-doria-koyu": {
+   "not": "Finike merkezine yaklaşık 3 km mesafede, karadan erişimi olmayan, dik kayalıklarla çevrili bakir bir koydur; tekne ve yatların uğrak demirleme noktasıdır, Akdeniz foku ve caretta yaşam alanı olduğundan hassas davranın.",
+   "url": "https://www.herantalya.com/tr/blog/andrea-doria-bay-antalya-291"
+  },
+  "asar-aperlai-koyu": {
+   "not": "Aperlai antik kenti kalıntılarının bulunduğu koy batılı rüzgârlara açıktır; hakim rüzgârda korunaksız kaldığından yalnız uygun havada demirleyin.",
+   "url": "https://www.wikiderya.org/wiki/asar-koyu"
+  },
+  "asirli-adasi": {
+   "not": "Aşırlı Adası'nın koruduğu Gökkaya Limanı her türlü havaya kapalıdır; 6-8 m derinlikteki balçık zeminde çapa rahat tutar, en rahat alarga kuzeybatı bölgesidir.",
+   "url": "https://www.wikiderya.org/wiki/gokkaya-limani"
+  },
+  "atbuku-maden-koyu": {
+   "not": "Karadan ulaşımı çok zor, tesissiz ve ıssız bir koydur; tekneyle ulaşım mümkündür, kıyısı ince çakıl/taşlıktır ve ihtiyaçlarınızı yanınızda getirin.",
+   "url": "https://teknekirala.com/blog/maden-koyu-atbuku-koyu-hakkinda-bilmeniz-gereken-her-sey/"
+  },
+  "ayisigi-koyu": {
+   "not": "Yazın hakim kuzey esintilerinden korunmak için koyun kuzey kıyısına yakın, iyi tutan kum zemine demirlenir (kıyıya yakın eriştelik artar); kuzeyden yaklaşırken yarımadanın döküntüsünden yaklaşık yarım mil açık geçin. Liman başkanlığı talimatına göre koyda demirleme yılda en fazla 15 günle sınırlıdır ve kıyıya/ağaca halat bağlamak yasaktır.",
+   "url": "https://www.wikiderya.org/wiki/ay%C4%B1%C5%9F%C4%B1%C4%9F%C4%B1"
+  },
+  "buzaglik-koyu": {
+   "not": "Gökkaya Limanı'nın kuzeydoğu kesimindeki bu demirleme alanına yaklaşırken kayalık adacıkların çevresindeki resiflere ve adacık grubunun batısındaki üzerinde 3,5 m su bulunan münferit kayaya dikkat edin; alan küçük adalarla genel olarak korunaklıdır.",
+   "url": "https://www.cruiserswiki.org/wiki/Kekova_Roads"
+  },
+  "camlik-koyu": {
+   "not": "Koy 250 m batıya karanın içine girer; girişte su altı kayası gibi bir tehdit yoktur. Koy ortasında 10-15 m derinliğe demirleyip batı yönündeki kıyıdan koltuk halatı alınır; güney kıyısına yakın birkaç su üstü kayası vardır ama manevrayı engellemez.",
+   "url": "https://www.wikiderya.org/wiki/camli-liman-kekova"
+  },
+  "cirali-liman-koyu": {
+   "not": "Kuzeye açık plaj önü demirlik; yalnız yerleşik havada 5-6 m kumluk zemine demirlenir. Öğleden sonra hakim G-GD rüzgarı soluğan yapabildiğinden sabah ziyareti daha uygundur.",
+   "url": "https://www.cruiserswiki.org/wiki/Antalya"
+  },
+  "coban-limani-kumluca": {
+   "not": "Çam ağaçlarıyla çevrili, denizi duru ve sakin küçük bir koy; tekne turlarının rüzgar durumuna göre doğal liman gibi kullandığı bir duraktır. Zemin kayalık olduğundan yüzerken deniz ayakkabısı önerilir.",
+   "url": "https://www.antalyagundem.com.tr/antalya-kumluca-plajlari"
+  },
+  "degirmenlik-koyu": {
+   "not": "Girişte 10 m olan derinlik koyun dibinde 2 m'ye düşer; kıvrılarak içeri giren bölümde 1 m'nin altındadır. İçerisi dar olduğundan tornistanla girip kıyıya 10-15 m mesafede kıçtan kara olmak pratiktir; sakin havalarda gecelenebilir.",
+   "url": "https://www.wikiderya.org/wiki/degirmenlik"
+  },
+  "fakdere-koyu": {
+   "not": "Uluburun'u sancağa alarak yaklaşılır ve burunla mesafeye dikkat edilir; girişteki adacık sancağa alınır, adacıkla kara arasındaki kanal geçişe uygun değildir. Koyun içi derindir, kıyılara yaklaştıkça yer yer döküntü vardır.",
+   "url": "https://www.wikiderya.org/index.php/wiki/fakdereufakdere"
+  },
+  "gokliman-finike": {
+   "not": "Navily kaydına göre kumluk zeminde demirlemeye izin verilen bir plaj önü demirliktir; kıyıda tekneye hizmet verecek tesis yoktur.",
+   "url": "https://www.navily.com/mouillage/gokliman-plaji/54274"
+  },
+  "hamidiye-koyu": {
+   "not": "Köylülerin balıkçı kayıklarını bıraktığı küçük bir koydur; sığ sulara dikkat ederek demirleyip kayalardan koltuk halatı alınabilir. İhtiyaçlar için tekneyle Üçağız'a geçilebilir.",
+   "url": "https://www.wikiderya.org/wiki/hamidiye-koyu"
+  },
+  "ince-burun-koyu": {
+   "not": "Hakim G-GD rüzgarlarına iyi korunak veren, yalnız doğuya açık küçük bir koy; 5-6 m kuma demirlenir. İçeride yer az olduğundan başka tekneler varsa kıyıya halat almak gerekebilir.",
+   "url": "https://www.cruiserswiki.org/wiki/Antalya"
+  },
+  "kalamar-koyu": {
+   "not": "Kalkan merkeze bitişik, küçük ve kayalık sakin bir koy; Kalkan tekne turlarının yüzme molası verdiği bir duraktır, kıyısında beach club iskeleleri vardır.",
+   "url": "https://eksisozluk.com/kalamar-koyu--1543094"
+  },
+  "karaoz-koyu": {
+   "not": "Merkez sahili havaya ve soluğana açık olduğundan günübirlik uygundur; girişte sancak taraftaki Korsan Koyu'nda alargada daha güvenli kalınır. Koyun içindeki girintiyi balıkçılar kullanır.",
+   "url": "https://www.wikiderya.org/wiki/karaoz-limani"
+  },
+  "kisle-bogazi-koyu": {
+   "not": "Suyu soğuk kaynaklarla beslenen bir Kekova koyudur; yaklaşırken önündeki adanın güneyinden geçilmemelidir.",
+   "url": "https://www.wikiderya.org/wiki/kisle-koyu"
+  },
+  "korsan-koyu-kumluca": {
+   "not": "Karaöz girişinde, iki tepe arasına dar bir girinti yapan ve tarih boyunca teknelerin fırtınadan sığındığı doğal liman niteliğinde bir koydur; Gelidonya Feneri yakınındadır ve kıyısında küçük bir mağara vardır.",
+   "url": "https://www.hurriyet.com.tr/seyahat/galeri-kizilcamlarin-arasinda-gizlenmis-guzel-41315927"
+  },
+  "olimpos-koyu": {
+   "not": "Açık plaj önü demirlik: 4-12 m kumluk zemin iyi tutar, yavaş yaklaşıp iskandil takip edilmeli. Güney sektörüne açık olduğundan ancak yerleşik kuzey rüzgarı tahmini varken gecelenir.",
+   "url": "https://safetyanchoralarm.com/anchorages/turkey/finike-antalya/olympos-beach"
+  },
+  "papaz-koyu": {
+   "not": "Karaöz yakınında, kum zeminli ve barınaklı küçük bir aile koyu; Likya Yolu üzerindedir, kıyısında iskele ve basit tesisler vardır.",
+   "url": "https://www.antalyagundem.com.tr/antalya-kumluca-plajlari"
+  },
+  "patara-koyu": {
+   "not": "Demirleme önerilmez: çok uzun ve sığ bir plaj önüdür, sığlığı nedeniyle çok deniz kaldırır; geçişlerde bile millerce açıktan geçilmesi önerilir.",
+   "url": "https://www.wikiderya.org/wiki/patara"
+  },
+  "polemos-buku": {
+   "not": "Çok korunaklı bir koydur; 5-10 m yumuşak çamura demirlenir. Ancak 40 knota ulaşabilen şiddetli hamle rüzgarları (gust) olduğundan demir iyice gömülmeli, taramaya karşı hazırlıklı olunmalıdır.",
+   "url": "https://www.cruiserswiki.org/wiki/Kekova_Roads"
+  },
+  "suluada-koyu": {
+   "not": "Karadan ulaşımı olmayan açık deniz adası; Adrasan'dan tekneyle gelinir. Beyaz kumlu iki plajı ve tatlı su kaynağı vardır; kıyı çevresinde kayalık su altı yapıları bulunur.",
+   "url": "https://www.antalyagundem.com.tr/antalya-kumluca-plajlari"
+  },
+  "yaglica-koyu": {
+   "not": "Kayalık uçurumlarla çevrili, fiyort benzeri dar girişli derin ve küçük bir koy; içeride dönüş alanı kısıtlıdır ve aynı anda ancak birkaç tekne barındırır.",
+   "url": "https://kekovatekneturu.com/blog/yaglica-koyu/"
+  },
+  "bademli-liman": {
+   "not": "Giriş yaklaşık 2,5 m, liman içi 2-3,5 m kumdur; işaret şamandırasından sonra iskeleye düz gitmek karaya oturtur, limanın kuzeyi çok sığdır. Garip ile Kalem adaları arası geçilmez; geceleri gündoğusu 30-40 knot esebilir, adalar arasında ve liman dışında da demirlenebilir.",
+   "url": "https://www.wikiderya.org/wiki/bademli"
+  },
+  "bolme-kormen-island-koyu": {
+   "not": "Yaklaşırken koy girişinin batı yakasından ve Bölme (Körmen) Adası'nın kuzeyinden uzanan kayalara dikkat edin. Yaklaşık 5 m'de kum-ot zeminde demirlenir; koy boşken 4-5 tekne alır, meltemiden iyi korunur ama güneye açıktır.",
+   "url": "https://turkeymarinas.blogspot.com/2016/09/bolme-kormen-island-anchorage.html"
+  },
+  "buyuk-saip-ada-koyu": {
+   "not": "Büyük Sahip (Saip) Adası'nın güneyinde demirlenir; bu demirleme alanı doğuya açıktır. Ada çevresinde deniz derin ve temizdir.",
+   "url": "https://www.cruiserswiki.org/wiki/Izmir"
+  },
+  "camcagiz-limani": {
+   "not": "Sığacık Limanı'na en yakın demirlik; iyi hava demirliğidir ve doğu rüzgarlarına karşı savunmasızdır. Doğudaki 'Minaret Rocks' denilen kayalık falezlere dikkat ederek kumda salınarak demirlenir.",
+   "url": "https://turkeymarinas.blogspot.com/2016/09/camcagiz-limani-anchorage.html"
+  },
+  "denizkoy-koyu": {
+   "not": "Körfezin kuzeybatı köşesi kuzeyli rüzgarlarda iyi korunak verir; 2-7 m ot-kum zeminde demirlenir. Hakim batı rüzgarları içeri dalga sokar, kuzeyliler dağlardan daha sert eser; yerel teknelerin bağlama şamandıralarına dikkat.",
+   "url": "https://turkeymarinas.blogspot.com/2016/10/denizkoy-cove-anchorage.html"
+  },
+  "denizyildizi-bodrum-koyu": {
+   "not": "Kuzeye doğru giren, batı ucunda küçük bir bükü olan koy; 4-5 m'de kum ağırlıklı zeminde demirlenir. Güneyli rüzgarlar dışında güvenli bir demirliktir; batı büküsünde beach club iskelesi vardır.",
+   "url": "https://turkeymarinas.blogspot.com/2016/09/denizyildizi-bodrum-cove-anchorage.html"
+  },
+  "garip-adasi-demirleme": {
+   "not": "Bademli Limanı içinde, Garip ile Kalem adacıkları arasında 2-4 m kum zeminde demirlenir; sound her yönden korunaklıdır. Kuzey girişte resif ve sığlık, güney girişte burundan ~70 m uzanan resif vardır; kuzeyli kuvvetli havada akşamları doğudan 20-25 kt hamleler gelir.",
+   "url": "https://turkeymarinas.blogspot.com/2016/10/bademli-liman-anchorage.html"
+  },
+  "gevil-koyu": {
+   "not": "Küçük Gevil dar bir koydur; 4-5 m kum-ot zeminde demirleyip gece kalışlarda mutlaka kıçtan karaya halat verin. İyi korunak sağlar ancak kuzeyli ve güneyli rüzgarlara açıktır; girişte iskele tarafında mağaralar görülür.",
+   "url": "https://turkeymarinas.blogspot.com/2016/09/gevil-cove-anchorage.html"
+  },
+  "hayitli-koyu": {
+   "not": "Antik çağda liman olarak kullanılmış, fırtınalı günlerde gemilerin sığındığı bir koydur; önünde uzun kumsal ve tatil siteleri bulunur.",
+   "url": "https://turkeymarinas.blogspot.com/2016/10/hayitli-cove-anchorage.html"
+  },
+  "kara-ada-koyu": {
+   "not": "Ada çevresinde çok sayıda resif vardır, dikkatli yaklaşın. Güneydeki üç koydan ortadaki en iyi korunağı verir; 3-10 m kum-ot zeminde demirlenir, kuvvetli kuzeylide karaya halat verin; koylar güneye açıktır ve gündüz gezi/dalış tekneleri yoğundur.",
+   "url": "https://turkeymarinas.blogspot.com/2016/10/kara-ada-anchorage.html"
+  },
+  "karareis-koyu": {
+   "not": "Koyu paralel kapatan burun sayesinde yazın deniz genellikle dalgasızdır; zaman zaman esen lodos kısa süreli deniz yapar. Kıyıdan kısa mesafede derinlik hızla artar.",
+   "url": "https://eksisozluk.com/karareis--448532"
+  },
+  "kargacik-koyu": {
+   "not": "Kıyıya olabildiğince sokulun; ot zemin yaklaşık 5 m'de kuma döner. Kum serttir, demirin tutması birkaç deneme gerektirebilir; kuzeyli meltemiden ve batı dalgasından korunur ama güneye açıktır.",
+   "url": "https://turkeymarinas.blogspot.com/2016/09/kargacik-cove-anchorage.html"
+  },
+  "klaros-denizpinari-koyu": {
+   "not": "Derin bir koydur; kıyıdan kısa mesafe sonra derinlik hızla artar. Yatların dinlenme molası için kullandığı bir noktadır; antik Klaros Apollon Tapınağı yakındadır.",
+   "url": "https://turkeymarinas.blogspot.com/2016/09/klaros-denizpinari-cove-anchorage.html"
+  },
+  "maydanoz-koyu": {
+   "not": "Kıyıya sokularak demirleyin; ot zemin yaklaşık 5 m'de kuma döner, kum sert olduğundan demir birkaç denemede tutabilir. Kuzeyli meltemiden ve batı dalgasından korunaklı, güneye açıktır (Navily de zemini kum olarak doğrular).",
+   "url": "https://turkeymarinas.blogspot.com/2016/09/maydanoz-cove-anchorage.html"
+  },
+  "notion-koyu": {
+   "not": "Kıyıya olabildiğince sokulup yaklaşık 5 m'de, otun kuma döndüğü sert zemine demirlenir; sert kumda çapa zor tutar, birkaç deneme gerekebilir. Kuzey meltemisine ve batı dalgasına korunaklı, güneye açıktır.",
+   "url": "https://turkeymarinas.blogspot.com/2016/09/ahmetbeyli-cove-anchorage.html"
+  },
+  "pasa-limani": {
+   "not": "Çok sığ bir kumsal koyudur; kıyıdan 100-150 m açıkta bile su bel hizasını geçmez ve girişte kayalıklar vardır. Koy zaman zaman hayli dalgalı olabilir; demirleme için sığlığa dikkat edilmelidir.",
+   "url": "https://cesmetravel.com/tr/gezirehberi/pasa-limani-plaji.html"
+  },
+  "pissa-koyu-demirleme": {
+   "not": "Dikili-Bademli kıyısında, tesisi olmayan ıssız bir kumsal koydur; uzun kumlu sahilin önünde demirlenir. En yakın liman olanakları yaklaşık 1 km mesafedeki Bademli'dedir.",
+   "url": "https://turkeymarinas.blogspot.com/2016/10/pissa-cove-anchorage.html"
+  },
+  "sicaksu-koyu": {
+   "not": "Bölme (Körmen) Adası'nın arkasına, 5 m kum-ot zemine demirlenir; adanın batı girişinden ve kuzeyinden denize uzanan kayalara dikkat edilmelidir. Meltemiye karşı korunak iyidir, koy güneye açıktır.",
+   "url": "https://www.cruiserswiki.org/wiki/Sigacik_Region"
+  },
+  "urkmez-koyu": {
+   "not": "Antik Lebedos yerleşiminin bulunduğu Kısık Yarımadası'nın (175 m uzunluk, 61 m yükseklik) yanında, çamlık tepelerle çevrili bir demirleme yeridir; kaynakta zemin ve derinlik bilgisi verilmemektedir.",
+   "url": "https://turkeymarinas.blogspot.com/2016/09/urkmez-cove-anchorage.html"
+  },
+  "sedef-koyu": {
+   "not": "Didim Mavişehir'de sakin bir koy demirlemesidir; kaynak koyu dinlenilecek sakin mavi bir lagün olarak tanımlar, zemin ve derinlik bilgisi vermez.",
+   "url": "https://turkeymarinas.blogspot.com/2016/09/sedef-cove-anchorage.html"
+  },
+  "zeytineli-koyu-demirleme": {
+   "not": "Sakız Boğazı ile Sığacık arasındaki ıssız kıyıda demirleme; zemin kum ve deniz çayırı karışımıdır, ot yamalarında çapanın tutuşunu kontrol edin. Kıyıda tesis yoktur, plaja botla çıkılabilir.",
+   "url": "https://www.navily.com/de/mouillage/zeytineli-koyu/59114"
+  },
+  "altinkum-koyu": {
+   "not": "Koyun kuzeybatı köşesinde 3-4 m kuma demirlenir; tutuş ve meltemi korunağı iyidir. Kasaba geceleri gürültülü olabileceğinden plajdan uzağa demirlemek önerilir.",
+   "url": "https://www.cruiserswiki.org/wiki/Gulluk_Korfesi"
+  },
+  "cam-limani-kusadasi": {
+   "not": "Kuşadası Körfezi'nin kuzeyinde, Sünger Burnu'nun doğusundaki küçük koyda 3-8 m'ye, ot zemine demirlenir; emniyet için karaya halat verilmesi önerilir. Batı rüzgarlarına korunaklı, güneydoğuya açıktır.",
+   "url": "https://turkeymarinas.blogspot.com/2016/09/cam-limani-anchorage_17.html"
+  },
+  "cukurcuk-limani": {
+   "not": "Doğu ve batı olmak üzere iki koluna 2-4 m'ye demirlenir; hakim kuzeylilere karşı korunak oldukça iyidir ancak burnu dolanan hafif soluğan koya girebilir.",
+   "url": "https://www.cruiserswiki.org/wiki/Gulluk_Korfesi"
+  },
+  "sandal-islet-koyu": {
+   "not": "Sandal Adası'nın yaklaşık yarım mil doğusundaki koyda 3-5 m kum-ot zemine demirlenir; kuzey tarafı sığdır ve manevra alanı dardır. Çapanın iyi gömüldüğünden emin olup karaya halat verin; Dilek Boğazı geçişinde mola demirlemesi olarak kullanılır.",
+   "url": "https://turkeymarinas.blogspot.com/2016/09/sandal-islet-cove-anchorage.html"
+  },
+  "su-island-koyu": {
+   "not": "Koya tek giriş Tavşan Adası'nın güneyinden yapılır; ada çevresi kayalık resiflidir. Su Adası ile kara arasında 7-9 m'de ot zemine demirlenir, kıyıya doğru yavaşça sığlaşır; kuvvetli rüzgarda koya soluğan girdiğinden çapanın iyi gömüldüğünden emin olun.",
+   "url": "https://turkeymarinas.blogspot.com/2016/09/su-island-anchorage.html"
+  },
+  "sapli-island-koyu": {
+   "not": "Akbük yakınındaki Saplı Ada koyunda kum zemine demirlenir; demirleme serbesttir ve koyda iskele mevcuttur, tatlı su yoktur. Adayı karaya bağlayan sığ kumsal dile dikkat edilmelidir.",
+   "url": "https://www.navily.com/fr/mouillage/sapli/45376"
+  },
+  "camlik-koyu-demirleme-ayvalik": {
+   "not": "Çanak Tepe'nin altındaki çarpıcı koyda demirlenir; güneyden esen rüzgar dışında her yönden iyi korunak sağlar.",
+   "url": "https://www.cruiserswiki.org/wiki/Ayvalik"
+  },
+  "ortunc-koyu": {
+   "not": "Alibey (Cunda) Adası'nın güneybatısında, Sivribe Burnu ile Pınar Boğazı arasındaki geniş koyda 3-10 m ot zemine demirlenir; çapanın iyi tuttuğundan emin olun, gecelemede güney kıyıdan karaya halat verin. Kuzeylilere yeterli korunak sağlar, batı rüzgarında koya soluğan girer.",
+   "url": "https://turkeymarinas.blogspot.com/2016/11/ortunc-cove-anchorage.html"
+  },
+  "pasa-koyu": {
+   "not": "Ayvalık Çamlık'taki koy, kıyıya doğru uzak mesafeden itibaren yavaşça sığlaşır; koy ortasında yaklaşık 4 m su vardır ve plaj önünde demirlenir.",
+   "url": "https://turkeymarinas.blogspot.com/2016/11/pasa-koyu-anchorage.html"
+  },
+  "patrica-koyu": {
+   "not": "Alibey (Cunda) Adası'nın kuzeydoğusundaki geniş koyda 3-4 m'ye demirlenip salınılır; koy hemen her yönden korunak sağlar, yalnız güneydoğuya açıktır. Güvercin Adası'ndaki kalıntılar uzaktan seçilen iyi bir nirengidir.",
+   "url": "https://turkeymarinas.blogspot.com/2016/11/patricia-koyu-gokceliman-anchorage.html"
+  },
+  "tuzla-koyu-pasalimani-demirlemesi": {
+   "not": "Paşalimanı Adası'ndaki küçük bir köy limanıdır; kıyıda köy iskelesi bulunur, dalış noktası olarak da bilinir. Kaynakta demirleme derinliği ve zemin bilgisi verilmemiştir.",
+   "url": "https://turkeymarinas.blogspot.com/2016/12/tuzla-village-anchorage.html"
+  },
+  "akkum-koyu": {
+   "not": "Plaj önünde demirlemeye izinli bir demirlik; dip kum, kaya ve deniz çayırı karışımı olduğundan demirin tuttuğundan emin olunmalıdır.",
+   "url": "https://www.navily.com/mouillage/akkum-plaji/53992"
+  },
+  "akyar-koyu": {
+   "not": "Koy lodos-poyraz doğrultusunda uzanır; poyraz köşesi bolca solugan alır, kıçtan kara bağlanmak için lodos köşesi daha elverişlidir. Girişin iki yanı da rahat ve derin sudur; dip kıyılara doğru iri kayalık, demir alanı kumdur.",
+   "url": "https://www.wikiderya.org/wiki/akyar-buku-kizlarhamami"
+  },
+  "barbaros-koyu": {
+   "not": "Girişte güney tarafına daha yakın bir batık kaya vardır; girişin iki yanında da yeterli derinlik bulunur. Kumsala fazla sokulmadan 6-7 metre derinlikte alargada demirlenir; kuzey ve güney yakaları kayalık, doğu ucundaki demir yeri kum ve küçük çakıldır.",
+   "url": "https://www.wikiderya.org/wiki/barboros-koyu-tahti-koyu"
+  },
+  "bogsak-koyu": {
+   "not": "Boğsak Adası ile anakara arasındaki geçitten ortalayarak girilir, derinlik sorunu yoktur; 8-10 metre kumluk dibe demirlenir. Doğulu havada dalga oluşursa adanın rüzgâraltına kaçılabilir.",
+   "url": "https://www.wikiderya.org/wiki/bogsak-koyu"
+  },
+  "dana-adasi": {
+   "not": "Ada ile anakara arasındaki geçit (Kargıcak Boğazı) Kıbrıs feribotları ve küçük tekneler tarafından kullanılır; adanın kuzey kıyısı önündeki dip kumluktur. Antik çağda da fırtınada sığınılan bir demirlik olarak kayıtlıdır.",
+   "url": "https://www.danaadasi.com/p/dana-island.html"
+  },
+  "kizkalesi-koyu": {
+   "not": "Adanın güneybatısında eski liman yapısına ait döküntüler vardır, dikkatle geçilmelidir; kıyıdan adaya kuzeydoğu doğrultusunda uzanan sualtı aydınlatma kabloları demirlerken gözetilmelidir. Sürekli solugan aldığından gece demirlemesi önerilmez.",
+   "url": "https://www.wikiderya.org/wiki/kizkalesi"
+  },
+  "kizlarhamami-koyu": {
+   "not": "Yöre halkının Kızlarhamamı dediği Akyar Bükü lodos-poyraz doğrultusundadır; poyraz köşesi bolca solugan alır, kıçtan kara için lodos köşesi elverişlidir. Giriş derin ve rahattır; dip kıyıya doğru iri kayalık, demir alanı kumdur.",
+   "url": "https://www.wikiderya.org/wiki/akyar-buku-kizlarhamami"
+  },
+  "mamure-kalesi-demirleme": {
+   "not": "Kale önü ancak sığlıklara dikkat edilerek kısa süreli durulabilecek bir demirliktir; karaya çıkış botla yapılır. Uzun süre kalınacaksa Bozyazı barınağına bağlanılması önerilir.",
+   "url": "https://www.wikiderya.org/index.php/wiki/anamur"
+  },
+  "narlikuyu-koyu": {
+   "not": "Kuzeydoğu tarafındaki koyda bolca balıkçı tonozu vardır; demir atarken tonoza takılma riskine dikkat edilmelidir. Yazın restoranlar hizasında doğu-batı hattında çekilen şamandıra koyun içine girişi engeller; restoranlara yaklaştıkça derinlik 1-2 metreye düşer, solugana karşı kıçtan demirleme önerilir.",
+   "url": "https://www.wikiderya.org/wiki/narlikuyu"
+  },
+  "simi-emporios-koyu": {
+   "not": "Derinlikleri fazla olan geniş, açık bir koydur; kuzey kıyısındaki beyaz Aziz Mercurius manastırı yakınında demirleyip kıyıya halat verilmesi önerilir. Kuzey-doğu arası rüzgârlara açıktır.",
+   "url": "https://sailingissues.com/greekislands/simi.html"
   }
  }
 }

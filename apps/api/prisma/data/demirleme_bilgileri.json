@@ -673,6 +673,288 @@
    "derinlik_min": 15,
    "derinlik_max": 20,
    "url": "https://turkeymarinas.blogspot.com/2016/05/ragged-bay-anchorage.html?m=0"
+  },
+  "salih-adasi-demirleme": {
+   "zemin": "mixed",
+   "derinlik_min": 2,
+   "derinlik_max": 8,
+   "url": "https://my-sea.com/en/poi/turkey/kusadasi-to-bodrum/salih-adas/anchorage/5f4913d9-15bd-410c-946d-3cc7152dca7d"
+  },
+  "semizce-coves-koyu": {
+   "zemin": "mixed",
+   "url": "https://www.wikiderya.org/wiki/semizce-koyu"
+  },
+  "sogut-koyu": {
+   "zemin": "mixed",
+   "derinlik_min": 3,
+   "derinlik_max": 12,
+   "url": "https://blog.medgulets.com/turkey/marmaris/sogut-island"
+  },
+  "turunc-pinari-koyu": {
+   "derinlik_min": 1.5,
+   "derinlik_max": 20,
+   "url": "https://my-sea.com/en/poi/turkey/fethiye-to-antalya/fethiye/turunc-pnar/4a01cea4-5e97-4f5d-9be3-faab82c34b55"
+  },
+  "yaz-limani-samandira-sahasi": {
+   "zemin": "mud",
+   "derinlik_min": 5,
+   "derinlik_max": 15,
+   "url": "https://seatv.world/location/fethiye-gocek/"
+  },
+  "alacasu-cennet-koyu": {
+   "zemin": "mixed",
+   "derinlik_min": 5,
+   "derinlik_max": 10,
+   "url": "https://www.limancepte.com/en/blog/alacasu-cennet-koyu-kemer-rehberi/"
+  },
+  "asirli-adasi": {
+   "zemin": "mud",
+   "derinlik_min": 6,
+   "derinlik_max": 8,
+   "url": "https://www.wikiderya.org/wiki/gokkaya-limani"
+  },
+  "ayisigi-koyu": {
+   "zemin": "mixed",
+   "url": "https://www.wikiderya.org/wiki/ay%C4%B1%C5%9F%C4%B1%C4%9F%C4%B1"
+  },
+  "buzaglik-koyu": {
+   "zemin": "mixed",
+   "derinlik_min": 3,
+   "derinlik_max": 30,
+   "url": "https://www.cruiserswiki.org/wiki/Kekova_Roads"
+  },
+  "camlik-koyu": {
+   "derinlik_min": 10,
+   "derinlik_max": 15,
+   "url": "https://www.wikiderya.org/wiki/camli-liman-kekova"
+  },
+  "cirali-liman-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 5,
+   "derinlik_max": 6,
+   "url": "https://www.cruiserswiki.org/wiki/Antalya"
+  },
+  "coban-limani-kumluca": {
+   "zemin": "rock",
+   "url": "https://www.antalyagundem.com.tr/antalya-kumluca-plajlari"
+  },
+  "degirmenlik-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 2,
+   "derinlik_max": 10,
+   "url": "https://www.wikiderya.org/wiki/degirmenlik"
+  },
+  "fakdere-koyu": {
+   "zemin": "mixed",
+   "url": "https://www.wikiderya.org/index.php/wiki/fakdereufakdere"
+  },
+  "gokliman-finike": {
+   "zemin": "sand",
+   "url": "https://www.navily.com/mouillage/gokliman-plaji/54274"
+  },
+  "ince-burun-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 5,
+   "derinlik_max": 6,
+   "url": "https://www.cruiserswiki.org/wiki/Antalya"
+  },
+  "karaoz-koyu": {
+   "zemin": "sand",
+   "url": "https://www.wikiderya.org/wiki/karaoz-limani"
+  },
+  "olimpos-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 4,
+   "derinlik_max": 12,
+   "url": "https://safetyanchoralarm.com/anchorages/turkey/finike-antalya/olympos-beach"
+  },
+  "papaz-koyu": {
+   "zemin": "sand",
+   "url": "https://www.antalyagundem.com.tr/antalya-kumluca-plajlari"
+  },
+  "polemos-buku": {
+   "zemin": "mud",
+   "derinlik_min": 5,
+   "derinlik_max": 10,
+   "url": "https://www.cruiserswiki.org/wiki/Kekova_Roads"
+  },
+  "suluada-koyu": {
+   "zemin": "mixed",
+   "url": "https://www.antalyagundem.com.tr/antalya-kumluca-plajlari"
+  },
+  "bademli-liman": {
+   "zemin": "sand",
+   "derinlik_min": 2,
+   "derinlik_max": 3.5,
+   "url": "https://www.wikiderya.org/wiki/bademli"
+  },
+  "bolme-kormen-island-koyu": {
+   "zemin": "mixed",
+   "derinlik_min": 5,
+   "url": "https://turkeymarinas.blogspot.com/2016/09/bolme-kormen-island-anchorage.html"
+  },
+  "camcagiz-limani": {
+   "zemin": "sand",
+   "url": "https://turkeymarinas.blogspot.com/2016/09/camcagiz-limani-anchorage.html"
+  },
+  "denizkoy-koyu": {
+   "zemin": "mixed",
+   "derinlik_min": 2,
+   "derinlik_max": 7,
+   "url": "https://turkeymarinas.blogspot.com/2016/10/denizkoy-cove-anchorage.html"
+  },
+  "denizyildizi-bodrum-koyu": {
+   "zemin": "mixed",
+   "derinlik_min": 4,
+   "derinlik_max": 5,
+   "url": "https://turkeymarinas.blogspot.com/2016/09/denizyildizi-bodrum-cove-anchorage.html"
+  },
+  "garip-adasi-demirleme": {
+   "zemin": "sand",
+   "derinlik_min": 2,
+   "derinlik_max": 4,
+   "url": "https://turkeymarinas.blogspot.com/2016/10/bademli-liman-anchorage.html"
+  },
+  "gevil-koyu": {
+   "zemin": "mixed",
+   "derinlik_min": 4,
+   "derinlik_max": 5,
+   "url": "https://turkeymarinas.blogspot.com/2016/09/gevil-cove-anchorage.html"
+  },
+  "kalem-adasi-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 3,
+   "derinlik_max": 6,
+   "url": "https://turkeymarinas.blogspot.com/2016/10/bademli-liman-anchorage.html"
+  },
+  "kara-ada-koyu": {
+   "zemin": "mixed",
+   "derinlik_min": 3,
+   "derinlik_max": 10,
+   "url": "https://turkeymarinas.blogspot.com/2016/10/kara-ada-anchorage.html"
+  },
+  "kargacik-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 5,
+   "url": "https://turkeymarinas.blogspot.com/2016/09/kargacik-cove-anchorage.html"
+  },
+  "maydanoz-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 5,
+   "url": "https://turkeymarinas.blogspot.com/2016/09/maydanoz-cove-anchorage.html"
+  },
+  "notion-koyu": {
+   "zemin": "mixed",
+   "derinlik_min": 5,
+   "derinlik_max": 5,
+   "url": "https://turkeymarinas.blogspot.com/2016/09/ahmetbeyli-cove-anchorage.html"
+  },
+  "pasa-limani": {
+   "zemin": "mixed",
+   "url": "https://cesmetravel.com/tr/gezirehberi/pasa-limani-plaji.html"
+  },
+  "sicaksu-koyu": {
+   "zemin": "mixed",
+   "derinlik_min": 5,
+   "derinlik_max": 5,
+   "url": "https://www.cruiserswiki.org/wiki/Sigacik_Region"
+  },
+  "zeytineli-koyu-demirleme": {
+   "zemin": "mixed",
+   "url": "https://www.navily.com/de/mouillage/zeytineli-koyu/59114"
+  },
+  "altinkum-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 3,
+   "derinlik_max": 4,
+   "url": "https://www.cruiserswiki.org/wiki/Gulluk_Korfesi"
+  },
+  "cam-limani-kusadasi": {
+   "zemin": "weed",
+   "derinlik_min": 3,
+   "derinlik_max": 8,
+   "url": "https://turkeymarinas.blogspot.com/2016/09/cam-limani-anchorage_17.html"
+  },
+  "cukurcuk-limani": {
+   "derinlik_min": 2,
+   "derinlik_max": 4,
+   "url": "https://www.cruiserswiki.org/wiki/Gulluk_Korfesi"
+  },
+  "sandal-islet-koyu": {
+   "zemin": "mixed",
+   "derinlik_min": 3,
+   "derinlik_max": 5,
+   "url": "https://turkeymarinas.blogspot.com/2016/09/sandal-islet-cove-anchorage.html"
+  },
+  "su-island-koyu": {
+   "zemin": "weed",
+   "derinlik_min": 7,
+   "derinlik_max": 9,
+   "url": "https://turkeymarinas.blogspot.com/2016/09/su-island-anchorage.html"
+  },
+  "sapli-island-koyu": {
+   "zemin": "sand",
+   "url": "https://www.navily.com/fr/mouillage/sapli/45376"
+  },
+  "ortunc-koyu": {
+   "zemin": "weed",
+   "derinlik_min": 3,
+   "derinlik_max": 10,
+   "url": "https://turkeymarinas.blogspot.com/2016/11/ortunc-cove-anchorage.html"
+  },
+  "pasa-koyu": {
+   "derinlik_min": 4,
+   "derinlik_max": 4,
+   "url": "https://turkeymarinas.blogspot.com/2016/11/pasa-koyu-anchorage.html"
+  },
+  "patrica-koyu": {
+   "derinlik_min": 3,
+   "derinlik_max": 4,
+   "url": "https://turkeymarinas.blogspot.com/2016/11/patricia-koyu-gokceliman-anchorage.html"
+  },
+  "akkum-koyu": {
+   "zemin": "mixed",
+   "url": "https://www.navily.com/mouillage/akkum-plaji/53992"
+  },
+  "akyar-koyu": {
+   "zemin": "sand",
+   "url": "https://www.wikiderya.org/wiki/akyar-buku-kizlarhamami"
+  },
+  "barbaros-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 6,
+   "derinlik_max": 7,
+   "url": "https://www.wikiderya.org/wiki/barboros-koyu-tahti-koyu"
+  },
+  "bogsak-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 8,
+   "derinlik_max": 10,
+   "url": "https://www.wikiderya.org/wiki/bogsak-koyu"
+  },
+  "dana-adasi": {
+   "zemin": "sand",
+   "url": "https://www.danaadasi.com/p/dana-island.html"
+  },
+  "kizkalesi-koyu": {
+   "zemin": "sand",
+   "url": "https://www.wikiderya.org/wiki/kizkalesi"
+  },
+  "kizlarhamami-koyu": {
+   "zemin": "sand",
+   "url": "https://www.wikiderya.org/wiki/akyar-buku-kizlarhamami"
+  },
+  "narlikuyu-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 2.5,
+   "derinlik_max": 3,
+   "url": "https://www.wikiderya.org/wiki/narlikuyu"
+  },
+  "simi-nanou-koyu": {
+   "zemin": "sand",
+   "derinlik_min": 3.5,
+   "derinlik_max": 10,
+   "url": "https://sailingissues.com/greekislands/simi.html"
   }
  }
 }

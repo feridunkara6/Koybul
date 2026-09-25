@@ -22,23 +22,44 @@ final StateProvider<bool> nearbySheetCollapsedProvider =
 /// VARSAYILAN KATLI: yalnız başlık şeridi görünür; şeride DOKUNUNCA kartlar
 /// açılır, tekrar dokununca kapanır (ok işareti yönü gösterir). Dokunuş esas
 /// alınır — kaydırma jesti web'de haritayla yarıştığı için güvenilmezdi.
-class NearbySheet extends ConsumerWidget {
+class NearbySheet extends ConsumerStatefulWidget {
   const NearbySheet({super.key});
+
+  @override
+  ConsumerState<NearbySheet> createState() => _NearbySheetState();
+}
+
+class _NearbySheetState extends ConsumerState<NearbySheet> {
+  /// KATLIYKEN DONDURULMUŞ sorgu anahtarı (kurucu bulgusu 2026-09-25:
+  /// "haritayı hareket ettirince alttaki çubuk sürekli titriyor"). Katlı
+  /// şerit yalnız başlık gösterir — içeriği umursamaz; yine de her ~1 km'de
+  /// yeni sorgu başlatmak şeridi 'yükleniyor → boş → dolu' döngüsüne sokup
+  /// görünüp kaybolmasına yol açıyordu. Katlıyken anahtar SABİT tutulur;
+  /// kullanıcı şeridi AÇINCA güncel konuma tazelenir.
+  MapNearbyKey? _frozenKey;
+
+  /// Son başarılı liste — yeni sorgu yüklenirken şerit eski veriyle sabit
+  /// durur (titreme önleyici); hiç veri gelmediyse şerit çizilmez (eski kural).
+  List<LocationSummary>? _lastItems;
 
   /// Sorgu anahtarı ~1 km'ye yuvarlanır — her küçük kaydırmada istek atılmaz.
   static double _round2(double v) => (v * 100).roundToDouble() / 100;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final GeoPoint? origin = ref.watch(originProvider);
     if (origin == null) return const SizedBox.shrink();
-    final MapNearbyKey key =
+    final bool collapsed = ref.watch(nearbySheetCollapsedProvider);
+    final MapNearbyKey current =
         (lat: _round2(origin.lat), lon: _round2(origin.lon));
+    final MapNearbyKey key = collapsed ? (_frozenKey ?? current) : current;
+    _frozenKey = key;
     final AsyncValue<List<LocationSummary>> async = ref.watch(mapNearbyProvider(key));
-    final List<LocationSummary>? items = async.valueOrNull;
+    final List<LocationSummary>? fresh = async.valueOrNull;
+    if (fresh != null) _lastItems = fresh; // boş liste de gerçek bir cevaptır
+    final List<LocationSummary>? items = fresh ?? _lastItems;
     if (items == null || items.isEmpty) return const SizedBox.shrink();
 
-    final bool collapsed = ref.watch(nearbySheetCollapsedProvider);
     final ThemeData theme = Theme.of(context);
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
