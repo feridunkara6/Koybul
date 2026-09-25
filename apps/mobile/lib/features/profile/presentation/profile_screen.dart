@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/app_locale.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../../academy/presentation/academy_screen.dart';
+import '../../admin/application/admin_controller.dart';
+import '../../admin/presentation/admin_screen.dart';
 import '../../auth/application/auth_controller.dart';
 import '../../auth/domain/auth_state.dart';
 import '../../auth/presentation/account_section.dart';
@@ -77,6 +79,9 @@ class ProfileScreen extends ConsumerWidget {
                 const ContributionsBlock(),
                 // MODERASYON (topluluk 2026-08): yalnız moderatöre görünür.
                 const ModerationRow(),
+                // YÖNETİM PANELİ (kurucu talebi 2026-09-25): yalnız admin
+                // rolüne görünür; yetki denetimi sunucudadır (RolesGuard).
+                const _AdminRow(),
                 // DENİZCİLİK — kaptanın varlıkları.
                 Padding(
                   padding: const EdgeInsets.only(left: 4, top: 18, bottom: 7),
@@ -189,6 +194,31 @@ class ProfileScreen extends ConsumerWidget {
         letterSpacing: 0.8,
         color: theme.colorScheme.onSurfaceVariant,
       );
+}
+
+/// YÖNETİM PANELİ satırı — yalnız admin/super_admin hesaplara görünür
+/// (moderasyon satırıyla aynı desen; kurucu talebi 2026-09-25).
+class _AdminRow extends ConsumerWidget {
+  const _AdminRow();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (!ref.watch(isAdminProvider)) return const SizedBox.shrink();
+    final L10n t = ref.watch(l10nProvider);
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: _GroupCard(children: <Widget>[
+        _GroupRow(
+          icon: DocklyIcons.viewList,
+          tint: DocklyColors.brandDeep,
+          label: t.admRow,
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute<void>(builder: (_) => const AdminScreen()),
+          ),
+        ),
+      ]),
+    );
+  }
 }
 
 /// KAPTAN KARTI başlığı: degrade zemin, avatar, hesap bilgisi, premium rozeti.

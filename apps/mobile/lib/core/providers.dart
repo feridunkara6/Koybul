@@ -58,6 +58,12 @@ final Provider<PremiumApi> premiumApiProvider = Provider<PremiumApi>((ref) {
   return PremiumApi(ref.watch(docklyClientProvider).dio);
 });
 
+/// YÖNETİM PANELİ istemcisi (kurucu talebi 2026-09-25) — yalnız admin rolü
+/// kullanır; yetki denetimi sunucudadır.
+final Provider<AdminApi> adminApiProvider = Provider<AdminApi>((ref) {
+  return AdminApi(ref.watch(docklyClientProvider).dio);
+});
+
 /// Rüzgâr/hava tahmini API istemcisi — anonim uç (MET Norway, sunucu proksili).
 final Provider<WeatherApi> weatherApiProvider = Provider<WeatherApi>((ref) {
   return WeatherApi(ref.watch(docklyClientProvider).dio);
