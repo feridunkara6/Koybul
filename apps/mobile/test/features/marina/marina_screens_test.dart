@@ -1,5 +1,6 @@
 import 'package:dockly_api/dockly_api.dart'
     show MarinaBoat, MarinaCommunity, MyMarinaBoat;
+import 'package:dockly_mobile/features/auth/application/auth_controller.dart';
 import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
 import 'package:dockly_mobile/features/boat/domain/my_boat.dart';
 import 'package:dockly_mobile/features/marina/application/marina_controller.dart';
