@@ -53,6 +53,8 @@ enum ModerationEntity {
   suggested_location
   location_report
   note
+  qa_question
+  qa_answer
 
   @@map("moderation_entity")
 }
@@ -531,6 +533,11 @@ model User {
 
   moderationTasksAssigned          ModerationTask[]       @relation("ModerationAssignedTo")
   moderationTasksDecided           ModerationTask[]       @relation("ModerationDecidedBy")
+
+  qaQuestions                      QaQuestion[]           @relation("QaQuestionAuthor")
+  qaAnswers                        QaAnswer[]             @relation("QaAnswerAuthor")
+  qaQuestionLikes                  QaQuestionLike[]
+  qaAnswerHelpfuls                 QaAnswerHelpful[]
 
   reservationRequests               ReservationRequest[]  @relation("ReservationRequester")
   reservationRequestsHandled        ReservationRequest[]  @relation("ReservationHandledBy")
@@ -1319,6 +1326,82 @@ model ModerationTask {
 
   @@unique([entityType, entityId], map: "ux_moderation_tasks_entity")
   @@map("moderation_tasks")
+}
+
+// ---------------------------------------------------------------------
+// SORU-CEVAP (Blog V1 — kurucu onayı 2026-10-23, 0014_qa)
+// Erişim: liste+önizleme herkese, detay/yazma Premium (sunucu kilidi).
+// Moderasyon KARMA: ilk içerik kuyruktan, sonrası ön-süzgeç temizse anında.
+// ---------------------------------------------------------------------
+
+model QaQuestion {
+  id            String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String           @map("user_id") @db.Uuid
+  /// Sabit sözlük: demirleme|seyir|ekipman|marina|uygulama|genel (DB CHECK).
+  category      String
+  title         String
+  body          String
+  status        ModerationStatus @default(pending)
+  /// Premium görünürlük avantajı: onaydan sonra 24 saat "Öne çıkan" şeridi.
+  featuredUntil DateTime?        @map("featured_until") @db.Timestamptz(6)
+  likeCount     Int              @default(0) @map("like_count")
+  answersCount  Int              @default(0) @map("answers_count")
+  createdAt     DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime         @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt     DateTime?        @map("deleted_at") @db.Timestamptz(6)
+
+  author  User             @relation("QaQuestionAuthor", fields: [userId], references: [id], onDelete: Cascade)
+  answers QaAnswer[]
+  likes   QaQuestionLike[]
+
+  @@index([status, createdAt(sort: Desc)], map: "ix_qa_questions_feed")
+  @@index([category, status, createdAt(sort: Desc)], map: "ix_qa_questions_category")
+  @@index([userId], map: "ix_qa_questions_user")
+  @@map("qa_questions")
+}
+
+model QaAnswer {
+  id           String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  questionId   String           @map("question_id") @db.Uuid
+  userId       String           @map("user_id") @db.Uuid
+  body         String
+  status       ModerationStatus @default(pending)
+  helpfulCount Int              @default(0) @map("helpful_count")
+  createdAt    DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime         @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?        @map("deleted_at") @db.Timestamptz(6)
+
+  question QaQuestion        @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  author   User              @relation("QaAnswerAuthor", fields: [userId], references: [id], onDelete: Cascade)
+  helpfuls QaAnswerHelpful[]
+
+  @@index([questionId, status, createdAt], map: "ix_qa_answers_question")
+  @@index([userId], map: "ix_qa_answers_user")
+  @@map("qa_answers")
+}
+
+model QaQuestionLike {
+  questionId String   @map("question_id") @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  question QaQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([questionId, userId])
+  @@map("qa_question_likes")
+}
+
+model QaAnswerHelpful {
+  answerId  String   @map("answer_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  answer QaAnswer @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([answerId, userId])
+  @@map("qa_answer_helpfuls")
 }
 
 // ---------------------------------------------------------------------

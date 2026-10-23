@@ -1,7 +1,14 @@
 /** Moderasyon kuyruğunda görünen tek öğe. */
 export interface ModerationItem {
   taskId: string;
-  entityType: 'note' | 'review' | 'media' | 'suggested_location' | 'location_report';
+  entityType:
+    | 'note'
+    | 'review'
+    | 'media'
+    | 'suggested_location'
+    | 'location_report'
+    | 'qa_question'
+    | 'qa_answer';
   entityId: string;
   createdAt: string;
   /** Karar verirken gereken bağlam — moderatör içeriği görmeden karar veremez. */

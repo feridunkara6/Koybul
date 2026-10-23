@@ -19,6 +19,7 @@ import { DeriaModule } from './modules/deria/deria.module';
 import { CommunityModule } from './modules/community/community.module';
 import { PremiumModule } from './modules/premium/premium.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { QaModule } from './modules/qa/qa.module';
 
 /** PII redaksiyon listesi (docs/24 §12, docs/29 SEC-04). */
 const REDACT_PATHS = [
@@ -59,6 +60,7 @@ const REDACT_PATHS = [
     CommunityModule,
     PremiumModule,
     AdminModule,
+    QaModule,
   ],
 })
 export class AppModule implements NestModule {

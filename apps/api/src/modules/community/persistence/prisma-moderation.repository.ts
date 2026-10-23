@@ -38,13 +38,13 @@ export class PrismaModerationRepository implements ModerationRepository {
     >(Prisma.sql`
       SELECT t.id AS "taskId", t.entity_type::text AS "entityType", t.entity_id AS "entityId",
              t.created_at AS "createdAt",
-             n.kind::text AS kind,
-             COALESCE(n.title, r.title) AS title,
-             COALESCE(n.body, r.body) AS body,
+             COALESCE(n.kind::text, qq.category, qaq.category) AS kind,
+             COALESCE(n.title, r.title, qq.title, qaq.title) AS title,
+             COALESCE(n.body, r.body, qq.body, qa.body) AS body,
              COALESCE(ln.name, lr.name) AS "locationName",
              n.observed_on AS "observedOn",
              n.gps_verified AS "gpsVerified",
-             COALESCE(n.user_id, r.user_id) AS "authorId",
+             COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id) AS "authorId",
              p.display_name AS "displayName",
              COALESCE(rep.level_code, 'new') AS "levelCode",
              COALESCE(rep.approved_count, 0)::int AS "approvedCount",
@@ -54,10 +54,18 @@ export class PrismaModerationRepository implements ModerationRepository {
         ON t.entity_type = 'note' AND n.id = t.entity_id AND n.deleted_at IS NULL
       LEFT JOIN reviews r
         ON t.entity_type = 'review' AND r.id = t.entity_id AND r.deleted_at IS NULL
+      -- Soru-cevap (0014_qa): soru doğrudan; cevapta bağlam için SORUSU da gelir.
+      LEFT JOIN qa_questions qq
+        ON t.entity_type = 'qa_question' AND qq.id = t.entity_id AND qq.deleted_at IS NULL
+      LEFT JOIN qa_answers qa
+        ON t.entity_type = 'qa_answer' AND qa.id = t.entity_id AND qa.deleted_at IS NULL
+      LEFT JOIN qa_questions qaq ON qaq.id = qa.question_id
       LEFT JOIN locations ln ON ln.id = n.location_id
       LEFT JOIN locations lr ON lr.id = r.location_id
-      LEFT JOIN user_profiles p ON p.user_id = COALESCE(n.user_id, r.user_id)
-      LEFT JOIN user_reputation rep ON rep.user_id = COALESCE(n.user_id, r.user_id)
+      LEFT JOIN user_profiles p
+        ON p.user_id = COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id)
+      LEFT JOIN user_reputation rep
+        ON rep.user_id = COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id)
       WHERE t.status = 'pending' ${typeFilter}
       ORDER BY (t.entity_type = 'note' AND n.kind = 'hazard') DESC, t.created_at ASC
       LIMIT ${limit}
@@ -152,6 +160,50 @@ export class PrismaModerationRepository implements ModerationRepository {
           noteKind: null,
           bodyLength: Number(rows[0].len),
         };
+      }
+
+      if (entityType === 'qa_question') {
+        // İlk onayda 24 saatlik "Öne çıkan" penceresi açılır (Blog V1 adalet
+        // kararı A). Reddedilen soru akıştan düşer; şikâyet-sonrası onay
+        // şeridi YENİDEN açmaz (featured_until yalnız pending→approved'da).
+        const rows = await tx.$queryRaw<{ oldStatus: string }[]>(Prisma.sql`
+          UPDATE qa_questions q SET
+            status = ${status}::moderation_status,
+            featured_until = CASE
+              WHEN ${status} = 'approved' AND o.status = 'pending'::moderation_status
+                THEN now() + interval '24 hours'
+              ELSE q.featured_until END,
+            updated_at = now()
+          FROM (SELECT id, status FROM qa_questions WHERE id = ${entityId}::uuid FOR UPDATE) o
+          WHERE q.id = o.id AND q.deleted_at IS NULL
+          RETURNING o.status::text AS "oldStatus"
+        `);
+        if (rows.length === 0) return null;
+        // İtibar puanı BİLİNÇLİ yok (Blog V1) — owner null döner, puan yazılmaz.
+        return { entityType, entityId, ownerUserId: null, decision, noteKind: null, bodyLength: 0 };
+      }
+
+      if (entityType === 'qa_answer') {
+        // Cevap sayacı yalnız onay durumu DEĞİŞİNCE oynar: pending→approved +1,
+        // (şikâyet sonrası) approved→rejected -1; aynı karar tekrarı 0.
+        const rows = await tx.$queryRaw<{ oldStatus: string; questionId: string }[]>(Prisma.sql`
+          UPDATE qa_answers a SET status = ${status}::moderation_status, updated_at = now()
+          FROM (SELECT id, status, question_id FROM qa_answers
+                WHERE id = ${entityId}::uuid FOR UPDATE) o
+          WHERE a.id = o.id AND a.deleted_at IS NULL
+          RETURNING o.status::text AS "oldStatus", o.question_id AS "questionId"
+        `);
+        if (rows.length === 0) return null;
+        const was = rows[0].oldStatus === 'approved' ? 1 : 0;
+        const is = status === 'approved' ? 1 : 0;
+        if (is - was !== 0) {
+          await tx.$executeRaw(Prisma.sql`
+            UPDATE qa_questions
+            SET answers_count = GREATEST(0, answers_count + ${is - was}), updated_at = now()
+            WHERE id = ${rows[0].questionId}::uuid
+          `);
+        }
+        return { entityType, entityId, ownerUserId: null, decision, noteKind: null, bodyLength: 0 };
       }
 
       // Diğer varlık tipleri (media, suggestion) Faz 5'te bağlanır. Sahip
