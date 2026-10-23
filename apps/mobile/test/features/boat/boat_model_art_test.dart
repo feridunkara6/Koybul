@@ -32,21 +32,49 @@ void main() {
   });
 
   test('KATI eşleşme: komşu boy ve bilinmeyen model EŞLEŞMEZ', () {
-    // Oceanis 40.1 kütüphanede yok → 38 ya da 46 ÇİZİLMEZ.
-    expect(boatModelArt(brand: 'Beneteau', model: 'Oceanis 40.1'), isNull);
-    // Sun Odyssey 410 kütüphanede yok (449'un "44"ü 410'u yakalamaz).
-    expect(boatModelArt(brand: 'Jeanneau', model: 'Sun Odyssey 410'), isNull);
+    // Kütüphanede olmayan boylar çizilmez (komşuya yuvarlama yok).
+    expect(boatModelArt(brand: 'Beneteau', model: 'Oceanis 35.1'), isNull);
+    expect(boatModelArt(brand: 'Jeanneau', model: 'Sun Odyssey 380'), isNull);
+    // Lagoon 400 ayrı (eski) nesildir — 40'ın çizimi ona GÖSTERİLMEZ.
+    expect(boatModelArt(brand: 'Lagoon', model: '400 S2'), isNull);
     // Sayısız / boş / alakasız metin eşleşmez.
     expect(boatModelArt(brand: 'Beneteau', model: 'Oceanis'), isNull);
     expect(boatModelArt(brand: null, model: null), isNull);
     expect(boatModelArt(brand: 'Najad', model: '390'), isNull);
-    // Aile başka markaya ait sayıyı sahiplenmez: Bavaria 412 diye model yok
-    // ama "41" yalnız Dufour ailesinde — bavaria + 412 eşleşmemeli.
     expect(boatModelArt(brand: 'Bavaria', model: '412'), isNull);
+    // Sayısız modelde AYIRT EDİCİ ad şarttır: tek başına "Westerly" yetmez.
+    expect(boatModelArt(brand: 'Westerly', model: '33'), isNull);
   });
 
-  test('katalog bütünlüğü: 20 ayrı model, 20 ayrı gövde, ad çapalı', () {
-    expect(kBoatModelCatalog, hasLength(20));
+  test('PAKET 2: yeni modeller doğru çizime eşleşir', () {
+    String? idOf(String brand, String model) =>
+        boatModelArt(brand: brand, model: model)?.id;
+    expect(idOf('Beneteau', 'Oceanis 40.1'), 'oceanis_40');
+    expect(idOf('Jeanneau', 'Sun Odyssey 410'), 'so_410');
+    expect(idOf('Bavaria', 'C42'), 'bavaria_c42');
+    expect(idOf('Hanse', '388'), 'hanse_388');
+    // Sayısız modeller model ADIYLA eşleşir.
+    expect(idOf('Westerly', 'Centaur'), 'centaur');
+    expect(idOf('Dufour', 'Arpège'), 'arpege');
+    expect(idOf('Dufour', 'Arpege'), 'arpege'); // aksansız yazım da tutar
+    expect(idOf('Beneteau', 'First 31.7'), 'first_317');
+    expect(idOf('Hallberg-Rassy', '352'), 'hr_352');
+    expect(idOf('Comar', 'Comet 910'), 'comet_910');
+    expect(idOf('Sirena Marine', 'Azuree 46'), 'azuree_46');
+    expect(idOf('Fountaine Pajot', 'Astréa 42'), 'astrea_42');
+    expect(idOf('Excess', '11'), 'excess_11');
+    expect(idOf('Lagoon', '40'), 'lagoon_40');
+    expect(idOf('Sea Ray', 'Sundancer 265'), 'searay_265');
+    expect(idOf('Sirena', '48'), 'sirena_48');
+    expect(idOf('Jeanneau', 'Merry Fisher 695'), 'mf_695');
+    expect(idOf('Quicksilver', '605 Pilothouse'), 'qs_605');
+    expect(idOf('Zodiac', 'Medline 6.8'), 'zodiac_68');
+    expect(idOf('Highfield', 'Sport 660'), 'highfield_660');
+    expect(idOf('Brig', 'Eagle 6.7'), 'brig_67');
+  });
+
+  test('katalog bütünlüğü: 40 ayrı model, 40 ayrı gövde, ad çapalı', () {
+    expect(kBoatModelCatalog, hasLength(40));
     final Set<String> ids = <String>{};
     final Set<String> bodies = <String>{};
     for (final BoatArtEntry e in kBoatModelCatalog) {
@@ -57,8 +85,8 @@ void main() {
       expect(e.nameX, greaterThan(0)); // borda adı çapası tanımlı
       expect(e.vbW, greaterThan(0));
     }
-    expect(ids, hasLength(20)); // kimlik çakışması yok
-    expect(bodies, hasLength(20)); // kopya-boylandırma yok: 20 AYRI geometri
+    expect(ids, hasLength(40)); // kimlik çakışması yok
+    expect(bodies, hasLength(40)); // kopya-boylandırma yok: 40 AYRI geometri
   });
 
   test('tür çizimleri: 8 tür + gulet BOY varyantı', () {
