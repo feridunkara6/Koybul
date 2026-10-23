@@ -6,6 +6,9 @@ import 'package:dockly_api/dockly_api.dart'
         MyMarinaBoat,
         QaFeed,
         QaQuestionSummary;
+// CI dersi (2026-10-23, marina testleriyle aynı): authRepositoryProvider
+// auth_controller'da tanımlı — import zincirleme GEÇMEZ, burada da gerekir.
+import 'package:dockly_mobile/features/auth/application/auth_controller.dart';
 import 'package:dockly_mobile/features/boat/application/maintenance_controller.dart';
 import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
 import 'package:dockly_mobile/features/boat/domain/maintenance.dart';
