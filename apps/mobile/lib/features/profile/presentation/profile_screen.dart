@@ -18,6 +18,7 @@ import '../../onboarding/application/onboarding_controller.dart';
 import '../../favorites/presentation/favorites_screen.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../premium/presentation/premium_screen.dart';
+import '../../qa/presentation/qa_list_screen.dart';
 import '../../legal/presentation/legal_screen.dart';
 import '../../legal/presentation/sources_screen.dart';
 import '../../route/presentation/saved_routes_screen.dart';
@@ -113,6 +114,17 @@ class ProfileScreen extends ConsumerWidget {
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute<void>(
                           builder: (_) => const SavedRoutesScreen()),
+                    ),
+                  ),
+                  _GroupRow(
+                    icon: DocklyIcons.chat,
+                    tint: DocklyColors.brandPrimary,
+                    // SORU-CEVAP (Blog V1, kurucu onayı 2026-10-23): liste
+                    // herkese açık; detay/yazma kilidi SUNUCUDA (premium v3).
+                    label: t.qaRowTitle,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          builder: (_) => const QaListScreen()),
                     ),
                   ),
                   _GroupRow(

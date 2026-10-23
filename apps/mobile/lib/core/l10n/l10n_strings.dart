@@ -131,6 +131,39 @@ class L10n {
     required this.admDownloadsNote,
     required this.forgotPasswordBtn,
     required this.resetMailSentFmt,
+    required this.qaRowTitle,
+    required this.qaLead,
+    required this.qaCatAll,
+    required this.qaCatDemirleme,
+    required this.qaCatSeyir,
+    required this.qaCatEkipman,
+    required this.qaCatMarina,
+    required this.qaCatUygulama,
+    required this.qaCatGenel,
+    required this.qaFeaturedCap,
+    required this.qaLatestCap,
+    required this.qaAskCta,
+    required this.qaAnswersFmt,
+    required this.qaEmpty,
+    required this.qaLockTitle,
+    required this.qaLockBodyFmt,
+    required this.qaPendingNote,
+    required this.qaPublishedNote,
+    required this.qaAnswerHint,
+    required this.qaTitleHint,
+    required this.qaBodyHint,
+    required this.qaRulesNote,
+    required this.qaSubmit,
+    required this.qaSubmitAnswer,
+    required this.qaReport,
+    required this.qaReported,
+    required this.qaHelpfulFmt,
+    required this.qaValTitle,
+    required this.qaValBody,
+    required this.qaValAnswer,
+    required this.qaPendingChip,
+    required this.modEntityQaQuestion,
+    required this.modEntityQaAnswer,
     required this.emergencyTitle,
     required this.emergencySub,
     required this.sectionBoat,
@@ -710,6 +743,8 @@ class L10n {
   final String admEmailLabel, admMonthsFmt, admGrantBtn, admGrantDoneFmt, admNotFound;
   final String admDownloadsNote;
   final String forgotPasswordBtn, resetMailSentFmt;
+  // SORU-CEVAP (Blog V1 — kurucu onayı 2026-10-23).
+  final String qaRowTitle, qaLead, qaCatAll, qaCatDemirleme, qaCatSeyir, qaCatEkipman, qaCatMarina, qaCatUygulama, qaCatGenel, qaFeaturedCap, qaLatestCap, qaAskCta, qaAnswersFmt, qaEmpty, qaLockTitle, qaLockBodyFmt, qaPendingNote, qaPublishedNote, qaAnswerHint, qaTitleHint, qaBodyHint, qaRulesNote, qaSubmit, qaSubmitAnswer, qaReport, qaReported, qaHelpfulFmt, qaValTitle, qaValBody, qaValAnswer, qaPendingChip, modEntityQaQuestion, modEntityQaAnswer;
   final String sectionBoat, boatEmptyBody, boatDeckBridge, boatDefineCta;
   final String boatLengthFmt, boatDraftFmt, boatDraftUnknown, editLabel, removeLabel;
   final String sectionAccount, accTitle, accBody, accCta, accOpen, signOut;
@@ -1200,6 +1235,24 @@ class L10n {
   }
 
   /// Moderasyon kuyruğundaki varlık türünün etiketi.
+  /// Soru-cevap kategori kodu → görünen ad (Blog V1).
+  String qaCategoryLabel(String code) {
+    switch (code) {
+      case 'demirleme':
+        return qaCatDemirleme;
+      case 'seyir':
+        return qaCatSeyir;
+      case 'ekipman':
+        return qaCatEkipman;
+      case 'marina':
+        return qaCatMarina;
+      case 'uygulama':
+        return qaCatUygulama;
+      default:
+        return qaCatGenel;
+    }
+  }
+
   String moderationEntityLabel(String code) {
     switch (code) {
       case 'review':
@@ -1210,6 +1263,10 @@ class L10n {
         return modEntitySuggestion;
       case 'location_report':
         return modEntityReport;
+      case 'qa_question':
+        return modEntityQaQuestion;
+      case 'qa_answer':
+        return modEntityQaAnswer;
       default:
         return modEntityNote;
     }
@@ -1368,6 +1425,39 @@ const L10n _tr = L10n(
   admDownloadsNote: 'İndirme sayısı Apple\'ın App Store Connect › Analytics ekranındadır; sunucu yalnız kayıtlı hesapları bilir.',
   forgotPasswordBtn: 'Şifremi unuttum',
   resetMailSentFmt: 'Sıfırlama bağlantısı {0} adresine gönderildi — gelen kutunu (ve gereksiz klasörünü) kontrol et.',
+  qaRowTitle: 'Soru-Cevap',
+  qaLead: 'Denizcilerin birbirine sorduğu sorular — her cevapla büyüyen bilgi arşivi.',
+  qaCatAll: 'Tümü',
+  qaCatDemirleme: 'Demirleme',
+  qaCatSeyir: 'Rota & Seyir',
+  qaCatEkipman: 'Ekipman',
+  qaCatMarina: 'Marina',
+  qaCatUygulama: 'Uygulama',
+  qaCatGenel: 'Genel',
+  qaFeaturedCap: 'ÖNE ÇIKAN',
+  qaLatestCap: 'SON SORULAR',
+  qaAskCta: 'Soru sor',
+  qaAnswersFmt: '{0} cevap',
+  qaEmpty: 'Henüz soru yok — ilk soruyu sen sor, kaptan.',
+  qaLockTitle: 'Cevaplar Premium üyelere açık',
+  qaLockBodyFmt: '{0} denizci bu soruyu cevaplamış. Tüm soru-cevap arşivi, soru sorma ve cevap yazma Koybul Premium ile açılır.',
+  qaPendingNote: 'İçeriğin denetime alındı — onaylanınca yayınlanacak. (İlk katkılar kısa bir denetimden geçer.)',
+  qaPublishedNote: 'Yayınlandı — rüzgârın bol olsun!',
+  qaAnswerHint: 'Cevabını yaz…',
+  qaTitleHint: 'Sorunu tek cümlede özetle…',
+  qaBodyHint: 'Durumu anlat: nerede, hangi tekne, hangi koşullar… Ne kadar detay, o kadar isabetli cevap.',
+  qaRulesNote: 'Topluluk kuralları: reklam, kişisel bilgi ve hakaret içeren içerik kaldırılır.',
+  qaSubmit: 'Soruyu yayınla',
+  qaSubmitAnswer: 'Cevabı gönder',
+  qaReport: 'Bildir',
+  qaReported: 'Bildirildi — moderasyon inceleyecek.',
+  qaHelpfulFmt: 'Faydalı · {0}',
+  qaValTitle: 'Başlık 10-140 karakter olmalı.',
+  qaValBody: 'Detay en az 30 karakter olmalı.',
+  qaValAnswer: 'Cevap en az 10 karakter olmalı.',
+  qaPendingChip: 'Onay bekliyor',
+  modEntityQaQuestion: 'Soru',
+  modEntityQaAnswer: 'Cevap (S-C)',
   emergencyTitle: 'Acil Durum',
   emergencySub: '158 · 112 · VHF 16 · MAYDAY şablonu · denizci alfabesi',
   sectionBoat: 'Teknem',
@@ -2104,6 +2194,39 @@ const L10n _en = L10n(
   admDownloadsNote: 'Download counts live in Apple\'s App Store Connect › Analytics; the server only knows registered accounts.',
   forgotPasswordBtn: 'Forgot my password',
   resetMailSentFmt: 'A reset link was sent to {0} — check your inbox (and spam folder).',
+  qaRowTitle: 'Q&A',
+  qaLead: 'Questions sailors ask each other — a knowledge archive that grows with every answer.',
+  qaCatAll: 'All',
+  qaCatDemirleme: 'Anchoring',
+  qaCatSeyir: 'Route & Passage',
+  qaCatEkipman: 'Equipment',
+  qaCatMarina: 'Marina',
+  qaCatUygulama: 'App',
+  qaCatGenel: 'General',
+  qaFeaturedCap: 'FEATURED',
+  qaLatestCap: 'LATEST QUESTIONS',
+  qaAskCta: 'Ask a question',
+  qaAnswersFmt: '{0} answers',
+  qaEmpty: 'No questions yet — ask the first one, captain.',
+  qaLockTitle: 'Answers are for Premium members',
+  qaLockBodyFmt: '{0} sailors have answered this question. The full Q&A archive, asking and answering open with Koybul Premium.',
+  qaPendingNote: 'Your content is in review — it will be published once approved. (First contributions get a quick review.)',
+  qaPublishedNote: 'Published — fair winds!',
+  qaAnswerHint: 'Write your answer…',
+  qaTitleHint: 'Sum up your question in one sentence…',
+  qaBodyHint: 'Describe the situation: where, which boat, what conditions… More detail, better answers.',
+  qaRulesNote: 'Community rules: ads, personal data and insults are removed.',
+  qaSubmit: 'Post question',
+  qaSubmitAnswer: 'Send answer',
+  qaReport: 'Report',
+  qaReported: 'Reported — moderation will review it.',
+  qaHelpfulFmt: 'Helpful · {0}',
+  qaValTitle: 'Title must be 10-140 characters.',
+  qaValBody: 'Details must be at least 30 characters.',
+  qaValAnswer: 'Answer must be at least 10 characters.',
+  qaPendingChip: 'Awaiting approval',
+  modEntityQaQuestion: 'Question',
+  modEntityQaAnswer: 'Answer (Q&A)',
   emergencyTitle: 'Emergency',
   emergencySub: '158 · 112 · VHF 16 · MAYDAY template · phonetic alphabet',
   sectionBoat: 'My Boat',
@@ -2840,6 +2963,39 @@ const L10n _es = L10n(
   admDownloadsNote: 'Las descargas están en App Store Connect › Analytics de Apple; el servidor solo conoce las cuentas registradas.',
   forgotPasswordBtn: 'Olvidé mi contraseña',
   resetMailSentFmt: 'Se envió un enlace de restablecimiento a {0}; revisa tu bandeja (y el spam).',
+  qaRowTitle: 'Preguntas y respuestas',
+  qaLead: 'Preguntas entre navegantes: un archivo de saber que crece con cada respuesta.',
+  qaCatAll: 'Todas',
+  qaCatDemirleme: 'Fondeo',
+  qaCatSeyir: 'Ruta y navegación',
+  qaCatEkipman: 'Equipo',
+  qaCatMarina: 'Marina',
+  qaCatUygulama: 'Aplicación',
+  qaCatGenel: 'General',
+  qaFeaturedCap: 'DESTACADAS',
+  qaLatestCap: 'ÚLTIMAS PREGUNTAS',
+  qaAskCta: 'Preguntar',
+  qaAnswersFmt: '{0} respuestas',
+  qaEmpty: 'Aún no hay preguntas: haz la primera, capitán.',
+  qaLockTitle: 'Las respuestas son para miembros Premium',
+  qaLockBodyFmt: '{0} navegantes han respondido esta pregunta. El archivo completo, preguntar y responder se abren con Koybul Premium.',
+  qaPendingNote: 'Tu contenido está en revisión; se publicará al aprobarse. (Las primeras aportaciones pasan una revisión breve.)',
+  qaPublishedNote: 'Publicado. ¡Buenos vientos!',
+  qaAnswerHint: 'Escribe tu respuesta…',
+  qaTitleHint: 'Resume tu pregunta en una frase…',
+  qaBodyHint: 'Describe la situación: dónde, qué barco, qué condiciones… Más detalle, mejores respuestas.',
+  qaRulesNote: 'Normas de la comunidad: se elimina publicidad, datos personales e insultos.',
+  qaSubmit: 'Publicar pregunta',
+  qaSubmitAnswer: 'Enviar respuesta',
+  qaReport: 'Denunciar',
+  qaReported: 'Denunciado: moderación lo revisará.',
+  qaHelpfulFmt: 'Útil · {0}',
+  qaValTitle: 'El título debe tener 10-140 caracteres.',
+  qaValBody: 'El detalle debe tener al menos 30 caracteres.',
+  qaValAnswer: 'La respuesta debe tener al menos 10 caracteres.',
+  qaPendingChip: 'Pendiente de aprobación',
+  modEntityQaQuestion: 'Pregunta',
+  modEntityQaAnswer: 'Respuesta (P-R)',
   emergencyTitle: 'Emergencia',
   emergencySub: '158 · 112 · VHF 16 · plantilla MAYDAY · alfabeto náutico',
   sectionBoat: 'Mi barco',
@@ -3576,6 +3732,39 @@ const L10n _ru = L10n(
   admDownloadsNote: 'Число загрузок — в App Store Connect › Analytics; сервер знает только зарегистрированные аккаунты.',
   forgotPasswordBtn: 'Забыл пароль',
   resetMailSentFmt: 'Ссылка для сброса отправлена на {0} — проверьте почту (и папку «Спам»).',
+  qaRowTitle: 'Вопросы и ответы',
+  qaLead: 'Вопросы моряков друг другу — архив знаний, растущий с каждым ответом.',
+  qaCatAll: 'Все',
+  qaCatDemirleme: 'Якорная стоянка',
+  qaCatSeyir: 'Маршрут и переход',
+  qaCatEkipman: 'Оборудование',
+  qaCatMarina: 'Марина',
+  qaCatUygulama: 'Приложение',
+  qaCatGenel: 'Общее',
+  qaFeaturedCap: 'ИЗБРАННОЕ',
+  qaLatestCap: 'ПОСЛЕДНИЕ ВОПРОСЫ',
+  qaAskCta: 'Задать вопрос',
+  qaAnswersFmt: 'Ответов: {0}',
+  qaEmpty: 'Вопросов пока нет — задайте первый, капитан.',
+  qaLockTitle: 'Ответы доступны участникам Premium',
+  qaLockBodyFmt: 'Моряков, ответивших на вопрос: {0}. Полный архив, вопросы и ответы открываются с Koybul Premium.',
+  qaPendingNote: 'Ваш контент на проверке — он появится после одобрения. (Первые публикации проходят быструю проверку.)',
+  qaPublishedNote: 'Опубликовано — попутного ветра!',
+  qaAnswerHint: 'Напишите свой ответ…',
+  qaTitleHint: 'Сформулируйте вопрос одним предложением…',
+  qaBodyHint: 'Опишите ситуацию: где, какая лодка, какие условия… Чем больше деталей, тем точнее ответы.',
+  qaRulesNote: 'Правила сообщества: реклама, личные данные и оскорбления удаляются.',
+  qaSubmit: 'Опубликовать вопрос',
+  qaSubmitAnswer: 'Отправить ответ',
+  qaReport: 'Пожаловаться',
+  qaReported: 'Жалоба отправлена — модерация проверит.',
+  qaHelpfulFmt: 'Полезно · {0}',
+  qaValTitle: 'Заголовок должен быть 10–140 символов.',
+  qaValBody: 'Описание должно быть не короче 30 символов.',
+  qaValAnswer: 'Ответ должен быть не короче 10 символов.',
+  qaPendingChip: 'Ожидает одобрения',
+  modEntityQaQuestion: 'Вопрос',
+  modEntityQaAnswer: 'Ответ (В-О)',
   emergencyTitle: 'Экстренная помощь',
   emergencySub: '158 · 112 · УКВ 16 · шаблон MAYDAY · фонетический алфавит',
   sectionBoat: 'Моя лодка',

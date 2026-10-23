@@ -64,6 +64,12 @@ final Provider<AdminApi> adminApiProvider = Provider<AdminApi>((ref) {
   return AdminApi(ref.watch(docklyClientProvider).dio);
 });
 
+/// SORU-CEVAP istemcisi (Blog V1, kurucu onayı 2026-10-23) — akış herkese
+/// açık; yazma uçlarının Premium kapısı sunucudadır.
+final Provider<QaApi> qaApiProvider = Provider<QaApi>((ref) {
+  return QaApi(ref.watch(docklyClientProvider).dio);
+});
+
 /// Rüzgâr/hava tahmini API istemcisi — anonim uç (MET Norway, sunucu proksili).
 final Provider<WeatherApi> weatherApiProvider = Provider<WeatherApi>((ref) {
   return WeatherApi(ref.watch(docklyClientProvider).dio);
