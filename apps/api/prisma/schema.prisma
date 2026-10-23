@@ -711,12 +711,19 @@ model Boat {
   flagCountryCode    String?   @map("flag_country_code") @db.Char(2)
   registrationNo     String?   @map("registration_no")
   isPrimary          Boolean   @default(false) @map("is_primary")
+  /// MARİNA TOPLULUĞU (0015, kurucu onayı 2026-10-23): bağlı marina + rıza
+  /// anahtarları. visibleInMarina=false iken ad LİSTELENMEZ (yalnız isimsiz
+  /// sayıya katılır); shareSpecs tip/boy/marka için ayrı rızadır.
+  homeMarinaLocationId String? @map("home_marina_location_id") @db.Uuid
+  visibleInMarina    Boolean   @default(false) @map("visible_in_marina")
+  shareSpecs         Boolean   @default(false) @map("share_specs")
   createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
   deletedAt          DateTime? @map("deleted_at") @db.Timestamptz(6)
   deletedBy          String?   @map("deleted_by") @db.Uuid
 
   owner        User        @relation("BoatOwner", fields: [ownerUserId], references: [id])
+  homeMarinaLocation Location? @relation("BoatHomeMarina", fields: [homeMarinaLocationId], references: [id])
   deletedByUser User?      @relation("BoatDeletedByUser", fields: [deletedBy], references: [id])
   boatType     BoatType    @relation(fields: [boatTypeId], references: [id])
   engineType   EngineType? @relation(fields: [engineTypeId], references: [id])
@@ -727,6 +734,7 @@ model Boat {
   boatMedia           BoatMedia[]
   notes               LocationNote[]
 
+  @@index([homeMarinaLocationId], map: "ix_boats_home_marina")
   @@map("boats")
 }
 
@@ -808,6 +816,7 @@ model Location {
   locationReports         LocationReport[]
   reservationRequests     ReservationRequest[]
   userProfilesHomePort    UserProfile[]
+  boatsHomeMarina         Boat[]        @relation("BoatHomeMarina")
   notes                   LocationNote[]  @relation("LocationNoteTarget")
   notesFrom               LocationNote[]  @relation("LocationNoteFrom")
   notesTo                 LocationNote[]  @relation("LocationNoteTo")
