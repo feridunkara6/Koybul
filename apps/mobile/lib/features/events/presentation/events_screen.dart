@@ -189,7 +189,6 @@ class _EventsTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ThemeData theme = Theme.of(context);
     final L10n t = ref.watch(l10nProvider);
     final AsyncValue<List<EventView>> feed = ref.watch(eventsFeedProvider);
     return feed.when(
