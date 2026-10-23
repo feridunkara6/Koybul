@@ -76,6 +76,12 @@ final Provider<MarinaApi> marinaApiProvider = Provider<MarinaApi>((ref) {
   return MarinaApi(ref.watch(docklyClientProvider).dio);
 });
 
+/// ETKİNLİKLER & FIRSATLAR istemcisi (V1, kurucu onayı 2026-10-23) — kitle
+/// kilitleri ve kontenjan kararları sunucudadır.
+final Provider<EventsApi> eventsApiProvider = Provider<EventsApi>((ref) {
+  return EventsApi(ref.watch(docklyClientProvider).dio);
+});
+
 /// Rüzgâr/hava tahmini API istemcisi — anonim uç (MET Norway, sunucu proksili).
 final Provider<WeatherApi> weatherApiProvider = Provider<WeatherApi>((ref) {
   return WeatherApi(ref.watch(docklyClientProvider).dio);

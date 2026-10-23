@@ -18,6 +18,7 @@ import '../../onboarding/application/onboarding_controller.dart';
 import '../../favorites/presentation/favorites_screen.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../premium/presentation/premium_screen.dart';
+import '../../events/presentation/events_screen.dart';
 import '../../qa/presentation/qa_list_screen.dart';
 import '../../legal/presentation/legal_screen.dart';
 import '../../legal/presentation/sources_screen.dart';
@@ -125,6 +126,17 @@ class ProfileScreen extends ConsumerWidget {
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute<void>(
                           builder: (_) => const QaListScreen()),
+                    ),
+                  ),
+                  _GroupRow(
+                    icon: DocklyIcons.eventNote,
+                    tint: DocklyColors.warning,
+                    // ETKİNLİKLER (V1, kurucu onayı 2026-10-23): buluşmalar +
+                    // fırsatlar; kitle kilitleri SUNUCUDA.
+                    label: t.evRowTitle,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          builder: (_) => const EventsScreen()),
                     ),
                   ),
                   _GroupRow(
