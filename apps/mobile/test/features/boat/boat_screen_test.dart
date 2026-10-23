@@ -195,8 +195,13 @@ void main() {
     expect(find.byKey(const ValueKey<String>('boat-meta')), findsOneWidget);
     expect(find.text('Beneteau · Oceanis 38.1 · 2017 · Yelkenli'),
         findsOneWidget);
+  });
 
-    // Yıl bilinmiyorsa uydurulmaz — dürüstçe "Yıl bilinmiyor" yazılır.
+  // AYRI TEST (CI dersi 2026-10-23): aynı testte ikinci pumpWidget ile farklı
+  // tekne verilemez — ProviderScope ilk kurulan kontrolcüyü (ilk tekneyi)
+  // hafızada tutar, ikinci override hiç çalışmaz ve test eski tekneyi görür.
+  testWidgets('KATALOG KİMLİĞİ: yıl bilinmiyorsa uydurulmaz — dürüstçe '
+      '"Yıl bilinmiyor" yazılır', (WidgetTester tester) async {
     await tester.pumpWidget(_app(
       FakeMaintenanceStore(),
       boat: const MyBoat(lengthM: 9, brand: 'Vicem', typeId: 'gulet'),
