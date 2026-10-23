@@ -38,6 +38,11 @@ dependencies:
   # DocklyIcons SVG glifleri ekran dışında PNG'ye çizilip Mapbox stiline
   # kaydedilir. dockly_ui ile aynı sürüm ailesi.
   flutter_svg: ^2.0.10+1
+  # TEKNE FOTOĞRAFI (kurucu onayı 2026-10-23, Teknem paketi): fotoğraf çek /
+  # galeriden seç. Görsel YALNIZ CİHAZDA saklanır (gizlilik kararı A) —
+  # sunucuya yükleme yok; path_provider uygulama belgeler klasörünü verir.
+  image_picker: ^1.1.2
+  path_provider: ^2.1.4
   dockly_api:
     path: ../../packages/dockly_api
   dockly_core:

@@ -1,3 +1,4 @@
+import 'package:dockly_mobile/features/boat/application/boat_photo_controller.dart';
 import 'package:dockly_mobile/features/boat/application/maintenance_controller.dart';
 import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
 import 'package:dockly_mobile/features/boat/domain/maintenance.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/boat_photo_fakes.dart';
 import '../../support/maintenance_fakes.dart';
 
 /// Sabit tekne döndüren kontrolcü (depolamaya gitmez).
@@ -28,6 +30,8 @@ class _FixedBoat extends MyBoatController {
 Widget _app(FakeMaintenanceStore store, {MyBoat? boat}) => ProviderScope(
       overrides: <Override>[
         maintenanceStoreProvider.overrideWithValue(store),
+        // Fotoğraf deposu sahte: gerçek image_picker/path_provider teste girmez.
+        boatPhotoStoreProvider.overrideWithValue(FakeBoatPhotoStore()),
         if (boat != null) myBoatProvider.overrideWith(() => _FixedBoat(boat)),
       ],
       child: const MaterialApp(home: BoatScreen()),
@@ -155,6 +159,12 @@ void main() {
     expect(find.byKey(const ValueKey<String>('boat-edit')), findsOneWidget);
     expect(find.text('Tekneni tanımla'), findsNothing);
 
+    // Fotoğraf yok → kaynak çipi DÜRÜSTÇE illüstrasyon der (Teknem paketi);
+    // katalog alanları boşken kimlik satırı da uydurulmaz.
+    expect(find.textContaining('TİP İLLÜSTRASYONU'), findsOneWidget);
+    expect(find.textContaining('SENİN FOTOĞRAFIN'), findsNothing);
+    expect(find.byKey(const ValueKey<String>('boat-meta')), findsNothing);
+
     await tester.tap(find.byKey(const ValueKey<String>('boat-marina-map')));
     await tester.pump();
 
@@ -165,5 +175,33 @@ void main() {
     expect(focus!.point.lat, 36.75);
     expect(focus.point.lon, 28.93);
     expect(focus.zoom, 11); // kHomeMarinaFocusZoom
+  });
+
+  testWidgets('KATALOG KİMLİĞİ (Teknem paketi): marka · model · yıl · tip '
+      'satırı yalnız girilen bilgiyle yazılır', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(
+      FakeMaintenanceStore(),
+      boat: const MyBoat(
+        lengthM: 11.5,
+        name: 'Martı',
+        brand: 'Beneteau',
+        model: 'Oceanis 38.1',
+        buildYear: 2017,
+        typeId: 'sail',
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('boat-meta')), findsOneWidget);
+    expect(find.text('Beneteau · Oceanis 38.1 · 2017 · Yelkenli'),
+        findsOneWidget);
+
+    // Yıl bilinmiyorsa uydurulmaz — dürüstçe "Yıl bilinmiyor" yazılır.
+    await tester.pumpWidget(_app(
+      FakeMaintenanceStore(),
+      boat: const MyBoat(lengthM: 9, brand: 'Vicem', typeId: 'gulet'),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('Vicem · Yıl bilinmiyor · Gulet / ahşap'), findsOneWidget);
   });
 }

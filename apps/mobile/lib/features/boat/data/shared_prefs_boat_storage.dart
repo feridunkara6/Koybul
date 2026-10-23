@@ -15,6 +15,9 @@ class SharedPrefsBoatStorage implements BoatStorage {
   static const String _brandKey = 'boat.brand';
   static const String _typeKey = 'boat.typeId';
   static const String _nameKey = 'boat.name';
+  // KATALOG GENİŞLEMESİ (kurucu onayı 2026-10-23): model + yıl.
+  static const String _modelKey = 'boat.model';
+  static const String _yearKey = 'boat.buildYear';
   // Bağlı marina 4 anahtarla saklanır; DÖRDÜ BİRDEN geçerliyse okunur —
   // yarım kayıt (ör. ad var, koordinat yok) marina yokmuş gibi davranır.
   static const String _marinaIdKey = 'boat.marina.id';
@@ -43,6 +46,8 @@ class SharedPrefsBoatStorage implements BoatStorage {
         typeId: prefs.getString(_typeKey),
         name: prefs.getString(_nameKey),
         homeMarina: marina,
+        model: prefs.getString(_modelKey),
+        buildYear: prefs.getInt(_yearKey),
       );
     } catch (_) {
       return null;
@@ -63,6 +68,13 @@ class SharedPrefsBoatStorage implements BoatStorage {
       await _setOrRemove(prefs, _brandKey, boat.brand);
       await _setOrRemove(prefs, _typeKey, boat.typeId);
       await _setOrRemove(prefs, _nameKey, boat.name);
+      await _setOrRemove(prefs, _modelKey, boat.model);
+      final int? year = boat.buildYear;
+      if (year != null) {
+        await prefs.setInt(_yearKey, year);
+      } else {
+        await prefs.remove(_yearKey);
+      }
       final HomeMarina? marina = boat.homeMarina;
       if (marina != null) {
         await prefs.setString(_marinaIdKey, marina.id);
@@ -98,6 +110,8 @@ class SharedPrefsBoatStorage implements BoatStorage {
       await prefs.remove(_brandKey);
       await prefs.remove(_typeKey);
       await prefs.remove(_nameKey);
+      await prefs.remove(_modelKey);
+      await prefs.remove(_yearKey);
       await prefs.remove(_marinaIdKey);
       await prefs.remove(_marinaNameKey);
       await prefs.remove(_marinaLatKey);

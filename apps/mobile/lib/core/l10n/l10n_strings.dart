@@ -251,6 +251,29 @@ class L10n {
     required this.admSavedNote,
     required this.admDealActiveToggle,
     required this.admValRequired,
+    required this.btTypeLabel,
+    required this.btTypeSail,
+    required this.btTypeMotor,
+    required this.btTypeCatamaran,
+    required this.btTypeGulet,
+    required this.btTypeDaily,
+    required this.btTypeFishing,
+    required this.btTypeRib,
+    required this.btTypeSuper,
+    required this.btBrandLabel,
+    required this.btModelLabel,
+    required this.btModelHint,
+    required this.btYearLabel,
+    required this.btYearHint,
+    required this.btYearInvalid,
+    required this.btYearUnknown,
+    required this.btPhotoTitle,
+    required this.btPhotoCamera,
+    required this.btPhotoGallery,
+    required this.btPhotoIllustration,
+    required this.btPhotoPrivacy,
+    required this.btSrcUser,
+    required this.btSrcIllustration,
     required this.emergencyTitle,
     required this.emergencySub,
     required this.sectionBoat,
@@ -838,6 +861,8 @@ class L10n {
   final String evRowTitle, evLead, evTabEvents, evTabDeals, evEmpty, dealEmpty, evQuotaFmt2, evRemainingFmt, evLastSpots, evFullCap, evDeadlineFmt, evOrganizerFmt, evRegisterCta, evRegisteredChip, evCancelCta, evCancelledBanner, evCancelledChip, evRegisteredFmt, evCancelDone, evFullNote, evAudMembers, evAudAll, dealCopy, dealCopiedFmt, dealLockedPremium, dealUnlockCta, dealLockedMembers, dealExpired, dealValidFmt, dealPlaceFmt;
   // PANEL — etkinlik/fırsat yönetimi (V1 — kurucu onayı 2026-10-23).
   final String admEventsRow, admDealsRow, admEvNew, admDealNew, admEvCancelCta, admEvCancelConfirm, admEvCancelDone, admEvParticipants, admEvNoParticipants, admFormTitle, admFormBody, admFormLocation, admFormQuota, admFormStart, admFormDeadline, admFormPrice, admFormConditions, admFormAudience, admAudAll, admAudMembers, admAudPremium, admFormPartner, admFormBenefit, admFormCode, admFormValid, admFormTerms, admFormPlace, admSaveCta, admSavedNote, admDealActiveToggle, admValRequired;
+  // TEKNEM — fotoğraf + katalog (kurucu onayı 2026-10-23).
+  final String btTypeLabel, btTypeSail, btTypeMotor, btTypeCatamaran, btTypeGulet, btTypeDaily, btTypeFishing, btTypeRib, btTypeSuper, btBrandLabel, btModelLabel, btModelHint, btYearLabel, btYearHint, btYearInvalid, btYearUnknown, btPhotoTitle, btPhotoCamera, btPhotoGallery, btPhotoIllustration, btPhotoPrivacy, btSrcUser, btSrcIllustration;
   final String sectionBoat, boatEmptyBody, boatDeckBridge, boatDefineCta;
   final String boatLengthFmt, boatDraftFmt, boatDraftUnknown, editLabel, removeLabel;
   final String sectionAccount, accTitle, accBody, accCta, accOpen, signOut;
@@ -1328,6 +1353,28 @@ class L10n {
   }
 
   /// Moderasyon kuyruğundaki varlık türünün etiketi.
+  /// Tekne türü kodu → görünen ad (Teknem kataloğu, 2026-10-23).
+  String boatTypeLabel(String code) {
+    switch (code) {
+      case 'motor':
+        return btTypeMotor;
+      case 'catamaran':
+        return btTypeCatamaran;
+      case 'gulet':
+        return btTypeGulet;
+      case 'daily':
+        return btTypeDaily;
+      case 'fishing':
+        return btTypeFishing;
+      case 'rib':
+        return btTypeRib;
+      case 'super':
+        return btTypeSuper;
+      default:
+        return btTypeSail;
+    }
+  }
+
   /// Soru-cevap kategori kodu → görünen ad (Blog V1).
   String qaCategoryLabel(String code) {
     switch (code) {
@@ -1638,6 +1685,29 @@ const L10n _tr = L10n(
   admSavedNote: 'Kaydedildi.',
   admDealActiveToggle: 'Aktif',
   admValRequired: 'Zorunlu alanları doldur.',
+  btTypeLabel: 'Tekne türü',
+  btTypeSail: 'Yelkenli',
+  btTypeMotor: 'Motoryat',
+  btTypeCatamaran: 'Katamaran',
+  btTypeGulet: 'Gulet / ahşap',
+  btTypeDaily: 'Sürat / günlük',
+  btTypeFishing: 'Balıkçı',
+  btTypeRib: 'RIB / şişme',
+  btTypeSuper: 'Süperyat',
+  btBrandLabel: 'Marka — opsiyonel',
+  btModelLabel: 'Model — opsiyonel',
+  btModelHint: 'ör. Oceanis 38.1',
+  btYearLabel: 'Model yılı — opsiyonel',
+  btYearHint: 'ör. 2017 — bilinmiyorsa boş bırak',
+  btYearInvalid: 'Model yılı 1850-2027 arasında olmalı — bilinmiyorsa boş bırak.',
+  btYearUnknown: 'Yıl bilinmiyor',
+  btPhotoTitle: 'Tekne fotoğrafı',
+  btPhotoCamera: 'Fotoğraf çek',
+  btPhotoGallery: 'Galeriden seç',
+  btPhotoIllustration: 'Tip illüstrasyonunu kullan',
+  btPhotoPrivacy: 'Fotoğrafın yalnız senin cihazında durur; sunucuya gönderilmez, marina topluluğunda gösterilmez.',
+  btSrcUser: 'SENİN FOTOĞRAFIN',
+  btSrcIllustration: 'TİP İLLÜSTRASYONU',
   emergencyTitle: 'Acil Durum',
   emergencySub: '158 · 112 · VHF 16 · MAYDAY şablonu · denizci alfabesi',
   sectionBoat: 'Teknem',
@@ -2494,6 +2564,29 @@ const L10n _en = L10n(
   admSavedNote: 'Saved.',
   admDealActiveToggle: 'Active',
   admValRequired: 'Fill the required fields.',
+  btTypeLabel: 'Boat type',
+  btTypeSail: 'Sailboat',
+  btTypeMotor: 'Motor yacht',
+  btTypeCatamaran: 'Catamaran',
+  btTypeGulet: 'Gulet / wooden',
+  btTypeDaily: 'Speed / day boat',
+  btTypeFishing: 'Fishing boat',
+  btTypeRib: 'RIB / inflatable',
+  btTypeSuper: 'Superyacht',
+  btBrandLabel: 'Brand — optional',
+  btModelLabel: 'Model — optional',
+  btModelHint: 'e.g. Oceanis 38.1',
+  btYearLabel: 'Model year — optional',
+  btYearHint: 'e.g. 2017 — leave empty if unknown',
+  btYearInvalid: 'Model year must be 1850-2027 — leave empty if unknown.',
+  btYearUnknown: 'Year unknown',
+  btPhotoTitle: 'Boat photo',
+  btPhotoCamera: 'Take a photo',
+  btPhotoGallery: 'Choose from gallery',
+  btPhotoIllustration: 'Use type illustration',
+  btPhotoPrivacy: 'Your photo stays only on your device; it is not uploaded and not shown in the marina community.',
+  btSrcUser: 'YOUR PHOTO',
+  btSrcIllustration: 'TYPE ILLUSTRATION',
   emergencyTitle: 'Emergency',
   emergencySub: '158 · 112 · VHF 16 · MAYDAY template · phonetic alphabet',
   sectionBoat: 'My Boat',
@@ -3350,6 +3443,29 @@ const L10n _es = L10n(
   admSavedNote: 'Guardado.',
   admDealActiveToggle: 'Activa',
   admValRequired: 'Completa los campos obligatorios.',
+  btTypeLabel: 'Tipo de barco',
+  btTypeSail: 'Velero',
+  btTypeMotor: 'Yate a motor',
+  btTypeCatamaran: 'Catamarán',
+  btTypeGulet: 'Goleta / madera',
+  btTypeDaily: 'Lancha / día',
+  btTypeFishing: 'Pesquero',
+  btTypeRib: 'RIB / neumática',
+  btTypeSuper: 'Superyate',
+  btBrandLabel: 'Marca (opcional)',
+  btModelLabel: 'Modelo (opcional)',
+  btModelHint: 'p. ej. Oceanis 38.1',
+  btYearLabel: 'Año del modelo (opcional)',
+  btYearHint: 'p. ej. 2017; déjalo vacío si no lo sabes',
+  btYearInvalid: 'El año debe estar entre 1850 y 2027; déjalo vacío si no lo sabes.',
+  btYearUnknown: 'Año desconocido',
+  btPhotoTitle: 'Foto del barco',
+  btPhotoCamera: 'Hacer foto',
+  btPhotoGallery: 'Elegir de la galería',
+  btPhotoIllustration: 'Usar ilustración del tipo',
+  btPhotoPrivacy: 'Tu foto queda solo en tu dispositivo; no se sube ni se muestra en la comunidad de la marina.',
+  btSrcUser: 'TU FOTO',
+  btSrcIllustration: 'ILUSTRACIÓN DEL TIPO',
   emergencyTitle: 'Emergencia',
   emergencySub: '158 · 112 · VHF 16 · plantilla MAYDAY · alfabeto náutico',
   sectionBoat: 'Mi barco',
@@ -4206,6 +4322,29 @@ const L10n _ru = L10n(
   admSavedNote: 'Сохранено.',
   admDealActiveToggle: 'Активна',
   admValRequired: 'Заполните обязательные поля.',
+  btTypeLabel: 'Тип лодки',
+  btTypeSail: 'Парусная',
+  btTypeMotor: 'Моторная яхта',
+  btTypeCatamaran: 'Катамаран',
+  btTypeGulet: 'Гулет / деревянная',
+  btTypeDaily: 'Катер / дневная',
+  btTypeFishing: 'Рыболовная',
+  btTypeRib: 'RIB / надувная',
+  btTypeSuper: 'Суперяхта',
+  btBrandLabel: 'Марка (необязательно)',
+  btModelLabel: 'Модель (необязательно)',
+  btModelHint: 'напр. Oceanis 38.1',
+  btYearLabel: 'Год модели (необязательно)',
+  btYearHint: 'напр. 2017 — оставьте пустым, если неизвестен',
+  btYearInvalid: 'Год должен быть между 1850 и 2027 — оставьте пустым, если неизвестен.',
+  btYearUnknown: 'Год неизвестен',
+  btPhotoTitle: 'Фото лодки',
+  btPhotoCamera: 'Сделать фото',
+  btPhotoGallery: 'Выбрать из галереи',
+  btPhotoIllustration: 'Использовать иллюстрацию типа',
+  btPhotoPrivacy: 'Фото остаётся только на вашем устройстве; оно не загружается и не показывается в сообществе марины.',
+  btSrcUser: 'ВАШЕ ФОТО',
+  btSrcIllustration: 'ИЛЛЮСТРАЦИЯ ТИПА',
   emergencyTitle: 'Экстренная помощь',
   emergencySub: '158 · 112 · УКВ 16 · шаблон MAYDAY · фонетический алфавит',
   sectionBoat: 'Моя лодка',

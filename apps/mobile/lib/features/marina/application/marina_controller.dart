@@ -46,6 +46,15 @@ String? serverBoatTypeCode(String? localTypeId) {
       return 'catamaran';
     case 'gulet':
       return 'gulet';
+    // KATALOG GENİŞLEMESİ (2026-10-23): sözlük 8 türe tamamlandı.
+    case 'daily':
+      return 'daily_boat';
+    case 'fishing':
+      return 'fishing_boat';
+    case 'rib':
+      return 'rib';
+    case 'super':
+      return 'superyacht';
     default:
       return null;
   }

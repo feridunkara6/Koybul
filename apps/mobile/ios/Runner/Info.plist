@@ -40,6 +40,12 @@
 	     tutuyor. Uygulama bu izni HİÇ İSTEMEZ; metin yine de dürüstçe açıklar. -->
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Koybul konumunu yalnız uygulama açıkken, en yakın koyları sıralamak ve haritada yerini göstermek için kullanır. Arka planda konum takibi yapılmaz; bu izin türü uygulama tarafından istenmez.</string>
+	<!-- TEKNE FOTOĞRAFI (2026-10-23): kamera/galeri yalnız kullanıcı kendi
+	     teknesinin fotoğrafını eklemek istediğinde açılır; görsel cihazda kalır. -->
+	<key>NSCameraUsageDescription</key>
+	<string>Kamera, yalnız sen istediğinde teknenin fotoğrafını çekmek için kullanılır. Fotoğraf cihazında saklanır, sunucuya gönderilmez.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Galeri, yalnız sen istediğinde teknene fotoğraf seçmek için açılır. Fotoğraf cihazında saklanır, sunucuya gönderilmez.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

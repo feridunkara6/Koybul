@@ -29,6 +29,14 @@ class _BoatSheetState extends ConsumerState<_BoatSheet> {
   late final TextEditingController _lengthCtrl;
   late final TextEditingController _draftCtrl;
   late final TextEditingController _nameCtrl;
+  // KATALOG (kurucu onayı 2026-10-23): model + yıl alanları, tür çipleri,
+  // marka otomatik tamamlama. Hepsi OPSİYONEL — "bilmiyorum" geçerli cevaptır.
+  late final TextEditingController _modelCtrl;
+  late final TextEditingController _yearCtrl;
+  late final TextEditingController _brandCtrl;
+  final FocusNode _brandFocus = FocusNode();
+  String _brandText = '';
+  String? _typeId;
   HomeMarina? _marina;
   String? _error;
 
@@ -39,6 +47,11 @@ class _BoatSheetState extends ConsumerState<_BoatSheet> {
     _lengthCtrl = TextEditingController(text: boat?.lengthM.toString() ?? '');
     _draftCtrl = TextEditingController(text: boat?.draftM?.toString() ?? '');
     _nameCtrl = TextEditingController(text: boat?.name ?? '');
+    _modelCtrl = TextEditingController(text: boat?.model ?? '');
+    _yearCtrl = TextEditingController(text: boat?.buildYear?.toString() ?? '');
+    _brandCtrl = TextEditingController(text: boat?.brand ?? '');
+    _brandText = boat?.brand ?? '';
+    _typeId = boat?.typeId;
     _marina = boat?.homeMarina;
   }
 
@@ -46,6 +59,10 @@ class _BoatSheetState extends ConsumerState<_BoatSheet> {
   void dispose() {
     _lengthCtrl.dispose();
     _draftCtrl.dispose();
+    _modelCtrl.dispose();
+    _yearCtrl.dispose();
+    _brandCtrl.dispose();
+    _brandFocus.dispose();
     _nameCtrl.dispose();
     super.dispose();
   }
@@ -84,14 +101,27 @@ class _BoatSheetState extends ConsumerState<_BoatSheet> {
     // marka ve tekne tipini (açılış E3 cevabı) silmesin. Ad ve bağlı marina
     // bu sayfada DÜZENLENEBİLİR (kullanıcı isteği 2026-08) — adın silinmesi
     // bilinçli bir eylemdir (alanı boşaltmak), korunmaz.
-    final MyBoat? current = ref.read(myBoatProvider);
+    // Yıl: boş = bilinmiyor (geçerli); doluysa 1850-2027 aralığı beklenir.
+    final String yearText = _yearCtrl.text.trim();
+    int? year;
+    if (yearText.isNotEmpty) {
+      year = int.tryParse(yearText);
+      if (year == null || year < kBoatYearMin || year > kBoatYearMax) {
+        setState(() => _error = ref.read(l10nProvider).btYearInvalid);
+        return;
+      }
+    }
+    final String brand = _brandText.trim();
+    final String model = _modelCtrl.text.trim();
     ref.read(myBoatProvider.notifier).set(MyBoat(
           lengthM: length,
           draftM: draft,
-          brand: current?.brand,
-          typeId: current?.typeId,
+          brand: brand.isEmpty ? null : brand,
+          typeId: _typeId,
           name: name.isEmpty ? null : name,
           homeMarina: _marina,
+          model: model.isEmpty ? null : model,
+          buildYear: year,
         ));
     Navigator.of(context).pop();
   }
@@ -99,6 +129,7 @@ class _BoatSheetState extends ConsumerState<_BoatSheet> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final L10n t = ref.watch(l10nProvider);
     final List<TextInputFormatter> formatters = <TextInputFormatter>[
       FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
     ];
@@ -109,7 +140,8 @@ class _BoatSheetState extends ConsumerState<_BoatSheet> {
         top: 20,
         bottom: MediaQuery.of(context).viewInsets.bottom + 20,
       ),
-      child: Column(
+      child: SingleChildScrollView(
+        child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -127,6 +159,116 @@ class _BoatSheetState extends ConsumerState<_BoatSheet> {
             decoration: const InputDecoration(
               labelText: 'Teknenin adı — opsiyonel',
               hintText: 'ör. Martı',
+              counterText: '',
+            ),
+          ),
+          const SizedBox(height: 12),
+          // TÜR ÇİPLERİ — sunucu sözlüğüyle aynı 8 tür (katalog genişlemesi).
+          Text(t.btTypeLabel,
+              style: theme.textTheme.labelMedium
+                  ?.copyWith(fontWeight: FontWeight.w700)),
+          const SizedBox(height: 6),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: <Widget>[
+              for (final String id in kBoatTypeIds)
+                ChoiceChip(
+                  key: ValueKey<String>('boat-type-$id'),
+                  label: Text('${boatTypeEmoji(id)} ${t.boatTypeLabel(id)}'),
+                  selected: _typeId == id,
+                  onSelected: (_) => setState(() => _typeId = id),
+                  showCheckmark: false,
+                  selectedColor: DocklyColors.brandPrimary,
+                  labelStyle: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: _typeId == id
+                        ? const Color(0xFFFFFFFF)
+                        : theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // MARKA — öneri listesi yol gösterir ama SINIRLAMAZ: 1930 model bir
+          // ahşap tekne de, listede olmayan yerli üretici de serbestçe yazılır.
+          RawAutocomplete<String>(
+            textEditingController: _brandCtrl,
+            focusNode: _brandFocus,
+            optionsBuilder: (TextEditingValue v) {
+              final String q = v.text.trim().toLowerCase();
+              if (q.length < 2) return const Iterable<String>.empty();
+              return kBoatBrandSuggestions
+                  .where((String b) => b.toLowerCase().contains(q));
+            },
+            onSelected: (String v) => _brandText = v,
+            fieldViewBuilder: (BuildContext context,
+                TextEditingController ctrl,
+                FocusNode focus,
+                VoidCallback onFieldSubmitted) {
+              return TextField(
+                key: const ValueKey<String>('boat-brand-field'),
+                controller: ctrl,
+                focusNode: focus,
+                maxLength: 60,
+                onChanged: (String v) => _brandText = v,
+                decoration: InputDecoration(
+                  labelText: t.btBrandLabel,
+                  counterText: '',
+                ),
+              );
+            },
+            optionsViewBuilder: (BuildContext context,
+                void Function(String) onSelected, Iterable<String> options) {
+              return Align(
+                alignment: Alignment.topLeft,
+                child: Material(
+                  elevation: 4,
+                  borderRadius: BorderRadius.circular(10),
+                  child: ConstrainedBox(
+                    constraints:
+                        const BoxConstraints(maxHeight: 180, maxWidth: 280),
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      children: <Widget>[
+                        for (final String o in options)
+                          ListTile(
+                            dense: true,
+                            title: Text(o),
+                            onTap: () => onSelected(o),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            key: const ValueKey<String>('boat-model-field'),
+            controller: _modelCtrl,
+            maxLength: 60,
+            decoration: InputDecoration(
+              labelText: t.btModelLabel,
+              hintText: t.btModelHint,
+              counterText: '',
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            key: const ValueKey<String>('boat-year-field'),
+            controller: _yearCtrl,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly,
+            ],
+            maxLength: 4,
+            decoration: InputDecoration(
+              labelText: t.btYearLabel,
+              hintText: t.btYearHint,
               counterText: '',
             ),
           ),
@@ -187,6 +329,7 @@ class _BoatSheetState extends ConsumerState<_BoatSheet> {
           ),
           const SizedBox(height: 8),
         ],
+        ),
       ),
     );
   }

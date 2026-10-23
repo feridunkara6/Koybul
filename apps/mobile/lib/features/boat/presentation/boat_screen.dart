@@ -17,6 +17,7 @@ import '../application/my_boat_controller.dart';
 import '../data/maintenance_catalog.dart';
 import '../domain/maintenance.dart';
 import '../domain/my_boat.dart';
+import 'boat_photo_header.dart';
 import 'boat_sheet.dart';
 import 'maintenance_screen.dart';
 
@@ -55,7 +56,7 @@ class BoatScreen extends ConsumerWidget {
           KeyedSubtree(
             key: tourKeyBoatCard,
             child: Container(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18),
                 gradient: const LinearGradient(
@@ -65,125 +66,161 @@ class BoatScreen extends ConsumerWidget {
                 ),
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      const DocklyIcon(DocklyIcons.sailing,
-                          size: 22, color: Color(0xFF7FE3D9)),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          // Kimlik sırası: teknenin ADI (kullanıcı isteği
-                          // 2026-08) → marka → genel başlık.
-                          boat?.name ?? boat?.brand ?? t.sectionBoat,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            color: const Color(0xFFFFFFFF),
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                      // DÜZENLE sağ üstte kalem ikonu (Konsept A: kartta tek
-                      // CTA). Tekne yokken ikon yerine alttaki davet düğmesi
-                      // kalır — boş durumda net bir çağrı gerekir.
-                      if (boat != null)
-                        IconButton(
-                          key: const ValueKey<String>('boat-edit'),
-                          tooltip: t.editLabel,
-                          visualDensity: VisualDensity.compact,
-                          icon: const DocklyIcon(DocklyIcons.edit,
-                              size: 18, color: Color(0xFFEAF6FF)),
-                          onPressed: () => showBoatSheet(context),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  // Bağlı marina — dokununca HARİTA marina çevresinde açılır
-                  // (Konsept A wireframe sözü: "harita buradan açılır").
-                  if (boat?.homeMarina != null) ...<Widget>[
-                    InkWell(
-                      key: const ValueKey<String>('boat-marina-map'),
-                      borderRadius: BorderRadius.circular(8),
-                      onTap: () {
-                        // CI DERSİ (tasarım 4 kırmızısı): `boat` bu kapanışın
-                        // içinde zaten null-olamaz kabul ediliyor (koşul
-                        // `boat?.homeMarina != null` kapanış yaratılırken
-                        // terfiyi sabitliyor); fazladan `!` analizörde
-                        // unnecessary_non_null_assertion uyarısı üretir ve
-                        // --fatal-infos bunu kırmızı sayar.
-                        final HomeMarina hm = boat.homeMarina!;
-                        final MapFocusRequest? prev =
-                            ref.read(mapFocusProvider);
-                        ref.read(mapFocusProvider.notifier).state =
-                            MapFocusRequest(
-                          point: GeoPoint(lat: hm.lat, lon: hm.lon),
-                          seq: (prev?.seq ?? 0) + 1,
-                          zoom: kHomeMarinaFocusZoom,
-                        );
-                        ref.read(shellTabProvider.notifier).state = 0;
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 2),
-                        child: Row(
+                  // TEKNE FOTOĞRAFI (Teknem paketi 2026-10-23): tekne
+                  // tanımlıysa kartın tepesi fotoğraf/illüstrasyon şeridi.
+                  if (boat != null) const BoatPhotoHeader(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
                           children: <Widget>[
-                            const DocklyIcon(DocklyIcons.amMooring,
-                                size: 13, color: Color(0xFF9BD8CF)),
-                            const SizedBox(width: 5),
-                            Flexible(
+                            const DocklyIcon(DocklyIcons.sailing,
+                                size: 22, color: Color(0xFF7FE3D9)),
+                            const SizedBox(width: 8),
+                            Expanded(
                               child: Text(
-                                boat!.homeMarina!.name,
+                                // Kimlik sırası: teknenin ADI (kullanıcı isteği
+                                // 2026-08) → marka → genel başlık.
+                                boat?.name ?? boat?.brand ?? t.sectionBoat,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: const Color(0xFFD7E6F5),
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  color: const Color(0xFFFFFFFF),
+                                  fontWeight: FontWeight.w800,
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 5),
-                            const DocklyIcon(DocklyIcons.openInNew,
-                                size: 11, color: Color(0xFF9BD8CF)),
+                            // DÜZENLE sağ üstte kalem ikonu (Konsept A: kartta tek
+                            // CTA). Tekne yokken ikon yerine alttaki davet düğmesi
+                            // kalır — boş durumda net bir çağrı gerekir.
+                            if (boat != null)
+                              IconButton(
+                                key: const ValueKey<String>('boat-edit'),
+                                tooltip: t.editLabel,
+                                visualDensity: VisualDensity.compact,
+                                icon: const DocklyIcon(DocklyIcons.edit,
+                                    size: 18, color: Color(0xFFEAF6FF)),
+                                onPressed: () => showBoatSheet(context),
+                              ),
                           ],
                         ),
-                      ),
+                        // KATALOG KİMLİĞİ (Teknem paketi 2026-10-23): marka ·
+                        // model · yıl · tip. Yalnız GİRİLEN alanlar yazılır — boş
+                        // alan uydurulmaz; yıl boşsa dürüstçe "bilinmiyor" denir.
+                        if (boat != null &&
+                            (boat.brand != null ||
+                                boat.model != null ||
+                                boat.buildYear != null ||
+                                boat.typeId != null)) ...<Widget>[
+                          const SizedBox(height: 2),
+                          Text(
+                            <String>[
+                              if (boat.brand != null) boat.brand!,
+                              if (boat.model != null) boat.model!,
+                              boat.buildYear?.toString() ?? t.btYearUnknown,
+                              if (boat.typeId != null) t.boatTypeLabel(boat.typeId!),
+                            ].join(' · '),
+                            key: const ValueKey<String>('boat-meta'),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: const Color(0xFF9BD8CF),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 8),
+                        // Bağlı marina — dokununca HARİTA marina çevresinde açılır
+                        // (Konsept A wireframe sözü: "harita buradan açılır").
+                        if (boat?.homeMarina != null) ...<Widget>[
+                          InkWell(
+                            key: const ValueKey<String>('boat-marina-map'),
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: () {
+                              // CI DERSİ (tasarım 4 kırmızısı): `boat` bu kapanışın
+                              // içinde zaten null-olamaz kabul ediliyor (koşul
+                              // `boat?.homeMarina != null` kapanış yaratılırken
+                              // terfiyi sabitliyor); fazladan `!` analizörde
+                              // unnecessary_non_null_assertion uyarısı üretir ve
+                              // --fatal-infos bunu kırmızı sayar.
+                              final HomeMarina hm = boat.homeMarina!;
+                              final MapFocusRequest? prev =
+                                  ref.read(mapFocusProvider);
+                              ref.read(mapFocusProvider.notifier).state =
+                                  MapFocusRequest(
+                                point: GeoPoint(lat: hm.lat, lon: hm.lon),
+                                seq: (prev?.seq ?? 0) + 1,
+                                zoom: kHomeMarinaFocusZoom,
+                              );
+                              ref.read(shellTabProvider.notifier).state = 0;
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 2),
+                              child: Row(
+                                children: <Widget>[
+                                  const DocklyIcon(DocklyIcons.amMooring,
+                                      size: 13, color: Color(0xFF9BD8CF)),
+                                  const SizedBox(width: 5),
+                                  Flexible(
+                                    child: Text(
+                                      boat!.homeMarina!.name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        color: const Color(0xFFD7E6F5),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  const DocklyIcon(DocklyIcons.openInNew,
+                                      size: 11, color: Color(0xFF9BD8CF)),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                        ],
+                        if (boat == null)
+                          Text(
+                            t.boatEmptyBody,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: const Color(0xFFD7E6F5),
+                              height: 1.45,
+                            ),
+                          )
+                        else
+                          Text(
+                            '${L10n.fmt(t.boatLengthFmt, _num(boat.lengthM))}'
+                            '${boat.draftM != null ? ' · ${L10n.fmt(t.boatDraftFmt, _num(boat.draftM!))}' : ''}',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: const Color(0xFFEAF6FF),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        if (boat == null) ...<Widget>[
+                          const SizedBox(height: 12),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: FilledButton(
+                              key: const ValueKey<String>('boat-edit'),
+                              style: FilledButton.styleFrom(
+                                backgroundColor: const Color(0xFFFFFFFF),
+                                foregroundColor: const Color(0xFF0E8577),
+                                minimumSize: const Size(0, 42),
+                                padding: const EdgeInsets.symmetric(horizontal: 18),
+                              ),
+                              onPressed: () => showBoatSheet(context),
+                              child: Text(t.boatDefineCta),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
-                    const SizedBox(height: 6),
-                  ],
-                  if (boat == null)
-                    Text(
-                      t.boatEmptyBody,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: const Color(0xFFD7E6F5),
-                        height: 1.45,
-                      ),
-                    )
-                  else
-                    Text(
-                      '${L10n.fmt(t.boatLengthFmt, _num(boat.lengthM))}'
-                      '${boat.draftM != null ? ' · ${L10n.fmt(t.boatDraftFmt, _num(boat.draftM!))}' : ''}',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: const Color(0xFFEAF6FF),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  if (boat == null) ...<Widget>[
-                    const SizedBox(height: 12),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: FilledButton(
-                        key: const ValueKey<String>('boat-edit'),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: const Color(0xFFFFFFFF),
-                          foregroundColor: const Color(0xFF0E8577),
-                          minimumSize: const Size(0, 42),
-                          padding: const EdgeInsets.symmetric(horizontal: 18),
-                        ),
-                        onPressed: () => showBoatSheet(context),
-                        child: Text(t.boatDefineCta),
-                      ),
-                    ),
-                  ],
+                  ),
                 ],
               ),
             ),
