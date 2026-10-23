@@ -46,4 +46,87 @@ class AdminApi {
       throw mapDioError(error);
     }
   }
+
+  /// Etkinlik oluşturur (yalnız admin+; yetki sunucuda).
+  Future<String> createEvent({
+    required String accessToken,
+    required AdminEventInput input,
+  }) async {
+    try {
+      final res = await _dio.post<Map<String, dynamic>>(
+        '/v1/admin/events',
+        data: input.toJson(),
+        options: _auth(accessToken),
+      );
+      return res.data!['id'] as String;
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  /// Etkinliği iptal eder — kayıtlılar uygulamada iptal şeridini görür (V1).
+  Future<void> cancelEvent({
+    required String accessToken,
+    required String eventId,
+  }) async {
+    try {
+      await _dio.patch<Map<String, dynamic>>(
+        '/v1/admin/events/$eventId',
+        data: <String, dynamic>{'status': 'cancelled'},
+        options: _auth(accessToken),
+      );
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  Future<List<EventParticipantView>> participants({
+    required String accessToken,
+    required String eventId,
+  }) async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>(
+        '/v1/admin/events/$eventId/participants',
+        options: _auth(accessToken),
+      );
+      return (res.data!['participants'] as List<dynamic>)
+          .map((dynamic e) => EventParticipantView.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  Future<String> createDeal({
+    required String accessToken,
+    required AdminDealInput input,
+  }) async {
+    try {
+      final res = await _dio.post<Map<String, dynamic>>(
+        '/v1/admin/deals',
+        data: input.toJson(),
+        options: _auth(accessToken),
+      );
+      return res.data!['id'] as String;
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  /// Fırsatı aç/kapat (pasif fırsat listeden düşer).
+  Future<void> setDealActive({
+    required String accessToken,
+    required String dealId,
+    required bool isActive,
+  }) async {
+    try {
+      await _dio.patch<Map<String, dynamic>>(
+        '/v1/admin/deals/$dealId',
+        data: <String, dynamic>{'isActive': isActive},
+        options: _auth(accessToken),
+      );
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
 }

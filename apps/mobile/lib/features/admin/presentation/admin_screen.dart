@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../../community/presentation/moderation_screen.dart';
 import '../application/admin_controller.dart';
+import 'admin_deals_screen.dart';
+import 'admin_events_screen.dart';
 
 /// YÖNETİM PANELİ ekranı (Konsept onayı 2026-09-25): sayı kartları + elle
 /// premium tanımlama + moderasyon kısayolu. Telefonda ve web'de aynı ekran.
@@ -79,6 +81,21 @@ class AdminScreen extends ConsumerWidget {
                   ),
                 ),
               ),
+            ),
+            const SizedBox(height: 10),
+            // ETKİNLİK & FIRSAT YÖNETİMİ (V1, kurucu onayı 2026-10-23).
+            _AdminLinkRow(
+              keyValue: 'admin-events',
+              icon: DocklyIcons.eventNote,
+              label: t.admEventsRow,
+              builder: (_) => const AdminEventsScreen(),
+            ),
+            const SizedBox(height: 10),
+            _AdminLinkRow(
+              keyValue: 'admin-deals',
+              icon: DocklyIcons.bookmark,
+              label: t.admDealsRow,
+              builder: (_) => const AdminDealsScreen(),
             ),
             const SizedBox(height: 14),
             // DÜRÜSTLÜK NOTU: indirme sayısı bizim sunucuda yoktur.
@@ -295,6 +312,56 @@ class _ErrorCard extends StatelessWidget {
         const SizedBox(height: 8),
         OutlinedButton(onPressed: onRetry, child: const Text('↻')),
       ],
+    );
+  }
+}
+
+/// Panel içi gezinme satırı — moderasyon kısayoluyla aynı görsel aile.
+class _AdminLinkRow extends StatelessWidget {
+  const _AdminLinkRow({
+    required this.keyValue,
+    required this.icon,
+    required this.label,
+    required this.builder,
+  });
+
+  final String keyValue;
+  final DocklyIconData icon;
+  final String label;
+  final WidgetBuilder builder;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Material(
+      color: theme.colorScheme.surfaceContainerLow,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        key: ValueKey<String>(keyValue),
+        borderRadius: BorderRadius.circular(14),
+        onTap: () => Navigator.of(context)
+            .push(MaterialPageRoute<void>(builder: builder)),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border:
+                Border.all(color: theme.dividerColor.withValues(alpha: 0.4)),
+          ),
+          child: Row(
+            children: <Widget>[
+              DocklyIcon(icon, size: 20, color: DocklyColors.brandPrimary),
+              const SizedBox(width: 10),
+              Expanded(
+                child:
+                    Text(label, style: theme.textTheme.bodyMedium),
+              ),
+              DocklyIcon(DocklyIcons.arrowForward,
+                  size: 16, color: theme.colorScheme.onSurfaceVariant),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -32,4 +32,24 @@ class ApiAdminGateway implements AdminGateway {
         email: email,
         months: months,
       );
+
+  @override
+  Future<String> createEvent(AdminEventInput input) async =>
+      _api.createEvent(accessToken: await _token(), input: input);
+
+  @override
+  Future<void> cancelEvent(String eventId) async =>
+      _api.cancelEvent(accessToken: await _token(), eventId: eventId);
+
+  @override
+  Future<List<EventParticipantView>> participants(String eventId) async =>
+      _api.participants(accessToken: await _token(), eventId: eventId);
+
+  @override
+  Future<String> createDeal(AdminDealInput input) async =>
+      _api.createDeal(accessToken: await _token(), input: input);
+
+  @override
+  Future<void> setDealActive(String dealId, {required bool isActive}) async =>
+      _api.setDealActive(accessToken: await _token(), dealId: dealId, isActive: isActive);
 }

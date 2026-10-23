@@ -1,4 +1,5 @@
-import 'package:dockly_api/dockly_api.dart' show AdminPremiumGrant, AdminStats;
+import 'package:dockly_api/dockly_api.dart'
+    show AdminDealInput, AdminEventInput, AdminPremiumGrant, AdminStats, EventParticipantView;
 import 'package:dockly_core/dockly_core.dart';
 import 'package:dockly_mobile/features/admin/application/admin_controller.dart';
 import 'package:dockly_mobile/features/admin/domain/admin_gateway.dart';
@@ -40,6 +41,23 @@ class FakeAdminGateway implements AdminGateway {
       premiumUntil: DateTime.utc(2027, 9, 25),
     );
   }
+
+  // Etkinlik/fırsat yönetimi (V1) — bu dosyanın testleri kullanmaz.
+  @override
+  Future<String> createEvent(AdminEventInput input) async => 'e-new';
+
+  @override
+  Future<void> cancelEvent(String eventId) async {}
+
+  @override
+  Future<List<EventParticipantView>> participants(String eventId) async =>
+      <EventParticipantView>[];
+
+  @override
+  Future<String> createDeal(AdminDealInput input) async => 'd-new';
+
+  @override
+  Future<void> setDealActive(String dealId, {required bool isActive}) async {}
 }
 
 Widget _app(FakeAdminGateway gw) => ProviderScope(
