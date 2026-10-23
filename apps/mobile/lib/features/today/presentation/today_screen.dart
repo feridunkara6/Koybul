@@ -17,6 +17,7 @@ import '../../weather/presentation/weather_card.dart';
 import '../application/suggestion_engine.dart';
 import '../domain/day_suggestion.dart';
 import '../domain/day_summary.dart';
+import 'today_pulse_cards.dart';
 
 /// BUGÜN sekmesi (v2.0 vizyonu, kurucu onayı 2026-08): günlük alışkanlık
 /// merkezi. İçerik GERÇEK verilerle sınırlıdır: günün hava/rüzgâr kartı
@@ -93,6 +94,14 @@ class TodayScreen extends ConsumerWidget {
                   style: theme.textTheme.bodyMedium?.copyWith(height: 1.45),
                 ),
               ),
+            // GÜNÜN NABZI (K2 DENGELİ, kurucu onayı 2026-10-23): hava
+            // bloğunun altında, öneriden önce — Marinam, bakım uyarısı,
+            // Soru-Cevap ve yaklaşan etkinlik köprüleri. Hepsi mevcut
+            // sağlayıcılardan; verisi olmayan kart kendini hiç çizmez.
+            const TodayMarinamCard(),
+            const TodayMaintStrip(),
+            const TodayQaCard(),
+            const TodayEventCard(),
             // BUGÜN NEREYE? — akıllı öneri (yalnız konum varken; konum
             // yokken hava kartındaki dürüst yönlendirme zaten görünür).
             if (pos != null) _SuggestSection(pos: pos),

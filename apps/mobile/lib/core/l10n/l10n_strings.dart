@@ -274,6 +274,10 @@ class L10n {
     required this.btPhotoPrivacy,
     required this.btSrcUser,
     required this.btSrcIllustration,
+    required this.tdMarinamGuest,
+    required this.tdMarinamPick,
+    required this.tdMarinamCountFmt,
+    required this.tdEventCap,
     required this.emergencyTitle,
     required this.emergencySub,
     required this.sectionBoat,
@@ -863,6 +867,9 @@ class L10n {
   final String admEventsRow, admDealsRow, admEvNew, admDealNew, admEvCancelCta, admEvCancelConfirm, admEvCancelDone, admEvParticipants, admEvNoParticipants, admFormTitle, admFormBody, admFormLocation, admFormQuota, admFormStart, admFormDeadline, admFormPrice, admFormConditions, admFormAudience, admAudAll, admAudMembers, admAudPremium, admFormPartner, admFormBenefit, admFormCode, admFormValid, admFormTerms, admFormPlace, admSaveCta, admSavedNote, admDealActiveToggle, admValRequired;
   // TEKNEM — fotoğraf + katalog (kurucu onayı 2026-10-23).
   final String btTypeLabel, btTypeSail, btTypeMotor, btTypeCatamaran, btTypeGulet, btTypeDaily, btTypeFishing, btTypeRib, btTypeSuper, btBrandLabel, btModelLabel, btModelHint, btYearLabel, btYearHint, btYearInvalid, btYearUnknown, btPhotoTitle, btPhotoCamera, btPhotoGallery, btPhotoIllustration, btPhotoPrivacy, btSrcUser, btSrcIllustration;
+
+  /// BUGÜN — GÜNÜN NABZI kartları (K2 Dengeli, kurucu onayı 2026-10-23).
+  final String tdMarinamGuest, tdMarinamPick, tdMarinamCountFmt, tdEventCap;
   final String sectionBoat, boatEmptyBody, boatDeckBridge, boatDefineCta;
   final String boatLengthFmt, boatDraftFmt, boatDraftUnknown, editLabel, removeLabel;
   final String sectionAccount, accTitle, accBody, accCta, accOpen, signOut;
@@ -1708,6 +1715,10 @@ const L10n _tr = L10n(
   btPhotoPrivacy: 'Fotoğrafın yalnız senin cihazında durur; sunucuya gönderilmez, marina topluluğunda gösterilmez.',
   btSrcUser: 'SENİN FOTOĞRAFIN',
   btSrcIllustration: 'TİP İLLÜSTRASYONU',
+  tdMarinamGuest: 'Marina topluluğu için ücretsiz hesap aç',
+  tdMarinamPick: 'Marinanı seç, rıhtım komşularını gör',
+  tdMarinamCountFmt: '{0} kayıtlı tekne',
+  tdEventCap: 'Yaklaşan etkinlik',
   emergencyTitle: 'Acil Durum',
   emergencySub: '158 · 112 · VHF 16 · MAYDAY şablonu · denizci alfabesi',
   sectionBoat: 'Teknem',
@@ -2587,6 +2598,10 @@ const L10n _en = L10n(
   btPhotoPrivacy: 'Your photo stays only on your device; it is not uploaded and not shown in the marina community.',
   btSrcUser: 'YOUR PHOTO',
   btSrcIllustration: 'TYPE ILLUSTRATION',
+  tdMarinamGuest: 'Create a free account to join the marina community',
+  tdMarinamPick: 'Pick your marina to see your dock neighbours',
+  tdMarinamCountFmt: '{0} registered boats',
+  tdEventCap: 'Upcoming event',
   emergencyTitle: 'Emergency',
   emergencySub: '158 · 112 · VHF 16 · MAYDAY template · phonetic alphabet',
   sectionBoat: 'My Boat',
@@ -3466,6 +3481,10 @@ const L10n _es = L10n(
   btPhotoPrivacy: 'Tu foto queda solo en tu dispositivo; no se sube ni se muestra en la comunidad de la marina.',
   btSrcUser: 'TU FOTO',
   btSrcIllustration: 'ILUSTRACIÓN DEL TIPO',
+  tdMarinamGuest: 'Crea una cuenta gratuita para la comunidad de tu marina',
+  tdMarinamPick: 'Elige tu marina y descubre a tus vecinos de pantalán',
+  tdMarinamCountFmt: '{0} barcos registrados',
+  tdEventCap: 'Próximo evento',
   emergencyTitle: 'Emergencia',
   emergencySub: '158 · 112 · VHF 16 · plantilla MAYDAY · alfabeto náutico',
   sectionBoat: 'Mi barco',
@@ -4345,6 +4364,10 @@ const L10n _ru = L10n(
   btPhotoPrivacy: 'Фото остаётся только на вашем устройстве; оно не загружается и не показывается в сообществе марины.',
   btSrcUser: 'ВАШЕ ФОТО',
   btSrcIllustration: 'ИЛЛЮСТРАЦИЯ ТИПА',
+  tdMarinamGuest: 'Создай бесплатный аккаунт для сообщества марины',
+  tdMarinamPick: 'Выбери свою марину и узнай соседей по причалу',
+  tdMarinamCountFmt: '{0} лодок зарегистрировано',
+  tdEventCap: 'Ближайшее событие',
   emergencyTitle: 'Экстренная помощь',
   emergencySub: '158 · 112 · УКВ 16 · шаблон MAYDAY · фонетический алфавит',
   sectionBoat: 'Моя лодка',

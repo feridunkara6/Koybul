@@ -4,7 +4,9 @@ import 'package:dockly_mobile/core/origin_provider.dart';
 import 'package:dockly_mobile/features/checklist/application/checklist_controller.dart';
 import 'package:dockly_mobile/features/community/application/community_controller.dart';
 import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
+import 'package:dockly_mobile/features/events/application/events_controller.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
+import 'package:dockly_mobile/features/qa/application/qa_controller.dart';
 import 'package:dockly_mobile/features/today/presentation/today_screen.dart';
 import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,9 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../support/checklist_fakes.dart';
 import '../../support/community_fakes.dart';
 import '../../support/detail_fakes.dart';
+import '../../support/events_feed_fakes.dart';
 import '../../support/nearby_fakes.dart';
+import '../../support/qa_feed_fakes.dart';
 import '../../support/search_fakes.dart' show sampleSummary;
 import '../../support/weather_fakes.dart';
 
@@ -27,6 +31,10 @@ void main() {
       overrides: <Override>[
         weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
         checklistStoreProvider.overrideWithValue(FakeChecklistStore()),
+        // GÜNÜN NABZI köprüleri (K2, 2026-10-23): ağ yok kuralı — boş sahte
+        // akışlar; köprü kartları veri yokken kendilerini çizmez.
+        qaGatewayProvider.overrideWithValue(FakeQaFeedGateway()),
+        eventsGatewayProvider.overrideWithValue(FakeEventsFeedGateway()),
         communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
       ],
       child: const MaterialApp(home: TodayScreen()),
@@ -66,6 +74,10 @@ void main() {
         weatherGatewayProvider.overrideWithValue(
             FakeWeatherGateway(result: sampleForecast(windKn: 20, windDirDeg: 0))),
         checklistStoreProvider.overrideWithValue(FakeChecklistStore()),
+        // GÜNÜN NABZI köprüleri (K2, 2026-10-23): ağ yok kuralı — boş sahte
+        // akışlar; köprü kartları veri yokken kendilerini çizmez.
+        qaGatewayProvider.overrideWithValue(FakeQaFeedGateway()),
+        eventsGatewayProvider.overrideWithValue(FakeEventsFeedGateway()),
         communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
         nearbyGatewayProvider.overrideWithValue(nearby),
         locationDetailGatewayProvider
@@ -111,6 +123,10 @@ void main() {
         weatherGatewayProvider.overrideWithValue(FakeWeatherGateway(
             result: sampleForecast(windKn: 8, windDirDeg: 225))),
         checklistStoreProvider.overrideWithValue(FakeChecklistStore()),
+        // GÜNÜN NABZI köprüleri (K2, 2026-10-23): ağ yok kuralı — boş sahte
+        // akışlar; köprü kartları veri yokken kendilerini çizmez.
+        qaGatewayProvider.overrideWithValue(FakeQaFeedGateway()),
+        eventsGatewayProvider.overrideWithValue(FakeEventsFeedGateway()),
         communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
         nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
         locationDetailGatewayProvider
@@ -150,6 +166,10 @@ void main() {
         weatherGatewayProvider.overrideWithValue(
             FakeWeatherGateway(result: sampleForecast())),
         checklistStoreProvider.overrideWithValue(FakeChecklistStore()),
+        // GÜNÜN NABZI köprüleri (K2, 2026-10-23): ağ yok kuralı — boş sahte
+        // akışlar; köprü kartları veri yokken kendilerini çizmez.
+        qaGatewayProvider.overrideWithValue(FakeQaFeedGateway()),
+        eventsGatewayProvider.overrideWithValue(FakeEventsFeedGateway()),
         communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
         nearbyGatewayProvider.overrideWithValue(
             FakeNearbyGateway(error: const NetworkFailure())),
@@ -171,6 +191,10 @@ void main() {
             (ref) => const GeoPoint(lat: 36.74, lon: 28.94)),
         weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
         checklistStoreProvider.overrideWithValue(FakeChecklistStore()),
+        // GÜNÜN NABZI köprüleri (K2, 2026-10-23): ağ yok kuralı — boş sahte
+        // akışlar; köprü kartları veri yokken kendilerini çizmez.
+        qaGatewayProvider.overrideWithValue(FakeQaFeedGateway()),
+        eventsGatewayProvider.overrideWithValue(FakeEventsFeedGateway()),
         // Öneri bölümü de kurulur: sahtesi verilmezse gerçek ağ yığını
         // kurulmaya çalışılır ve kart sessizce hata durumunda çizilir.
         nearbyGatewayProvider.overrideWithValue(FakeNearbyGateway()),
