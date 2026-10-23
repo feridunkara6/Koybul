@@ -9,6 +9,7 @@ import '../../deck/presentation/deck_screen.dart' show deckSegmentProvider;
 import '../../launch/domain/launch_answers.dart' show kHomeMarinaFocusZoom;
 import '../../map/application/map_controller.dart' show mapFocusProvider;
 import '../../map/domain/map_viewport.dart' show MapFocusRequest;
+import '../../marina/presentation/marinam_card.dart';
 import '../../onboarding/presentation/tour_targets.dart';
 import '../../shell/application/shell_tab_provider.dart';
 import '../application/maintenance_controller.dart';
@@ -187,6 +188,10 @@ class BoatScreen extends ConsumerWidget {
               ),
             ),
           ),
+          const SizedBox(height: 12),
+          // MARİNAM (Marina Topluluğu V1, kurucu onayı 2026-10-23): teknenin
+          // bağlı marinasındaki Koybul komşuları — katılım açık rızayla.
+          const MarinamCard(),
           const SizedBox(height: 18),
           // BAKIM ÖZETİ (Konsept A): 10 kalem her açılışta tam boy durmaz —
           // kaptan çoğu gün yalnız "ilgi bekleyen var mı?" diye bakar.

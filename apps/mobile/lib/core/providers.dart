@@ -70,6 +70,12 @@ final Provider<QaApi> qaApiProvider = Provider<QaApi>((ref) {
   return QaApi(ref.watch(docklyClientProvider).dio);
 });
 
+/// MARİNA TOPLULUĞU istemcisi (V1, kurucu onayı 2026-10-23) — sayılar herkese
+/// açık; liste erişimi ve gizlilik kuralları sunucudadır.
+final Provider<MarinaApi> marinaApiProvider = Provider<MarinaApi>((ref) {
+  return MarinaApi(ref.watch(docklyClientProvider).dio);
+});
+
 /// Rüzgâr/hava tahmini API istemcisi — anonim uç (MET Norway, sunucu proksili).
 final Provider<WeatherApi> weatherApiProvider = Provider<WeatherApi>((ref) {
   return WeatherApi(ref.watch(docklyClientProvider).dio);
