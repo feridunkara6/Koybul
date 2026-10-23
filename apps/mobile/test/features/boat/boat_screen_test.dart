@@ -155,13 +155,14 @@ void main() {
     await tester.pumpAndSettle();
 
     // Ad başlıkta, düzenleme ikonu var, boş-durum CTA'sı yok.
-    expect(find.text('Martı'), findsOneWidget);
+    // Ad başlıkta VE bordada (çizim üstü ad katmanı) — iki yerde görünür.
+    expect(find.text('Martı'), findsNWidgets(2));
     expect(find.byKey(const ValueKey<String>('boat-edit')), findsOneWidget);
     expect(find.text('Tekneni tanımla'), findsNothing);
 
     // Fotoğraf yok → kaynak çipi DÜRÜSTÇE illüstrasyon der (Teknem paketi);
     // katalog alanları boşken kimlik satırı da uydurulmaz.
-    expect(find.textContaining('TİP İLLÜSTRASYONU'), findsOneWidget);
+    expect(find.textContaining('TİP ÇİZİMİ'), findsOneWidget);
     expect(find.textContaining('SENİN FOTOĞRAFIN'), findsNothing);
     expect(find.byKey(const ValueKey<String>('boat-meta')), findsNothing);
 

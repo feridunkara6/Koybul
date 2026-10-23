@@ -65,8 +65,11 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
-    expect(find.text('🛥️'), findsOneWidget); // motor türünün illüstrasyonu
-    expect(find.textContaining('TİP İLLÜSTRASYONU'), findsOneWidget);
+    // Emoji dönemi kapandı (Çizim Kütüphanesi Paket 1): türün DOLGULU
+    // teknik çizimi gösterilir — anahtar tür kimliğini taşır.
+    expect(find.byKey(const ValueKey<String>('boat-art-motor')),
+        findsOneWidget);
+    expect(find.textContaining('TİP ÇİZİMİ'), findsOneWidget);
     expect(find.textContaining('SENİN FOTOĞRAFIN'), findsNothing);
 
     await tester.tap(find.byKey(const ValueKey<String>('boat-photo-btn')));
@@ -92,7 +95,7 @@ void main() {
     await _settleIo(tester);
 
     expect(find.textContaining('SENİN FOTOĞRAFIN'), findsOneWidget);
-    expect(find.textContaining('TİP İLLÜSTRASYONU'), findsNothing);
+    expect(find.textContaining('TİP ÇİZİMİ'), findsNothing);
 
     await tester.tap(find.byKey(const ValueKey<String>('boat-photo-btn')));
     await tester.pumpAndSettle();
@@ -103,7 +106,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(store.clearCount, 1);
-    expect(find.textContaining('TİP İLLÜSTRASYONU'), findsOneWidget);
+    expect(find.textContaining('TİP ÇİZİMİ'), findsOneWidget);
     expect(find.textContaining('SENİN FOTOĞRAFIN'), findsNothing);
   });
 
@@ -116,7 +119,7 @@ void main() {
       boat: const MyBoat(lengthM: 10, typeId: 'sail'),
     ));
     await tester.pumpAndSettle();
-    expect(find.textContaining('TİP İLLÜSTRASYONU'), findsOneWidget);
+    expect(find.textContaining('TİP ÇİZİMİ'), findsOneWidget);
 
     await tester.tap(find.byKey(const ValueKey<String>('boat-photo-btn')));
     await tester.pumpAndSettle();
@@ -126,6 +129,61 @@ void main() {
 
     expect(find.text('Galeriden seç'), findsNothing); // alt sayfa kapandı
     expect(find.textContaining('SENİN FOTOĞRAFIN'), findsOneWidget);
+  });
+
+  testWidgets('MODEL ÇİZİMİ: marka+model eşleşince modele özel çizim + '
+      'dürüst rozet + BORDA ADI katmanı', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(
+      FakeBoatPhotoStore(),
+      boat: const MyBoat(
+        lengthM: 11.5,
+        name: 'Martı',
+        brand: 'Beneteau',
+        model: 'Oceanis 38.1',
+        typeId: 'sail',
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('boat-art-model-oceanis_38')),
+        findsOneWidget);
+    expect(find.textContaining('MODEL ÇİZİMİ'), findsOneWidget);
+    expect(find.textContaining('TİP ÇİZİMİ'), findsNothing);
+    // Borda adı AYRI katmanda, çizimin üstünde (kurucu isteği).
+    expect(find.byKey(const ValueKey<String>('boat-art-name')), findsOneWidget);
+    expect(find.text('Martı'), findsOneWidget);
+  });
+
+  testWidgets('bilinmeyen model TÜR çizimine düşer; ad girilmemişse borda '
+      'adı yazılmaz (uydurma yok)', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(
+      FakeBoatPhotoStore(),
+      boat: const MyBoat(
+        lengthM: 12,
+        brand: 'Najad',
+        model: '390',
+        typeId: 'sail',
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('boat-art-sail')), findsOneWidget);
+    expect(find.textContaining('TİP ÇİZİMİ'), findsOneWidget);
+    expect(find.textContaining('MODEL ÇİZİMİ'), findsNothing);
+    expect(find.byKey(const ValueKey<String>('boat-art-name')), findsNothing);
+  });
+
+  testWidgets('GULET boy varyantı: 24 m gulet büyük çizimi alır',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(
+      FakeBoatPhotoStore(),
+      boat: const MyBoat(lengthM: 24, typeId: 'gulet'),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('boat-art-gulet_buyuk')),
+        findsOneWidget);
+    expect(find.textContaining('TİP ÇİZİMİ'), findsOneWidget);
   });
 
   testWidgets('seçimden VAZGEÇMEK mevcut durumu değiştirmez',
@@ -142,7 +200,7 @@ void main() {
     await tester.tap(find.byKey(const ValueKey<String>('boat-photo-camera')));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('TİP İLLÜSTRASYONU'), findsOneWidget);
+    expect(find.textContaining('TİP ÇİZİMİ'), findsOneWidget);
     expect(find.textContaining('SENİN FOTOĞRAFIN'), findsNothing);
   });
 }

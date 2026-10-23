@@ -274,6 +274,7 @@ class L10n {
     required this.btPhotoPrivacy,
     required this.btSrcUser,
     required this.btSrcIllustration,
+    required this.btSrcModel,
     required this.tdMarinamGuest,
     required this.tdMarinamPick,
     required this.tdMarinamCountFmt,
@@ -866,7 +867,7 @@ class L10n {
   // PANEL — etkinlik/fırsat yönetimi (V1 — kurucu onayı 2026-10-23).
   final String admEventsRow, admDealsRow, admEvNew, admDealNew, admEvCancelCta, admEvCancelConfirm, admEvCancelDone, admEvParticipants, admEvNoParticipants, admFormTitle, admFormBody, admFormLocation, admFormQuota, admFormStart, admFormDeadline, admFormPrice, admFormConditions, admFormAudience, admAudAll, admAudMembers, admAudPremium, admFormPartner, admFormBenefit, admFormCode, admFormValid, admFormTerms, admFormPlace, admSaveCta, admSavedNote, admDealActiveToggle, admValRequired;
   // TEKNEM — fotoğraf + katalog (kurucu onayı 2026-10-23).
-  final String btTypeLabel, btTypeSail, btTypeMotor, btTypeCatamaran, btTypeGulet, btTypeDaily, btTypeFishing, btTypeRib, btTypeSuper, btBrandLabel, btModelLabel, btModelHint, btYearLabel, btYearHint, btYearInvalid, btYearUnknown, btPhotoTitle, btPhotoCamera, btPhotoGallery, btPhotoIllustration, btPhotoPrivacy, btSrcUser, btSrcIllustration;
+  final String btTypeLabel, btTypeSail, btTypeMotor, btTypeCatamaran, btTypeGulet, btTypeDaily, btTypeFishing, btTypeRib, btTypeSuper, btBrandLabel, btModelLabel, btModelHint, btYearLabel, btYearHint, btYearInvalid, btYearUnknown, btPhotoTitle, btPhotoCamera, btPhotoGallery, btPhotoIllustration, btPhotoPrivacy, btSrcUser, btSrcIllustration, btSrcModel;
 
   /// BUGÜN — GÜNÜN NABZI kartları (K2 Dengeli, kurucu onayı 2026-10-23).
   final String tdMarinamGuest, tdMarinamPick, tdMarinamCountFmt, tdEventCap;
@@ -1711,10 +1712,11 @@ const L10n _tr = L10n(
   btPhotoTitle: 'Tekne fotoğrafı',
   btPhotoCamera: 'Fotoğraf çek',
   btPhotoGallery: 'Galeriden seç',
-  btPhotoIllustration: 'Tip illüstrasyonunu kullan',
+  btPhotoIllustration: 'Tip çizimini kullan',
   btPhotoPrivacy: 'Fotoğrafın yalnız senin cihazında durur; sunucuya gönderilmez, marina topluluğunda gösterilmez.',
   btSrcUser: 'SENİN FOTOĞRAFIN',
-  btSrcIllustration: 'TİP İLLÜSTRASYONU',
+  btSrcIllustration: 'TİP ÇİZİMİ',
+  btSrcModel: 'MODEL ÇİZİMİ',
   tdMarinamGuest: 'Marina topluluğu için ücretsiz hesap aç',
   tdMarinamPick: 'Marinanı seç, rıhtım komşularını gör',
   tdMarinamCountFmt: '{0} kayıtlı tekne',
@@ -2594,10 +2596,11 @@ const L10n _en = L10n(
   btPhotoTitle: 'Boat photo',
   btPhotoCamera: 'Take a photo',
   btPhotoGallery: 'Choose from gallery',
-  btPhotoIllustration: 'Use type illustration',
+  btPhotoIllustration: 'Use the type drawing',
   btPhotoPrivacy: 'Your photo stays only on your device; it is not uploaded and not shown in the marina community.',
   btSrcUser: 'YOUR PHOTO',
-  btSrcIllustration: 'TYPE ILLUSTRATION',
+  btSrcIllustration: 'TYPE DRAWING',
+  btSrcModel: 'MODEL DRAWING',
   tdMarinamGuest: 'Create a free account to join the marina community',
   tdMarinamPick: 'Pick your marina to see your dock neighbours',
   tdMarinamCountFmt: '{0} registered boats',
@@ -3477,10 +3480,11 @@ const L10n _es = L10n(
   btPhotoTitle: 'Foto del barco',
   btPhotoCamera: 'Hacer foto',
   btPhotoGallery: 'Elegir de la galería',
-  btPhotoIllustration: 'Usar ilustración del tipo',
+  btPhotoIllustration: 'Usar el dibujo del tipo',
   btPhotoPrivacy: 'Tu foto queda solo en tu dispositivo; no se sube ni se muestra en la comunidad de la marina.',
   btSrcUser: 'TU FOTO',
-  btSrcIllustration: 'ILUSTRACIÓN DEL TIPO',
+  btSrcIllustration: 'DIBUJO DEL TIPO',
+  btSrcModel: 'DIBUJO DEL MODELO',
   tdMarinamGuest: 'Crea una cuenta gratuita para la comunidad de tu marina',
   tdMarinamPick: 'Elige tu marina y descubre a tus vecinos de pantalán',
   tdMarinamCountFmt: '{0} barcos registrados',
@@ -4360,10 +4364,11 @@ const L10n _ru = L10n(
   btPhotoTitle: 'Фото лодки',
   btPhotoCamera: 'Сделать фото',
   btPhotoGallery: 'Выбрать из галереи',
-  btPhotoIllustration: 'Использовать иллюстрацию типа',
+  btPhotoIllustration: 'Использовать рисунок типа',
   btPhotoPrivacy: 'Фото остаётся только на вашем устройстве; оно не загружается и не показывается в сообществе марины.',
   btSrcUser: 'ВАШЕ ФОТО',
-  btSrcIllustration: 'ИЛЛЮСТРАЦИЯ ТИПА',
+  btSrcIllustration: 'РИСУНОК ТИПА',
+  btSrcModel: 'РИСУНОК МОДЕЛИ',
   tdMarinamGuest: 'Создай бесплатный аккаунт для сообщества марины',
   tdMarinamPick: 'Выбери свою марину и узнай соседей по причалу',
   tdMarinamCountFmt: '{0} лодок зарегистрировано',
