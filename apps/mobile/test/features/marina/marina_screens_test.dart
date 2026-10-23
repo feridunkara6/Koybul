@@ -104,7 +104,13 @@ Widget _app({
   required Widget home,
   MyBoat? localBoat,
   bool signedIn = true,
+  // KART tam ekran değildir → kaydırmalı Scaffold'a sarılır. EKRANLAR kendi
+  // Scaffold'unu getirir; onları ikinci bir kaydırıcıya sarmak sonsuz
+  // yükseklik hatası doğurur (CI dersi 2026-10-23) — çıplak verilirler.
+  bool wrapCard = false,
 }) {
+  final Widget child =
+      wrapCard ? Scaffold(body: SingleChildScrollView(child: home)) : home;
   return ProviderScope(
     overrides: <Override>[
       marinaGatewayProvider.overrideWithValue(gw),
@@ -113,7 +119,7 @@ Widget _app({
       authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
       if (signedIn) signedInAuthOverride(),
     ],
-    child: MaterialApp(home: Scaffold(body: SingleChildScrollView(child: home))),
+    child: MaterialApp(home: child),
   );
 }
 
@@ -123,7 +129,7 @@ void main() {
     final FakeMarinaGateway gw =
         FakeMarinaGateway(communityResult: community());
     await tester.pumpWidget(
-        _app(gw: gw, home: const MarinamCard(), signedIn: false));
+        _app(gw: gw, home: const MarinamCard(), signedIn: false, wrapCard: true));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey<String>('marinam-signin')), findsOneWidget);
     expect(gw.upserts, isEmpty);
@@ -137,6 +143,7 @@ void main() {
       gw: gw,
       home: const MarinamCard(),
       localBoat: const MyBoat(lengthM: 10.4, name: 'Martı', typeId: 'sail'),
+      wrapCard: true,
     ));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey<String>('marinam-pick')), findsOneWidget);
@@ -148,7 +155,7 @@ void main() {
     final FakeMarinaGateway gw =
         FakeMarinaGateway(communityResult: community());
     await tester.pumpWidget(
-        _app(gw: gw, home: const MarinamCard(), localBoat: kLocalBoat));
+        _app(gw: gw, home: const MarinamCard(), localBoat: kLocalBoat, wrapCard: true));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const ValueKey<String>('marinam-join')));
@@ -168,7 +175,7 @@ void main() {
     final FakeMarinaGateway gw = FakeMarinaGateway(
         mine: serverBoat(), communityResult: community());
     await tester.pumpWidget(
-        _app(gw: gw, home: const MarinamCard(), localBoat: kLocalBoat));
+        _app(gw: gw, home: const MarinamCard(), localBoat: kLocalBoat, wrapCard: true));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const ValueKey<String>('marinam-visible')));
