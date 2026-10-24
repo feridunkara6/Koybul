@@ -64,7 +64,8 @@ const createNoteSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.too_big,
         maximum: NOTE_BODY_MAX[v.kind],
-        type: 'string',
+        // zod v4 (CVE-2023-54404 yükseltmesi): 'type' alanının yeni adı 'origin'.
+        origin: 'string',
         inclusive: true,
         path: ['body'],
         message: `Bu not tipi için en fazla ${NOTE_BODY_MAX[v.kind]} karakter`,
