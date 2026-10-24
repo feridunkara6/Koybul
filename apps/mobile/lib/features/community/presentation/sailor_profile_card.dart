@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../../deck/application/trip_log_controller.dart';
 import '../../deck/domain/sea_trip_log.dart';
+import '../../profile/presentation/profile_edit_screen.dart';
 import '../application/reputation_controller.dart';
 import 'badges_screen.dart';
 import 'reputation_shell.dart';
@@ -147,6 +148,22 @@ class SailorProfileCard extends ConsumerWidget {
                           ),
                         ],
                       ),
+                    ),
+                    // PROFİL DÜZENLEME (Sosyalleşme Hafta 1A, kurucu onayı
+                    // 2026-10-24): ad/bio/deneyim artık düzenlenebilir —
+                    // kalem karttan doğrudan açılır.
+                    IconButton(
+                      key: const ValueKey<String>('sailor-edit'),
+                      tooltip: t.peTitle,
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                            builder: (_) => const ProfileEditScreen()),
+                      ),
+                      icon: DocklyIcon(DocklyIcons.edit,
+                          size: 16, color: theme.colorScheme.onSurfaceVariant),
+                      padding: EdgeInsets.zero,
+                      constraints:
+                          const BoxConstraints(minWidth: 34, minHeight: 34),
                     ),
                     DocklyIcon(DocklyIcons.arrowForward,
                         size: 16, color: theme.colorScheme.onSurfaceVariant),
