@@ -38,7 +38,8 @@
     "zod": "^4.6.7"
   },
   "overrides": {
-    "body-parser": "1.20.9"
+    "body-parser": "1.20.9",
+    "multer": "2.5.0"
   },
   "devDependencies": {
     "@nestjs/testing": "^10.4.15",
