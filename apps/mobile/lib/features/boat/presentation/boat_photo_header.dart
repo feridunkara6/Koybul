@@ -42,7 +42,9 @@ class BoatPhotoHeader extends ConsumerWidget {
     final String boatName = boat?.name?.trim() ?? '';
 
     return SizedBox(
-      height: 148,
+      // ÇİZİM MODU DAHA YÜKSEK (TestFlight geri bildirimi 2026-10-24:
+      // "çizimler küçük ve uzakta kalıyor"): fotoğraf 148, çizim 210.
+      height: hasPhoto ? 148 : 210,
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -57,7 +59,8 @@ class BoatPhotoHeader extends ConsumerWidget {
             )
           else
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 8, 10, 2),
+              // Dar kenar payı: tekne kadrajı doldursun (aynı geri bildirim).
+              padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
               child: _BoatArtView(
                 key: ValueKey<String>(modelArt != null
                     ? 'boat-art-model-${art.id}'
