@@ -28,7 +28,7 @@ const Color _dimColor = Color(0xE8071626);
 ///  • anlatılan bölge YUMUŞAK IŞIMALI vurgu halkasıyla aydınlık kalır ve
 ///    yerine "oturma" animasyonuyla gelir;
 ///  • kart, hedefe KONUŞMA BALONU UCUYLA bağlanır (havada uçan ok yok);
-///  • kartta adım sayacı (3/10), akıcı geçiş animasyonu ve İleri/Başla
+///  • kartta adım sayacı (3/12), akıcı geçiş animasyonu ve İleri/Başla
 ///    düğmesi vardır; ekranın herhangi bir yerine dokunmak da ilerletir;
 ///  • tur gerekirse SAYFA DEĞİŞTİRİR (Defter, Teknem) ve son kart
 ///    "Hazırsın" deyip Keşfet'e döner.
@@ -116,7 +116,13 @@ final List<_TourStepDef> _tourSteps = <_TourStepDef>[
       icon: DocklyIcons.edit, tab: 2, target: tourKeySavedDemo),
   _TourStepDef( // ⑨ Teknem — tekne kimlik kartı vurgulanır
       icon: DocklyIcons.sailing, tab: 3, target: tourKeyBoatCard),
-  const _TourStepDef(icon: DocklyIcons.sailing), // ⑩ hazırsın (Keşfet'te)
+  // SOSYAL DURAKLAR (Hoş Geldin Paketi A, kurucu onayı 2026-10-25): hedef
+  // anahtarı BİLEREK yok — kart ortada durur, sayfanın kendisi örnektir
+  // (Bugün ve Profil içeriği sekme açılınca zaten görünür; ölçüm kırılganlığı
+  // sıfır). Sekme değiştirme mekanizması Defter/Teknem adımlarıyla aynıdır.
+  const _TourStepDef(icon: DocklyIcons.social, tab: 1), // ⑩ Bugün — nabız
+  const _TourStepDef(icon: DocklyIcons.compass, tab: 4), // ⑪ Profil — rotalar
+  const _TourStepDef(icon: DocklyIcons.sailing), // ⑫ hazırsın (Keşfet'te)
 ];
 
 class _TourOverlayState extends ConsumerState<TourOverlay> {
@@ -696,7 +702,7 @@ class _TourCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                // ADIM SAYACI (3/10): kullanıcı turda nerede, bilir.
+                // ADIM SAYACI (3/12): kullanıcı turda nerede, bilir.
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 9, vertical: 4),

@@ -11,11 +11,13 @@ final Provider<OnboardingStore> onboardingStoreProvider =
     Provider<OnboardingStore>((ref) => const SharedPrefsOnboardingStore());
 
 /// Turun adım sayısı (v2.0 kabuğu, kurucu onayı 2026-08 — tur ilgili bölgeyi
-/// ışıkla gösterir, gerekirse SAYFA DEĞİŞİR):
+/// ışıkla gösterir, gerekirse SAYFA DEĞİŞİR; Hoş Geldin Paketi A ile
+/// sosyal duraklar eklendi, kurucu onayı 2026-10-25):
 /// ① hoş geldin ② harita & koylar ③ filtreler ④ Konumum ⑤ SOS
 /// ⑥ deniz rotası ⑦ rota düzenleme & kaydetme ⑧ Defter (sekme 2)
-/// ⑨ Teknem (sekme 3) ⑩ "Hazırsın" — Keşfet'e dönülür.
-const int kTourStepCount = 10;
+/// ⑨ Teknem (sekme 3) ⑩ Bugün & çevrende olanlar (sekme 1)
+/// ⑪ Profil & topluluk rotaları (sekme 4) ⑫ "Hazırsın" — Keşfet'e dönülür.
+const int kTourStepCount = 12;
 
 /// ÖRNEKLİ TUR v5 (kullanıcı isteği 2026-08): bu adımlarda ekranlar CANLI
 /// ÖRNEK gösterir — kalıcı hiçbir şey yazılmaz, tur bitince örnekler silinir.

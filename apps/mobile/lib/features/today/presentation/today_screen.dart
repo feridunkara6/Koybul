@@ -17,6 +17,7 @@ import '../../weather/presentation/weather_card.dart';
 import '../application/suggestion_engine.dart';
 import '../domain/day_suggestion.dart';
 import '../domain/day_summary.dart';
+import 'getting_started_card.dart';
 import 'today_pulse_cards.dart';
 
 /// BUGÜN sekmesi (v2.0 vizyonu, kurucu onayı 2026-08): günlük alışkanlık
@@ -77,6 +78,10 @@ class TodayScreen extends ConsumerWidget {
             // GÜNÜN ÖZETİ (onaylı E2): RÜZGÂR · EN İYİ SAAT · DENİZ.
             // Üçü de aynı tahminden türetilir; veri yoksa şerit çizilmez.
             if (pos != null) _DaySummaryStrip(pos: pos),
+            // BAŞLANGIÇ GÖREVLERİ (Hoş Geldin Paketi B, kurucu onayı
+            // 2026-10-25): yeni kaptanın ilk 4 adımı — gerçek veriden okunur,
+            // hepsi bitince ya da "Gizle" denince kendini çizmez.
+            const GettingStartedCard(),
             // SEYİR ÖNCESİ KONTROL — ÖZET KUTUCUKLARININ HEMEN ALTINDA
             // (kurucu kararı 2026-09-23, 2. tur: "rüzgâr/en iyi saat/deniz
             // kutucuklarının altına yerleştir"). Sayfanın üst bölgesinde

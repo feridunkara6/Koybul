@@ -22,6 +22,7 @@ import 'package:dockly_mobile/features/marina/domain/marina_gateway.dart';
 import 'package:dockly_mobile/features/qa/application/qa_controller.dart';
 import 'package:dockly_mobile/features/qa/presentation/qa_list_screen.dart';
 import 'package:dockly_mobile/features/shell/application/shell_tab_provider.dart';
+import 'package:dockly_mobile/features/today/application/getting_started_controller.dart';
 import 'package:dockly_mobile/features/today/presentation/today_screen.dart';
 import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ import '../../support/auth_fakes.dart';
 import '../../support/checklist_fakes.dart';
 import '../../support/community_fakes.dart';
 import '../../support/events_feed_fakes.dart';
+import '../../support/getting_started_fakes.dart';
 import '../../support/maintenance_fakes.dart';
 import '../../support/qa_feed_fakes.dart';
 import '../../support/weather_fakes.dart';
@@ -103,6 +105,10 @@ Widget _app({
     overrides: <Override>[
       weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
       checklistStoreProvider.overrideWithValue(FakeChecklistStore()),
+      // Depo kuralı (docs/15): başlangıç görevleri kartı bu dosyada KAPALI —
+      // köprü kartları sınanır; kartın kendi testi getting_started_test'te.
+      gettingStartedStoreProvider
+          .overrideWithValue(FakeGettingStartedStore(dismissed: true)),
       communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
       boatStorageProvider.overrideWithValue(FakeBoatStorage(boat: boat)),
       qaGatewayProvider

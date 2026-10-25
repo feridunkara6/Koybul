@@ -12,6 +12,7 @@ import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart
 import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
 import 'package:dockly_mobile/features/route/application/saved_routes_controller.dart';
 import 'package:dockly_mobile/features/shell/presentation/dockly_shell.dart';
+import 'package:dockly_mobile/features/today/application/getting_started_controller.dart';
 import 'package:dockly_mobile/features/today/presentation/today_screen.dart';
 import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
 import 'package:dockly_mobile/features/welcome/presentation/welcome_prompt.dart';
@@ -22,6 +23,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../support/community_fakes.dart';
 import '../../support/detail_fakes.dart';
 import '../../support/fake_map_surface.dart';
+import '../../support/getting_started_fakes.dart';
 import '../../support/logbook_fakes.dart';
 import '../../support/maintenance_fakes.dart';
 import '../../support/map_fakes.dart';
@@ -54,6 +56,10 @@ Widget _app() {
       communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
       // Teknem sekmesi: bakım kayıtları bellek içi sahte depodan gelir.
       maintenanceStoreProvider.overrideWithValue(FakeMaintenanceStore()),
+      // Bugün sekmesi: başlangıç görevleri kartı KAPALI başlar — bu dosya
+      // sekme gezintisini sınar; kartın kendi testi getting_started_test'te.
+      gettingStartedStoreProvider
+          .overrideWithValue(FakeGettingStartedStore(dismissed: true)),
     ],
     child: const MaterialApp(home: DocklyShell()),
   );

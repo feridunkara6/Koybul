@@ -1,3 +1,6 @@
+import 'package:dockly_mobile/features/checklist/application/checklist_controller.dart';
+import 'package:dockly_mobile/features/community/application/community_controller.dart';
+import 'package:dockly_mobile/features/detail/application/location_detail_controller.dart';
 import 'package:dockly_mobile/features/favorites/application/favorites_controller.dart';
 import 'package:dockly_mobile/features/logbook/application/logbook_controller.dart';
 import 'package:dockly_mobile/features/map/application/map_controller.dart';
@@ -7,6 +10,7 @@ import 'package:dockly_mobile/features/map/presentation/map_surface.dart';
 import 'package:dockly_mobile/features/nearby/application/nearby_controller.dart';
 import 'package:dockly_mobile/features/onboarding/application/onboarding_controller.dart';
 import 'package:dockly_mobile/features/boat/application/maintenance_controller.dart';
+import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
 import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
 import 'package:dockly_mobile/features/onboarding/domain/onboarding_store.dart';
 import 'package:dockly_mobile/features/onboarding/presentation/tour_targets.dart';
@@ -18,6 +22,7 @@ import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
 import 'package:dockly_mobile/features/route/domain/sea_router.dart';
 import 'package:dockly_mobile/features/route/domain/sea_trip.dart';
 import 'package:dockly_mobile/features/shell/application/shell_tab_provider.dart';
+import 'package:dockly_mobile/features/today/application/getting_started_controller.dart';
 import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
 import 'package:dockly_mobile/features/shell/presentation/dockly_shell.dart';
 import 'package:dockly_mobile/features/welcome/presentation/welcome_prompt.dart';
@@ -25,8 +30,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/checklist_fakes.dart';
+import '../../support/community_fakes.dart';
+import '../../support/detail_fakes.dart';
 import '../../support/fake_map_surface.dart';
 import '../../support/favorites_fakes.dart';
+import '../../support/getting_started_fakes.dart';
 import '../../support/logbook_fakes.dart';
 import '../../support/maintenance_fakes.dart';
 import '../../support/map_fakes.dart';
@@ -88,6 +97,18 @@ Widget _app(FakeOnboardingStore store, {MapResult mapResult = pinResult}) {
       // Örnek rota (tur v5): gerçek motor/ağ yerine sahteler.
       seaRouteEngineProvider.overrideWithValue(_FakeRouteEngine()),
       weatherGatewayProvider.overrideWithValue(FakeWeatherGateway()),
+      // SOSYAL DURAKLAR (Hoş Geldin Paketi A, 2026-10-25): tur artık Bugün
+      // ve Profil sekmelerine de uğruyor — depo kuralı (docs/15: testte
+      // gerçek SharedPreferences ASLA) buradaki depoları da kapsar.
+      checklistStoreProvider.overrideWithValue(FakeChecklistStore()),
+      boatStorageProvider.overrideWithValue(FakeBoatStorage()),
+      gettingStartedStoreProvider.overrideWithValue(FakeGettingStartedStore()),
+      // Bugün sekmesi ağ geçitleri (kabuk testiyle aynı ders): harita
+      // açılışta origin yazar — öneri bölümü ve "yakında paylaşılanlar"
+      // kurulur; motor asla gerçek ağa çıkmasın.
+      locationDetailGatewayProvider
+          .overrideWithValue(FakeLocationDetailGateway()),
+      communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
     ],
     child: const MaterialApp(home: DocklyShell()),
   );
@@ -264,7 +285,20 @@ void main() {
     expect(_tab(tester), 3);
     expect(find.text('Tekneni tanımla'), findsOneWidget);
 
-    // → adım 9 (Hazırsın): Keşfet'e dönülür, kapanış kartı.
+    // Adım 9 (Bugün — Hoş Geldin Paketi A, 2026-10-25): sekme 1; günün
+    // nabzı kartı ortada, sayfanın kendisi örnektir (başlangıç görevleri
+    // kartı da bu sayfada yaşar).
+    await _advance(tester);
+    expect(_tab(tester), 1);
+    expect(find.text('Günün nabzı'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('gs-card')), findsOneWidget);
+
+    // Adım 10 (Profil): sekme 4 — topluluk rotaları ve kaptan profili.
+    await _advance(tester);
+    expect(_tab(tester), 4);
+    expect(find.text('Topluluk ve rotalar'), findsOneWidget);
+
+    // → adım 11 (Hazırsın): Keşfet'e dönülür, kapanış kartı.
     await _advance(tester);
     expect(_tab(tester), 0);
     expect(find.text('Hazırsın, kaptan!'), findsOneWidget);
