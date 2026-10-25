@@ -1,4 +1,4 @@
-import { Boat, CreateBoatInput, UpdateBoatInput } from './boat.types';
+import { Boat, CreateBoatInput, PublicBoatCard, UpdateBoatInput } from './boat.types';
 
 /** Lookup kod→id çözümü sonucu (geçersiz kod erken 422'ye map'lenir). */
 export interface LookupResolution {
@@ -29,6 +29,11 @@ export interface BoatRepository {
   softDelete(ownerUserId: string, boatId: string, actorUserId: string): Promise<void>;
   /** Silinen birincil teknenin yerine en yeni aktif tekneyi birincil yapar. */
   promoteNewPrimaryIfNeeded(ownerUserId: string): Promise<void>;
+  /**
+   * TEKNE KARTI (Hafta 2): yalnız visibleInMarina açık ve sahibi aktif
+   * teknede döner; teknik alanlar shareSpecs'e göre null'lanır.
+   */
+  publicCard(boatId: string): Promise<PublicBoatCard | null>;
 }
 
 /** Çözülmüş lookup id'leri (undefined = patch'te dokunulmadı). */

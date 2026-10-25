@@ -61,7 +61,7 @@ class BoatPhotoHeader extends ConsumerWidget {
             Padding(
               // Dar kenar payı: tekne kadrajı doldursun (aynı geri bildirim).
               padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
-              child: _BoatArtView(
+              child: BoatArtView(
                 key: ValueKey<String>(modelArt != null
                     ? 'boat-art-model-${art.id}'
                     : 'boat-art-${art.id}'),
@@ -224,12 +224,15 @@ class _BoatPhotoSheetBody extends ConsumerWidget {
 
 /// Çizim + BORDA ADI katmanı (onaylı rapor §5-6).
 ///
+/// HAFTA 2 NOTU: Tekne Kartı ekranı da bu widget'ı kullanır — bu yüzden
+/// herkese açıktır (eski adı _BoatArtView'dı; davranış değişmedi).
+///
 /// Çizim, kendi en-boy oranında ortalanır; ad, girişteki onaylı çapa
 /// noktasında (kıça yakın, sheer eğimli) AYRI Flutter katmanı olarak
 /// yazılır — aynı model çizimi her kullanıcıda kendi tekne adıyla görünür.
 /// flutter_svg <text> çizmediği için bu katman zorunlu ve bilinçlidir.
-class _BoatArtView extends StatelessWidget {
-  const _BoatArtView({
+class BoatArtView extends StatelessWidget {
+  const BoatArtView({
     required this.entry,
     required this.boatName,
     super.key,

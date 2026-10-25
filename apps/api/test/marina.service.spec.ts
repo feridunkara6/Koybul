@@ -38,6 +38,7 @@ class FakeMarinaRepo implements MarinaRepository {
   countsValue = { total: 12, visibleCount: 7 };
   boats: MarinaBoat[] = [
     {
+      boatId: 'b-ruzgar',
       name: 'Rüzgargülü',
       boatTypeCode: 'sailboat',
       lengthM: 12,
@@ -63,6 +64,8 @@ class FakeMarinaRepo implements MarinaRepository {
       boatTypeCode: input.boatTypeCode,
       lengthM: input.lengthM,
       brand: input.brand ?? null,
+      model: input.model ?? null,
+      buildYear: input.buildYear ?? null,
       marina: this.marinas.get(input.marinaLocationId) ?? null,
       visible: input.visible,
       shareSpecs: input.shareSpecs,

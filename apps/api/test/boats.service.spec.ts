@@ -1,6 +1,11 @@
 import { BoatsService } from '../src/modules/boats/application/boats.service';
 import { BoatRepository, LookupResolution } from '../src/modules/boats/domain/boat.repository';
-import { Boat, CreateBoatInput, UpdateBoatInput } from '../src/modules/boats/domain/boat.types';
+import {
+  Boat,
+  CreateBoatInput,
+  PublicBoatCard,
+  UpdateBoatInput,
+} from '../src/modules/boats/domain/boat.types';
 import { Principal } from '../src/core/auth/principal';
 
 const P: Principal = { userId: 'owner-1', role: 'user', isGuest: false, familyId: 'f', jti: 'j' };
@@ -94,6 +99,11 @@ class FakeBoatRepo implements BoatRepository {
       this.rows[this.rows.length - 1].isPrimary = true;
     }
   }
+  // TEKNE KARTI (Hafta 2): sahte kart — null = görünmez/yok (servis 404'ler).
+  publicCards = new Map<string, PublicBoatCard>();
+  async publicCard(boatId: string): Promise<PublicBoatCard | null> {
+    return this.publicCards.get(boatId) ?? null;
+  }
 }
 
 describe('BoatsService (birincil tekne + doğrulama, docs/23 §10 #7)', () => {
@@ -167,5 +177,26 @@ describe('BoatsService (birincil tekne + doğrulama, docs/23 §10 #7)', () => {
     await expect(
       service.create(P, { name: 'fazla', boatTypeCode: 'other', lengthM: 5 }),
     ).rejects.toMatchObject({ problemType: 'conflict-state' });
+  });
+
+  it('TEKNE KARTI (Hafta 2): görünür tekne döner; görünmez/yok AYNI 404', async () => {
+    const card: PublicBoatCard = {
+      id: 'b-marti',
+      name: 'Martı',
+      boatTypeCode: 'sailboat',
+      brand: 'Beneteau',
+      model: 'Oceanis 38.1',
+      lengthM: 11.5,
+      buildYear: 2019,
+      marina: { id: 'loc-marti', name: 'Martı Marina' },
+      captain: { userId: 'u-1', displayName: 'Kaptan Levent', levelCode: 'guide' },
+    };
+    repo.publicCards.set('b-marti', card);
+
+    expect(await service.publicCard('b-marti')).toEqual(card);
+    // Depo null dedi (görünmez/silinmiş/yok) → servis ayrım sızdırmadan 404.
+    await expect(service.publicCard('b-gizli')).rejects.toMatchObject({
+      problemType: 'not-found',
+    });
   });
 });

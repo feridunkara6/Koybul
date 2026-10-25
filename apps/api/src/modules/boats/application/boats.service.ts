@@ -3,7 +3,7 @@ import { uuidv7 } from 'uuidv7';
 import { AppProblem, FieldError } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
 import { BOAT_REPOSITORY, BoatRepository, LookupIds } from '../domain/boat.repository';
-import { Boat, CreateBoatInput, UpdateBoatInput } from '../domain/boat.types';
+import { Boat, CreateBoatInput, PublicBoatCard, UpdateBoatInput } from '../domain/boat.types';
 
 /** Hesap başına aktif tekne tavanı — kötüye kullanım freni (docs/29 SEC-14 ruhu). */
 const MAX_BOATS_PER_OWNER = 25;
@@ -20,6 +20,17 @@ export class BoatsService {
     const boat = await this.boats.findOwned(principal.userId, boatId);
     if (!boat) throw new AppProblem('not-found');
     return boat;
+  }
+
+  /**
+   * TEKNE KARTI (Hafta 2): kimlik istemez. Görünür olmayan, silinmiş ya da
+   * sahibi pasif tekne ile bilinmeyen kimlik AYNI 404'ü alır — kart yalnız
+   * sahibinin rızasıyla vardır, rıza kapanınca anında kaybolur.
+   */
+  async publicCard(boatId: string): Promise<PublicBoatCard> {
+    const card = await this.boats.publicCard(boatId);
+    if (!card) throw new AppProblem('not-found');
+    return card;
   }
 
   async create(principal: Principal, input: CreateBoatInput): Promise<Boat> {

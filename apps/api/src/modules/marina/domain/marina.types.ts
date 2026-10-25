@@ -17,6 +17,8 @@
 
 /** Topluluk listesinde tek tekne — yalnız sahibinin paylaştığı alanlar. */
 export interface MarinaBoat {
+  /** Tekne Kartı köprüsü (Hafta 2): karta geçiş için kimlik — PII değildir. */
+  boatId: string;
   name: string;
   boatTypeCode: string;
   /** shareSpecs kapalıysa null gelir (istemciye hiç inmez). */
@@ -43,6 +45,9 @@ export interface MyMarinaBoat {
   boatTypeCode: string;
   lengthM: number;
   brand: string | null;
+  /** Tekne Kartı (Hafta 2): modele özel çizim bu alanla seçilir. */
+  model: string | null;
+  buildYear: number | null;
   marina: { id: string; name: string } | null;
   visible: boolean;
   shareSpecs: boolean;
@@ -54,6 +59,9 @@ export interface UpsertMyBoatInput {
   boatTypeCode: string;
   lengthM: number;
   brand?: string | null;
+  /** Hafta 2: modele özel çizim ve kart için — isteğe bağlı kalır. */
+  model?: string | null;
+  buildYear?: number | null;
   marinaLocationId: string;
   visible: boolean;
   shareSpecs: boolean;

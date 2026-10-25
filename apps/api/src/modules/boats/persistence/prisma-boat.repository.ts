@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../../infrastructure/prisma/prisma.service';
 import { BoatRepository, LookupIds, LookupResolution } from '../domain/boat.repository';
-import { Boat, CreateBoatInput, UpdateBoatInput } from '../domain/boat.types';
+import { Boat, CreateBoatInput, PublicBoatCard, UpdateBoatInput } from '../domain/boat.types';
 
 type BoatRow = Prisma.BoatGetPayload<{ include: { boatType: true; engineType: true } }>;
 
@@ -165,6 +165,60 @@ export class PrismaBoatRepository implements BoatRepository {
         await tx.boat.update({ where: { id: newest.id }, data: { isPrimary: true } });
       }
     });
+  }
+
+  /**
+   * TEKNE KARTI (Hafta 2, kurucu onayı 2026-10-24). Kullanıcı bağlamı YOK:
+   * okuma kamuya açıktır (kaptan kartı deposuyla aynı ilke). Görünürlük
+   * süzgeci SORGUDA: visible_in_marina kapalı tekne bulunamaz; shareSpecs
+   * kapalıysa teknik alanlar istemciye hiç inmez.
+   */
+  async publicCard(boatId: string): Promise<PublicBoatCard | null> {
+    const row = await this.prisma.boat.findFirst({
+      where: {
+        id: boatId,
+        deletedAt: null,
+        visibleInMarina: true,
+        owner: { deletedAt: null, status: 'active' },
+      },
+      select: {
+        id: true,
+        name: true,
+        brand: true,
+        model: true,
+        buildYear: true,
+        lengthM: true,
+        shareSpecs: true,
+        ownerUserId: true,
+        boatType: { select: { code: true } },
+        homeMarinaLocation: { select: { id: true, name: true } },
+        owner: {
+          select: {
+            profile: { select: { displayName: true } },
+            reputation: { select: { levelCode: true } },
+          },
+        },
+      },
+    });
+    if (!row) return null;
+    const specs = row.shareSpecs;
+    return {
+      id: row.id,
+      name: row.name,
+      boatTypeCode: row.boatType.code,
+      brand: specs ? row.brand : null,
+      model: specs ? row.model : null,
+      lengthM: specs ? row.lengthM.toNumber() : null,
+      buildYear: specs ? row.buildYear : null,
+      marina: row.homeMarinaLocation
+        ? { id: row.homeMarinaLocation.id, name: row.homeMarinaLocation.name }
+        : null,
+      captain: {
+        userId: row.ownerUserId,
+        displayName: row.owner.profile?.displayName ?? 'Koybul Kaptanı',
+        levelCode: row.owner.reputation?.levelCode ?? 'new',
+      },
+    };
   }
 
   private toBoat(row: BoatRow): Boat {

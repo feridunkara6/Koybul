@@ -53,6 +53,12 @@ final Provider<UsersApi> usersApiProvider = Provider<UsersApi>((ref) {
   return UsersApi(ref.watch(docklyClientProvider).dio);
 });
 
+/// TEKNE KARTI istemcisi (Sosyalleşme Hafta 2, kurucu onayı 2026-10-24) —
+/// kart kimliksiz okunur; görünürlük ve rıza kuralları sunucudadır.
+final Provider<BoatsApi> boatsApiProvider = Provider<BoatsApi>((ref) {
+  return BoatsApi(ref.watch(docklyClientProvider).dio);
+});
+
 /// Premium (abonelik + keşif hakkı) istemcisi — TÜM uçları hesap ister (P3).
 final Provider<PremiumApi> premiumApiProvider = Provider<PremiumApi>((ref) {
   return PremiumApi(ref.watch(docklyClientProvider).dio);

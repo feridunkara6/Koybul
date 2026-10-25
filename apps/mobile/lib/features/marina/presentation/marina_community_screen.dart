@@ -6,6 +6,7 @@ import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../boat/presentation/boat_card_screen.dart';
 import '../application/marina_controller.dart';
 
 /// MARİNA TOPLULUĞU ekranı (onaylı görsel konsept Ekran 12-13-16).
@@ -271,12 +272,26 @@ class _BoatRow extends StatelessWidget {
       if (b.lengthM != null) '${_num(b.lengthM!)} m',
       if (b.brand != null && b.brand!.isNotEmpty) b.brand!,
     ];
+    // TEKNE KARTI KÖPRÜSÜ (Hafta 2): kimlik geldiyse satır dokunulabilir;
+    // eski sunucu yanıtında kimlik yoksa satır eskisi gibi düz kalır.
+    final String? boatId = b.boatId;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Container(
+      child: Material(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          key: boatId != null ? ValueKey<String>('mc-boat-$boatId') : null,
+          borderRadius: BorderRadius.circular(12),
+          onTap: boatId == null
+              ? null
+              : () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                        builder: (_) => BoatCardScreen(boatId: boatId)),
+                  ),
+          child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: theme.dividerColor.withValues(alpha: .4)),
         ),
@@ -312,7 +327,12 @@ class _BoatRow extends StatelessWidget {
                 ],
               ),
             ),
+            // Karta geçilebiliyorsa küçük ok ipucu göster.
+            if (boatId != null)
+              DocklyIcon(DocklyIcons.arrowForward, size: 14, color: sub),
           ],
+        ),
+          ),
         ),
       ),
     );

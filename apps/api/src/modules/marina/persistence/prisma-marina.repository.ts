@@ -25,6 +25,8 @@ interface MyBoatRow {
   boatTypeCode: string;
   lengthM: unknown;
   brand: string | null;
+  model: string | null;
+  buildYear: number | null;
   marinaId: string | null;
   marinaName: string | null;
   visible: boolean;
@@ -38,6 +40,8 @@ function toMyBoat(r: MyBoatRow): MyMarinaBoat {
     boatTypeCode: r.boatTypeCode,
     lengthM: Number(r.lengthM),
     brand: r.brand,
+    model: r.model,
+    buildYear: r.buildYear,
     marina:
       r.marinaId !== null && r.marinaName !== null ? { id: r.marinaId, name: r.marinaName } : null,
     visible: r.visible,
@@ -47,7 +51,8 @@ function toMyBoat(r: MyBoatRow): MyMarinaBoat {
 
 const MY_BOAT_SELECT = Prisma.sql`
   b.id AS "boatId", b.name, bt.code AS "boatTypeCode", b.length_m AS "lengthM",
-  b.brand, l.id AS "marinaId", l.name AS "marinaName",
+  b.brand, b.model, b.build_year AS "buildYear",
+  l.id AS "marinaId", l.name AS "marinaName",
   b.visible_in_marina AS visible, b.share_specs AS "shareSpecs"
 `;
 
@@ -97,6 +102,8 @@ export class PrismaMarinaRepository implements MarinaRepository {
             boat_type_id = (SELECT id FROM boat_types WHERE code = ${input.boatTypeCode}),
             length_m = ${input.lengthM},
             brand = ${input.brand ?? null},
+            model = ${input.model ?? null},
+            build_year = ${input.buildYear ?? null},
             home_marina_location_id = ${input.marinaLocationId}::uuid,
             visible_in_marina = ${input.visible},
             share_specs = ${input.shareSpecs},
@@ -105,11 +112,13 @@ export class PrismaMarinaRepository implements MarinaRepository {
           RETURNING b.*
         ), yeni AS (
           INSERT INTO boats (owner_user_id, name, boat_type_id, length_m, brand,
+                             model, build_year,
                              home_marina_location_id, visible_in_marina, share_specs,
                              is_primary)
           SELECT ${userId}::uuid, ${input.name},
                  (SELECT id FROM boat_types WHERE code = ${input.boatTypeCode}),
                  ${input.lengthM}, ${input.brand ?? null},
+                 ${input.model ?? null}, ${input.buildYear ?? null},
                  ${input.marinaLocationId}::uuid, ${input.visible}, ${input.shareSpecs},
                  true
           WHERE NOT EXISTS (SELECT 1 FROM mevcut)
@@ -118,7 +127,7 @@ export class PrismaMarinaRepository implements MarinaRepository {
           SELECT * FROM guncel UNION ALL SELECT * FROM yeni
         )
         SELECT b.id AS "boatId", b.name, bt.code AS "boatTypeCode",
-               b.length_m AS "lengthM", b.brand,
+               b.length_m AS "lengthM", b.brand, b.model, b.build_year AS "buildYear",
                l.id AS "marinaId", l.name AS "marinaName",
                b.visible_in_marina AS visible, b.share_specs AS "shareSpecs"
         FROM tekne b
@@ -166,6 +175,7 @@ export class PrismaMarinaRepository implements MarinaRepository {
     // boy/marka NULL'lanır — istemciye inmeyen veri "gizlenmiş" değil YOKTUR.
     const rows = await this.prisma.$queryRaw<
       {
+        boatId: string;
         name: string;
         boatTypeCode: string;
         lengthM: unknown;
@@ -173,7 +183,7 @@ export class PrismaMarinaRepository implements MarinaRepository {
         captainName: string | null;
       }[]
     >(Prisma.sql`
-      SELECT b.name, bt.code AS "boatTypeCode",
+      SELECT b.id AS "boatId", b.name, bt.code AS "boatTypeCode",
              CASE WHEN b.share_specs THEN b.length_m END AS "lengthM",
              CASE WHEN b.share_specs THEN b.brand END AS brand,
              p.display_name AS "captainName"
@@ -185,6 +195,7 @@ export class PrismaMarinaRepository implements MarinaRepository {
       ORDER BY b.name ASC
     `);
     return rows.map((r) => ({
+      boatId: r.boatId,
       name: r.name,
       boatTypeCode: r.boatTypeCode,
       lengthM: r.lengthM === null || r.lengthM === undefined ? null : Number(r.lengthM),

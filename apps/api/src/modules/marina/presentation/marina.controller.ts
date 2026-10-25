@@ -17,6 +17,9 @@ const upsertMyBoatSchema = z
     boatTypeCode: z.string().min(1).max(40),
     lengthM: z.number().gt(0).max(200),
     brand: z.string().trim().max(60).nullable().optional(),
+    // Hafta 2 (Tekne Kartı): modele özel çizim bu alanlarla seçilir.
+    model: z.string().trim().max(60).nullable().optional(),
+    buildYear: z.number().int().min(1900).max(2100).nullable().optional(),
     marinaLocationId: UUID,
     visible: z.boolean(),
     shareSpecs: z.boolean(),

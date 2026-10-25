@@ -22,6 +22,8 @@ const MyBoat kLocalBoat = MyBoat(
   name: 'Martı',
   typeId: 'sail',
   brand: 'Beneteau',
+  model: 'Oceanis 38.1', // Hafta 2: model + yıl da sunucuya gider
+  buildYear: 2019,
   homeMarina: HomeMarina(id: 'loc-marti', name: 'Martı Marina', lat: 36.77, lon: 28.12),
 );
 
@@ -68,6 +70,8 @@ class FakeMarinaGateway implements MarinaGateway {
     required String boatTypeCode,
     required double lengthM,
     String? brand,
+    String? model,
+    int? buildYear,
     required String marinaLocationId,
     required bool visible,
     required bool shareSpecs,
@@ -77,6 +81,8 @@ class FakeMarinaGateway implements MarinaGateway {
       'boatTypeCode': boatTypeCode,
       'lengthM': lengthM,
       'brand': brand,
+      'model': model,
+      'buildYear': buildYear,
       'marinaLocationId': marinaLocationId,
       'visible': visible,
       'shareSpecs': shareSpecs,
@@ -166,6 +172,9 @@ void main() {
     expect(gw.upserts.single['boatTypeCode'], 'sailboat'); // yerel 'sail' eşlendi
     expect(gw.upserts.single['visible'], false); // gizlilik varsayılanı
     expect(gw.upserts.single['shareSpecs'], false);
+    // Hafta 2: model + yıl yereldeki tekneden aynen taşınır (çizim köprüsü).
+    expect(gw.upserts.single['model'], 'Oceanis 38.1');
+    expect(gw.upserts.single['buildYear'], 2019);
     // Katılım sonrası sayı kutuları ve anahtarlar görünür.
     expect(find.byKey(const ValueKey<String>('marinam-visible')), findsOneWidget);
   });
@@ -195,13 +204,14 @@ void main() {
         visibleCount: 2,
         boats: const <MarinaBoat>[
           MarinaBoat(
+              boatId: 'b-ruzgar', // Hafta 2: Tekne Kartı köprüsü
               name: 'Rüzgargülü',
               boatTypeCode: 'sailboat',
               lengthM: 12,
               brand: 'Hanse',
               captainName: 'Deniz K.'),
           MarinaBoat(
-              name: 'Poyraz',
+              name: 'Poyraz', // boatId YOK — eski sunucu uyumu: satır düz kalır
               boatTypeCode: 'motor_yacht',
               lengthM: null, // shareSpecs kapalı — boy istemciye inmedi
               brand: null,
@@ -219,6 +229,9 @@ void main() {
     expect(find.textContaining('Kaptan: Uğur T.'), findsOneWidget);
     expect(find.textContaining('+10 tekne gizli'), findsOneWidget); // 12-2
     expect(find.textContaining('beyanına dayanır'), findsOneWidget); // dürüstlük
+    // TEKNE KARTI KÖPRÜSÜ (Hafta 2): kimlikli satır dokunulabilir,
+    // kimliksiz (eski sunucu) satır düz kalır.
+    expect(find.byKey(const ValueKey<String>('mc-boat-b-ruzgar')), findsOneWidget);
   });
 
   testWidgets('Topluluk: liste kilitliyken tekneler çizilmez, sayılar durur',

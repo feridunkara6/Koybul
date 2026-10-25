@@ -28,6 +28,8 @@ const MY_BOAT_ROW = {
   boatTypeCode: 'sailboat',
   lengthM: '10.40', // Decimal sütun string gelebilir — Number() sözleşmesi
   brand: 'Beneteau',
+  model: 'Oceanis 38.1', // Hafta 2: modele özel çizim köprüsü
+  buildYear: 2019,
   marinaId: 'loc-marti',
   marinaName: 'Martı Marina',
   visible: true,
@@ -49,6 +51,8 @@ describe('PrismaMarinaRepository (satır eşleme sözleşmesi)', () => {
     const mine = await repo.findMyBoat('u1');
     expect(mine?.lengthM).toBe(10.4);
     expect(mine?.marina).toEqual({ id: 'loc-marti', name: 'Martı Marina' });
+    expect(mine?.model).toBe('Oceanis 38.1'); // Hafta 2 alanları eşlenir
+    expect(mine?.buildYear).toBe(2019);
 
     const upserted = await repo.upsertMyBoat('u1', {
       name: 'Martı',
@@ -85,17 +89,26 @@ describe('PrismaMarinaRepository (satır eşleme sözleşmesi)', () => {
     const repo = new PrismaMarinaRepository(
       fakePrisma(() => [
         {
+          boatId: 'b-ruzgar',
           name: 'Rüzgargülü',
           boatTypeCode: 'sailboat',
           lengthM: '12.00',
           brand: 'Hanse',
           captainName: 'Deniz K.',
         },
-        { name: 'Poyraz', boatTypeCode: 'gulet', lengthM: null, brand: null, captainName: null },
+        {
+          boatId: 'b-poyraz',
+          name: 'Poyraz',
+          boatTypeCode: 'gulet',
+          lengthM: null,
+          brand: null,
+          captainName: null,
+        },
       ]),
     );
     const boats = await repo.visibleBoats('loc-marti');
     expect(boats[0]).toEqual({
+      boatId: 'b-ruzgar',
       name: 'Rüzgargülü',
       boatTypeCode: 'sailboat',
       lengthM: 12,

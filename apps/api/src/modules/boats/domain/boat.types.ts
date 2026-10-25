@@ -16,6 +16,30 @@ export interface Boat {
   createdAt: string;
 }
 
+/**
+ * GET /v1/boats/:id/public yanıtı — TEKNE KARTI (Sosyalleşme Hafta 2,
+ * kurucu onayı 2026-10-24).
+ *
+ * GİZLİLİK SÖZLEŞMESİ marina listesinin devamıdır: kart YALNIZ sahibi
+ * "Marinada görün"ü (visibleInMarina) açtıysa vardır; teknik alanlar
+ * (marka/model/boy/yıl) shareSpecs rızasına bağlıdır — kapalıysa null bile
+ * değil, istemciye HİÇ inmez. Konum, bağlama yeri, sicil no ve iletişim
+ * bu modelde YOKTUR. Çizim istemcide üretilir (marka+model → çizim
+ * kütüphanesi); sunucu görsel taşımaz.
+ */
+export interface PublicBoatCard {
+  id: string;
+  name: string;
+  boatTypeCode: string;
+  /** shareSpecs kapalıysa dördü birden null. */
+  brand: string | null;
+  model: string | null;
+  lengthM: number | null;
+  buildYear: number | null;
+  marina: { id: string; name: string } | null;
+  captain: { userId: string; displayName: string; levelCode: string };
+}
+
 /** POST /v1/boats girdisi — zorunlu alanlar + lookup kodları. */
 export interface CreateBoatInput {
   name: string;

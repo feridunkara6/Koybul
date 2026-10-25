@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   HttpCode,
   Param,
   Patch,
@@ -16,7 +17,7 @@ import { AccountGuard, RequireAccount } from '../../../common/guards/account.gua
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
-import { Boat } from '../domain/boat.types';
+import { Boat, PublicBoatCard } from '../domain/boat.types';
 
 const CURRENT_YEAR = 2026;
 
@@ -111,5 +112,23 @@ export class BoatsController {
     const parsed = boatIdSchema.safeParse(id);
     if (!parsed.success) throw new AppProblem('not-found');
     return parsed.data;
+  }
+}
+
+/**
+ * TEKNE KARTI ucu (Sosyalleşme Hafta 2, kurucu onayı 2026-10-24). Ayrı
+ * controller: yukarıdaki sınıf Jwt+Account zırhlıdır, kart ise kimliksiz
+ * okunur — kaptan kartı (`users/:id/public`) ile aynı desen.
+ */
+@Controller('boats')
+export class BoatsPublicController {
+  constructor(private readonly boatsService: BoatsService) {}
+
+  @Get(':id/public')
+  @Header('Cache-Control', 'public, max-age=60')
+  async publicCard(@Param('id') id: string): Promise<PublicBoatCard> {
+    const parsed = boatIdSchema.safeParse(id);
+    if (!parsed.success) throw new AppProblem('not-found');
+    return this.boatsService.publicCard(parsed.data);
   }
 }

@@ -56,6 +56,10 @@ class _MarinamCardState extends ConsumerState<MarinamCard> {
             boatTypeCode: typeCode,
             lengthM: local.lengthM,
             brand: local.brand,
+            // Hafta 2 (Tekne Kartı): model + yıl da sunucuya gider ki
+            // kartta MODELE ÖZEL çizim seçilebilsin.
+            model: local.model,
+            buildYear: local.buildYear,
             marinaLocationId: local.homeMarina!.id,
             visible: visible,
             shareSpecs: shareSpecs,

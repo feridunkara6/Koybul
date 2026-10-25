@@ -9,6 +9,7 @@ library;
 /// Topluluk listesindeki tek tekne — yalnız sahibinin paylaştığı alanlar.
 class MarinaBoat {
   const MarinaBoat({
+    this.boatId,
     required this.name,
     required this.boatTypeCode,
     required this.lengthM,
@@ -16,6 +17,9 @@ class MarinaBoat {
     required this.captainName,
   });
 
+  /// Tekne Kartı köprüsü (Hafta 2) — eski sunucuda yoktur, null ise
+  /// satır dokunulabilir olmaz (kırılmaz).
+  final String? boatId;
   final String name;
   final String boatTypeCode;
   final double? lengthM;
@@ -23,6 +27,7 @@ class MarinaBoat {
   final String captainName;
 
   factory MarinaBoat.fromJson(Map<String, dynamic> json) => MarinaBoat(
+        boatId: json['boatId'] as String?,
         name: json['name'] as String,
         boatTypeCode: json['boatTypeCode'] as String,
         lengthM: (json['lengthM'] as num?)?.toDouble(),
@@ -78,6 +83,8 @@ class MyMarinaBoat {
     required this.boatTypeCode,
     required this.lengthM,
     required this.brand,
+    this.model,
+    this.buildYear,
     required this.marinaId,
     required this.marinaName,
     required this.visible,
@@ -89,6 +96,10 @@ class MyMarinaBoat {
   final String boatTypeCode;
   final double lengthM;
   final String? brand;
+
+  /// Hafta 2 (Tekne Kartı): modele özel çizim bu alanla seçilir.
+  final String? model;
+  final int? buildYear;
   final String? marinaId;
   final String? marinaName;
   final bool visible;
@@ -102,6 +113,8 @@ class MyMarinaBoat {
       boatTypeCode: json['boatTypeCode'] as String,
       lengthM: (json['lengthM'] as num).toDouble(),
       brand: json['brand'] as String?,
+      model: json['model'] as String?,
+      buildYear: (json['buildYear'] as num?)?.toInt(),
       marinaId: marina?['id'] as String?,
       marinaName: marina?['name'] as String?,
       visible: json['visible'] as bool,

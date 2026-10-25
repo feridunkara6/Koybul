@@ -38,6 +38,8 @@ class MarinaApi {
     required String boatTypeCode,
     required double lengthM,
     String? brand,
+    String? model,
+    int? buildYear,
     required String marinaLocationId,
     required bool visible,
     required bool shareSpecs,
@@ -50,6 +52,9 @@ class MarinaApi {
           'boatTypeCode': boatTypeCode,
           'lengthM': lengthM,
           'brand': brand,
+          // Hafta 2 (Tekne Kartı): modele özel çizim için.
+          'model': model,
+          'buildYear': buildYear,
           'marinaLocationId': marinaLocationId,
           'visible': visible,
           'shareSpecs': shareSpecs,

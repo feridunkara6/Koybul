@@ -36,6 +36,31 @@ final AutoDisposeFutureProviderFamily<MarinaCommunity, String> marinaCommunityPr
 /// Yerel tekne tipi kodu → sunucu sözlüğü (boat_types.code).
 /// Bilinmeyen/boş tip null döner — UYDURMA TİP GÖNDERİLMEZ; katılım, kullanıcı
 /// tip seçene dek kibarca bekletilir.
+/// Sunucu tipi → yerel tip kimliği (Tekne Kartı çizimi için TERS sözlük).
+/// Bilinmeyen kod null döner — kart dürüst varsayılan yelkenliye düşer.
+String? localBoatTypeId(String serverCode) {
+  switch (serverCode) {
+    case 'sailboat':
+      return 'sail';
+    case 'motor_yacht':
+      return 'motor';
+    case 'catamaran':
+      return 'catamaran';
+    case 'gulet':
+      return 'gulet';
+    case 'daily_boat':
+      return 'daily';
+    case 'fishing_boat':
+      return 'fishing';
+    case 'rib':
+      return 'rib';
+    case 'superyacht':
+      return 'super';
+    default:
+      return null;
+  }
+}
+
 String? serverBoatTypeCode(String? localTypeId) {
   switch (localTypeId) {
     case 'sail':

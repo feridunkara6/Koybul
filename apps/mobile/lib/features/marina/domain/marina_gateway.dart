@@ -7,11 +7,14 @@ abstract interface class MarinaGateway {
   Future<MyMarinaBoat?> myBoat();
 
   /// Tekneyi kaydet/güncelle — topluluğa katılım ve rıza anahtarları.
+  /// Hafta 2: model + yapım yılı da gider (Tekne Kartı çizimi için).
   Future<MyMarinaBoat> upsertMyBoat({
     required String name,
     required String boatTypeCode,
     required double lengthM,
     String? brand,
+    String? model,
+    int? buildYear,
     required String marinaLocationId,
     required bool visible,
     required bool shareSpecs,

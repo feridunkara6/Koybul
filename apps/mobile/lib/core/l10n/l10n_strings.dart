@@ -338,6 +338,9 @@ class L10n {
     required this.cpApprovedCap,
     required this.cpHelpfulCap,
     required this.cpBadges,
+    required this.bcTitle,
+    required this.bcLoadFailed,
+    required this.bcPrivacyNote,
     required this.locateTooltip,
     required this.locDenied,
     required this.locLocated,
@@ -909,6 +912,8 @@ class L10n {
   final String peTitle, peIntro, peName, peNameHelp, peBio, peBioHint, peExp, peExpInvalid, peSave, peSaved, peNameShort, peLoadFailed, peSaveFailed;
   // HERKESE AÇIK KAPTAN PROFİLİ (Sosyalleşme Hafta 1B, kurucu onayı 2026-10-24).
   final String cpTitle, cpMemberFmt, cpExpFmt, cpApprovedCap, cpHelpfulCap, cpBadges;
+  // TEKNE KARTI (Sosyalleşme Hafta 2, kurucu onayı 2026-10-24).
+  final String bcTitle, bcLoadFailed, bcPrivacyNote;
   final String locateTooltip, locDenied, locLocated;
   final String mapViewTooltip, listViewTooltip;
   final String offlineBanner, emptyArea, tooManyHint, loadingHarbors, nmUnit;
@@ -1832,6 +1837,9 @@ const L10n _tr = L10n(
   cpApprovedCap: 'ONAYLI KATKI',
   cpHelpfulCap: 'FAYDALI OYU',
   cpBadges: 'Rozetler',
+  bcTitle: 'Tekne Kartı',
+  bcLoadFailed: 'Tekne kartı yüklenemedi — tekne artık paylaşımda olmayabilir.',
+  bcPrivacyNote: 'Bu kart yalnız sahibi izin verdiği için görünür. Konum, bağlama yeri ve iletişim bilgisi hiçbir zaman paylaşılmaz.',
   locateTooltip: 'Konumum',
   locDenied: 'Konum alınamadı. Tarayıcı/uygulama konum iznini kontrol et.',
   locLocated: 'Konumun alındı — mesafeler ve deniz yolu artık senden hesaplanıyor.',
@@ -2735,6 +2743,9 @@ const L10n _en = L10n(
   cpApprovedCap: 'APPROVED POSTS',
   cpHelpfulCap: 'HELPFUL VOTES',
   cpBadges: 'Badges',
+  bcTitle: 'Boat Card',
+  bcLoadFailed: 'Could not load the boat card — it may no longer be shared.',
+  bcPrivacyNote: 'This card is visible only because its owner allowed it. Location, berth and contact details are never shared.',
   locateTooltip: 'My location',
   locDenied: 'Couldn\'t get your location. Check the location permission.',
   locLocated: 'Location acquired — distances and sea routes now start from you.',
@@ -3638,6 +3649,9 @@ const L10n _es = L10n(
   cpApprovedCap: 'APORTES APROBADOS',
   cpHelpfulCap: 'VOTOS ÚTILES',
   cpBadges: 'Insignias',
+  bcTitle: 'Ficha del barco',
+  bcLoadFailed: 'No se pudo cargar la ficha — puede que ya no esté compartida.',
+  bcPrivacyNote: 'Esta ficha es visible solo porque su propietario lo permitió. La ubicación, el amarre y el contacto nunca se comparten.',
   locateTooltip: 'Mi ubicación',
   locDenied: 'No se pudo obtener tu ubicación. Revisa el permiso de ubicación.',
   locLocated: 'Ubicación obtenida: las distancias y rutas parten ahora de ti.',
@@ -4541,6 +4555,9 @@ const L10n _ru = L10n(
   cpApprovedCap: 'ОДОБРЕННЫЕ ВКЛАДЫ',
   cpHelpfulCap: 'ГОЛОСА «ПОЛЕЗНО»',
   cpBadges: 'Значки',
+  bcTitle: 'Карточка лодки',
+  bcLoadFailed: 'Не удалось загрузить карточку — возможно, она больше не публикуется.',
+  bcPrivacyNote: 'Эта карточка видна только с разрешения владельца. Координаты, стоянка и контакты никогда не публикуются.',
   locateTooltip: 'Моё местоположение',
   locDenied: 'Не удалось определить местоположение. Проверьте разрешение.',
   locLocated: 'Местоположение получено — расстояния и маршруты теперь от вас.',
