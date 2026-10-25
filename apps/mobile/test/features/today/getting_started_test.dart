@@ -30,12 +30,13 @@ const MyBoat _boatWithMarina = MyBoat(
       HomeMarina(id: 'loc-marti', name: 'Martı Marina', lat: 36.77, lon: 28.12),
 );
 
-final SavedRoute _route = SavedRoute(
+// CI DERSİ (2026-10-25): bütün alanları sabit olan nesne `const` kurulmalı —
+// prefer_const_constructors INFO bile olsa CI'da kırmızı sayılır.
+const SavedRoute _route = SavedRoute(
   id: 'r1',
   name: 'Göcek → Bedri Rahmi',
-  origin:
-      const RouteOrigin(pos: GeoPoint(lat: 36.74, lon: 28.93), name: 'Göcek'),
-  waypoints: const <RouteWaypoint>[
+  origin: RouteOrigin(pos: GeoPoint(lat: 36.74, lon: 28.93), name: 'Göcek'),
+  waypoints: <RouteWaypoint>[
     RouteWaypoint(pos: GeoPoint(lat: 36.69, lon: 28.88), name: 'Bedri Rahmi'),
   ],
   distanceNm: 5.2,
