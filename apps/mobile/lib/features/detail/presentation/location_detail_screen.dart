@@ -37,6 +37,7 @@ import '../domain/approach_note.dart';
 import 'cover_photo.dart';
 import 'premium_lock_card.dart';
 import 'maritime_info_panel.dart';
+import '../../route/presentation/routes_through_section.dart';
 import '../../weather/presentation/weather_card.dart';
 import '../../weather/presentation/wind_warning_badge.dart';
 import 'operating_info.dart';
@@ -218,6 +219,10 @@ class _DetailContent extends ConsumerWidget {
           ),
 
         _SeaRouteRow(destination: detail.position, accent: ink),
+
+        // BURADAN GEÇEN ROTALAR (Sosyalleşme Hafta 4): topluluğun bu durağı
+        // içeren onaylı rotaları — boşsa bölüm hiç çizilmez.
+        if (!teaser) RoutesThroughSection(locationId: detail.id),
 
         // KİLİT KARTI (P4): vitrinde sayfanın TEK premium çağrısı — güvenlik
         // özetinin altında, kilitli içeriği anlatır; Premium ya da keşif hakkı.

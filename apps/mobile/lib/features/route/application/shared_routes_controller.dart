@@ -31,6 +31,17 @@ final AutoDisposeFutureProviderFamily<List<SharedRouteSummary>, String>
   return ref.watch(sharedRoutesGatewayProvider).feed(sort: sort);
 });
 
+/// KOY KÖPRÜSÜ (Hafta 4): bu duraktan geçen onaylı rotalar — koy detayında
+/// "buradan geçen rotalar" bölümünü besler. Boş liste = bölüm çizilmez.
+final AutoDisposeFutureProviderFamily<List<SharedRouteSummary>, String>
+    routesThroughLocationProvider =
+    FutureProvider.autoDispose.family<List<SharedRouteSummary>, String>(
+        (ref, String locationId) {
+  return ref
+      .watch(sharedRoutesGatewayProvider)
+      .feed(sort: 'new', locationId: locationId);
+});
+
 /// Rota detayı — kimlik varsa savedByMe/doneByMe dolu gelir.
 final AutoDisposeFutureProviderFamily<SharedRouteDetail, String>
     sharedRouteDetailProvider =

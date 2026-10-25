@@ -5,7 +5,8 @@ import 'package:dockly_api/dockly_api.dart'
 /// Gerçek implementasyon `data/api_shared_routes_gateway.dart`; testte sahte.
 abstract interface class SharedRoutesGateway {
   /// Keşif listesi — kimliksiz çalışır; yalnız onaylı rotalar gelir.
-  Future<List<SharedRouteSummary>> feed({required String sort});
+  /// [locationId] verilirse YALNIZ o duraktan geçen rotalar (koy köprüsü).
+  Future<List<SharedRouteSummary>> feed({required String sort, String? locationId});
 
   /// Detay — kimlik varsa savedByMe/doneByMe dolar.
   Future<SharedRouteDetail> detail(String routeId);

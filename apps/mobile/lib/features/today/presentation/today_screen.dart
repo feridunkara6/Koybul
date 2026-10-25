@@ -100,6 +100,12 @@ class TodayScreen extends ConsumerWidget {
             // sağlayıcılardan; verisi olmayan kart kendini hiç çizmez.
             const TodayMarinamCard(),
             const TodayMaintStrip(),
+            // ÇEVRENDE OLANLAR (Sosyalleşme Hafta 4, Konsept 2): topluluk
+            // köprüleri tek başlık altında — yeni rota + soru + etkinlik.
+            // Hiçbirinin verisi yoksa kartlar kendini çizmez; başlık kalır
+            // ve "tümü" Rota Keşfi'ne götürür (keşfedilebilirlik).
+            const TodayCommunityHeader(),
+            const TodayRouteCard(),
             const TodayQaCard(),
             const TodayEventCard(),
             // BUGÜN NEREYE? — akıllı öneri (yalnız konum varken; konum

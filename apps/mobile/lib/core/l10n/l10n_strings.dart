@@ -367,6 +367,10 @@ class L10n {
     required this.rtShareSent,
     required this.rtNeedStops,
     required this.rtBodyShort,
+    required this.rtThroughTitle,
+    required this.tdCommunityCap,
+    required this.tdCommunityAll,
+    required this.modEntityRoute,
     required this.locateTooltip,
     required this.locDenied,
     required this.locLocated,
@@ -942,6 +946,8 @@ class L10n {
   final String bcTitle, bcLoadFailed, bcPrivacyNote;
   // ROTA PAYLAŞIMI (Sosyalleşme Hafta 3, kurucu onayı 2026-10-24).
   final String rtDiscoverTitle, rtTitle, rtSortNew, rtSortPopular, rtEmpty, rtLoadFailed, rtStopsCap, rtExperienceCap, rtSeasonFmt, rtBoatFmt, rtStopCountFmt, rtSaveBtn, rtDoneBtn, rtSignInNote, rtBeyanNote, rtPendingChip, rtShareCta, rtShareTitle, rtShareIntro, rtFieldBody, rtFieldSeason, rtFieldBoat, rtShareSend, rtShareSent, rtNeedStops, rtBodyShort;
+  // HAFTA 4: koy köprüsü + Bugün topluluk bloğu + moderasyon rota etiketi.
+  final String rtThroughTitle, tdCommunityCap, tdCommunityAll, modEntityRoute;
   final String locateTooltip, locDenied, locLocated;
   final String mapViewTooltip, listViewTooltip;
   final String offlineBanner, emptyArea, tooManyHint, loadingHarbors, nmUnit;
@@ -1471,6 +1477,8 @@ class L10n {
         return modEntityQaQuestion;
       case 'qa_answer':
         return modEntityQaAnswer;
+      case 'route':
+        return modEntityRoute;
       default:
         return modEntityNote;
     }
@@ -1894,6 +1902,10 @@ const L10n _tr = L10n(
   rtShareSent: 'Rotan moderasyon onayına gönderildi — onaylanınca yayında.',
   rtNeedStops: 'Paylaşmak için rotada katalogdan seçilmiş en az 2 durak olmalı.',
   rtBodyShort: 'Deneyim metni en az 30 karakter olmalı.',
+  rtThroughTitle: 'Buradan geçen rotalar',
+  tdCommunityCap: 'Çevrende olanlar',
+  tdCommunityAll: 'tümü',
+  modEntityRoute: 'Rota',
   locateTooltip: 'Konumum',
   locDenied: 'Konum alınamadı. Tarayıcı/uygulama konum iznini kontrol et.',
   locLocated: 'Konumun alındı — mesafeler ve deniz yolu artık senden hesaplanıyor.',
@@ -2826,6 +2838,10 @@ const L10n _en = L10n(
   rtShareSent: 'Your route was sent for moderation — it goes live once approved.',
   rtNeedStops: 'To share, the route needs at least 2 stops picked from the catalog.',
   rtBodyShort: 'The experience text must be at least 30 characters.',
+  rtThroughTitle: 'Routes passing through here',
+  tdCommunityCap: 'Around you',
+  tdCommunityAll: 'all',
+  modEntityRoute: 'Route',
   locateTooltip: 'My location',
   locDenied: 'Couldn\'t get your location. Check the location permission.',
   locLocated: 'Location acquired — distances and sea routes now start from you.',
@@ -3758,6 +3774,10 @@ const L10n _es = L10n(
   rtShareSent: 'Tu ruta fue enviada a moderación — se publica al aprobarse.',
   rtNeedStops: 'Para compartir, la ruta necesita al menos 2 paradas del catálogo.',
   rtBodyShort: 'El texto de experiencia debe tener al menos 30 caracteres.',
+  rtThroughTitle: 'Rutas que pasan por aquí',
+  tdCommunityCap: 'A tu alrededor',
+  tdCommunityAll: 'todo',
+  modEntityRoute: 'Ruta',
   locateTooltip: 'Mi ubicación',
   locDenied: 'No se pudo obtener tu ubicación. Revisa el permiso de ubicación.',
   locLocated: 'Ubicación obtenida: las distancias y rutas parten ahora de ti.',
@@ -4690,6 +4710,10 @@ const L10n _ru = L10n(
   rtShareSent: 'Маршрут отправлен на модерацию — после одобрения он появится.',
   rtNeedStops: 'Для публикации нужно минимум 2 остановки из каталога.',
   rtBodyShort: 'Текст опыта должен быть не короче 30 символов.',
+  rtThroughTitle: 'Маршруты через это место',
+  tdCommunityCap: 'Рядом с вами',
+  tdCommunityAll: 'все',
+  modEntityRoute: 'Маршрут',
   locateTooltip: 'Моё местоположение',
   locDenied: 'Не удалось определить местоположение. Проверьте разрешение.',
   locLocated: 'Местоположение получено — расстояния и маршруты теперь от вас.',

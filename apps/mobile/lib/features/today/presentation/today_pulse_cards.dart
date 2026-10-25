@@ -1,5 +1,5 @@
 import 'package:dockly_api/dockly_api.dart'
-    show EventView, MarinaCommunity, QaFeed, QaQuestionSummary;
+    show EventView, MarinaCommunity, QaFeed, QaQuestionSummary, SharedRouteSummary;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,8 +17,12 @@ import '../../boat/domain/my_boat.dart';
 import '../../events/application/events_controller.dart';
 import '../../events/presentation/event_detail_screen.dart';
 import '../../marina/application/marina_controller.dart';
+import '../../community/presentation/reputation_shell.dart' show formatNm;
 import '../../qa/application/qa_controller.dart';
 import '../../qa/presentation/qa_list_screen.dart';
+import '../../route/application/shared_routes_controller.dart';
+import '../../route/presentation/shared_route_detail_screen.dart';
+import '../../route/presentation/shared_routes_screen.dart';
 import '../../shell/application/shell_tab_provider.dart';
 
 /// BUGÜN — GÜNÜN NABZI kartları (K2 DENGELİ, kurucu onayı 2026-10-23).
@@ -119,6 +123,75 @@ class TodayMaintStrip extends ConsumerWidget {
       title: L10n.fmt(t.maintSummaryFmt, '$needsAttention'),
       warning: true,
       onTap: () => ref.read(shellTabProvider.notifier).state = _kBoatTabIndex,
+    );
+  }
+}
+
+/// "ÇEVRENDE OLANLAR" başlığı (Sosyalleşme Hafta 4, Konsept 2 — kurucu
+/// onayı 2026-10-24): topluluk köprülerini (rota + soru + etkinlik) tek
+/// başlık altında toplar; sağdaki "tümü" Rota Keşfi'ni açar.
+class TodayCommunityHeader extends ConsumerWidget {
+  const TodayCommunityHeader({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final ThemeData theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(top: 16, left: 4),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              t.tdCommunityCap.toUpperCase(),
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.8,
+              ),
+            ),
+          ),
+          TextButton(
+            key: const ValueKey<String>('today-community-all'),
+            style: TextButton.styleFrom(
+              minimumSize: const Size(0, 32),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+            ),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                  builder: (_) => const SharedRoutesScreen()),
+            ),
+            child: Text('${t.tdCommunityAll} ›'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// ROTA köprüsü (Hafta 4) — topluluğun EN YENİ onaylı rotası. Akış boş ya da
+/// ulaşılamazsa kart kendini çizmez (0-uydurma; dönen çember yok).
+class TodayRouteCard extends ConsumerWidget {
+  const TodayRouteCard({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final List<SharedRouteSummary>? routes =
+        ref.watch(sharedRoutesFeedProvider('new')).valueOrNull;
+    if (routes == null || routes.isEmpty) return const SizedBox.shrink();
+    final SharedRouteSummary r = routes.first;
+    return _PulseCard(
+      keyValue: 'today-route',
+      emoji: '🧭',
+      caption: t.rtDiscoverTitle,
+      title: r.name,
+      subtitle:
+          '${r.startName} → ${r.endName} · ${formatNm(t, r.distanceNm)} nm',
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(
+            builder: (_) => SharedRouteDetailScreen(routeId: r.id)),
+      ),
     );
   }
 }

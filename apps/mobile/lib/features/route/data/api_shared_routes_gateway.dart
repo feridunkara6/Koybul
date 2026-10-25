@@ -20,8 +20,8 @@ class ApiSharedRoutesGateway implements SharedRoutesGateway {
   }
 
   @override
-  Future<List<SharedRouteSummary>> feed({required String sort}) =>
-      _api.list(sort: sort);
+  Future<List<SharedRouteSummary>> feed({required String sort, String? locationId}) =>
+      _api.list(sort: sort, locationId: locationId);
 
   @override
   Future<SharedRouteDetail> detail(String routeId) async =>

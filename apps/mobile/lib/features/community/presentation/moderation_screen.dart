@@ -15,6 +15,8 @@ const List<String?> kModerationTabs = <String?>[
   // SORU-CEVAP (Blog V1, kurucu onayı 2026-10-23): aynı kuyruk, yeni türler.
   'qa_question',
   'qa_answer',
+  // ROTA PAYLAŞIMI (Hafta 3-4, kurucu onayı 2026-10-24): her rota onaydan geçer.
+  'route',
   'media',
   'suggested_location',
   'location_report',

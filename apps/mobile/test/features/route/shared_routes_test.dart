@@ -4,9 +4,12 @@ import 'package:dockly_mobile/features/route/application/shared_routes_controlle
 import 'package:dockly_mobile/features/route/domain/saved_route.dart';
 import 'package:dockly_mobile/features/route/domain/sea_trip.dart';
 import 'package:dockly_mobile/features/route/domain/shared_routes_gateway.dart';
+import 'package:dockly_mobile/features/route/presentation/routes_through_section.dart';
 import 'package:dockly_mobile/features/route/presentation/share_route_sheet.dart';
 import 'package:dockly_mobile/features/route/presentation/shared_route_detail_screen.dart';
 import 'package:dockly_mobile/features/route/presentation/shared_routes_screen.dart';
+import 'package:dockly_mobile/features/today/presentation/today_pulse_cards.dart'
+    show TodayCommunityHeader, TodayRouteCard;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -65,9 +68,13 @@ class FakeSharedRoutesGateway implements SharedRoutesGateway {
   int saveToggles = 0;
   int doneToggles = 0;
 
+  final List<String?> feedLocationIds = <String?>[];
+
   @override
-  Future<List<SharedRouteSummary>> feed({required String sort}) async {
+  Future<List<SharedRouteSummary>> feed(
+      {required String sort, String? locationId}) async {
     feedSorts.add(sort);
+    feedLocationIds.add(locationId);
     return feedResult;
   }
 
@@ -206,6 +213,66 @@ void main() {
     await tester.pumpAndSettle();
     expect(gw.saveToggles, 1);
     expect(gw.doneToggles, 1);
+  });
+
+  testWidgets('HAFTA 4 — Bugün: rota köprüsü en yeni rotayı gösterir; '
+      'başlıktaki tümü Rota Keşfini açar', (WidgetTester tester) async {
+    final gw =
+        FakeSharedRoutesGateway(feedResult: <SharedRouteSummary>[summary()]);
+    await tester.pumpWidget(_app(
+      gw,
+      const Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[TodayCommunityHeader(), TodayRouteCard()],
+          ),
+        ),
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Çevrende olanlar'.toUpperCase()), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('today-route')), findsOneWidget);
+    expect(find.text('12 Adalar klasiği'), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey<String>('today-community-all')));
+    await tester.pumpAndSettle();
+    expect(find.byType(SharedRoutesScreen), findsOneWidget);
+  });
+
+  testWidgets('HAFTA 4 — Bugün: akış boşken rota köprüsü kendini çizmez',
+      (WidgetTester tester) async {
+    final gw = FakeSharedRoutesGateway();
+    await tester.pumpWidget(
+        _app(gw, const Scaffold(body: TodayRouteCard())));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('today-route')), findsNothing);
+  });
+
+  testWidgets('HAFTA 4 — koy köprüsü: rotalar duraktan süzülür; boşsa bölüm yok',
+      (WidgetTester tester) async {
+    final gw =
+        FakeSharedRoutesGateway(feedResult: <SharedRouteSummary>[summary()]);
+    await tester.pumpWidget(_app(
+        gw,
+        const Scaffold(
+            body: SingleChildScrollView(
+                child: RoutesThroughSection(locationId: 'loc-gocek')))));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Buradan geçen rotalar'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('rt-through-r1')), findsOneWidget);
+    // Süzgeç geçide duraktan gitti (sunucu süzer — istemci süzmez).
+    expect(gw.feedLocationIds, contains('loc-gocek'));
+
+    final bos = FakeSharedRoutesGateway();
+    await tester.pumpWidget(_app(
+        bos,
+        const Scaffold(
+            body: SingleChildScrollView(
+                child: RoutesThroughSection(locationId: 'loc-bos')))));
+    await tester.pumpAndSettle();
+    expect(find.text('Buradan geçen rotalar'), findsNothing);
   });
 
   testWidgets('Paylaşım: kısa deneyim metni gönderilmez; geçerli form gider',
