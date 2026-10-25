@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+// CI DERSİ (2026-10-25): SectionCard dockly_ui'da DEĞİL, core/widgets'ta
+// yaşar — import'u varsaymadan tanımın evine bak.
+import '../../../core/widgets/section_card.dart';
 import '../../community/presentation/reputation_shell.dart' show formatNm;
 import '../application/shared_routes_controller.dart';
 import 'shared_route_detail_screen.dart';
@@ -28,9 +31,9 @@ class RoutesThroughSection extends ConsumerWidget {
 
     final ThemeData theme = Theme.of(context);
     final Color sub = theme.colorScheme.onSurfaceVariant;
-    return Padding(
-      padding: const EdgeInsets.only(top: 12),
-      child: SectionCard(
+    // SectionCard kendi üst boşluğunu getirir (margin: top 12) — ekstra
+    // sarmalayıcı yok.
+    return SectionCard(
         icon: DocklyIcons.navigation,
         title: t.rtThroughTitle,
         child: Column(
@@ -76,7 +79,6 @@ class RoutesThroughSection extends ConsumerWidget {
               ),
           ],
         ),
-      ),
     );
   }
 }
