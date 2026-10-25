@@ -55,11 +55,16 @@ class _FakeMarinaGateway implements MarinaGateway {
       communityResult;
 
   @override
+  // CI DERSİ (2026-10-25): arayüze eklenen her yeni parametre TÜM sahte
+  // geçitlere de eklenmeli — Hafta 2'de model/buildYear eklenince burası
+  // invalid_override ile kırılmıştı.
   Future<MyMarinaBoat> upsertMyBoat({
     required String name,
     required String boatTypeCode,
     required double lengthM,
     String? brand,
+    String? model,
+    int? buildYear,
     required String marinaLocationId,
     required bool visible,
     required bool shareSpecs,
