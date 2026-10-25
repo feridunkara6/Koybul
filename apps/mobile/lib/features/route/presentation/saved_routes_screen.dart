@@ -12,6 +12,7 @@ import '../../shell/application/shell_tab_provider.dart';
 import '../application/saved_routes_controller.dart';
 import '../domain/saved_route.dart';
 import '../domain/sea_route.dart' show etaHours;
+import 'share_route_sheet.dart';
 
 /// KAYITLI ROTALAR (rota planlama 2026-08): cihazdaki rota kayıtları.
 /// "Haritada aç" rotayı kayıtlı başlangıç + duraklardan AYNI motorla yeniden
@@ -131,6 +132,16 @@ class SavedRouteCard extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 14),
             ),
             child: Text(t.savedOpenBtn),
+          ),
+          // ROTAYI PAYLAŞ (Sosyalleşme Hafta 3): kayıtlı rotadan topluluk
+          // rotası — yalnız katalog duraklı rotalar paylaşılabilir (akış
+          // içinde kibarca söylenir, düğme gizlenmez: keşfedilebilirlik).
+          IconButton(
+            key: ValueKey<String>('saved-route-share-${route.id}'),
+            tooltip: t.rtShareCta,
+            icon: DocklyIcon(DocklyIcons.share,
+                size: 18, color: theme.colorScheme.onSurfaceVariant),
+            onPressed: () => openShareRouteSheet(context, route),
           ),
           IconButton(
             tooltip: t.savedDeleteTooltip,

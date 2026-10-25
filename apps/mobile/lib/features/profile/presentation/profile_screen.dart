@@ -23,6 +23,7 @@ import '../../qa/presentation/qa_list_screen.dart';
 import '../../legal/presentation/legal_screen.dart';
 import '../../legal/presentation/sources_screen.dart';
 import '../../route/presentation/saved_routes_screen.dart';
+import '../../route/presentation/shared_routes_screen.dart';
 import '../../shell/application/shell_tab_provider.dart';
 
 /// Profil sekmesi — KAPTAN KARTI konsepti (Konsept A, kurucu onayı
@@ -115,6 +116,17 @@ class ProfileScreen extends ConsumerWidget {
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute<void>(
                           builder: (_) => const SavedRoutesScreen()),
+                    ),
+                  ),
+                  _GroupRow(
+                    icon: DocklyIcons.compass,
+                    tint: DocklyColors.brandPrimary,
+                    // ROTA KEŞFİ (Sosyalleşme Hafta 3, kurucu onayı
+                    // 2026-10-24): topluluğun paylaştığı rotalar.
+                    label: t.rtDiscoverTitle,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          builder: (_) => const SharedRoutesScreen()),
                     ),
                   ),
                   _GroupRow(

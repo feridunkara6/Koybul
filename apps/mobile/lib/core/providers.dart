@@ -59,6 +59,12 @@ final Provider<BoatsApi> boatsApiProvider = Provider<BoatsApi>((ref) {
   return BoatsApi(ref.watch(docklyClientProvider).dio);
 });
 
+/// ROTA PAYLAŞIMI istemcisi (Sosyalleşme Hafta 3, kurucu onayı 2026-10-24) —
+/// keşif herkese açık; yazma, moderasyon ve aylık tavan sunucudadır.
+final Provider<RoutesApi> routesApiProvider = Provider<RoutesApi>((ref) {
+  return RoutesApi(ref.watch(docklyClientProvider).dio);
+});
+
 /// Premium (abonelik + keşif hakkı) istemcisi — TÜM uçları hesap ister (P3).
 final Provider<PremiumApi> premiumApiProvider = Provider<PremiumApi>((ref) {
   return PremiumApi(ref.watch(docklyClientProvider).dio);
