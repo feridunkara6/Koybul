@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import 'dto/public_captain.dart';
 import 'dto/user_me.dart';
 import 'problem_mapper.dart';
 
@@ -57,6 +58,19 @@ class UsersApi {
         options: _auth(accessToken),
       );
       return UserProfileMe.fromJson(res.data!);
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  /// Herkese açık kaptan kartı (Hafta 1B) — kimlik İSTEMEZ; S-C akışı gibi
+  /// anonim de okunur. Bilinmeyen/silinmiş kullanıcıda `not-found` fırlar.
+  Future<PublicCaptain> publicProfile(String userId) async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>(
+        '/v1/users/$userId/public',
+      );
+      return PublicCaptain.fromJson(res.data!);
     } on DioException catch (error) {
       throw mapDioError(error);
     }

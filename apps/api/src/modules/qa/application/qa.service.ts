@@ -63,6 +63,7 @@ export class QaService {
         row.body.length > QA_PREVIEW_CHARS
           ? `${row.body.slice(0, QA_PREVIEW_CHARS).trimEnd()}…`
           : row.body,
+      authorId: row.userId,
       authorName: row.authorName ?? 'Koybul Kaptanı',
       authorPremium: row.authorPremium,
       featured: row.featuredUntil !== null && row.featuredUntil.getTime() > now.getTime(),
@@ -77,6 +78,7 @@ export class QaService {
       id: row.id,
       body: row.body,
       status: row.status,
+      authorId: row.userId,
       authorName: row.authorName ?? 'Koybul Kaptanı',
       authorPremium: row.authorPremium,
       helpfulCount: row.helpfulCount,

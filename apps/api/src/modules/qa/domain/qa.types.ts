@@ -50,6 +50,9 @@ export interface QaQuestionSummary {
   title: string;
   /** Gövdenin ilk QA_PREVIEW_CHARS karakteri — sunucuda kesilir. */
   preview: string;
+  /** Yazarın kimliği — herkese açık kaptan kartına köprü (Hafta 1B).
+   *  Notlardaki `NoteAuthor.userId` ile aynı ilke: id PII değildir. */
+  authorId: string;
   authorName: string;
   /** Yazar ŞU AN Premium mu? (rozet — admin ve üstü de Premium sayılır). */
   authorPremium: boolean;
@@ -72,6 +75,8 @@ export interface QaAnswerView {
   id: string;
   body: string;
   status: QaModerationStatus;
+  /** Yazar kimliği — kaptan kartı köprüsü (Hafta 1B). */
+  authorId: string;
   authorName: string;
   authorPremium: boolean;
   helpfulCount: number;

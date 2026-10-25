@@ -332,6 +332,12 @@ class L10n {
     required this.peNameShort,
     required this.peLoadFailed,
     required this.peSaveFailed,
+    required this.cpTitle,
+    required this.cpMemberFmt,
+    required this.cpExpFmt,
+    required this.cpApprovedCap,
+    required this.cpHelpfulCap,
+    required this.cpBadges,
     required this.locateTooltip,
     required this.locDenied,
     required this.locLocated,
@@ -901,6 +907,8 @@ class L10n {
   final String searchHint, clearTooltip, searchPrompt, noResults, retryLabel;
   // PROFİL DÜZENLEME (Sosyalleşme Hafta 1A, kurucu onayı 2026-10-24).
   final String peTitle, peIntro, peName, peNameHelp, peBio, peBioHint, peExp, peExpInvalid, peSave, peSaved, peNameShort, peLoadFailed, peSaveFailed;
+  // HERKESE AÇIK KAPTAN PROFİLİ (Sosyalleşme Hafta 1B, kurucu onayı 2026-10-24).
+  final String cpTitle, cpMemberFmt, cpExpFmt, cpApprovedCap, cpHelpfulCap, cpBadges;
   final String locateTooltip, locDenied, locLocated;
   final String mapViewTooltip, listViewTooltip;
   final String offlineBanner, emptyArea, tooManyHint, loadingHarbors, nmUnit;
@@ -1818,6 +1826,12 @@ const L10n _tr = L10n(
   peNameShort: 'Görünen ad 2-50 karakter olmalı',
   peLoadFailed: 'Profil yüklenemedi — bağlantını kontrol edip tekrar dene.',
   peSaveFailed: 'Kaydedilemedi — lütfen tekrar dene.',
+  cpTitle: 'Kaptan Profili',
+  cpMemberFmt: '{0} yılından beri üye',
+  cpExpFmt: '{0} yıl deneyim',
+  cpApprovedCap: 'ONAYLI KATKI',
+  cpHelpfulCap: 'FAYDALI OYU',
+  cpBadges: 'Rozetler',
   locateTooltip: 'Konumum',
   locDenied: 'Konum alınamadı. Tarayıcı/uygulama konum iznini kontrol et.',
   locLocated: 'Konumun alındı — mesafeler ve deniz yolu artık senden hesaplanıyor.',
@@ -2715,6 +2729,12 @@ const L10n _en = L10n(
   peNameShort: 'Display name must be 2-50 characters',
   peLoadFailed: 'Could not load profile — check your connection and try again.',
   peSaveFailed: 'Could not save — please try again.',
+  cpTitle: 'Captain Profile',
+  cpMemberFmt: 'Member since {0}',
+  cpExpFmt: '{0} years of experience',
+  cpApprovedCap: 'APPROVED POSTS',
+  cpHelpfulCap: 'HELPFUL VOTES',
+  cpBadges: 'Badges',
   locateTooltip: 'My location',
   locDenied: 'Couldn\'t get your location. Check the location permission.',
   locLocated: 'Location acquired — distances and sea routes now start from you.',
@@ -3612,6 +3632,12 @@ const L10n _es = L10n(
   peNameShort: 'El nombre visible debe tener 2-50 caracteres',
   peLoadFailed: 'No se pudo cargar el perfil — revisa tu conexión e inténtalo de nuevo.',
   peSaveFailed: 'No se pudo guardar — inténtalo de nuevo.',
+  cpTitle: 'Perfil del capitán',
+  cpMemberFmt: 'Miembro desde {0}',
+  cpExpFmt: '{0} años de experiencia',
+  cpApprovedCap: 'APORTES APROBADOS',
+  cpHelpfulCap: 'VOTOS ÚTILES',
+  cpBadges: 'Insignias',
   locateTooltip: 'Mi ubicación',
   locDenied: 'No se pudo obtener tu ubicación. Revisa el permiso de ubicación.',
   locLocated: 'Ubicación obtenida: las distancias y rutas parten ahora de ti.',
@@ -4509,6 +4535,12 @@ const L10n _ru = L10n(
   peNameShort: 'Имя должно быть от 2 до 50 символов',
   peLoadFailed: 'Не удалось загрузить профиль — проверьте соединение и повторите.',
   peSaveFailed: 'Не удалось сохранить — повторите попытку.',
+  cpTitle: 'Профиль капитана',
+  cpMemberFmt: 'Участник с {0} года',
+  cpExpFmt: 'Опыт: {0} лет',
+  cpApprovedCap: 'ОДОБРЕННЫЕ ВКЛАДЫ',
+  cpHelpfulCap: 'ГОЛОСА «ПОЛЕЗНО»',
+  cpBadges: 'Значки',
   locateTooltip: 'Моё местоположение',
   locDenied: 'Не удалось определить местоположение. Проверьте разрешение.',
   locLocated: 'Местоположение получено — расстояния и маршруты теперь от вас.',

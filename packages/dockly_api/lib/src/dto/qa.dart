@@ -23,6 +23,7 @@ class QaQuestionSummary {
     required this.category,
     required this.title,
     required this.preview,
+    this.authorId,
     required this.authorName,
     required this.authorPremium,
     required this.featured,
@@ -35,6 +36,10 @@ class QaQuestionSummary {
   final String category;
   final String title;
   final String preview;
+
+  /// Yazarın kimliği — kaptan kartı köprüsü (Hafta 1B). Eski sunucu
+  /// yanıtlarında alan yoktur; null ise köprü çizilmez (kırılmaz).
+  final String? authorId;
   final String authorName;
 
   /// Yazar ŞU AN Premium mu? (altın rozet — dinamik, dürüst).
@@ -51,6 +56,7 @@ class QaQuestionSummary {
         category: json['category'] as String,
         title: json['title'] as String,
         preview: json['preview'] as String,
+        authorId: json['authorId'] as String?,
         authorName: json['authorName'] as String,
         authorPremium: json['authorPremium'] as bool,
         featured: json['featured'] as bool,
@@ -82,6 +88,7 @@ class QaAnswer {
     required this.id,
     required this.body,
     required this.status,
+    this.authorId,
     required this.authorName,
     required this.authorPremium,
     required this.helpfulCount,
@@ -95,6 +102,9 @@ class QaAnswer {
 
   /// 'approved' ya da (yalnız kendi cevabında görünen) 'pending'.
   final String status;
+
+  /// Kaptan kartı köprüsü — null ise köprü çizilmez (eski sunucu uyumu).
+  final String? authorId;
   final String authorName;
   final bool authorPremium;
   final int helpfulCount;
@@ -106,6 +116,7 @@ class QaAnswer {
         id: json['id'] as String,
         body: json['body'] as String,
         status: json['status'] as String,
+        authorId: json['authorId'] as String?,
         authorName: json['authorName'] as String,
         authorPremium: json['authorPremium'] as bool,
         helpfulCount: json['helpfulCount'] as int,

@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { uuidv7 } from 'uuidv7';
 import { PrismaService } from '../../../infrastructure/prisma/prisma.service';
 import { DeletionAudit, UserRepository } from '../domain/user.repository';
-import { UpdateMeInput, UserMe } from '../domain/user.types';
+import { PublicCaptain, UpdateMeInput, UserMe } from '../domain/user.types';
 import { RoleCode } from '../../../core/auth/principal';
 
 const ANONYMIZED_DISPLAY_NAME = 'Silinmiş Kullanıcı';
@@ -47,6 +47,51 @@ export class PrismaUserRepository implements UserRepository {
       }
       return this.toMe(user);
     });
+  }
+
+  /**
+   * HERKESE AÇIK kaptan kartı (Hafta 1B). Kullanıcı bağlamı KULLANILMAZ:
+   * okuma kamuya açıktır ve uygulama katmanı birincil yetkidir (ADR-003,
+   * notlar deposundaki desenle aynı). PII seçilmez — select listesi kart
+   * modeliyle birebir sınırlıdır.
+   */
+  async getPublic(userId: string): Promise<PublicCaptain | null> {
+    const user = await this.prisma.user.findFirst({
+      where: { id: userId, deletedAt: null, status: 'active' },
+      select: {
+        id: true,
+        createdAt: true,
+        profile: {
+          select: { displayName: true, bio: true, experienceYears: true },
+        },
+        reputation: {
+          select: {
+            points: true,
+            levelCode: true,
+            approvedCount: true,
+            helpfulReceived: true,
+          },
+        },
+        badges: {
+          where: { revokedAt: null },
+          select: { badgeCode: true },
+          orderBy: { awardedAt: 'asc' },
+        },
+      },
+    });
+    if (!user) return null;
+    return {
+      id: user.id,
+      displayName: user.profile?.displayName ?? DEFAULT_DISPLAY_NAME,
+      bio: user.profile?.bio ?? null,
+      experienceYears: user.profile?.experienceYears ?? null,
+      memberSince: user.createdAt.toISOString(),
+      points: user.reputation?.points ?? 0,
+      levelCode: user.reputation?.levelCode ?? 'new',
+      approvedCount: user.reputation?.approvedCount ?? 0,
+      helpfulReceived: user.reputation?.helpfulReceived ?? 0,
+      badges: user.badges.map((b) => b.badgeCode),
+    };
   }
 
   async updateMe(userId: string, patch: UpdateMeInput): Promise<UserMe> {

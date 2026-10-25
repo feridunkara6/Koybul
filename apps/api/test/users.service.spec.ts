@@ -1,7 +1,7 @@
 import { UsersService } from '../src/modules/users/application/users.service';
 import { SessionService } from '../src/modules/auth/application/session.service';
 import { UserRepository, DeletionAudit } from '../src/modules/users/domain/user.repository';
-import { UpdateMeInput, UserMe } from '../src/modules/users/domain/user.types';
+import { PublicCaptain, UpdateMeInput, UserMe } from '../src/modules/users/domain/user.types';
 import { Principal } from '../src/core/auth/principal';
 
 const PRINCIPAL: Principal = {
@@ -34,6 +34,22 @@ class FakeUserRepo implements UserRepository {
 
   async getMe(): Promise<UserMe | null> {
     return this.exists ? me() : null;
+  }
+
+  async getPublic(userId: string): Promise<PublicCaptain | null> {
+    if (!this.exists) return null;
+    return {
+      id: userId,
+      displayName: 'Kaptan Levent',
+      bio: 'Göcek sularındayım.',
+      experienceYears: 14,
+      memberSince: '2026-07-07T00:00:00.000Z',
+      points: 840,
+      levelCode: 'guide',
+      approvedCount: 46,
+      helpfulReceived: 120,
+      badges: ['first_contribution', 'hazard_hero'],
+    };
   }
 
   async updateMe(_userId: string, patch: UpdateMeInput): Promise<UserMe> {
@@ -69,6 +85,21 @@ describe('UsersService (unit)', () => {
   it('getMe: silinmiş/yok hesapta not-found', async () => {
     repo.exists = false;
     await expect(service.getMe(PRINCIPAL)).rejects.toMatchObject({ problemType: 'not-found' });
+  });
+
+  it('getPublic: kart PII TAŞIMAZ ve itibar alanlarını döndürür (Hafta 1B)', async () => {
+    const card = await service.getPublic('u-2');
+    expect(card.displayName).toBe('Kaptan Levent');
+    expect(card.points).toBe(840);
+    expect(card.badges).toContain('hazard_hero');
+    // PII sözleşmesi: e-posta/rol/premium alanları kartta YOKTUR.
+    expect(card as unknown as Record<string, unknown>).not.toHaveProperty('email');
+    expect(card as unknown as Record<string, unknown>).not.toHaveProperty('role');
+  });
+
+  it('getPublic: silinmiş/bilinmeyen kullanıcıda not-found', async () => {
+    repo.exists = false;
+    await expect(service.getPublic('u-x')).rejects.toMatchObject({ problemType: 'not-found' });
   });
 
   it('updateMe: boş patch 422 empty_patch (edge)', async () => {

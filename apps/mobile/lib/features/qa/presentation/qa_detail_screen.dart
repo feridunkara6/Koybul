@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
 import '../../premium/presentation/premium_screen.dart';
+import '../../profile/presentation/captain_profile_screen.dart';
 import '../application/qa_controller.dart';
 import 'qa_list_screen.dart' show QaPremiumBadge;
 
@@ -170,8 +171,26 @@ class _QaDetailScreenState extends ConsumerState<QaDetailScreen> {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: <Widget>[
                   if (d.question.authorPremium) const QaPremiumBadge(),
-                  Text(d.question.authorName,
-                      style: theme.textTheme.labelSmall?.copyWith(color: sub)),
+                  // KAPTAN KARTI KÖPRÜSÜ (Hafta 1B, kurucu onayı 2026-10-24):
+                  // yazar adına dokununca herkese açık profil açılır. Eski
+                  // sunucu yanıtında kimlik yoksa ad düz metin kalır.
+                  if (d.question.authorId != null)
+                    InkWell(
+                      key: const ValueKey<String>('qa-author'),
+                      borderRadius: BorderRadius.circular(6),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                            builder: (_) => CaptainProfileScreen(
+                                userId: d.question.authorId!)),
+                      ),
+                      child: Text(d.question.authorName,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                              color: DocklyColors.brandPrimary,
+                              fontWeight: FontWeight.w800)),
+                    )
+                  else
+                    Text(d.question.authorName,
+                        style: theme.textTheme.labelSmall?.copyWith(color: sub)),
                   if (d.full && !d.mine)
                     // Beğeni — kendi soruna görünmez (sunucu da reddeder).
                     TextButton.icon(
@@ -331,9 +350,25 @@ class _AnswerCard extends StatelessWidget {
                     spacing: 8,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: <Widget>[
-                      Text(a.authorName,
-                          style: theme.textTheme.labelMedium
-                              ?.copyWith(fontWeight: FontWeight.w800)),
+                      // Cevap yazarı da kaptan kartına köprülenir (Hafta 1B).
+                      if (a.authorId != null)
+                        InkWell(
+                          key: ValueKey<String>('qa-answer-author-${a.id}'),
+                          borderRadius: BorderRadius.circular(6),
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                                builder: (_) => CaptainProfileScreen(
+                                    userId: a.authorId!)),
+                          ),
+                          child: Text(a.authorName,
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  color: DocklyColors.brandPrimary)),
+                        )
+                      else
+                        Text(a.authorName,
+                            style: theme.textTheme.labelMedium
+                                ?.copyWith(fontWeight: FontWeight.w800)),
                       if (a.authorPremium) const QaPremiumBadge(),
                       if (a.status == 'pending')
                         // Yalnız sahibine görünen dürüst durum çipi.

@@ -1,12 +1,24 @@
-import { Body, Controller, Delete, Get, HttpCode, Patch, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Header,
+  HttpCode,
+  Param,
+  Patch,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { z } from 'zod';
 import { UsersService } from '../application/users.service';
 import { AuthedRequest, JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { currentRequestId } from '../../../common/context/request-context';
+import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
-import { UserMe } from '../domain/user.types';
+import { PublicCaptain, UserMe } from '../domain/user.types';
 
 /**
  * PATCH beyaz listesi (docs/24 §7.3 mass-assignment önlemi): yalnız bu alanlar.
@@ -59,5 +71,27 @@ export class UsersController {
       ip: req.ip,
       requestId: currentRequestId(),
     });
+  }
+}
+
+/**
+ * HERKESE AÇIK kaptan kartı (Sosyalleşme Hafta 1B, kurucu onayı 2026-10-24).
+ * Ayrı controller: `users/me` sınıfı Jwt+Account zırhlıdır, bu uç kimliksiz
+ * okunur (S-C akışı gibi). Yanıt PII içermez — `PublicCaptain` sözleşmesine bak.
+ */
+@Controller('users')
+export class UsersPublicController {
+  constructor(private readonly usersService: UsersService) {}
+
+  private static readonly UUID = z.string().uuid();
+
+  @Get(':id/public')
+  @Header('Cache-Control', 'public, max-age=60')
+  async getPublic(@Param('id') id: string): Promise<PublicCaptain> {
+    // Geçersiz UUID → 404 (varlık enumerasyonu ve tip hatası tek yanıtta;
+    // notlar controller'ındaki desen).
+    const parsed = UsersPublicController.UUID.safeParse(id);
+    if (!parsed.success) throw new AppProblem('not-found');
+    return this.usersService.getPublic(parsed.data);
   }
 }

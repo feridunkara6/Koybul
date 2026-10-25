@@ -3,7 +3,7 @@ import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
 import { SessionService } from '../../auth/application/session.service';
 import { DeletionAudit, USER_REPOSITORY, UserRepository } from '../domain/user.repository';
-import { UpdateMeInput, UserMe } from '../domain/user.types';
+import { PublicCaptain, UpdateMeInput, UserMe } from '../domain/user.types';
 
 /** users/me use-case'leri (docs/23 §10 #4-5). */
 @Injectable()
@@ -17,6 +17,17 @@ export class UsersService {
     const me = await this.users.getMe(principal.userId);
     if (!me) throw new AppProblem('not-found');
     return me;
+  }
+
+  /**
+   * Herkese açık kaptan kartı (Hafta 1B). Kimlik İSTEMEZ — toplulukta imzalı
+   * içeriği olan herkesin kartviziti gezilebilir. Silinmiş/pasif kullanıcı
+   * ve bilinmeyen kimlik AYNI 404'ü alır (varlık enumerasyonu sinyali yok).
+   */
+  async getPublic(userId: string): Promise<PublicCaptain> {
+    const captain = await this.users.getPublic(userId);
+    if (!captain) throw new AppProblem('not-found');
+    return captain;
   }
 
   async updateMe(principal: Principal, patch: UpdateMeInput): Promise<UserMe> {

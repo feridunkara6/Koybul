@@ -1,4 +1,4 @@
-import 'package:dockly_api/dockly_api.dart' show UserProfileMe;
+import 'package:dockly_api/dockly_api.dart' show PublicCaptain, UserProfileMe;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers.dart';
@@ -27,6 +27,13 @@ final Provider<ProfileGateway> profileGatewayProvider = Provider<ProfileGateway>
 final AutoDisposeFutureProvider<UserProfileMe> myProfileProvider =
     FutureProvider.autoDispose<UserProfileMe>((ref) {
   return ref.watch(profileGatewayProvider).me();
+});
+
+/// HERKESE AÇIK kaptan kartı (Hafta 1B) — kimliksiz okunur; içerikteki yazar
+/// adına dokununca açılır. Aile anahtarı: kullanıcı kimliği.
+final AutoDisposeFutureProviderFamily<PublicCaptain, String> publicCaptainProvider =
+    FutureProvider.autoDispose.family<PublicCaptain, String>((ref, String userId) {
+  return ref.watch(usersApiProvider).publicProfile(userId);
 });
 
 /// Kaydedici — widget'tan `ref.read(profileSaverProvider).save(...)` ile

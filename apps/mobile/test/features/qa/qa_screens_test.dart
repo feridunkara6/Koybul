@@ -1,5 +1,6 @@
 import 'package:dockly_api/dockly_api.dart'
-    show QaAnswer, QaCreateResult, QaDetail, QaFeed, QaQuestionSummary;
+    show PublicCaptain, QaAnswer, QaCreateResult, QaDetail, QaFeed, QaQuestionSummary;
+import 'package:dockly_mobile/features/profile/application/profile_controller.dart';
 import 'package:dockly_mobile/features/qa/application/qa_controller.dart';
 import 'package:dockly_mobile/features/qa/domain/qa_gateway.dart';
 import 'package:dockly_mobile/features/qa/presentation/qa_composer_screen.dart';
@@ -24,6 +25,7 @@ QaQuestionSummary summary({
     category: 'demirleme',
     title: 'Poyrazda hangi yakaya demir atmalı?',
     preview: 'Hafta sonu Boynuz planı var, poyraz 15-20 kn görünüyor…',
+    authorId: 'author-1', // kaptan kartı köprüsü (Hafta 1B)
     authorName: 'Kaptan M.',
     authorPremium: authorPremium,
     featured: featured,
@@ -38,6 +40,7 @@ QaAnswer answer({String id = 'a1', bool mine = false, String status = 'approved'
     id: id,
     body: 'Kuzey yaka nefes alır; kıçtan karaya güney cebi daha rahat.',
     status: status,
+    authorId: 'author-2',
     authorName: 'Kaptan H.',
     authorPremium: false,
     helpfulCount: 9,
@@ -216,6 +219,48 @@ void main() {
     expect(gw.answeredBody, contains('tek demir yetmedi'));
     // Karma moderasyon dürüstlüğü: ilk içerik denetimde mesajı görünür.
     expect(find.textContaining('denetime alındı'), findsOneWidget);
+  });
+
+  testWidgets('KAPTAN KARTI KÖPRÜSÜ (Hafta 1B): yazar adına dokununca profil açılır',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    final FakeQaGateway gw = FakeQaGateway(
+      feedResult: const QaFeed(
+          featured: <QaQuestionSummary>[], items: <QaQuestionSummary>[]),
+      detailResult: QaDetail(
+        access: 'full',
+        question: summary(),
+        answersCount: 1,
+        body: 'Sorunun tam gövdesi.',
+        answers: <QaAnswer>[answer()],
+      ),
+    );
+    await tester.pumpWidget(ProviderScope(
+      overrides: <Override>[
+        qaGatewayProvider.overrideWithValue(gw),
+        publicCaptainProvider.overrideWith((ref, String id) async => PublicCaptain(
+              id: id,
+              displayName: 'Kaptan M.',
+              bio: null,
+              experienceYears: null,
+              memberSince: DateTime.utc(2026, 7, 7),
+              points: 120,
+              levelCode: 'coastal',
+              approvedCount: 5,
+              helpfulReceived: 9,
+              badges: const <String>[],
+            )),
+      ],
+      child: const MaterialApp(home: QaDetailScreen(questionId: 'q1')),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey<String>('qa-author')));
+    await tester.pumpAndSettle();
+    // Kaptan kartı açıldı — ad başlık alanında görünür.
+    expect(find.byKey(const ValueKey<String>('cp-name')), findsOneWidget);
   });
 
   testWidgets('soru oluşturma: kısa başlık geçmez; geçerli soru geçide ulaşır',

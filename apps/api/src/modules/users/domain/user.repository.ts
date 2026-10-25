@@ -1,4 +1,4 @@
-import { UpdateMeInput, UserMe } from './user.types';
+import { PublicCaptain, UpdateMeInput, UserMe } from './user.types';
 
 export interface DeletionAudit {
   ip?: string;
@@ -9,6 +9,8 @@ export interface DeletionAudit {
 export interface UserRepository {
   /** Profil/ayar satırları yoksa güvenli varsayılanlarla oluşturur (lazy init). */
   getMe(userId: string): Promise<UserMe | null>;
+  /** Herkese açık kaptan kartı; silinmiş/pasif kullanıcıda null (Hafta 1B). */
+  getPublic(userId: string): Promise<PublicCaptain | null>;
   updateMe(userId: string, patch: UpdateMeInput): Promise<UserMe>;
   /**
    * KVKK silme (docs/22 §1.5): soft delete + PII anonimleştirme + cihaz kayıtlarının

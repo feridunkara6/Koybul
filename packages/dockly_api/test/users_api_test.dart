@@ -71,6 +71,34 @@ void main() {
       expect(profile, <String, dynamic>{'displayName': 'Kaptan Martı'});
     });
 
+    test('publicProfile: kimliksiz okunur, kart PII taşımaz (Hafta 1B)', () async {
+      final adapter = FakeAdapter();
+      adapter.enqueueJson(200, <String, dynamic>{
+        'id': 'u-2',
+        'displayName': 'Kaptan Levent',
+        'bio': 'Göcek sularındayım.',
+        'experienceYears': 14,
+        'memberSince': '2026-07-07T00:00:00.000Z',
+        'points': 840,
+        'levelCode': 'guide',
+        'approvedCount': 46,
+        'helpfulReceived': 120,
+        'badges': <String>['lighthouse'],
+      });
+
+      final card = await UsersApi(_dio(adapter)).publicProfile('u-2');
+      expect(card.displayName, 'Kaptan Levent');
+      expect(card.levelCode, 'guide');
+      expect(card.badges, <String>['lighthouse']);
+      expect(card.initials, 'KL');
+      expect(card.memberSince.year, 2026);
+
+      final req = adapter.received.single;
+      expect(req.path, '/v1/users/u-2/public');
+      // Kimlik GÖNDERİLMEZ — uç herkese açıktır.
+      expect(req.headers.containsKey('Authorization'), isFalse);
+    });
+
     test('updateProfile: clearBio/clearExperience alanı bilerek null yazar',
         () async {
       final adapter = FakeAdapter();

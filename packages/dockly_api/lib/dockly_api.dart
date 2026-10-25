@@ -16,6 +16,7 @@ export 'src/marina_api.dart';
 export 'src/events_api.dart';
 export 'src/dto/session.dart';
 export 'src/dto/user_me.dart';
+export 'src/dto/public_captain.dart';
 export 'src/dto/geo.dart';
 export 'src/dto/map_result.dart';
 export 'src/dto/occupancy.dart';

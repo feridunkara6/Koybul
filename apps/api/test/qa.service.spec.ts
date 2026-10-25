@@ -195,6 +195,8 @@ describe('QaService (Blog V1 — kurucu onayı 2026-10-23)', () => {
     expect(feed.featured[0].featured).toBe(true);
     // Gövde liste yanıtında YOKTUR (vitrin ilkesi — alan hiç tanımlı değil).
     expect('body' in feed.featured[0]).toBe(false);
+    // KAPTAN KARTI KÖPRÜSÜ (Hafta 1B): yazar kimliği akışta taşınır.
+    expect(feed.featured[0].authorId).toBe('author-1');
   });
 
   it('akış: kategori süzgeci varken öne çıkan şeridi boş döner', async () => {
