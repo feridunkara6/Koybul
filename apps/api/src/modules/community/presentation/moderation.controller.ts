@@ -12,7 +12,16 @@ import { ModerationService } from '../application/moderation.service';
 const queueSchema = z
   .object({
     entityType: z
-      .enum(['note', 'review', 'media', 'suggested_location', 'location_report'])
+      .enum([
+        'note',
+        'review',
+        'media',
+        'suggested_location',
+        'location_report',
+        'qa_question',
+        'qa_answer',
+        'route',
+      ])
       .optional(),
     limit: z.coerce.number().int().min(1).max(50).default(20),
   })

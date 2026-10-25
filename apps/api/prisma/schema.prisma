@@ -55,6 +55,7 @@ enum ModerationEntity {
   note
   qa_question
   qa_answer
+  route
 
   @@map("moderation_entity")
 }
@@ -540,6 +541,10 @@ model User {
   qaAnswerHelpfuls                 QaAnswerHelpful[]
   eventRegistrations               EventRegistration[]
 
+  routes                           Route[]               @relation("RouteAuthor")
+  routeSaves                       RouteSave[]
+  routeDones                       RouteDone[]
+
   reservationRequests               ReservationRequest[]  @relation("ReservationRequester")
   reservationRequestsHandled        ReservationRequest[]  @relation("ReservationHandledBy")
   reservationRequestsDeleted        ReservationRequest[]  @relation("ReservationDeletedByUser")
@@ -819,6 +824,7 @@ model Location {
   userProfilesHomePort    UserProfile[]
   boatsHomeMarina         Boat[]        @relation("BoatHomeMarina")
   eventsVenue             Event[]       @relation("EventVenue")
+  routeStops              RouteStop[]
   notes                   LocationNote[]  @relation("LocationNoteTarget")
   notesFrom               LocationNote[]  @relation("LocationNoteFrom")
   notesTo                 LocationNote[]  @relation("LocationNoteTo")
@@ -1413,6 +1419,79 @@ model QaAnswerHelpful {
 
   @@id([answerId, userId])
   @@map("qa_answer_helpfuls")
+}
+
+// ---------------------------------------------------------------------
+// ROTA PAYLAŞIMI (V1 — kurucu onayı 2026-10-24, 0017_rotalar)
+// Çizgi saklanmaz: yalnız duraklar; çizgi istemcide yeniden üretilir.
+// Her rota moderasyon onayından geçer (her zaman pending doğar).
+// ---------------------------------------------------------------------
+
+model Route {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String           @map("user_id") @db.Uuid
+  name           String
+  /// Deneyim + uyarılar tek gövdede (S-C gövdesiyle aynı sınırlar, DB CHECK).
+  body           String
+  season         String?
+  boatSuggestion String?          @map("boat_suggestion")
+  /// İstemci rotalayıcısının beyanı; aralık DB CHECK + zod ile doğrulanır.
+  distanceNm     Decimal          @map("distance_nm") @db.Decimal(6, 1)
+  durationHours  Decimal?         @map("duration_hours") @db.Decimal(5, 1)
+  status         ModerationStatus @default(pending)
+  saveCount      Int              @default(0) @map("save_count")
+  doneCount      Int              @default(0) @map("done_count")
+  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime         @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime?        @map("deleted_at") @db.Timestamptz(6)
+
+  author User        @relation("RouteAuthor", fields: [userId], references: [id], onDelete: Cascade)
+  stops  RouteStop[]
+  saves  RouteSave[]
+  dones  RouteDone[]
+
+  @@index([status, createdAt(sort: Desc)], map: "ix_routes_feed")
+  @@index([status, saveCount(sort: Desc), createdAt(sort: Desc)], map: "ix_routes_popular")
+  @@index([userId, createdAt(sort: Desc)], map: "ix_routes_user")
+  @@map("routes")
+}
+
+model RouteStop {
+  routeId    String @map("route_id") @db.Uuid
+  /// 1..12 (DB CHECK); ilk durak başlangıç, son durak bitiş.
+  seq        Int    @db.SmallInt
+  locationId String @map("location_id") @db.Uuid
+
+  route    Route    @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  location Location @relation(fields: [locationId], references: [id], onDelete: Restrict)
+
+  @@id([routeId, seq])
+  @@index([locationId], map: "ix_route_stops_location")
+  @@map("route_stops")
+}
+
+model RouteSave {
+  routeId   String   @map("route_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  route Route @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([routeId, userId])
+  @@map("route_saves")
+}
+
+model RouteDone {
+  routeId   String   @map("route_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  route Route @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([routeId, userId])
+  @@map("route_dones")
 }
 
 // ---------------------------------------------------------------------

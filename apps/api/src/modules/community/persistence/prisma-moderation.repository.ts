@@ -39,12 +39,12 @@ export class PrismaModerationRepository implements ModerationRepository {
       SELECT t.id AS "taskId", t.entity_type::text AS "entityType", t.entity_id AS "entityId",
              t.created_at AS "createdAt",
              COALESCE(n.kind::text, qq.category, qaq.category) AS kind,
-             COALESCE(n.title, r.title, qq.title, qaq.title) AS title,
-             COALESCE(n.body, r.body, qq.body, qa.body) AS body,
+             COALESCE(n.title, r.title, qq.title, qaq.title, rt.name) AS title,
+             COALESCE(n.body, r.body, qq.body, qa.body, rt.body) AS body,
              COALESCE(ln.name, lr.name) AS "locationName",
              n.observed_on AS "observedOn",
              n.gps_verified AS "gpsVerified",
-             COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id) AS "authorId",
+             COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id, rt.user_id) AS "authorId",
              p.display_name AS "displayName",
              COALESCE(rep.level_code, 'new') AS "levelCode",
              COALESCE(rep.approved_count, 0)::int AS "approvedCount",
@@ -60,12 +60,15 @@ export class PrismaModerationRepository implements ModerationRepository {
       LEFT JOIN qa_answers qa
         ON t.entity_type = 'qa_answer' AND qa.id = t.entity_id AND qa.deleted_at IS NULL
       LEFT JOIN qa_questions qaq ON qaq.id = qa.question_id
+      -- Rota paylaşımı (0017_rotalar): ad + gövde önizlemeye gelir.
+      LEFT JOIN routes rt
+        ON t.entity_type = 'route' AND rt.id = t.entity_id AND rt.deleted_at IS NULL
       LEFT JOIN locations ln ON ln.id = n.location_id
       LEFT JOIN locations lr ON lr.id = r.location_id
       LEFT JOIN user_profiles p
-        ON p.user_id = COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id)
+        ON p.user_id = COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id, rt.user_id)
       LEFT JOIN user_reputation rep
-        ON rep.user_id = COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id)
+        ON rep.user_id = COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id, rt.user_id)
       WHERE t.status = 'pending' ${typeFilter}
       ORDER BY (t.entity_type = 'note' AND n.kind = 'hazard') DESC, t.created_at ASC
       LIMIT ${limit}
@@ -203,6 +206,18 @@ export class PrismaModerationRepository implements ModerationRepository {
             WHERE id = ${rows[0].questionId}::uuid
           `);
         }
+        return { entityType, entityId, ownerUserId: null, decision, noteKind: null, bodyLength: 0 };
+      }
+
+      if (entityType === 'route') {
+        // Rota paylaşımı (Hafta 3): karar yalnız durumu günceller; itibar
+        // puanı BİLİNÇLİ yok (S-C ile aynı karar) — owner null döner.
+        const rows = await tx.$queryRaw<{ id: string }[]>(Prisma.sql`
+          UPDATE routes SET status = ${status}::moderation_status, updated_at = now()
+          WHERE id = ${entityId}::uuid AND deleted_at IS NULL
+          RETURNING id
+        `);
+        if (rows.length === 0) return null;
         return { entityType, entityId, ownerUserId: null, decision, noteKind: null, bodyLength: 0 };
       }
 

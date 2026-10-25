@@ -21,6 +21,7 @@ import { PremiumModule } from './modules/premium/premium.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { QaModule } from './modules/qa/qa.module';
 import { MarinaModule } from './modules/marina/marina.module';
+import { RoutesModule } from './modules/routes/routes.module';
 import { EventsModule } from './modules/events/events.module';
 
 /** PII redaksiyon listesi (docs/24 §12, docs/29 SEC-04). */
@@ -65,6 +66,7 @@ const REDACT_PATHS = [
     QaModule,
     MarinaModule,
     EventsModule,
+    RoutesModule,
   ],
 })
 export class AppModule implements NestModule {
