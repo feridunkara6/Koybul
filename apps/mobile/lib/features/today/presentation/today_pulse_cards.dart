@@ -16,9 +16,12 @@ import '../../boat/domain/maintenance.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../events/application/events_controller.dart';
 import '../../events/presentation/event_detail_screen.dart';
+import '../../events/presentation/events_screen.dart';
 import '../../marina/application/marina_controller.dart';
+import '../../marina/presentation/marina_community_screen.dart';
 import '../../community/presentation/reputation_shell.dart' show formatNm;
 import '../../qa/application/qa_controller.dart';
+import '../../qa/presentation/qa_composer_screen.dart';
 import '../../qa/presentation/qa_list_screen.dart';
 import '../../route/application/shared_routes_controller.dart';
 import '../../route/presentation/shared_route_detail_screen.dart';
@@ -41,6 +44,135 @@ import '../../shell/application/shell_tab_provider.dart';
 
 /// Teknem sekmesinin kabuk içindeki sırası (dockly_shell ile aynı sözlük).
 const int _kBoatTabIndex = 3;
+
+/// TOPLULUK ŞERİDİ (UX keşfedilebilirlik paketi, kurucu onayı 2026-10-25):
+/// dört kalıcı kısayol — Soru-Cevap · Rotalar · Etkinlik · Marinam.
+///
+/// Köprü kartlarından farkı BİLİNÇLİDİR: şerit veriye bakmaz ve HER ZAMAN
+/// görünür. İçerik yokken bile özelliklerin kapısı ortada durur (analiz
+/// bulgusu: veri-koşullu köprüler, tanıtıma en çok ihtiyaç duyulan boş
+/// dönemde kayboluyordu). İçerik iddiası taşımadığı için 0-uydurma kuralını
+/// da ihlal etmez — bunlar kapı, kart değil.
+class TodayCommunityStrip extends ConsumerWidget {
+  const TodayCommunityStrip({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final HomeMarina? marina = ref.watch(myBoatProvider)?.homeMarina;
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Row(
+        children: <Widget>[
+          _StripButton(
+            keyValue: 'ts-qa',
+            emoji: '💬',
+            label: t.tsQa,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const QaListScreen()),
+            ),
+          ),
+          const SizedBox(width: 8),
+          _StripButton(
+            keyValue: 'ts-routes',
+            emoji: '🧭',
+            label: t.tsRoutes,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                  builder: (_) => const SharedRoutesScreen()),
+            ),
+          ),
+          const SizedBox(width: 8),
+          _StripButton(
+            keyValue: 'ts-events',
+            emoji: '📅',
+            label: t.tsEvents,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const EventsScreen()),
+            ),
+          ),
+          const SizedBox(width: 8),
+          _StripButton(
+            keyValue: 'ts-marina',
+            emoji: '🏠',
+            label: t.tsMarina,
+            // Marina bağlıysa topluluk ekranı doğrudan açılır; değilse
+            // Teknem'e götürür (marina orada seçilir — Marinam kartı kuralı).
+            onTap: marina != null
+                ? () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          builder: (_) =>
+                              MarinaCommunityScreen(marinaId: marina.id)),
+                    )
+                : () => ref.read(shellTabProvider.notifier).state =
+                    _kBoatTabIndex,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Şerit düğmesi: emoji + kısa etiket; turkuaz çerçeveli ince kapı.
+class _StripButton extends StatelessWidget {
+  const _StripButton({
+    required this.keyValue,
+    required this.emoji,
+    required this.label,
+    required this.onTap,
+  });
+
+  final String keyValue;
+  final String emoji;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Expanded(
+      child: Material(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(13),
+        child: InkWell(
+          key: ValueKey<String>(keyValue),
+          borderRadius: BorderRadius.circular(13),
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(13),
+              border: Border.all(
+                color: DocklyColors.accentTurquoise.withValues(alpha: 0.45),
+              ),
+            ),
+            child: Column(
+              children: <Widget>[
+                Text(emoji, style: const TextStyle(fontSize: 17)),
+                const SizedBox(height: 2),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        color: DocklyColors.accentTurquoise,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 /// MARİNAM köprüsü — üç dürüst durum:
 /// 1) hesap yok → ücretsiz hesap daveti (giriş sayfası açılır);
@@ -153,9 +285,15 @@ class TodayCommunityHeader extends ConsumerWidget {
           ),
           TextButton(
             key: const ValueKey<String>('today-community-all'),
+            // BELİRGİN DÜĞME (UX paketi P2, 2026-10-25): silik "tümü" yazısı
+            // hap zeminli "Tümünü gör" oldu — Rota Keşfi'nin kapısı görünsün.
             style: TextButton.styleFrom(
               minimumSize: const Size(0, 32),
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              backgroundColor:
+                  DocklyColors.brandPrimary.withValues(alpha: 0.08),
+              shape: const StadiumBorder(),
+              textStyle: const TextStyle(fontWeight: FontWeight.w800),
             ),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute<void>(
@@ -197,7 +335,10 @@ class TodayRouteCard extends ConsumerWidget {
 }
 
 /// SORU-CEVAP köprüsü — akıştan TEK soru: öne çıkan varsa o, yoksa en yenisi.
-/// Akış boş/yüklenmemiş/hatalıysa kart çizilmez. Dokunuş listeyi açar.
+/// Yüklenmemiş/hatalıysa kart çizilmez. AKIŞ BOŞSA kaybolmak yerine dürüst
+/// bir DAVET kartına dönüşür (UX paketi, kurucu onayı 2026-10-25): sahte
+/// içerik yazılmaz, yalnız "ilk soruyu sor" çağrısı yapılır — özellik,
+/// tanıtıma en çok ihtiyaç duyduğu boş dönemde de kapısını gösterir.
 class TodayQaCard extends ConsumerWidget {
   const TodayQaCard({super.key});
 
@@ -208,7 +349,7 @@ class TodayQaCard extends ConsumerWidget {
     if (feed == null) return const SizedBox.shrink();
     final List<QaQuestionSummary> all =
         <QaQuestionSummary>[...feed.featured, ...feed.items];
-    if (all.isEmpty) return const SizedBox.shrink();
+    if (all.isEmpty) return const _QaInviteCard();
     final QaQuestionSummary q = all.first;
     return _PulseCard(
       keyValue: 'today-qa',
@@ -218,6 +359,79 @@ class TodayQaCard extends ConsumerWidget {
       subtitle: L10n.fmt(t.qaAnswersFmt, '${q.answersCount}'),
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute<void>(builder: (_) => const QaListScreen()),
+      ),
+    );
+  }
+}
+
+/// SORU DAVET KARTI — akış yüklendi ama hiç onaylı soru yok. Karta dokunmak
+/// listeyi (boş hâliyle, dürüst) açar; düğme doğrudan soru yazmaya götürür.
+/// Premium/hesap kapıları her zamanki evlerinde: sunucuda ve composer'da.
+class _QaInviteCard extends ConsumerWidget {
+  const _QaInviteCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final ThemeData theme = Theme.of(context);
+    const Color turq = DocklyColors.accentTurquoise;
+    return Container(
+      margin: const EdgeInsets.only(top: 12),
+      child: Material(
+        color: turq.withValues(alpha: 0.07),
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          key: const ValueKey<String>('today-qa-invite'),
+          borderRadius: BorderRadius.circular(16),
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute<void>(builder: (_) => const QaListScreen()),
+          ),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: turq.withValues(alpha: 0.45)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    const Text('💬', style: TextStyle(fontSize: 20)),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        t.qaInviteTitle,
+                        style: theme.textTheme.bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.w800),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  t.qaInviteSub,
+                  style: theme.textTheme.bodySmall
+                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                ),
+                const SizedBox(height: 8),
+                FilledButton(
+                  key: const ValueKey<String>('today-qa-invite-btn'),
+                  style: FilledButton.styleFrom(
+                    minimumSize: const Size(0, 36),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    backgroundColor: turq,
+                  ),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                        builder: (_) => const QaComposerScreen()),
+                  ),
+                  child: Text(t.qaAskCta),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

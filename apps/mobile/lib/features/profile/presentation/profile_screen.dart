@@ -22,7 +22,6 @@ import '../../events/presentation/events_screen.dart';
 import '../../qa/presentation/qa_list_screen.dart';
 import '../../legal/presentation/legal_screen.dart';
 import '../../legal/presentation/sources_screen.dart';
-import '../../route/presentation/saved_routes_screen.dart';
 import '../../route/presentation/shared_routes_screen.dart';
 import '../../shell/application/shell_tab_provider.dart';
 
@@ -85,10 +84,13 @@ class ProfileScreen extends ConsumerWidget {
                 // YÖNETİM PANELİ (kurucu talebi 2026-09-25): yalnız admin
                 // rolüne görünür; yetki denetimi sunucudadır (RolesGuard).
                 const _AdminRow(),
-                // DENİZCİLİK — kaptanın varlıkları.
+                // VARLIKLARIM / TOPLULUK AYRIMI (UX paketi, kurucu onayı
+                // 2026-10-25): eski tek "Denizcilik" yığını iki anlamlı rafa
+                // bölündü — kişisel varlıklar ile topluluk özellikleri artık
+                // ayrı başlıklar altında. Hiçbir satır eklenmedi/silinmedi.
                 Padding(
                   padding: const EdgeInsets.only(left: 4, top: 18, bottom: 7),
-                  child: Text(t.profileGroupSea.toUpperCase(),
+                  child: Text(t.profileGroupAssets.toUpperCase(),
                       style: _groupTitleStyle(theme)),
                 ),
                 _GroupCard(children: <Widget>[
@@ -113,9 +115,40 @@ class ProfileScreen extends ConsumerWidget {
                     icon: DocklyIcons.navigation,
                     tint: DocklyColors.accentTurquoise,
                     label: t.savedRoutesTitle,
+                    // TEK EV (UX paketi, 2026-10-25): rotaların evi Defter/
+                    // Rotalarım — ayrı ekran yerine köprü (Günlük deseni).
+                    // Paylaşma dahil her işlem artık tek yerde yaşar.
+                    onTap: () {
+                      ref.read(deckSegmentProvider.notifier).state = 1; // Rotalarım
+                      ref.read(shellTabProvider.notifier).state = 2; // Defter
+                    },
+                  ),
+                  _GroupRow(
+                    icon: DocklyIcons.edit,
+                    tint: DocklyColors.brandDeep,
+                    label: t.logbookTitle,
+                    // Notların TEK evi Defter/Notlar — yönlendirme (UX P1).
+                    onTap: () {
+                      ref.read(deckSegmentProvider.notifier).state = 2; // Notlar
+                      ref.read(shellTabProvider.notifier).state = 2; // Defter
+                    },
+                  ),
+                ]),
+                Padding(
+                  padding: const EdgeInsets.only(left: 4, top: 18, bottom: 7),
+                  child: Text(t.profileGroupCommunity.toUpperCase(),
+                      style: _groupTitleStyle(theme)),
+                ),
+                _GroupCard(children: <Widget>[
+                  _GroupRow(
+                    icon: DocklyIcons.chat,
+                    tint: DocklyColors.brandPrimary,
+                    // SORU-CEVAP (Blog V1, kurucu onayı 2026-10-23): liste
+                    // herkese açık; detay/yazma kilidi SUNUCUDA (premium v3).
+                    label: t.qaRowTitle,
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute<void>(
-                          builder: (_) => const SavedRoutesScreen()),
+                          builder: (_) => const QaListScreen()),
                     ),
                   ),
                   _GroupRow(
@@ -130,17 +163,6 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                   ),
                   _GroupRow(
-                    icon: DocklyIcons.chat,
-                    tint: DocklyColors.brandPrimary,
-                    // SORU-CEVAP (Blog V1, kurucu onayı 2026-10-23): liste
-                    // herkese açık; detay/yazma kilidi SUNUCUDA (premium v3).
-                    label: t.qaRowTitle,
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                          builder: (_) => const QaListScreen()),
-                    ),
-                  ),
-                  _GroupRow(
                     icon: DocklyIcons.eventNote,
                     tint: DocklyColors.warning,
                     // ETKİNLİKLER (V1, kurucu onayı 2026-10-23): buluşmalar +
@@ -150,16 +172,6 @@ class ProfileScreen extends ConsumerWidget {
                       MaterialPageRoute<void>(
                           builder: (_) => const EventsScreen()),
                     ),
-                  ),
-                  _GroupRow(
-                    icon: DocklyIcons.edit,
-                    tint: DocklyColors.brandDeep,
-                    label: t.logbookTitle,
-                    // Notların TEK evi Defter/Notlar — yönlendirme (UX P1).
-                    onTap: () {
-                      ref.read(deckSegmentProvider.notifier).state = 2; // Notlar
-                      ref.read(shellTabProvider.notifier).state = 2; // Defter
-                    },
                   ),
                 ]),
                 // UYGULAMA — öğrenme ve ayarlar.

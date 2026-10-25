@@ -20,6 +20,8 @@ import 'package:dockly_mobile/features/events/presentation/event_detail_screen.d
 import 'package:dockly_mobile/features/marina/application/marina_controller.dart';
 import 'package:dockly_mobile/features/marina/domain/marina_gateway.dart';
 import 'package:dockly_mobile/features/qa/application/qa_controller.dart';
+import 'package:dockly_mobile/features/marina/presentation/marina_community_screen.dart';
+import 'package:dockly_mobile/features/qa/presentation/qa_composer_screen.dart';
 import 'package:dockly_mobile/features/qa/presentation/qa_list_screen.dart';
 import 'package:dockly_mobile/features/shell/application/shell_tab_provider.dart';
 import 'package:dockly_mobile/features/today/application/getting_started_controller.dart';
@@ -273,5 +275,96 @@ void main() {
     await tester.tap(find.byKey(const ValueKey<String>('today-maint')));
     await tester.pump();
     expect(_containerOf(tester).read(shellTabProvider), 3); // Teknem
+  });
+
+  // ─── TOPLULUK ŞERİDİ + SORU DAVETİ (UX paketi, kurucu onayı 2026-10-25) ──
+
+  testWidgets('TOPLULUK ŞERİDİ: veri olmasa da dört kısayol görünür; '
+      'Soru-Cevap kısayolu listeyi açar', (WidgetTester tester) async {
+    await tester.binding.setSurfaceSize(const Size(800, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(_app(extra: <Override>[
+      eventsGatewayProvider.overrideWithValue(FakeEventsFeedGateway()),
+      maintenanceStoreProvider.overrideWithValue(FakeMaintenanceStore()),
+    ]));
+    await tester.pumpAndSettle();
+
+    // Köprü kartlarının aksine şerit VERİYE BAKMAZ — boş uygulamada da
+    // dört kapı ortadadır (analiz bulgusunun tam karşılığı).
+    expect(find.byKey(const ValueKey<String>('ts-qa')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('ts-routes')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('ts-events')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('ts-marina')), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey<String>('ts-qa')));
+    await tester.pumpAndSettle();
+    expect(find.byType(QaListScreen), findsOneWidget);
+  });
+
+  testWidgets('şerit Marinam: marina yokken Teknem sekmesine götürür',
+      (WidgetTester tester) async {
+    await tester.binding.setSurfaceSize(const Size(800, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(_app(extra: <Override>[
+      eventsGatewayProvider.overrideWithValue(FakeEventsFeedGateway()),
+      maintenanceStoreProvider.overrideWithValue(FakeMaintenanceStore()),
+    ]));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey<String>('ts-marina')));
+    await tester.pump();
+    expect(_containerOf(tester).read(shellTabProvider), 3); // Teknem
+  });
+
+  testWidgets('şerit Marinam: marina bağlıyken doğrudan marina topluluğunu '
+      'açar', (WidgetTester tester) async {
+    await tester.binding.setSurfaceSize(const Size(800, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(_app(
+      signedIn: true,
+      boat: _boatWithMarina,
+      community: const MarinaCommunity(
+        marinaId: 'loc-marti',
+        marinaName: 'Martı Marina',
+        total: 12,
+        visibleCount: 3,
+        access: 'counts',
+        boats: <MarinaBoat>[],
+      ),
+      extra: <Override>[
+        eventsGatewayProvider.overrideWithValue(FakeEventsFeedGateway()),
+        maintenanceStoreProvider.overrideWithValue(FakeMaintenanceStore()),
+      ],
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey<String>('ts-marina')));
+    await tester.pumpAndSettle();
+    expect(find.byType(MarinaCommunityScreen), findsOneWidget);
+  });
+
+  testWidgets('soru akışı BOŞKEN köprü kaybolmaz — davet kartı çıkar; '
+      'düğme soru yazmayı açar', (WidgetTester tester) async {
+    await tester.binding.setSurfaceSize(const Size(800, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    // _app sahte akışı varsayılan olarak BOŞ verir — tam senaryomuz.
+    await tester.pumpWidget(_app(extra: <Override>[
+      eventsGatewayProvider.overrideWithValue(FakeEventsFeedGateway()),
+      maintenanceStoreProvider.overrideWithValue(FakeMaintenanceStore()),
+    ]));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('today-qa')), findsNothing);
+    final Finder invite =
+        find.byKey(const ValueKey<String>('today-qa-invite'));
+    expect(invite, findsOneWidget);
+    await tester.ensureVisible(invite);
+
+    final Finder btn =
+        find.byKey(const ValueKey<String>('today-qa-invite-btn'));
+    await tester.ensureVisible(btn);
+    await tester.tap(btn);
+    await tester.pumpAndSettle();
+    expect(find.byType(QaComposerScreen), findsOneWidget);
   });
 }

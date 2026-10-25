@@ -2,6 +2,7 @@ import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_mobile/features/community/application/community_controller.dart';
 import 'package:dockly_mobile/features/community/presentation/note_card.dart';
 import 'package:dockly_mobile/features/community/presentation/notes_section.dart';
+import 'package:dockly_mobile/features/qa/presentation/qa_composer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -159,5 +160,18 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.byType(NoteCard), findsNothing);
+  });
+
+  testWidgets('KOY KÖPRÜSÜ (UX paketi 2026-10-25): "topluluğa sor" satırı '
+      'soru yazma ekranını açar', (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeCommunityGateway()));
+    await tester.pumpAndSettle();
+
+    final Finder ask = find.byKey(const ValueKey<String>('notes-ask-qa'));
+    expect(ask, findsOneWidget);
+    await tester.ensureVisible(ask);
+    await tester.tap(ask);
+    await tester.pumpAndSettle();
+    expect(find.byType(QaComposerScreen), findsOneWidget);
   });
 }

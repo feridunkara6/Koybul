@@ -7,6 +7,7 @@ import '../../../core/l10n/l10n_strings.dart';
 import '../../../core/widgets/section_card.dart';
 import '../../auth/presentation/account_gate.dart';
 import '../../../core/origin_provider.dart';
+import '../../qa/presentation/qa_composer_screen.dart';
 import '../application/community_controller.dart';
 import 'note_card.dart';
 import 'note_composer_screen.dart';
@@ -101,6 +102,23 @@ class NotesSection extends ConsumerWidget {
             locationId: locationId,
             locationName: locationName,
             position: position,
+          ),
+          // TOPLULUĞA SOR KÖPRÜSÜ (UX paketi, kurucu onayı 2026-10-25):
+          // soru tam koy incelenirken akla gelir ("burada demir tutar mı?")
+          // — buradan Soru-Cevap yazarına tek dokunuşla geçilir. Hesap ve
+          // premium kapıları her zamanki evlerinde (composer + sunucu).
+          const SizedBox(height: 4),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              key: const ValueKey<String>('notes-ask-qa'),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                    builder: (_) => const QaComposerScreen()),
+              ),
+              icon: const DocklyIcon(DocklyIcons.chat, size: 16),
+              label: Text(t.qaAskHereCta),
+            ),
           ),
         ],
       ),

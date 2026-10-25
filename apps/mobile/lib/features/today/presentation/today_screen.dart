@@ -82,6 +82,10 @@ class TodayScreen extends ConsumerWidget {
             // 2026-10-25): yeni kaptanın ilk 4 adımı — gerçek veriden okunur,
             // hepsi bitince ya da "Gizle" denince kendini çizmez.
             const GettingStartedCard(),
+            // TOPLULUK ŞERİDİ (UX paketi, kurucu onayı 2026-10-25): dört
+            // kalıcı kısayol — veri-koşullu köprülerin aksine HER ZAMAN
+            // görünür; topluluk özelliklerinin kapısı artık ana akışta.
+            const TodayCommunityStrip(),
             // SEYİR ÖNCESİ KONTROL — ÖZET KUTUCUKLARININ HEMEN ALTINDA
             // (kurucu kararı 2026-09-23, 2. tur: "rüzgâr/en iyi saat/deniz
             // kutucuklarının altına yerleştir"). Sayfanın üst bölgesinde

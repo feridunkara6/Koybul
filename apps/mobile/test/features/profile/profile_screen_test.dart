@@ -120,4 +120,31 @@ void main() {
 
     expect(find.text('Taleplerim'), findsNothing);
   });
+
+  testWidgets('UX paketi (2026-10-25): VARLIKLARIM/TOPLULUK ayrımı; '
+      '"Kayıtlı Rotalar" artık Defter/Rotalarım köprüsü',
+      (WidgetTester tester) async {
+    // Uzun yüzey: gruplu satırlar sayfanın altına iner.
+    await tester.binding.setSurfaceSize(const Size(800, 1500));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(_app());
+    await tester.pumpAndSettle();
+
+    // Eski tek "Denizcilik" yığını iki rafa bölündü.
+    expect(find.text('VARLIKLARIM'), findsOneWidget);
+    expect(find.text('TOPLULUK'), findsOneWidget);
+    // Topluluk rafı üç satırı birlikte taşır.
+    expect(find.text('Soru-Cevap'), findsOneWidget);
+    expect(find.text('Rota Keşfi'), findsOneWidget);
+    expect(find.text('Etkinlikler'), findsOneWidget);
+
+    // TEK EV: satır ayrı ekran açmak yerine Defter'in Rotalarım
+    // segmentine geçirir (Günlük köprüsüyle aynı desen).
+    await tester.ensureVisible(find.text('Kayıtlı Rotalar'));
+    await tester.tap(find.text('Kayıtlı Rotalar'));
+    await tester.pump();
+    final ProviderContainer c = _containerOf(tester);
+    expect(c.read(shellTabProvider), 2); // Defter
+    expect(c.read(deckSegmentProvider), 1); // Rotalarım
+  });
 }
