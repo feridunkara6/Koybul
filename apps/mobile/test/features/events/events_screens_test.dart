@@ -13,23 +13,28 @@ import 'package:flutter_test/flutter_test.dart';
 
 EventView ev({
   String id = 'e1',
+  String title = 'Göcek Koy Buluşması',
   int registeredCount = 18,
   int quota = 25,
   bool registered = false,
   String status = 'published',
   String audience = 'all',
+  DateTime? startsAt,
 }) =>
     EventView(
       id: id,
-      title: 'Göcek Koy Buluşması',
+      title: title,
       body: 'Sonbahar buluşması — koyda demirleyip tanışıyoruz.',
-      startsAt: DateTime.utc(2026, 11, 7, 11),
+      // GÖRELİ TARİH (geçmiş bölümü dersi 2026-10-25): sabit takvim tarihi,
+      // gerçek zaman o tarihi geçince etkinliği "geçmiş" bölümüne düşürür ve
+      // testleri sessizce kırardı — yaklaşan etkinlik hep now+13 gün olur.
+      startsAt: startsAt ?? DateTime.now().add(const Duration(days: 13)),
       endsAt: null,
       locationText: 'Göcek, Boynuz Koyu',
       quota: quota,
       registeredCount: registeredCount,
       remaining: quota - registeredCount,
-      registrationDeadline: DateTime.utc(2026, 11, 5, 21),
+      registrationDeadline: DateTime.now().add(const Duration(days: 11)),
       priceNote: 'Ücretsiz',
       conditions: null,
       organizer: 'Koybul',
@@ -193,5 +198,59 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey<String>('ev-cancelled')), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('ev-register')), findsNothing);
+  });
+
+  // ─── GEÇMİŞ ETKİNLİKLER (kurucu onayı 2026-10-25) ───
+
+  testWidgets('liste: bitmiş etkinlik "Geçmiş etkinlikler" bölümünde, soluk '
+      've katılım özetiyle; yaklaşanlar üstte kalır',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    final FakeEventsGateway gw = FakeEventsGateway(eventRows: <EventView>[
+      ev(), // yaklaşan (now + 13 gün)
+      ev(
+        id: 'e-eski',
+        title: 'Koy Temizliği Buluşması',
+        registeredCount: 18,
+        quota: 30,
+        startsAt: DateTime.now().subtract(const Duration(days: 20)),
+      ),
+    ]);
+    await tester.pumpWidget(_app(gw, const EventsScreen()));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Geçmiş etkinlikler'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('ev-item-e-eski')), findsOneWidget);
+    expect(find.text('Tamamlandı'), findsOneWidget);
+    expect(find.text('18/30 katılımcı · tamamlandı'), findsOneWidget);
+    // Yaklaşan etkinlik geçmiş başlığının ÜSTÜNDE durur.
+    final double upcomingY =
+        tester.getTopLeft(find.byKey(const ValueKey<String>('ev-item-e1'))).dy;
+    final double headerY =
+        tester.getTopLeft(find.text('Geçmiş etkinlikler')).dy;
+    expect(upcomingY, lessThan(headerY));
+  });
+
+  testWidgets('detay: bitmiş etkinlikte kayıt düğmesi YOK — dürüst kapanış '
+      'notu var', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    final FakeEventsGateway gw = FakeEventsGateway(eventRows: <EventView>[
+      ev(
+        id: 'e-eski',
+        startsAt: DateTime.now().subtract(const Duration(days: 20)),
+      ),
+    ]);
+    await tester
+        .pumpWidget(_app(gw, const EventDetailScreen(eventId: 'e-eski')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('ev-past')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('ev-register')), findsNothing);
+    expect(find.textContaining('kayıt kapalı'), findsOneWidget);
+    expect(gw.registerCalls, isEmpty);
   });
 }

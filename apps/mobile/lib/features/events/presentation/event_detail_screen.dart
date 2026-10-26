@@ -103,6 +103,13 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
   Widget _body(BuildContext context, L10n t, EventView e) {
     final ThemeData theme = Theme.of(context);
     final Color sub = theme.colorScheme.onSurfaceVariant;
+    // GEÇMİŞ ETKİNLİK (kurucu onayı 2026-10-25): eşik listeyle ve sunucuyla
+    // aynıdır (-1 gün). Geçmişte kayıt alanı yerine dürüst kapanış notu
+    // gösterilir; sunucu register() zaten 'not-open' derdi — arayüz o
+    // kapıya hiç göndermiyor.
+    final bool past = !e.cancelled &&
+        (e.endsAt ?? e.startsAt)
+            .isBefore(DateTime.now().subtract(const Duration(days: 1)));
 
     Widget info(String icon, String text) => Padding(
           padding: const EdgeInsets.only(bottom: 7),
@@ -166,13 +173,34 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                 info('💰', e.priceNote!),
               info('🧭', L10n.fmt(t.evOrganizerFmt, e.organizer)),
               const SizedBox(height: 4),
-              if (!e.cancelled) EventQuotaBar(e: e, t: t),
+              if (past)
+                Text(
+                  L10n.fmt2(
+                      t.evPastDoneFmt, '${e.registeredCount}', '${e.quota}'),
+                  style: theme.textTheme.labelSmall
+                      ?.copyWith(color: sub, fontWeight: FontWeight.w800),
+                )
+              else if (!e.cancelled)
+                EventQuotaBar(e: e, t: t),
             ],
           ),
         ),
         const SizedBox(height: 12),
         if (e.cancelled)
           const SizedBox.shrink()
+        else if (past)
+          Container(
+            key: const ValueKey<String>('ev-past'),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(t.evPastNote,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall?.copyWith(
+                    color: sub, fontWeight: FontWeight.w700)),
+          )
         else if (e.registered) ...<Widget>[
           Container(
             key: const ValueKey<String>('ev-registered'),

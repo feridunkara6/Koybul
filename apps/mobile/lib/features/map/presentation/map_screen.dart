@@ -1622,25 +1622,36 @@ class _RouteModeActionCard extends ConsumerWidget {
         : (warn ? DocklyColors.warning : DocklyColors.success);
     final String windText =
         w == null ? '—' : '${w.worst.windKn.toStringAsFixed(0)} kn';
+    // SIĞMA KURALI (saha hatası 2026-10-26: "yazılar büyük, butona
+    // sığmıyor"): iOS'ta büyük yazı ayarı (Dynamic Type) metni ölçekler —
+    // üç nokta ile KIRPMAK yerine FittedBox metni kutuya SIĞACAK kadar
+    // küçültür; yazı her boyutta tam okunur.
     Widget stat(String value, String label, {Color? color}) => Expanded(
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding:
+                const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
             decoration: BoxDecoration(
               color: theme.colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
               children: <Widget>[
-                Text(value,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w800, color: color)),
-                Text(label,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.4)),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(value,
+                      maxLines: 1,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w800, color: color)),
+                ),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(label,
+                      maxLines: 1,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.4)),
+                ),
               ],
             ),
           ),
@@ -1673,13 +1684,20 @@ class _RouteModeActionCard extends ConsumerWidget {
             const SizedBox(height: 10),
             Row(
               children: <Widget>[
+                // SIĞMA KURALI (saha hatası 2026-10-26): "..." ile kırpılan
+                // düğme yazısı okunmaz oluyordu — FittedBox metni düğmeye
+                // sığacak kadar küçültür, yazı her cihaz ayarında tam çıkar.
                 Expanded(
                   child: OutlinedButton(
                     onPressed: onAddPoint,
                     style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(0, 42)),
-                    child: Text(t.routeAddPointBtn,
-                        maxLines: 1, overflow: TextOverflow.ellipsis),
+                        minimumSize: const Size(0, 42),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 6)),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(t.routeAddPointBtn, maxLines: 1),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -1687,19 +1705,27 @@ class _RouteModeActionCard extends ConsumerWidget {
                   child: OutlinedButton(
                     onPressed: onSave,
                     style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(0, 42)),
-                    child: Text(t.saveLabel,
-                        maxLines: 1, overflow: TextOverflow.ellipsis),
+                        minimumSize: const Size(0, 42),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 6)),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(t.saveLabel, maxLines: 1),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: FilledButton(
                     onPressed: onDetail,
-                    style:
-                        FilledButton.styleFrom(minimumSize: const Size(0, 42)),
-                    child: Text(t.routeChipTitle,
-                        maxLines: 1, overflow: TextOverflow.ellipsis),
+                    style: FilledButton.styleFrom(
+                        minimumSize: const Size(0, 42),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 6)),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(t.routeChipTitle, maxLines: 1),
+                    ),
                   ),
                 ),
               ],

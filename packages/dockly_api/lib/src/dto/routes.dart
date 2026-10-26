@@ -12,6 +12,8 @@ class SharedRouteStop {
     required this.locationId,
     required this.name,
     required this.typeCode,
+    this.lat,
+    this.lon,
   });
 
   final int seq;
@@ -19,11 +21,19 @@ class SharedRouteStop {
   final String name;
   final String typeCode;
 
+  /// Durak koordinatı — "Haritada aç" rotayı bununla kurar (saha hatası
+  /// 2026-10-26). NULL kalabilir: eski sunucu sürümü koordinat göndermez;
+  /// arayüz o durumda düğmeyi dürüstçe gizler (çizgi uydurulmaz).
+  final double? lat;
+  final double? lon;
+
   factory SharedRouteStop.fromJson(Map<String, dynamic> json) => SharedRouteStop(
         seq: json['seq'] as int,
         locationId: json['locationId'] as String,
         name: json['name'] as String,
         typeCode: json['typeCode'] as String,
+        lat: (json['lat'] as num?)?.toDouble(),
+        lon: (json['lon'] as num?)?.toDouble(),
       );
 }
 

@@ -1,5 +1,7 @@
+import 'dart:async' show unawaited;
+
 import 'package:dockly_api/dockly_api.dart'
-    show SharedRouteDetail, SharedRouteStop;
+    show GeoPoint, SharedRouteDetail, SharedRouteStop;
 import 'package:dockly_core/dockly_core.dart' show AppFailure;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +12,11 @@ import '../../community/application/reputation_controller.dart'
     show hasRealAccountProvider;
 import '../../community/presentation/reputation_shell.dart'
     show formatCount, formatNm;
+import '../../map/application/map_controller.dart';
 import '../../profile/presentation/captain_profile_screen.dart';
+import '../../shell/application/shell_tab_provider.dart';
 import '../application/shared_routes_controller.dart';
+import '../domain/sea_trip.dart';
 
 /// ROTA KARTI — paylaşılan rotanın detayı (Sosyalleşme Hafta 3, kurucu
 /// onayı 2026-10-24; demodaki "Rota Kartı" ekranının gerçeği).
@@ -61,6 +66,34 @@ class _SharedRouteDetailScreenState
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  /// HARİTADA AÇ (saha hatası 2026-10-26: "rotaya tıklıyorum, haritada
+  /// açılmıyor"): duraklardan gerçek rota kurulur — ilk durak başlangıç,
+  /// kalanlar sıralı duraklar; çizgiyi her zamanki deniz motoru çizer
+  /// (kayıtlı rota açma mekanizmasının birebir aynısı). Ardından Keşfet'e
+  /// dönülür ve bu sayfa kapanır — kaptan rotayı haritada bulur.
+  void _openOnMap(SharedRouteDetail d) {
+    final List<SharedRouteStop> stops = d.stops;
+    if (stops.length < 2) return;
+    final SharedRouteStop first = stops.first;
+    final RouteOrigin origin = RouteOrigin(
+      pos: GeoPoint(lat: first.lat!, lon: first.lon!),
+      name: first.name,
+    );
+    final List<RouteWaypoint> waypoints = <RouteWaypoint>[
+      for (final SharedRouteStop s in stops.skip(1))
+        RouteWaypoint(
+          pos: GeoPoint(lat: s.lat!, lon: s.lon!),
+          id: s.locationId,
+          name: s.name,
+        ),
+    ];
+    unawaited(ref
+        .read(mapControllerProvider.notifier)
+        .openSavedRoute(origin, waypoints, name: d.summary.name));
+    ref.read(shellTabProvider.notifier).state = 0; // Keşfet
+    Navigator.of(context).popUntil((Route<dynamic> r) => r.isFirst);
   }
 
   @override
@@ -229,6 +262,24 @@ class _SharedRouteDetailScreenState
           child: Text(d.body, style: theme.textTheme.bodyMedium),
         ),
         const SizedBox(height: 14),
+        // HARİTADA AÇ — eski sunucu koordinat göndermiyorsa düğme dürüstçe
+        // GİZLENİR (yarım rota çizilmez, çizgi uydurulmaz).
+        if (d.stops.length >= 2 &&
+            d.stops.every(
+                (SharedRouteStop s) => s.lat != null && s.lon != null)) ...<Widget>[
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              key: const ValueKey<String>('rtd-open-map'),
+              style: FilledButton.styleFrom(minimumSize: const Size(0, 44)),
+              onPressed: () => _openOnMap(d),
+              icon: const DocklyIcon(DocklyIcons.navigation,
+                  size: 16, color: Colors.white),
+              label: Text(t.rtOpenMapBtn),
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
         Row(
           children: <Widget>[
             Expanded(

@@ -204,8 +204,44 @@ class _EventsTab extends ConsumerWidget {
         if (events.isEmpty) {
           return _Empty(icon: '🎟️', text: t.evEmpty);
         }
+        // GEÇMİŞ BÖLÜMÜ (kurucu onayı 2026-10-25): sunucu artık son 6 ayın
+        // bitmiş etkinliklerini de gönderir — liste "yaklaşan / geçmiş"
+        // diye ikiye bölünür. Eşik sunucudaki -1 gün kuralıyla AYNIDIR
+        // (süren etkinlik geçmişe düşmez). Geçmişte en yeni üstte durur.
+        final DateTime cutoff =
+            DateTime.now().subtract(const Duration(days: 1));
+        bool isPast(EventView e) =>
+            (e.endsAt ?? e.startsAt).isBefore(cutoff);
+        final List<EventView> upcoming =
+            events.where((EventView e) => !isPast(e)).toList(growable: false);
+        final List<EventView> past = events.where(isPast).toList()
+          ..sort((EventView a, EventView b) =>
+              b.startsAt.compareTo(a.startsAt));
+        final ThemeData theme = Theme.of(context);
         return Column(
-          children: <Widget>[for (final EventView e in events) _EventCard(e: e, t: t)],
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            if (upcoming.isEmpty && past.isNotEmpty)
+              _Empty(icon: '🎟️', text: t.evEmpty),
+            for (final EventView e in upcoming) _EventCard(e: e, t: t),
+            if (past.isNotEmpty) ...<Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 4, top: 12, bottom: 8),
+                child: Text(
+                  // Büyük-İ tuzağı: değer l10n'da yazıldığı gibi kullanılır
+                  // (.toUpperCase() Türkçede 'GEÇMIŞ' üretirdi).
+                  t.evPastCap,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.6,
+                  ),
+                ),
+              ),
+              for (final EventView e in past)
+                _EventCard(e: e, t: t, past: true),
+            ],
+          ],
         );
       },
     );
@@ -213,10 +249,14 @@ class _EventsTab extends ConsumerWidget {
 }
 
 class _EventCard extends StatelessWidget {
-  const _EventCard({required this.e, required this.t});
+  const _EventCard({required this.e, required this.t, this.past = false});
 
   final EventView e;
   final L10n t;
+
+  /// true → bitmiş etkinlik: kart soluk, kontenjan yerine katılım özeti,
+  /// rozet "Tamamlandı". Dokunuş detayı yine açar (kayıt orada da kapalı).
+  final bool past;
 
   static const List<List<Color>> _tones = <List<Color>>[
     <Color>[DocklyColors.brandDeep, DocklyColors.brandPrimary],
@@ -232,7 +272,7 @@ class _EventCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Opacity(
-        opacity: e.cancelled ? .6 : 1,
+        opacity: e.cancelled || past ? .6 : 1,
         child: Material(
           color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(14),
@@ -279,6 +319,19 @@ class _EventCard extends StatelessWidget {
                                     fontWeight: FontWeight.w800,
                                     color: DocklyColors.error)),
                           )
+                        else if (past)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 7, vertical: 2),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(999)),
+                            child: Text(t.evPastChip,
+                                style: const TextStyle(
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w800,
+                                    color: Color(0xFF5B7187))),
+                          )
                         else
                           EventAudienceChip(audience: e.audience, t: t),
                       ],
@@ -297,7 +350,16 @@ class _EventCard extends StatelessWidget {
                         style: theme.textTheme.bodySmall?.copyWith(color: sub),
                       ),
                       const SizedBox(height: 8),
-                      if (e.registered)
+                      if (past)
+                        // Bitmiş etkinlikte "X yer boş" anlamsız — dürüst
+                        // katılım özeti yazılır (sayı sunucu defterinden).
+                        Text(
+                          L10n.fmt2(t.evPastDoneFmt, '${e.registeredCount}',
+                              '${e.quota}'),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                              color: sub, fontWeight: FontWeight.w800),
+                        )
+                      else if (e.registered)
                         Text(t.evRegisteredChip,
                             style: theme.textTheme.labelSmall?.copyWith(
                                 color: DocklyColors.success,

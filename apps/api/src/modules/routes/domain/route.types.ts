@@ -30,6 +30,11 @@ export interface RouteStopView {
   locationId: string;
   name: string;
   typeCode: string;
+  /** Durak koordinatı (katalogdan) — "Haritada aç" rotayı bununla kurar
+   *  (saha hatası 2026-10-26: koordinatsız duraklarla rota haritada
+   *  açılamıyordu). */
+  lat: number;
+  lon: number;
 }
 
 /** Liste satırı — herkese açık alanlar. */

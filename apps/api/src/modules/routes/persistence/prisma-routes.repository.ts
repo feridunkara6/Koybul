@@ -69,7 +69,9 @@ export class PrismaRoutesRepository implements RoutesRepository {
   async stopsFor(routeId: string): Promise<RouteStopView[]> {
     return this.prisma.$queryRaw<RouteStopView[]>(Prisma.sql`
       SELECT s.seq::int AS seq, s.location_id AS "locationId",
-             l.name, lt.code AS "typeCode"
+             l.name, lt.code AS "typeCode",
+             ST_Y(l.position::geometry) AS lat,
+             ST_X(l.position::geometry) AS lon
       FROM route_stops s
       JOIN locations l ON l.id = s.location_id
       JOIN location_types lt ON lt.id = l.location_type_id

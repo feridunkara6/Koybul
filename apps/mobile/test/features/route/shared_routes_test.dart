@@ -1,6 +1,13 @@
 import 'package:dockly_api/dockly_api.dart'
     show GeoPoint, SharedRouteDetail, SharedRouteStop, SharedRouteSummary;
+import 'package:dockly_mobile/features/map/application/map_controller.dart';
+import 'package:dockly_mobile/features/map/domain/map_state.dart' show MapState;
+import 'package:dockly_mobile/features/premium/application/premium_controller.dart';
+import 'package:dockly_mobile/features/route/application/route_quota_controller.dart';
+import 'package:dockly_mobile/features/route/application/sea_route_engine.dart';
 import 'package:dockly_mobile/features/route/application/shared_routes_controller.dart';
+import 'package:dockly_mobile/features/route/domain/sea_router.dart';
+import 'package:dockly_mobile/features/shell/application/shell_tab_provider.dart';
 import 'package:dockly_mobile/features/route/domain/saved_route.dart';
 import 'package:dockly_mobile/features/route/domain/sea_trip.dart';
 import 'package:dockly_mobile/features/route/domain/shared_routes_gateway.dart';
@@ -15,6 +22,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/auth_fakes.dart';
+import '../../support/map_fakes.dart';
 
 /// ROTA PAYLAŞIMI mobil testleri (Hafta 3, kurucu onayı 2026-10-24).
 /// Kural (docs/15): ağ yok — ağ geçidi sahtedir.
@@ -58,6 +66,61 @@ SharedRouteDetail routeDetail({bool savedByMe = false}) => SharedRouteDetail(
       savedByMe: savedByMe,
       doneByMe: false,
     );
+
+/// Koordinatlı detay — "Haritada aç" testleri (saha hatası 2026-10-26).
+/// Göcek açığı → güneyi: sea_mask'e karşı doğrulanmış su noktaları
+/// (tur örnek rotasıyla aynı bölge — sahte motorda fark etmez).
+SharedRouteDetail routeDetailWithCoords() => SharedRouteDetail(
+      summary: summary(),
+      body: 'Öğlen meltemi güçlenmeden Yassıca molasını verin; '
+          'Tersane girişindeki şamandıralara dikkat.',
+      boatSuggestion: 'Her tür · günübirlik',
+      status: 'approved',
+      stops: const <SharedRouteStop>[
+        SharedRouteStop(
+            seq: 1,
+            locationId: 'loc-gocek',
+            name: 'Göcek',
+            typeCode: 'private_marina',
+            lat: 36.740,
+            lon: 28.935),
+        SharedRouteStop(
+            seq: 2,
+            locationId: 'loc-yassica',
+            name: 'Yassıca Adaları',
+            typeCode: 'mooring_point',
+            lat: 36.660,
+            lon: 28.900),
+      ],
+      mine: false,
+      savedByMe: false,
+      doneByMe: false,
+    );
+
+/// Sahte deniz motoru: iki noktayı dolaysız bağlar (tur testiyle aynı).
+class _FakeRouteEngine implements SeaRouteEngine {
+  @override
+  Future<SeaRoutePlan?> route(GeoPoint from, GeoPoint to) async =>
+      SeaRoutePlan(
+        points: <GeoPoint>[from, to],
+        distanceNm: 5,
+        reachedGoal: true,
+        viaSea: true,
+      );
+
+  @override
+  Future<SeaTrip?> trip(GeoPoint from, List<GeoPoint> stops) async {
+    final SeaRoutePlan? leg = await route(from, stops.last);
+    if (leg == null) return null;
+    return SeaTrip(
+      legs: <SeaRoutePlan>[leg],
+      combined: combineTripLegs(<SeaRoutePlan>[leg]),
+    );
+  }
+
+  @override
+  Future<GeoPoint?> snapWater(GeoPoint p) async => p;
+}
 
 class FakeSharedRoutesGateway implements SharedRoutesGateway {
   FakeSharedRoutesGateway({this.feedResult = const <SharedRouteSummary>[]});
@@ -330,5 +393,53 @@ void main() {
     expect(gw.shares.single['stops'], <String>['loc-a', 'loc-b']);
     expect(gw.shares.single['distanceNm'], 14.0);
     expect(find.textContaining('moderasyon onayına gönderildi'), findsOneWidget);
+  });
+
+  // ─── HARİTADA AÇ (saha hatası 2026-10-26) ───
+
+  testWidgets('rota kartı: koordinat yoksa "Haritada aç" GİZLİ (eski sunucu '
+      'uyumu — yarım rota çizilmez)', (WidgetTester tester) async {
+    final FakeSharedRoutesGateway gw = FakeSharedRoutesGateway();
+    await tester.pumpWidget(
+        _app(gw, const SharedRouteDetailScreen(routeId: 'r1')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('rtd-open-map')), findsNothing);
+  });
+
+  testWidgets('rota kartı: "Haritada aç" rotayı gerçek motor akışıyla kurar, '
+      'adını yazar ve Keşfet sekmesine döner', (WidgetTester tester) async {
+    final FakeSharedRoutesGateway gw = FakeSharedRoutesGateway()
+      ..detailResult = routeDetailWithCoords();
+    await tester.pumpWidget(_app(
+      gw,
+      const SharedRouteDetailScreen(routeId: 'r1'),
+      extra: <Override>[
+        // Harita beyni gerçek; motor/ağ/kota sahte (tur testleriyle aynı).
+        mapLocationsGatewayProvider
+            .overrideWithValue(FakeMapGateway(result: pinResult)),
+        mapCacheProvider.overrideWithValue(FakeMapCache()),
+        mapDebounceProvider.overrideWithValue(Duration.zero),
+        seaRouteEngineProvider.overrideWithValue(_FakeRouteEngine()),
+        isPremiumActiveProvider.overrideWithValue(true),
+        routeQuotaStoreProvider.overrideWithValue(FakeRouteQuotaStore()),
+      ],
+    ));
+    await tester.pumpAndSettle();
+
+    final Finder btn = find.byKey(const ValueKey<String>('rtd-open-map'));
+    expect(btn, findsOneWidget);
+    final ProviderContainer c = ProviderScope.containerOf(
+      tester.element(find.byType(SharedRouteDetailScreen)),
+      listen: false,
+    );
+    await tester.ensureVisible(btn);
+    await tester.tap(btn);
+    await tester.pumpAndSettle();
+
+    final MapState ms = c.read(mapControllerProvider);
+    expect(ms.route, isNotNull); // çizgi gerçek motor akışından geldi
+    expect(ms.routeLabel, '12 Adalar klasiği'); // rota adı çipte
+    expect(c.read(shellTabProvider), 0); // Keşfet'e dönüldü
   });
 }

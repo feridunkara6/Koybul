@@ -62,12 +62,15 @@ export class PrismaEventsRepository implements EventsRepository {
   }
 
   async upcomingEvents(viewerUserId: string | null, now: Date): Promise<EventRow[]> {
-    // Dünden itibaren: süren etkinlik listeden kaybolmaz; İPTAL edilen
-    // gelecek etkinlik de dürüstçe 'iptal' rozetiyle görünür.
+    // GEÇMİŞ PENCERESİ (kurucu onayı 2026-10-25): son 6 ayın bitmiş
+    // etkinlikleri de akışa girer — mobil, listeyi "yaklaşan / geçmiş"
+    // diye ikiye böler (geçmiş bölümünde kayıt kapalıdır; register()
+    // zaten son tarihi geçen etkinliği 'not-open' ile reddeder).
+    // İPTAL edilen gelecek etkinlik dürüstçe 'iptal' rozetiyle görünür.
     return this.prisma.$queryRaw<EventRow[]>(Prisma.sql`
       SELECT ${this.eventSelect(viewerUserId)}
       FROM events e
-      WHERE COALESCE(e.ends_at, e.starts_at) >= ${now}::timestamptz - interval '1 day'
+      WHERE COALESCE(e.ends_at, e.starts_at) >= ${now}::timestamptz - interval '6 months'
       ORDER BY e.starts_at ASC
       LIMIT 100
     `);

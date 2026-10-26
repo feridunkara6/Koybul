@@ -387,6 +387,11 @@ class L10n {
     required this.profileGroupAssets,
     required this.profileGroupCommunity,
     required this.qaAskHereCta,
+    required this.evPastCap,
+    required this.evPastChip,
+    required this.evPastDoneFmt,
+    required this.evPastNote,
+    required this.rtOpenMapBtn,
     required this.locateTooltip,
     required this.locDenied,
     required this.locLocated,
@@ -971,6 +976,10 @@ class L10n {
   /// UX keşfedilebilirlik paketi (kurucu onayı 2026-10-25): Bugün'deki
   /// Topluluk şeridi, soru davet kartı, Profil grup başlıkları, koy köprüsü.
   final String tsQa, tsRoutes, tsEvents, tsMarina, qaInviteTitle, qaInviteSub, profileGroupAssets, profileGroupCommunity, qaAskHereCta;
+
+  /// Geçmiş etkinlikler bölümü (kurucu onayı 2026-10-25) + rota kartı
+  /// "Haritada aç" (saha hatası düzeltmesi 2026-10-26).
+  final String evPastCap, evPastChip, evPastDoneFmt, evPastNote, rtOpenMapBtn;
   final String locateTooltip, locDenied, locLocated;
   final String mapViewTooltip, listViewTooltip;
   final String offlineBanner, emptyArea, tooManyHint, loadingHarbors, nmUnit;
@@ -1945,6 +1954,13 @@ const L10n _tr = L10n(
   profileGroupAssets: 'Varlıklarım',
   profileGroupCommunity: 'Topluluk',
   qaAskHereCta: 'Bu koy hakkında topluluğa sor',
+  // Türkçe büyük-İ tuzağı: bu başlık koda .toUpperCase() ile DEĞİL, burada
+  // yazıldığı gibi girer ('i'→'I' dönüşümü 'GEÇMIŞ' üretirdi).
+  evPastCap: 'Geçmiş etkinlikler',
+  evPastChip: 'Tamamlandı',
+  evPastDoneFmt: '{0}/{1} katılımcı · tamamlandı',
+  evPastNote: 'Bu etkinlik tamamlandı — kayıt kapalı.',
+  rtOpenMapBtn: 'Haritada aç',
   locateTooltip: 'Konumum',
   locDenied: 'Konum alınamadı. Tarayıcı/uygulama konum iznini kontrol et.',
   locLocated: 'Konumun alındı — mesafeler ve deniz yolu artık senden hesaplanıyor.',
@@ -2901,6 +2917,11 @@ const L10n _en = L10n(
   profileGroupAssets: 'Personal',
   profileGroupCommunity: 'Community',
   qaAskHereCta: 'Ask the community about this spot',
+  evPastCap: 'Past events',
+  evPastChip: 'Ended',
+  evPastDoneFmt: '{0}/{1} attended · completed',
+  evPastNote: 'This event has ended — registration is closed.',
+  rtOpenMapBtn: 'Open on map',
   locateTooltip: 'My location',
   locDenied: 'Couldn\'t get your location. Check the location permission.',
   locLocated: 'Location acquired — distances and sea routes now start from you.',
@@ -3857,6 +3878,11 @@ const L10n _es = L10n(
   profileGroupAssets: 'Personal',
   profileGroupCommunity: 'Comunidad',
   qaAskHereCta: 'Pregunta a la comunidad sobre este lugar',
+  evPastCap: 'Eventos pasados',
+  evPastChip: 'Finalizado',
+  evPastDoneFmt: '{0}/{1} asistentes · finalizado',
+  evPastNote: 'Este evento ha finalizado — inscripción cerrada.',
+  rtOpenMapBtn: 'Abrir en el mapa',
   locateTooltip: 'Mi ubicación',
   locDenied: 'No se pudo obtener tu ubicación. Revisa el permiso de ubicación.',
   locLocated: 'Ubicación obtenida: las distancias y rutas parten ahora de ti.',
@@ -4813,6 +4839,11 @@ const L10n _ru = L10n(
   profileGroupAssets: 'Моё',
   profileGroupCommunity: 'Сообщество',
   qaAskHereCta: 'Спросите сообщество об этом месте',
+  evPastCap: 'Прошедшие события',
+  evPastChip: 'Завершено',
+  evPastDoneFmt: '{0}/{1} участников · завершено',
+  evPastNote: 'Событие завершилось — запись закрыта.',
+  rtOpenMapBtn: 'Открыть на карте',
   locateTooltip: 'Моё местоположение',
   locDenied: 'Не удалось определить местоположение. Проверьте разрешение.',
   locLocated: 'Местоположение получено — расстояния и маршруты теперь от вас.',
