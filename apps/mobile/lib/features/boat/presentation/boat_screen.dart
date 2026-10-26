@@ -226,16 +226,20 @@ class BoatScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 12),
-          // MARİNAM (Marina Topluluğu V1, kurucu onayı 2026-10-23): teknenin
-          // bağlı marinasındaki Koybul komşuları — katılım açık rızayla.
-          const MarinamCard(),
-          const SizedBox(height: 18),
+          // SIRA DEĞİŞİKLİĞİ (kurucu isteği 2026-10-26): "marina alanı büyük
+          // duruyor, bakım altta kalıyor" — bakım özeti ve Defter köprüsü
+          // YUKARI alındı, Marinam kartı en alta indi. Kaptanın her gün
+          // baktığı şey bakım durumudur; marina topluluğu ara sıra gezilir.
           // BAKIM ÖZETİ (Konsept A): 10 kalem her açılışta tam boy durmaz —
           // kaptan çoğu gün yalnız "ilgi bekleyen var mı?" diye bakar.
           const _MaintenanceSummaryRow(),
           const SizedBox(height: 12),
           // DEFTER KÖPRÜSÜ (tek ev): istatistik burada KOPYALANMAZ.
           const _DeckBridgeRow(),
+          const SizedBox(height: 18),
+          // MARİNAM (Marina Topluluğu V1, kurucu onayı 2026-10-23): teknenin
+          // bağlı marinasındaki Koybul komşuları — katılım açık rızayla.
+          const MarinamCard(),
         ],
       ),
     );
