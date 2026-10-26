@@ -133,6 +133,10 @@ runIf('Users API (e2e — gerçek DB+Redis)', () => {
     await request(http)
       .delete('/v1/users/me')
       .set('Authorization', `Bearer ${first.access}`)
+      // REGRESYON (saha hatası 2026-10-26): üretimde istek kimliği UUID
+      // DEĞİLDİR (Render 'lbrm…' üretir) — denetim kaydı yazımı bununla da
+      // çalışmalı; eskiden UUID kolonuna çakılıp silmeyi 500'le düşürüyordu.
+      .set('x-request-id', 'lbrmpcqkkwb8p6luri3a2vig')
       .expect(204);
 
     // jti karalistesi: aynı access token artık geçersiz (15 dk beklemeden)

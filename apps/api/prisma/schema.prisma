@@ -1667,7 +1667,9 @@ model AuditLog {
   newValues    Json?      @map("new_values")
   ip           String?    @db.Inet
   userAgent    String?    @map("user_agent")
-  requestId    String?    @map("request_id") @db.Uuid
+  // SAHA HATASI (2026-10-26, hesap silme 500): istek kimlikleri UUID değildir
+  // (Render/Cloudflare 'lbrm…' gibi kısa kimlikler üretir) — kolon metindir.
+  requestId    String?    @map("request_id")
 
   actorUser User? @relation(fields: [actorUserId], references: [id])
 
