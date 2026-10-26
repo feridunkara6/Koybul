@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
 import '../../../core/origin_provider.dart';
+import '../../auth/presentation/account_gate.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
@@ -803,7 +804,21 @@ class _ModeBanner extends ConsumerWidget {
 
 /// ROTAYI KAYDET diyaloğu (rota planlama 2026-08): ad önerilir, Kaydet cihaza
 /// yazar (başlangıç + duraklar — açılışta aynı motorla yeniden hesaplanır).
+///
+/// HESAP KAPISI (kurucu kararı 2026-10-26): rota kaydetmek HESAP ister —
+/// kayıtlı rotalar hesapla gezer, çıkışta görünmez. Hesap yoksa davet açılır;
+/// giriş/kayıt tamamlanırsa ad diyaloğu OTOMATİK devam eder.
 Future<void> _saveRouteDialog(
+    BuildContext context, WidgetRef ref, MapState state) {
+  return requireAccount(
+    context,
+    ref,
+    message: ref.read(l10nProvider).gateRouteMsg,
+    onAllowed: () => _saveRouteDialogBody(context, ref, state),
+  );
+}
+
+Future<void> _saveRouteDialogBody(
     BuildContext context, WidgetRef ref, MapState state) async {
   final L10n t = ref.read(l10nProvider);
   final RouteOrigin? origin = state.routeOrigin;
@@ -1147,7 +1162,7 @@ class _TypeFilterRow extends ConsumerWidget {
                 selected: fitOn,
                 onSelected: (bool _) {
                   if (!hasBoat) {
-                    showBoatSheet(context);
+                    showBoatSheet(context, ref);
                     return;
                   }
                   ref.read(mapFitFilterProvider.notifier).state = !fitOn;

@@ -145,7 +145,7 @@ class _FilterRow extends ConsumerWidget {
         // Tekne yoksa önce tanımlama sayfasını aç; varsa filtreyi aç/kapat.
         onSelected: (bool _) {
           if (boat == null) {
-            showBoatSheet(context);
+            showBoatSheet(context, ref);
           } else {
             controller.toggleBoatFitOnly();
           }

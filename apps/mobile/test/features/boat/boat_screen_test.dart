@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/auth_fakes.dart';
 import '../../support/boat_photo_fakes.dart';
 import '../../support/maintenance_fakes.dart';
 
@@ -27,15 +28,23 @@ class _FixedBoat extends MyBoatController {
   MyBoat? build() => _boat;
 }
 
-Widget _app(FakeMaintenanceStore store, {MyBoat? boat}) => ProviderScope(
+/// HESAP KAPISI (2026-10-26): tekne/bakım hesapla gezer — bakım testleri
+/// "hesap açık" varsayımıyla koşar; misafir davranışının kendi testi var.
+Widget _app(FakeMaintenanceStore store, {MyBoat? boat, bool member = true}) =>
+    ProviderScope(
       overrides: <Override>[
         maintenanceStoreProvider.overrideWithValue(store),
         // Fotoğraf deposu sahte: gerçek image_picker/path_provider teste girmez.
         boatPhotoStoreProvider.overrideWithValue(FakeBoatPhotoStore()),
+        if (member) signedInAuthOverride(),
         if (boat != null) myBoatProvider.overrideWith(() => _FixedBoat(boat)),
       ],
       child: const MaterialApp(home: BoatScreen()),
     );
+
+/// Bakım testlerinin varsayılan teknesi (hesap kapısı: bakım özeti yalnız
+/// tekne tanımlıyken çizilir — tekne yokken bakım takibi anlamsız).
+const MyBoat _maintBoat = MyBoat(lengthM: 10);
 
 ProviderContainer _containerOf(WidgetTester tester) =>
     ProviderScope.containerOf(
@@ -48,10 +57,9 @@ ProviderContainer _containerOf(WidgetTester tester) =>
 void main() {
   testWidgets('KONSEPT A: ilk bakış üç kart — kimlik + bakım özeti + Defter '
       'köprüsü; 10 kalem artık ilk ekranda DEĞİL', (WidgetTester tester) async {
-    await tester.pumpWidget(_app(FakeMaintenanceStore()));
+    await tester.pumpWidget(_app(FakeMaintenanceStore(), boat: _maintBoat));
     await tester.pumpAndSettle();
 
-    expect(find.text('Tekneni tanımla'), findsOneWidget); // boş durum CTA'sı
     expect(find.byKey(const ValueKey<String>('maint-open')), findsOneWidget);
     expect(find.text('Bakım takibi'), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('boat-deck-bridge')), findsOneWidget);
@@ -61,9 +69,34 @@ void main() {
     expect(find.byKey(const ValueKey<String>('maint-summary')), findsNothing);
   });
 
+  testWidgets('HESAP KAPISI (2026-10-26): misafir Teknem\'de yalnız davet '
+      'kartı + Defter köprüsü görür — bakım ve Marinam ÇİZİLMEZ',
+      (WidgetTester tester) async {
+    // member:false → oturum yok (AuthRestoring); tekne de yok.
+    await tester.pumpWidget(_app(FakeMaintenanceStore(), member: false));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Tekneni tanımla'), findsOneWidget); // davet durur
+    expect(find.byKey(const ValueKey<String>('maint-open')), findsNothing);
+    expect(find.text('Bakım takibi'), findsNothing);
+    expect(find.byKey(const ValueKey<String>('marinam-pick')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('boat-deck-bridge')),
+        findsOneWidget);
+  });
+
+  testWidgets('HESAP KAPISI: hesaplı ama teknesiz kullanıcıda da bakım özeti '
+      'çizilmez (tekne yokken bakım anlamsız); davet CTA\'sı durur',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(FakeMaintenanceStore()));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Tekneni tanımla'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('maint-open')), findsNothing);
+  });
+
   testWidgets('bakım özetine dokun → tam liste kendi ekranında; kayıt yokken '
       'hiçbir şey İDDİA ETMEZ', (WidgetTester tester) async {
-    await tester.pumpWidget(_app(FakeMaintenanceStore()));
+    await tester.pumpWidget(_app(FakeMaintenanceStore(), boat: _maintBoat));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const ValueKey<String>('maint-open')));
@@ -90,7 +123,7 @@ void main() {
           lastDoneMs: old.millisecondsSinceEpoch,
         ),
       ];
-    await tester.pumpWidget(_app(store));
+    await tester.pumpWidget(_app(store, boat: _maintBoat));
     await tester.pumpAndSettle();
 
     // Özet rozeti Teknem'in ilk ekranında uyarır…
@@ -107,7 +140,7 @@ void main() {
   testWidgets('"Bugün yaptım": kalem güncel olur ve kayıt cihaza yazılır',
       (WidgetTester tester) async {
     final FakeMaintenanceStore store = FakeMaintenanceStore();
-    await tester.pumpWidget(_app(store));
+    await tester.pumpWidget(_app(store, boat: _maintBoat));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const ValueKey<String>('maint-open')));

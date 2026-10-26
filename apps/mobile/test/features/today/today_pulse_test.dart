@@ -263,10 +263,15 @@ void main() {
           lastDoneMs: old.millisecondsSinceEpoch,
         ),
       ];
-    await tester.pumpWidget(_app(extra: <Override>[
-      eventsGatewayProvider.overrideWithValue(FakeEventsFeedGateway()),
-      maintenanceStoreProvider.overrideWithValue(store),
-    ]));
+    // HESAP KAPISI (2026-10-26): bakım şeridi tekneye, tekne hesaba bağlı —
+    // şeridin görünmesi için oturum + tekne gerekir (misafir testi yukarıda).
+    await tester.pumpWidget(_app(
+        signedIn: true,
+        boat: const MyBoat(lengthM: 10),
+        extra: <Override>[
+          eventsGatewayProvider.overrideWithValue(FakeEventsFeedGateway()),
+          maintenanceStoreProvider.overrideWithValue(store),
+        ]));
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey<String>('today-maint')), findsOneWidget);

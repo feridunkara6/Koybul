@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/auth_fakes.dart';
 import '../../support/logbook_fakes.dart';
 import '../../support/saved_routes_fakes.dart';
 import '../../support/trip_fakes.dart';
@@ -34,6 +35,9 @@ Widget _app({
   final FakeLogbookStore logs = FakeLogbookStore()..data = List<LogEntry>.of(notes);
   return ProviderScope(
     overrides: <Override>[
+      // HESAP KAPISI (2026-10-26): kayıtlı rotalar hesapla gezer —
+      // Rotalarım testleri oturum açık koşar.
+      signedInAuthOverride(),
       savedRoutesStoreProvider.overrideWithValue(
           FakeSavedRoutesStore()..data = List<SavedRoute>.of(routes)),
       logbookStoreProvider.overrideWithValue(logs),

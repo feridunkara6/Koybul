@@ -233,6 +233,9 @@ class TodayMaintStrip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // HESAP KAPISI (kurucu kararı 2026-10-26): bakım, tekneye bağlıdır ve
+    // tekne hesapla gezer — misafirde/çıkışta tekne null gelir, şerit çizilmez.
+    if (ref.watch(myBoatProvider) == null) return const SizedBox.shrink();
     final L10n t = ref.watch(l10nProvider);
     final List<MaintenanceTask> tasks =
         maintenanceCatalog(ref.watch(appLocaleProvider));

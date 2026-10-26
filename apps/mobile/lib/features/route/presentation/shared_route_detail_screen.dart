@@ -201,6 +201,26 @@ class _SharedRouteDetailScreenState
           ),
         ),
         const SizedBox(height: 10),
+        // HARİTADA AÇ — EN ÜSTTE (saha geri bildirimi 2026-10-26: "rotaya
+        // basınca haritada göremiyorum" — düğme sayfanın altında kaldığı için
+        // fark edilmiyordu; artık ilk bakışta görünür). Eski sunucu koordinat
+        // göndermiyorsa düğme dürüstçe GİZLENİR (yarım rota çizilmez).
+        if (d.stops.length >= 2 &&
+            d.stops.every(
+                (SharedRouteStop s) => s.lat != null && s.lon != null)) ...<Widget>[
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              key: const ValueKey<String>('rtd-open-map'),
+              style: FilledButton.styleFrom(minimumSize: const Size(0, 44)),
+              onPressed: () => _openOnMap(d),
+              icon: const DocklyIcon(DocklyIcons.navigation,
+                  size: 16, color: Colors.white),
+              label: Text(t.rtOpenMapBtn),
+            ),
+          ),
+          const SizedBox(height: 12),
+        ],
         // DURAKLAR — çizgi yok; sıra numaralı liste (gizlilik dürüstlüğü).
         Text(t.rtStopsCap,
             style: theme.textTheme.labelSmall?.copyWith(
@@ -262,24 +282,6 @@ class _SharedRouteDetailScreenState
           child: Text(d.body, style: theme.textTheme.bodyMedium),
         ),
         const SizedBox(height: 14),
-        // HARİTADA AÇ — eski sunucu koordinat göndermiyorsa düğme dürüstçe
-        // GİZLENİR (yarım rota çizilmez, çizgi uydurulmaz).
-        if (d.stops.length >= 2 &&
-            d.stops.every(
-                (SharedRouteStop s) => s.lat != null && s.lon != null)) ...<Widget>[
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton.icon(
-              key: const ValueKey<String>('rtd-open-map'),
-              style: FilledButton.styleFrom(minimumSize: const Size(0, 44)),
-              onPressed: () => _openOnMap(d),
-              icon: const DocklyIcon(DocklyIcons.navigation,
-                  size: 16, color: Colors.white),
-              label: Text(t.rtOpenMapBtn),
-            ),
-          ),
-          const SizedBox(height: 8),
-        ],
         Row(
           children: <Widget>[
             Expanded(

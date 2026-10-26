@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/auth_fakes.dart';
 import '../../support/launch_fakes.dart';
 import '../../support/location_fakes.dart';
 import '../../support/search_fakes.dart';
@@ -25,9 +26,14 @@ Widget _app(
   FakeBoatStorage? boatStorage,
   FakeLocationService? location,
   FakeSearchGateway? search,
+  // HESAP KAPISI (2026-10-26): tekne hesapla gezer — bu dosyanın akış
+  // testleri oturum açık koşar (misafir açılış odağı testi kendi bayrağını
+  // verir). Misafir ölçü cevabının SAHİPSİZ saklandığı kontrolcü testinde.
+  bool member = true,
 }) {
   return ProviderScope(
     overrides: <Override>[
+      if (member) signedInAuthOverride(),
       launchStoreProvider.overrideWithValue(store),
       boatStorageProvider.overrideWithValue(boatStorage ?? FakeBoatStorage()),
       // CI DERSİ: konum akışına dokunan HER test sahte konum servisi kullanır
@@ -391,6 +397,29 @@ void main() {
     expect(focus, isNotNull);
     expect(focus!.zoom, 11);
     expect(focus.point.lat, closeTo(36.75, 0.001));
+  });
+
+  testWidgets('HESAP KAPISI (2026-10-26): MİSAFİRDE kayıtlı marina odağı '
+      'KURULMAZ — tekne/marina hesapla gezer, çıkışta görünmez',
+      (WidgetTester tester) async {
+    final FakeBoatStorage boatStorage = FakeBoatStorage(
+      boat: MyBoat(
+        lengthM: 11,
+        ownerUid: testUser.id, // başka/eski hesabın teknesi
+        homeMarina: const HomeMarina(
+            id: 'dm1', name: 'D-Marin Göcek', lat: 36.75, lon: 28.93),
+      ),
+    );
+    await tester.pumpWidget(_app(
+      FakeLaunchStore(done: true),
+      boatStorage: boatStorage,
+      member: false,
+    ));
+    await tester.pumpAndSettle();
+
+    final ProviderContainer c =
+        ProviderScope.containerOf(tester.element(find.text('KABUK')));
+    expect(c.read(mapFocusProvider), isNull);
   });
 
   testWidgets('DÖNEN kullanıcı + marinasız tekne: açılış odağı KURULMAZ',

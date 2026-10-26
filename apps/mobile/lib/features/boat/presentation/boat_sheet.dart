@@ -5,16 +5,29 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../auth/presentation/account_gate.dart';
 import '../../search/presentation/search_screen.dart';
 import '../application/my_boat_controller.dart';
 import '../domain/my_boat.dart';
 
 /// "Tekneni tanımla" alt sayfası — boy (+ opsiyonel su çekimi) alır, bellekte saklar.
-Future<void> showBoatSheet(BuildContext context) {
-  return showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    builder: (BuildContext _) => const _BoatSheet(),
+///
+/// HESAP KAPISI (kurucu kararı 2026-10-26): tekne tanımlamak HESAP ister.
+/// Kapı TEK yerde — burada — durur; 8 çağıranın hiçbiri ayrıca düşünmez.
+/// Hesap yoksa "Hesap gerekli" daveti açılır; giriş/kayıt tamamlanırsa
+/// tekne formu OTOMATİK devam eder (üyelik kapısı deseni, 2026-07).
+Future<void> showBoatSheet(BuildContext context, WidgetRef ref) {
+  return requireAccount(
+    context,
+    ref,
+    message: ref.read(l10nProvider).gateBoatMsg,
+    onAllowed: () {
+      showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext _) => const _BoatSheet(),
+      );
+    },
   );
 }
 

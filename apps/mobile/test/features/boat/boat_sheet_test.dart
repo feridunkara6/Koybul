@@ -1,3 +1,4 @@
+import 'package:dockly_mobile/features/auth/presentation/account_gate.dart';
 import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
 import 'package:dockly_mobile/features/boat/domain/boat_storage.dart';
 import 'package:dockly_mobile/features/boat/domain/my_boat.dart';
@@ -5,6 +6,8 @@ import 'package:dockly_mobile/features/boat/presentation/boat_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../../support/auth_fakes.dart';
 
 /// Bellekte tutan sahte depolama (gerçek shared_preferences teste girmez).
 class _FakeBoatStorage implements BoatStorage {
@@ -21,24 +24,27 @@ class _FakeBoatStorage implements BoatStorage {
 }
 
 /// Alt sayfayı gerçek akışla (düğmeden) açan taşıyıcı.
-class _Launcher extends StatelessWidget {
+/// HESAP KAPISI (2026-10-26): showBoatSheet artık ref ister — kapı tek yerde.
+class _Launcher extends ConsumerWidget {
   const _Launcher();
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context, WidgetRef ref) => Scaffold(
         body: Center(
           child: ElevatedButton(
             key: const ValueKey<String>('open-sheet'),
-            onPressed: () => showBoatSheet(context),
+            onPressed: () => showBoatSheet(context, ref),
             child: const Text('aç'),
           ),
         ),
       );
 }
 
-Widget _app(_FakeBoatStorage storage) => ProviderScope(
+Widget _app(_FakeBoatStorage storage, {bool member = true}) => ProviderScope(
       overrides: <Override>[
         boatStorageProvider.overrideWithValue(storage),
+        // Form testleri hesap açık koşar; kapının kendi testi aşağıda.
+        if (member) signedInAuthOverride(),
       ],
       child: const MaterialApp(home: _Launcher()),
     );
@@ -122,5 +128,41 @@ void main() {
     expect(storage.stored!.lengthM, 9);
     expect(storage.stored!.buildYear, isNull);
     expect(storage.stored!.typeId, isNull); // tür seçilmedi — uydurulmaz
+  });
+
+  testWidgets('kayıt SAHİP KİMLİĞİYLE yazılır (hesap kapısı 2026-10-26)',
+      (WidgetTester tester) async {
+    final _FakeBoatStorage storage = _FakeBoatStorage();
+    await _openSheet(tester, storage);
+
+    await tester.enterText(
+        find.widgetWithText(TextField, 'Tekne boyu (m)'), '12');
+    await tester.tap(find.text('Kaydet'));
+    await tester.pumpAndSettle();
+
+    expect(storage.stored?.ownerUid, testUser.id);
+  });
+
+  testWidgets('HESAP KAPISI: misafir "tekneni tanımla"ya basınca form DEĞİL '
+      'hesap daveti açılır; depoya hiçbir şey yazılmaz',
+      (WidgetTester tester) async {
+    final _FakeBoatStorage storage = _FakeBoatStorage();
+    tester.view.physicalSize = const Size(800, 1900);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(_app(storage, member: false));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey<String>('open-sheet')));
+    await tester.pumpAndSettle();
+
+    // Davet var, form yok.
+    expect(find.byType(AccountRequiredSheetBody), findsOneWidget);
+    expect(find.text('Tekne türü'), findsNothing);
+
+    // "Şimdi değil" → davet kapanır, depo bakir.
+    await tester.tap(find.text('Şimdi değil'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AccountRequiredSheetBody), findsNothing);
+    expect(storage.stored, isNull);
   });
 }

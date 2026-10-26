@@ -116,7 +116,7 @@ class _MarinamCardState extends ConsumerState<MarinamCard> {
             _WhiteButton(
               keyValue: 'marinam-pick',
               label: t.marinaPickTitle,
-              onTap: () => showBoatSheet(context),
+              onTap: () => showBoatSheet(context, ref),
             ),
           ],
         ),

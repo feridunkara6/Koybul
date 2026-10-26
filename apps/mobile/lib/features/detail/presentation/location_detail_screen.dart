@@ -809,7 +809,7 @@ class _GlanceStrip extends ConsumerWidget {
       sub: boat == null
           ? t.boatDefineCta
           : '${_num(boat.lengthM)} m${boat.draftM != null ? ' · ${_num(boat.draftM!)} m' : ''}',
-      onTap: () => showBoatSheet(context),
+      onTap: () => showBoatSheet(context, ref),
     ));
 
     if (tiles.isEmpty) return const SizedBox.shrink();

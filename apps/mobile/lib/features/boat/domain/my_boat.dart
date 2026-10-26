@@ -29,6 +29,7 @@ class MyBoat {
     this.homeMarina,
     this.model,
     this.buildYear,
+    this.ownerUid,
   });
 
   /// Tekne boyu (m) — zorunlu. İÇ BİRİM her zaman metredir (uyum hesapları
@@ -61,6 +62,27 @@ class MyBoat {
   /// Model yılı — opsiyonel. Eski/klasik tekneler dâhil her yıl geçerlidir;
   /// bilinmiyorsa null ("Bilmiyorum" her zaman geçerli bir cevaptır).
   final int? buildYear;
+
+  /// SAHİP KİMLİĞİ (kurucu kararı 2026-10-26): tekne HESABA bağlıdır.
+  /// Sunucudaki kullanıcı kimliği (SessionUser.id). Çıkış yapınca tekne
+  /// görünmez olur; aynı hesapla dönünce geri gelir. null = eski kayıt
+  /// (sahipsiz) — ilk hesaplı açılışta o hesap tarafından sahiplenilir,
+  /// kullanıcının teknesi kaybolmaz.
+  final String? ownerUid;
+
+  /// Aynı teknenin sahibi değiştirilmiş kopyası (hesap kapısı 2026-10-26).
+  /// Diğer tüm alanlar AYNEN korunur — çizimler/uyum hesapları etkilenmez.
+  MyBoat withOwner(String? uid) => MyBoat(
+        lengthM: lengthM,
+        draftM: draftM,
+        brand: brand,
+        typeId: typeId,
+        name: name,
+        homeMarina: homeMarina,
+        model: model,
+        buildYear: buildYear,
+        ownerUid: uid,
+      );
 }
 
 /// Tekne türü sözlüğü — SUNUCU sözlüğüyle bire bir ayna (8 tür). Sıra,

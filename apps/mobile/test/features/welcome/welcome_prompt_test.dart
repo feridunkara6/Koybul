@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/auth_fakes.dart';
 import '../../support/fake_map_surface.dart';
 import '../../support/map_fakes.dart';
 import '../../support/welcome_fakes.dart';
@@ -21,6 +22,9 @@ Widget _app({required FakeWelcomeStore store, FakeBoatStorage? boatStorage}) {
       mapCacheProvider.overrideWithValue(FakeMapCache()),
       welcomeStoreProvider.overrideWithValue(store),
       boatStorageProvider.overrideWithValue(boatStorage ?? FakeBoatStorage()),
+      // HESAP KAPISI (2026-10-26): tekne hesapla gezer — geri yükleme testi
+      // için oturum açık varsayılır (misafir davranışı kontrolcü testinde).
+      signedInAuthOverride(),
     ],
     child: const MaterialApp(home: DocklyShell()),
   );

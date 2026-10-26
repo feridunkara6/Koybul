@@ -32,6 +32,7 @@ import 'package:dockly_mobile/features/route/domain/sea_router.dart';
 import 'package:dockly_mobile/features/route/domain/sea_trip.dart';
 import 'package:dockly_mobile/features/weather/application/weather_controller.dart';
 
+import '../../support/auth_fakes.dart';
 import '../../support/fake_map_surface.dart';
 import '../../support/location_fakes.dart';
 import '../../support/checklist_fakes.dart';
@@ -116,6 +117,9 @@ Widget _app(
       // Kayıtlı rota deposu da HER ZAMAN sahte (aynı depo kuralı — K5
       // yuva testi gerçek depoda sonsuza dek beklerdi).
       savedRoutesStoreProvider.overrideWithValue(FakeSavedRoutesStore()),
+      // HESAP KAPISI (2026-10-26): tekne tanımlama + rota kaydetme hesap
+      // ister — bu dosyanın konusu kapılar değil; oturum açık koşulur.
+      signedInAuthOverride(),
     ],
     child: const MaterialApp(home: MapScreen()),
   );

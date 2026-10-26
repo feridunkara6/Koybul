@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/auth_fakes.dart';
 import '../../support/favorites_fakes.dart';
 import '../../support/getting_started_fakes.dart';
 import '../../support/saved_routes_fakes.dart';
@@ -54,6 +55,9 @@ Widget _app({
       gettingStartedStoreProvider
           .overrideWithValue(store ?? FakeGettingStartedStore()),
       boatStorageProvider.overrideWithValue(FakeBoatStorage(boat: boat)),
+      // HESAP KAPISI (2026-10-26): tekne hesapla gezer — görev durumu
+      // "tekne tanımlandı" GERÇEK veriden okunsun diye oturum açık koşar.
+      signedInAuthOverride(),
       favoritesStorageProvider.overrideWithValue(FakeFavoritesStorage(favorites)),
       savedRoutesStoreProvider
           .overrideWithValue(FakeSavedRoutesStore()..data = routes),

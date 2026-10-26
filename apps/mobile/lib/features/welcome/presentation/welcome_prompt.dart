@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../auth/presentation/account_gate.dart';
 import '../../boat/application/my_boat_controller.dart';
 import '../../boat/domain/my_boat.dart';
 import '../../boat/presentation/boat_sheet.dart';
@@ -17,6 +18,10 @@ final Provider<WelcomeStore> welcomeStoreProvider =
 /// verilirse tüm liman/arama sonuçlarında "teknen sığar mı?" rozetleri anında
 /// kişiselleşir). Gösterilmez: daha önce soruldu ya da tekne zaten tanımlı.
 Future<void> maybeShowWelcomePrompt(BuildContext context, WidgetRef ref) async {
+  // HESAP KAPISI (kurucu kararı 2026-10-26): tekne HESABA bağlıdır. Misafire
+  // bu soru hiç sorulmaz — ve "soruldu" da İŞARETLENMEZ: hesap açıldığında
+  // soru ilk uygun açılışta sorulabilsin.
+  if (!hasAccount(ref)) return;
   final WelcomeStore store = ref.read(welcomeStoreProvider);
   if (await store.wasShown()) return;
   // Tekne zaten var mı? Bellek + cihaz deposu (açılış geri-yükleme yarışına
@@ -56,7 +61,7 @@ Future<void> maybeShowWelcomePrompt(BuildContext context, WidgetRef ref) async {
       onCustom: () {
         Navigator.of(sheetContext).pop();
         // Ana bağlam üzerinden tam tekne sayfası (boy + su çekimi).
-        if (context.mounted) showBoatSheet(context);
+        if (context.mounted) showBoatSheet(context, ref);
       },
       onSkip: () => Navigator.of(sheetContext).pop(),
     ),

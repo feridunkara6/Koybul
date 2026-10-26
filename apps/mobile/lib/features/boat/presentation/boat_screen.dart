@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/app_locale.dart';
 import '../../../core/l10n/l10n_strings.dart';
+import '../../auth/application/auth_controller.dart';
+import '../../auth/domain/auth_state.dart';
 import '../../deck/presentation/deck_screen.dart' show deckSegmentProvider;
 import '../../launch/domain/launch_answers.dart' show kHomeMarinaFocusZoom;
 import '../../map/application/map_controller.dart' show mapFocusProvider;
@@ -47,6 +49,10 @@ class BoatScreen extends ConsumerWidget {
     final L10n t = ref.watch(l10nProvider);
     final ThemeData theme = Theme.of(context);
     final MyBoat? boat = ref.watch(myBoatProvider);
+    // HESAP KAPISI: Marinam kartı yalnız gerçek hesapla görünür (misafir
+    // sayılmaz) — marinam_card içindeki davetle çifte davet olmasın.
+    final AuthState auth = ref.watch(authControllerProvider);
+    final bool member = auth is Authenticated && !auth.isGuest;
     return Scaffold(
       appBar: AppBar(title: Text(t.navBoat)),
       body: ListView(
@@ -104,7 +110,7 @@ class BoatScreen extends ConsumerWidget {
                                 visualDensity: VisualDensity.compact,
                                 icon: const DocklyIcon(DocklyIcons.edit,
                                     size: 18, color: Color(0xFFEAF6FF)),
-                                onPressed: () => showBoatSheet(context),
+                                onPressed: () => showBoatSheet(context, ref),
                               ),
                           ],
                         ),
@@ -213,7 +219,7 @@ class BoatScreen extends ConsumerWidget {
                                 minimumSize: const Size(0, 42),
                                 padding: const EdgeInsets.symmetric(horizontal: 18),
                               ),
-                              onPressed: () => showBoatSheet(context),
+                              onPressed: () => showBoatSheet(context, ref),
                               child: Text(t.boatDefineCta),
                             ),
                           ),
@@ -232,14 +238,24 @@ class BoatScreen extends ConsumerWidget {
           // baktığı şey bakım durumudur; marina topluluğu ara sıra gezilir.
           // BAKIM ÖZETİ (Konsept A): 10 kalem her açılışta tam boy durmaz —
           // kaptan çoğu gün yalnız "ilgi bekleyen var mı?" diye bakar.
-          const _MaintenanceSummaryRow(),
-          const SizedBox(height: 12),
+          // HESAP KAPISI (kurucu kararı 2026-10-26): tekne HESABA bağlıdır —
+          // misafirde/çıkışta tekne null gelir, bakım özeti de ÇİZİLMEZ
+          // (tekne yokken bakım takibi anlamsız; "veri yoksa kart kendini
+          // çizmez" kuralı). Kimlik kartındaki davet + kapı her zaman durur.
+          if (boat != null) ...<Widget>[
+            const _MaintenanceSummaryRow(),
+            const SizedBox(height: 12),
+          ],
           // DEFTER KÖPRÜSÜ (tek ev): istatistik burada KOPYALANMAZ.
           const _DeckBridgeRow(),
-          const SizedBox(height: 18),
           // MARİNAM (Marina Topluluğu V1, kurucu onayı 2026-10-23): teknenin
           // bağlı marinasındaki Koybul komşuları — katılım açık rızayla.
-          const MarinamCard(),
+          // Misafirde GÖZÜKMEZ (hesap kapısı): marina bilgisi teknenin
+          // parçasıdır, tekne de hesapla gezer.
+          if (member) ...<Widget>[
+            const SizedBox(height: 18),
+            const MarinamCard(),
+          ],
         ],
       ),
     );

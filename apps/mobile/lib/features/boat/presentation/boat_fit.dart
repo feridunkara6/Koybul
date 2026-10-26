@@ -25,7 +25,7 @@ class BoatFitRow extends ConsumerWidget {
         child: ActionChip(
           avatar: const DocklyIcon(DocklyIcons.straighten, size: 18),
           label: Text(t.fitCta),
-          onPressed: () => showBoatSheet(context),
+          onPressed: () => showBoatSheet(context, ref),
         ),
       );
     }
@@ -39,7 +39,7 @@ class BoatFitRow extends ConsumerWidget {
         BoatFitBadge(fit: fit),
         const SizedBox(width: 8),
         TextButton(
-          onPressed: () => showBoatSheet(context),
+          onPressed: () => showBoatSheet(context, ref),
           child: Text(t.fitChange),
         ),
       ],

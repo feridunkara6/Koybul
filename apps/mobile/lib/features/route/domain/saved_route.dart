@@ -15,6 +15,7 @@ class SavedRoute {
     required this.waypoints,
     required this.distanceNm,
     required this.savedAtMs,
+    this.ownerUid,
   });
 
   final String id;
@@ -28,7 +29,23 @@ class SavedRoute {
   /// Kayıt zamanı (epoch ms) — sıralama için.
   final int savedAtMs;
 
+  /// SAHİP KİMLİĞİ (hesap kapısı 2026-10-26): kayıtlı rota HESABA bağlıdır —
+  /// çıkışta listeden kaybolur, aynı hesapla dönünce geri gelir. null = eski
+  /// (sahipsiz) kayıt; ilk hesaplı açılışta o hesap tarafından sahiplenilir.
+  final String? ownerUid;
+
   int get stopCount => waypoints.where((RouteWaypoint w) => w.isStop).length;
+
+  /// Aynı rotanın sahibi değiştirilmiş kopyası — diğer alanlar AYNEN korunur.
+  SavedRoute withOwner(String? uid) => SavedRoute(
+        id: id,
+        name: name,
+        origin: origin,
+        waypoints: waypoints,
+        distanceNm: distanceNm,
+        savedAtMs: savedAtMs,
+        ownerUid: uid,
+      );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'id': id,
@@ -50,6 +67,7 @@ class SavedRoute {
         ],
         'nm': distanceNm,
         'at': savedAtMs,
+        if (ownerUid != null) 'owner': ownerUid,
       };
 
   /// Bozuk kayıt → null (sürüm/veri hatası kullanıcıya çökme olarak dönmez).
@@ -83,6 +101,7 @@ class SavedRoute {
         waypoints: wps,
         distanceNm: (raw['nm'] as num).toDouble(),
         savedAtMs: (raw['at'] as num?)?.toInt() ?? 0,
+        ownerUid: raw['owner'] as String?,
       );
     } catch (_) {
       return null;

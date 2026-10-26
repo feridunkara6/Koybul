@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/auth_fakes.dart';
 import '../../support/favorites_fakes.dart';
 import '../../support/saved_routes_fakes.dart';
 
@@ -19,6 +20,8 @@ Widget _app(FakeFavoritesStorage storage, {FakeSavedRoutesStore? routes}) =>
         favoritesStorageProvider.overrideWithValue(storage),
         savedRoutesStoreProvider
             .overrideWithValue(routes ?? FakeSavedRoutesStore()),
+        // HESAP KAPISI (2026-10-26): "Kayıtlı Rotalar" bölümü hesapla gezer.
+        signedInAuthOverride(),
       ],
       // GERÇEK TEMA (üretim hatası dersi 2026-08): sonsuz-genişlik
       // OutlinedButton hatası sade temayla GÖRÜNMÜYORDU — kartlı ekran
