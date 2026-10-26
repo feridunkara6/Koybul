@@ -91,6 +91,7 @@ void main() {
     final ProviderContainer c = _containerWith(storage, extra: <Override>[
       signedInAuthOverride(user: testGuest),
     ]);
+    c.read(myBoatProvider); // CI DERSİ (5.6): sağlayıcı tembel — önce kur
     await _tick();
     expect(c.read(myBoatProvider), isNull); // misafir tekne GÖRMEZ
   });
@@ -114,6 +115,9 @@ void main() {
     final FakeBoatStorage storage = FakeBoatStorage()
       ..stored = const MyBoat(lengthM: 11, name: 'Martı'); // ownerUid YOK
     final ProviderContainer c = _containerWith(storage);
+    // CI DERSİ (5.6 kırmızısı): Riverpod sağlayıcısı TEMBELDİR — ilk read
+    // gelmeden build/restore hiç başlamaz; önce kur, sonra akmasını bekle.
+    c.read(myBoatProvider);
     await _tick();
     expect(c.read(myBoatProvider)?.name, 'Martı'); // tekne geri geldi
     expect(storage.stored?.ownerUid, testUser.id); // ve artık bu hesabın
@@ -124,6 +128,7 @@ void main() {
     final FakeBoatStorage storage = FakeBoatStorage()
       ..stored = const MyBoat(lengthM: 15, ownerUid: 'baska-hesap');
     final ProviderContainer c = _containerWith(storage);
+    c.read(myBoatProvider); // tembel sağlayıcıyı kur
     await _tick();
     expect(c.read(myBoatProvider), isNull); // gösterilmez
     expect(storage.stored?.ownerUid, 'baska-hesap'); // depo DOKUNULMADI
@@ -137,6 +142,7 @@ void main() {
       authControllerProvider.overrideWith(
           () => SwitchableAuthController(const Authenticated(testUser))),
     ]);
+    c.read(myBoatProvider); // tembel sağlayıcıyı kur (CI dersi 5.6)
     await _tick();
     expect(c.read(myBoatProvider)?.lengthM, 12);
 
@@ -147,9 +153,11 @@ void main() {
     expect(c.read(myBoatProvider), isNull);
     expect(storage.stored?.lengthM, 12);
 
-    // AYNI hesapla DÖNÜŞ → tekne geri gelir.
+    // AYNI hesapla DÖNÜŞ → tekne geri gelir. (Tembellik dersi: geçişten
+    // sonra da yeniden kuruluş ilk read'de başlar — önce oku, sonra bekle.)
     (c.read(authControllerProvider.notifier) as SwitchableAuthController)
         .switchTo(const Authenticated(testUser));
+    c.read(myBoatProvider);
     await _tick();
     expect(c.read(myBoatProvider)?.lengthM, 12);
   });

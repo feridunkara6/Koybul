@@ -1,5 +1,7 @@
 import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_mobile/features/boat/application/maintenance_controller.dart';
+import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
+import 'package:dockly_mobile/features/boat/domain/my_boat.dart';
 import 'package:dockly_mobile/features/boat/presentation/boat_screen.dart';
 import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
 import 'package:dockly_mobile/features/community/application/community_controller.dart';
@@ -17,6 +19,14 @@ import '../../support/community_fakes.dart';
 import '../../support/maintenance_fakes.dart';
 import '../../support/premium_fakes.dart';
 import '../../support/trip_fakes.dart';
+
+/// Sabit tekne döndüren kontrolcü (depolamaya gitmez).
+class _FixedBoat extends MyBoatController {
+  _FixedBoat(this._boat);
+  final MyBoat _boat;
+  @override
+  MyBoat? build() => _boat;
+}
 
 /// "Denizci Profilim" kartı — YENİ EVİ PROFİL (Teknem Konsept A, kullanıcı
 /// onayı 2026-08): kart kaptanın kimliğidir, teknenin değil. Hesap yoksa HİÇ
@@ -85,6 +95,13 @@ void main() {
         maintenanceStoreProvider.overrideWithValue(FakeMaintenanceStore()),
         tripStoreProvider.overrideWithValue(FakeTripStore()),
         signedInAuthOverride(),
+        // CI DERSİ (5.6 kırmızısı): boş-durum "Tekneni tanımla" düğmesi de
+        // 'boat-edit' anahtarı taşıyor — tekne VERİLMEDEN bu test, kalem
+        // ikonunu değil daveti buluyordu; bakım satırı da (hesap kapısı:
+        // tekne yokken çizilmez) kayboluyordu. Testin kastı "tekneli Teknem"
+        // olduğundan tekne AÇIKÇA verilir.
+        myBoatProvider.overrideWith(
+            () => _FixedBoat(const MyBoat(lengthM: 10))),
         reputationGatewayProvider.overrideWithValue(FakeReputationGateway()),
       ],
       child: const MaterialApp(home: BoatScreen()),

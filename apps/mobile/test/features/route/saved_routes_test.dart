@@ -160,6 +160,7 @@ void main() {
     final ProviderContainer c = _container(store, extra: <Override>[
       signedInAuthOverride(user: testGuest),
     ]);
+    c.read(savedRoutesProvider); // tembel sağlayıcıyı kur
     await Future<void>.delayed(Duration.zero);
     expect(c.read(savedRoutesProvider), isEmpty); // misafir rota GÖRMEZ
     await c.read(savedRoutesProvider.notifier).add(_sample.withOwner(null));
@@ -172,6 +173,8 @@ void main() {
     final FakeSavedRoutesStore store = FakeSavedRoutesStore()
       ..data = <SavedRoute>[_sample]; // ownerUid YOK
     final ProviderContainer c = _container(store);
+    // CI DERSİ (5.6 kırmızısı): sağlayıcı TEMBEL — önce kur, sonra bekle.
+    c.read(savedRoutesProvider);
     await Future<void>.delayed(Duration.zero);
     expect(c.read(savedRoutesProvider).single.id, 'r1'); // geri geldi
     expect(c.read(savedRoutesProvider).single.ownerUid, testUser.id);
@@ -185,6 +188,7 @@ void main() {
     final FakeSavedRoutesStore store = FakeSavedRoutesStore()
       ..data = <SavedRoute>[foreign];
     final ProviderContainer c = _container(store);
+    c.read(savedRoutesProvider); // tembel sağlayıcıyı kur
     await Future<void>.delayed(Duration.zero);
     expect(c.read(savedRoutesProvider), isEmpty); // gösterilmez
 
@@ -214,6 +218,7 @@ void main() {
       authControllerProvider.overrideWith(
           () => SwitchableAuthController(const Authenticated(testUser))),
     ]);
+    c.read(savedRoutesProvider); // tembel sağlayıcıyı kur (CI dersi 5.6)
     await Future<void>.delayed(Duration.zero);
     expect(c.read(savedRoutesProvider), hasLength(1));
 
@@ -225,6 +230,7 @@ void main() {
 
     (c.read(authControllerProvider.notifier) as SwitchableAuthController)
         .switchTo(const Authenticated(testUser));
+    c.read(savedRoutesProvider); // geçiş sonrası da tembel — önce oku
     await Future<void>.delayed(Duration.zero);
     expect(c.read(savedRoutesProvider).single.id, 'r1'); // geri geldi
   });

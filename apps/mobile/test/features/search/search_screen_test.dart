@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/auth_fakes.dart';
 import '../../support/search_fakes.dart';
 
 /// Sabit tekne döndüren kontrolcü (depolamaya gitmez).
@@ -41,6 +42,9 @@ Widget _app(FakeSearchGateway gateway, {MyBoat? boat}) {
     overrides: <Override>[
       searchGatewayProvider.overrideWithValue(gateway),
       searchDebounceProvider.overrideWithValue(Duration.zero),
+      // HESAP KAPISI (2026-10-26): "Teknem sığar" çipi tekne sayfası açmadan
+      // önce hesap ister — bu dosyanın konusu kapı değil; oturum açık koşar.
+      signedInAuthOverride(),
       if (boat != null) myBoatProvider.overrideWith(() => _FixedBoat(boat)),
     ],
     child: const MaterialApp(home: SearchScreen()),
