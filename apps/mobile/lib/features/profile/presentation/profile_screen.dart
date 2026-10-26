@@ -134,6 +134,22 @@ class ProfileScreen extends ConsumerWidget {
                     },
                   ),
                 ]),
+                // CİHAZ-VERİSİ BEYANI (denetim K2, kurucu onayı 2026-10-26):
+                // bu gruptaki varlıklar şimdilik yalnız cihazda yaşar —
+                // kullanıcı telefon değişiminde sürprizle karşılaşmasın diye
+                // dürüstçe söylenir. Hesap senkronu yol haritasındadır.
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(6, 7, 6, 0),
+                  child: Text(
+                    t.pdDeviceNote,
+                    key: const ValueKey<String>('pd-device-note'),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      fontSize: 11.5,
+                      height: 1.35,
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 4, top: 18, bottom: 7),
                   child: Text(t.profileGroupCommunity.toUpperCase(),

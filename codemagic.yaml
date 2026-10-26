@@ -64,6 +64,7 @@ workflows:
             --dart-define=API_BASE_URL="$API_BASE_URL" \
             --dart-define=FLAVOR="$FLAVOR" \
             --dart-define=MAPBOX_ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN \
+            --dart-define=SENTRY_DSN_MOBILE=$SENTRY_DSN_MOBILE \
             --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa

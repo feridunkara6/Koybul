@@ -1,4 +1,5 @@
 import 'package:dockly_ui/dockly_ui.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -65,14 +66,45 @@ class _DocklyShellState extends ConsumerState<DocklyShell> {
     final int tourStep = ref.watch(onboardingControllerProvider
         .select((OnboardingState s) => s.tourStep));
     final Widget shell = Scaffold(
-      body: IndexedStack(
-        index: index,
+      body: Column(
         children: <Widget>[
-          const MapScreen(), // her zaman canlı (harita durumu korunur)
-          _built[1] ? const TodayScreen() : const SizedBox.shrink(),
-          _built[2] ? const DeckScreen() : const SizedBox.shrink(),
-          _built[3] ? const BoatScreen() : const SizedBox.shrink(),
-          _built[4] ? const ProfileScreen() : const SizedBox.shrink(),
+          // WEB ÖNİZLEME ŞERİDİ (denetim R-08, kurucu onayı 2026-10-26):
+          // koybul.com'daki web sürümü vitrindir — beklenti bu ince şeritle
+          // dürüstçe kurulur. iOS/Android derlemelerinde HİÇ çizilmez
+          // (kIsWeb derleme sabiti; testlerde de görünmez).
+          if (kIsWeb)
+            Container(
+              key: const ValueKey<String>('web-preview-band'),
+              width: double.infinity,
+              color: DocklyColors.brandDeep,
+              padding: EdgeInsets.only(
+                top: MediaQuery.viewPaddingOf(context).top + 4,
+                bottom: 5,
+                left: 12,
+                right: 12,
+              ),
+              child: Text(
+                t.webPreviewNote,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Color(0xFFCFE8FF),
+                  fontSize: 11.5,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          Expanded(
+            child: IndexedStack(
+              index: index,
+              children: <Widget>[
+                const MapScreen(), // her zaman canlı (harita durumu korunur)
+                _built[1] ? const TodayScreen() : const SizedBox.shrink(),
+                _built[2] ? const DeckScreen() : const SizedBox.shrink(),
+                _built[3] ? const BoatScreen() : const SizedBox.shrink(),
+                _built[4] ? const ProfileScreen() : const SizedBox.shrink(),
+              ],
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: Container(

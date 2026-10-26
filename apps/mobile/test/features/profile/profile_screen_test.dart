@@ -146,5 +146,10 @@ void main() {
     final ProviderContainer c = _containerOf(tester);
     expect(c.read(shellTabProvider), 2); // Defter
     expect(c.read(deckSegmentProvider), 1); // Rotalarım
+
+    // CİHAZ-VERİSİ BEYANI (denetim K2, 2026-10-26): varlıklar grubunun
+    // altında dürüst not durur.
+    expect(
+        find.byKey(const ValueKey<String>('pd-device-note')), findsOneWidget);
   });
 }

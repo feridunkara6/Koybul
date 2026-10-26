@@ -392,6 +392,8 @@ class L10n {
     required this.evPastDoneFmt,
     required this.evPastNote,
     required this.rtOpenMapBtn,
+    required this.pdDeviceNote,
+    required this.webPreviewNote,
     required this.locateTooltip,
     required this.locDenied,
     required this.locLocated,
@@ -980,6 +982,9 @@ class L10n {
   /// Geçmiş etkinlikler bölümü (kurucu onayı 2026-10-25) + rota kartı
   /// "Haritada aç" (saha hatası düzeltmesi 2026-10-26).
   final String evPastCap, evPastChip, evPastDoneFmt, evPastNote, rtOpenMapBtn;
+
+  /// Denetim paketi (2026-10-26): cihaz-verisi beyanı + web önizleme şeridi.
+  final String pdDeviceNote, webPreviewNote;
   final String locateTooltip, locDenied, locLocated;
   final String mapViewTooltip, listViewTooltip;
   final String offlineBanner, emptyArea, tooManyHint, loadingHarbors, nmUnit;
@@ -1961,6 +1966,8 @@ const L10n _tr = L10n(
   evPastDoneFmt: '{0}/{1} katılımcı · tamamlandı',
   evPastNote: 'Bu etkinlik tamamlandı — kayıt kapalı.',
   rtOpenMapBtn: 'Haritada aç',
+  pdDeviceNote: 'Tekne, favoriler, kayıtlı rotalar ve defter şimdilik yalnız bu cihazda saklanır — telefon değişiminde otomatik taşınmaz.',
+  webPreviewNote: 'Web önizlemesi — tam deneyim iOS uygulamasında.',
   locateTooltip: 'Konumum',
   locDenied: 'Konum alınamadı. Tarayıcı/uygulama konum iznini kontrol et.',
   locLocated: 'Konumun alındı — mesafeler ve deniz yolu artık senden hesaplanıyor.',
@@ -2922,6 +2929,8 @@ const L10n _en = L10n(
   evPastDoneFmt: '{0}/{1} attended · completed',
   evPastNote: 'This event has ended — registration is closed.',
   rtOpenMapBtn: 'Open on map',
+  pdDeviceNote: 'Your boat, favorites, saved routes and deck log are stored on this device only for now — they do not transfer automatically to a new phone.',
+  webPreviewNote: 'Web preview — the full experience is in the iOS app.',
   locateTooltip: 'My location',
   locDenied: 'Couldn\'t get your location. Check the location permission.',
   locLocated: 'Location acquired — distances and sea routes now start from you.',
@@ -3883,6 +3892,8 @@ const L10n _es = L10n(
   evPastDoneFmt: '{0}/{1} asistentes · finalizado',
   evPastNote: 'Este evento ha finalizado — inscripción cerrada.',
   rtOpenMapBtn: 'Abrir en el mapa',
+  pdDeviceNote: 'Tu barco, favoritos, rutas guardadas y diario se guardan solo en este dispositivo por ahora — no se transfieren automáticamente a un teléfono nuevo.',
+  webPreviewNote: 'Vista previa web — la experiencia completa está en la app de iOS.',
   locateTooltip: 'Mi ubicación',
   locDenied: 'No se pudo obtener tu ubicación. Revisa el permiso de ubicación.',
   locLocated: 'Ubicación obtenida: las distancias y rutas parten ahora de ti.',
@@ -4844,6 +4855,8 @@ const L10n _ru = L10n(
   evPastDoneFmt: '{0}/{1} участников · завершено',
   evPastNote: 'Событие завершилось — запись закрыта.',
   rtOpenMapBtn: 'Открыть на карте',
+  pdDeviceNote: 'Лодка, избранное, сохранённые маршруты и журнал пока хранятся только на этом устройстве — на новый телефон автоматически не переносятся.',
+  webPreviewNote: 'Веб-превью — полная версия в приложении для iOS.',
   locateTooltip: 'Моё местоположение',
   locDenied: 'Не удалось определить местоположение. Проверьте разрешение.',
   locLocated: 'Местоположение получено — расстояния и маршруты теперь от вас.',
