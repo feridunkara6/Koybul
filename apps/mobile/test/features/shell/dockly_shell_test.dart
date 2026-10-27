@@ -143,7 +143,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.textContaining('Henüz kayıtlı rota yok'), findsOneWidget);
 
-    await tester.tap(find.text('Notlar'));
+    await tester.tap(find.text('Günlük')); // Notlar → Günlük (2026-10-27)
     await tester.pumpAndSettle();
     expect(find.byType(LogbookBody), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('deck-note-new')), findsOneWidget);

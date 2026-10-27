@@ -44,7 +44,15 @@ export class FcmSender implements PushSender {
               token,
               notification: { title: message.title, body: message.body },
               data: message.data,
-              apns: { payload: { aps: { sound: 'default' } } },
+              // SAHA DÜZELTMESİ (2026-10-27, "uygulama kapalıyken gelmiyor"):
+              // apns başlıkları AÇIKÇA yazılır — push-type: alert + priority: 10
+              // bildirimi "hemen göster, kilit ekranına düş" olarak işaretler;
+              // başlıksız gönderimde APNs teslimi erteleyebiliyor ve bildirim
+              // ancak uygulama açılınca görünüyordu.
+              apns: {
+                headers: { 'apns-push-type': 'alert', 'apns-priority': '10' },
+                payload: { aps: { sound: 'default' } },
+              },
             },
           }),
         },

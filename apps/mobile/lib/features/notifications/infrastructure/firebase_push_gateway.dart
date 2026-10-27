@@ -9,8 +9,16 @@ class FirebasePushGateway implements PushGateway {
   @override
   Future<bool> requestPermission() async {
     try {
+      // AÇIKÇA tam izin istenir (saha düzeltmesi 2026-10-27): provisional
+      // (sessiz teslim) İSTENMEZ — sessiz izinde bildirim kilit ekranına
+      // düşmez, bildirim merkezine sessizce girer; kaptan "gelmiyor" sanır.
       final NotificationSettings settings =
-          await FirebaseMessaging.instance.requestPermission();
+          await FirebaseMessaging.instance.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+        provisional: false,
+      );
       // Ön planda da afiş görünsün (iOS varsayılanı sessizdir).
       await FirebaseMessaging.instance
           .setForegroundNotificationPresentationOptions(

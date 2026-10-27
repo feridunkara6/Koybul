@@ -6,6 +6,7 @@ import '../../../core/l10n/l10n_strings.dart';
 import '../../admin/application/admin_controller.dart';
 import '../../auth/application/auth_controller.dart';
 import '../../auth/domain/auth_state.dart';
+import '../application/maintenance_reminder.dart';
 import '../application/push_controller.dart';
 
 /// BİLDİRİM AYARLARI (push paketi, kurucu onayı 2026-10-27).
@@ -106,8 +107,12 @@ class _NotificationSettingsScreenState
               title: Text(t.ntfMaint),
               subtitle: Text(t.ntfMaintHint),
               value: maintOn,
-              onChanged: (bool v) =>
-                  ref.read(maintReminderEnabledProvider.notifier).set(v),
+              onChanged: (bool v) async {
+                await ref.read(maintReminderEnabledProvider.notifier).set(v);
+                // Kapatınca kurulu bildirimler sökülür, açınca yeniden
+                // kurulur — anahtar sözünü ANINDA tutar.
+                await ref.read(maintenanceReminderProvider).run();
+              },
             ),
           ]),
         ],

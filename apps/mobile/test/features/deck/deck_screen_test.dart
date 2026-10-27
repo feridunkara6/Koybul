@@ -142,7 +142,7 @@ void main() {
     // Not, Notlar segmentine rota bağlamıyla işlendi.
     await tester.pump(const Duration(seconds: 6));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Notlar'));
+    await tester.tap(find.text('Günlük')); // Notlar → Günlük (2026-10-27)
     await tester.pumpAndSettle();
     expect(find.text('Rüzgâr tatlıydı.'), findsOneWidget);
   });
@@ -256,7 +256,7 @@ void main() {
     ]));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Notlar'));
+    await tester.tap(find.text('Günlük')); // Notlar → Günlük (2026-10-27)
     await tester.pumpAndSettle();
     expect(find.text('Sakin bir akşam.'), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('deck-note-new')), findsOneWidget);

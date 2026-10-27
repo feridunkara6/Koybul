@@ -56,6 +56,7 @@ class MaintenanceRecord {
     required this.taskId,
     required this.lastDoneMs,
     this.intervalDays,
+    this.ownerUid,
   });
 
   final String taskId;
@@ -64,17 +65,32 @@ class MaintenanceRecord {
   /// Kaptanın kendi aralığı (gün). null → katalogdaki öneri kullanılır.
   final int? intervalDays;
 
+  /// HESAP KAPISI (kurucu kararı 2026-10-27): bakım kaydının sahibi — tekne
+  /// ve Defter'le aynı kural: hesapla gelir, çıkışta görünmez. null = kapıdan
+  /// önce yazılmış eski kayıt (ilk hesaplı açılışta sahiplenilir).
+  final String? ownerUid;
+
   MaintenanceRecord copyWith({int? lastDoneMs, int? intervalDays}) =>
       MaintenanceRecord(
         taskId: taskId,
         lastDoneMs: lastDoneMs ?? this.lastDoneMs,
         intervalDays: intervalDays ?? this.intervalDays,
+        ownerUid: ownerUid,
+      );
+
+  /// Kaydı hesaba bağlar (eski kayıt sahiplenme — kayıtlı rota deseni).
+  MaintenanceRecord withOwner(String uid) => MaintenanceRecord(
+        taskId: taskId,
+        lastDoneMs: lastDoneMs,
+        intervalDays: intervalDays,
+        ownerUid: uid,
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'id': taskId,
         'done': lastDoneMs,
         if (intervalDays != null) 'every': intervalDays,
+        if (ownerUid != null) 'owner': ownerUid,
       };
 
   /// Bozuk kayıt → null (çökme yok; satır sessizce atlanır).
@@ -88,6 +104,7 @@ class MaintenanceRecord {
       taskId: id,
       lastDoneMs: done,
       intervalDays: (every != null && every > 0) ? every : null,
+      ownerUid: raw['owner'] as String?,
     );
   }
 }

@@ -21,8 +21,10 @@ dependencies:
   # ve ön plan sunumu. firebase_core 3.x ailesiyle uyumlu sürüm.
   firebase_messaging: ^15.2.0
   # BAKIM HATIRLATMASI: bakım verisi cihazda yaşar; hatırlatması da telefonun
-  # YEREL bildirimi (sunucuya veri çıkmaz). Zamanlama yok — açılışta kontrol.
+  # YEREL bildirimi (sunucuya veri çıkmaz). v2: bildirim telefona KURULUR —
+  # uygulama kapalıyken de çalar (timezone: zonedSchedule'ın an tipi için).
   flutter_local_notifications: ^18.0.1
+  timezone: ^0.9.4
   flutter_riverpod: ^2.5.1
   mapbox_maps_flutter: ^2.22.0
   flutter_map: ^7.0.2

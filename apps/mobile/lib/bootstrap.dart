@@ -104,6 +104,10 @@ class _DocklyAppState extends ConsumerState<DocklyApp> {
         unawaited(
             ref.read(pushRegistrarProvider).register().catchError((_) => null));
       }
+      // BAKIM HATIRLATMASI oturumu izler (hesap kapısı 2026-10-27): girişte
+      // bu hesabın kalemleri telefona kurulur, çıkışta kurulanlar SÖKÜLÜR —
+      // eski hesabın hatırlatması yeni sahipsiz cihazda çalmaz.
+      unawaited(ref.read(maintenanceReminderProvider).run());
     });
     // Saklanan oturumu arka planda geri yükle (docs/26 §8): kullanıcı sekmeyi
     // kapatıp açınca girişi sürer. Hata olursa sessizce misafir kalınır.
