@@ -516,6 +516,10 @@ void main() {
     // Aynı rota İKİ KEZ planlanamaz (çifte kayıt = şişirilmiş defter):
     // menü yeniden açılınca seçenek sakin "zaten planlandı" bilgisine döner;
     // "Rotalarım'a ekle" durmaya devam eder.
+    // CI dersi (rota paketi 1): PLANLANDI snackbar'ı alttaki menü düğmesini
+    // ÖRTÜYORDU — dokunmadan önce akıtılır (eski snackbar dersiyle aynı).
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey<String>('route-save-menu')));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey<String>('save-opt-trip')), findsNothing);
@@ -828,6 +832,12 @@ void main() {
     expect(undo.onPressed, isNull);
 
     // ✕ ile ara durak çıkarılır → Geri al CANLANIR.
+    // CI dersi (rota paketi 1): dar test ekranında ✕, şeridin görünür
+    // alanının DIŞINDA kalıyordu (B hapının altına denk gelen noktaya
+    // dokunulamaz) — önce şerit kaydırılıp düğme görünür yapılır.
+    await tester.ensureVisible(
+        find.byKey(const ValueKey<String>('rte-stop-del-0')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey<String>('rte-stop-del-0')));
     await tester.pumpAndSettle();
     expect(c.read(mapControllerProvider).routeWaypoints, hasLength(1));

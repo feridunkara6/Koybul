@@ -1821,7 +1821,11 @@ class _RouteStartButton extends ConsumerWidget {
           showDragHandle: true,
           builder: (BuildContext sheetContext) {
             final ThemeData theme = Theme.of(sheetContext);
-            return Column(
+            // KAYDIRILABİLİR (CI dersi "rota paketi 1" kırmızısı): kart dar/
+            // kısa ekranda 23 px taşıyordu — içerik sabit boy iddia etmez,
+            // sığmazsa kayar (RenderFlex overflow = testte kırmızı).
+            return SingleChildScrollView(
+              child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -1898,6 +1902,7 @@ class _RouteStartButton extends ConsumerWidget {
                   ),
                 ),
               ],
+              ),
             );
           },
         );
