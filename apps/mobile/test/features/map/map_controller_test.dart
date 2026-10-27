@@ -1278,7 +1278,10 @@ void main() {
   test('ÇİZGİ DURAĞA BAĞLANIR: bacak başları seçili başlangıca ve ara durak '
       'çapalarına eklenir', () async {
     const GeoPoint a = GeoPoint(lat: 36.7400, lon: 28.9300);
-    const GeoPoint s1 = GeoPoint(lat: 36.7000, lon: 28.9000);
+    // CI dersi (5.1 kırmızısı): sahte motor HER bacak için AYNI planı döner —
+    // iki çapanın da (a ve s1) bacak başına ≤1,2 nm olması kurgu gereğidir;
+    // ilk kurguda s1 ~3 nm uzaktaydı ve kural doğru şekilde "bağlama" dedi.
+    const GeoPoint s1 = GeoPoint(lat: 36.7480, lon: 28.9470);
     const GeoPoint s2 = GeoPoint(lat: 36.6600, lon: 28.8700);
     // Motor bacağı çapadan ~0.5 nm açıkta başlatıyor (ızgara hücre merkezi).
     // CI dersi: tüm alanlar sabit → const kurulmalı (prefer_const_constructors).
