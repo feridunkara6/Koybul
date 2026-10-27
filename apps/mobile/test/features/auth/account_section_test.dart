@@ -242,5 +242,8 @@ class FakeResetGateway implements AuthGateway {
   Future<void> signOutProvider() async {}
 
   @override
+  Future<bool> deleteProviderAccount() async => true;
+
+  @override
   String? get currentEmail => null;
 }

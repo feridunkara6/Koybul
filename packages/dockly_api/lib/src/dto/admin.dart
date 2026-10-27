@@ -139,3 +139,31 @@ class EventParticipantView {
         registeredAt: DateTime.parse(json['registeredAt'] as String),
       );
 }
+
+/// İÇERİK YÖNETİMİ satırı (kurucu talebi 2026-10-27): yönetici uygulamadaki
+/// içerikleri tür tür listeler ve yayından indirebilir (yumuşak silme).
+class AdminContentItem {
+  const AdminContentItem({
+    required this.id,
+    required this.title,
+    required this.authorName,
+    required this.status,
+    required this.createdAt,
+  });
+
+  final String id;
+  final String title;
+  final String? authorName;
+
+  /// 'approved' | 'pending' | 'rejected' | tekne için 'visible'/'hidden'.
+  final String? status;
+  final DateTime createdAt;
+
+  factory AdminContentItem.fromJson(Map<String, dynamic> json) => AdminContentItem(
+        id: json['id'] as String,
+        title: json['title'] as String,
+        authorName: json['authorName'] as String?,
+        status: json['status'] as String?,
+        createdAt: DateTime.parse(json['createdAt'] as String),
+      );
+}

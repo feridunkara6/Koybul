@@ -27,9 +27,11 @@ import '../../support/map_fakes.dart';
 /// ROTA PAYLAŞIMI mobil testleri (Hafta 3, kurucu onayı 2026-10-24).
 /// Kural (docs/15): ağ yok — ağ geçidi sahtedir.
 
-SharedRouteSummary summary({String id = 'r1', int saveCount = 23}) =>
+SharedRouteSummary summary(
+        {String id = 'r1', int saveCount = 23, String status = 'approved'}) =>
     SharedRouteSummary(
       id: id,
+      status: status,
       name: '12 Adalar klasiği',
       authorId: 'u-author',
       authorName: 'Meltem Y.',
@@ -441,5 +443,22 @@ void main() {
     expect(ms.route, isNotNull); // çizgi gerçek motor akışından geldi
     expect(ms.routeLabel, '12 Adalar klasiği'); // rota adı çipte
     expect(c.read(shellTabProvider), 0); // Keşfet'e dönüldü
+  });
+
+  // SAHA İSTEĞİ (2026-10-27, "paylaştım ama görünmüyor"): liste bakanın
+  // KENDİ bekleyen rotasını "Onay bekliyor" rozetiyle taşır.
+  testWidgets('KENDİ BEKLEYENİM: listede pending rota dürüst rozetle görünür',
+      (WidgetTester tester) async {
+    final FakeSharedRoutesGateway gw = FakeSharedRoutesGateway(
+      feedResult: <SharedRouteSummary>[
+        summary(id: 'p1', status: 'pending'),
+        summary(id: 'a1'),
+      ],
+    );
+    await tester.pumpWidget(_app(gw, const SharedRoutesScreen()));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('rt-pending-p1')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('rt-pending-a1')), findsNothing);
   });
 }

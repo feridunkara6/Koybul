@@ -52,13 +52,16 @@ export interface RouteSummary {
   saveCount: number;
   doneCount: number;
   createdAt: string;
+  /// SAHA İSTEĞİ (2026-10-27, "paylaştım ama görünmüyor"): liste artık
+  /// bakanın KENDİ bekleyen rotalarını da taşır — durum burada söylenir
+  /// ('approved' | 'pending'); arayüz bekleyene dürüst rozet basar.
+  status: RouteModerationStatus;
 }
 
 /** Detay — tam gövde + duraklar + bakanın defter durumu. */
 export interface RouteDetail extends RouteSummary {
   body: string;
   boatSuggestion: string | null;
-  status: RouteModerationStatus;
   stops: RouteStopView[];
   mine: boolean;
   savedByMe: boolean;
@@ -101,6 +104,8 @@ export const ROUTES_REPOSITORY = Symbol('ROUTES_REPOSITORY');
 export interface RoutesRepository {
   /** Onaylı rotalar; sıralama yeni/popüler; locationId verilirse o duraktan geçenler. */
   list(sort: RouteSort, locationId: string | null, limit: number): Promise<RouteRow[]>;
+  /** Bakanın KENDİ bekleyen rotaları (en yeni başta) — listeye eklenir. */
+  listOwnPending(userId: string, limit: number): Promise<RouteRow[]>;
   findRoute(routeId: string): Promise<RouteRow | null>;
   stopsFor(routeId: string): Promise<RouteStopView[]>;
   /** Verilen kimliklerden kaçı yayında katalog lokasyonu? (doğrulama) */

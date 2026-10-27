@@ -1,4 +1,4 @@
-import 'package:dockly_api/dockly_api.dart' show AdminStats;
+import 'package:dockly_api/dockly_api.dart' show AdminContentItem, AdminStats;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers.dart';
@@ -35,3 +35,12 @@ final AutoDisposeFutureProvider<AdminStats> adminStatsProvider =
   return ref.watch(adminGatewayProvider).stats();
 });
 
+
+/// İÇERİK YÖNETİMİ listesi (kurucu talebi 2026-10-27) — tür başına aile;
+/// silme sonrası ref.invalidate ile tazelenir.
+final AutoDisposeFutureProviderFamily<List<AdminContentItem>, String>
+    adminContentProvider =
+    FutureProvider.autoDispose.family<List<AdminContentItem>, String>(
+        (ref, String type) {
+  return ref.watch(adminGatewayProvider).listContent(type);
+});

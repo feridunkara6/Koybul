@@ -95,6 +95,27 @@ class FirebaseAuthGateway implements AuthGateway {
     }
   }
 
+  @override
+  Future<bool> deleteProviderAccount() async {
+    // SAHA DÜZELTMESİ (2026-10-27): sunucu kaydı silinse de Firebase hesabı
+    // yaşıyordu — aynı e-posta+şifreyle tekrar girilebiliyordu. Silme hesap
+    // açılışından hemen sonra yapıldığında Firebase ek doğrulama istemez;
+    // 'requires-recent-login' gelirse en iyi çaba: false döner, çağıran
+    // çıkışla tamamlar (sunucudaki KVKK silmesi zaten bitmiştir).
+    try {
+      final User? user = _auth.currentUser;
+      if (user == null) return true;
+      await user.delete();
+      return true;
+    } on FirebaseAuthException {
+      await signOutProvider();
+      return false;
+    } catch (_) {
+      await signOutProvider();
+      return false;
+    }
+  }
+
   static Future<String> _idTokenOf(UserCredential cred) async {
     final String? token = await cred.user?.getIdToken();
     if (token == null || token.isEmpty) {

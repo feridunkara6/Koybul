@@ -52,4 +52,12 @@ class ApiAdminGateway implements AdminGateway {
   @override
   Future<void> setDealActive(String dealId, {required bool isActive}) async =>
       _api.setDealActive(accessToken: await _token(), dealId: dealId, isActive: isActive);
+
+  @override
+  Future<List<AdminContentItem>> listContent(String type) async =>
+      _api.listContent(accessToken: await _token(), type: type);
+
+  @override
+  Future<void> deleteContent({required String type, required String id}) async =>
+      _api.deleteContent(accessToken: await _token(), type: type, id: id);
 }

@@ -72,11 +72,24 @@ const createSchema = z
 export class RoutesController {
   constructor(private readonly routes: RoutesService) {}
 
+  // SAHA İSTEĞİ (2026-10-27): kimlikli istekte bakanın KENDİ bekleyen
+  // rotaları listeye eklenir. ÖNBELLEK GÜVENLİĞİ: kişisel satır taşıyan
+  // yanıt ASLA ortak önbelleğe yazılmaz — kimlikli istek no-store alır;
+  // anonim yanıt eskisi gibi 60 sn paylaşımlı önbelleklenir.
   @Get()
-  @Header('Cache-Control', 'public, max-age=60')
-  async list(@Query() query: unknown): Promise<{ data: RouteSummary[] }> {
+  @Header('Vary', 'Authorization')
+  @UseGuards(OptionalJwtAuthGuard)
+  async list(
+    @Req() req: AuthedRequest,
+    @Query() query: unknown,
+  ): Promise<{ data: RouteSummary[] }> {
     const q = listSchema.parse(query ?? {});
-    return { data: await this.routes.list(q.sort, q.locationId ?? null, q.limit) };
+    const principal = req.principal ?? null;
+    req.res?.setHeader(
+      'Cache-Control',
+      principal === null ? 'public, max-age=60' : 'private, no-store',
+    );
+    return { data: await this.routes.list(principal, q.sort, q.locationId ?? null, q.limit) };
   }
 
   @Get(':id')

@@ -11,6 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:dockly_mobile/features/auth/application/auth_controller.dart';
+import 'package:dockly_mobile/features/auth/domain/auth_state.dart';
+
 import '../../support/auth_fakes.dart';
 import '../../support/logbook_fakes.dart';
 import '../../support/saved_routes_fakes.dart';
@@ -257,5 +260,56 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Sakin bir akşam.'), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('deck-note-new')), findsOneWidget);
+  });
+
+  // SAHA RAPORU REGRESYONU (2026-10-27, "çıkış yapınca defterde rotalar
+  // kalıyor"): Rotalarım HESAPLA gezer — çıkışta BOŞALIR, dönüşte geri gelir.
+  testWidgets('HESAP KAPISI: çıkışta Rotalarım boşalır, aynı hesapla dönünce '
+      'geri gelir', (WidgetTester tester) async {
+    final FakeLogbookStore logs = FakeLogbookStore();
+    await tester.pumpWidget(ProviderScope(
+      overrides: <Override>[
+        authControllerProvider.overrideWith(
+            () => SwitchableAuthController(const Authenticated(testUser))),
+        savedRoutesStoreProvider.overrideWithValue(FakeSavedRoutesStore()
+          ..data = <SavedRoute>[
+            const SavedRoute(
+              id: 'r1',
+              name: 'Göcek → Bedri Rahmi',
+              origin:
+                  RouteOrigin(pos: GeoPoint(lat: 36.74, lon: 28.93), name: 'Göcek'),
+              waypoints: <RouteWaypoint>[
+                RouteWaypoint(
+                    pos: GeoPoint(lat: 36.69, lon: 28.88), name: 'Bedri Rahmi'),
+              ],
+              distanceNm: 5.2,
+              savedAtMs: 1,
+            ),
+          ]),
+        logbookStoreProvider.overrideWithValue(logs),
+        tripStoreProvider.overrideWithValue(FakeTripStore()),
+      ],
+      child: const MaterialApp(home: DeckScreen()),
+    ));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Rotalarım'));
+    await tester.pumpAndSettle();
+    expect(find.text('Göcek → Bedri Rahmi'), findsOneWidget);
+
+    final ProviderContainer c = ProviderScope.containerOf(
+      tester.element(find.byType(DeckScreen)),
+      listen: false,
+    );
+    // ÇIKIŞ → liste kendiliğinden boşalır (ekran açıkken bile).
+    (c.read(authControllerProvider.notifier) as SwitchableAuthController)
+        .switchTo(const Unauthenticated());
+    await tester.pumpAndSettle();
+    expect(find.text('Göcek → Bedri Rahmi'), findsNothing);
+
+    // DÖNÜŞ → rota geri gelir (depo silinmedi).
+    (c.read(authControllerProvider.notifier) as SwitchableAuthController)
+        .switchTo(const Authenticated(testUser));
+    await tester.pumpAndSettle();
+    expect(find.text('Göcek → Bedri Rahmi'), findsOneWidget);
   });
 }

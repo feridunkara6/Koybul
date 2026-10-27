@@ -132,6 +132,10 @@ SeaRoutePlan? planSeaRoute(
   final List<int> px = res.px, py = res.py;
   // Başlangıç karadaysa çizgi SUDAN başlar (ilk hücre merkezi) — karadaki
   // eve/şehre çizgi çekilmez; kaptan denizdeyse gerçek konum kullanılır.
+  // (Katalog DURAĞINA bağlanma — "çizgi noktaya kadar gitsin" — burada
+  // yapılmaz: bu fonksiyon ham GPS'i de alır ve şehir içi konuma çizgi
+  // çekmek yasaktır. Durak bağlama, durak olduğunu BİLEN planlayıcıda:
+  // map_controller._dockLegsToStops, 2026-10-27.)
   final bool fromOnWater = m.isWater(m.colOf(from.lon), m.rowOf(from.lat));
   final List<GeoPoint> pts = <GeoPoint>[
     if (fromOnWater) from else m.centerOf(sx, sy),

@@ -2,7 +2,12 @@ import {
   ADMIN_GRANT_PRODUCT_ID,
   AdminService,
 } from '../src/modules/admin/application/admin.service';
-import { AdminRepository, AdminStats } from '../src/modules/admin/domain/admin.repository';
+import {
+  AdminContentRow,
+  AdminContentType,
+  AdminRepository,
+  AdminStats,
+} from '../src/modules/admin/domain/admin.repository';
 import { AppProblem } from '../src/common/problem/problem';
 
 /** Bellek-içi sahte depo — YÖNETİM PANELİ (kurucu talebi 2026-09-25). */
@@ -24,6 +29,18 @@ class FakeAdminRepo implements AdminRepository {
 
   async findUserByEmail(email: string) {
     return this.user && this.user.email.toLowerCase() === email.toLowerCase() ? this.user : null;
+  }
+
+  content: AdminContentRow[] = [];
+  deleted: string[] = [];
+
+  async listContent(_t: AdminContentType, _l: number): Promise<AdminContentRow[]> {
+    return this.content;
+  }
+  async deleteContent(_t: AdminContentType, id: string): Promise<boolean> {
+    const hit = this.content.some((r) => r.id === id);
+    if (hit) this.deleted.push(id);
+    return hit;
   }
 
   async setPremium(userId: string, until: Date, productId: string): Promise<void> {
@@ -75,5 +92,49 @@ describe('AdminService (yönetim paneli, kurucu talebi 2026-09-25)', () => {
 
   it('AppProblem sözleşmesi: not-found problemType kısa kodunu taşır', () => {
     expect(new AppProblem('not-found').problemType).toBe('not-found');
+  });
+
+  // İÇERİK YÖNETİMİ (kurucu talebi 2026-10-27).
+  it('listContent: satırları ISO tarihle döner', async () => {
+    const repo = new FakeAdminRepo();
+    repo.content = [
+      {
+        id: 'r1',
+        title: 'Göcek turu',
+        authorName: 'Meltem Y.',
+        status: 'approved',
+        createdAt: new Date('2026-10-20T10:00:00Z'),
+      },
+    ];
+    const svc = new AdminService(repo);
+    const rows = await svc.listContent('routes', 50);
+    expect(rows).toEqual([
+      {
+        id: 'r1',
+        title: 'Göcek turu',
+        authorName: 'Meltem Y.',
+        status: 'approved',
+        createdAt: '2026-10-20T10:00:00.000Z',
+      },
+    ]);
+  });
+
+  it('deleteContent: var olanı siler; olmayana not-found', async () => {
+    const repo = new FakeAdminRepo();
+    repo.content = [
+      {
+        id: 'r1',
+        title: 'x',
+        authorName: null,
+        status: 'approved',
+        createdAt: new Date(),
+      },
+    ];
+    const svc = new AdminService(repo);
+    await svc.deleteContent('routes', 'r1');
+    expect(repo.deleted).toEqual(['r1']);
+    await expect(svc.deleteContent('routes', 'yok')).rejects.toMatchObject({
+      problemType: 'not-found',
+    });
   });
 });

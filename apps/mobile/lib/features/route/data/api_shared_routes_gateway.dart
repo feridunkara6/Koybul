@@ -20,8 +20,10 @@ class ApiSharedRoutesGateway implements SharedRoutesGateway {
   }
 
   @override
-  Future<List<SharedRouteSummary>> feed({required String sort, String? locationId}) =>
-      _api.list(sort: sort, locationId: locationId);
+  Future<List<SharedRouteSummary>> feed({required String sort, String? locationId}) async =>
+      // Kimlik varsa gönderilir: liste bakanın KENDİ bekleyen rotalarını da
+      // getirir ("paylaştım ama görünmüyor" düzeltmesi, 2026-10-27).
+      _api.list(sort: sort, locationId: locationId, accessToken: await _tokenProvider());
 
   @override
   Future<SharedRouteDetail> detail(String routeId) async =>

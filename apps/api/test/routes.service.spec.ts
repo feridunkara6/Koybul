@@ -57,6 +57,9 @@ class FakeRoutesRepo implements RoutesRepository {
   async list(_s: RouteSort, locationId: string | null, _l: number): Promise<RouteRow[]> {
     return this.rows.filter((r) => r.status === 'approved' && (locationId === null || true));
   }
+  async listOwnPending(userId: string, _l: number): Promise<RouteRow[]> {
+    return this.rows.filter((r) => r.status === 'pending' && r.userId === userId);
+  }
   async findRoute(routeId: string): Promise<RouteRow | null> {
     return this.rows.find((r) => r.id === routeId) ?? null;
   }
@@ -229,5 +232,26 @@ describe('RoutesService (Rota Paylaşımı V1 — Hafta 3)', () => {
     });
     await svc.remove(member('author-1'), 'r1');
     expect(repo.rows).toHaveLength(0);
+  });
+
+  // SAHA İSTEĞİ (2026-10-27, "paylaştım ama görünmüyor"): kimlikli liste
+  // bakanın KENDİ bekleyenlerini BAŞA koyar; anonim liste yalnız onaylı görür.
+  it('list: kimlikli istekte kendi bekleyen rotalar başa gelir; anonimde yok', async () => {
+    const { svc, repo } = makeSvc({ enforce: false });
+    repo.rows = [
+      row({ id: 'a1', status: 'approved', name: 'Onaylı tur' }),
+      row({ id: 'p1', status: 'pending', userId: 'u1', name: 'Benim bekleyen' }),
+      row({ id: 'p2', status: 'pending', userId: 'u2', name: 'Başkasının bekleyeni' }),
+    ];
+
+    const anon = await svc.list(null, 'new', null, 20);
+    expect(anon.map((r) => r.id)).toEqual(['a1']);
+    expect(anon[0].status).toBe('approved');
+
+    const mine = await svc.list(member('u1'), 'new', null, 20);
+    expect(mine.map((r) => r.id)).toEqual(['p1', 'a1']); // bekleyen BAŞTA
+    expect(mine[0].status).toBe('pending'); // rozet için durum dolu
+    // Başkasının bekleyeni ASLA sızmaz.
+    expect(mine.some((r) => r.id === 'p2')).toBe(false);
   });
 });

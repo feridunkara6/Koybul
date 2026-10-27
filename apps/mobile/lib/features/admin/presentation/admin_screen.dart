@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../../community/presentation/moderation_screen.dart';
 import '../application/admin_controller.dart';
+import 'admin_content_screen.dart';
 import 'admin_deals_screen.dart';
 import 'admin_events_screen.dart';
 
@@ -96,6 +97,15 @@ class AdminScreen extends ConsumerWidget {
               icon: DocklyIcons.bookmark,
               label: t.admDealsRow,
               builder: (_) => const AdminDealsScreen(),
+            ),
+            const SizedBox(height: 10),
+            // İÇERİK YÖNETİMİ (kurucu talebi 2026-10-27): yayındaki/bekleyen
+            // içerikleri tür tür gör + yayından indir (yumuşak silme).
+            _AdminLinkRow(
+              keyValue: 'admin-content',
+              icon: DocklyIcons.deleteOutline,
+              label: t.admCtTitle,
+              builder: (_) => const AdminContentScreen(),
             ),
             const SizedBox(height: 14),
             // DÜRÜSTLÜK NOTU: indirme sayısı bizim sunucuda yoktur.

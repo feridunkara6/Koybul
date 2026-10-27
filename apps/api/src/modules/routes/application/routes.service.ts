@@ -17,6 +17,9 @@ import {
   RoutesRepository,
 } from '../domain/route.types';
 
+/** Listeye eklenen "kendi bekleyenlerim" tavanı — liste şişmez. */
+const OWN_PENDING_LIMIT = 5;
+
 /**
  * ROTA PAYLAŞIMI iş kuralları (Sosyalleşme Hafta 3, kurucu onayı 2026-10-24).
  *
@@ -50,13 +53,29 @@ export class RoutesService {
       saveCount: row.saveCount,
       doneCount: row.doneCount,
       createdAt: row.createdAt.toISOString(),
+      status: row.status,
     };
   }
 
-  /** Keşif listesi — herkese açık; yalnız onaylı rotalar. */
-  async list(sort: RouteSort, locationId: string | null, limit: number): Promise<RouteSummary[]> {
+  /**
+   * Keşif listesi — herkese açık; yalnız onaylı rotalar. Kimlik GELDİYSE
+   * bakanın KENDİ bekleyen rotaları listenin BAŞINA eklenir (saha isteği
+   * 2026-10-27: "paylaştım ama görünmüyor") — başkasının bekleyeni asla
+   * sızmaz, rozet için durum alanı dolu döner.
+   */
+  async list(
+    principal: Principal | null,
+    sort: RouteSort,
+    locationId: string | null,
+    limit: number,
+  ): Promise<RouteSummary[]> {
     const rows = await this.repo.list(sort, locationId, limit);
-    return rows.map((r) => this.toSummary(r));
+    const approved = rows.map((r) => this.toSummary(r));
+    // Koy süzgeçli liste ("buradan geçen rotalar") bekleyen TAŞIMAZ — bekleyen
+    // rota durak bilgisiyle eşlenmeden her koyda görünürdü (yanlış temsil).
+    if (principal === null || locationId !== null) return approved;
+    const own = await this.repo.listOwnPending(principal.userId, OWN_PENDING_LIMIT);
+    return [...own.map((r) => this.toSummary(r)), ...approved];
   }
 
   /** Detay — onaylı herkese; bekleyen yalnız sahibine (varlık sızdırılmaz). */

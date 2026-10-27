@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { AppProblem } from '../../../common/problem/problem';
 import {
   ADMIN_REPOSITORY,
+  AdminContentType,
   AdminRepository,
   AdminStats,
   PremiumGrantResult,
@@ -43,5 +44,34 @@ export class AdminService {
     until.setUTCMonth(until.getUTCMonth() + months);
     await this.repo.setPremium(user.id, until, ADMIN_GRANT_PRODUCT_ID);
     return { email: user.email, premiumUntil: until.toISOString() };
+  }
+
+  /** İÇERİK YÖNETİMİ (2026-10-27): tür başına en yeni içerikler. */
+  async listContent(
+    type: AdminContentType,
+    limit: number,
+  ): Promise<
+    {
+      id: string;
+      title: string;
+      authorName: string | null;
+      status: string | null;
+      createdAt: string;
+    }[]
+  > {
+    const rows = await this.repo.listContent(type, limit);
+    return rows.map((r) => ({
+      id: r.id,
+      title: r.title,
+      authorName: r.authorName,
+      status: r.status,
+      createdAt: r.createdAt.toISOString(),
+    }));
+  }
+
+  /** Yayından indirme (yumuşak silme). Bulunamazsa 404 — panel dürüst söyler. */
+  async deleteContent(type: AdminContentType, id: string): Promise<void> {
+    const ok = await this.repo.deleteContent(type, id);
+    if (!ok) throw new AppProblem('not-found');
   }
 }

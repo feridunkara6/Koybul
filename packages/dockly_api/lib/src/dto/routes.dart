@@ -52,6 +52,7 @@ class SharedRouteSummary {
     required this.saveCount,
     required this.doneCount,
     required this.createdAt,
+    this.status = 'approved',
   });
 
   final String id;
@@ -68,6 +69,11 @@ class SharedRouteSummary {
   final int doneCount;
   final DateTime createdAt;
 
+  /// 'approved' | 'pending' — liste artık bakanın KENDİ bekleyen rotalarını
+  /// da taşır (saha isteği 2026-10-27); eski sunucu alanı göndermezse onaylı
+  /// varsayılır (yanlış "bekliyor" rozeti basılmaz).
+  final String status;
+
   factory SharedRouteSummary.fromJson(Map<String, dynamic> json) => SharedRouteSummary(
         id: json['id'] as String,
         name: json['name'] as String,
@@ -82,6 +88,7 @@ class SharedRouteSummary {
         saveCount: json['saveCount'] as int,
         doneCount: json['doneCount'] as int,
         createdAt: DateTime.parse(json['createdAt'] as String),
+        status: json['status'] as String? ?? 'approved',
       );
 }
 

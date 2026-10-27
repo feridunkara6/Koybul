@@ -148,6 +148,24 @@ class _RouteCard extends StatelessWidget {
                           style: theme.textTheme.titleSmall
                               ?.copyWith(fontWeight: FontWeight.w800)),
                     ),
+                    // KENDİ BEKLEYENİM (saha isteği 2026-10-27, "paylaştım
+                    // ama görünmüyor"): liste artık bakanın onay bekleyen
+                    // rotasını da taşır — dürüst rozetle.
+                    if (r.status == 'pending')
+                      Container(
+                        key: ValueKey<String>('rt-pending-${r.id}'),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF4D6),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(t.rtPendingChip,
+                            style: const TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w800,
+                                color: Color(0xFF8A6A12))),
+                      ),
                   ],
                 ),
                 const SizedBox(height: 4),

@@ -1,5 +1,11 @@
 import 'package:dockly_api/dockly_api.dart'
-    show AdminDealInput, AdminEventInput, AdminPremiumGrant, AdminStats, EventParticipantView;
+    show
+        AdminContentItem,
+        AdminDealInput,
+        AdminEventInput,
+        AdminPremiumGrant,
+        AdminStats,
+        EventParticipantView;
 
 /// YÖNETİM PANELİ ağ geçidi (kurucu talebi 2026-09-25) — testte sahteyle
 /// değiştirilir; gerçek uygulama `/v1/admin/*` uçlarına gider.
@@ -23,4 +29,12 @@ abstract interface class AdminGateway {
   Future<String> createDeal(AdminDealInput input);
 
   Future<void> setDealActive(String dealId, {required bool isActive});
+
+  // --- İçerik yönetimi (kurucu talebi 2026-10-27) ---
+
+  /// Tür: routes|questions|answers|notes|reviews|boats.
+  Future<List<AdminContentItem>> listContent(String type);
+
+  /// Yayından indirme (yumuşak silme) — veri sunucuda denetim için durur.
+  Future<void> deleteContent({required String type, required String id});
 }

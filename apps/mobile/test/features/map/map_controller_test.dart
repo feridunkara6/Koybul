@@ -1271,4 +1271,43 @@ void main() {
     expect(_state(container).routeWaypoints, hasLength(2));
     expect(_state(container).multiStopBlockSeq, 1); // sinyal artmadı
   });
+
+  // SAHA DÜZELTMESİ (2026-10-27, "çizgi noktalara kadar gitmiyor"): bacak
+  // başları KATALOG çapalarına (başlangıç + ara duraklar) ≤1,2 nm'den
+  // bağlanır — ızgara kaymasından doğan görünür boşluk kapanır.
+  test('ÇİZGİ DURAĞA BAĞLANIR: bacak başları seçili başlangıca ve ara durak '
+      'çapalarına eklenir', () async {
+    const GeoPoint a = GeoPoint(lat: 36.7400, lon: 28.9300);
+    const GeoPoint s1 = GeoPoint(lat: 36.7000, lon: 28.9000);
+    const GeoPoint s2 = GeoPoint(lat: 36.6600, lon: 28.8700);
+    // Motor bacağı çapadan ~0.5 nm açıkta başlatıyor (ızgara hücre merkezi).
+    final SeaRoutePlan leg = SeaRoutePlan(
+      points: const <GeoPoint>[GeoPoint(lat: 36.7450, lon: 28.9400), s1],
+      distanceNm: 3,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final FakeMapGateway gw = FakeMapGateway(result: pinResult);
+    final ProviderContainer container =
+        _containerWith(gw, routeEngine: FakeSeaRouteEngine(leg));
+    await _ctrl(container).loadViewport(pinViewport);
+    await _ctrl(container).openSavedRoute(
+      const RouteOrigin(pos: a, name: 'Göcek'),
+      const <RouteWaypoint>[
+        RouteWaypoint(pos: s1, id: 'x1', name: 'S1'),
+        RouteWaypoint(pos: s2, id: 'x2', name: 'S2'),
+      ],
+      name: 'Bağlama testi',
+    );
+    final List<SeaRoutePlan> legs = _state(container).routeLegs;
+    expect(legs, hasLength(2));
+    // 1. bacak: seçili başlangıç çapası başa eklendi.
+    expect(legs[0].points.first.lat, a.lat);
+    expect(legs[0].points.first.lon, a.lon);
+    // 2. bacak: ara durağın çapası başa eklendi.
+    expect(legs[1].points.first.lat, s1.lat);
+    expect(legs[1].points.first.lon, s1.lon);
+    // Mesafe dürüstçe arttı (boşluk kadar) — azalmadı.
+    expect(legs[0].distanceNm, greaterThan(3));
+  });
 }

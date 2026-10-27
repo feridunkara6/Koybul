@@ -1,10 +1,34 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { z } from 'zod';
+import { AppProblem } from '../../../common/problem/problem';
+import { UuidParam } from '../../../common/validation/uuid';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { MinRole, RolesGuard } from '../../../common/guards/roles.guard';
-import { AdminStats, PremiumGrantResult } from '../domain/admin.repository';
+import {
+  ADMIN_CONTENT_TYPES,
+  AdminContentType,
+  AdminStats,
+  PremiumGrantResult,
+} from '../domain/admin.repository';
 import { AdminService } from '../application/admin.service';
+
+const contentListSchema = z
+  .object({
+    type: z.enum(['routes', 'questions', 'answers', 'notes', 'reviews', 'boats']),
+    limit: z.coerce.number().int().min(1).max(100).default(50),
+  })
+  .strict();
 
 const grantSchema = z
   .object({
@@ -34,5 +58,32 @@ export class AdminController {
   grant(@Body() body: unknown): Promise<PremiumGrantResult> {
     const b = grantSchema.parse(body ?? {});
     return this.admin.grantPremium(b.email, b.months);
+  }
+
+  /** İÇERİK YÖNETİMİ (kurucu talebi 2026-10-27): tür başına en yeni içerik. */
+  @Get('content')
+  async listContent(@Query() query: unknown): Promise<{
+    data: {
+      id: string;
+      title: string;
+      authorName: string | null;
+      status: string | null;
+      createdAt: string;
+    }[];
+  }> {
+    const q = contentListSchema.parse(query ?? {});
+    return { data: await this.admin.listContent(q.type, q.limit) };
+  }
+
+  /** Yayından indirme — yumuşak silme; veri denetim için durur. */
+  @Delete('content/:type/:id')
+  @HttpCode(204)
+  async deleteContent(@Param('type') type: string, @Param('id') id: string): Promise<void> {
+    if (!(ADMIN_CONTENT_TYPES as readonly string[]).includes(type)) {
+      throw new AppProblem('not-found');
+    }
+    const parsed = UuidParam.safeParse(id);
+    if (!parsed.success) throw new AppProblem('not-found');
+    await this.admin.deleteContent(type as AdminContentType, parsed.data);
   }
 }

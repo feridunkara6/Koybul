@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:dockly_api/dockly_api.dart'
@@ -105,7 +106,57 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
     if (f != null && f.seq != oldWidget.data.focus?.seq) {
       unawaited(_flyToFocus(f));
     }
+    // ROTAYA UÇUŞ (saha isteği 2026-10-27, "haritada aç deyince harita o
+    // bölgeye kaysın"): web yüzeyi yeni rotada kamerayı rotaya sığdırıyordu,
+    // Mapbox yüzeyi SIĞDIRMIYORDU — kaptan rotayı aramak zorunda kalıyordu.
+    // routeSeq yalnız YENİ rotada artar (düzenlemeler kamerayı oynatmaz).
+    if (widget.data.routeSeq != oldWidget.data.routeSeq) {
+      unawaited(_flyToRoute());
+    }
     unawaited(_render());
+  }
+
+  /// Rotanın tüm bacak noktalarını kapsayan kutuya uçar. Yakınlık, kutunun
+  /// enine/boyuna göre hesaplanır (paket sürümüne bağımlı sınır-API'si yerine
+  /// sade logaritmik ölçek — web yüzeyindeki fitCamera ile aynı his).
+  Future<void> _flyToRoute() async {
+    final MapboxMap? map = _map;
+    if (map == null || _disposed) return;
+    final List<List<GeoPoint>> legs = widget.data.routeLegPoints ??
+        <List<GeoPoint>>[
+          if (widget.data.routePoints != null) widget.data.routePoints!,
+        ];
+    double? minLat, maxLat, minLon, maxLon;
+    for (final List<GeoPoint> leg in legs) {
+      for (final GeoPoint p in leg) {
+        minLat = (minLat == null || p.lat < minLat) ? p.lat : minLat;
+        maxLat = (maxLat == null || p.lat > maxLat) ? p.lat : maxLat;
+        minLon = (minLon == null || p.lon < minLon) ? p.lon : minLon;
+        maxLon = (maxLon == null || p.lon > maxLon) ? p.lon : maxLon;
+      }
+    }
+    if (minLat == null || maxLat == null || minLon == null || maxLon == null) {
+      return; // rota temizlendi — kamera olduğu yerde kalır
+    }
+    final GeoPoint center = GeoPoint(
+      lat: (minLat + maxLat) / 2,
+      lon: (minLon + maxLon) / 2,
+    );
+    // Kenar payıyla genişletilmiş açıklık (derece); enlem açıklığı ekran
+    // oranı için ~1.4 ile ağırlıklanır. Tek-nokta/çok kısa rota 11'e oturur.
+    final double span =
+        1.35 * math.max(maxLon - minLon, (maxLat - minLat) * 1.4);
+    double webZoom = span <= 0.005
+        ? 11
+        : (math.log(360.0 / span) / math.ln2).clamp(7.0, 13.0).toDouble();
+    if (webZoom > 13) webZoom = 13;
+    await map.flyTo(
+      CameraOptions(
+        center: Point(coordinates: Position(center.lon, center.lat)),
+        zoom: webZoom - _kZoomOffset,
+      ),
+      MapAnimationOptions(duration: 900),
+    );
   }
 
   Future<void> _flyToFocus(MapFocusRequest f) async {

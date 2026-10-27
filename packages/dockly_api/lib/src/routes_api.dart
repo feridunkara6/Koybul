@@ -15,11 +15,13 @@ class RoutesApi {
       ? null
       : Options(headers: <String, dynamic>{'Authorization': 'Bearer $token'});
 
-  /// Keşif listesi — yalnız onaylı rotalar.
+  /// Keşif listesi — onaylı rotalar + (kimlik gönderilirse) bakanın KENDİ
+  /// bekleyen rotaları başta, 'pending' durumuyla (saha isteği 2026-10-27).
   Future<List<SharedRouteSummary>> list({
     String sort = 'new',
     String? locationId,
     int limit = 20,
+    String? accessToken,
   }) async {
     try {
       final res = await _dio.get<Map<String, dynamic>>(
@@ -29,6 +31,7 @@ class RoutesApi {
           if (locationId != null) 'locationId': locationId,
           'limit': limit,
         },
+        options: _maybeAuth(accessToken),
       );
       return (res.data!['data'] as List<dynamic>)
           .map((dynamic e) => SharedRouteSummary.fromJson(e as Map<String, dynamic>))

@@ -129,4 +129,40 @@ class AdminApi {
       throw mapDioError(error);
     }
   }
+
+  /// İÇERİK YÖNETİMİ (2026-10-27): tür başına en yeni içerikler.
+  Future<List<AdminContentItem>> listContent({
+    required String accessToken,
+    required String type,
+    int limit = 50,
+  }) async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>(
+        '/v1/admin/content',
+        queryParameters: <String, dynamic>{'type': type, 'limit': limit},
+        options: _auth(accessToken),
+      );
+      return (res.data!['data'] as List<dynamic>)
+          .map((dynamic e) => AdminContentItem.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  /// Yayından indirme (yumuşak silme) — veri denetim için sunucuda durur.
+  Future<void> deleteContent({
+    required String accessToken,
+    required String type,
+    required String id,
+  }) async {
+    try {
+      await _dio.delete<void>(
+        '/v1/admin/content/$type/$id',
+        options: _auth(accessToken),
+      );
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
 }

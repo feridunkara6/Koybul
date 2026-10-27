@@ -12,6 +12,7 @@ import '../../route/application/route_quota_controller.dart';
 import '../../route/application/route_wind_advisor.dart';
 import '../../route/application/sea_route_engine.dart';
 import '../../route/domain/route_wind.dart';
+import '../../route/domain/sea_route.dart' show haversineNm;
 import '../../route/domain/sea_router.dart';
 import '../../route/domain/sea_trip.dart';
 import '../data/api_map_locations_gateway.dart';
@@ -653,6 +654,42 @@ class MapController extends Notifier<MapState> {
   /// Ortak planlayıcı: başlangıçtan sıralı ara noktalara ÇOK BACAKLI yolculuk.
   /// [editing] true iken başarısızlık ESKİ ROTAYI KORUR ve yalnız düzenleme
   /// uyarısı sinyali verir; false iken rota yoktur, "hesaplanamadı" gösterilir.
+  /// Bacak başlangıçlarını bilinen çapalara (durak/katalog başlangıcı)
+  /// bağlar; ayrıntı yukarıdaki çağrı yorumunda. Boşluk yoksa dokunmaz.
+  static SeaTrip _dockLegsToStops(
+    SeaTrip trip,
+    RouteOrigin origin,
+    List<RouteWaypoint> wps,
+  ) {
+    if (trip.legs.length != wps.length) return trip; // beklenmedik — dokunma
+    bool changed = false;
+    final List<SeaRoutePlan> legs = <SeaRoutePlan>[];
+    for (int i = 0; i < trip.legs.length; i++) {
+      final SeaRoutePlan leg = trip.legs[i];
+      final GeoPoint? anchor =
+          i == 0 ? (origin.isDevice ? null : origin.pos) : wps[i - 1].pos;
+      if (anchor == null || leg.points.isEmpty) {
+        legs.add(leg);
+        continue;
+      }
+      final GeoPoint first = leg.points.first;
+      final double gap = haversineNm(anchor, first);
+      if (gap <= 0.005 || gap > 1.2) {
+        legs.add(leg); // zaten bağlı ya da işaret denizden uzak (kara yasağı)
+        continue;
+      }
+      legs.add(SeaRoutePlan(
+        points: <GeoPoint>[anchor, ...leg.points],
+        distanceNm: leg.distanceNm + gap,
+        reachedGoal: leg.reachedGoal,
+        viaSea: leg.viaSea,
+      ));
+      changed = true;
+    }
+    if (!changed) return trip;
+    return SeaTrip(legs: legs, combined: combineTripLegs(legs));
+  }
+
   Future<void> _planTrip(
     RouteOrigin origin,
     List<RouteWaypoint> wps, {
@@ -680,6 +717,12 @@ class MapController extends Notifier<MapState> {
       trip = null;
     }
     if (req != _routeReq) return;
+    // ÇİZGİ DURAĞA BAĞLANIR (saha düzeltmesi 2026-10-27, "çizgi noktalara
+    // kadar gitmiyor"): kıyı işaretleri ızgara çözünürlüğünde kara hücresine
+    // düşebilir ve her bacak başında görünür boşluk kalır. Yalnız KATALOG
+    // çapaları (duraklar + cihaz-olmayan başlangıç) ≤1,2 nm'den bağlanır —
+    // ham GPS'e (karadaki ev/şehir) çizgi ÇEKİLMEZ (kaptan kuralı korunur).
+    if (trip != null) trip = _dockLegsToStops(trip, origin, wps);
     // KARA YASAĞI (kaptan kuralı 2026-08): motor rota bulamazsa DÜZ ÇİZGİ
     // ÇİZİLMEZ. Düzenlemede eski rota korunur; yeni rotada dürüst uyarı.
     if (trip == null) {

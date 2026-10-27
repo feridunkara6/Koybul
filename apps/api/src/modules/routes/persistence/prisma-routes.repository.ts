@@ -57,6 +57,19 @@ export class PrismaRoutesRepository implements RoutesRepository {
     `);
   }
 
+  async listOwnPending(userId: string, limit: number): Promise<RouteRow[]> {
+    // SAHA İSTEĞİ (2026-10-27): paylaşan, kendi bekleyen rotasını listede
+    // "Onay bekliyor" rozetiyle görür — "paylaştım ama kayboldu" hissi biter.
+    return this.prisma.$queryRaw<RouteRow[]>(Prisma.sql`
+      SELECT ${ROUTE_COLS}
+      FROM routes r ${AUTHOR_JOIN}
+      WHERE r.user_id = ${userId}::uuid
+        AND r.status = 'pending'::moderation_status AND r.deleted_at IS NULL
+      ORDER BY r.created_at DESC
+      LIMIT ${limit}
+    `);
+  }
+
   async findRoute(routeId: string): Promise<RouteRow | null> {
     const rows = await this.prisma.$queryRaw<RouteRow[]>(Prisma.sql`
       SELECT ${ROUTE_COLS}

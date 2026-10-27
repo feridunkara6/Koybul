@@ -129,7 +129,11 @@ class AuthRepositoryImpl implements AuthRepository {
     await _store.clear();
     _accessToken = null;
     _accessExpiresAt = null;
-    await _gateway.signOutProvider();
+    // SAĞLAYICI HESABI DA SİLİNİR (kurucu kararı 2026-10-27): e-posta+şifre
+    // bir daha giriş YAPAMAZ. Başarısızsa (nadir: eski oturum) en iyi çaba —
+    // sunucu verisi zaten silindi, sağlayıcı çıkışı deleteProviderAccount
+    // içinde yapılır.
+    await _gateway.deleteProviderAccount();
   }
 
   @override

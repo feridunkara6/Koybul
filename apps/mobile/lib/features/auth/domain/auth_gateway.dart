@@ -25,6 +25,14 @@ abstract interface class AuthGateway {
   /// Sağlayıcı tarafındaki oturumu kapatır (bizim sunucu oturumundan ayrı).
   Future<void> signOutProvider();
 
+  /// HESABI SAĞLAYICIDA DA SİL (kurucu kararı 2026-10-27, "silindikten sonra
+  /// aynı şifreyle giriliyor"): sunucu kaydı silindikten sonra Firebase
+  /// kullanıcısı da silinir — aynı e-posta+şifre bir daha GİRİŞ YAPAMAZ
+  /// (yeniden kayıt gerekir). Başarıda true; Firebase "yakın zamanda giriş
+  /// gerek" derse ya da silemezse false döner (en iyi çaba — çağıran yine
+  /// çıkış yapar; ana KVKK silmesi sunucuda zaten tamamlanmıştır).
+  Future<bool> deleteProviderAccount();
+
   /// Görüntülenecek e-posta (oturum açık Firebase kullanıcısından); yoksa null.
   String? get currentEmail;
 }
@@ -54,6 +62,9 @@ class StubAuthGateway implements AuthGateway {
 
   @override
   Future<void> signOutProvider() async {}
+
+  @override
+  Future<bool> deleteProviderAccount() async => true; // stub: silinecek hesap yok
 
   @override
   String? get currentEmail => null;
