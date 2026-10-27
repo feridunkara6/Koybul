@@ -83,7 +83,13 @@ export class PremiumSubscriptionService {
       ]);
     }
 
-    const owner = await this.repo.findUserIdByOriginalTransactionId(originalTransactionId);
+    // SAHA HATASI (2026-10-27, "ikinci hesapta ödeme başarısız" + 500):
+    // sahiplik denetimi İSTEMCİNİN gönderdiği kimlikle yapılıyordu; oysa
+    // kaydedilen kimlik Apple yanıtındaki KANONİK originalTransactionId'dir.
+    // Yenileme/yeniden abonelikte istemci farklı bir işlem kimliği gönderir
+    // (ikisi aynı değildir) → denetim ıskalıyor, yazma tekil kısıta çakılıp
+    // 500 veriyordu. Kural: denetim de KANONİK kimlikle yapılır.
+    const owner = await this.repo.findUserIdByOriginalTransactionId(state.originalTransactionId);
     if (owner !== null && owner !== principal.userId) {
       throw new AppProblem(
         'conflict-state',
@@ -91,7 +97,19 @@ export class PremiumSubscriptionService {
       );
     }
 
-    await this.saveState(principal.userId, state);
+    try {
+      await this.saveState(principal.userId, state);
+    } catch (error) {
+      // Emniyet kemeri (yarış ya da öngörülemeyen yol): tekil kısıt ihlali
+      // kullanıcıya 500 değil, yukarıdakiyle AYNI dürüst 409 olarak döner.
+      if ((error as { code?: string }).code === 'P2002') {
+        throw new AppProblem(
+          'conflict-state',
+          'Bu abonelik başka bir Koybul hesabına bağlı. Aboneliğin sahibi o hesapla giriş yapıp "Satın alımları geri yükle" demeli.',
+        );
+      }
+      throw error;
+    }
     return {
       active: state.entitled,
       until: state.expiresAt?.toISOString() ?? null,

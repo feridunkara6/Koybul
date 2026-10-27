@@ -174,6 +174,47 @@ describe('PremiumSubscriptionService (P2)', () => {
     await expect(svc.link(member('u1'), 't1')).resolves.toMatchObject({ active: true });
   });
 
+  // SAHA HATASI REGRESYONU (2026-10-27): istemci YENİLEME işlem kimliği
+  // gönderir (t1-yenileme) ama Apple kanonik kimliği t1 döndürür. Denetim
+  // istemci kimliğiyle yapılınca ıskalıyor ve tekil kısıt 500'üne düşüyordu —
+  // artık kanonik kimlikle denetlenir ve dürüst 409 döner.
+  it(
+    'link: istemci farklı işlem kimliği gönderse de sahiplik KANONİK ' +
+      'kimlikle denetlenir (500 değil 409)',
+    async () => {
+      const repo = new FakeRepo();
+      // 't1-yenileme' sorgusuna Apple, kanonik kimliği t1 olan durumu döner.
+      const svc = new PremiumSubscriptionService(
+        repo,
+        gateway({ 't1-yenileme': activeState('t1'), t1: activeState('t1') }),
+      );
+      await svc.link(member('u1'), 't1');
+
+      await expect(svc.link(member('u2'), 't1-yenileme')).rejects.toMatchObject({
+        problemType: 'conflict-state',
+      });
+      // Sahibi aynı yoldan bağlanabilir (geri yükleme serbest).
+      await expect(svc.link(member('u1'), 't1-yenileme')).resolves.toMatchObject({
+        active: true,
+      });
+    },
+  );
+
+  // Emniyet kemeri: depo tekil kısıt ihlali fırlatırsa (yarış) kullanıcıya
+  // 500 değil aynı dürüst 409 gider.
+  it('link: depodan P2002 gelirse 409 conflict-state olarak sarılır', async () => {
+    const repo = new FakeRepo();
+    repo.saveSubscription = () => {
+      const e = new Error('Unique constraint failed') as Error & { code: string };
+      e.code = 'P2002';
+      return Promise.reject(e);
+    };
+    const svc = new PremiumSubscriptionService(repo, gateway({ t1: activeState('t1') }));
+    await expect(svc.link(member('u2'), 't1')).rejects.toMatchObject({
+      problemType: 'conflict-state',
+    });
+  });
+
   it('link: bitmiş abonelik bağlanır ama premium VERMEZ (dürüst geri yükleme)', async () => {
     const expired: AppleSubscriptionState = {
       originalTransactionId: 't9',
