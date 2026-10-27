@@ -15,7 +15,7 @@ import '../../support/auth_fakes.dart';
 /// misafire dürüst not, izinsiz cihaza yol tarifi, hesapta anahtarlar;
 /// moderasyon anahtarı yalnız admin hesaba çizilir.
 class FakePushGateway implements PushGateway {
-  FakePushGateway({this.permission = true, this.fcmToken = 'tok-test-1234567890'});
+  FakePushGateway({this.permission = true, this.fcmToken = 'testtesttesttesttest'});
 
   bool permission;
   String? fcmToken;
@@ -129,7 +129,7 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
-    expect(api.registeredToken, 'tok-test-1234567890');
+    expect(api.registeredToken, 'testtesttesttesttest');
     expect(api.registeredLocale, isNotNull);
     expect(find.byKey(const ValueKey<String>('ntf-community')), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('ntf-events')), findsOneWidget);

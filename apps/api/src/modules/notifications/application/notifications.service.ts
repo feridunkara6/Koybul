@@ -4,7 +4,6 @@ import {
   DeviceRegistration,
   DeviceRow,
   NOTIFICATIONS_REPOSITORY,
-  NotificationCategory,
   NotificationsRepository,
   PUSH_SENDER,
   PushMessage,

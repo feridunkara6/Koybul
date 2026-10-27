@@ -1,0 +1,8 @@
+# GEÇMİŞ COMMIT SAHTE ALARMI (CI dersi 2026-10-27, "versyion 6" kırmızısı):
+# bildirim ayarları TESTİNDEKİ sahte cihaz tokenı ('tok-test-1234567890')
+# gitleaks'in generic-api-key kuralına takıldı. Gerçek bir secret DEĞİLDİ —
+# testin uydurma değeriydi; sonraki commit'te düşük-entropili bir değerle
+# değiştirildi. Bu satırlar yalnız o ESKİ commit'teki iki bulguyu susturur;
+# kural ve tarama aynen açık kalır (yeni gerçek sızıntı yakalanmaya devam eder).
+4ceee19eb70c1cd5aa7e6df1b1d2cdd1cdaee615:apps/mobile/test/features/notifications/notification_settings_screen_test.dart:generic-api-key:132
+4ceee19eb70c1cd5aa7e6df1b1d2cdd1cdaee615:apps/mobile/test/features/notifications/notification_settings_screen_test.dart:generic-api-key:18
