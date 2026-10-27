@@ -1,5 +1,6 @@
 import { Body, Controller, HttpCode, Param, Post, UseGuards } from '@nestjs/common';
 import { z } from 'zod';
+import { UuidParam } from '../../../common/validation/uuid';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
@@ -19,7 +20,7 @@ const createReportSchema = z
     ]),
     message: z.string().trim().max(1000).nullable().optional(),
     targetType: z.enum(['note', 'review']).nullable().optional(),
-    targetId: z.string().uuid().nullable().optional(),
+    targetId: UuidParam.nullable().optional(),
   })
   .strict();
 

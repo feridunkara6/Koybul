@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, HttpCode, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { z } from 'zod';
+import { UuidParam } from '../../../common/validation/uuid';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
@@ -8,7 +9,8 @@ import { Principal } from '../../../core/auth/principal';
 import { ReviewWriteResult } from '../domain/reviews.repository';
 import { ReviewsService } from '../application/reviews.service';
 
-const UUID = z.string().uuid();
+// SAHA HATASI (2026-10-27): bkz. common/validation/uuid.ts.
+const UUID = UuidParam;
 /** Gövde sınırı 2000: mobilde 4000 karakter okunmuyor (07 S-12; DB 4000'e izin verir). */
 const REVIEW_BODY_MAX = 2000;
 

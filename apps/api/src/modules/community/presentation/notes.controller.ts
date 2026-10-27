@@ -15,6 +15,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { z } from 'zod';
+import { UuidParam } from '../../../common/validation/uuid';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
 import { AuthedRequest, JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
@@ -34,7 +35,8 @@ import {
 import { NearbyNote } from '../domain/notes.repository';
 import { NotesService } from '../application/notes.service';
 
-const UUID = z.string().uuid();
+// SAHA HATASI (2026-10-27): bkz. common/validation/uuid.ts.
+const UUID = UuidParam;
 const ISO_DATE = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD bekleniyor');
 
 /** Gövde sınırı tipe göre değişir — DB CHECK ile birebir aynı (0008 migration). */

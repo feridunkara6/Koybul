@@ -11,6 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { z } from 'zod';
+import { UuidParam } from '../../../common/validation/uuid';
 import { BoatsService } from '../application/boats.service';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
@@ -61,7 +62,9 @@ const updateBoatSchema = z
   })
   .strict();
 
-const boatIdSchema = z.string().uuid();
+// SAHA HATASI (2026-10-27): bkz. common/validation/uuid.ts — örnek tekne
+// kimlikleri ('d000…') zod .uuid() varyant süzgecine takılıyordu.
+const boatIdSchema = UuidParam;
 
 @Controller('boats')
 @UseGuards(JwtAuthGuard, AccountGuard)

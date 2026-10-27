@@ -21,9 +21,15 @@ Future<void> openShareRouteSheet(BuildContext context, SavedRoute route) {
     context: context,
     isScrollControlled: true,
     showDragHandle: true,
-    builder: (BuildContext _) => Padding(
+    useSafeArea: true,
+    // KLAVYE DÜZELTMESİ (saha hatası 2026-10-27, "klavye sabit kalıyor ve
+    // bilgileri kapatıyor"): dolgu SAYFANIN KENDİ bağlamından okunmalı —
+    // eskiden dıştaki ekranın bağlamı okunuyordu; klavye açılınca bu değer
+    // sayfayı YENİDEN ÇİZDİRMİYOR, alanlar klavyenin altında kalıyordu.
+    // (Diğer tüm alt sayfalar zaten iç bağlam kullanır — tek aykırı buydu.)
+    builder: (BuildContext sheetCtx) => Padding(
       padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          EdgeInsets.only(bottom: MediaQuery.of(sheetCtx).viewInsets.bottom),
       child: ShareRouteSheetBody(route: route),
     ),
   );

@@ -11,6 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { z } from 'zod';
+import { UuidParam } from '../../../common/validation/uuid';
 import { UsersService } from '../application/users.service';
 import { AuthedRequest, JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
@@ -83,7 +84,7 @@ export class UsersController {
 export class UsersPublicController {
   constructor(private readonly usersService: UsersService) {}
 
-  private static readonly UUID = z.string().uuid();
+  private static readonly UUID = UuidParam; // bkz. common/validation/uuid.ts
 
   @Get(':id/public')
   @Header('Cache-Control', 'public, max-age=60')

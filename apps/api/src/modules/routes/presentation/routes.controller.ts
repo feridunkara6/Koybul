@@ -12,6 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { z } from 'zod';
+import { UuidParam } from '../../../common/validation/uuid';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
 import { AuthedRequest, JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
@@ -32,7 +33,9 @@ import {
   RouteSummary,
 } from '../domain/route.types';
 
-const UUID = z.string().uuid();
+// SAHA HATASI (2026-10-27): örnek içerik kimlikleri RFC varyant süzgecine
+// takılıp detayı 404'e düşürüyordu — Postgres-genişliğinde doğrulayıcı.
+const UUID = UuidParam;
 
 const listSchema = z
   .object({

@@ -10,6 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { z } from 'zod';
+import { UuidParam } from '../../../common/validation/uuid';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
 import { AuthedRequest, JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
@@ -31,7 +32,9 @@ import {
 } from '../domain/qa.types';
 import { QaService } from '../application/qa.service';
 
-const UUID = z.string().uuid();
+// SAHA HATASI (2026-10-27): bkz. common/validation/uuid.ts — örnek soru
+// kimlikleri zod .uuid() varyant süzgecine takılıyordu.
+const UUID = UuidParam;
 
 /** Sunucu taraflı doğrulama — DB CHECK'leriyle birebir aynı sınırlar (0014). */
 const createQuestionSchema = z

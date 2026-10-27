@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Put, Req, UseGuards } from '@nestjs/common';
 import { z } from 'zod';
+import { UuidParam } from '../../../common/validation/uuid';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
 import { AuthedRequest, JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
@@ -8,7 +9,8 @@ import { Principal } from '../../../core/auth/principal';
 import { MarinaCommunity, MyMarinaBoat } from '../domain/marina.types';
 import { MarinaService } from '../application/marina.service';
 
-const UUID = z.string().uuid();
+// SAHA HATASI (2026-10-27): bkz. common/validation/uuid.ts.
+const UUID = UuidParam;
 
 /** Tekne alanları boats ucuyla aynı sınırlar (docs/22 CHECK'leri). */
 const upsertMyBoatSchema = z

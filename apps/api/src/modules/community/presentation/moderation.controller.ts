@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { z } from 'zod';
+import { UuidParam } from '../../../common/validation/uuid';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
@@ -75,7 +76,7 @@ export class ModerationController {
     @Body() body: unknown,
   ): Promise<{ entityId: string; decision: string; pointsAwarded: number }> {
     const dto = decisionSchema.parse(body);
-    const parsed = z.string().uuid().safeParse(taskId);
+    const parsed = UuidParam.safeParse(taskId); // bkz. common/validation/uuid.ts
     if (!parsed.success) throw new AppProblem('not-found');
     return this.moderation.decide(
       principal,
