@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { AppProblem } from '../../../common/problem/problem';
 import { EnvService } from '../../../config/env.service';
 import { Principal, roleAtLeast } from '../../../core/auth/principal';
+import { NotificationsService } from '../../notifications/application/notifications.service';
 import { PremiumAccessService } from '../../premium/application/premium-access.service';
 import {
   DealRow,
@@ -24,8 +25,8 @@ import {
  * admin+ her zaman geçer. Kilitli fırsat kodu istemciye HİÇ İNMEZ.
  *
  * KAYIT: kontenjan/işlemsel kilit depodadır; burada yalnız kitle ve durum
- * kuralları konuşur. İptal bildirimi V1'de uygulama içi durumla görünür
- * (push altyapısı yok — dürüst sınır, konsept raporunda yazıldığı gibi).
+ * kuralları konuşur. İptal artık push ile de duyurulur (push paketi ③,
+ * kurucu onayı 2026-10-27) — uygulama içi durum göstergesi aynen kalır.
  */
 @Injectable()
 export class EventsService {
@@ -33,6 +34,8 @@ export class EventsService {
     private readonly env: EnvService,
     private readonly premium: PremiumAccessService,
     @Inject(EVENTS_REPOSITORY) private readonly repo: EventsRepository,
+    /** Push tetikleri (ateşle-unut) — birim testleri vermez, yol atlanır. */
+    @Optional() private readonly notifications?: NotificationsService,
   ) {}
 
   private async audienceAllows(
@@ -166,6 +169,9 @@ export class EventsService {
     patch: Partial<UpsertEventInput> & { status?: 'published' | 'cancelled' },
   ): Promise<void> {
     if (!(await this.repo.updateEvent(eventId, patch))) throw new AppProblem('not-found');
+    // Push paketi ③: iptal kayıtlı herkese duyurulur (logOnce tekrar kalkanı —
+    // panelden ikinci bir güncelleme ikinci bildirim ÜRETMEZ).
+    if (patch.status === 'cancelled') this.notifications?.eventCancelled(eventId);
   }
 
   /** Katılımcı listesi (ad + e-posta) — yalnız panelde, organizasyon amaçlı. */

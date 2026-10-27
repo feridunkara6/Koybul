@@ -17,6 +17,12 @@ dependencies:
   # sunucuda. Sürümler Flutter 3.27 (Dart 3.6) ile uyumlu ailede sabitlenir.
   firebase_core: ^3.10.0
   firebase_auth: ^5.4.0
+  # PUSH BİLDİRİMLERİ (kurucu onayı 2026-10-27): FCM köprüsü — cihaz tokenı
+  # ve ön plan sunumu. firebase_core 3.x ailesiyle uyumlu sürüm.
+  firebase_messaging: ^15.2.0
+  # BAKIM HATIRLATMASI: bakım verisi cihazda yaşar; hatırlatması da telefonun
+  # YEREL bildirimi (sunucuya veri çıkmaz). Zamanlama yok — açılışta kontrol.
+  flutter_local_notifications: ^18.0.1
   flutter_riverpod: ^2.5.1
   mapbox_maps_flutter: ^2.22.0
   flutter_map: ^7.0.2

@@ -2271,27 +2271,34 @@ class _PlanTripRow extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 14),
             visualDensity: VisualDensity.compact,
           ),
-          onPressed: () async {
-            final int now = DateTime.now().millisecondsSinceEpoch;
-            await ref.read(tripLogProvider.notifier).add(SeaTripLog(
-                  id: 't$now',
-                  name: name,
-                  status: TripStatus.planned,
-                  dateMs: now,
-                  distanceNm: distanceNm,
-                  stops: stops,
-                  // Rota plana gömülür (v2.2) — başlangıç yoksa (olmamalı)
-                  // rota verisi dürüstçe boş kalır.
-                  routeOrigin: origin,
-                  routeWaypoints:
-                      origin == null || waypoints.isEmpty ? null : waypoints,
-                ));
-            ref.read(plannedRouteSeqProvider.notifier).state = routeSeq;
-            if (!context.mounted) return;
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text(t.tripPlannedSnack)));
-          },
+          // HESAP KAPISI (Defter paketi 2026-10-27): seyirler hesapla gezer —
+          // plansız yazma controller'da sessizce düşer; kapı dürüst davet açar.
+          onPressed: () => requireAccount(
+            context,
+            ref,
+            message: t.gateTripMsg,
+            onAllowed: () async {
+              final int now = DateTime.now().millisecondsSinceEpoch;
+              await ref.read(tripLogProvider.notifier).add(SeaTripLog(
+                    id: 't$now',
+                    name: name,
+                    status: TripStatus.planned,
+                    dateMs: now,
+                    distanceNm: distanceNm,
+                    stops: stops,
+                    // Rota plana gömülür (v2.2) — başlangıç yoksa (olmamalı)
+                    // rota verisi dürüstçe boş kalır.
+                    routeOrigin: origin,
+                    routeWaypoints:
+                        origin == null || waypoints.isEmpty ? null : waypoints,
+                  ));
+              ref.read(plannedRouteSeqProvider.notifier).state = routeSeq;
+              if (!context.mounted) return;
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(SnackBar(content: Text(t.tripPlannedSnack)));
+            },
+          ),
           icon: const DocklyIcon(DocklyIcons.sailing,
               size: 15, color: Colors.white),
           label: Text(t.tripPlanBtn),

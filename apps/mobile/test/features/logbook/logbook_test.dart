@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/auth_fakes.dart';
 import '../../support/logbook_fakes.dart';
 
 const LogEntry _sample = LogEntry(
@@ -19,6 +20,9 @@ const LogEntry _sample = LogEntry(
 
 Widget _app(FakeLogbookStore store, {LogContext? ctx}) => ProviderScope(
       overrides: <Override>[
+        // HESAP KAPISI (Defter paketi 2026-10-27): günlük hesapla gezer —
+        // testler oturum açık koşar; sahipsiz kayıtlar sahiplenilir.
+        signedInAuthOverride(),
         logbookStoreProvider.overrideWithValue(store),
         // Harita sahtelerine gerek kalmasın: bağlam doğrudan verilir.
         logContextProvider.overrideWithValue(ctx),
@@ -44,7 +48,10 @@ void main() {
     final FakeLogbookStore store = FakeLogbookStore()
       ..data = <LogEntry>[_sample];
     final ProviderContainer c = ProviderContainer(
-      overrides: <Override>[logbookStoreProvider.overrideWithValue(store)],
+      overrides: <Override>[
+        signedInAuthOverride(),
+        logbookStoreProvider.overrideWithValue(store),
+      ],
     );
     addTearDown(c.dispose);
     const LogEntry fresh =
@@ -122,7 +129,10 @@ void main() {
         _sample, // dateMs: 1754300000000 (daha yeni)
       ];
     final ProviderContainer c = ProviderContainer(
-      overrides: <Override>[logbookStoreProvider.overrideWithValue(store)],
+      overrides: <Override>[
+        signedInAuthOverride(),
+        logbookStoreProvider.overrideWithValue(store),
+      ],
     );
     addTearDown(c.dispose);
     final LogbookController ctrl = c.read(logbookProvider.notifier);

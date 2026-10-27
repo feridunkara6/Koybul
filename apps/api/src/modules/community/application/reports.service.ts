@@ -1,6 +1,7 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
+import { NotificationsService } from '../../notifications/application/notifications.service';
 import { AUTO_HIDE_REPORT_THRESHOLD } from '../domain/note.types';
 import {
   CreateReportInput,
@@ -16,6 +17,8 @@ export class ReportsService {
   constructor(
     @Inject(REPORTS_REPOSITORY) private readonly reports: ReportsRepository,
     private readonly reputation: ReputationService,
+    /** Push tetikleri (ateşle-unut) — birim testleri vermez, yol atlanır. */
+    @Optional() private readonly notifications?: NotificationsService,
   ) {}
 
   async create(
@@ -52,6 +55,8 @@ export class ReportsService {
         );
       }
     }
+    // Şikâyet kuyruğa düşer → adminlere kuyruk bildirimi (push paketi ⑤).
+    this.notifications?.moderationNew('report');
     return { id: created.id, autoHidden };
   }
 }

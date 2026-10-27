@@ -57,4 +57,19 @@ export class EnvService {
       environment: this.env.APPLE_IAP_ENVIRONMENT,
     };
   }
+
+  /**
+   * Push bildirimleri için Firebase servis hesabı — verilmediyse null
+   * (gönderici sessiz kapalı çalışır; şema bozuk JSON'u zaten reddetti).
+   */
+  get firebasePush(): { projectId: string; clientEmail: string; privateKey: string } | null {
+    const raw = this.env.FIREBASE_SERVICE_ACCOUNT_JSON;
+    if (!raw) return null;
+    const sa = JSON.parse(raw) as {
+      project_id: string;
+      client_email: string;
+      private_key: string;
+    };
+    return { projectId: sa.project_id, clientEmail: sa.client_email, privateKey: sa.private_key };
+  }
 }

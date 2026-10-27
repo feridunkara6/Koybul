@@ -21,6 +21,7 @@ import '../../premium/presentation/premium_screen.dart';
 import '../../events/presentation/events_screen.dart';
 import '../../qa/presentation/qa_list_screen.dart';
 import '../../legal/presentation/legal_screen.dart';
+import '../../notifications/presentation/notification_settings_screen.dart';
 import '../../legal/presentation/sources_screen.dart';
 import '../../route/presentation/shared_routes_screen.dart';
 import '../../shell/application/shell_tab_provider.dart';
@@ -215,6 +216,17 @@ class ProfileScreen extends ConsumerWidget {
                       ref.read(onboardingControllerProvider.notifier).replayTour();
                       ref.read(shellTabProvider.notifier).state = 0; // Keşfet
                     },
+                  ),
+                  _GroupRow(
+                    icon: DocklyIcons.radio,
+                    tint: DocklyColors.accentTurquoise,
+                    // BİLDİRİMLER (push paketi, kurucu onayı 2026-10-27):
+                    // anlık bildirim tercihleri + cihazdaki bakım hatırlatması.
+                    label: t.ntfTitle,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          builder: (_) => const NotificationSettingsScreen()),
+                    ),
                   ),
                   const _LanguageGroupRow(),
                 ]),

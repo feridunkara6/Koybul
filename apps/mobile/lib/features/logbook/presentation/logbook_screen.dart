@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../auth/presentation/account_gate.dart';
 import '../application/logbook_controller.dart';
 import '../domain/log_entry.dart';
 
@@ -182,23 +183,34 @@ class _LogEntryCard extends ConsumerWidget {
 
 /// YENİ GİRİŞ düzenleyicisi (alt sayfa). [context] verilmezse o anki aktif
 /// rotadan otomatik alınır; kaptan bağlamı ✕ ile kaldırabilir.
+///
+/// HESAP KAPISI (Defter paketi 2026-10-27): günlük girişleri hesapla gezer —
+/// tüm çağrı noktaları (Defter FAB'ı, Günlük ekranı, rota kartı) bu tek
+/// kapıdan geçer. Giriş/kayıt tamamlanırsa düzenleyici OTOMATİK açılır.
 Future<void> showLogEntryEditor(
   BuildContext context,
   WidgetRef ref, {
   LogContext? logContext,
-}) async {
-  final LogContext? ctx = logContext ?? ref.read(logContextProvider);
-  await showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    useSafeArea: true,
-    showDragHandle: true,
-    builder: (BuildContext sheetContext) => Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(sheetContext).viewInsets.bottom,
-      ),
-      child: _LogEntryEditor(initialContext: ctx),
-    ),
+}) {
+  return requireAccount(
+    context,
+    ref,
+    message: ref.read(l10nProvider).gateLogMsg,
+    onAllowed: () async {
+      final LogContext? ctx = logContext ?? ref.read(logContextProvider);
+      await showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        useSafeArea: true,
+        showDragHandle: true,
+        builder: (BuildContext sheetContext) => Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(sheetContext).viewInsets.bottom,
+          ),
+          child: _LogEntryEditor(initialContext: ctx),
+        ),
+      );
+    },
   );
 }
 

@@ -1,0 +1,42 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+import '../domain/push_gateway.dart';
+
+/// Gerçek FCM köprüsü — YALNIZ bootstrap'ta, Firebase başlatıldıysa devreye
+/// girer (authGateway deseni). Tüm çağrılar en-iyi-çaba: eklenti hatası
+/// uygulamayı asla düşürmez, kayıt bir sonraki açılışta yeniden denenir.
+class FirebasePushGateway implements PushGateway {
+  @override
+  Future<bool> requestPermission() async {
+    try {
+      final NotificationSettings settings =
+          await FirebaseMessaging.instance.requestPermission();
+      // Ön planda da afiş görünsün (iOS varsayılanı sessizdir).
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+              alert: true, badge: true, sound: true);
+      return settings.authorizationStatus == AuthorizationStatus.authorized ||
+          settings.authorizationStatus == AuthorizationStatus.provisional;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  @override
+  Future<String?> token() async {
+    // iOS'ta APNs tokenı FCM tokenından ÖNCE hazır olmalı; izinden hemen
+    // sonra istenirse kısa bir yarış olabilir — bir kez bekleyip tekrar dene.
+    for (int attempt = 0; attempt < 2; attempt++) {
+      try {
+        final String? t = await FirebaseMessaging.instance.getToken();
+        if (t != null) return t;
+      } catch (_) {/* aşağıda tekrar denenir */}
+      await Future<void>.delayed(const Duration(seconds: 2));
+    }
+    return null;
+  }
+
+  @override
+  Stream<String> get onTokenRefresh =>
+      FirebaseMessaging.instance.onTokenRefresh;
+}

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers.dart';
+import '../../notifications/application/push_controller.dart';
 import '../data/auth_repository.dart';
 import '../domain/auth_gateway.dart';
 import '../domain/auth_state.dart';
@@ -58,6 +59,10 @@ class AuthController extends Notifier<AuthState> {
   }
 
   Future<void> logout() async {
+    // Push cihaz kaydını DÜŞÜR (push paketi 2026-10-27): eski hesabın
+    // bildirimi, çıkış yapılmış cihaza gitmesin. En iyi çaba — token hâlâ
+    // geçerliyken, yani sunucu çıkışından ÖNCE çağrılır; asla fırlatmaz.
+    await ref.read(pushRegistrarProvider).unregister();
     await _repo.logout();
     state = const Unauthenticated();
   }
@@ -65,6 +70,9 @@ class AuthController extends Notifier<AuthState> {
   /// Hesabı siler. Başarısızlıkta AppFailure fırlatır ve OTURUM KORUNUR —
   /// kaptan hesabının silindiğini sanmasın (Faz 0).
   Future<void> deleteAccount() async {
+    // Sunucu kaydı FK ile zaten silinir; cihaz tarafı yine de düşürülür
+    // (en iyi çaba) — başarısız silmede token sahipsiz kalmasın.
+    await ref.read(pushRegistrarProvider).unregister();
     await _repo.deleteAccount();
     state = const Unauthenticated();
   }

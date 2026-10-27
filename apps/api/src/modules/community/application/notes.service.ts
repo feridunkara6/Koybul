@@ -1,5 +1,6 @@
 import { Inject, Injectable, Optional } from '@nestjs/common';
 import { uuidv7 } from 'uuidv7';
+import { NotificationsService } from '../../notifications/application/notifications.service';
 import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
 import {
@@ -34,6 +35,8 @@ export class NotesService {
      * olmadan kurabilir — o zaman kilit uygulanmaz (bayrak kapalı gibi).
      */
     @Optional() private readonly premium?: PremiumAccessService,
+    /** Push tetikleri (ateşle-unut) — birim testleri vermez, yol atlanır. */
+    @Optional() private readonly notifications?: NotificationsService,
   ) {}
 
   /**
@@ -134,6 +137,9 @@ export class NotesService {
         type: 'note',
         id: note.id,
       });
+    } else {
+      // Kuyruğa girdi → adminlere kuyruk bildirimi (push paketi ⑤).
+      this.notifications?.moderationNew('note');
     }
     return note;
   }

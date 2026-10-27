@@ -96,6 +96,15 @@ export const envSchema = z
     APPLE_IAP_BUNDLE_ID: z.string().min(1).optional(),
     /** Apple ortamı: TestFlight/sandbox testi 'sandbox', mağaza 'production'. */
     APPLE_IAP_ENVIRONMENT: z.enum(['sandbox', 'production']).default('sandbox'),
+    /**
+     * PUSH BİLDİRİMLERİ (kurucu onayı 2026-10-27) — Firebase servis hesabı
+     * JSON'u OLDUĞU GİBİ (tek satır). Kaynak: Firebase Console → Project
+     * settings → Service accounts → Generate new private key; YALNIZ hosting
+     * paneline yapıştırılır. Verilmezse push tamamen sessiz kapalıdır
+     * (uygulama normal çalışır) — testler ve yerel geliştirme böyle koşar.
+     * Verilip de bozuksa önyükleme HATAYLA durur (fail-fast, §16).
+     */
+    FIREBASE_SERVICE_ACCOUNT_JSON: z.string().min(1).optional(),
   })
   .superRefine((env, ctx) => {
     // Apple anahtarı ya TAM ya HİÇ: kısmi yapılandırma en sinsi hata sınıfıdır
@@ -113,6 +122,33 @@ export const envSchema = z
           code: z.ZodIssueCode.custom,
           path: [k],
           message: `${k} eksik — Apple IAP değişkenleri ya dördü birden verilir ya hiçbiri.`,
+        });
+      }
+    }
+
+    // Firebase servis hesabı: verildiyse GEÇERLİ olmalı — bozuk JSON sessizce
+    // "bildirim gitmiyor" üretmesin, önyükleme dursun (aynı fail-fast ilkesi).
+    if (env.FIREBASE_SERVICE_ACCOUNT_JSON !== undefined) {
+      let parsed: unknown;
+      try {
+        parsed = JSON.parse(env.FIREBASE_SERVICE_ACCOUNT_JSON);
+      } catch {
+        parsed = null;
+      }
+      const sa = parsed as { project_id?: string; client_email?: string; private_key?: string };
+      if (
+        !sa ||
+        typeof sa.project_id !== 'string' ||
+        typeof sa.client_email !== 'string' ||
+        typeof sa.private_key !== 'string' ||
+        !sa.private_key.includes('BEGIN')
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['FIREBASE_SERVICE_ACCOUNT_JSON'],
+          message:
+            'FIREBASE_SERVICE_ACCOUNT_JSON geçersiz — Firebase servis hesabı JSON dosyasının ' +
+            'içeriği olduğu gibi (project_id, client_email, private_key alanlarıyla) yapıştırılmalı.',
         });
       }
     }

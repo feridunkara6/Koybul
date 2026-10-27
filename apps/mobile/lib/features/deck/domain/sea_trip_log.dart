@@ -43,9 +43,15 @@ class SeaTripLog {
     this.durMin,
     this.routeOrigin,
     this.routeWaypoints,
+    this.ownerUid,
   });
 
   final String id;
+
+  /// HESAP KAPISI (saha hatası 2026-10-27, "çıkış yapınca defterde rota
+  /// kalıyor"): seyir kaydının sahibi. Kayıtlı rotalardaki desenin aynısı —
+  /// null = kapıdan önce yazılmış eski kayıt (ilk hesaplı açılışta sahiplenilir).
+  final String? ownerUid;
 
   /// Rota adı (kayıtlı rotanın adı ya da "A → B" önerisi).
   final String name;
@@ -90,6 +96,7 @@ class SeaTripLog {
         'nm': distanceNm,
         'stops': stops,
         if (durMin != null) 'dur': durMin,
+        if (ownerUid != null) 'owner': ownerUid,
         // v2.2 rota verisi (isteğe bağlı): başlangıç + sıralı noktalar.
         if (routeOrigin != null)
           'org': <String, dynamic>{
@@ -175,6 +182,7 @@ class SeaTripLog {
         durMin: raw['dur'] as int?,
         routeOrigin: route.$1,
         routeWaypoints: route.$2,
+        ownerUid: raw['owner'] as String?,
       );
     }
 
@@ -207,6 +215,23 @@ class SeaTripLog {
       durMin: durMin ?? this.durMin,
       routeOrigin: routeOrigin,
       routeWaypoints: routeWaypoints,
+      ownerUid: ownerUid,
+    );
+  }
+
+  /// Kaydı hesaba bağlar (eski kayıt sahiplenme — kayıtlı rota deseni).
+  SeaTripLog withOwner(String uid) {
+    return SeaTripLog(
+      id: id,
+      name: name,
+      status: status,
+      dateMs: dateMs,
+      distanceNm: distanceNm,
+      stops: stops,
+      durMin: durMin,
+      routeOrigin: routeOrigin,
+      routeWaypoints: routeWaypoints,
+      ownerUid: uid,
     );
   }
 }

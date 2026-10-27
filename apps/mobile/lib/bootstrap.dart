@@ -16,6 +16,10 @@ import 'features/auth/application/auth_controller.dart';
 import 'features/auth/domain/auth_state.dart';
 import 'features/auth/infrastructure/firebase_auth_gateway.dart';
 import 'features/auth/presentation/sign_in_screen.dart';
+import 'features/notifications/application/maintenance_reminder.dart';
+import 'features/notifications/application/push_controller.dart';
+import 'features/notifications/infrastructure/firebase_push_gateway.dart';
+import 'features/notifications/infrastructure/flutter_local_notifier.dart';
 import 'features/launch/presentation/launch_gate.dart';
 import 'features/shell/presentation/dockly_shell.dart';
 import 'features/splash/presentation/splash_screen.dart';
@@ -59,9 +63,23 @@ Future<void> bootstrap(AppConfig config) async {
       overrides.add(
         authGatewayProvider.overrideWithValue(FirebaseAuthGateway()),
       );
+      // PUSH köprüsü (push paketi 2026-10-27): yalnız MOBİLDE ve Firebase
+      // ayaktayken — web/test stub ile sürer, hiçbir eklenti kanalı açılmaz.
+      if (!kIsWeb) {
+        overrides.add(
+          pushGatewayProvider.overrideWithValue(FirebasePushGateway()),
+        );
+      }
     } catch (err) {
       debugPrint('Firebase başlatılamadı (misafir mod sürer): $err');
     }
+  }
+  // YEREL bildirim köprüsü (bakım hatırlatması): Firebase'den bağımsız,
+  // yalnız mobilde — bakım verisi cihazda, hatırlatması da cihazdan.
+  if (!kIsWeb) {
+    overrides.add(
+      localNotifierProvider.overrideWithValue(FlutterLocalNotifier()),
+    );
   }
 
   runApp(ProviderScope(overrides: overrides, child: const DocklyApp()));
@@ -78,6 +96,15 @@ class _DocklyAppState extends ConsumerState<DocklyApp> {
   @override
   void initState() {
     super.initState();
+    // GİRİŞTE PUSH KAYDI (push paketi 2026-10-27): hesap açılır açılmaz izin
+    // istenir ve cihaz sunucuya yazılır. Stub köprüde no-op (web/test).
+    ref.listenManual<AuthState>(authControllerProvider,
+        (AuthState? prev, AuthState next) {
+      if (next is Authenticated && !next.isGuest) {
+        unawaited(
+            ref.read(pushRegistrarProvider).register().catchError((_) => null));
+      }
+    });
     // Saklanan oturumu arka planda geri yükle (docs/26 §8): kullanıcı sekmeyi
     // kapatıp açınca girişi sürer. Hata olursa sessizce misafir kalınır.
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -85,6 +112,11 @@ class _DocklyAppState extends ConsumerState<DocklyApp> {
         try {
           await ref.read(authControllerProvider.notifier).restore();
         } catch (_) {/* oturum yok/geçersiz → misafir */}
+        // BAKIM HATIRLATMASI (kurucu talebi 2026-10-27): açılışta bir kez,
+        // oturum işi bittikten sonra — eşiği geçen kaleme YEREL bildirim.
+        try {
+          await ref.read(maintenanceReminderProvider).run();
+        } catch (_) {/* bakım şeridi uygulama içinde zaten uyarır */}
       });
     });
   }

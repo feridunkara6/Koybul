@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { uuidv7 } from 'uuidv7';
 import { AppProblem, FieldError } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
+import { NotificationsService } from '../../notifications/application/notifications.service';
 import {
   CreateReviewInput,
   REVIEWS_WRITE_REPOSITORY,
@@ -16,6 +17,8 @@ export class ReviewsService {
   constructor(
     @Inject(REVIEWS_WRITE_REPOSITORY) private readonly reviews: ReviewsWriteRepository,
     private readonly reputation: ReputationService,
+    /** Push tetikleri (ateşle-unut) — birim testleri vermez, yol atlanır. */
+    @Optional() private readonly notifications?: NotificationsService,
   ) {}
 
   async create(
@@ -36,7 +39,10 @@ export class ReviewsService {
     }
 
     await this.assertDimensionsValid(input.dimensions);
-    return this.reviews.create(uuidv7(), locationId, principal.userId, input);
+    const result = await this.reviews.create(uuidv7(), locationId, principal.userId, input);
+    // Kuyruğa girdiyse adminlere kuyruk bildirimi (push paketi ⑤).
+    if (result.status === 'pending') this.notifications?.moderationNew('review');
+    return result;
   }
 
   async update(

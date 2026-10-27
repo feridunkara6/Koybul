@@ -76,6 +76,13 @@ final Provider<AdminApi> adminApiProvider = Provider<AdminApi>((ref) {
   return AdminApi(ref.watch(docklyClientProvider).dio);
 });
 
+/// PUSH BİLDİRİM istemcisi (push paketi, kurucu onayı 2026-10-27) — cihaz
+/// kaydı ve tercihler. TÜM uçları hesap ister; misafirde çağrılmaz.
+final Provider<NotificationsApi> notificationsApiProvider =
+    Provider<NotificationsApi>((ref) {
+  return NotificationsApi(ref.watch(docklyClientProvider).dio);
+});
+
 /// SORU-CEVAP istemcisi (Blog V1, kurucu onayı 2026-10-23) — akış herkese
 /// açık; yazma uçlarının Premium kapısı sunucudadır.
 final Provider<QaApi> qaApiProvider = Provider<QaApi>((ref) {

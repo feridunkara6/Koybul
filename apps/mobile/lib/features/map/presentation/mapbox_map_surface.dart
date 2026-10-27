@@ -116,12 +116,27 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
     unawaited(_render());
   }
 
-  /// Rotanın tüm bacak noktalarını kapsayan kutuya uçar. Yakınlık, kutunun
-  /// enine/boyuna göre hesaplanır (paket sürümüne bağımlı sınır-API'si yerine
-  /// sade logaritmik ölçek — web yüzeyindeki fitCamera ile aynı his).
+  /// Harita kurulmadan rota geldiyse uçuş buraya not edilir — _onMapCreated
+  /// borcu öder (saha hatası 2026-10-27 ikinci tur: "halen kaymıyor").
+  bool _pendingRouteFly = false;
+
+  /// Rotanın tüm bacak noktalarını kapsayan kutuya KAMERAYI OTURTUR.
+  /// Yakınlık, kutunun enine/boyuna göre hesaplanır (paket sürümüne bağımlı
+  /// sınır-API'si yerine sade logaritmik ölçek — web fitCamera ile aynı his).
+  ///
+  /// NEDEN setCamera, flyTo DEĞİL (saha hatası 2026-10-27 ikinci tur, "rota
+  /// çiziliyor ama harita kaymıyor"): rota, Keşfet sekmesi HENÜZ EKRANDA
+  /// DEĞİLKEN açılır (Rota Keşfi detayından) — gizli/duraklatılmış yerli
+  /// harita görünümü 900 ms'lik flyTo ANİMASYONUNU sessizce düşürebiliyor;
+  /// çizgi (veri) kalıyor, kamera (animasyon) kayboluyordu. setCamera anlık
+  /// durum yazar: görünüm ekrana geldiğinde kamera KESİN rotadadır.
   Future<void> _flyToRoute() async {
     final MapboxMap? map = _map;
-    if (map == null || _disposed) return;
+    if (map == null) {
+      _pendingRouteFly = true; // harita kurulunca ödenir
+      return;
+    }
+    if (_disposed) return;
     final List<List<GeoPoint>> legs = widget.data.routeLegPoints ??
         <List<GeoPoint>>[
           if (widget.data.routePoints != null) widget.data.routePoints!,
@@ -150,12 +165,11 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
         ? 11
         : (math.log(360.0 / span) / math.ln2).clamp(7.0, 13.0).toDouble();
     if (webZoom > 13) webZoom = 13;
-    await map.flyTo(
+    await map.setCamera(
       CameraOptions(
         center: Point(coordinates: Position(center.lon, center.lat)),
         zoom: webZoom - _kZoomOffset,
       ),
-      MapAnimationOptions(duration: 900),
     );
   }
 
@@ -277,6 +291,16 @@ class _MapboxMapSurfaceState extends State<MapboxMapSurface> {
     // web yüzeyiyle aynı davranış (_applyPendingFocus karşılığı).
     final MapFocusRequest? pending = widget.data.focus;
     if (pending != null) unawaited(_flyToFocus(pending));
+    // AÇIK ROTAYLA KURULUŞ (saha hatası 2026-10-27 ikinci tur): yüzey, rota
+    // zaten açıkken yeniden yaratılabilir (liste görünümünden dönüş) ya da
+    // rota harita kurulmadan gelmiş olabilir (_pendingRouteFly) — her iki
+    // durumda didUpdateWidget tetiklenmez; borç burada ödenir.
+    final bool hasRoute = widget.data.routePoints != null ||
+        (widget.data.routeLegPoints?.isNotEmpty ?? false);
+    if (_pendingRouteFly || hasRoute) {
+      _pendingRouteFly = false;
+      if (hasRoute) unawaited(_flyToRoute());
+    }
   }
 
   /// Stil yeniden yüklenirse (tema/stil değişimi) kayıtlı resimler silinebilir —

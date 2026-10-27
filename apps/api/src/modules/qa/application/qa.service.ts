@@ -1,9 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { uuidv7 } from 'uuidv7';
 import { AppProblem } from '../../../common/problem/problem';
 import { EnvService } from '../../../config/env.service';
 import { Principal, roleAtLeast } from '../../../core/auth/principal';
 import { screenText } from '../../community/domain/prefilter';
+import { NotificationsService } from '../../notifications/application/notifications.service';
 import { PremiumAccessService } from '../../premium/application/premium-access.service';
 import {
   CreateQuestionInput,
@@ -41,6 +42,8 @@ export class QaService {
     private readonly env: EnvService,
     private readonly premium: PremiumAccessService,
     @Inject(QA_REPOSITORY) private readonly repo: QaRepository,
+    /** Push tetikleri (ateşle-unut) — birim testleri vermez, yol atlanır. */
+    @Optional() private readonly notifications?: NotificationsService,
   ) {}
 
   /** Premium kapısı: bayrak kapalıyken herkes; açıkken admin+ veya premium. */
@@ -186,6 +189,8 @@ export class QaService {
       autoPublish ? 'approved' : 'pending',
       featuredUntil,
     );
+    // Kuyruğa girdiyse adminlere haber (push paketi ⑤) — ana işi bekletmez.
+    if (row.status === 'pending') this.notifications?.moderationNew('question');
     return { id: row.id, status: row.status };
   }
 
@@ -212,6 +217,14 @@ export class QaService {
       body,
       autoPublish ? 'approved' : 'pending',
     );
+    // Push paketi ①: anında yayınlanan cevap soru sahibine bildirilir; kuyruğa
+    // girense adminlere düşer — sahibine bildirim MODERASYON ONAYINDA gider
+    // (moderation.service), yoksa reddedilecek cevap için boşuna heyecan olur.
+    if (row.status === 'approved') {
+      this.notifications?.qaAnswer(questionId, row.id, principal.userId);
+    } else {
+      this.notifications?.moderationNew('answer');
+    }
     return { id: row.id, status: row.status };
   }
 
@@ -254,5 +267,6 @@ export class QaService {
   async report(entity: 'qa_question' | 'qa_answer', entityId: string): Promise<void> {
     const ok = await this.repo.report(entity, entityId);
     if (!ok) throw new AppProblem('not-found');
+    this.notifications?.moderationNew('report');
   }
 }

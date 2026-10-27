@@ -1,8 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { uuidv7 } from 'uuidv7';
 import { AppProblem } from '../../../common/problem/problem';
 import { EnvService } from '../../../config/env.service';
 import { Principal, roleAtLeast } from '../../../core/auth/principal';
+import { NotificationsService } from '../../notifications/application/notifications.service';
 import { PremiumAccessService } from '../../premium/application/premium-access.service';
 import {
   CreateRouteInput,
@@ -36,6 +37,8 @@ export class RoutesService {
     private readonly env: EnvService,
     private readonly premium: PremiumAccessService,
     @Inject(ROUTES_REPOSITORY) private readonly repo: RoutesRepository,
+    /** Push tetikleri (ateşle-unut) — birim testleri vermez, yol atlanır. */
+    @Optional() private readonly notifications?: NotificationsService,
   ) {}
 
   private toSummary(row: RouteRow): RouteSummary {
@@ -152,6 +155,8 @@ export class RoutesService {
     }
 
     const row = await this.repo.create(uuidv7(), principal.userId, input);
+    // Her rota pending doğar → adminlere kuyruk bildirimi (push paketi ⑤).
+    this.notifications?.moderationNew('route');
     return { id: row.id, status: row.status };
   }
 

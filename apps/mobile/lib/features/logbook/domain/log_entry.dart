@@ -23,9 +23,14 @@ class LogEntry {
     this.ctxRoute,
     this.ctxNm,
     this.ctxStops,
+    this.ownerUid,
   });
 
   final String id;
+
+  /// HESAP KAPISI (saha hatası 2026-10-27, Defter paketi): girişin sahibi.
+  /// null = kapıdan önce yazılmış eski giriş (ilk hesaplı açılışta sahiplenilir).
+  final String? ownerUid;
 
   /// Girişin anı (ms, epoch) — liste en yeni başta sıralanır.
   final int dateMs;
@@ -49,6 +54,7 @@ class LogEntry {
         if (ctxRoute != null) 'ctxRoute': ctxRoute,
         if (ctxNm != null) 'ctxNm': ctxNm,
         if (ctxStops != null) 'ctxStops': ctxStops,
+        if (ownerUid != null) 'owner': ownerUid,
       };
 
   /// Bozuk kayıt → null (çökme yok; satır sessizce atlanır).
@@ -68,6 +74,21 @@ class LogEntry {
       ctxRoute: raw['ctxRoute'] as String?,
       ctxNm: (raw['ctxNm'] as num?)?.toDouble(),
       ctxStops: raw['ctxStops'] as int?,
+      ownerUid: raw['owner'] as String?,
+    );
+  }
+
+  /// Girişi hesaba bağlar (eski kayıt sahiplenme — kayıtlı rota deseni).
+  LogEntry withOwner(String uid) {
+    return LogEntry(
+      id: id,
+      dateMs: dateMs,
+      text: text,
+      title: title,
+      ctxRoute: ctxRoute,
+      ctxNm: ctxNm,
+      ctxStops: ctxStops,
+      ownerUid: uid,
     );
   }
 }
