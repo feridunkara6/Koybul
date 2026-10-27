@@ -36,6 +36,8 @@ class MapState {
     this.routeQuotaBlockSeq = 0,
     this.multiStopBlockSeq = 0,
     this.originSnappedSeq = 0,
+    this.editingRoute = false,
+    this.editUndoDepth = 0,
   });
 
   final List<LocationPin> pins;
@@ -148,6 +150,15 @@ class MapState {
     return null;
   }
 
+  /// ROTA DÜZENLEME MODU (rota paketi, kurucu onayı 2026-10-27): açıkken alt
+  /// eylem kartının yerini düzenleme araç çubuğu + durak şeridi alır; harita
+  /// düzenleme jestleri (çizgi/tutamaç) her zamanki gibi çalışır.
+  final bool editingRoute;
+
+  /// Geri alınabilecek düzenleme adımı sayısı ("Geri al" düğmesi bununla
+  /// açılır/sönür). Yeni rota çizilince sıfırlanır.
+  final int editUndoDepth;
+
   MapState copyWith({
     List<LocationPin>? pins,
     List<Cluster>? clusters,
@@ -181,6 +192,8 @@ class MapState {
     int? routeQuotaBlockSeq,
     int? multiStopBlockSeq,
     int? originSnappedSeq,
+    bool? editingRoute,
+    int? editUndoDepth,
   }) {
     return MapState(
       pins: pins ?? this.pins,
@@ -217,6 +230,8 @@ class MapState {
       routeQuotaBlockSeq: routeQuotaBlockSeq ?? this.routeQuotaBlockSeq,
       multiStopBlockSeq: multiStopBlockSeq ?? this.multiStopBlockSeq,
       originSnappedSeq: originSnappedSeq ?? this.originSnappedSeq,
+      editingRoute: clearRoute ? false : (editingRoute ?? this.editingRoute),
+      editUndoDepth: clearRoute ? 0 : (editUndoDepth ?? this.editUndoDepth),
     );
   }
 }

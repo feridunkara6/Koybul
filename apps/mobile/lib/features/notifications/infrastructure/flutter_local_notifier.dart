@@ -84,6 +84,12 @@ class FlutterLocalNotifier implements LocalNotifier {
         // Dakika hassasiyeti gerekmez; 'inexact' pil dostudur ve Android'de
         // özel alarm izni istemez (iOS'ta zaten dakikası dakikasına çalar).
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        // CI dersi (versyion 7 kırmızısı): bu parametre kütüphanede ZORUNLU —
+        // eksikken analiz hatası hem mobil testini hem web derlemesini düşürdü.
+        // 'absoluteTime' = verdiğimiz an MUTLAKTIR (UTC epoch); saat dilimi
+        // değişse de bildirim aynı fiziksel anda çalar (eski iOS yolu için).
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
       );
     } catch (_) {/* en iyi çaba */}
   }

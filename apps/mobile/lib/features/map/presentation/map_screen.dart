@@ -27,6 +27,8 @@ import '../../route/domain/saved_route.dart';
 import '../../route/domain/sea_route.dart';
 import '../../route/domain/sea_router.dart';
 import '../../route/domain/sea_trip.dart';
+import '../../route/presentation/share_route_sheet.dart'
+    show openShareRouteSheet;
 import '../../search/presentation/search_screen.dart';
 import '../../shell/application/shell_tab_provider.dart';
 import '../../checklist/application/checklist_controller.dart';
@@ -401,8 +403,11 @@ class MapScreen extends ConsumerWidget {
                 ),
               ),
             ),
-          // ROTA MODU — ALT EYLEM KARTI: mesafe/süre/rüzgâr + büyük düğmeler.
-          if (routeMode && selectedPin == null)
+          // ROTA MODU — ALT EYLEM KARTI (rota paketi 2026-10-27): istatistik
+          // hapı + yalnız İKİ düğme (Düzenle / Kaydet ▾). Eski üçlü düğme
+          // karmaşası ve ayrıntı sayfasındaki eş işlevli düğme tekrarları
+          // kaldırıldı — kaydet/planla/paylaş tek menüde toplandı.
+          if (routeMode && selectedPin == null && !state.editingRoute)
             Positioned(
               left: 12,
               right: 12,
@@ -416,10 +421,27 @@ class MapScreen extends ConsumerWidget {
                       route: state.route!,
                       wind: state.routeWind,
                       waypoints: state.routeWaypoints,
-                      onAddPoint: controller.beginAddPoint,
-                      onSave: () => _saveRouteDialog(context, ref, state),
+                      onEdit: controller.beginRouteEdit,
+                      onSaveMenu: () => _showRouteSaveMenu(context, ref),
                       onDetail: () => showRouteDetailSheet(context, ref),
                     ),
+                  ),
+                ),
+              ),
+            ),
+          // DÜZENLEME MODU (rota paketi 2026-10-27): ipucu + sürüklenebilir
+          // durak şeridi + araç çubuğu — alt eylem kartının yerine geçer.
+          if (routeMode && selectedPin == null && state.editingRoute)
+            Positioned(
+              left: 12,
+              right: 12,
+              bottom: 12,
+              child: SafeArea(
+                top: false,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 480),
+                    child: _RouteEditBar(state: state),
                   ),
                 ),
               ),
@@ -903,6 +925,376 @@ Future<void> _saveRouteDialogBody(
 
 /// Ücretsiz hesabın ROTA KAYIT YUVASI sayısı (P4b, kurucu onayı — K5).
 const int kFreeRouteSlots = 3;
+
+/// KAYDET MENÜSÜ (rota paketi, kurucu onayı 2026-10-27): üç kayıt yolu TEK
+/// yerde — Rotalarım'a ekle / Seyri planla / Toplulukta paylaş. Eskiden
+/// "Kaydet" iki ayrı yerde iki iş yapıyor, paylaşmak için Defter'e gitmek
+/// gerekiyordu (K1+K2 kopuklukları).
+Future<void> _showRouteSaveMenu(BuildContext context, WidgetRef ref) async {
+  final L10n t = ref.read(l10nProvider);
+  final MapState state = ref.read(mapControllerProvider);
+  if (state.route == null) return;
+  final bool alreadyPlanned =
+      ref.read(plannedRouteSeqProvider) == state.routeSeq;
+
+  Widget option({
+    required String keyName,
+    required Widget icon,
+    required String title,
+    required String subtitle,
+    VoidCallback? onTap,
+  }) =>
+      Builder(
+        builder: (BuildContext sheetCtx) => ListTile(
+          key: ValueKey<String>(keyName),
+          leading: icon,
+          title: Text(title,
+              style: const TextStyle(fontWeight: FontWeight.w800)),
+          subtitle: Text(subtitle),
+          enabled: onTap != null,
+          onTap: onTap == null
+              ? null
+              : () {
+                  Navigator.of(sheetCtx).pop();
+                  onTap();
+                },
+        ),
+      );
+
+  await showModalBottomSheet<void>(
+    context: context,
+    useSafeArea: true,
+    showDragHandle: true,
+    builder: (BuildContext sheetContext) => Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+          child: Text(
+            t.rteMenuTitle,
+            style: Theme.of(sheetContext)
+                .textTheme
+                .titleMedium
+                ?.copyWith(fontWeight: FontWeight.w800),
+          ),
+        ),
+        option(
+          keyName: 'save-opt-routes',
+          icon: const DocklyIcon(DocklyIcons.bookmark,
+              color: DocklyColors.accentTurquoise),
+          title: t.routeAddToSaved,
+          subtitle: t.rteOptRoutesSub,
+          onTap: () =>
+              _saveRouteDialog(context, ref, ref.read(mapControllerProvider)),
+        ),
+        option(
+          keyName: alreadyPlanned ? 'save-opt-trip-done' : 'save-opt-trip',
+          icon: DocklyIcon(DocklyIcons.sailing,
+              color: alreadyPlanned
+                  ? DocklyColors.success
+                  : DocklyColors.brandPrimary),
+          title: t.tripPlanBtn,
+          subtitle: alreadyPlanned ? t.rteOptTripDone : t.rteOptTripSub,
+          // Çifte plan üretilmez: zaten planlandıysa satır sakin bilgiye döner.
+          onTap: alreadyPlanned
+              ? null
+              : () => requireAccount(
+                    context,
+                    ref,
+                    message: t.gateTripMsg,
+                    onAllowed: () => _planTripFromRoute(context, ref),
+                  ),
+        ),
+        option(
+          keyName: 'save-opt-share',
+          icon:
+              const DocklyIcon(DocklyIcons.share, color: DocklyColors.brandDeep),
+          title: t.rteOptShare,
+          subtitle: t.rteOptShareSub,
+          onTap: () => requireAccount(
+            context,
+            ref,
+            message: t.gateRouteMsg,
+            onAllowed: () => _shareCurrentRoute(context, ref),
+          ),
+        ),
+        const SizedBox(height: 12),
+      ],
+    ),
+  );
+}
+
+/// Çizili rotayı Defter/Seyirler'e PLANLANDI olarak işler (menüden).
+Future<void> _planTripFromRoute(BuildContext context, WidgetRef ref) async {
+  final L10n t = ref.read(l10nProvider);
+  final MapState state = ref.read(mapControllerProvider);
+  final SeaRoutePlan? route = state.route;
+  final RouteOrigin? origin = state.routeOrigin;
+  if (route == null || state.routeWaypoints.isEmpty) return;
+  final String originLabel = origin?.name ??
+      (origin?.isDevice == true ? t.routeOriginDevice : t.routeOriginPicked);
+  final String name =
+      state.routeLabel ?? suggestRouteName(originLabel, state.routeWaypoints);
+  final int stops =
+      state.routeWaypoints.where((RouteWaypoint w) => w.isStop).length;
+  final int now = DateTime.now().millisecondsSinceEpoch;
+  await ref.read(tripLogProvider.notifier).add(SeaTripLog(
+        id: 't$now',
+        name: name,
+        status: TripStatus.planned,
+        dateMs: now,
+        distanceNm: route.distanceNm,
+        stops: stops,
+        // Rota plana gömülür (v2.2) — "Haritada aç" bununla çalışır.
+        routeOrigin: origin,
+        routeWaypoints: origin == null || state.routeWaypoints.isEmpty
+            ? null
+            : state.routeWaypoints,
+      ));
+  ref.read(plannedRouteSeqProvider.notifier).state = state.routeSeq;
+  if (!context.mounted) return;
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(SnackBar(content: Text(t.tripPlannedSnack)));
+}
+
+/// TOPLULUKTA PAYLAŞ (K2 çözümü): rota önce SESSİZCE Rotalarım'a eklenir
+/// (önerilen adla — paylaşım sayfasında ad zaten düzenlenir), sonra paylaşım
+/// sayfası doğrudan açılır. Yuvalar doluysa dürüst yuva sayfası çıkar.
+Future<void> _shareCurrentRoute(BuildContext context, WidgetRef ref) async {
+  final L10n t = ref.read(l10nProvider);
+  final MapState state = ref.read(mapControllerProvider);
+  final SeaRoutePlan? route = state.route;
+  final RouteOrigin? origin = state.routeOrigin;
+  if (route == null || origin == null || state.routeWaypoints.isEmpty) return;
+  if (!ref.read(isPremiumActiveProvider) &&
+      ref.read(savedRoutesProvider).length >= kFreeRouteSlots) {
+    await _showRouteSlotsSheet(context, ref);
+    return;
+  }
+  final String originLabel = origin.name ??
+      (origin.isDevice ? t.routeOriginDevice : t.routeOriginPicked);
+  final String name =
+      state.routeLabel ?? suggestRouteName(originLabel, state.routeWaypoints);
+  final int now = DateTime.now().millisecondsSinceEpoch;
+  final SavedRoute saved = SavedRoute(
+    id: 'r$now',
+    name: name,
+    origin: origin,
+    waypoints: state.routeWaypoints,
+    distanceNm: route.distanceNm,
+    savedAtMs: now,
+  );
+  await ref.read(savedRoutesProvider.notifier).add(saved);
+  if (!context.mounted) return;
+  ref.read(mapControllerProvider.notifier).setRouteLabel(name);
+  await openShareRouteSheet(context, saved);
+}
+
+/// DÜZENLEME ÇUBUĞU (rota paketi Öneri 3): ipucu + sürüklenebilir durak
+/// şeridi + araç çubuğu. Alt eylem kartının yerine geçer; "Bitti" ile döner.
+class _RouteEditBar extends ConsumerWidget {
+  const _RouteEditBar({required this.state});
+
+  final MapState state;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final L10n t = ref.watch(l10nProvider);
+    final ThemeData theme = Theme.of(context);
+    final MapController controller = ref.read(mapControllerProvider.notifier);
+    final List<RouteWaypoint> waypoints = state.routeWaypoints;
+    // Duraklar: son durak = varış (B), şeritte sabit; aradakiler sürüklenir.
+    final List<(int, int, RouteWaypoint)> stops = _numberedStops(waypoints);
+    final List<(int, int, RouteWaypoint)> middle =
+        stops.isEmpty ? stops : stops.sublist(0, stops.length - 1);
+    final RouteOrigin? origin = state.routeOrigin;
+    final String originLabel = origin?.name ??
+        (origin?.isDevice == true ? t.routeOriginDevice : t.routeOriginPicked);
+    final String destName =
+        stops.isEmpty ? '' : (stops.last.$3.name ?? '');
+
+    Widget pill(String text,
+            {Color? bg, Color? fg, Widget? trailing, Key? key}) =>
+        Container(
+          key: key,
+          margin: const EdgeInsets.only(right: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+          decoration: BoxDecoration(
+            color: bg ?? theme.colorScheme.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(
+                color: theme.dividerColor.withValues(alpha: .5)),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(text,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: fg ?? theme.colorScheme.onSurface)),
+              if (trailing != null) trailing,
+            ],
+          ),
+        );
+
+    return Material(
+      elevation: 8,
+      shadowColor: Colors.black.withValues(alpha: 0.3),
+      borderRadius: BorderRadius.circular(18),
+      color: theme.colorScheme.surface,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            // İPUCU (K3 çözümü): jestler artık KENDİNİ ANLATIR.
+            Text(
+              t.rteHint,
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+            const SizedBox(height: 8),
+            // DURAK ŞERİDİ: A sabit · aradakiler ≡ ile sürüklenir · B sabit.
+            SizedBox(
+              height: 38,
+              child: Row(
+                children: <Widget>[
+                  pill('A · $originLabel',
+                      bg: DocklyColors.brandPrimary.withValues(alpha: .12),
+                      fg: DocklyColors.brandPrimary),
+                  Expanded(
+                    child: middle.isEmpty
+                        ? Center(
+                            child: Text(
+                              t.rteNoStops,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant),
+                            ),
+                          )
+                        : ReorderableListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            buildDefaultDragHandles: false,
+                            itemCount: middle.length,
+                            onReorder: (int oldIndex, int newIndex) {
+                              // ReorderableListView yeni indeksi "araya"
+                              // göre verir — sona taşımada 1 düşülür.
+                              if (newIndex > oldIndex) newIndex -= 1;
+                              controller.reorderStops(oldIndex, newIndex);
+                            },
+                            itemBuilder: (BuildContext c, int i) {
+                              final (int wpIndex, int number,
+                                  RouteWaypoint wp) = middle[i];
+                              final String stopName = wp.name ?? '';
+                              return ReorderableDragStartListener(
+                                key: ValueKey<String>('rte-stop-$wpIndex'),
+                                index: i,
+                                child: pill(
+                                  '≡ $number · $stopName',
+                                  trailing: InkWell(
+                                    key: ValueKey<String>(
+                                        'rte-stop-del-$wpIndex'),
+                                    onTap: () =>
+                                        controller.removeWaypoint(wpIndex),
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 6),
+                                      child: Text('✕',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w800,
+                                              color: theme.colorScheme
+                                                  .onSurfaceVariant)),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                  if (stops.isNotEmpty)
+                    pill('B · $destName',
+                        bg: DocklyColors.brandDeep,
+                        fg: Colors.white),
+                ],
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              t.rteReorderHint,
+              style: theme.textTheme.labelSmall
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+            const SizedBox(height: 10),
+            // ARAÇ ÇUBUĞU: + Nokta · Başlangıç · Geri al · Bitti.
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: OutlinedButton(
+                    key: const ValueKey<String>('rte-add-point'),
+                    onPressed: controller.beginAddPoint,
+                    style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(0, 42),
+                        padding: const EdgeInsets.symmetric(horizontal: 4)),
+                    child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(t.routeAddPointBtn, maxLines: 1)),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: OutlinedButton(
+                    key: const ValueKey<String>('rte-origin'),
+                    onPressed: () => showRouteOriginMenu(context, ref),
+                    style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(0, 42),
+                        padding: const EdgeInsets.symmetric(horizontal: 4)),
+                    child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text('⇄ ${t.rteOrigin}', maxLines: 1)),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: OutlinedButton(
+                    key: const ValueKey<String>('rte-undo'),
+                    onPressed: state.editUndoDepth == 0
+                        ? null
+                        : () => controller.undoEdit(),
+                    style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(0, 42),
+                        padding: const EdgeInsets.symmetric(horizontal: 4)),
+                    child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text('↩ ${t.rteUndo}', maxLines: 1)),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: FilledButton(
+                    key: const ValueKey<String>('rte-done'),
+                    onPressed: controller.endRouteEdit,
+                    style: FilledButton.styleFrom(
+                        backgroundColor: DocklyColors.success,
+                        minimumSize: const Size(0, 42),
+                        padding: const EdgeInsets.symmetric(horizontal: 4)),
+                    child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text('✓ ${t.rteDone}', maxLines: 1)),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 /// PREMIUM ALT SAYFALARININ ortak gövdesi (P4b): başlık + açıklama + tek
 /// premium çağrısı + saygılı vazgeçme. SIKMAMA SÖZLEŞMESİ: sayfa yalnız
@@ -1418,43 +1810,96 @@ class _RouteStartButton extends ConsumerWidget {
         //  • İki nokta arası (A → B) — GPS'e HİÇ dokunmaz: hedef seçilir,
         //    sonra BAŞLANGIÇ SEÇ modu açılır (haritaya ya da koya dokun).
         //    Konum paylaşılmış olsa bile kaptan A'yı kendisi belirler.
+        // TEK EKRAN "NEREDEN → NEREYE" (rota paketi Öneri 4, kurucu onayı
+        // 2026-10-27): ayrı "mod sorusu" sayfası kalktı — başlangıç seçimi
+        // ve hedef arama tek kartta. Nereden satırına dokunmak o başlangıçla
+        // hedef aramayı AÇAR (fazladan adım yok); "Nereye?" satırı varsayılan
+        // başlangıçla (Konumum) aynı aramayı açar.
         final String? mode = await showModalBottomSheet<String>(
           context: context,
           useSafeArea: true,
           showDragHandle: true,
-          builder: (BuildContext sheetContext) => Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
-                child: Text(
-                  t.routePlanFab,
-                  style: Theme.of(sheetContext)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(fontWeight: FontWeight.w800),
+          builder: (BuildContext sheetContext) {
+            final ThemeData theme = Theme.of(sheetContext);
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+                  child: Text(
+                    t.routePlanFab,
+                    style: theme.textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.w800),
+                  ),
                 ),
-              ),
-              ListTile(
-                key: const ValueKey<String>('plan-from-me'),
-                leading: const DocklyIcon(DocklyIcons.sailing,
-                    color: DocklyColors.brandPrimary),
-                title: Text(t.routeFromDeviceOpt),
-                subtitle: Text(t.routePlanFromMeSub),
-                onTap: () => Navigator.of(sheetContext).pop('me'),
-              ),
-              ListTile(
-                key: const ValueKey<String>('plan-two-points'),
-                leading: const DocklyIcon(DocklyIcons.place,
-                    color: DocklyColors.brandPrimary),
-                title: Text(t.routePlanTwoPoints),
-                subtitle: Text(t.routePlanTwoPointsSub),
-                onTap: () => Navigator.of(sheetContext).pop('ab'),
-              ),
-              const SizedBox(height: 12),
-            ],
-          ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 6, 16, 2),
+                  child: Text(
+                    t.rtePlanFrom.toUpperCase(),
+                    style: theme.textTheme.labelSmall?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: .6,
+                        color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                ),
+                ListTile(
+                  key: const ValueKey<String>('plan-from-me'),
+                  leading: const DocklyIcon(DocklyIcons.sailing,
+                      color: DocklyColors.brandPrimary),
+                  title: Text(t.routeFromDeviceOpt),
+                  subtitle: Text(t.routePlanFromMeSub),
+                  onTap: () => Navigator.of(sheetContext).pop('me'),
+                ),
+                ListTile(
+                  key: const ValueKey<String>('plan-two-points'),
+                  leading: const DocklyIcon(DocklyIcons.place,
+                      color: DocklyColors.brandPrimary),
+                  title: Text(t.routePlanTwoPoints),
+                  subtitle: Text(t.routePlanTwoPointsSub),
+                  onTap: () => Navigator.of(sheetContext).pop('ab'),
+                ),
+                const Divider(height: 16, indent: 16, endIndent: 16),
+                // NEREYE: arama görünümlü satır — varsayılan başlangıç Konumum.
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  child: InkWell(
+                    key: const ValueKey<String>('plan-where-to'),
+                    borderRadius: BorderRadius.circular(14),
+                    onTap: () => Navigator.of(sheetContext).pop('me'),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 13),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                            color:
+                                theme.dividerColor.withValues(alpha: .6)),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          DocklyIcon(DocklyIcons.search,
+                              size: 17,
+                              color: theme.colorScheme.onSurfaceVariant),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              t.rtePlanTo,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                  color:
+                                      theme.colorScheme.onSurfaceVariant),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         );
         if (mode == null || !context.mounted) return;
         final LocationSummary? picked =
@@ -1606,8 +2051,8 @@ class _RouteModeActionCard extends ConsumerWidget {
   const _RouteModeActionCard({
     required this.route,
     required this.waypoints,
-    required this.onAddPoint,
-    required this.onSave,
+    required this.onEdit,
+    required this.onSaveMenu,
     required this.onDetail,
     this.wind,
   });
@@ -1615,8 +2060,8 @@ class _RouteModeActionCard extends ConsumerWidget {
   final SeaRoutePlan route;
   final RouteWindReport? wind;
   final List<RouteWaypoint> waypoints;
-  final VoidCallback onAddPoint;
-  final VoidCallback onSave;
+  final VoidCallback onEdit;
+  final VoidCallback onSaveMenu;
   final VoidCallback onDetail;
 
   @override
@@ -1699,47 +2144,40 @@ class _RouteModeActionCard extends ConsumerWidget {
             const SizedBox(height: 10),
             Row(
               children: <Widget>[
-                // SIĞMA KURALI (saha hatası 2026-10-26): "..." ile kırpılan
-                // düğme yazısı okunmaz oluyordu — FittedBox metni düğmeye
-                // sığacak kadar küçültür, yazı her cihaz ayarında tam çıkar.
+                // ROTA PAKETİ (2026-10-27): üç düğme İKİYE indi — düzenleme
+                // işleri "Düzenle" modunda, kaydet/planla/paylaş tek menüde.
+                // SIĞMA KURALI (saha hatası 2026-10-26): FittedBox metni
+                // düğmeye sığacak kadar küçültür, yazı her ayarda tam çıkar.
                 Expanded(
-                  child: OutlinedButton(
-                    onPressed: onAddPoint,
+                  child: OutlinedButton.icon(
+                    key: const ValueKey<String>('route-edit-btn'),
+                    onPressed: onEdit,
                     style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(0, 42),
+                        minimumSize: const Size(0, 44),
                         padding:
                             const EdgeInsets.symmetric(horizontal: 6)),
-                    child: FittedBox(
+                    icon: const DocklyIcon(DocklyIcons.edit,
+                        size: 15, color: DocklyColors.brandPrimary),
+                    label: FittedBox(
                       fit: BoxFit.scaleDown,
-                      child: Text(t.routeAddPointBtn, maxLines: 1),
+                      child: Text(t.rteEdit, maxLines: 1),
                     ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: OutlinedButton(
-                    onPressed: onSave,
-                    style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(0, 42),
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 6)),
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(t.saveLabel, maxLines: 1),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: FilledButton(
-                    onPressed: onDetail,
+                  child: FilledButton.icon(
+                    key: const ValueKey<String>('route-save-menu'),
+                    onPressed: onSaveMenu,
                     style: FilledButton.styleFrom(
-                        minimumSize: const Size(0, 42),
+                        minimumSize: const Size(0, 44),
                         padding:
                             const EdgeInsets.symmetric(horizontal: 6)),
-                    child: FittedBox(
+                    icon: const DocklyIcon(DocklyIcons.bookmark,
+                        size: 15, color: Colors.white),
+                    label: FittedBox(
                       fit: BoxFit.scaleDown,
-                      child: Text(t.routeChipTitle, maxLines: 1),
+                      child: Text('${t.rteSave} ▾', maxLines: 1),
                     ),
                   ),
                 ),
@@ -1887,19 +2325,10 @@ void showRouteDetailSheet(BuildContext mapContext, WidgetRef ref) {
       initialChildSize: 0.6,
       minChildSize: 0.4,
       maxChildSize: 0.92,
+      // ROTA PAKETİ (2026-10-27): sayfa artık SALT BİLGİdir — kaydet/planla/
+      // paylaş "Kaydet ▾" menüsünde, başlangıç/nokta işleri Düzenle modunda.
       builder: (BuildContext c, ScrollController scroll) => _RouteDetailSheet(
         scroll: scroll,
-        // Harita etkileşimi isteyen modlar sayfayı kapatıp devam eder.
-        onChangeOrigin: () {
-          Navigator.of(sheetCtx).pop();
-          showRouteOriginMenu(mapContext, ref);
-        },
-        onAddPoint: () {
-          Navigator.of(sheetCtx).pop();
-          ref.read(mapControllerProvider.notifier).beginAddPoint();
-        },
-        onSave: () => _saveRouteDialog(
-            mapContext, ref, ref.read(mapControllerProvider)),
         onOpenChecklist: () => showChecklistSheet(sheetCtx),
       ),
     ),
@@ -1912,16 +2341,10 @@ void showRouteDetailSheet(BuildContext mapContext, WidgetRef ref) {
 class _RouteDetailSheet extends ConsumerWidget {
   const _RouteDetailSheet({
     required this.scroll,
-    required this.onChangeOrigin,
-    required this.onAddPoint,
-    required this.onSave,
     required this.onOpenChecklist,
   });
 
   final ScrollController scroll;
-  final VoidCallback onChangeOrigin;
-  final VoidCallback onAddPoint;
-  final VoidCallback onSave;
   final VoidCallback onOpenChecklist;
 
   @override
@@ -2009,89 +2432,23 @@ class _RouteDetailSheet extends ConsumerWidget {
                 ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
           ),
         ),
-        // SEYİR PLANI + ROTALARIM (v2.2 birleştirme): iki eş boy kardeş düğme.
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: _PlanTripRow(
-            t: t,
-            name: label ??
-                suggestRouteName(
-                  origin?.name ??
-                      (origin?.isDevice == true
-                          ? t.routeOriginDevice
-                          : t.routeOriginPicked),
-                  waypoints,
-                ),
-            distanceNm: route.distanceNm,
-            stops: stopCount,
-            origin: origin,
-            waypoints: waypoints,
-            onAddToSaved: onSave,
-          ),
-        ),
-        // BAŞLANGIÇ satırı: A noktası + değiştir + Nokta ekle.
+        // BAŞLANGIÇ BİLGİSİ (salt okunur — değiştirme Düzenle modunda).
         if (origin != null)
           Padding(
-            padding: const EdgeInsets.only(top: 12),
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 4,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: <Widget>[
-                Text(
-                  L10n.fmt(
-                    t.routeOriginFmt,
-                    origin.name ??
-                        (origin.isDevice
-                            ? t.routeOriginDevice
-                            : t.routeOriginPicked),
-                  ),
-                  style: theme.textTheme.bodySmall
-                      ?.copyWith(fontWeight: FontWeight.w600),
-                ),
-                InkWell(
-                  borderRadius: BorderRadius.circular(8),
-                  onTap: onChangeOrigin,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 5, vertical: 2),
-                    child: Text(
-                      t.routeOriginChange,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: DocklyColors.brandPrimary,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ),
-                ),
-                // + NOKTA EKLE: dokunma modu haritayı ister — sayfa kapanır.
-                InkWell(
-                  borderRadius: BorderRadius.circular(8),
-                  onTap: onAddPoint,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 5, vertical: 2),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        const DocklyIcon(DocklyIcons.place,
-                            size: 12, color: DocklyColors.brandPrimary),
-                        const SizedBox(width: 3),
-                        Text(
-                          t.routeAddPointBtn,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: DocklyColors.brandPrimary,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(
+              L10n.fmt(
+                t.routeOriginFmt,
+                origin.name ??
+                    (origin.isDevice
+                        ? t.routeOriginDevice
+                        : t.routeOriginPicked),
+              ),
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(fontWeight: FontWeight.w600),
             ),
           ),
-        // DURAK LİSTESİ: sıralı haplar; hedef dışındakiler ✕ ile çıkarılır.
+        // DURAK LİSTESİ (salt okunur — çıkarma/sıralama Düzenle modunda).
         if (stopCount >= 2)
           Padding(
             padding: const EdgeInsets.only(top: 8),
@@ -2106,11 +2463,7 @@ class _RouteDetailSheet extends ConsumerWidget {
                     name: wp.name ?? '',
                     isLast: wpIndex == waypoints.length - 1,
                     removeTooltip: t.routeStopRemoveTooltip,
-                    onRemove: wpIndex == waypoints.length - 1
-                        ? null
-                        : () => ref
-                            .read(mapControllerProvider.notifier)
-                            .removeWaypoint(wpIndex),
+                    onRemove: null, // salt okunur — düzenleme Düzenle modunda
                   ),
               ],
             ),
@@ -2174,140 +2527,6 @@ List<(int, int, RouteWaypoint)> _numberedStops(List<RouteWaypoint> waypoints) {
 /// çift dokunuş çift plan üretmesin; yeni rota çizilince düğme geri gelir.)
 final StateProvider<int?> plannedRouteSeqProvider =
     StateProvider<int?>((ref) => null);
-
-/// SEYİR PLANI SATIRI (rota çipinin altı, v2.2): iki eş boy kardeş düğme —
-/// MAVİ "Seyri planla" (sefer niyeti: Defter'e PLANLANDI düşer, rota plana
-/// gömülür) ve TURKUAZ "Rotalarım'a ekle" (tarihsiz şablon rota). Renk
-/// ayrımı işlevi anlatır, tasarım/boy birdir (kurucu isteği 2026-08).
-/// Navigasyon başlatma/GPS iması taşıyan hiçbir söz kullanılmaz.
-class _PlanTripRow extends ConsumerWidget {
-  const _PlanTripRow({
-    required this.t,
-    required this.name,
-    required this.distanceNm,
-    required this.stops,
-    this.origin,
-    this.waypoints = const <RouteWaypoint>[],
-    this.onAddToSaved,
-  });
-
-  final L10n t;
-  final String name;
-  final double distanceNm;
-  final int stops;
-
-  /// Rota verisi (v2.2): plana gömülür — "Haritada aç" bununla çalışır.
-  final RouteOrigin? origin;
-  final List<RouteWaypoint> waypoints;
-
-  /// "Rotalarım'a ekle" (kurucu isteği 2026-08): planla düğmesinin yanında
-  /// AYNI boy/tasarımda, TURKUAZ kardeş düğme — şablon rotalar için.
-  final VoidCallback? onAddToSaved;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ThemeData theme = Theme.of(context);
-    final int routeSeq =
-        ref.watch(mapControllerProvider.select((MapState s) => s.routeSeq));
-    final bool alreadyPlanned =
-        ref.watch(plannedRouteSeqProvider) == routeSeq;
-    // İkincil eylem: turkuaz "Rotalarım'a ekle" — planla ile eş boy/biçim,
-    // renk ayrıştırır (mavi = sefer niyeti, turkuaz = şablon rota). Rota
-    // planlandıktan SONRA da görünür kalır: kaptan önce planlayıp sonra
-    // şablon olarak da saklayabilir.
-    final Widget? saveBtn = onAddToSaved == null
-        ? null
-        : FilledButton.icon(
-            key: const ValueKey<String>('route-add-saved'),
-            style: FilledButton.styleFrom(
-              backgroundColor: DocklyColors.accentTurquoise,
-              foregroundColor: DocklyColors.brandDeep,
-              minimumSize: const Size(0, 36),
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              visualDensity: VisualDensity.compact,
-            ),
-            onPressed: onAddToSaved,
-            icon: const DocklyIcon(DocklyIcons.bookmark,
-                size: 15, color: DocklyColors.brandDeep),
-            label: Text(t.routeAddToSaved),
-          );
-    if (alreadyPlanned) {
-      // Bu rota deftere eklendi — planla düğmesi yerini sakin bir onay
-      // satırına bırakır; "Rotalarım'a ekle" yanında durmaya devam eder.
-      return Wrap(
-        spacing: 10,
-        runSpacing: 8,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: <Widget>[
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const DocklyIcon(DocklyIcons.checkCircle,
-                  size: 14, color: DocklyColors.success),
-              const SizedBox(width: 5),
-              Text(
-                t.tripPlannedShort,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
-          if (saveBtn != null) saveBtn,
-        ],
-      );
-    }
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: <Widget>[
-        FilledButton.icon(
-          key: const ValueKey<String>('trip-plan'),
-          style: FilledButton.styleFrom(
-            minimumSize: const Size(0, 36),
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            visualDensity: VisualDensity.compact,
-          ),
-          // HESAP KAPISI (Defter paketi 2026-10-27): seyirler hesapla gezer —
-          // plansız yazma controller'da sessizce düşer; kapı dürüst davet açar.
-          onPressed: () => requireAccount(
-            context,
-            ref,
-            message: t.gateTripMsg,
-            onAllowed: () async {
-              final int now = DateTime.now().millisecondsSinceEpoch;
-              await ref.read(tripLogProvider.notifier).add(SeaTripLog(
-                    id: 't$now',
-                    name: name,
-                    status: TripStatus.planned,
-                    dateMs: now,
-                    distanceNm: distanceNm,
-                    stops: stops,
-                    // Rota plana gömülür (v2.2) — başlangıç yoksa (olmamalı)
-                    // rota verisi dürüstçe boş kalır.
-                    routeOrigin: origin,
-                    routeWaypoints:
-                        origin == null || waypoints.isEmpty ? null : waypoints,
-                  ));
-              ref.read(plannedRouteSeqProvider.notifier).state = routeSeq;
-              if (!context.mounted) return;
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(content: Text(t.tripPlannedSnack)));
-            },
-          ),
-          icon: const DocklyIcon(DocklyIcons.sailing,
-              size: 15, color: Colors.white),
-          label: Text(t.tripPlanBtn),
-        ),
-        if (saveBtn != null) saveBtn,
-      ],
-    );
-  }
-}
 
 /// Rota istatistik hücresi (bilgi ekranı 2.0): küçük başlık + belirgin değer.
 /// Değer sütuna sığmazsa FittedBox ile küçülür — kesilme/taşma olmaz.

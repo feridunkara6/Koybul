@@ -488,19 +488,19 @@ void main() {
     await tester.pump(const Duration(seconds: 6));
     await tester.pumpAndSettle();
 
-    // ROTA ÖZET HAPI (kurucu isteği 2026-08, "ekranı kaplıyor"): planla ve
-    // diğer ayrıntılar artık ALTTAN AÇILAN sayfada — önce hapa dokunulur.
-    expect(find.byKey(const ValueKey<String>('trip-plan')), findsNothing);
-    await tester.tap(find.byKey(const ValueKey<String>('route-summary')));
+    // ROTA PAKETİ (kurucu onayı 2026-10-27): planla artık "Kaydet ▾"
+    // menüsünde — kaydet/planla/paylaş tek kapıda toplandı.
+    expect(find.byKey(const ValueKey<String>('save-opt-trip')), findsNothing);
+    await tester.tap(find.byKey(const ValueKey<String>('route-save-menu')));
     await tester.pumpAndSettle();
 
-    // İKİ KARDEŞ DÜĞME (kurucu isteği 2026-08): sayfada planla'nın yanında
-    // turkuaz "Rotalarım'a ekle" de durur — eş boy, farklı renk.
-    expect(find.byKey(const ValueKey<String>('route-add-saved')), findsOneWidget);
+    // Menüde üç yol birden durur: Rotalarım'a ekle + planla + paylaş.
+    expect(find.byKey(const ValueKey<String>('save-opt-routes')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('save-opt-share')), findsOneWidget);
 
     // Planla: kayıt PLANLANDI olarak depoya düşer, onay mesajı görünür.
     // (Önce depo doğrulanır — mesaj bulunamazsa neden ayrışsın.)
-    await tester.tap(find.byKey(const ValueKey<String>('trip-plan')));
+    await tester.tap(find.byKey(const ValueKey<String>('save-opt-trip')));
     await tester.pumpAndSettle();
     expect(trips.data, hasLength(1));
     expect(trips.data.first.status, TripStatus.planned);
@@ -513,13 +513,17 @@ void main() {
     expect(trips.data.first.routeWaypoints, hasLength(1));
     expect(find.textContaining('PLANLANDI'), findsOneWidget);
 
-    // Düğme yerini onay satırına bırakır — aynı rota İKİ KEZ planlanamaz
-    // (çifte kayıt = şişirilmiş defter; tasarım raporu §6). "Rotalarım'a
-    // ekle" ise DURMAYA DEVAM eder: kaptan planladıktan sonra şablon
-    // olarak da saklayabilir.
-    expect(find.byKey(const ValueKey<String>('trip-plan')), findsNothing);
-    expect(find.textContaining('Defter\'e eklendi'), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('route-add-saved')), findsOneWidget);
+    // Aynı rota İKİ KEZ planlanamaz (çifte kayıt = şişirilmiş defter):
+    // menü yeniden açılınca seçenek sakin "zaten planlandı" bilgisine döner;
+    // "Rotalarım'a ekle" durmaya devam eder.
+    await tester.tap(find.byKey(const ValueKey<String>('route-save-menu')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('save-opt-trip')), findsNothing);
+    expect(
+        find.byKey(const ValueKey<String>('save-opt-trip-done')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('save-opt-routes')), findsOneWidget);
+    await tester.tapAt(const Offset(200, 30)); // menüyü kapat
+    await tester.pumpAndSettle();
 
     // Snackbar zamanlayıcısını akıt.
     await tester.pump(const Duration(seconds: 6));
@@ -554,15 +558,15 @@ void main() {
     expect(find.text('Üç koy turu'), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('route-summary')), findsOneWidget);
     expect(find.text('Bedri Rahmi'), findsNothing);
-    expect(find.byKey(const ValueKey<String>('trip-plan')), findsNothing);
 
-    // Hapa dokun → ayrıntı sayfası: istatistikler, duraklar, düğmeler.
+    // Hapa dokun → ayrıntı sayfası: SALT BİLGİ (rota paketi 2026-10-27) —
+    // istatistikler + duraklar; kaydet/planla menüde, düzenleme Düzenle'de.
     await tester.tap(find.byKey(const ValueKey<String>('route-summary')));
     await tester.pumpAndSettle();
     expect(find.text('DURAK'), findsOneWidget);
     expect(find.text('Bedri Rahmi'), findsOneWidget);
     expect(find.text('Boynuz Bükü'), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('trip-plan')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('save-opt-trip')), findsNothing);
     // Dürüstlük notu sayfada okunur.
     expect(find.textContaining('Tahminî deniz rotası'), findsOneWidget);
 
@@ -767,9 +771,9 @@ void main() {
       name: 'Dördüncü rota',
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey<String>('route-summary')));
+    await tester.tap(find.byKey(const ValueKey<String>('route-save-menu')));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey<String>('route-add-saved')));
+    await tester.tap(find.byKey(const ValueKey<String>('save-opt-routes')));
     await tester.pumpAndSettle();
 
     expect(find.text('Kayıt yuvaların doldu (3/3)'), findsOneWidget);
@@ -778,6 +782,67 @@ void main() {
 
     await tester.tapAt(const Offset(200, 30));
     await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('DÜZENLEME MODU (rota paketi 2026-10-27): Düzenle → araç çubuğu '
+      've durak şeridi; Bitti → eylem kartı geri gelir',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_app(
+      FakeMapGateway(result: pinResult),
+      routeEngine: _FakeRouteEngine(),
+    ));
+    await tester.pumpAndSettle();
+    final ProviderContainer c =
+        ProviderScope.containerOf(tester.element(find.byType(MapScreen)));
+    await c.read(mapControllerProvider.notifier).openSavedRoute(
+      const RouteOrigin(pos: GeoPoint(lat: 36.75, lon: 28.93), name: 'Göcek'),
+      const <RouteWaypoint>[
+        RouteWaypoint(
+            pos: GeoPoint(lat: 36.72, lon: 28.92), id: 's1', name: 'Bedri Rahmi'),
+        RouteWaypoint(
+            pos: GeoPoint(lat: 36.70, lon: 28.90), id: 's2', name: 'Boynuz Bükü'),
+      ],
+      name: 'Düzenleme provası',
+    );
+    await tester.pumpAndSettle();
+
+    // Eylem kartında iki düğme: Düzenle + Kaydet ▾.
+    expect(find.byKey(const ValueKey<String>('route-edit-btn')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('route-save-menu')), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey<String>('route-edit-btn')));
+    await tester.pumpAndSettle();
+
+    // Düzenleme çubuğu: araç düğmeleri + ara durak hapı (B sabit, şeride girmez).
+    expect(find.byKey(const ValueKey<String>('rte-done')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('rte-add-point')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('rte-stop-0')), findsOneWidget);
+    expect(find.textContaining('B · Boynuz Bükü'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('route-save-menu')), findsNothing);
+
+    // Geri al: henüz adım yok — düğme sönük.
+    final OutlinedButton undo = tester
+        .widget<OutlinedButton>(find.byKey(const ValueKey<String>('rte-undo')));
+    expect(undo.onPressed, isNull);
+
+    // ✕ ile ara durak çıkarılır → Geri al CANLANIR.
+    await tester.tap(find.byKey(const ValueKey<String>('rte-stop-del-0')));
+    await tester.pumpAndSettle();
+    expect(c.read(mapControllerProvider).routeWaypoints, hasLength(1));
+    final OutlinedButton undo2 = tester
+        .widget<OutlinedButton>(find.byKey(const ValueKey<String>('rte-undo')));
+    expect(undo2.onPressed, isNotNull);
+    await tester.tap(find.byKey(const ValueKey<String>('rte-undo')));
+    await tester.pumpAndSettle();
+    expect(c.read(mapControllerProvider).routeWaypoints, hasLength(2));
+
+    // Bitti → eylem kartı geri gelir.
+    await tester.tap(find.byKey(const ValueKey<String>('rte-done')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('route-save-menu')), findsOneWidget);
+
     await tester.pump(const Duration(seconds: 6));
     await tester.pumpAndSettle();
   });

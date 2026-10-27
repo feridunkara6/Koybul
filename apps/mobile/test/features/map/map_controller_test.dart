@@ -844,6 +844,86 @@ void main() {
     expect(_state(container).routeWaypoints, hasLength(1));
   });
 
+  test('ROTA PAKETİ: reorderStops durak SIRASINI değiştirir; varış (B) sabit '
+      'kalır; ara noktalar bilerek düşer', () async {
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.76, lon: 28.96), GeoPoint(lat: 36.75, lon: 28.93)],
+      distanceNm: 2,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final container = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: FakeSeaRouteEngine(plan));
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin); // durak 1: loc-1
+    await _ctrl(container)
+        .addStop(const GeoPoint(lat: 36.74, lon: 28.91), 'loc-2', 'Kille');
+    await _ctrl(container)
+        .addStop(const GeoPoint(lat: 36.72, lon: 28.89), 'loc-3', 'Sarsala');
+    // Araya serbest nokta da koy — sıra değişince bilerek düşecek.
+    await _ctrl(container).insertVia(0, const GeoPoint(lat: 36.70, lon: 28.90));
+    expect(_state(container).routeWaypoints, hasLength(4));
+
+    // Ara duraklar [loc-1, loc-2]; varış loc-3 SABİT. 0 ↔ 1 takası:
+    await _ctrl(container).reorderStops(0, 1);
+    final MapState s = _state(container);
+    final List<String?> ids =
+        s.routeWaypoints.map((RouteWaypoint w) => w.id).toList();
+    expect(ids, <String?>['loc-2', 'loc-1', 'loc-3']); // sıra değişti, B sabit
+    // Serbest ara nokta düştü (eski bacaklara göre şekillenmişti — dürüst).
+    expect(s.routeWaypoints.every((RouteWaypoint w) => w.isStop), isTrue);
+    expect(s.routeSeq, 1); // düzenleme — kamera sıçramaz
+  });
+
+  test('ROTA PAKETİ: undoEdit son adımı geri sarar; yeni rota yığını sıfırlar',
+      () async {
+    const SeaRoutePlan plan = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.76, lon: 28.96), GeoPoint(lat: 36.75, lon: 28.93)],
+      distanceNm: 2,
+      reachedGoal: true,
+      viaSea: true,
+    );
+    final container = _containerWith(FakeMapGateway(result: pinResult),
+        routeEngine: FakeSeaRouteEngine(plan));
+    await _ctrl(container).loadViewport(pinViewport);
+    _shareLocation(container);
+    await _ctrl(container).routeToPin(testPin);
+    expect(_state(container).editUndoDepth, 0);
+
+    await _ctrl(container).insertVia(0, const GeoPoint(lat: 36.70, lon: 28.90));
+    expect(_state(container).routeWaypoints, hasLength(2));
+    expect(_state(container).editUndoDepth, 1);
+
+    await _ctrl(container).undoEdit();
+    expect(_state(container).routeWaypoints, hasLength(1)); // ara nokta gitti
+    expect(_state(container).editUndoDepth, 0);
+
+    // Boş yığında geri al SESSİZCE hiçbir şey yapmaz.
+    await _ctrl(container).undoEdit();
+    expect(_state(container).routeWaypoints, hasLength(1));
+
+    // Düzenleme modu bayrağı: gir/çık.
+    _ctrl(container).beginRouteEdit();
+    expect(_state(container).editingRoute, isTrue);
+    _ctrl(container).endRouteEdit();
+    expect(_state(container).editingRoute, isFalse);
+
+    // YENİ rota çizilince yığın sıfırlanır (eski adımlar yeni rotayı saramaz).
+    await _ctrl(container).insertVia(0, const GeoPoint(lat: 36.70, lon: 28.90));
+    expect(_state(container).editUndoDepth, 1);
+    await _ctrl(container).openSavedRoute(
+      const RouteOrigin(pos: GeoPoint(lat: 36.76, lon: 28.96), name: 'Göcek'),
+      const <RouteWaypoint>[
+        RouteWaypoint(
+            pos: GeoPoint(lat: 36.75, lon: 28.93), id: 'loc-1', name: 'K'),
+      ],
+      name: 'Yeni',
+    );
+    expect(_state(container).editUndoDepth, 0);
+    expect(_state(container).editingRoute, isFalse);
+  });
+
   test('DÜZENLEME BAŞARISIZ: motor rota bulamazsa ESKİ ROTA KORUNUR + edit sinyali', () async {
     const SeaRoutePlan plan = SeaRoutePlan(
       points: <GeoPoint>[GeoPoint(lat: 36.76, lon: 28.96), GeoPoint(lat: 36.75, lon: 28.93)],

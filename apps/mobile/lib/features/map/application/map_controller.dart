@@ -451,6 +451,87 @@ class MapController extends Notifier<MapState> {
     }
   }
 
+  // --- ROTA DÜZENLEME MODU (rota paketi, kurucu onayı 2026-10-27) ---
+
+  /// Geri-al yığını: her düzenleme adımından önce (başlangıç + noktalar)
+  /// fotoğrafı buraya itilir. En fazla 10 adım — bellek şişmez.
+  final List<({RouteOrigin origin, List<RouteWaypoint> wps})> _editHistory =
+      <({RouteOrigin origin, List<RouteWaypoint> wps})>[];
+
+  /// Düzenleme moduna gir (alt karttaki "Düzenle"). Araç çubuğu + durak
+  /// şeridi açılır; jestler (çizgiye dokun / tutamaç sürükle) zaten canlı.
+  void beginRouteEdit() {
+    if (state.route == null) return;
+    state = state.copyWith(
+        editingRoute: true,
+        addingPoint: false,
+        pickingOrigin: false,
+        clearSelection: true);
+  }
+
+  /// Düzenleme modundan çık ("Bitti"). Geri-al yığını DURUR: kaptan tekrar
+  /// Düzenle'ye girerse kaldığı yerden geri alabilir.
+  void endRouteEdit() {
+    state = state.copyWith(
+        editingRoute: false, addingPoint: false, pickingOrigin: false);
+  }
+
+  /// Düzenleme adımından önce fotoğraf çek (geri-al için).
+  void _pushEditHistory() {
+    final RouteOrigin? origin = state.routeOrigin;
+    if (origin == null) return;
+    _editHistory.add((
+      origin: origin,
+      wps: List<RouteWaypoint>.unmodifiable(state.routeWaypoints),
+    ));
+    if (_editHistory.length > 10) _editHistory.removeAt(0);
+    state = state.copyWith(editUndoDepth: _editHistory.length);
+  }
+
+  /// GERİ AL: son düzenleme adımını geri sarar (başlangıç + noktalar) ve
+  /// rotayı yeniden çizer. Başarısız yeniden çizimde adım yığına geri konur
+  /// (mevcut rota korunmuştur — hiçbir şey kaybolmaz).
+  Future<void> undoEdit() async {
+    if (_editHistory.isEmpty || state.isRouting) return;
+    final ({RouteOrigin origin, List<RouteWaypoint> wps}) snap =
+        _editHistory.removeLast();
+    state = state.copyWith(editUndoDepth: _editHistory.length);
+    final int failBefore = state.routeEditFailSeq;
+    await _planTrip(snap.origin, snap.wps, editing: true);
+    if (state.routeEditFailSeq != failBefore) {
+      _editHistory.add(snap);
+      state = state.copyWith(editUndoDepth: _editHistory.length);
+    }
+  }
+
+  /// DURAK SIRASI DEĞİŞTİRME (şeritte ≡ sürükle): [oldIndex]/[newIndex]
+  /// ARA duraklar listesinin indeksleridir (başlangıç ve son varış sabit).
+  /// Serbest ara noktalar ESKİ bacaklara göre şekillenmişti — sıra değişince
+  /// anlamları kalmaz; dürüst davranış onları bırakıp rotayı duraklarla
+  /// yeniden çizmektir (yorumda belgeli bilinçli karar).
+  Future<void> reorderStops(int oldIndex, int newIndex) async {
+    final RouteOrigin? origin = state.routeOrigin;
+    if (state.route == null || origin == null || state.isRouting) return;
+    final List<RouteWaypoint> stops = <RouteWaypoint>[
+      for (final RouteWaypoint w in state.routeWaypoints)
+        if (w.isStop) w,
+    ];
+    // Son durak = varış (B) — şeritte sabittir, sıralamaya girmez.
+    final List<RouteWaypoint> middle = stops.sublist(0, stops.length - 1);
+    if (oldIndex < 0 ||
+        oldIndex >= middle.length ||
+        newIndex < 0 ||
+        newIndex >= middle.length ||
+        oldIndex == newIndex) {
+      return;
+    }
+    _pushEditHistory();
+    final RouteWaypoint moved = middle.removeAt(oldIndex);
+    middle.insert(newIndex, moved);
+    await _planTrip(
+        origin, <RouteWaypoint>[...middle, stops.last], editing: true);
+  }
+
   // --- NOKTA EKLE modu (kullanıcı isteği 2026-08, mobil dostu düzenleme) ---
 
   /// NOKTA EKLE moduna girer (çipteki "+ Nokta ekle"). Haritaya dokunuş ara
@@ -482,6 +563,7 @@ class MapController extends Notifier<MapState> {
       <GeoPoint>[for (final RouteWaypoint w in wps) w.pos],
       snapped,
     );
+    _pushEditHistory(); // geri al bu adımı da sarabilsin
     wps.insert(idx, RouteWaypoint(pos: snapped));
     state = state.copyWith(addingPoint: false);
     await _planTrip(origin, wps, editing: true);
@@ -554,6 +636,7 @@ class MapController extends Notifier<MapState> {
   /// Yeni başlangıçla: mevcut rota varsa onu, yoksa bekleyen hedefi planlar.
   Future<void> _replanWithOrigin(RouteOrigin origin) async {
     if (state.routeWaypoints.isNotEmpty) {
+      _pushEditHistory(); // başlangıç değişimi de geri alınabilir
       await _planTrip(origin, state.routeWaypoints, editing: true);
       return;
     }
@@ -592,6 +675,7 @@ class MapController extends Notifier<MapState> {
     // davranış en kısa sapmaya göre araya sokuyordu; kullanıcı rotanın
     // hedefini değiştiremiyordu. bestStopInsertIndex yalnız haritaya dokunma
     // "ara nokta"larında kullanılmaya devam eder.)
+    _pushEditHistory(); // geri al bu adımı da sarabilsin
     wps.add(RouteWaypoint(pos: pos, id: idOrSlug, name: name));
     await _planTrip(origin, wps, editing: true);
   }
@@ -604,6 +688,7 @@ class MapController extends Notifier<MapState> {
     final GeoPoint? snapped =
         await _snapForEdit(pos);
     if (snapped == null) return; // sinyal _snapForEdit içinde verildi
+    _pushEditHistory();
     final List<RouteWaypoint> wps =
         List<RouteWaypoint>.of(state.routeWaypoints);
     final int idx = legIndex.clamp(0, wps.length - 1);
@@ -619,6 +704,7 @@ class MapController extends Notifier<MapState> {
     if (state.routeWaypoints[wpIndex].isStop) return; // duraklar taşınmaz
     final GeoPoint? snapped = await _snapForEdit(pos);
     if (snapped == null) return;
+    _pushEditHistory();
     final List<RouteWaypoint> wps =
         List<RouteWaypoint>.of(state.routeWaypoints);
     wps[wpIndex] = RouteWaypoint(pos: snapped);
@@ -631,6 +717,7 @@ class MapController extends Notifier<MapState> {
     final RouteOrigin? origin = state.routeOrigin;
     if (state.route == null || origin == null || state.isRouting) return;
     if (wpIndex < 0 || wpIndex >= state.routeWaypoints.length - 1) return;
+    _pushEditHistory();
     final List<RouteWaypoint> wps =
         List<RouteWaypoint>.of(state.routeWaypoints)..removeAt(wpIndex);
     await _planTrip(origin, wps, editing: true);
@@ -738,9 +825,14 @@ class MapController extends Notifier<MapState> {
       return;
     }
     final SeaRoutePlan resolved = trip.combined;
+    // YENİ rota = temiz sayfa: geri-al yığını ve düzenleme modu sıfırlanır
+    // (eski rotanın adımları yeni rotayı geri saramaz).
+    if (!editing) _editHistory.clear();
     state = state.copyWith(
       route: resolved,
       routeLegs: trip.legs,
+      editingRoute: editing ? null : false,
+      editUndoDepth: editing ? null : 0,
       routeWaypoints: List<RouteWaypoint>.unmodifiable(wps),
       routeOrigin: origin,
       isRouting: false,
@@ -779,6 +871,7 @@ class MapController extends Notifier<MapState> {
     // BEKLEYEN PLAN İPTAL (örnekli tur dersi 2026-08): kapat'a basıldığında
     // hâlâ hesaplanan bir rota varsa bitince "geri gelmesin".
     ++_routeReq;
+    _editHistory.clear(); // rota kapandı — geri-al yığını da anlamını yitirdi
     state = state.copyWith(clearRoute: true, isRouting: false);
   }
 
