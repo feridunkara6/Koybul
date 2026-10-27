@@ -1281,8 +1281,9 @@ void main() {
     const GeoPoint s1 = GeoPoint(lat: 36.7000, lon: 28.9000);
     const GeoPoint s2 = GeoPoint(lat: 36.6600, lon: 28.8700);
     // Motor bacağı çapadan ~0.5 nm açıkta başlatıyor (ızgara hücre merkezi).
-    final SeaRoutePlan leg = SeaRoutePlan(
-      points: const <GeoPoint>[GeoPoint(lat: 36.7450, lon: 28.9400), s1],
+    // CI dersi: tüm alanlar sabit → const kurulmalı (prefer_const_constructors).
+    const SeaRoutePlan leg = SeaRoutePlan(
+      points: <GeoPoint>[GeoPoint(lat: 36.7450, lon: 28.9400), s1],
       distanceNm: 3,
       reachedGoal: true,
       viaSea: true,

@@ -1,5 +1,6 @@
 import 'package:dockly_api/dockly_api.dart'
     show
+        AdminContentItem,
         AdminDealInput,
         AdminEventInput,
         AdminPremiumGrant,
@@ -105,6 +106,14 @@ class FakeAdminGw implements AdminGateway {
   @override
   Future<void> setDealActive(String dealId, {required bool isActive}) async =>
       dealToggles.add((dealId, isActive));
+
+  // İçerik yönetimi (2026-10-27) — bu dosyanın testleri kullanmaz.
+  @override
+  Future<List<AdminContentItem>> listContent(String type) async =>
+      const <AdminContentItem>[];
+
+  @override
+  Future<void> deleteContent({required String type, required String id}) async {}
 }
 
 class FakeEventsGw implements EventsGateway {
