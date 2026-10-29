@@ -1,0 +1,646 @@
+{
+ "yontem": "Koy-ici yerlestirme turu (2026-10-29, kurucu talimati: 'noktalari koylarin iclerine en belirgin yerlerine yerlestir'). GSHHG tam cozunurluk kiyi cizgisi (basemap-data-hires 2.0.0 icindeki gshhs_f, GSHHS_f_L1 esdegeri) ile 767 kaydin tamami tarandi. Koy tipi (mooring_point/buoy, 376 kayit) icin bayrak kriterleri: karada olmak, kiyiya <25 m yapisik olmak, kiyidan >350 m acikta olmak, ya da 16-isin kusatilmislik orani <0.25 (koy cebinde degil). Bayraklanan 71 nokta, yalniz GSHHG suyunda aranan adaylar arasindan su skorla tasindi: 2.0*kusatilmislik + exp(-((kiyi-130m)/90m)^2) - 1.2*(tasima/arama_yaricapi); taban kiyi mesafesi 50 m. Her tasima once/sonra kiyi haritasi uzerinde gorsel olarak dogrulandi (koy_dogrulama_*.png). adrasan-koyu-demirleme icin kaynakli koordinat kullanildi (turkeymarinas Cavus Koyu/Adrasan kaydi) — kaynakli deger geometrik tasimayi ezer (2026-09 kurali). Marina/iskele kayitlarina DOKUNULMADI (koordinatlari kaynak-dogrulamali; GSHHG mendirek/havuz cozunurlugu yaniltici olabilir).",
+ "kaynak": "basemap-data-hires 2.0.0 (PyPI) gshhs_f verisi (GSHHG v2.3.6 tam cozunurluk) + turkeymarinas.blogspot.com (adrasan)",
+ "tarih": "2026-10-29",
+ "duzeltmeler": [
+  {
+   "slug": "adrasan-koyu-demirleme",
+   "eskiLat": 36.333,
+   "eskiLon": 30.433,
+   "lat": 36.305,
+   "lon": 30.483333,
+   "tasimaM": 5487,
+   "neden": "karada (köy koordinatı) — kaynaklı demirleme noktası: turkeymarinas Çavuş Koyu/Adrasan 36.305000, 30.483333"
+  },
+  {
+   "slug": "agiou-panteleimonos-girit",
+   "eskiLat": 35.128111,
+   "eskiLon": 25.73425,
+   "lat": 35.12865,
+   "lon": 25.733371,
+   "tasimaM": 100,
+   "neden": "kıyıya yapışık (8m)"
+  },
+  {
+   "slug": "akcay-koyu-demirleme",
+   "eskiLat": 39.582139,
+   "eskiLon": 26.922306,
+   "lat": 39.58151,
+   "lon": 26.921374,
+   "tasimaM": 106,
+   "neden": "kıyıya yapışık (5m)"
+  },
+  {
+   "slug": "altinkoy-omerali-koyu",
+   "eskiLat": 38.208859,
+   "eskiLon": 26.720362,
+   "lat": 38.208679,
+   "lon": 26.721162,
+   "tasimaM": 73,
+   "neden": "kıyıya yapışık (20m)"
+  },
+  {
+   "slug": "analoukas-koyu-girit",
+   "eskiLat": 35.213917,
+   "eskiLon": 26.184417,
+   "lat": 35.214815,
+   "lon": 26.183317,
+   "tasimaM": 141,
+   "neden": "kıyıya yapışık (20m)"
+  },
+  {
+   "slug": "andrea-doria-koyu",
+   "eskiLat": 36.27409,
+   "eskiLon": 30.151185,
+   "lat": 36.27409,
+   "lon": 30.148622,
+   "tasimaM": 230,
+   "neden": "açıkta (367m)"
+  },
+  {
+   "slug": "asi-ici-koyu",
+   "eskiLat": 36.721458,
+   "eskiLon": 28.647178,
+   "lat": 36.72029,
+   "lon": 28.647514,
+   "tasimaM": 133,
+   "neden": "kıyıya yapışık (22m)"
+  },
+  {
+   "slug": "avsa-turkeli-demirleme",
+   "eskiLat": 40.509209,
+   "eskiLon": 27.494681,
+   "lat": 40.509209,
+   "lon": 27.491491,
+   "tasimaM": 270,
+   "neden": "karada"
+  },
+  {
+   "slug": "ayisigi-koyu",
+   "eskiLat": 36.599088,
+   "eskiLon": 30.58177,
+   "lat": 36.593339,
+   "lon": 30.581322,
+   "tasimaM": 641,
+   "neden": "açıkta (702m)"
+  },
+  {
+   "slug": "azmak-koyu",
+   "eskiLat": 38.221164,
+   "eskiLon": 26.754222,
+   "lat": 38.220266,
+   "lon": 26.754565,
+   "tasimaM": 104,
+   "neden": "kıyıya yapışık (10m)"
+  },
+  {
+   "slug": "ballipinar-kocaburgaz-koyu",
+   "eskiLat": 40.507638,
+   "eskiLon": 27.903543,
+   "lat": 40.508446,
+   "lon": 27.904488,
+   "tasimaM": 120,
+   "neden": "kıyıya yapışık (2m)"
+  },
+  {
+   "slug": "buyukcekmece-koyu-demirleme",
+   "eskiLat": 40.996333,
+   "eskiLon": 28.595333,
+   "lat": 40.996333,
+   "lon": 28.593905,
+   "tasimaM": 120,
+   "neden": "kıyıya yapışık (4m)"
+  },
+  {
+   "slug": "camli-liman",
+   "eskiLat": 37.000124,
+   "eskiLon": 28.234324,
+   "lat": 37.000843,
+   "lon": 28.237136,
+   "tasimaM": 262,
+   "neden": "açıkta (360m)"
+  },
+  {
+   "slug": "canak-koyu-gokova",
+   "eskiLat": 36.950126,
+   "eskiLon": 28.172818,
+   "lat": 36.951024,
+   "lon": 28.17338,
+   "tasimaM": 112,
+   "neden": "kıyıya yapışık (6m)"
+  },
+  {
+   "slug": "ceneviz-limani-demirleme",
+   "eskiLat": 36.366667,
+   "eskiLon": 30.5,
+   "lat": 36.364511,
+   "lon": 30.495203,
+   "tasimaM": 492,
+   "neden": "açıkta (697m)"
+  },
+  {
+   "slug": "cennet-koyu-faralya",
+   "eskiLat": 36.440882,
+   "eskiLon": 29.131195,
+   "lat": 36.440433,
+   "lon": 29.130078,
+   "tasimaM": 112,
+   "neden": "karada"
+  },
+  {
+   "slug": "ciftlik-koyu-datca",
+   "eskiLat": 36.748378,
+   "eskiLon": 27.878389,
+   "lat": 36.751573,
+   "lon": 27.883937,
+   "tasimaM": 609,
+   "neden": "açıkta (625m)"
+  },
+  {
+   "slug": "cirali-liman-koyu",
+   "eskiLat": 36.417159,
+   "eskiLon": 30.488365,
+   "lat": 36.419045,
+   "lon": 30.486132,
+   "tasimaM": 290,
+   "neden": "açıkta (381m)"
+  },
+  {
+   "slug": "coban-limani-kumluca",
+   "eskiLat": 36.342172,
+   "eskiLon": 30.524414,
+   "lat": 36.33777,
+   "lon": 30.523076,
+   "tasimaM": 504,
+   "neden": "açıkta (407m)"
+  },
+  {
+   "slug": "dana-adasi",
+   "eskiLat": 36.192035,
+   "eskiLon": 33.764838,
+   "lat": 36.199173,
+   "lon": 33.763128,
+   "tasimaM": 809,
+   "neden": "açıkta (943m)"
+  },
+  {
+   "slug": "degirmen-buku",
+   "eskiLat": 36.713407,
+   "eskiLon": 27.405159,
+   "lat": 36.708915,
+   "lon": 27.408297,
+   "tasimaM": 573,
+   "neden": "açıkta (708m)"
+  },
+  {
+   "slug": "didim-yelken-kulubu-demirleme",
+   "eskiLat": 37.345,
+   "eskiLon": 27.2695,
+   "lat": 37.343473,
+   "lon": 27.268144,
+   "tasimaM": 208,
+   "neden": "karada"
+  },
+  {
+   "slug": "ekincik-koyu-demirleme",
+   "eskiLat": 36.818083,
+   "eskiLon": 28.556333,
+   "lat": 36.818352,
+   "lon": 28.550386,
+   "tasimaM": 531,
+   "neden": "açıkta (610m)"
+  },
+  {
+   "slug": "galissas-koyu-syros",
+   "eskiLat": 37.421333,
+   "eskiLon": 24.875861,
+   "lat": 37.421962,
+   "lon": 24.874164,
+   "tasimaM": 166,
+   "neden": "kıyıya yapışık (0m)"
+  },
+  {
+   "slug": "gencelli-bay",
+   "eskiLat": 38.74675,
+   "eskiLon": 26.883208,
+   "lat": 38.741096,
+   "lon": 26.897938,
+   "tasimaM": 1425,
+   "neden": "açıkta (1148m)"
+  },
+  {
+   "slug": "gerbeske-koyu",
+   "eskiLat": 36.695749,
+   "eskiLon": 28.22916,
+   "lat": 36.694581,
+   "lon": 28.226919,
+   "tasimaM": 239,
+   "neden": "açıkta (363m)"
+  },
+  {
+   "slug": "gilimi-koyu",
+   "eskiLat": 38.879548,
+   "eskiLon": 27.050075,
+   "lat": 38.880048,
+   "lon": 27.061983,
+   "tasimaM": 1033,
+   "neden": "açıkta (921m)"
+  },
+  {
+   "slug": "gobun-samandira-sahasi",
+   "eskiLat": 36.6438,
+   "eskiLon": 28.8937,
+   "lat": 36.644519,
+   "lon": 28.8937,
+   "tasimaM": 80,
+   "neden": "kıyıya yapışık (5m)"
+  },
+  {
+   "slug": "gocek-adasi-dogu-samandira-sahasi",
+   "eskiLat": 36.73295833,
+   "eskiLon": 28.944675,
+   "lat": 36.733228,
+   "lon": 28.94602,
+   "tasimaM": 124,
+   "neden": "kıyıya yapışık (10m)"
+  },
+  {
+   "slug": "gonlucek-buku",
+   "eskiLat": 36.755191,
+   "eskiLon": 27.956862,
+   "lat": 36.757616,
+   "lon": 27.957759,
+   "tasimaM": 282,
+   "neden": "açıkta (400m)"
+  },
+  {
+   "slug": "harputlu-koyu",
+   "eskiLat": 37.276389,
+   "eskiLon": 27.506944,
+   "lat": 37.278455,
+   "lon": 27.507508,
+   "tasimaM": 235,
+   "neden": "açıkta (354m)"
+  },
+  {
+   "slug": "hebil-koyu",
+   "eskiLat": 37.14468,
+   "eskiLon": 27.378524,
+   "lat": 37.145578,
+   "lon": 27.378524,
+   "tasimaM": 100,
+   "neden": "kıyıya yapışık (14m)"
+  },
+  {
+   "slug": "hidayet-koyu-kas",
+   "eskiLat": 36.197091,
+   "eskiLon": 29.612262,
+   "lat": 36.196013,
+   "lon": 29.613932,
+   "tasimaM": 192,
+   "neden": "karada"
+  },
+  {
+   "slug": "ince-burun-koyu",
+   "eskiLat": 36.533544,
+   "eskiLon": 30.564282,
+   "lat": 36.533724,
+   "lon": 30.559475,
+   "tasimaM": 430,
+   "neden": "açıkta (574m)"
+  },
+  {
+   "slug": "kameriye-adasi-selimiye",
+   "eskiLat": 36.731034,
+   "eskiLon": 28.05061,
+   "lat": 36.730944,
+   "lon": 28.048592,
+   "tasimaM": 180,
+   "neden": "kıyıya yapışık (20m)"
+  },
+  {
+   "slug": "karaloz-limani-kekova",
+   "eskiLat": 36.18338,
+   "eskiLon": 29.889446,
+   "lat": 36.183829,
+   "lon": 29.892785,
+   "tasimaM": 304,
+   "neden": "kıyıya yapışık (12m)"
+  },
+  {
+   "slug": "kargi-koyu",
+   "eskiLat": 36.805676,
+   "eskiLon": 28.54115,
+   "lat": 36.809269,
+   "lon": 28.53857,
+   "tasimaM": 461,
+   "neden": "açıkta (584m)"
+  },
+  {
+   "slug": "kazikli-koyu",
+   "eskiLat": 37.32,
+   "eskiLon": 27.48,
+   "lat": 37.321976,
+   "lon": 27.473561,
+   "tasimaM": 611,
+   "neden": "açıkta (803m)"
+  },
+  {
+   "slug": "kertibuku",
+   "eskiLat": 36.677018,
+   "eskiLon": 28.038939,
+   "lat": 36.677018,
+   "lon": 28.040059,
+   "tasimaM": 100,
+   "neden": "kıyıya yapışık (20m)"
+  },
+  {
+   "slug": "killik-koyu",
+   "eskiLat": 39.038751,
+   "eskiLon": 26.810693,
+   "lat": 39.039649,
+   "lon": 26.810693,
+   "tasimaM": 100,
+   "neden": "kıyıya yapışık (8m)"
+  },
+  {
+   "slug": "kirkdilim-limani-demirleme",
+   "eskiLat": 38.133333,
+   "eskiLon": 26.571667,
+   "lat": 38.13513,
+   "lon": 26.57338,
+   "tasimaM": 250,
+   "neden": "açıkta (389m)"
+  },
+  {
+   "slug": "kissebuku-alakisla-demirleme",
+   "eskiLat": 36.989359,
+   "eskiLon": 27.64974,
+   "lat": 36.991156,
+   "lon": 27.646479,
+   "tasimaM": 352,
+   "neden": "açıkta (468m)"
+  },
+  {
+   "slug": "korsan-cove-koyu",
+   "eskiLat": 36.569013,
+   "eskiLon": 28.040485,
+   "lat": 36.568384,
+   "lon": 28.040485,
+   "tasimaM": 70,
+   "neden": "kıyıya yapışık (19m)"
+  },
+  {
+   "slug": "kristal-koyu-cesme",
+   "eskiLat": 38.345004,
+   "eskiLon": 26.319694,
+   "lat": 38.343477,
+   "lon": 26.318549,
+   "tasimaM": 197,
+   "neden": "karada"
+  },
+  {
+   "slug": "kucuk-kargi-koyu",
+   "eskiLat": 36.7145,
+   "eskiLon": 29.02,
+   "lat": 36.714051,
+   "lon": 29.018879,
+   "tasimaM": 112,
+   "neden": "kıyıya yapışık (5m)"
+  },
+  {
+   "slug": "kucuk-kuyruk-koyu",
+   "eskiLat": 36.629691,
+   "eskiLon": 28.880985,
+   "lat": 36.629601,
+   "lon": 28.883895,
+   "tasimaM": 260,
+   "neden": "kıyıya yapışık (17m)"
+  },
+  {
+   "slug": "kumru-koyu-demirleme",
+   "eskiLat": 39.2967,
+   "eskiLon": 26.64,
+   "lat": 39.294185,
+   "lon": 26.639652,
+   "tasimaM": 282,
+   "neden": "açıkta (425m)"
+  },
+  {
+   "slug": "kuruca-buku",
+   "eskiLat": 36.748855,
+   "eskiLon": 27.903694,
+   "lat": 36.748586,
+   "lon": 27.898649,
+   "tasimaM": 451,
+   "neden": "açıkta (540m)"
+  },
+  {
+   "slug": "kusadasi-sahil-demirleme",
+   "eskiLat": 37.867,
+   "eskiLon": 27.2624,
+   "lat": 37.867629,
+   "lon": 27.261262,
+   "tasimaM": 122,
+   "neden": "kıyıya yapışık (0m)"
+  },
+  {
+   "slug": "lapseki-demirleme",
+   "eskiLat": 40.352167,
+   "eskiLon": 26.689667,
+   "lat": 40.352167,
+   "lon": 26.681416,
+   "tasimaM": 700,
+   "neden": "karada"
+  },
+  {
+   "slug": "mersin-korfezi-demirleme-cesme",
+   "eskiLat": 38.212667,
+   "eskiLon": 26.4325,
+   "lat": 38.216709,
+   "lon": 26.434215,
+   "tasimaM": 474,
+   "neden": "açıkta (574m)"
+  },
+  {
+   "slug": "mersinaki-koyu-foca",
+   "eskiLat": 38.683,
+   "eskiLon": 26.7395,
+   "lat": 38.680754,
+   "lon": 26.738694,
+   "tasimaM": 260,
+   "neden": "karada"
+  },
+  {
+   "slug": "murdala-bay",
+   "eskiLat": 36.750241,
+   "eskiLon": 27.447884,
+   "lat": 36.748175,
+   "lon": 27.449229,
+   "tasimaM": 259,
+   "neden": "açıkta (403m)"
+  },
+  {
+   "slug": "narli-koyu-demirleme-erdek",
+   "eskiLat": 40.472667,
+   "eskiLon": 27.688833,
+   "lat": 40.47132,
+   "lon": 27.687888,
+   "tasimaM": 170,
+   "neden": "karada"
+  },
+  {
+   "slug": "narlidere-koyu",
+   "eskiLat": 38.930644,
+   "eskiLon": 26.84436,
+   "lat": 38.933339,
+   "lon": 26.844706,
+   "tasimaM": 301,
+   "neden": "açıkta (439m)"
+  },
+  {
+   "slug": "papaz-bogazi-demirleme",
+   "eskiLat": 38.207129,
+   "eskiLon": 26.653834,
+   "lat": 38.206949,
+   "lon": 26.652691,
+   "tasimaM": 102,
+   "neden": "kıyıya yapışık (18m)"
+  },
+  {
+   "slug": "phaselis-koylari-demirleme",
+   "eskiLat": 36.527028,
+   "eskiLon": 30.558416,
+   "lat": 36.526759,
+   "lon": 30.559534,
+   "tasimaM": 104,
+   "neden": "kıyıya yapışık (15m)"
+  },
+  {
+   "slug": "pirasali-adasi",
+   "eskiLat": 36.335086,
+   "eskiLon": 30.53217,
+   "lat": 36.333559,
+   "lon": 30.529605,
+   "tasimaM": 286,
+   "neden": "açıkta (425m)"
+  },
+  {
+   "slug": "plaka-plaji-naxos",
+   "eskiLat": 37.038222,
+   "eskiLon": 25.37775,
+   "lat": 37.038222,
+   "lon": 25.376625,
+   "tasimaM": 100,
+   "neden": "kıyıya yapışık (16m)"
+  },
+  {
+   "slug": "sarigerme-bay",
+   "eskiLat": 36.700255,
+   "eskiLon": 28.695477,
+   "lat": 36.699357,
+   "lon": 28.695477,
+   "tasimaM": 100,
+   "neden": "kıyıya yapışık (14m)"
+  },
+  {
+   "slug": "sarpdere-limani-demirleme",
+   "eskiLat": 38.182,
+   "eskiLon": 26.520667,
+   "lat": 38.181281,
+   "lon": 26.518953,
+   "tasimaM": 170,
+   "neden": "kıyıya yapışık (6m)"
+  },
+  {
+   "slug": "serce-limani",
+   "eskiLat": 36.577845,
+   "eskiLon": 28.050651,
+   "lat": 36.578114,
+   "lon": 28.048637,
+   "tasimaM": 182,
+   "neden": "kıyıya yapışık (14m)"
+  },
+  {
+   "slug": "seytanli-island-koyu",
+   "eskiLat": 36.697449,
+   "eskiLon": 28.931419,
+   "lat": 36.69682,
+   "lon": 28.931419,
+   "tasimaM": 70,
+   "neden": "kıyıya yapışık (20m)"
+  },
+  {
+   "slug": "siralibuk-koyu",
+   "eskiLat": 36.6762,
+   "eskiLon": 28.8588,
+   "lat": 36.676469,
+   "lon": 28.860256,
+   "tasimaM": 133,
+   "neden": "kıyıya yapışık (9m)"
+  },
+  {
+   "slug": "sivrice-koyu-demirleme",
+   "eskiLat": 39.4725,
+   "eskiLon": 26.222,
+   "lat": 39.470973,
+   "lon": 26.222116,
+   "tasimaM": 170,
+   "neden": "karada"
+  },
+  {
+   "slug": "sogut-koyu",
+   "eskiLat": 36.632769,
+   "eskiLon": 28.070847,
+   "lat": 36.640222,
+   "lon": 28.065687,
+   "tasimaM": 949,
+   "neden": "açıkta (859m)"
+  },
+  {
+   "slug": "tersane-adasi-koyu",
+   "eskiLat": 36.676711,
+   "eskiLon": 28.914805,
+   "lat": 36.677609,
+   "lon": 28.913685,
+   "tasimaM": 141,
+   "neden": "kıyıya yapışık (21m)"
+  },
+  {
+   "slug": "turunc-buku",
+   "eskiLat": 36.730562,
+   "eskiLon": 28.302911,
+   "lat": 36.730472,
+   "lon": 28.303808,
+   "tasimaM": 81,
+   "neden": "kıyıya yapışık (4m)"
+  },
+  {
+   "slug": "turunc-pinari-koyu",
+   "eskiLat": 36.6155,
+   "eskiLon": 29.0527,
+   "lat": 36.616398,
+   "lon": 29.05326,
+   "tasimaM": 112,
+   "neden": "kıyıya yapışık (12m)"
+  },
+  {
+   "slug": "yarim-liman",
+   "eskiLat": 37.318333,
+   "eskiLon": 27.467222,
+   "lat": 37.318602,
+   "lon": 27.468352,
+   "tasimaM": 104,
+   "neden": "kıyıya yapışık (15m)"
+  },
+  {
+   "slug": "yassica-adalari",
+   "eskiLat": 36.710549,
+   "eskiLon": 28.934405,
+   "lat": 36.711447,
+   "lon": 28.934405,
+   "tasimaM": 100,
+   "neden": "kıyıya yapışık (18m)"
+  }
+ ]
+}
