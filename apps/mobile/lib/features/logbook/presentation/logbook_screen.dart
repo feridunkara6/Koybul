@@ -61,11 +61,34 @@ class LogbookBody extends ConsumerWidget {
         ),
       );
     }
-    return ListView.builder(
+    // AY GRUPLARI (mock_gunluk, kurucu onayı 2026-10-27): liste zaten en
+    // yeni başta sıralı gelir — ay değiştikçe "EKİM 2026" başlığı atılır.
+    // monthLong değerleri l10n'da HAZIR BÜYÜK gelir (Türkçe İ/I tuzağı:
+    // kodda .toUpperCase() çağrılmaz — 'Ekim' → 'EKIM' olurdu).
+    final List<Widget> children = <Widget>[];
+    int? shownYm;
+    for (final LogEntry e in entries) {
+      final DateTime d = DateTime.fromMillisecondsSinceEpoch(e.dateMs);
+      final int ym = d.year * 100 + d.month;
+      if (ym != shownYm) {
+        shownYm = ym;
+        children.add(Padding(
+          padding: EdgeInsets.fromLTRB(4, children.isEmpty ? 2 : 10, 4, 8),
+          child: Text(
+            '${t.monthLong[d.month - 1]} ${d.year}',
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1,
+            ),
+          ),
+        ));
+      }
+      children.add(_LogEntryCard(entry: e));
+    }
+    return ListView(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 96),
-      itemCount: entries.length,
-      itemBuilder: (BuildContext context, int i) =>
-          _LogEntryCard(entry: entries[i]),
+      children: children,
     );
   }
 }
@@ -77,62 +100,125 @@ class LogbookBody extends ConsumerWidget {
 /// verisi (anıları) için fazla riskliydi. Yeni akış: kartı SOLA KAYDIR →
 /// giriş silinir + 5 saniyelik "Geri al" snackbar'ı çıkar. Geri al, kaydı
 /// tarih sırası bozulmadan geri getirir (controller.restore).
-class _LogEntryCard extends ConsumerWidget {
+class _LogEntryCard extends ConsumerStatefulWidget {
   const _LogEntryCard({required this.entry});
 
   final LogEntry entry;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_LogEntryCard> createState() => _LogEntryCardState();
+}
+
+class _LogEntryCardState extends ConsumerState<_LogEntryCard> {
+  /// Kart KAPALI başlar: not 2 satır önizlemedir (mock_gunluk) — dokununca
+  /// açılır/kapanır; uzun anılar listeyi boğmaz ama kaybolmaz da.
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final LogEntry entry = widget.entry;
     final L10n t = ref.watch(l10nProvider);
     final ThemeData theme = Theme.of(context);
     final DateTime d = DateTime.fromMillisecondsSinceEpoch(entry.dateMs);
-    final String date = '${d.day}.${d.month}.${d.year}';
+    final bool hasTitle = entry.title != null && entry.title!.isNotEmpty;
     final String? ctx = entry.ctxRoute == null
         ? null
         : entry.ctxNm == null
             ? entry.ctxRoute
             : '${entry.ctxRoute} · ≈ ${entry.ctxNm! >= 10 ? entry.ctxNm!.round() : entry.ctxNm!.toStringAsFixed(1)} ${t.nmUnit}';
-    final Widget card = Container(
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+    // TARİH ROZETİ (mock_gunluk): gün büyük + kısa ay — yıl ay başlığında.
+    final Widget dateBadge = Container(
+      width: 52,
+      height: 56,
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        border: Border.all(color: theme.colorScheme.outline),
-        borderRadius: BorderRadius.circular(14),
+        color: DocklyColors.brandPrimary.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(date,
-              style: theme.textTheme.bodySmall?.copyWith(
+          Text('${d.day}',
+              style: theme.textTheme.titleMedium?.copyWith(
+                  color: DocklyColors.brandPrimary,
+                  fontWeight: FontWeight.w800,
+                  height: 1)),
+          const SizedBox(height: 2),
+          Text(t.monthShort[d.month - 1],
+              style: theme.textTheme.labelSmall?.copyWith(
                   color: DocklyColors.brandPrimary,
                   fontWeight: FontWeight.w800)),
-          if (entry.title != null && entry.title!.isNotEmpty) ...<Widget>[
-            const SizedBox(height: 2),
-            Text(entry.title!,
-                style: theme.textTheme.titleSmall
-                    ?.copyWith(fontWeight: FontWeight.w800)),
-          ],
-          if (ctx != null) ...<Widget>[
-            const SizedBox(height: 2),
-            Row(
-              children: <Widget>[
-                const DocklyIcon(DocklyIcons.navigation,
-                    size: 12, color: DocklyColors.accentTurquoise),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(ctx,
+        ],
+      ),
+    );
+    final Widget card = InkWell(
+      borderRadius: BorderRadius.circular(14),
+      onTap: () => setState(() => _expanded = !_expanded),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          border: Border.all(color: theme.colorScheme.outline),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            dateBadge,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // Başlıksız giriş dürüstçe "Başlıksız giriş" der (soluk).
+                  Text(hasTitle ? entry.title! : t.logbookUntitled,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight:
+                            hasTitle ? FontWeight.w800 : FontWeight.w700,
+                        color: hasTitle
+                            ? null
+                            : theme.colorScheme.onSurfaceVariant,
+                      )),
+                  const SizedBox(height: 3),
+                  Text(entry.text,
+                      maxLines: _expanded ? null : 2,
+                      overflow: _expanded ? null : TextOverflow.ellipsis,
                       style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant)),
-                ),
-              ],
+                          color: theme.colorScheme.onSurfaceVariant,
+                          height: 1.4)),
+                  if (ctx != null) ...<Widget>[
+                    const SizedBox(height: 7),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 9, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: DocklyColors.accentTurquoise
+                            .withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const DocklyIcon(DocklyIcons.navigation,
+                              size: 11, color: DocklyColors.accentTurquoise),
+                          const SizedBox(width: 4),
+                          Flexible(
+                            child: Text(ctx,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                    fontWeight: FontWeight.w700)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
           ],
-          const SizedBox(height: 6),
-          Text(entry.text, style: theme.textTheme.bodyMedium),
-        ],
+        ),
       ),
     );
 
@@ -181,8 +267,12 @@ class _LogEntryCard extends ConsumerWidget {
   }
 }
 
-/// YENİ GİRİŞ düzenleyicisi (alt sayfa). [context] verilmezse o anki aktif
-/// rotadan otomatik alınır; kaptan bağlamı ✕ ile kaldırabilir.
+/// YENİ GİRİŞ düzenleyicisi (alt sayfa).
+///
+/// BAĞIMSIZ GÜNLÜK (kurucu isteği 2026-10-29): günlük rotaya ZORUNLU
+/// bağlanmaz — bağlam yalnız [logContext] AÇIKÇA verilirse eklenir (örn.
+/// rota kaydı snackbar'ındaki "Not düş" yolu) ve ✕ ile kaldırılabilir.
+/// Günlük/Defter FAB'ından açılan yeni kayıt aktif rotadan habersizdir.
 ///
 /// HESAP KAPISI (Defter paketi 2026-10-27): günlük girişleri hesapla gezer —
 /// tüm çağrı noktaları (Defter FAB'ı, Günlük ekranı, rota kartı) bu tek
@@ -197,7 +287,8 @@ Future<void> showLogEntryEditor(
     ref,
     message: ref.read(l10nProvider).gateLogMsg,
     onAllowed: () async {
-      final LogContext? ctx = logContext ?? ref.read(logContextProvider);
+      // Otomatik rota bağlamı KALDIRILDI (2026-10-29): yalnız açık istek.
+      final LogContext? ctx = logContext;
       await showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,
@@ -236,6 +327,17 @@ class _LogEntryEditorState extends ConsumerState<_LogEntryEditor> {
     super.dispose();
   }
 
+  /// Hazır başlangıcı metnin BAŞINA ekler (mock_gunluk): "Rüzgâr: " gibi.
+  /// İmleç eklemenin sonuna konur — kaptan kaldığı yerden yazar.
+  void _prependStarter(String label) {
+    final String add = '$label: ';
+    final String cur = _text.text;
+    _text.value = TextEditingValue(
+      text: '$add$cur',
+      selection: TextSelection.collapsed(offset: add.length),
+    );
+  }
+
   Future<void> _save() async {
     final String text = _text.text.trim();
     if (text.isEmpty || _saving) return; // boş giriş kaydedilmez
@@ -258,7 +360,9 @@ class _LogEntryEditorState extends ConsumerState<_LogEntryEditor> {
     final L10n t = ref.watch(l10nProvider);
     final ThemeData theme = Theme.of(context);
     final LogContext? ctx = _ctx;
-    return Padding(
+    // KAYDIRILABİLİR (CI dersi "rota paketi 1" taşması): çipler + ipucuyla
+    // uzayan içerik dar/kısa ekranda sabit boy iddia etmez, sığmazsa kayar.
+    return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -302,23 +406,53 @@ class _LogEntryEditorState extends ConsumerState<_LogEntryEditor> {
             ),
           ],
           const SizedBox(height: 12),
+          // ÖNCE METİN (mock_gunluk, kurucu onayı 2026-10-27): günlükte asıl
+          // iş hikâyedir — kutu büyük, imleç hazır; başlık en sona taşındı.
+          TextField(
+            controller: _text,
+            maxLines: 6,
+            minLines: 4,
+            autofocus: true,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: InputDecoration(
+              hintText: t.logbookTextHint,
+              border: const OutlineInputBorder(),
+              alignLabelWithHint: true,
+            ),
+          ),
+          const SizedBox(height: 10),
+          // HAZIR BAŞLANGIÇLAR: dokununca "Etiket: " metnin başına eklenir,
+          // imleç eklemenin sonuna konur — yazmaya oradan devam edilir.
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: <Widget>[
+              for (final (String, String) s in <(String, String)>[
+                ('starter-wind', t.starterWind),
+                ('starter-anchor', t.starterAnchor),
+                ('starter-issue', t.starterIssue),
+                ('starter-view', t.starterView),
+              ])
+                ActionChip(
+                  key: ValueKey<String>(s.$1),
+                  label: Text(s.$2),
+                  labelStyle: theme.textTheme.labelMedium
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () => _prependStarter(s.$2),
+                ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(t.logbookStartersHint,
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+          const SizedBox(height: 12),
           TextField(
             controller: _title,
             decoration: InputDecoration(
               labelText: t.logbookTitleHint,
               border: const OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _text,
-            maxLines: 5,
-            minLines: 3,
-            autofocus: true,
-            decoration: InputDecoration(
-              labelText: t.logbookTextHint,
-              border: const OutlineInputBorder(),
-              alignLabelWithHint: true,
             ),
           ),
           const SizedBox(height: 14),
@@ -327,7 +461,7 @@ class _LogEntryEditorState extends ConsumerState<_LogEntryEditor> {
             child: FilledButton(
               key: const ValueKey<String>('logbook-save'),
               onPressed: _saving ? null : _save,
-              child: Text(t.saveLabel),
+              child: Text(t.logbookSaveCta),
             ),
           ),
         ],

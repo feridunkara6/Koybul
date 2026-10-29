@@ -76,6 +76,13 @@ void main() {
     expect(find.textContaining('Gökova poyrazı'), findsOneWidget);
     // Tek dokunuşla kalıcı silme kaldırıldı — kartta çöp ikonu yok.
     expect(find.byTooltip('Girişi sil'), findsNothing);
+    // AY BAŞLIĞI (mock_gunluk 2026-10-27): kayıt ay grubuyla listelenir.
+    // Değer l10n'dan HAZIR BÜYÜK gelir (Türkçe İ: kodda toUpperCase yok).
+    final DateTime d = DateTime.fromMillisecondsSinceEpoch(_sample.dateMs);
+    expect(find.text('AĞUSTOS ${d.year}'), findsOneWidget);
+    // TARİH ROZETİ: gün + kısa ay kartın solunda.
+    expect(find.text('${d.day}'), findsOneWidget);
+    expect(find.text('Ağu'), findsOneWidget);
   });
 
   testWidgets('SİLME (UX P0 2026-08): sola kaydır → silinir + snackbar; '
@@ -150,9 +157,11 @@ void main() {
     expect(store.data, hasLength(2)); // disk de aynı
   });
 
-  testWidgets('YENİ KAYIT: aktif rota bağlamı kendiliğinden gelir, ✕ ile '
-      'kaldırılabilir; boş metin kaydedilmez', (WidgetTester tester) async {
+  testWidgets('BAĞIMSIZ GÜNLÜK (kurucu isteği 2026-10-29): FAB\'dan açılan '
+      'yeni kayıt aktif rotaya BAĞLANMAZ; boş metin kaydedilmez',
+      (WidgetTester tester) async {
     final FakeLogbookStore store = FakeLogbookStore();
+    // Aktif rota VAR (sağlayıcı dolu) — yine de bağlam eklenmemeli.
     await tester.pumpWidget(_app(
       store,
       ctx: const LogContext(
@@ -162,9 +171,16 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey<String>('logbook-new')));
     await tester.pumpAndSettle();
-    expect(find.text('Konumum → Göcek'), findsOneWidget); // otomatik bağlam
+    // Otomatik bağlam YOK: zorunlu rota bağlantısı kaldırıldı.
+    expect(find.text('Konumum → Göcek'), findsNothing);
+    expect(find.byKey(const ValueKey<String>('logbook-ctx-remove')),
+        findsNothing);
 
     // Boş metinle kaydetme denemesi → kayıt YOK (sayfa açık kalır).
+    // ensureVisible (CI dersi): editör uzadı — düğme görünür alana çekilir.
+    await tester.ensureVisible(
+        find.byKey(const ValueKey<String>('logbook-save')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey<String>('logbook-save')));
     await tester.pumpAndSettle();
     expect(store.data, isEmpty);
@@ -176,23 +192,41 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(store.data, hasLength(1));
-    expect(store.data.single.ctxRoute, 'Konumum → Göcek');
-    expect(store.data.single.ctxStops, 2);
+    expect(store.data.single.ctxRoute, isNull); // bağımsız giriş
+    expect(store.data.single.ctxStops, isNull);
     expect(find.textContaining('Rüzgar tam kıçtan'), findsOneWidget); // listede
   });
 
-  testWidgets('bağlam ✕ ile kaldırılırsa giriş bağlamsız kaydedilir', (
+  testWidgets('AÇIK bağlamla açılan editör (rota kaydı "Not düş" yolu): çip '
+      'görünür, ✕ ile kaldırılırsa giriş bağlamsız kaydedilir', (
     WidgetTester tester,
   ) async {
     final FakeLogbookStore store = FakeLogbookStore();
-    await tester.pumpWidget(_app(
-      store,
-      ctx: const LogContext(routeName: 'Konumum → Göcek'),
+    await tester.pumpWidget(ProviderScope(
+      overrides: <Override>[
+        signedInAuthOverride(),
+        logbookStoreProvider.overrideWithValue(store),
+      ],
+      child: MaterialApp(
+        home: Scaffold(
+          body: Consumer(
+            builder: (BuildContext ctx, WidgetRef ref, _) => TextButton(
+              onPressed: () => showLogEntryEditor(ctx, ref,
+                  logContext:
+                      const LogContext(routeName: 'Konumum → Göcek')),
+              child: const Text('editörü aç'),
+            ),
+          ),
+        ),
+      ),
     ));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const ValueKey<String>('logbook-new')));
+    await tester.tap(find.text('editörü aç'));
     await tester.pumpAndSettle();
+    // Açıkça verilen bağlam çipte görünür (isteğe bağlı yol korunuyor).
+    expect(find.text('Konumum → Göcek'), findsOneWidget);
+
     await tester.tap(find.byKey(const ValueKey<String>('logbook-ctx-remove')));
     await tester.pumpAndSettle();
     expect(find.text('Konumum → Göcek'), findsNothing);
@@ -200,8 +234,35 @@ void main() {
     await tester.enterText(
         find.widgetWithText(TextField, 'Bugünün seyri nasıldı, kaptan?'),
         'Bağlamsız not.');
+    await tester.ensureVisible(
+        find.byKey(const ValueKey<String>('logbook-save')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey<String>('logbook-save')));
     await tester.pumpAndSettle();
     expect(store.data.single.ctxRoute, isNull);
+  });
+
+  testWidgets('HAZIR BAŞLANGIÇ çipleri (mock_gunluk 2026-10-27): dokununca '
+      '"Etiket: " metnin başına eklenir, imleç eklemenin sonunda',
+      (WidgetTester tester) async {
+    final FakeLogbookStore store = FakeLogbookStore();
+    await tester.pumpWidget(_app(store));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey<String>('logbook-new')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey<String>('starter-wind')));
+    await tester.pump();
+    // İlk TextField büyük metin kutusudur (başlık artık en sonda).
+    final TextField tf =
+        tester.widget<TextField>(find.byType(TextField).first);
+    expect(tf.controller!.text, 'Rüzgâr: ');
+    expect(tf.controller!.selection.baseOffset, 'Rüzgâr: '.length);
+
+    // İkinci çip de BAŞA eklenir (mock: "metnin başına eklenir").
+    await tester.tap(find.byKey(const ValueKey<String>('starter-anchor')));
+    await tester.pump();
+    expect(tf.controller!.text, 'Demir yeri: Rüzgâr: ');
   });
 }

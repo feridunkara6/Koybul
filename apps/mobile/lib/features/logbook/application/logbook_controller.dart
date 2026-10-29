@@ -127,9 +127,10 @@ class LogbookController extends Notifier<List<LogEntry>> {
 final NotifierProvider<LogbookController, List<LogEntry>> logbookProvider =
     NotifierProvider<LogbookController, List<LogEntry>>(LogbookController.new);
 
-/// OTOMATİK BAĞLAM (onaylı tasarım): o anki aktif rotadan günlük bağlamı.
-/// Rota yoksa null — giriş bağlamsız açılır. Testte doğrudan override edilir
-/// (harita sahtelerine gerek kalmaz).
+/// Aktif rotadan günlük bağlamı. BAĞIMSIZ GÜNLÜK (kurucu isteği 2026-10-29):
+/// editör bunu artık KENDİLİĞİNDEN OKUMAZ — yeni kayıt rotaya bağlanmaz;
+/// bağlam yalnız çağıranın açıkça verdiği yerde (rota kaydı "Not düş" yolu)
+/// eklenir. Sağlayıcı, ileride açık-bağlam isteyen yüzeyler için duruyor.
 final Provider<LogContext?> logContextProvider = Provider<LogContext?>((ref) {
   final MapState s = ref.watch(mapControllerProvider);
   final RouteOrigin? origin = s.routeOrigin;

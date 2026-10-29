@@ -23,13 +23,18 @@ import '../../route/presentation/saved_routes_screen.dart' show SavedRouteCard;
 import '../application/trip_log_controller.dart';
 import '../domain/sea_trip_log.dart';
 
-/// Defter segmenti: 0 = Seyirler · 1 = Rotalarım · 2 = Notlar.
+/// Defter segmenti: 0 = Seyirler · 1 = Rotalarım · 2 = Günlük (anlam sabit;
+/// EKRAN SIRASI farklı — çip dizilişi Rotalarım · Seyirler · Günlük).
 ///
 /// TEK EV TAMİRİ (UX denetimi P1, kullanıcı onayı 2026-08): segment artık
 /// SAĞLAYICIDA tutulur — Profil'deki "Kaptanın Günlüğü" satırı ayrı bir
 /// ekran açmak yerine Defter sekmesine geçip bu segmenti Notlar'a çevirir.
 /// Aynı içerik iki kapıdan açılmaz; kapı tek, ev tek.
-final StateProvider<int> deckSegmentProvider = StateProvider<int>((ref) => 0);
+///
+/// VARSAYILAN = 1 (Rotalarım, kurucu isteği 2026-10-29): Defter ilk
+/// açılışta Rotalarım'ı gösterir; dizinlerin ANLAMI değişmedi — Profil ve
+/// Teknem'den gelen 0/1/2 atlamaları aynen çalışır.
+final StateProvider<int> deckSegmentProvider = StateProvider<int>((ref) => 1);
 
 /// DEFTER sekmesi (v2.0 vizyonu, kurucu onayı 2026-08): denizcinin arşivi.
 /// Üç bölüm: SEYİRLER (planlanan + gerçekleşen seferler, sezon özeti) ·
@@ -73,20 +78,22 @@ class DeckScreen extends ConsumerWidget {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.fromLTRB(12, 10, 12, 2),
+            // ÇİP SIRASI (kurucu isteği 2026-10-29): Rotalarım önce —
+            // dizin anlamları (0=Seyirler, 1=Rotalarım, 2=Günlük) sabit.
             child: Row(
               children: <Widget>[
-                _SegChip(
-                  label: t.deckTabTrips,
-                  selected: seg == 0,
-                  onTap: () =>
-                      ref.read(deckSegmentProvider.notifier).state = 0,
-                ),
-                const SizedBox(width: 8),
                 _SegChip(
                   label: t.deckTabRoutes,
                   selected: seg == 1,
                   onTap: () =>
                       ref.read(deckSegmentProvider.notifier).state = 1,
+                ),
+                const SizedBox(width: 8),
+                _SegChip(
+                  label: t.deckTabTrips,
+                  selected: seg == 0,
+                  onTap: () =>
+                      ref.read(deckSegmentProvider.notifier).state = 0,
                 ),
                 const SizedBox(width: 8),
                 _SegChip(
@@ -442,6 +449,14 @@ class _MarkDoneSheetState extends ConsumerState<_MarkDoneSheet> {
   /// Denizde geçen süre (dk) — null = belirtilmedi (dürüst boşluk).
   int? _durMin;
 
+  /// ÖZEL SÜRE SAYACI saati (mock_seyir, kurucu onayı 2026-10-27): çiplere
+  /// uymayan süreler "− N sa +" ile kurulur; dokununca [_durMin] = N×60.
+  int _stepH = 4;
+
+  /// Not alanı KAPALI başlar (mock_seyir): kesikli "Günlüğe not düş" satırı
+  /// dokununca metin kutusuna dönüşür — sayfa kısa kalır, akış hızlanır.
+  bool _noteOpen = false;
+
   final TextEditingController _note = TextEditingController();
 
   @override
@@ -468,6 +483,15 @@ class _MarkDoneSheetState extends ConsumerState<_MarkDoneSheet> {
     setState(() {
       _day = picked;
       _dayChoice = 2;
+    });
+  }
+
+  /// Sayaç adımı: 1–24 saat arasında tutulur; her dokunuş süreyi kurar.
+  void _stepDur(int delta) {
+    setState(() {
+      // .clamp num döndürür — int alana açık çevrimle iner (analiz dersi).
+      _stepH = (_stepH + delta).clamp(1, 24).toInt();
+      _durMin = _stepH * 60;
     });
   }
 
@@ -507,6 +531,26 @@ class _MarkDoneSheetState extends ConsumerState<_MarkDoneSheet> {
     final ThemeData theme = Theme.of(context);
     final DateTime now = DateTime.now();
     final DateTime today = DateTime(now.year, now.month, now.day);
+    // Bölüm başlığı stili (mock_seyir'in büyük-harf etiket havası; metnin
+    // kendisi BÜYÜTÜLMEZ — Türkçe İ/I tuzağı, l10n monthLong notuna bak).
+    final TextStyle? label = theme.textTheme.labelSmall?.copyWith(
+      color: theme.colorScheme.onSurfaceVariant,
+      fontWeight: FontWeight.w800,
+      letterSpacing: 0.6,
+    );
+    // Rota bandı alt satırı: yalnız BİLİNEN plan verileri (0-uydurma).
+    final String bandStats = <String>[
+      if (widget.trip.distanceNm > 0)
+        '≈ ${_TripsTab._fmtNm(widget.trip.distanceNm)} ${t.nmUnit}',
+      if (widget.trip.stops > 0) '${t.routeStatStops}: ${widget.trip.stops}',
+      t.tripFromPlan,
+    ].join(' · ');
+    // Sayaç vurgusu: süre sayaçtan kurulduysa (çip değerlerine denk değilse).
+    final bool stepperOn = _durMin != null &&
+        _durMin == _stepH * 60 &&
+        _durMin != 120 &&
+        _durMin != 240 &&
+        _durMin != 480;
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -517,13 +561,48 @@ class _MarkDoneSheetState extends ConsumerState<_MarkDoneSheet> {
             Text(t.tripDoneSheetTitle,
                 style: theme.textTheme.titleMedium
                     ?.copyWith(fontWeight: FontWeight.w800)),
-            const SizedBox(height: 2),
-            Text(widget.trip.name,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodyMedium
-                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
+            // ROTA BANDI (mock_seyir): neyi kaydettiğin tek bakışta —
+            // sefer adı + plan istatistikleri + "plandan" kaynağı.
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              decoration: BoxDecoration(
+                color: DocklyColors.brandPrimary.withValues(alpha: 0.07),
+                border: Border.all(
+                  color: DocklyColors.brandPrimary.withValues(alpha: 0.30),
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: <Widget>[
+                  const DocklyIcon(DocklyIcons.navigation,
+                      size: 16, color: DocklyColors.brandPrimary),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(widget.trip.name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.w800)),
+                        if (bandStats.isNotEmpty)
+                          Text(bandStats,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+            Text(t.tripWhenQ, style: label),
+            const SizedBox(height: 6),
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -557,9 +636,7 @@ class _MarkDoneSheetState extends ConsumerState<_MarkDoneSheet> {
               ],
             ),
             const SizedBox(height: 14),
-            Text(t.tripDurQ,
-                style: theme.textTheme.bodySmall
-                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+            Text(t.tripDurQ, style: label),
             const SizedBox(height: 6),
             Wrap(
               spacing: 8,
@@ -577,18 +654,121 @@ class _MarkDoneSheetState extends ConsumerState<_MarkDoneSheet> {
                     onSelected: (bool sel) =>
                         setState(() => _durMin = sel ? c.$2 : null),
                   ),
+                // ÖZEL SÜRE SAYACI (mock_seyir): "− N sa +" hap biçimli
+                // denetim — çiplerin karşılamadığı süreler saat saat kurulur.
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: stepperOn
+                          ? DocklyColors.brandPrimary
+                          : theme.colorScheme.outline,
+                      width: stepperOn ? 1.6 : 1,
+                    ),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      InkWell(
+                        key: const ValueKey<String>('trip-dur-minus'),
+                        borderRadius: BorderRadius.circular(999),
+                        onTap: () => _stepDur(-1),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 7),
+                          child: Text('−',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w800,
+                                  color: DocklyColors.brandPrimary)),
+                        ),
+                      ),
+                      Text(
+                        L10n.fmt(t.hoursShortFmt, '$_stepH'),
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          color: stepperOn ? DocklyColors.brandPrimary : null,
+                        ),
+                      ),
+                      InkWell(
+                        key: const ValueKey<String>('trip-dur-plus'),
+                        borderRadius: BorderRadius.circular(999),
+                        onTap: () => _stepDur(1),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 7),
+                          child: Text('+',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w800,
+                                  color: DocklyColors.brandPrimary)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
+            const SizedBox(height: 6),
+            Text(t.tripDurHint,
+                style: theme.textTheme.bodySmall
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
             const SizedBox(height: 14),
-            TextField(
-              controller: _note,
-              maxLines: 2,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
-                hintText: t.tripNoteHint,
-                border: const OutlineInputBorder(),
+            // NOT SATIRI (mock_seyir): kapalı başlar — dokununca metin
+            // kutusu açılır; not Kaptanın Günlüğü'ne rota bağlamıyla düşer.
+            if (!_noteOpen)
+              InkWell(
+                key: const ValueKey<String>('trip-note-open'),
+                borderRadius: BorderRadius.circular(12),
+                onTap: () => setState(() => _noteOpen = true),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(12, 11, 12, 11),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: theme.colorScheme.outline),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      DocklyIcon(DocklyIcons.edit,
+                          size: 16,
+                          color: theme.colorScheme.onSurfaceVariant),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(t.tripNoteRowTitle,
+                                style: theme.textTheme.bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.w800)),
+                            Text(t.tripNoteRowSub,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                    color:
+                                        theme.colorScheme.onSurfaceVariant)),
+                          ],
+                        ),
+                      ),
+                      const Text('+',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                              color: DocklyColors.brandPrimary)),
+                    ],
+                  ),
+                ),
+              )
+            else
+              TextField(
+                controller: _note,
+                minLines: 2,
+                maxLines: 3,
+                autofocus: true,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: InputDecoration(
+                  hintText: t.tripNoteHint,
+                  border: const OutlineInputBorder(),
+                ),
               ),
-            ),
             const SizedBox(height: 14),
             SizedBox(
               width: double.infinity,
@@ -596,8 +776,16 @@ class _MarkDoneSheetState extends ConsumerState<_MarkDoneSheet> {
                 key: const ValueKey<String>('trip-done-save'),
                 style: FilledButton.styleFrom(minimumSize: const Size(0, 44)),
                 onPressed: _save,
-                child: Text(t.tripDoneSave),
+                child: Text(t.tripDoneSave, textAlign: TextAlign.center),
               ),
+            ),
+            const SizedBox(height: 8),
+            // Alt ipucu (mock_seyir): kaydın nereye gittiği dürüstçe söylenir.
+            Center(
+              child: Text(t.tripDoneHint,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodySmall
+                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
             ),
           ],
         ),

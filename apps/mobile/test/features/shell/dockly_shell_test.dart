@@ -124,8 +124,8 @@ void main() {
     expect(find.byKey(const ValueKey<String>('today-invite')), findsNothing);
   });
 
-  testWidgets('DEFTER sekmesi: Seyirler açılır; Rotalarım ve Notlar '
-      'segmentleri çalışır', (WidgetTester tester) async {
+  testWidgets('DEFTER sekmesi: Rotalarım açılır (2026-10-29); Seyirler ve '
+      'Günlük segmentleri çalışır', (WidgetTester tester) async {
     await tester.pumpWidget(_app());
     await tester.pumpAndSettle();
 
@@ -135,13 +135,14 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex, 2);
     expect(find.byType(DeckScreen), findsOneWidget);
-    // Seyir yok → dürüst boş durum (varsayılan segment Seyirler; metin
-    // v2.1 "Planla → Gerçekleşti" akışını anlatır).
-    expect(find.textContaining('Henüz sefer yok'), findsOneWidget);
-
-    await tester.tap(find.text('Rotalarım'));
-    await tester.pumpAndSettle();
+    // Varsayılan segment ROTALARIM (kurucu isteği 2026-10-29) → rota yoksa
+    // dürüst boş durum.
     expect(find.textContaining('Henüz kayıtlı rota yok'), findsOneWidget);
+
+    await tester.tap(find.text('Seyirler'));
+    await tester.pumpAndSettle();
+    // Seyir yok → dürüst boş durum (v2.1 "Planla → Gerçekleşti" metni).
+    expect(find.textContaining('Henüz sefer yok'), findsOneWidget);
 
     await tester.tap(find.text('Günlük')); // Notlar → Günlük (2026-10-27)
     await tester.pumpAndSettle();
