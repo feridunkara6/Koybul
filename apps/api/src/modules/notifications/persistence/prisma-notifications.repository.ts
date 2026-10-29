@@ -6,6 +6,8 @@ import {
   DeviceRegistration,
   DeviceRow,
   EventReminderCandidate,
+  InboxRow,
+  InboxType,
   NotificationCategory,
   NotificationsRepository,
 } from '../domain/notifications.types';
@@ -172,5 +174,55 @@ export class PrismaNotificationsRepository implements NotificationsRepository {
       ON CONFLICT (kind, entity_id, user_id) DO NOTHING
     `);
     return n > 0;
+  }
+
+  // --- BİLDİRİM KUTUSU (SP-2 Döngü, 2026-10-31) ---
+
+  async noteOwnerAndTitle(noteId: string): Promise<{ ownerId: string; title: string } | null> {
+    // Görünen başlık: notun başlığı, yoksa koy adı — kutu satırı insanca okunur.
+    const rows = await this.prisma.$queryRaw<{ ownerId: string; title: string | null }[]>(
+      Prisma.sql`
+        SELECT n.user_id AS "ownerId", COALESCE(n.title, l.name) AS "title"
+        FROM location_notes n
+        LEFT JOIN locations l ON l.id = n.location_id
+        WHERE n.id = ${noteId}::uuid AND n.deleted_at IS NULL
+      `,
+    );
+    const r = rows[0];
+    return r ? { ownerId: r.ownerId, title: r.title ?? '' } : null;
+  }
+
+  async insertInbox(userId: string, type: InboxType, data: Record<string, string>): Promise<void> {
+    await this.prisma.$executeRaw(Prisma.sql`
+      INSERT INTO notifications (user_id, type, data, pushed_at)
+      VALUES (${userId}::uuid, ${type}::notification_type, ${JSON.stringify(data)}::jsonb, now())
+    `);
+  }
+
+  async listInbox(userId: string, limit: number): Promise<InboxRow[]> {
+    const rows = await this.prisma.$queryRaw<
+      { id: string; type: InboxType; data: unknown; readAt: Date | null; createdAt: Date }[]
+    >(Prisma.sql`
+      SELECT id::text AS id, type::text AS type, data, read_at AS "readAt",
+             created_at AS "createdAt"
+      FROM notifications
+      WHERE user_id = ${userId}::uuid
+      ORDER BY created_at DESC
+      LIMIT ${limit}
+    `);
+    return rows.map((r) => ({
+      id: r.id,
+      type: r.type,
+      data: (r.data ?? {}) as Record<string, string>,
+      readAt: r.readAt ? r.readAt.toISOString() : null,
+      createdAt: r.createdAt.toISOString(),
+    }));
+  }
+
+  async markAllRead(userId: string): Promise<number> {
+    return this.prisma.$executeRaw(Prisma.sql`
+      UPDATE notifications SET read_at = now(), updated_at = now()
+      WHERE user_id = ${userId}::uuid AND read_at IS NULL
+    `);
   }
 }

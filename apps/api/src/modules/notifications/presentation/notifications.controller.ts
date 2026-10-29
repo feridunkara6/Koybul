@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Patch, Post, UseGuards } from '@nestjs/common';
 import { z } from 'zod';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
@@ -6,6 +6,7 @@ import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
 import { NotificationsService } from '../application/notifications.service';
+import { InboxRow } from '../domain/notifications.types';
 
 /**
  * FCM token biçimi: harf/rakam + ':', '-', '_' — başka karakter girmez.
@@ -73,5 +74,20 @@ export class NotificationsController {
     const updated = await this.notifications.updatePrefs(user.userId, token, prefs);
     if (!updated) throw new AppProblem('not-found');
     return updated;
+  }
+
+  // --- BİLDİRİM KUTUSU (SP-2 Döngü, kurucu onayı 2026-10-31) ---
+
+  /** Kutu listesi: en yeni 50 satır — metin istemcide üretilir (l10n). */
+  @Get()
+  async inbox(@CurrentUser() user: Principal): Promise<{ data: InboxRow[] }> {
+    return { data: await this.notifications.listInbox(user.userId) };
+  }
+
+  /** Kutu açılınca tümü okundu sayılır — rozet/işaret istemcide söner. */
+  @Post('read-all')
+  @HttpCode(204)
+  async readAll(@CurrentUser() user: Principal): Promise<void> {
+    await this.notifications.markAllRead(user.userId);
   }
 }

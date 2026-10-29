@@ -47,4 +47,19 @@ class FirebasePushGateway implements PushGateway {
   @override
   Stream<String> get onTokenRefresh =>
       FirebaseMessaging.instance.onTokenRefresh;
+
+  @override
+  Stream<Map<String, String>> get onNotificationTap async* {
+    // Uygulama BİLDİRİMDEN açıldıysa ilk mesaj burada yakalanır (soğuk
+    // açılış yolu) — sonra arka plandan öne geçiş dokunuşları akar.
+    try {
+      final RemoteMessage? initial =
+          await FirebaseMessaging.instance.getInitialMessage();
+      if (initial != null) yield _dataOf(initial);
+    } catch (_) {/* en iyi çaba — akış sürer */}
+    yield* FirebaseMessaging.onMessageOpenedApp.map(_dataOf);
+  }
+
+  static Map<String, String> _dataOf(RemoteMessage m) =>
+      m.data.map((String k, dynamic v) => MapEntry(k, '$v'));
 }

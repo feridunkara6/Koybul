@@ -1,5 +1,5 @@
 import 'package:dockly_api/dockly_api.dart'
-    show NotificationPrefs, NotificationsApi, SessionUser;
+    show InboxItem, NotificationPrefs, NotificationsApi, SessionUser;
 import 'package:dockly_mobile/core/providers.dart';
 import 'package:dockly_mobile/features/auth/application/auth_controller.dart';
 import 'package:dockly_mobile/features/notifications/application/push_controller.dart';
@@ -28,6 +28,10 @@ class FakePushGateway implements PushGateway {
 
   @override
   Stream<String> get onTokenRefresh => const Stream<String>.empty();
+
+  @override
+  Stream<Map<String, String>> get onNotificationTap =>
+      const Stream<Map<String, String>>.empty();
 }
 
 class FakeNotificationsApi implements NotificationsApi {
@@ -75,6 +79,14 @@ class FakeNotificationsApi implements NotificationsApi {
     );
     return prefs;
   }
+
+  // BİLDİRİM KUTUSU (SP-2, 2026-10-31) — bu testte kullanılmaz; boş sahte.
+  @override
+  Future<List<InboxItem>> inbox({required String accessToken}) async =>
+      const <InboxItem>[];
+
+  @override
+  Future<void> markAllRead({required String accessToken}) async {}
 }
 
 Widget _app({

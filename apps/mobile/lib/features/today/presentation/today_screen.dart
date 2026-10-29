@@ -11,6 +11,7 @@ import '../../checklist/presentation/checklist_sheet.dart';
 import '../../community/presentation/nearby_notes_section.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../../map/presentation/route_origin_menu.dart' show startSeaRoute;
+import '../../notifications/presentation/notifications_inbox_screen.dart';
 import '../../shell/application/shell_tab_provider.dart';
 import '../../weather/application/weather_controller.dart';
 import '../../weather/presentation/weather_card.dart';
@@ -51,24 +52,52 @@ class TodayScreen extends ConsumerWidget {
                   colors: <Color>[Color(0xFFF59E0B), Color(0xFFF97316)],
                 ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: <Widget>[
-                  Text(
-                    t.navToday,
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      color: const Color(0xFFFFFFFF),
-                      fontWeight: FontWeight.w800,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          t.navToday,
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        // GÜN SATIRI (onaylı E2: "Çrş 7 Ağu"): haftanın günü
+                        // kısa adıyla — hangi gün olduğu bir bakışta görülür.
+                        Text(
+                          '${t.weekdayShort[(now.weekday - 1) % 7]} '
+                          '${now.day} ${t.monthShort[now.month - 1]}',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: const Color(0xFFFFF3E0),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  // GÜN SATIRI (onaylı E2: "Çrş 7 Ağu"): haftanın günü kısa
-                  // adıyla — kaptan hangi gün olduğunu bir bakışta görür.
-                  Text(
-                    '${t.weekdayShort[(now.weekday - 1) % 7]} '
-                    '${now.day} ${t.monthShort[now.month - 1]}',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: const Color(0xFFFFF3E0),
-                      fontWeight: FontWeight.w600,
+                  // BİLDİRİM KUTUSU KAPISI (SP-2 Döngü, 2026-10-31): çan —
+                  // cevap/tepki/etkinlik olayları uygulama içinde de durur.
+                  InkWell(
+                    key: const ValueKey<String>('today-inbox-bell'),
+                    borderRadius: BorderRadius.circular(999),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const NotificationsInboxScreen(),
+                      ),
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(9),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: const Color(0xFFFFFFFF).withValues(alpha: .18),
+                      ),
+                      // Zil ikonu sette yok — bildirim ayarlarıyla AYNI dil
+                      // (Profil'deki satır da radio kullanıyor).
+                      child: const DocklyIcon(DocklyIcons.radio,
+                          size: 18, color: Color(0xFFFFFFFF)),
                     ),
                   ),
                 ],

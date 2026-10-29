@@ -190,6 +190,11 @@ export class NotesService {
           type: 'note',
           id: noteId,
         });
+        // "FAYDALI" EŞİĞİ (SP-2, 2026-10-31): 1., 5. ve 25. oyda sahibine
+        // bildirim — her oyda değil (taciz olmaz), ateşle-unut (akışı tutmaz).
+        if ([1, 5, 25].includes(res.helpfulCount)) {
+          this.notifications?.helpfulMilestone(noteId, res.helpfulCount);
+        }
       } else if (reaction === 'confirm' && owner.kind === 'hazard') {
         // Uyarı doğrulamak da bir katkıdır — puan OY VERENE yazılır.
         await this.reputation.award(principal.userId, 'hazard_confirmed', 3, {

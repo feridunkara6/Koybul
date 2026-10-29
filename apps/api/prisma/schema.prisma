@@ -135,6 +135,10 @@ enum NotificationType {
   helpful_received
   hazard_disputed
   level_up
+  // SP-2 Bildirim kutusu (2026-10-31): push ile aynı olaylar kutuya da düşer.
+  qa_answer
+  route_decision
+  event_update
   booking_status
   new_photo
   new_review

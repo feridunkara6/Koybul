@@ -85,6 +85,33 @@ export interface NotificationsRepository {
 
   /** Defter satırı atar; İLK kez eklendiyse true (tekrar koruması). */
   logOnce(kind: string, entityId: string, userId: string): Promise<boolean>;
+
+  // --- BİLDİRİM KUTUSU (SP-2 Döngü, kurucu onayı 2026-10-31) ---
+
+  /** "Faydalı" eşiği bildirimi için not sahibi + görünen başlık (koy adı). */
+  noteOwnerAndTitle(noteId: string): Promise<{ ownerId: string; title: string } | null>;
+
+  /** Kutuya satır yazar — metin değil, tür + data (metin istemcide üretilir). */
+  insertInbox(userId: string, type: InboxType, data: Record<string, string>): Promise<void>;
+
+  /** Kullanıcının en yeni kutu satırları (en yeni önce). */
+  listInbox(userId: string, limit: number): Promise<InboxRow[]>;
+
+  /** Tümünü okundu işaretler; işaretlenen satır sayısını döner. */
+  markAllRead(userId: string): Promise<number>;
+}
+
+/** Kutuya yazılan olay türleri — prisma notification_type alt kümesi. */
+export type InboxType =
+  'qa_answer' | 'route_decision' | 'event_update' | 'helpful_received' | 'level_up';
+
+/** Kutu satırı (API yanıtı ile birebir). */
+export interface InboxRow {
+  id: string;
+  type: InboxType;
+  data: Record<string, string>;
+  readAt: string | null;
+  createdAt: string;
 }
 
 export const NOTIFICATIONS_REPOSITORY = Symbol('NOTIFICATIONS_REPOSITORY');

@@ -18,6 +18,7 @@ import 'features/auth/infrastructure/firebase_auth_gateway.dart';
 import 'features/auth/presentation/sign_in_screen.dart';
 import 'features/notifications/application/maintenance_reminder.dart';
 import 'features/notifications/application/push_controller.dart';
+import 'features/notifications/application/push_tap_router.dart';
 import 'features/notifications/infrastructure/firebase_push_gateway.dart';
 import 'features/notifications/infrastructure/flutter_local_notifier.dart';
 import 'features/launch/presentation/launch_gate.dart';
@@ -96,6 +97,9 @@ class _DocklyAppState extends ConsumerState<DocklyApp> {
   @override
   void initState() {
     super.initState();
+    // BİLDİRİME DOKUNUŞ YÖNLENDİRİCİSİ (SP-2, 2026-10-31): push'a dokunan
+    // kaptan ilgili ekrana iner. Stub köprüde akış boştur (web/test no-op).
+    ref.read(pushTapRouterProvider).start();
     // GİRİŞTE PUSH KAYDI (push paketi 2026-10-27): hesap açılır açılmaz izin
     // istenir ve cihaz sunucuya yazılır. Stub köprüde no-op (web/test).
     ref.listenManual<AuthState>(authControllerProvider,
@@ -129,6 +133,8 @@ class _DocklyAppState extends ConsumerState<DocklyApp> {
   Widget build(BuildContext context) {
     final AppLocale loc = ref.watch(appLocaleProvider);
     return MaterialApp(
+      // Bildirim dokunuşu ekran açar — kök gezgin anahtarı (SP-2).
+      navigatorKey: rootNavigatorKey,
       title: 'Koybul',
       debugShowCheckedModeBanner: false,
       theme: buildDocklyTheme(Brightness.light),

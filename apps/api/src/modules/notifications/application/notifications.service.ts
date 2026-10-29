@@ -3,6 +3,8 @@ import {
   DevicePrefs,
   DeviceRegistration,
   DeviceRow,
+  InboxRow,
+  InboxType,
   NOTIFICATIONS_REPOSITORY,
   NotificationsRepository,
   PUSH_SENDER,
@@ -31,6 +33,12 @@ interface LocaleStrings {
   moderationNewTitle: string;
   moderationNewBody: (kind: string) => string;
   kinds: Record<ModerationKind, string>;
+  // SP-2 Döngü (2026-10-31): faydalı eşiği + seviye atlama.
+  helpfulTitle: string;
+  helpfulBody: (title: string, count: number) => string;
+  levelUpTitle: string;
+  levelUpBody: (levelName: string) => string;
+  levels: Record<string, string>;
 }
 
 const STRINGS: Record<'tr' | 'en' | 'es' | 'ru', LocaleStrings> = {
@@ -55,6 +63,18 @@ const STRINGS: Record<'tr' | 'en' | 'es' | 'ru', LocaleStrings> = {
       review: 'yorum',
       report: 'şikâyet',
     },
+    helpfulTitle: 'Notun işe yarıyor',
+    helpfulBody: (title: string, count: number) =>
+      `"${title}" notun ${count} faydalı oyuna ulaştı. Pruvan neta!`,
+    levelUpTitle: 'Seviye atladın',
+    levelUpBody: (levelName: string) => `Yeni denizci seviyen: ${levelName}. Tebrikler!`,
+    levels: {
+      new: 'Yeni Denizci',
+      coastal: 'Kıyı Kaşifi',
+      guide: 'Yol Gösteren',
+      master: 'Usta Kaptan',
+      pilot: 'Deniz Rehberi',
+    },
   },
   en: {
     qaAnswerTitle: 'Your question got an answer',
@@ -75,6 +95,18 @@ const STRINGS: Record<'tr' | 'en' | 'es' | 'ru', LocaleStrings> = {
       note: 'note',
       review: 'review',
       report: 'report',
+    },
+    helpfulTitle: 'Your note is helping',
+    helpfulBody: (title: string, count: number) =>
+      `"${title}" reached ${count} helpful votes. Well done!`,
+    levelUpTitle: 'Level up',
+    levelUpBody: (levelName: string) => `Your new sailor level: ${levelName}. Congrats!`,
+    levels: {
+      new: 'New Sailor',
+      coastal: 'Coastal Explorer',
+      guide: 'Wayfinder',
+      master: 'Master Skipper',
+      pilot: 'Sea Guide',
     },
   },
   es: {
@@ -97,6 +129,18 @@ const STRINGS: Record<'tr' | 'en' | 'es' | 'ru', LocaleStrings> = {
       review: 'reseña',
       report: 'denuncia',
     },
+    helpfulTitle: 'Tu nota está ayudando',
+    helpfulBody: (title: string, count: number) =>
+      `"${title}" alcanzó ${count} votos útiles. ¡Bien hecho!`,
+    levelUpTitle: 'Subiste de nivel',
+    levelUpBody: (levelName: string) => `Tu nuevo nivel: ${levelName}. ¡Felicidades!`,
+    levels: {
+      new: 'Marinero nuevo',
+      coastal: 'Explorador costero',
+      guide: 'Guía',
+      master: 'Patrón experto',
+      pilot: 'Guía del mar',
+    },
   },
   ru: {
     qaAnswerTitle: 'На ваш вопрос ответили',
@@ -117,6 +161,18 @@ const STRINGS: Record<'tr' | 'en' | 'es' | 'ru', LocaleStrings> = {
       note: 'заметка',
       review: 'отзыв',
       report: 'жалоба',
+    },
+    helpfulTitle: 'Ваша заметка помогает',
+    helpfulBody: (title: string, count: number) =>
+      `«${title}» набрала ${count} отметок «полезно». Отлично!`,
+    levelUpTitle: 'Новый уровень',
+    levelUpBody: (levelName: string) => `Ваш новый уровень моряка: ${levelName}. Поздравляем!`,
+    levels: {
+      new: 'Новый моряк',
+      coastal: 'Исследователь побережья',
+      guide: 'Проводник',
+      master: 'Опытный капитан',
+      pilot: 'Морской лоцман',
     },
   },
 };
@@ -201,6 +257,12 @@ export class NotificationsService implements OnModuleInit, OnModuleDestroy {
       const q = await this.repo.questionOwnerAndTitle(questionId);
       if (!q || q.ownerId === answerAuthorId) return;
       if (!(await this.repo.logOnce('qa_answer', answerId, q.ownerId))) return;
+      // KUTU (SP-2): push kaçsa bile olay uygulama içinde durur.
+      await this.inbox(q.ownerId, 'qa_answer', {
+        kind: 'qa_answer',
+        id: questionId,
+        title: q.title,
+      });
       await this.sendTo(await this.repo.devicesForUser(q.ownerId, 'community'), (s) => ({
         title: s.qaAnswerTitle,
         body: q.title,
@@ -225,6 +287,7 @@ export class NotificationsService implements OnModuleInit, OnModuleDestroy {
       if (!r) return;
       const kind = approved ? 'route_approved' : 'route_rejected';
       if (!(await this.repo.logOnce(kind, routeId, r.ownerId))) return;
+      await this.inbox(r.ownerId, 'route_decision', { kind, id: routeId, name: r.name });
       await this.sendTo(await this.repo.devicesForUser(r.ownerId, 'community'), (s) => ({
         title: approved ? s.routeApprovedTitle : s.routeRejectedTitle,
         body: approved ? s.routeApprovedBody(r.name) : s.routeRejectedBody(r.name),
@@ -240,6 +303,11 @@ export class NotificationsService implements OnModuleInit, OnModuleDestroy {
       if (!ev || ev.userIds.length === 0) return;
       for (const userId of ev.userIds) {
         if (!(await this.repo.logOnce('event_cancelled', eventId, userId))) continue;
+        await this.inbox(userId, 'event_update', {
+          kind: 'event_cancelled',
+          id: eventId,
+          title: ev.title,
+        });
         await this.sendTo(await this.repo.devicesForUser(userId, 'events'), (s) => ({
           title: s.eventCancelledTitle,
           body: s.eventCancelledBody(ev.title),
@@ -247,6 +315,66 @@ export class NotificationsService implements OnModuleInit, OnModuleDestroy {
         }));
       }
     });
+  }
+
+  /** ⑥ "Faydalı" EŞİĞİ (SP-2, 2026-10-31): notun 1., 5. ve 25. faydalı
+   *  oyunda sahibine bir kez — her oyda push atmak taciz olurdu. */
+  helpfulMilestone(noteId: string, count: number): void {
+    this.fireAndForget('helpful_milestone', async () => {
+      const n = await this.repo.noteOwnerAndTitle(noteId);
+      if (!n) return;
+      // entity_id uuid'dir — eşik, tür adına işlenir (helpful_5 gibi).
+      if (!(await this.repo.logOnce(`helpful_${count}`, noteId, n.ownerId))) return;
+      await this.inbox(n.ownerId, 'helpful_received', {
+        kind: 'helpful_received',
+        id: noteId,
+        title: n.title,
+        count: String(count),
+      });
+      await this.sendTo(await this.repo.devicesForUser(n.ownerId, 'community'), (s) => ({
+        title: s.helpfulTitle,
+        body: s.helpfulBody(n.title, count),
+        data: { kind: 'helpful_received', id: noteId },
+      }));
+    });
+  }
+
+  /** ⑦ SEVİYE ATLAMA (SP-2): her seviye koduna bir kez (logOnce: level_<kod>). */
+  levelUp(userId: string, levelCode: string): void {
+    this.fireAndForget('level_up', async () => {
+      if (!(await this.repo.logOnce(`level_${levelCode}`, userId, userId))) return;
+      await this.inbox(userId, 'level_up', { kind: 'level_up', level: levelCode });
+      await this.sendTo(await this.repo.devicesForUser(userId, 'community'), (s) => ({
+        title: s.levelUpTitle,
+        body: s.levelUpBody(s.levels[levelCode] ?? levelCode),
+        data: { kind: 'level_up', id: levelCode },
+      }));
+    });
+  }
+
+  // --- BİLDİRİM KUTUSU (SP-2): uygulama içi liste -------------------------
+
+  /** Kullanıcının kutusu (en yeni 50). */
+  listInbox(userId: string): Promise<InboxRow[]> {
+    return this.repo.listInbox(userId, 50);
+  }
+
+  /** Tümünü okundu say (kutu ekranı açılınca). */
+  markAllRead(userId: string): Promise<number> {
+    return this.repo.markAllRead(userId);
+  }
+
+  /** Kutu yazımı en-iyi-çaba: kutu hatası push'u asla engellemez. */
+  private async inbox(
+    userId: string,
+    type: InboxType,
+    data: Record<string, string>,
+  ): Promise<void> {
+    try {
+      await this.repo.insertInbox(userId, type, data);
+    } catch (err) {
+      this.logger.warn({ event: 'inbox_write_failed', type, err: String(err) });
+    }
   }
 
   /** ⑤ Moderasyon kuyruğuna yeni içerik → admin cihazlarına. */
@@ -266,6 +394,11 @@ export class NotificationsService implements OnModuleInit, OnModuleDestroy {
     for (const c of candidates) {
       // logOnce = tekrar kalkanı: tarama her saat koşar, bildirim BİR kez gider.
       if (!(await this.repo.logOnce('event_reminder', c.eventId, c.userId))) continue;
+      await this.inbox(c.userId, 'event_update', {
+        kind: 'event_reminder',
+        id: c.eventId,
+        title: c.title,
+      });
       await this.sendTo(await this.repo.devicesForUser(c.userId, 'events'), (s) => ({
         title: s.eventReminderTitle,
         body: s.eventReminderBody(c.title),

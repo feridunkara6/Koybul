@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { AppProblem } from '../../../common/problem/problem';
 import {
   AuthorState,
@@ -14,6 +14,7 @@ import {
   isWriteRestricted,
 } from '../domain/scoring';
 import { earnedBadges } from '../domain/badges';
+import { NotificationsService } from '../../notifications/application/notifications.service';
 
 /**
  * Puan yazımının tek kapısı. Hiçbir controller doğrudan puan yazamaz; her yol
@@ -26,7 +27,11 @@ import { earnedBadges } from '../domain/badges';
 export class ReputationService {
   private readonly logger = new Logger(ReputationService.name);
 
-  constructor(@Inject(REPUTATION_REPOSITORY) private readonly repo: ReputationRepository) {}
+  constructor(
+    @Inject(REPUTATION_REPOSITORY) private readonly repo: ReputationRepository,
+    /** SEVİYE ATLAMA bildirimi (SP-2, 2026-10-31) — birim testleri vermez. */
+    @Optional() private readonly notifications?: NotificationsService,
+  ) {}
 
   async authorState(userId: string): Promise<AuthorState> {
     return this.repo.authorState(userId);
@@ -82,6 +87,8 @@ export class ReputationService {
       const res = await this.repo.award(userId, action, points, entity);
       if (res.leveledUp) {
         this.logger.log({ event: 'level_up', userId, level: res.levelCode }, 'Denizci seviyesi');
+        // SP-2 (2026-10-31): seviye bildirimi — ateşle-unut, puan akışını tutmaz.
+        this.notifications?.levelUp(userId, res.levelCode);
       }
       return points;
     } catch (err) {

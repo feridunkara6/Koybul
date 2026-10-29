@@ -4,6 +4,8 @@ import {
   DeviceRegistration,
   DeviceRow,
   EventReminderCandidate,
+  InboxRow,
+  InboxType,
   NotificationCategory,
   NotificationsRepository,
   PushMessage,
@@ -81,6 +83,32 @@ class FakeRepo implements NotificationsRepository {
     if (this.logged.has(key)) return false;
     this.logged.add(key);
     return true;
+  }
+
+  // --- BİLDİRİM KUTUSU (SP-2, 2026-10-31) ---
+  note: { ownerId: string; title: string } | null = null;
+  inboxRows: { userId: string; type: InboxType; data: Record<string, string> }[] = [];
+
+  async noteOwnerAndTitle(): Promise<{ ownerId: string; title: string } | null> {
+    return this.note;
+  }
+  async insertInbox(userId: string, type: InboxType, data: Record<string, string>): Promise<void> {
+    this.inboxRows.push({ userId, type, data });
+  }
+  async listInbox(userId: string, limit: number): Promise<InboxRow[]> {
+    return this.inboxRows
+      .filter((r) => r.userId === userId)
+      .slice(0, limit)
+      .map((r, i) => ({
+        id: `in-${i}`,
+        type: r.type,
+        data: r.data,
+        readAt: null,
+        createdAt: '2026-10-31T10:00:00.000Z',
+      }));
+  }
+  async markAllRead(userId: string): Promise<number> {
+    return this.inboxRows.filter((r) => r.userId === userId).length;
   }
 }
 
