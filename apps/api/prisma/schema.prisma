@@ -543,6 +543,10 @@ model User {
   qaAnswers                        QaAnswer[]             @relation("QaAnswerAuthor")
   qaQuestionLikes                  QaQuestionLike[]
   qaAnswerHelpfuls                 QaAnswerHelpful[]
+
+  // TAKİP (SP-3a, 2026-10-31): kaptanı takip et — içerik aboneliği.
+  following                        UserFollow[]           @relation("FollowFollower")
+  followers                        UserFollow[]           @relation("FollowFollowed")
   eventRegistrations               EventRegistration[]
 
   routes                           Route[]               @relation("RouteAuthor")
@@ -1484,6 +1488,19 @@ model RouteSave {
 
   @@id([routeId, userId])
   @@map("route_saves")
+}
+
+model UserFollow {
+  followerId String   @map("follower_id") @db.Uuid
+  followedId String   @map("followed_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  follower User @relation("FollowFollower", fields: [followerId], references: [id], onDelete: Cascade)
+  followed User @relation("FollowFollowed", fields: [followedId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followedId])
+  @@index([followedId], map: "idx_user_follows_followed")
+  @@map("user_follows")
 }
 
 model RouteDone {

@@ -407,6 +407,12 @@ class L10n {
     required this.reportReasonWrong,
     required this.reportReasonAbuse,
     required this.reportThanks,
+    required this.followBtn,
+    required this.followingBtn,
+    required this.cpFollowersCap,
+    required this.followingTitle,
+    required this.followingEmpty,
+    required this.gateFollowMsg,
     required this.bcTitle,
     required this.bcLoadFailed,
     required this.bcPrivacyNote,
@@ -1071,6 +1077,9 @@ class L10n {
   // SP-1 Kimlik (kurucu onayı 2026-10-29): kaptan kartı vitrini + şikâyet.
   final String cpRecent, cpRouteTag, reportAction, reportSheetTitle,
       reportReasonWrong, reportReasonAbuse, reportThanks;
+  // TAKİP (SP-3a, kurucu onayı 2026-10-31): takip düğmesi + listesi.
+  final String followBtn, followingBtn, cpFollowersCap, followingTitle,
+      followingEmpty, gateFollowMsg;
   // TEKNE KARTI (Sosyalleşme Hafta 2, kurucu onayı 2026-10-24).
   final String bcTitle, bcLoadFailed, bcPrivacyNote;
   // ROTA PAYLAŞIMI (Sosyalleşme Hafta 3, kurucu onayı 2026-10-24).
@@ -2089,6 +2098,13 @@ const L10n _tr = L10n(
   reportReasonWrong: 'Yanlış / güncel olmayan bilgi',
   reportReasonAbuse: 'Uygunsuz içerik',
   reportThanks: 'Bildirimin alındı — teşekkürler, inceleyeceğiz.',
+  followBtn: 'Takip et',
+  followingBtn: 'Takip ediliyor',
+  cpFollowersCap: 'TAKİPÇİ',
+  followingTitle: 'Takip ettiklerim',
+  followingEmpty:
+      'Henüz kimseyi takip etmiyorsun. Beğendiğin bir kaptanın profilinden "Takip et"e dokun.',
+  gateFollowMsg: 'Kaptanları takip etmek için ücretsiz bir hesap gerekir.',
   bcTitle: 'Tekne Kartı',
   bcLoadFailed: 'Tekne kartı yüklenemedi — tekne artık paylaşımda olmayabilir.',
   bcPrivacyNote: 'Bu kart yalnız sahibi izin verdiği için görünür. Konum, bağlama yeri ve iletişim bilgisi hiçbir zaman paylaşılmaz.',
@@ -3135,6 +3151,13 @@ const L10n _en = L10n(
   reportReasonWrong: 'Wrong / outdated information',
   reportReasonAbuse: 'Inappropriate content',
   reportThanks: 'Report received — thanks, we will review it.',
+  followBtn: 'Follow',
+  followingBtn: 'Following',
+  cpFollowersCap: 'FOLLOWERS',
+  followingTitle: 'Captains I follow',
+  followingEmpty:
+      'You are not following anyone yet. Tap "Follow" on a captain profile you like.',
+  gateFollowMsg: 'A free account is required to follow captains.',
   bcTitle: 'Boat Card',
   bcLoadFailed: 'Could not load the boat card — it may no longer be shared.',
   bcPrivacyNote: 'This card is visible only because its owner allowed it. Location, berth and contact details are never shared.',
@@ -4178,6 +4201,13 @@ const L10n _es = L10n(
   reportReasonWrong: 'Información errónea u obsoleta',
   reportReasonAbuse: 'Contenido inapropiado',
   reportThanks: 'Denuncia recibida — gracias, la revisaremos.',
+  followBtn: 'Seguir',
+  followingBtn: 'Siguiendo',
+  cpFollowersCap: 'SEGUIDORES',
+  followingTitle: 'Capitanes que sigo',
+  followingEmpty:
+      'Aún no sigues a nadie. Toca "Seguir" en el perfil de un capitán que te guste.',
+  gateFollowMsg: 'Se necesita una cuenta gratuita para seguir a capitanes.',
   bcTitle: 'Ficha del barco',
   bcLoadFailed: 'No se pudo cargar la ficha — puede que ya no esté compartida.',
   bcPrivacyNote: 'Esta ficha es visible solo porque su propietario lo permitió. La ubicación, el amarre y el contacto nunca se comparten.',
@@ -5221,6 +5251,13 @@ const L10n _ru = L10n(
   reportReasonWrong: 'Неверная / устаревшая информация',
   reportReasonAbuse: 'Неуместный контент',
   reportThanks: 'Жалоба получена — спасибо, мы проверим.',
+  followBtn: 'Подписаться',
+  followingBtn: 'Вы подписаны',
+  cpFollowersCap: 'ПОДПИСЧИКИ',
+  followingTitle: 'Мои подписки',
+  followingEmpty:
+      'Вы пока ни на кого не подписаны. Нажмите «Подписаться» в профиле капитана.',
+  gateFollowMsg: 'Чтобы подписываться на капитанов, нужна бесплатная учётная запись.',
   bcTitle: 'Карточка лодки',
   bcLoadFailed: 'Не удалось загрузить карточку — возможно, она больше не публикуется.',
   bcPrivacyNote: 'Эта карточка видна только с разрешения владельца. Координаты, стоянка и контакты никогда не публикуются.',

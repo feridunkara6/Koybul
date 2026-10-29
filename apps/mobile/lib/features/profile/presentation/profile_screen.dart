@@ -25,6 +25,7 @@ import '../../notifications/presentation/notification_settings_screen.dart';
 import '../../legal/presentation/sources_screen.dart';
 import '../../route/presentation/shared_routes_screen.dart';
 import '../../shell/application/shell_tab_provider.dart';
+import 'following_screen.dart';
 
 /// Profil sekmesi — KAPTAN KARTI konsepti (Konsept A, kurucu onayı
 /// 2026-09-23): üstte lacivert-mavi degrade kimlik başlığı (avatar + hesap +
@@ -188,6 +189,18 @@ class ProfileScreen extends ConsumerWidget {
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute<void>(
                           builder: (_) => const EventsScreen()),
+                    ),
+                  ),
+                  _GroupRow(
+                    icon: DocklyIcons.personOutline,
+                    tint: DocklyColors.accentTurquoise,
+                    // TAKİP ETTİKLERİM (SP-3a, kurucu onayı 2026-10-31):
+                    // takip edilen kaptanların listesi; satır herkese görünür,
+                    // misafirde boş durum metni hesaba yönlendirir.
+                    label: t.followingTitle,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          builder: (_) => const FollowingScreen()),
                     ),
                   ),
                 ]),

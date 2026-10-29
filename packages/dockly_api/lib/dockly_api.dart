@@ -21,6 +21,7 @@ export 'src/dto/session.dart';
 export 'src/dto/user_me.dart';
 export 'src/dto/inbox_item.dart';
 export 'src/dto/public_captain.dart';
+export 'src/dto/followed_captain.dart';
 export 'src/dto/public_boat.dart';
 export 'src/dto/routes.dart';
 export 'src/dto/geo.dart';

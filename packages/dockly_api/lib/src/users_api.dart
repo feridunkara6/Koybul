@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import 'dto/followed_captain.dart';
 import 'dto/public_captain.dart';
 import 'dto/user_me.dart';
 import 'problem_mapper.dart';
@@ -71,6 +72,55 @@ class UsersApi {
         '/v1/users/$userId/public',
       );
       return PublicCaptain.fromJson(res.data!);
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  // --- TAKİP (SP-3a, kurucu onayı 2026-10-31) ---
+
+  /// Takip ettiklerim — en yeni takip önce (id + görünen ad + seviye).
+  Future<List<FollowedCaptain>> following(String accessToken) async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>(
+        '/v1/users/me/following',
+        options: _auth(accessToken),
+      );
+      final List<dynamic> data =
+          (res.data!['data'] as List<dynamic>?) ?? const <dynamic>[];
+      return data
+          .map((dynamic e) => FollowedCaptain.fromJson(e as Map<String, dynamic>))
+          .toList(growable: false);
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  /// Kaptanı takip et — idempotent (ikinci çağrı da 204 döner).
+  Future<void> follow({
+    required String accessToken,
+    required String userId,
+  }) async {
+    try {
+      await _dio.post<void>(
+        '/v1/users/me/following/$userId',
+        options: _auth(accessToken),
+      );
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  /// Takibi bırak — idempotent (satır yoksa da 204).
+  Future<void> unfollow({
+    required String accessToken,
+    required String userId,
+  }) async {
+    try {
+      await _dio.delete<void>(
+        '/v1/users/me/following/$userId',
+        options: _auth(accessToken),
+      );
     } on DioException catch (error) {
       throw mapDioError(error);
     }

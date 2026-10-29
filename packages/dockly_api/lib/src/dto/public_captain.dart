@@ -21,6 +21,8 @@ class PublicCaptain {
     // SP-1 Kimlik (2026-10-29): vitrin — eski sunucu yanıtlarıyla uyum için
     // isteğe bağlı; alan gelmezse boş liste (bölüm çizilmez).
     this.recentContributions = const <CaptainContribution>[],
+    // SP-3a Takip (2026-10-31): takipçi sayısı — alan gelmezse 0.
+    this.followerCount = 0,
   });
 
   final String id;
@@ -38,6 +40,9 @@ class PublicCaptain {
 
   /// Son ONAYLI katkılar (vitrin): not (koy adıyla) + paylaşılan rota.
   final List<CaptainContribution> recentContributions;
+
+  /// Takipçi sayısı (SP-3a) — herkese açık; eski sunucuda alan yoksa 0.
+  final int followerCount;
 
   /// Avatar baş harfleri: görünen adın ilk iki kelimesinden; ad boşsa boş
   /// döner (uydurma harf yok — itibar DTO'suyla aynı ilke).
@@ -66,6 +71,7 @@ class PublicCaptain {
             .map((dynamic e) =>
                 CaptainContribution.fromJson(e as Map<String, dynamic>))
             .toList(growable: false),
+        followerCount: (json['followerCount'] as num?)?.toInt() ?? 0,
       );
 }
 

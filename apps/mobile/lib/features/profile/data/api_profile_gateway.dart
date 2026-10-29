@@ -38,4 +38,18 @@ class ApiProfileGateway implements ProfileGateway {
         experienceYears: experienceYears,
         clearExperience: clearExperience,
       );
+
+  // --- TAKİP (SP-3a, kurucu onayı 2026-10-31) ---
+
+  @override
+  Future<List<FollowedCaptain>> following() async =>
+      _api.following(await _requiredToken());
+
+  @override
+  Future<void> follow(String userId) async =>
+      _api.follow(accessToken: await _requiredToken(), userId: userId);
+
+  @override
+  Future<void> unfollow(String userId) async =>
+      _api.unfollow(accessToken: await _requiredToken(), userId: userId);
 }

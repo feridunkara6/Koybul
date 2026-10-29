@@ -3,7 +3,13 @@ import { Prisma } from '@prisma/client';
 import { uuidv7 } from 'uuidv7';
 import { PrismaService } from '../../../infrastructure/prisma/prisma.service';
 import { DeletionAudit, UserRepository } from '../domain/user.repository';
-import { CaptainContribution, PublicCaptain, UpdateMeInput, UserMe } from '../domain/user.types';
+import {
+  CaptainContribution,
+  FollowedCaptain,
+  PublicCaptain,
+  UpdateMeInput,
+  UserMe,
+} from '../domain/user.types';
 import { RoleCode } from '../../../core/auth/principal';
 
 const ANONYMIZED_DISPLAY_NAME = 'Silinmiş Kullanıcı';
@@ -77,6 +83,8 @@ export class PrismaUserRepository implements UserRepository {
           select: { badgeCode: true },
           orderBy: { awardedAt: 'asc' },
         },
+        // TAKİPÇİ SAYISI (SP-3a, 2026-10-31) — kartta herkese açık.
+        _count: { select: { followers: true } },
       },
     });
     if (!user) return null;
@@ -127,8 +135,61 @@ export class PrismaUserRepository implements UserRepository {
       approvedCount: user.reputation?.approvedCount ?? 0,
       helpfulReceived: user.reputation?.helpfulReceived ?? 0,
       badges: user.badges.map((b) => b.badgeCode),
+      followerCount: user._count.followers,
       recentContributions: recent,
     };
+  }
+
+  // --- TAKİP (SP-3a, kurucu onayı 2026-10-31) ---
+
+  async userExists(userId: string): Promise<boolean> {
+    const n = await this.prisma.user.count({
+      where: { id: userId, deletedAt: null, status: 'active' },
+    });
+    return n > 0;
+  }
+
+  async follow(followerId: string, followedId: string): Promise<void> {
+    // RLS: yazma kullanıcı bağlamıyla (satır sahibi = takip eden).
+    await this.prisma.withUserContext(followerId, async (tx) => {
+      await tx.$executeRaw`
+        INSERT INTO user_follows (follower_id, followed_id)
+        VALUES (${followerId}::uuid, ${followedId}::uuid)
+        ON CONFLICT (follower_id, followed_id) DO NOTHING
+      `;
+    });
+  }
+
+  async unfollow(followerId: string, followedId: string): Promise<void> {
+    await this.prisma.withUserContext(followerId, async (tx) => {
+      await tx.$executeRaw`
+        DELETE FROM user_follows
+        WHERE follower_id = ${followerId}::uuid AND followed_id = ${followedId}::uuid
+      `;
+    });
+  }
+
+  async following(userId: string): Promise<FollowedCaptain[]> {
+    // Ad/seviye kart diliyle aynı kaynaktan; silinmiş hesap listeden düşer.
+    const rows = await this.prisma.$queryRaw<
+      { id: string; displayName: string | null; levelCode: string | null }[]
+    >`
+      SELECT u.id::text AS id, up.display_name AS "displayName",
+             ur.level_code::text AS "levelCode"
+      FROM user_follows f
+      JOIN users u ON u.id = f.followed_id
+        AND u.deleted_at IS NULL AND u.status = 'active'
+      LEFT JOIN user_profiles up ON up.user_id = u.id
+      LEFT JOIN user_reputation ur ON ur.user_id = u.id
+      WHERE f.follower_id = ${userId}::uuid
+      ORDER BY f.created_at DESC
+      LIMIT 200
+    `;
+    return rows.map((r) => ({
+      id: r.id,
+      displayName: r.displayName ?? DEFAULT_DISPLAY_NAME,
+      levelCode: r.levelCode ?? 'new',
+    }));
   }
 
   async updateMe(userId: string, patch: UpdateMeInput): Promise<UserMe> {

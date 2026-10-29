@@ -1,4 +1,4 @@
-import { PublicCaptain, UpdateMeInput, UserMe } from './user.types';
+import { FollowedCaptain, PublicCaptain, UpdateMeInput, UserMe } from './user.types';
 
 export interface DeletionAudit {
   ip?: string;
@@ -17,6 +17,17 @@ export interface UserRepository {
    * silinmesi + audit kaydı — TEK transaction içinde.
    */
   softDeleteAndAnonymize(userId: string, audit: DeletionAudit): Promise<void>;
+
+  // --- TAKİP (SP-3a, kurucu onayı 2026-10-31) ---
+
+  /** Hedef aktif bir kullanıcı mı? (takip öncesi varlık denetimi) */
+  userExists(userId: string): Promise<boolean>;
+  /** Takip satırı ekler; zaten varsa sessizce geçer (idempotent). */
+  follow(followerId: string, followedId: string): Promise<void>;
+  /** Takibi bırakır; satır yoksa sessizce geçer (idempotent). */
+  unfollow(followerId: string, followedId: string): Promise<void>;
+  /** Takip ettiklerim — en yeni takip önce. */
+  following(userId: string): Promise<FollowedCaptain[]>;
 }
 
 export const USER_REPOSITORY = Symbol('USER_REPOSITORY');

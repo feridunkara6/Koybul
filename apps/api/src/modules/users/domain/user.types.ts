@@ -45,6 +45,8 @@ export interface PublicCaptain {
   helpfulReceived: number;
   /** Geri alınmamış rozet kodları — etiket metinleri istemcide (4 dil). */
   badges: string[];
+  /** Takipçi sayısı (SP-3a, kurucu onayı 2026-10-31) — herkese açık sayı. */
+  followerCount: number;
   /** SON KATKILAR vitrini (SP-1 Kimlik, kurucu onayı 2026-10-29): yalnız
    *  ONAYLI içerik — en yeni birkaç not (koy adıyla) + paylaşılan rota.
    *  PII taşımaz; içerik zaten herkese açık yüzeylerde yayındadır. */
@@ -78,4 +80,11 @@ export interface UpdateMeInput {
     units?: 'metric' | 'imperial';
     marketingConsent?: boolean;
   };
+}
+
+/** TAKİP listesi satırı (SP-3a, 2026-10-31) — PII yok, kart diliyle aynı. */
+export interface FollowedCaptain {
+  id: string;
+  displayName: string;
+  levelCode: string;
 }

@@ -7,6 +7,7 @@ import {
   HttpCode,
   Param,
   Patch,
+  Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -19,7 +20,7 @@ import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { currentRequestId } from '../../../common/context/request-context';
 import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
-import { PublicCaptain, UserMe } from '../domain/user.types';
+import { FollowedCaptain, PublicCaptain, UserMe } from '../domain/user.types';
 
 /**
  * PATCH beyaz listesi (docs/24 §7.3 mass-assignment önlemi): yalnız bu alanlar.
@@ -72,6 +73,32 @@ export class UsersController {
       ip: req.ip,
       requestId: currentRequestId(),
     });
+  }
+
+  // --- TAKİP (SP-3a, kurucu onayı 2026-10-31) ---
+
+  /** Takip ettiklerim — id + görünen ad + seviye (liste ekranı + düğme durumu). */
+  @Get('following')
+  async following(@CurrentUser() principal: Principal): Promise<{ data: FollowedCaptain[] }> {
+    return { data: await this.usersService.following(principal.userId) };
+  }
+
+  /** Kaptanı takip et — idempotent (ikinci çağrı sessizce 204). */
+  @Post('following/:id')
+  @HttpCode(204)
+  async follow(@CurrentUser() principal: Principal, @Param('id') id: string): Promise<void> {
+    const parsed = UuidParam.safeParse(id);
+    if (!parsed.success) throw new AppProblem('not-found');
+    await this.usersService.follow(principal.userId, parsed.data);
+  }
+
+  /** Takibi bırak — idempotent. */
+  @Delete('following/:id')
+  @HttpCode(204)
+  async unfollow(@CurrentUser() principal: Principal, @Param('id') id: string): Promise<void> {
+    const parsed = UuidParam.safeParse(id);
+    if (!parsed.success) throw new AppProblem('not-found');
+    await this.usersService.unfollow(principal.userId, parsed.data);
   }
 }
 

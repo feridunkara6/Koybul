@@ -5,7 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../auth/application/auth_controller.dart';
+import '../../auth/domain/auth_state.dart';
+import '../../auth/presentation/account_gate.dart';
 import '../../community/presentation/reputation_shell.dart' show formatCount;
+import '../application/follow_controller.dart';
 import '../application/profile_controller.dart';
 import 'captain_avatar.dart';
 
@@ -51,15 +55,18 @@ class CaptainProfileScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends StatelessWidget {
+class _Body extends ConsumerWidget {
   const _Body({required this.c, required this.t});
 
   final PublicCaptain c;
   final L10n t;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
+    // Kendi kartımda takip düğmesi çizilmez (kendini takip sunucuda da 422).
+    final AuthState auth = ref.watch(authControllerProvider);
+    final bool isSelf = auth is Authenticated && auth.user.id == c.id;
     final Color sub = theme.colorScheme.onSurfaceVariant;
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
@@ -102,6 +109,13 @@ class _Body extends StatelessWidget {
           ].join(' · '),
           style: theme.textTheme.bodySmall?.copyWith(color: sub),
         ),
+        // TAKİP DÜĞMESİ (SP-3a, 2026-10-31): içerik aboneliği — DM hakkı
+        // vermez. Misafir dokununca hesap kapısı açılır (kurucu kuralı:
+        // hesapsız kullanıcı etkileşime geçemez).
+        if (!isSelf) ...<Widget>[
+          const SizedBox(height: 12),
+          _FollowButton(captainId: c.id, t: t),
+        ],
         // TANITIM — kullanıcı yazdıysa; yoksa bölüm hiç çizilmez.
         if (c.bio != null && c.bio!.trim().isNotEmpty) ...<Widget>[
           const SizedBox(height: 12),
@@ -124,6 +138,9 @@ class _Body extends StatelessWidget {
             _Stat(caption: t.cpApprovedCap, value: formatCount(t, c.approvedCount)),
             const SizedBox(width: 8),
             _Stat(caption: t.cpHelpfulCap, value: formatCount(t, c.helpfulReceived)),
+            const SizedBox(width: 8),
+            // SP-3a: takipçi sayısı — herkese açık (sunucu sayar).
+            _Stat(caption: t.cpFollowersCap, value: formatCount(t, c.followerCount)),
           ],
         ),
         // ROZETLER — kod → yerel etiket; hiç yoksa bölüm çizilmez.
@@ -210,6 +227,72 @@ class _Body extends StatelessWidget {
             ),
         ],
       ],
+    );
+  }
+}
+
+/// TAKİP DÜĞMESİ (SP-3a, kurucu onayı 2026-10-31).
+///
+/// Durum `followedIdsProvider`'dan okunur (tek doğruluk kaynağı: sunucudaki
+/// listem). Dokunuş hesap kapısından geçer; eylem sürerken düğme kilitlenir
+/// (çift dokunuş koruması). Hata kullanıcıya SÖYLENİR (sessiz yutma yok).
+class _FollowButton extends ConsumerStatefulWidget {
+  const _FollowButton({required this.captainId, required this.t});
+
+  final String captainId;
+  final L10n t;
+
+  @override
+  ConsumerState<_FollowButton> createState() => _FollowButtonState();
+}
+
+class _FollowButtonState extends ConsumerState<_FollowButton> {
+  bool _busy = false;
+
+  Future<void> _toggle({required bool follow}) async {
+    setState(() => _busy = true);
+    try {
+      await ref
+          .read(followActionsProvider)
+          .setFollowing(widget.captainId, follow: follow);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+          ..clearSnackBars()
+          ..showSnackBar(SnackBar(content: Text(widget.t.actionFailed)));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final L10n t = widget.t;
+    final bool following =
+        ref.watch(followedIdsProvider).contains(widget.captainId);
+    if (following) {
+      // Takipteyim — ikinci dokunuş takibi bırakır (ayrı onay sormaz;
+      // eylem idempotent ve anında geri alınabilir).
+      return OutlinedButton.icon(
+        key: const ValueKey<String>('cp-follow-btn'),
+        onPressed: _busy ? null : () => _toggle(follow: false),
+        icon: const DocklyIcon(DocklyIcons.checkCircle, size: 16),
+        label: Text(t.followingBtn),
+      );
+    }
+    return FilledButton.tonalIcon(
+      key: const ValueKey<String>('cp-follow-btn'),
+      onPressed: _busy
+          ? null
+          : () => requireAccount(
+                context,
+                ref,
+                message: t.gateFollowMsg,
+                onAllowed: () => _toggle(follow: true),
+              ),
+      icon: const DocklyIcon(DocklyIcons.personOutline, size: 16),
+      label: Text(t.followBtn),
     );
   }
 }

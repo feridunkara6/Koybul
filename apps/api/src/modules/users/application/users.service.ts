@@ -3,7 +3,7 @@ import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
 import { SessionService } from '../../auth/application/session.service';
 import { DeletionAudit, USER_REPOSITORY, UserRepository } from '../domain/user.repository';
-import { PublicCaptain, UpdateMeInput, UserMe } from '../domain/user.types';
+import { FollowedCaptain, PublicCaptain, UpdateMeInput, UserMe } from '../domain/user.types';
 
 /** users/me use-case'leri (docs/23 §10 #4-5). */
 @Injectable()
@@ -55,5 +55,26 @@ export class UsersService {
     await this.getMe(principal); // silinmiş hesaba ikinci silme → 404 (idempotent görünüm yok; bilinçli)
     await this.users.softDeleteAndAnonymize(principal.userId, audit);
     await this.sessions.terminateUser(principal.userId);
+  }
+
+  // --- TAKİP (SP-3a, kurucu onayı 2026-10-31) ---
+
+  /** Takip et: kendi kendini takip 422, olmayan/pasif hedef 404; tekrar 204. */
+  async follow(followerId: string, targetId: string): Promise<void> {
+    if (followerId === targetId) {
+      throw new AppProblem('validation-error', 'Kendini takip edemezsin.', [
+        { field: 'id', code: 'self_follow', message: 'Hedef kendin olamaz' },
+      ]);
+    }
+    if (!(await this.users.userExists(targetId))) throw new AppProblem('not-found');
+    await this.users.follow(followerId, targetId);
+  }
+
+  async unfollow(followerId: string, targetId: string): Promise<void> {
+    await this.users.unfollow(followerId, targetId);
+  }
+
+  following(userId: string): Promise<FollowedCaptain[]> {
+    return this.users.following(userId);
   }
 }

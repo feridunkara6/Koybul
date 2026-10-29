@@ -1,4 +1,4 @@
-import 'package:dockly_api/dockly_api.dart' show UserProfileMe;
+import 'package:dockly_api/dockly_api.dart' show FollowedCaptain, UserProfileMe;
 
 /// Profil ağ geçidi sözleşmesi (Sosyalleşme Hafta 1A, kurucu onayı 2026-10-24).
 ///
@@ -17,4 +17,15 @@ abstract interface class ProfileGateway {
     int? experienceYears,
     bool clearExperience,
   });
+
+  // --- TAKİP (SP-3a, kurucu onayı 2026-10-31) ---
+
+  /// Takip ettiklerim — en yeni takip önce; oturum şart.
+  Future<List<FollowedCaptain>> following();
+
+  /// Kaptanı takip et — idempotent.
+  Future<void> follow(String userId);
+
+  /// Takibi bırak — idempotent.
+  Future<void> unfollow(String userId);
 }

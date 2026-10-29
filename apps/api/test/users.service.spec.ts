@@ -1,7 +1,12 @@
 import { UsersService } from '../src/modules/users/application/users.service';
 import { SessionService } from '../src/modules/auth/application/session.service';
 import { UserRepository, DeletionAudit } from '../src/modules/users/domain/user.repository';
-import { PublicCaptain, UpdateMeInput, UserMe } from '../src/modules/users/domain/user.types';
+import {
+  FollowedCaptain,
+  PublicCaptain,
+  UpdateMeInput,
+  UserMe,
+} from '../src/modules/users/domain/user.types';
 import { Principal } from '../src/core/auth/principal';
 
 const PRINCIPAL: Principal = {
@@ -49,6 +54,8 @@ class FakeUserRepo implements UserRepository {
       approvedCount: 46,
       helpfulReceived: 120,
       badges: ['first_contribution', 'hazard_hero'],
+      // SP-3a Takip (2026-10-31): herkese açık takipçi sayısı.
+      followerCount: 12,
       // SP-1 Kimlik (2026-10-29): vitrin — onaylı not + rota örneği.
       recentContributions: [
         {
@@ -77,6 +84,32 @@ class FakeUserRepo implements UserRepository {
   async softDeleteAndAnonymize(userId: string, _audit: DeletionAudit): Promise<void> {
     this.deleted.push(userId);
     this.exists = false;
+  }
+
+  // --- TAKİP (SP-3a, 2026-10-31) ---
+
+  follows: Array<[string, string]> = [];
+  targetExists = true;
+
+  async userExists(_userId: string): Promise<boolean> {
+    return this.targetExists;
+  }
+
+  async follow(followerId: string, followedId: string): Promise<void> {
+    // Gerçek repo idempotenttir (ON CONFLICT DO NOTHING) — fake de öyle.
+    if (!this.follows.some(([a, b]) => a === followerId && b === followedId)) {
+      this.follows.push([followerId, followedId]);
+    }
+  }
+
+  async unfollow(followerId: string, followedId: string): Promise<void> {
+    this.follows = this.follows.filter(([a, b]) => !(a === followerId && b === followedId));
+  }
+
+  async following(userId: string): Promise<FollowedCaptain[]> {
+    return this.follows
+      .filter(([a]) => a === userId)
+      .map(([, b]) => ({ id: b, displayName: 'Kaptan ' + b, levelCode: 'new' }));
   }
 }
 
@@ -146,5 +179,38 @@ describe('UsersService (unit)', () => {
       problemType: 'not-found',
     });
     expect(repo.deleted).toHaveLength(1);
+  });
+
+  // --- TAKİP (SP-3a, 2026-10-31) ---
+
+  it('follow: kendini takip 422 self_follow', async () => {
+    await expect(service.follow('u-1', 'u-1')).rejects.toMatchObject({
+      problemType: 'validation-error',
+    });
+    expect(repo.follows).toHaveLength(0);
+  });
+
+  it('follow: olmayan/pasif hedef 404', async () => {
+    repo.targetExists = false;
+    await expect(service.follow('u-1', 'u-2')).rejects.toMatchObject({
+      problemType: 'not-found',
+    });
+    expect(repo.follows).toHaveLength(0);
+  });
+
+  it('follow/unfollow: idempotent — tekrar çağrı hata üretmez', async () => {
+    await service.follow('u-1', 'u-2');
+    await service.follow('u-1', 'u-2'); // ikinci çağrı sessiz
+    expect(repo.follows).toEqual([['u-1', 'u-2']]);
+
+    await service.unfollow('u-1', 'u-2');
+    await service.unfollow('u-1', 'u-2'); // satır yok, yine sessiz
+    expect(repo.follows).toHaveLength(0);
+  });
+
+  it('following: takip ettiklerim listesi döner', async () => {
+    await service.follow('u-1', 'u-2');
+    const list = await service.following('u-1');
+    expect(list).toEqual([{ id: 'u-2', displayName: 'Kaptan u-2', levelCode: 'new' }]);
   });
 });
