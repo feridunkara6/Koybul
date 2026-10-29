@@ -1,4 +1,4 @@
-import 'package:dockly_api/dockly_api.dart' show UserProfileMe;
+import 'package:dockly_api/dockly_api.dart' show FollowedCaptain, UserProfileMe;
 import 'package:dockly_mobile/features/community/application/reputation_controller.dart';
 import 'package:dockly_mobile/features/community/presentation/sailor_profile_card.dart';
 import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
@@ -58,6 +58,18 @@ class FakeProfileGateway implements ProfileGateway {
     );
     return current;
   }
+
+  // --- TAKİP (SP-3a, 2026-10-31): bu testte kullanılmaz — boş/sessiz. ---
+
+  @override
+  Future<List<FollowedCaptain>> following() async =>
+      const <FollowedCaptain>[];
+
+  @override
+  Future<void> follow(String userId) async {}
+
+  @override
+  Future<void> unfollow(String userId) async {}
 }
 
 /// Ekran bir ana sayfanın ÜSTÜNE itilir — kayıt sonrası pop gerçekçi olsun
