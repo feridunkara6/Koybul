@@ -9,6 +9,7 @@ import '../../../core/widgets/section_card.dart';
 import '../../checklist/application/checklist_controller.dart';
 import '../../checklist/presentation/checklist_sheet.dart';
 import '../../community/presentation/nearby_notes_section.dart';
+import '../../feed/presentation/today_feed_section.dart';
 import '../../detail/presentation/location_detail_screen.dart';
 import '../../map/presentation/route_origin_menu.dart' show startSeaRoute;
 import '../../notifications/presentation/notifications_inbox_screen.dart';
@@ -138,6 +139,10 @@ class TodayScreen extends ConsumerWidget {
             // sağlayıcılardan; verisi olmayan kart kendini hiç çizmez.
             const TodayMarinamCard(),
             const TodayMaintStrip(),
+            // TOPLULUK AKIŞI (SP-3b, kurucu onayı 2026-10-31): takip
+            // edilenlerin seyir/not/rota kartları — kendi başlığı ve
+            // "Tümünü gör" köprüsü vardır; misafirde/boşken hiç çizilmez.
+            const TodayFeedSection(),
             // ÇEVRENDE OLANLAR (Sosyalleşme Hafta 4, Konsept 2): topluluk
             // köprüleri tek başlık altında — yeni rota + soru + etkinlik.
             // Hiçbirinin verisi yoksa kartlar kendini çizmez; başlık kalır

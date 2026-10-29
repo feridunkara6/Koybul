@@ -24,6 +24,7 @@ import { MarinaModule } from './modules/marina/marina.module';
 import { RoutesModule } from './modules/routes/routes.module';
 import { EventsModule } from './modules/events/events.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { TripsModule } from './modules/trips/trips.module';
 
 /** PII redaksiyon listesi (docs/24 §12, docs/29 SEC-04). */
 const REDACT_PATHS = [
@@ -69,6 +70,7 @@ const REDACT_PATHS = [
     EventsModule,
     RoutesModule,
     NotificationsModule,
+    TripsModule,
   ],
 })
 export class AppModule implements NestModule {

@@ -76,6 +76,12 @@ final Provider<AdminApi> adminApiProvider = Provider<AdminApi>((ref) {
   return AdminApi(ref.watch(docklyClientProvider).dio);
 });
 
+/// SEYİR PAYLAŞIMI + TAKİP AKIŞI istemcisi (SP-3b, kurucu onayı 2026-10-31)
+/// — TÜM uçları hesap ister; misafirde çağrılmaz (etkileşim kuralı).
+final Provider<TripsApi> tripsApiProvider = Provider<TripsApi>((ref) {
+  return TripsApi(ref.watch(docklyClientProvider).dio);
+});
+
 /// PUSH BİLDİRİM istemcisi (push paketi, kurucu onayı 2026-10-27) — cihaz
 /// kaydı ve tercihler. TÜM uçları hesap ister; misafirde çağrılmaz.
 final Provider<NotificationsApi> notificationsApiProvider =

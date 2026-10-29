@@ -413,6 +413,17 @@ class L10n {
     required this.followingTitle,
     required this.followingEmpty,
     required this.gateFollowMsg,
+    required this.fdTitle,
+    required this.fdEmpty,
+    required this.fdPruva,
+    required this.fdTripAct,
+    required this.fdNoteAct,
+    required this.fdRouteAct,
+    required this.fdTripTag,
+    required this.fdShareToggle,
+    required this.fdShareSub,
+    required this.fdShareGate,
+    required this.fdSharedSnack,
     required this.bcTitle,
     required this.bcLoadFailed,
     required this.bcPrivacyNote,
@@ -1080,6 +1091,9 @@ class L10n {
   // TAKİP (SP-3a, kurucu onayı 2026-10-31): takip düğmesi + listesi.
   final String followBtn, followingBtn, cpFollowersCap, followingTitle,
       followingEmpty, gateFollowMsg;
+  // TAKİP AKIŞI + SEYİR PAYLAŞIMI (SP-3b, kurucu onayı 2026-10-31).
+  final String fdTitle, fdEmpty, fdPruva, fdTripAct, fdNoteAct, fdRouteAct,
+      fdTripTag, fdShareToggle, fdShareSub, fdShareGate, fdSharedSnack;
   // TEKNE KARTI (Sosyalleşme Hafta 2, kurucu onayı 2026-10-24).
   final String bcTitle, bcLoadFailed, bcPrivacyNote;
   // ROTA PAYLAŞIMI (Sosyalleşme Hafta 3, kurucu onayı 2026-10-24).
@@ -2105,6 +2119,18 @@ const L10n _tr = L10n(
   followingEmpty:
       'Henüz kimseyi takip etmiyorsun. Beğendiğin bir kaptanın profilinden "Takip et"e dokun.',
   gateFollowMsg: 'Kaptanları takip etmek için ücretsiz bir hesap gerekir.',
+  fdTitle: 'Topluluk Akışı',
+  fdEmpty:
+      'Akışın henüz boş. Kaptanları takip ettikçe seyirleri, notları ve rotaları burada akar.',
+  fdPruva: 'Pruvan neta',
+  fdTripAct: 'bir seyir paylaştı',
+  fdNoteAct: 'not yazdı',
+  fdRouteAct: 'rota paylaştı',
+  fdTripTag: 'Seyir',
+  fdShareToggle: 'Toplulukla paylaş',
+  fdShareSub: 'Yalnız mesafe, süre ve durak adları gider — konum izi asla.',
+  fdShareGate: 'Seyrini paylaşmak için ücretsiz bir hesap gerekir.',
+  fdSharedSnack: 'Seyir kaydedildi ve toplulukla paylaşıldı ⚓',
   bcTitle: 'Tekne Kartı',
   bcLoadFailed: 'Tekne kartı yüklenemedi — tekne artık paylaşımda olmayabilir.',
   bcPrivacyNote: 'Bu kart yalnız sahibi izin verdiği için görünür. Konum, bağlama yeri ve iletişim bilgisi hiçbir zaman paylaşılmaz.',
@@ -3158,6 +3184,18 @@ const L10n _en = L10n(
   followingEmpty:
       'You are not following anyone yet. Tap "Follow" on a captain profile you like.',
   gateFollowMsg: 'A free account is required to follow captains.',
+  fdTitle: 'Community Feed',
+  fdEmpty:
+      'Your feed is empty for now. Follow captains and their voyages, notes and routes will flow here.',
+  fdPruva: 'Fair winds',
+  fdTripAct: 'shared a voyage',
+  fdNoteAct: 'wrote a note',
+  fdRouteAct: 'shared a route',
+  fdTripTag: 'Voyage',
+  fdShareToggle: 'Share with the community',
+  fdShareSub: 'Only distance, duration and stop names are sent — never a location trail.',
+  fdShareGate: 'A free account is required to share your voyage.',
+  fdSharedSnack: 'Voyage saved and shared with the community ⚓',
   bcTitle: 'Boat Card',
   bcLoadFailed: 'Could not load the boat card — it may no longer be shared.',
   bcPrivacyNote: 'This card is visible only because its owner allowed it. Location, berth and contact details are never shared.',
@@ -4208,6 +4246,18 @@ const L10n _es = L10n(
   followingEmpty:
       'Aún no sigues a nadie. Toca "Seguir" en el perfil de un capitán que te guste.',
   gateFollowMsg: 'Se necesita una cuenta gratuita para seguir a capitanes.',
+  fdTitle: 'Actividad',
+  fdEmpty:
+      'Tu actividad está vacía por ahora. Sigue a capitanes y sus travesías, notas y rutas aparecerán aquí.',
+  fdPruva: 'Buen viento',
+  fdTripAct: 'compartió una travesía',
+  fdNoteAct: 'escribió una nota',
+  fdRouteAct: 'compartió una ruta',
+  fdTripTag: 'Travesía',
+  fdShareToggle: 'Compartir con la comunidad',
+  fdShareSub: 'Solo se envían distancia, duración y nombres de paradas — nunca un rastro de ubicación.',
+  fdShareGate: 'Se necesita una cuenta gratuita para compartir tu travesía.',
+  fdSharedSnack: 'Travesía guardada y compartida con la comunidad ⚓',
   bcTitle: 'Ficha del barco',
   bcLoadFailed: 'No se pudo cargar la ficha — puede que ya no esté compartida.',
   bcPrivacyNote: 'Esta ficha es visible solo porque su propietario lo permitió. La ubicación, el amarre y el contacto nunca se comparten.',
@@ -5258,6 +5308,18 @@ const L10n _ru = L10n(
   followingEmpty:
       'Вы пока ни на кого не подписаны. Нажмите «Подписаться» в профиле капитана.',
   gateFollowMsg: 'Чтобы подписываться на капитанов, нужна бесплатная учётная запись.',
+  fdTitle: 'Лента сообщества',
+  fdEmpty:
+      'Лента пока пуста. Подписывайтесь на капитанов — их походы, заметки и маршруты появятся здесь.',
+  fdPruva: 'Семь футов',
+  fdTripAct: 'делится походом',
+  fdNoteAct: 'написал(а) заметку',
+  fdRouteAct: 'делится маршрутом',
+  fdTripTag: 'Поход',
+  fdShareToggle: 'Поделиться с сообществом',
+  fdShareSub: 'Передаются только дистанция, время и названия стоянок — никогда не трек.',
+  fdShareGate: 'Чтобы поделиться походом, нужна бесплатная учётная запись.',
+  fdSharedSnack: 'Поход сохранён и опубликован ⚓',
   bcTitle: 'Карточка лодки',
   bcLoadFailed: 'Не удалось загрузить карточку — возможно, она больше не публикуется.',
   bcPrivacyNote: 'Эта карточка видна только с разрешения владельца. Координаты, стоянка и контакты никогда не публикуются.',

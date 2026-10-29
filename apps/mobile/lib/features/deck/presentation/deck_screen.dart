@@ -13,6 +13,8 @@ import '../../logbook/application/logbook_controller.dart';
 import '../../logbook/domain/log_entry.dart';
 import '../../logbook/presentation/logbook_screen.dart'
     show LogbookBody, showLogEntryEditor;
+import '../../auth/presentation/account_gate.dart';
+import '../../feed/application/feed_controller.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/presentation/tour_targets.dart';
 import '../../route/application/saved_routes_controller.dart';
@@ -22,6 +24,7 @@ import '../../route/domain/sea_trip.dart';
 import '../../route/presentation/saved_routes_screen.dart' show SavedRouteCard;
 import '../application/trip_log_controller.dart';
 import '../domain/sea_trip_log.dart';
+import '../domain/trip_share_payload.dart';
 
 /// Defter segmenti: 0 = Seyirler · 1 = Rotalarım · 2 = Günlük (anlam sabit;
 /// EKRAN SIRASI farklı — çip dizilişi Rotalarım · Seyirler · Günlük).
@@ -457,6 +460,11 @@ class _MarkDoneSheetState extends ConsumerState<_MarkDoneSheet> {
   /// dokununca metin kutusuna dönüşür — sayfa kısa kalır, akış hızlanır.
   bool _noteOpen = false;
 
+  /// TOPLULUKLA PAYLAŞ (SP-3b, kurucu onayı 2026-10-31): kapalı başlar —
+  /// paylaşım bilinçli bir seçimdir. Misafir açmaya çalışınca hesap kapısı
+  /// çıkar (kurucu kuralı: hesapsız kullanıcı etkileşemez).
+  bool _share = false;
+
   final TextEditingController _note = TextEditingController();
 
   @override
@@ -517,12 +525,41 @@ class _MarkDoneSheetState extends ConsumerState<_MarkDoneSheet> {
             ctxStops: widget.trip.stops > 0 ? widget.trip.stops : null,
           ));
     }
+    // TOPLULUKLA PAYLAŞ (SP-3b): yalnız YAPISAL veri gider. GİZLİLİK:
+    // "Konumum" başlangıcında başlangıç adı GÖNDERİLMEZ (kurucu kuralı);
+    // koordinat/iz hiçbir durumda gitmez. Paylaşım düşse bile seyir kaydı
+    // cihazda güvende — hata dürüstçe ayrıca söylenir.
+    bool shareFailed = false;
+    if (_share) {
+      try {
+        // Gizlilik kuralı yük kurucusunda yaşar (trip_share_payload.dart):
+        // Konumum başlangıcı adıyla bile gitmez; koordinat/iz hiç gitmez.
+        final TripSharePayload p = buildTripSharePayload(
+            trip: widget.trip, durMin: _durMin, day: _day);
+        await ref.read(feedGatewayProvider).shareTrip(
+              startName: p.startName,
+              endName: p.endName,
+              distanceNm: p.distanceNm,
+              durationMin: p.durationMin,
+              stopCount: p.stopCount,
+              sailedOn: p.sailedOn,
+            );
+      } catch (_) {
+        shareFailed = true;
+      }
+    }
     if (!mounted) return;
     // Mesajcı POP'TAN ÖNCE alınır: sayfa kapanınca bu context ağaçtan düşer,
     // sonradan ScaffoldMessenger.of araması sorun çıkarabilirdi.
     final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
     Navigator.of(context).pop();
-    messenger.showSnackBar(SnackBar(content: Text(t.tripDoneSnack)));
+    messenger.showSnackBar(SnackBar(
+        content: Text(_share && !shareFailed
+            ? t.fdSharedSnack
+            : t.tripDoneSnack)));
+    if (shareFailed) {
+      messenger.showSnackBar(SnackBar(content: Text(t.actionFailed)));
+    }
   }
 
   @override
@@ -769,6 +806,52 @@ class _MarkDoneSheetState extends ConsumerState<_MarkDoneSheet> {
                   border: const OutlineInputBorder(),
                 ),
               ),
+            const SizedBox(height: 10),
+            // TOPLULUKLA PAYLAŞ (SP-3b, kurucu onayı 2026-10-31): yapısal
+            // özet akışa düşer; alt metin NEYİN gittiğini dürüstçe söyler.
+            Container(
+              padding: const EdgeInsets.fromLTRB(12, 4, 4, 4),
+              decoration: BoxDecoration(
+                border: Border.all(color: theme.colorScheme.outline),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: <Widget>[
+                  const Text('⚓', style: TextStyle(fontSize: 15)),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(t.fdShareToggle,
+                            style: theme.textTheme.bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.w800)),
+                        Text(t.fdShareSub,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant)),
+                      ],
+                    ),
+                  ),
+                  Switch(
+                    key: const ValueKey<String>('trip-share-switch'),
+                    value: _share,
+                    onChanged: (bool v) {
+                      if (!v) {
+                        setState(() => _share = false);
+                        return;
+                      }
+                      // Misafir → hesap kapısı; girişten sonra anahtar açılır.
+                      requireAccount(
+                        context,
+                        ref,
+                        message: t.fdShareGate,
+                        onAllowed: () => setState(() => _share = true),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 14),
             SizedBox(
               width: double.infinity,

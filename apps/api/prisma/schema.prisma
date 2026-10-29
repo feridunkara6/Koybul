@@ -547,6 +547,9 @@ model User {
   // TAKİP (SP-3a, 2026-10-31): kaptanı takip et — içerik aboneliği.
   following                        UserFollow[]           @relation("FollowFollower")
   followers                        UserFollow[]           @relation("FollowFollowed")
+  // SEYİR PAYLAŞIMI (SP-3b, kurucu onayı 2026-10-31).
+  sharedTrips                      SharedTrip[]           @relation("SharedTripOwner")
+  tripReactions                    TripReaction[]         @relation("TripReactionUser")
   eventRegistrations               EventRegistration[]
 
   routes                           Route[]               @relation("RouteAuthor")
@@ -1501,6 +1504,45 @@ model UserFollow {
   @@id([followerId, followedId])
   @@index([followedId], map: "idx_user_follows_followed")
   @@map("user_follows")
+}
+
+/// SEYİR PAYLAŞIMI (SP-3b, 0022): yalnız YAPISAL veri — serbest metin yok,
+/// bu yüzden moderasyonsuz. Koordinat/iz saklanmaz; "Konumum" başlangıcında
+/// start_name istemcide düşürülür (gizlilik, kurucu kuralı).
+model SharedTrip {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  startName   String?   @map("start_name")
+  endName     String?   @map("end_name")
+  distanceNm  Decimal   @map("distance_nm") @db.Decimal(6, 1)
+  durationMin Int?      @map("duration_min")
+  stopCount   Int       @default(0) @map("stop_count")
+  sailedOn    DateTime  @map("sailed_on") @db.Date
+  /// Türetilmiş sayaç — kaynak trip_reactions (route_saves deseni).
+  pruvaCount  Int       @default(0) @map("pruva_count")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  user      User           @relation("SharedTripOwner", fields: [userId], references: [id], onDelete: Cascade)
+  reactions TripReaction[]
+
+  @@index([userId, createdAt(sort: Desc)], map: "idx_shared_trips_user_created")
+  @@index([createdAt(sort: Desc)], map: "idx_shared_trips_created")
+  @@map("shared_trips")
+}
+
+/// "Pruvan neta" ⚓ — tek tür tepki; bileşik PK tekrar oyu engeller.
+model TripReaction {
+  tripId    String   @map("trip_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  trip SharedTrip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user User       @relation("TripReactionUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([tripId, userId])
+  @@index([userId], map: "idx_trip_reactions_user")
+  @@map("trip_reactions")
 }
 
 model RouteDone {
