@@ -1105,15 +1105,13 @@ class _RouteEditBar extends ConsumerWidget {
     final ThemeData theme = Theme.of(context);
     final MapController controller = ref.read(mapControllerProvider.notifier);
     final List<RouteWaypoint> waypoints = state.routeWaypoints;
-    // Duraklar: son durak = varış (B), şeritte sabit; aradakiler sürüklenir.
+    // Duraklar: TÜMÜ sürüklenir (kurucu isteği 2026-10-29) — şeritte en
+    // sonda duran durak VARIŞTIR (B, koyu hap). Hedefi değiştirmek =
+    // istediğin durağı en sona sürüklemek.
     final List<(int, int, RouteWaypoint)> stops = _numberedStops(waypoints);
-    final List<(int, int, RouteWaypoint)> middle =
-        stops.isEmpty ? stops : stops.sublist(0, stops.length - 1);
     final RouteOrigin? origin = state.routeOrigin;
     final String originLabel = origin?.name ??
         (origin?.isDevice == true ? t.routeOriginDevice : t.routeOriginPicked);
-    final String destName =
-        stops.isEmpty ? '' : (stops.last.$3.name ?? '');
 
     Widget pill(String text,
             {Color? bg, Color? fg, Widget? trailing, Key? key}) =>
@@ -1157,7 +1155,9 @@ class _RouteEditBar extends ConsumerWidget {
                   ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
             ),
             const SizedBox(height: 8),
-            // DURAK ŞERİDİ: A sabit · aradakiler ≡ ile sürüklenir · B sabit.
+            // DURAK ŞERİDİ (kurucu isteği 2026-10-29): A sabit · TÜM duraklar
+            // ≡ ile sürüklenir — EN SONDAKİ durak VARIŞTIR (B, koyu hap).
+            // Hedefi değiştirmek için istediğin durağı en sona sürükle.
             SizedBox(
               height: 38,
               child: Row(
@@ -1166,66 +1166,61 @@ class _RouteEditBar extends ConsumerWidget {
                       bg: DocklyColors.brandPrimary.withValues(alpha: .12),
                       fg: DocklyColors.brandPrimary),
                   Expanded(
-                    child: middle.isEmpty
-                        ? Center(
-                            child: Text(
-                              t.rteNoStops,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant),
-                            ),
-                          )
-                        : ReorderableListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            buildDefaultDragHandles: false,
-                            itemCount: middle.length,
-                            onReorder: (int oldIndex, int newIndex) {
-                              // ReorderableListView yeni indeksi "araya"
-                              // göre verir — sona taşımada 1 düşülür.
-                              if (newIndex > oldIndex) newIndex -= 1;
-                              controller.reorderStops(oldIndex, newIndex);
-                            },
-                            itemBuilder: (BuildContext c, int i) {
-                              final (int wpIndex, int number,
-                                  RouteWaypoint wp) = middle[i];
-                              final String stopName = wp.name ?? '';
-                              return ReorderableDragStartListener(
-                                key: ValueKey<String>('rte-stop-$wpIndex'),
-                                index: i,
-                                child: pill(
-                                  '≡ $number · $stopName',
-                                  trailing: InkWell(
-                                    key: ValueKey<String>(
-                                        'rte-stop-del-$wpIndex'),
-                                    onTap: () =>
-                                        controller.removeWaypoint(wpIndex),
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 6),
-                                      child: Text('✕',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w800,
-                                              color: theme.colorScheme
-                                                  .onSurfaceVariant)),
-                                    ),
-                                  ),
+                    child: ReorderableListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      buildDefaultDragHandles: false,
+                      itemCount: stops.length,
+                      onReorder: (int oldIndex, int newIndex) {
+                        // ReorderableListView yeni indeksi "araya"
+                        // göre verir — sona taşımada 1 düşülür.
+                        if (newIndex > oldIndex) newIndex -= 1;
+                        controller.reorderStops(oldIndex, newIndex);
+                      },
+                      itemBuilder: (BuildContext c, int i) {
+                        final (int wpIndex, int number, RouteWaypoint wp) =
+                            stops[i];
+                        final String stopName = wp.name ?? '';
+                        final bool isDest = i == stops.length - 1;
+                        // Varış (B) silinemez — rota hedefsiz kalamaz;
+                        // hedef, başka bir durağı sona sürükleyerek değişir.
+                        final Widget? del = isDest
+                            ? null
+                            : InkWell(
+                                key:
+                                    ValueKey<String>('rte-stop-del-$wpIndex'),
+                                onTap: () =>
+                                    controller.removeWaypoint(wpIndex),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 6),
+                                  child: Text('✕',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800,
+                                          color: theme
+                                              .colorScheme.onSurfaceVariant)),
                                 ),
                               );
-                            },
+                        return ReorderableDragStartListener(
+                          key: ValueKey<String>('rte-stop-$wpIndex'),
+                          index: i,
+                          child: pill(
+                            isDest
+                                ? '≡ B · $stopName'
+                                : '≡ $number · $stopName',
+                            bg: isDest ? DocklyColors.brandDeep : null,
+                            fg: isDest ? Colors.white : null,
+                            trailing: del,
                           ),
+                        );
+                      },
+                    ),
                   ),
-                  if (stops.isNotEmpty)
-                    pill('B · $destName',
-                        bg: DocklyColors.brandDeep,
-                        fg: Colors.white),
                 ],
               ),
             ),
             const SizedBox(height: 4),
             Text(
-              t.rteReorderHint,
+              stops.length == 1 ? t.rteNoStops : t.rteReorderHint,
               style: theme.textTheme.labelSmall
                   ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
             ),

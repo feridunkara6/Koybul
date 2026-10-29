@@ -819,11 +819,15 @@ void main() {
     await tester.tap(find.byKey(const ValueKey<String>('route-edit-btn')));
     await tester.pumpAndSettle();
 
-    // Düzenleme çubuğu: araç düğmeleri + ara durak hapı (B sabit, şeride girmez).
+    // Düzenleme çubuğu: araç düğmeleri + durak şeridi. v2 (2026-10-29):
+    // TÜM duraklar şeritte ve sürüklenebilir — en sondaki varıştır (B hapı).
     expect(find.byKey(const ValueKey<String>('rte-done')), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('rte-add-point')), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('rte-stop-0')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('rte-stop-1')), findsOneWidget);
     expect(find.textContaining('B · Boynuz Bükü'), findsOneWidget);
+    // Varış hapında ✕ yok — rota hedefsiz kalamaz (hedef sürüklemeyle değişir).
+    expect(find.byKey(const ValueKey<String>('rte-stop-del-1')), findsNothing);
     expect(find.byKey(const ValueKey<String>('route-save-menu')), findsNothing);
 
     // Geri al: henüz adım yok — düğme sönük.

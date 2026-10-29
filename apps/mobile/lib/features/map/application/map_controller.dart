@@ -516,20 +516,22 @@ class MapController extends Notifier<MapState> {
       for (final RouteWaypoint w in state.routeWaypoints)
         if (w.isStop) w,
     ];
-    // Son durak = varış (B) — şeritte sabittir, sıralamaya girmez.
-    final List<RouteWaypoint> middle = stops.sublist(0, stops.length - 1);
+    // VARIŞ DA SÜRÜKLENİR (kurucu isteği 2026-10-29): sıralama TÜM duraklar
+    // üzerindedir — EN SONA gelen durak VARIŞ (B) olur. Kaptan "hangi nokta
+    // final" kararını sürükleyerek verir; eski "B sabit" kuralı kalktı.
+    // Ara noktalar (isimsiz tutamaçlar) eski bacaklara göre şekillenmişti;
+    // sıra değişince BİLEREK düşer, rota yeni durak sırasıyla temiz çizilir.
     if (oldIndex < 0 ||
-        oldIndex >= middle.length ||
+        oldIndex >= stops.length ||
         newIndex < 0 ||
-        newIndex >= middle.length ||
+        newIndex >= stops.length ||
         oldIndex == newIndex) {
       return;
     }
     _pushEditHistory();
-    final RouteWaypoint moved = middle.removeAt(oldIndex);
-    middle.insert(newIndex, moved);
-    await _planTrip(
-        origin, <RouteWaypoint>[...middle, stops.last], editing: true);
+    final RouteWaypoint moved = stops.removeAt(oldIndex);
+    stops.insert(newIndex, moved);
+    await _planTrip(origin, stops, editing: true);
   }
 
   // --- NOKTA EKLE modu (kullanıcı isteği 2026-08, mobil dostu düzenleme) ---

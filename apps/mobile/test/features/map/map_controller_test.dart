@@ -844,8 +844,8 @@ void main() {
     expect(_state(container).routeWaypoints, hasLength(1));
   });
 
-  test('ROTA PAKETİ: reorderStops durak SIRASINI değiştirir; varış (B) sabit '
-      'kalır; ara noktalar bilerek düşer', () async {
+  test('ROTA PAKETİ v2 (2026-10-29): reorderStops TÜM durakları sıralar — '
+      'en sona taşınan durak VARIŞ olur; ara noktalar bilerek düşer', () async {
     const SeaRoutePlan plan = SeaRoutePlan(
       points: <GeoPoint>[GeoPoint(lat: 36.76, lon: 28.96), GeoPoint(lat: 36.75, lon: 28.93)],
       distanceNm: 2,
@@ -865,15 +865,22 @@ void main() {
     await _ctrl(container).insertVia(0, const GeoPoint(lat: 36.70, lon: 28.90));
     expect(_state(container).routeWaypoints, hasLength(4));
 
-    // Ara duraklar [loc-1, loc-2]; varış loc-3 SABİT. 0 ↔ 1 takası:
+    // Duraklar [loc-1, loc-2, loc-3]. Önce 0 ↔ 1 takası (varış değişmez):
     await _ctrl(container).reorderStops(0, 1);
-    final MapState s = _state(container);
-    final List<String?> ids =
+    MapState s = _state(container);
+    List<String?> ids =
         s.routeWaypoints.map((RouteWaypoint w) => w.id).toList();
-    expect(ids, <String?>['loc-2', 'loc-1', 'loc-3']); // sıra değişti, B sabit
+    expect(ids, <String?>['loc-2', 'loc-1', 'loc-3']);
     // Serbest ara nokta düştü (eski bacaklara göre şekillenmişti — dürüst).
     expect(s.routeWaypoints.every((RouteWaypoint w) => w.isStop), isTrue);
     expect(s.routeSeq, 1); // düzenleme — kamera sıçramaz
+
+    // VARIŞI DEĞİŞTİR (kurucu isteği 2026-10-29): loc-2'yi EN SONA sürükle →
+    // yeni varış loc-2 olur; eski varış loc-3 ara durağa iner.
+    await _ctrl(container).reorderStops(0, 2);
+    s = _state(container);
+    ids = s.routeWaypoints.map((RouteWaypoint w) => w.id).toList();
+    expect(ids, <String?>['loc-1', 'loc-3', 'loc-2']); // B artık loc-2
   });
 
   test('ROTA PAKETİ: undoEdit son adımı geri sarar; yeni rota yığını sıfırlar',
