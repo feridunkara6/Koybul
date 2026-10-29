@@ -57,7 +57,7 @@ describe('PrismaEventsRepository.register (kontenjan karar dalları)', () => {
       registeredCount: 18,
     });
     const repo = new PrismaEventsRepository(prisma);
-    const out = await repo.register('e1', 'u1', NOW);
+    const out = await repo.register('e1', 'u1', NOW, false);
     expect(out).toEqual({ result: 'registered', remaining: 6 }); // 25-18-1
     expect(execs).toHaveLength(1);
   });
@@ -68,7 +68,7 @@ describe('PrismaEventsRepository.register (kontenjan karar dalları)', () => {
       myRegistration: null,
       registeredCount: 25,
     });
-    const out = await new PrismaEventsRepository(prisma).register('e1', 'u1', NOW);
+    const out = await new PrismaEventsRepository(prisma).register('e1', 'u1', NOW, false);
     expect(out).toEqual({ result: 'quota' });
     expect(execs).toHaveLength(0);
   });
@@ -79,7 +79,7 @@ describe('PrismaEventsRepository.register (kontenjan karar dalları)', () => {
       myRegistration: { status: 'registered' },
       registeredCount: 18,
     });
-    const out = await new PrismaEventsRepository(prisma).register('e1', 'u1', NOW);
+    const out = await new PrismaEventsRepository(prisma).register('e1', 'u1', NOW, false);
     expect(out).toEqual({ result: 'already', remaining: 7 });
     expect(execs).toHaveLength(0);
   });
@@ -90,7 +90,7 @@ describe('PrismaEventsRepository.register (kontenjan karar dalları)', () => {
       myRegistration: { status: 'cancelled' },
       registeredCount: 18,
     });
-    const out = await new PrismaEventsRepository(prisma).register('e1', 'u1', NOW);
+    const out = await new PrismaEventsRepository(prisma).register('e1', 'u1', NOW, false);
     expect(out).toEqual({ result: 'registered', remaining: 6 });
     expect(execs).toHaveLength(1);
   });
@@ -100,20 +100,20 @@ describe('PrismaEventsRepository.register (kontenjan karar dalları)', () => {
     expect(
       await new PrismaEventsRepository(
         fakePrisma({ event: past, myRegistration: null, registeredCount: 0 }).prisma,
-      ).register('e1', 'u1', NOW),
+      ).register('e1', 'u1', NOW, false),
     ).toEqual({ result: 'not-open' });
 
     const cancelled = { ...OPEN_EVENT, status: 'cancelled' };
     expect(
       await new PrismaEventsRepository(
         fakePrisma({ event: cancelled, myRegistration: null, registeredCount: 0 }).prisma,
-      ).register('e1', 'u1', NOW),
+      ).register('e1', 'u1', NOW, false),
     ).toEqual({ result: 'not-open' });
 
     expect(
       await new PrismaEventsRepository(
         fakePrisma({ event: null, myRegistration: null, registeredCount: 0 }).prisma,
-      ).register('e-yok', 'u1', NOW),
+      ).register('e-yok', 'u1', NOW, false),
     ).toEqual({ result: 'not-open' });
   });
 
@@ -121,7 +121,7 @@ describe('PrismaEventsRepository.register (kontenjan karar dalları)', () => {
     const noDeadline = { ...OPEN_EVENT, deadline: null };
     const out = await new PrismaEventsRepository(
       fakePrisma({ event: noDeadline, myRegistration: null, registeredCount: 0 }).prisma,
-    ).register('e1', 'u1', NOW);
+    ).register('e1', 'u1', NOW, false);
     expect(out).toEqual({ result: 'registered', remaining: 24 });
   });
 

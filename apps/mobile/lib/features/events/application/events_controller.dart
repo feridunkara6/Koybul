@@ -1,8 +1,9 @@
-import 'package:dockly_api/dockly_api.dart' show DealView, EventView;
+import 'package:dockly_api/dockly_api.dart' show DealView, EventAttendee, EventView;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers.dart';
 import '../../auth/application/auth_controller.dart';
+import '../../auth/domain/auth_state.dart';
 import '../data/api_events_gateway.dart';
 import '../domain/events_gateway.dart';
 
@@ -32,6 +33,17 @@ final AutoDisposeFutureProvider<List<DealView>> dealsProvider =
 final AutoDisposeFutureProviderFamily<EventView, String> eventDetailProvider =
     FutureProvider.autoDispose.family<EventView, String>((ref, String id) {
   return ref.watch(eventsGatewayProvider).event(id);
+});
+
+/// RIZALI katılımcılar (SP-4) — hesapsızda sunucuya hiç gidilmez (boş liste;
+/// zaten detaydaki bölüm misafire çizilmez). Tür BİLEREK çıkarımda bırakılır
+/// (CI dersi, invalid_assignment).
+final attendeesProvider =
+    FutureProvider.autoDispose.family<List<EventAttendee>, String>(
+        (ref, String id) async {
+  final AuthState s = ref.watch(authControllerProvider);
+  if (s is! Authenticated || s.isGuest) return const <EventAttendee>[];
+  return ref.watch(eventsGatewayProvider).attendees(id);
 });
 
 /// Tarih biçimi: 07.11.2026 · 14:00 (yerel saat; ek paket gerekmez).

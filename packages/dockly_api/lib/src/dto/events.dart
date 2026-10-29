@@ -73,6 +73,10 @@ class EventView {
     required this.status,
     required this.registered,
     required this.full,
+    // SP-4 (kurucu onayı 2026-10-31): eski sunucuyla uyum için varsayılanlı.
+    this.template,
+    this.mine = false,
+    this.community = false,
   });
 
   final String id;
@@ -92,14 +96,27 @@ class EventView {
   /// 'all' | 'members' | 'premium'.
   final String audience;
 
-  /// 'published' | 'cancelled' — iptal dürüstçe listede kalır (push yok, V1).
+  /// 'pending' | 'published' | 'cancelled' | 'rejected' (SP-4) — bekleyen/
+  /// reddedilen yalnız kurucusuna iner; iptal dürüstçe listede kalır.
   final String status;
 
   /// Bakan kayıtlı mı?
   final bool registered;
   final bool full;
 
+  /// SP-4: şablon kodu ('bay_meetup'|'joint_sail'|'marina_meetup') — Koybul
+  /// resmi etkinliğinde null.
+  final String? template;
+
+  /// SP-4: etkinliği bakan mı kurdu?
+  final bool mine;
+
+  /// SP-4: kullanıcı (topluluk) etkinliği mi?
+  final bool community;
+
   bool get cancelled => status == 'cancelled';
+  bool get pending => status == 'pending';
+  bool get rejected => status == 'rejected';
 
   factory EventView.fromJson(Map<String, dynamic> json) => EventView(
         id: json['id'] as String,
@@ -122,5 +139,23 @@ class EventView {
         status: json['status'] as String,
         registered: json['registered'] as bool,
         full: json['full'] as bool,
+        template: json['template'] as String?,
+        mine: (json['mine'] as bool?) ?? false,
+        community: (json['community'] as bool?) ?? false,
+      );
+}
+
+/// RIZALI katılımcı satırı (SP-4) — yalnız izin verenler; PII yok.
+class EventAttendee {
+  const EventAttendee({required this.displayName, required this.levelCode});
+
+  final String displayName;
+
+  /// 'new' | 'coastal' | 'guide' | 'master' | 'pilot'.
+  final String levelCode;
+
+  factory EventAttendee.fromJson(Map<String, dynamic> json) => EventAttendee(
+        displayName: (json['displayName'] as String?) ?? '',
+        levelCode: (json['levelCode'] as String?) ?? 'new',
       );
 }

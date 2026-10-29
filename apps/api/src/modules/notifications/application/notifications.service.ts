@@ -13,7 +13,8 @@ import {
 } from '../domain/notifications.types';
 
 /** Moderasyon kuyruğuna düşebilen içerik türleri (admin bildirimi gövdesi). */
-export type ModerationKind = 'route' | 'question' | 'answer' | 'note' | 'review' | 'report';
+export type ModerationKind =
+  'route' | 'question' | 'answer' | 'note' | 'review' | 'report' | 'event';
 
 /**
  * Dil başına bildirim metinleri — l10n dosyaları MOBİLDE yaşar, sunucunun
@@ -62,6 +63,7 @@ const STRINGS: Record<'tr' | 'en' | 'es' | 'ru', LocaleStrings> = {
       note: 'not',
       review: 'yorum',
       report: 'şikâyet',
+      event: 'etkinlik',
     },
     helpfulTitle: 'Notun işe yarıyor',
     helpfulBody: (title: string, count: number) =>
@@ -95,6 +97,7 @@ const STRINGS: Record<'tr' | 'en' | 'es' | 'ru', LocaleStrings> = {
       note: 'note',
       review: 'review',
       report: 'report',
+      event: 'event',
     },
     helpfulTitle: 'Your note is helping',
     helpfulBody: (title: string, count: number) =>
@@ -128,6 +131,7 @@ const STRINGS: Record<'tr' | 'en' | 'es' | 'ru', LocaleStrings> = {
       note: 'nota',
       review: 'reseña',
       report: 'denuncia',
+      event: 'evento',
     },
     helpfulTitle: 'Tu nota está ayudando',
     helpfulBody: (title: string, count: number) =>
@@ -161,6 +165,7 @@ const STRINGS: Record<'tr' | 'en' | 'es' | 'ru', LocaleStrings> = {
       note: 'заметка',
       review: 'отзыв',
       report: 'жалоба',
+      event: 'событие',
     },
     helpfulTitle: 'Ваша заметка помогает',
     helpfulBody: (title: string, count: number) =>

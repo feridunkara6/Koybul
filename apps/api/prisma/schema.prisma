@@ -550,6 +550,8 @@ model User {
   // SEYİR PAYLAŞIMI (SP-3b, kurucu onayı 2026-10-31).
   sharedTrips                      SharedTrip[]           @relation("SharedTripOwner")
   tripReactions                    TripReaction[]         @relation("TripReactionUser")
+  // KULLANICI ETKİNLİKLERİ (SP-4, kurucu onayı 2026-10-31).
+  createdEvents                    Event[]                @relation("EventCreator")
   eventRegistrations               EventRegistration[]
 
   routes                           Route[]               @relation("RouteAuthor")
@@ -1597,15 +1599,22 @@ model Event {
   organizer            String    @default("Koybul")
   /// 'all' | 'members' | 'premium' (DB CHECK).
   audience             String    @default("all")
-  /// 'published' | 'cancelled' (DB CHECK).
+  /// 'pending' | 'published' | 'cancelled' | 'rejected' (DB CHECK, 0023).
   status               String    @default("published")
+  /// Oluşturan kaptan (SP-4, 0023) — NULL = Koybul resmi etkinliği.
+  createdBy            String?   @map("created_by") @db.Uuid
+  /// 'bay_meetup' | 'joint_sail' | 'marina_meetup' (DB CHECK) — yalnız
+  /// kullanıcı etkinliğinde dolu.
+  template             String?
   createdAt            DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt            DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
 
   venue         Location?           @relation("EventVenue", fields: [venueLocationId], references: [id])
+  creator       User?               @relation("EventCreator", fields: [createdBy], references: [id], onDelete: SetNull)
   registrations EventRegistration[]
 
   @@index([status, startsAt], map: "ix_events_feed")
+  @@index([createdBy, createdAt(sort: Desc)], map: "ix_events_created_by")
   @@map("events")
 }
 
@@ -1614,6 +1623,9 @@ model EventRegistration {
   userId    String   @map("user_id") @db.Uuid
   /// 'registered' | 'cancelled' (DB CHECK) — iptal satırı korunur, izi kalır.
   status    String   @default("registered")
+  /// RIZALI liste (SP-4, 0023): true = kaptan adının katılımcı listesinde
+  /// görünmesine açıkça izin verdi. Varsayılan GİZLİ.
+  showName  Boolean  @default(false) @map("show_name")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
 

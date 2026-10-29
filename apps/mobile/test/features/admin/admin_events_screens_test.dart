@@ -6,6 +6,7 @@ import 'package:dockly_api/dockly_api.dart'
         AdminPremiumGrant,
         AdminStats,
         DealView,
+        EventAttendee,
         EventParticipantView,
         EventView;
 import 'package:dockly_mobile/features/admin/application/admin_controller.dart';
@@ -133,11 +134,34 @@ class FakeEventsGw implements EventsGateway {
       eventRows.firstWhere((EventView e) => e.id == eventId);
 
   @override
-  Future<({bool registered, int remaining})> register(String eventId) async =>
+  Future<({bool registered, int remaining})> register(
+    String eventId, {
+    bool showName = false,
+  }) async =>
       (registered: true, remaining: 0);
 
   @override
   Future<void> cancel(String eventId) async {}
+
+  // --- SP-4 (2026-10-31): bu sahte yönetici ekranları içindir — sessiz. ---
+
+  @override
+  Future<String> createEvent({
+    required String template,
+    required String title,
+    required String body,
+    required DateTime startsAt,
+    required String locationText,
+    required int quota,
+  }) =>
+      throw UnimplementedError();
+
+  @override
+  Future<void> cancelOwnEvent(String eventId) => throw UnimplementedError();
+
+  @override
+  Future<List<EventAttendee>> attendees(String eventId) async =>
+      const <EventAttendee>[];
 }
 
 /// Kök rotayı koruyan başlatıcı (composer pop güvenliği — marina testi dersi).

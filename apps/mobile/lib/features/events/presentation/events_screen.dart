@@ -6,9 +6,13 @@ import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../admin/application/admin_controller.dart';
+import '../../auth/presentation/account_gate.dart';
 import '../../auth/presentation/account_section.dart' show showSignInSheet;
+import '../../premium/application/premium_controller.dart';
 import '../../premium/presentation/premium_screen.dart';
 import '../application/events_controller.dart';
+import 'event_create_screen.dart';
 import 'event_detail_screen.dart';
 
 /// ETKİNLİKLER ana ekranı (onaylı görsel konsept Ekran 6-7).
@@ -24,6 +28,80 @@ class EventsScreen extends ConsumerStatefulWidget {
 
 class _EventsScreenState extends ConsumerState<EventsScreen> {
   int _segment = 0;
+
+  /// ETKİNLİK KUR dokunuşu (SP-4): kapılar sırayla — hesap → premium → form.
+  /// "Sıkmama sözleşmesi": tanıtım yalnız DOKUNULDUĞUNDA açılır.
+  Future<void> _onCreateTap() async {
+    final L10n t = ref.read(l10nProvider);
+    await requireAccount(
+      context,
+      ref,
+      message: t.evGateCreateMsg,
+      onAllowed: () {
+        final bool allowed =
+            ref.read(isPremiumActiveProvider) || ref.read(isAdminProvider);
+        if (!mounted) return;
+        if (allowed) {
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(builder: (_) => const EventCreateScreen()),
+          );
+        } else {
+          _showCreatePremiumSheet();
+        }
+      },
+    );
+  }
+
+  /// Premium tanıtımı (rota çok-durak sayfasıyla aynı aile): başlık +
+  /// açıklama + tek çağrı + saygılı vazgeçme.
+  Future<void> _showCreatePremiumSheet() {
+    final L10n t = ref.read(l10nProvider);
+    return showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (BuildContext sheetContext) {
+        final ThemeData theme = Theme.of(sheetContext);
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Text(t.evPremiumCreateTitle,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.titleLarge),
+                const SizedBox(height: 10),
+                Text(
+                  t.evPremiumCreateBody,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyMedium
+                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                ),
+                const SizedBox(height: 16),
+                FilledButton(
+                  key: const ValueKey<String>('ev-create-premium-cta'),
+                  onPressed: () {
+                    Navigator.of(sheetContext).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          builder: (_) => const PremiumScreen()),
+                    );
+                  },
+                  child: Text(t.evPremiumCreateCta),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(sheetContext).pop(),
+                  child: Text(t.cancelLabel),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +147,19 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
               ),
             ),
             const SizedBox(height: 12),
+            // ETKİNLİK KUR (SP-4, kurucu onayı 2026-10-31): düğme HERKESE
+            // görünür (teşvik); misafirde hesap kapısı, ücretsiz üyede
+            // Premium tanıtım sayfası, premium/admin'de form açılır.
+            if (_segment == 0) ...<Widget>[
+              OutlinedButton.icon(
+                key: const ValueKey<String>('ev-create-btn'),
+                onPressed: _onCreateTap,
+                icon: const Text('＋',
+                    style: TextStyle(fontWeight: FontWeight.w800)),
+                label: Text(t.evCreateCta),
+              ),
+              const SizedBox(height: 10),
+            ],
             if (_segment == 0) const _EventsTab() else const _DealsTab(),
           ],
         ),
@@ -306,7 +397,35 @@ class _EventCard extends StatelessWidget {
                                   fontWeight: FontWeight.w800,
                                   fontSize: 13)),
                         ),
-                        if (e.cancelled)
+                        if (e.pending)
+                          // SP-4: kendi bekleyen etkinliğin — dürüst rozet.
+                          Container(
+                            key: ValueKey<String>('ev-pending-${e.id}'),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 7, vertical: 2),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(999)),
+                            child: Text(t.rtPendingChip,
+                                style: const TextStyle(
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w800,
+                                    color: DocklyColors.warning)),
+                          )
+                        else if (e.rejected)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 7, vertical: 2),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(999)),
+                            child: Text(t.evRejectedChip,
+                                style: const TextStyle(
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w800,
+                                    color: DocklyColors.error)),
+                          )
+                        else if (e.cancelled)
                           Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 7, vertical: 2),

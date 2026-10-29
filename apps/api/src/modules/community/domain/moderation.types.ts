@@ -9,7 +9,8 @@ export interface ModerationItem {
     | 'location_report'
     | 'qa_question'
     | 'qa_answer'
-    | 'route';
+    | 'route'
+    | 'event';
   entityId: string;
   createdAt: string;
   /** Karar verirken gereken bağlam — moderatör içeriği görmeden karar veremez. */

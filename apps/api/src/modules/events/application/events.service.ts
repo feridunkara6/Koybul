@@ -1,10 +1,12 @@
 import { Inject, Injectable, Optional } from '@nestjs/common';
+import { uuidv7 } from 'uuidv7';
 import { AppProblem } from '../../../common/problem/problem';
 import { EnvService } from '../../../config/env.service';
 import { Principal, roleAtLeast } from '../../../core/auth/principal';
 import { NotificationsService } from '../../notifications/application/notifications.service';
 import { PremiumAccessService } from '../../premium/application/premium-access.service';
 import {
+  CreateUserEventInput,
   DealRow,
   DealView,
   EventAudience,
@@ -13,8 +15,10 @@ import {
   EventView,
   EVENTS_REPOSITORY,
   EventsRepository,
+  PublicAttendee,
   UpsertDealInput,
   UpsertEventInput,
+  UserEventTemplate,
 } from '../domain/events.types';
 
 /**
@@ -76,7 +80,7 @@ export class EventsService {
     };
   }
 
-  private toEventView(row: EventRow): EventView {
+  private toEventView(row: EventRow, viewerUserId: string | null): EventView {
     return {
       id: row.id,
       title: row.title,
@@ -96,6 +100,10 @@ export class EventsService {
       status: row.status as EventView['status'],
       registered: row.registeredByViewer,
       full: row.registeredCount >= row.quota,
+      // SP-4: kullanıcı etkinliği alanları.
+      template: (row.template as UserEventTemplate | null) ?? null,
+      mine: viewerUserId !== null && row.createdBy === viewerUserId,
+      community: row.createdBy !== null,
     };
   }
 
@@ -106,19 +114,28 @@ export class EventsService {
 
   async events(principal: Principal | null, now: Date = new Date()): Promise<EventView[]> {
     const rows = await this.repo.upcomingEvents(principal?.userId ?? null, now);
-    return rows.map((r) => this.toEventView(r));
+    return rows.map((r) => this.toEventView(r, principal?.userId ?? null));
   }
 
   async event(principal: Principal | null, eventId: string): Promise<EventView> {
     const row = await this.repo.findEvent(eventId, principal?.userId ?? null);
     if (row === null) throw new AppProblem('not-found');
-    return this.toEventView(row);
+    // SP-4: bekleyen/reddedilen YALNIZ kurucusuna (ve admin+) görünür —
+    // varlık sızdırılmaz (rota detayı deseni).
+    const viewerId = principal?.userId ?? null;
+    const mine = viewerId !== null && row.createdBy === viewerId;
+    const admin = principal !== null && roleAtLeast(principal.role, 'admin');
+    if ((row.status === 'pending' || row.status === 'rejected') && !mine && !admin) {
+      throw new AppProblem('not-found');
+    }
+    return this.toEventView(row, viewerId);
   }
 
   /** Kayıt — kitle kuralı burada, kontenjan kilidi depoda. */
   async register(
     principal: Principal,
     eventId: string,
+    showName: boolean = false,
     now: Date = new Date(),
   ): Promise<{ registered: boolean; remaining: number }> {
     const row = await this.repo.findEvent(eventId, principal.userId);
@@ -127,7 +144,7 @@ export class EventsService {
       throw new AppProblem('premium-required', 'Bu etkinlik Koybul Premium üyelerine özel.');
     }
 
-    const outcome = await this.repo.register(eventId, principal.userId, now);
+    const outcome = await this.repo.register(eventId, principal.userId, now, showName);
     switch (outcome.result) {
       case 'registered':
       case 'already':
@@ -148,6 +165,64 @@ export class EventsService {
   async cancel(principal: Principal, eventId: string): Promise<void> {
     const ok = await this.repo.cancelRegistration(eventId, principal.userId);
     if (!ok) throw new AppProblem('not-found');
+  }
+
+  // --- KULLANICI ETKİNLİKLERİ (SP-4, kurucu onayı 2026-10-31) ---
+
+  /**
+   * Kaptanın etkinlik kurması — YALNIZ Premium (kurucu kuralı; admin+ muaf,
+   * bayrak ilkesi rotalarla aynı). 'pending' doğar, moderasyon onayıyla
+   * yayınlanır; kitle her zaman 'members' (misafir etkileşemez).
+   */
+  async createUserEvent(
+    principal: Principal,
+    input: CreateUserEventInput,
+    now: Date = new Date(),
+  ): Promise<{ id: string; status: string }> {
+    if (this.env.premiumEnforce && !roleAtLeast(principal.role, 'admin')) {
+      if (!(await this.premium.isPremium(principal.userId, now))) {
+        throw new AppProblem(
+          'premium-required',
+          'Etkinlik kurmak Koybul Premium üyelerine özel — katılmak herkese açık.',
+        );
+      }
+    }
+    // Geçmişe etkinlik kurulmaz (dürüst takvim; 15 dk tolerans saat dilimi
+    // sürtünmesini yutar).
+    const starts = new Date(input.startsAt);
+    if (starts.getTime() <= now.getTime() - 15 * 60 * 1000) {
+      throw new AppProblem('validation-error', 'Etkinlik tarihi geçmişte olamaz.', [
+        { field: 'startsAt', code: 'past_date', message: 'Gelecek bir tarih seç' },
+      ]);
+    }
+    if (input.endsAt && new Date(input.endsAt).getTime() <= starts.getTime()) {
+      throw new AppProblem('validation-error', 'Bitiş, başlangıçtan sonra olmalı.', [
+        { field: 'endsAt', code: 'ends_before_start', message: 'Bitişi kontrol et' },
+      ]);
+    }
+    const id = uuidv7();
+    await this.repo.createUserEvent(id, principal.userId, input);
+    // Her kullanıcı etkinliği pending doğar → adminlere kuyruk bildirimi.
+    this.notifications?.moderationNew('event');
+    return { id, status: 'pending' };
+  }
+
+  /** Kurucunun kendi etkinliğini iptali — katılımcılara iptal duyurulur. */
+  async cancelOwnEvent(principal: Principal, eventId: string): Promise<void> {
+    const ok = await this.repo.cancelOwnEvent(eventId, principal.userId);
+    if (!ok) throw new AppProblem('not-found');
+    this.notifications?.eventCancelled(eventId);
+  }
+
+  /** RIZALI katılımcı listesi — yalnız yayındaki etkinlikte, hesapla. */
+  async attendees(principal: Principal, eventId: string): Promise<PublicAttendee[]> {
+    const row = await this.repo.findEvent(eventId, principal.userId);
+    if (row === null) throw new AppProblem('not-found');
+    const mine = row.createdBy === principal.userId;
+    if (row.status !== 'published' && row.status !== 'cancelled' && !mine) {
+      throw new AppProblem('not-found');
+    }
+    return this.repo.attendees(eventId);
   }
 
   // --- Yönetici işlemleri (RolesGuard admin+ arkasında; panelden çağrılır) ---

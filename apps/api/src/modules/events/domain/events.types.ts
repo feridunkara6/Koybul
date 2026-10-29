@@ -14,6 +14,37 @@
 
 export type EventAudience = 'all' | 'members' | 'premium';
 
+// --- KULLANICI ETKİNLİKLERİ (SP-4, kurucu onayı 2026-10-31) ---
+
+/** 3 şablon (kurucu kararı): koy buluşması / birlikte seyir / marina. */
+export type UserEventTemplate = 'bay_meetup' | 'joint_sail' | 'marina_meetup';
+
+export const USER_EVENT_TEMPLATES: readonly UserEventTemplate[] = [
+  'bay_meetup',
+  'joint_sail',
+  'marina_meetup',
+];
+
+/** Kullanıcı etkinliği girdisi — kitle her zaman 'members' (misafir
+ *  etkileşemez), durum 'pending' doğar; fiyat/koşul alanı YOKTUR (ticari
+ *  organizasyon değil, buluşmadır — kurucu şablon kararı). */
+export interface CreateUserEventInput {
+  template: UserEventTemplate;
+  title: string;
+  body: string;
+  startsAt: string;
+  endsAt?: string | null;
+  locationText: string;
+  venueLocationId?: string | null;
+  quota: number;
+}
+
+/** RIZALI katılımcı satırı — yalnız show_name=true diyenler; PII YOK. */
+export interface PublicAttendee {
+  displayName: string;
+  levelCode: string;
+}
+
 /** Fırsat — kod, kitle kilidine göre null'lanmış hâlde taşınır. */
 export interface DealView {
   id: string;
@@ -48,10 +79,16 @@ export interface EventView {
   conditions: string | null;
   organizer: string;
   audience: EventAudience;
-  status: 'published' | 'cancelled';
+  status: 'pending' | 'published' | 'cancelled' | 'rejected';
   /** Bakan bu etkinliğe kayıtlı mı? (anonimde false) */
   registered: boolean;
   full: boolean;
+  /** SP-4: şablon kodu — Koybul resmi etkinliğinde null. */
+  template: UserEventTemplate | null;
+  /** SP-4: etkinliği bakan mı kurdu? (kendi bekleyenini görür + iptal eder) */
+  mine: boolean;
+  /** SP-4: kullanıcı etkinliği mi? (istemci "topluluk" rozeti çizer) */
+  community: boolean;
 }
 
 export interface UpsertDealInput {
@@ -119,6 +156,9 @@ export interface EventRow {
   audience: string;
   status: string;
   registeredByViewer: boolean;
+  /** SP-4 (0023): oluşturan kaptan; NULL = Koybul resmi etkinliği. */
+  createdBy: string | null;
+  template: string | null;
 }
 
 export type RegisterOutcome =
@@ -138,7 +178,8 @@ export interface EventsRepository {
    * İşlemsel kayıt: etkinlik satırı kilitlenir → sayılır → yazılır.
    * Mükerrer kayıt 'already'; dolu 'quota'; süre/iptal 'not-open'.
    */
-  register(eventId: string, userId: string, now: Date): Promise<RegisterOutcome>;
+  /** [showName]: rızalı liste tercihi — kayıtla birlikte yazılır (SP-4). */
+  register(eventId: string, userId: string, now: Date, showName: boolean): Promise<RegisterOutcome>;
   /** Kayıt iptali — satır silinmez, durumu 'cancelled' olur (iz kalır). */
   cancelRegistration(eventId: string, userId: string): Promise<boolean>;
   createDeal(input: UpsertDealInput): Promise<string>;
@@ -149,4 +190,13 @@ export interface EventsRepository {
     patch: Partial<UpsertEventInput> & { status?: 'published' | 'cancelled' },
   ): Promise<boolean>;
   participants(eventId: string): Promise<EventParticipant[]>;
+
+  // --- KULLANICI ETKİNLİKLERİ (SP-4, kurucu onayı 2026-10-31) ---
+
+  /** Kullanıcı etkinliği: 'pending' doğar + moderasyon görevi (tek işlem). */
+  createUserEvent(id: string, userId: string, input: CreateUserEventInput): Promise<void>;
+  /** Kurucunun kendi etkinliğini iptali; satır yoksa/başkasınınsa false. */
+  cancelOwnEvent(eventId: string, userId: string): Promise<boolean>;
+  /** RIZALI katılımcılar — yalnız show_name=true; ad + seviye, PII yok. */
+  attendees(eventId: string): Promise<PublicAttendee[]>;
 }

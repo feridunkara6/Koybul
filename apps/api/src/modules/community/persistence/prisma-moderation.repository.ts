@@ -38,13 +38,14 @@ export class PrismaModerationRepository implements ModerationRepository {
     >(Prisma.sql`
       SELECT t.id AS "taskId", t.entity_type::text AS "entityType", t.entity_id AS "entityId",
              t.created_at AS "createdAt",
-             COALESCE(n.kind::text, qq.category, qaq.category) AS kind,
-             COALESCE(n.title, r.title, qq.title, qaq.title, rt.name) AS title,
-             COALESCE(n.body, r.body, qq.body, qa.body, rt.body) AS body,
-             COALESCE(ln.name, lr.name) AS "locationName",
+             COALESCE(n.kind::text, qq.category, qaq.category, ev.template) AS kind,
+             COALESCE(n.title, r.title, qq.title, qaq.title, rt.name, ev.title) AS title,
+             COALESCE(n.body, r.body, qq.body, qa.body, rt.body, ev.body) AS body,
+             COALESCE(ln.name, lr.name, ev.location_text) AS "locationName",
              n.observed_on AS "observedOn",
              n.gps_verified AS "gpsVerified",
-             COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id, rt.user_id) AS "authorId",
+             COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id, rt.user_id,
+                      ev.created_by) AS "authorId",
              p.display_name AS "displayName",
              COALESCE(rep.level_code, 'new') AS "levelCode",
              COALESCE(rep.approved_count, 0)::int AS "approvedCount",
@@ -63,12 +64,17 @@ export class PrismaModerationRepository implements ModerationRepository {
       -- Rota paylaşımı (0017_rotalar): ad + gövde önizlemeye gelir.
       LEFT JOIN routes rt
         ON t.entity_type = 'route' AND rt.id = t.entity_id AND rt.deleted_at IS NULL
+      -- Kullanıcı etkinliği (0023, SP-4): başlık + açıklama + yer metni.
+      LEFT JOIN events ev
+        ON t.entity_type = 'event' AND ev.id = t.entity_id
       LEFT JOIN locations ln ON ln.id = n.location_id
       LEFT JOIN locations lr ON lr.id = r.location_id
       LEFT JOIN user_profiles p
-        ON p.user_id = COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id, rt.user_id)
+        ON p.user_id = COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id, rt.user_id,
+                                ev.created_by)
       LEFT JOIN user_reputation rep
-        ON rep.user_id = COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id, rt.user_id)
+        ON rep.user_id = COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id, rt.user_id,
+                                  ev.created_by)
       WHERE t.status = 'pending' ${typeFilter}
       ORDER BY (t.entity_type = 'note' AND n.kind = 'hazard') DESC, t.created_at ASC
       LIMIT ${limit}
@@ -215,6 +221,20 @@ export class PrismaModerationRepository implements ModerationRepository {
         const rows = await tx.$queryRaw<{ id: string }[]>(Prisma.sql`
           UPDATE routes SET status = ${status}::moderation_status, updated_at = now()
           WHERE id = ${entityId}::uuid AND deleted_at IS NULL
+          RETURNING id
+        `);
+        if (rows.length === 0) return null;
+        return { entityType, entityId, ownerUserId: null, decision, noteKind: null, bodyLength: 0 };
+      }
+
+      if (entityType === 'event') {
+        // Kullanıcı etkinliği (SP-4, 0023): events.status moderation_status
+        // DEĞİL metin sözlüğüdür — onay 'published', ret 'rejected' yazar.
+        // Kurucu bu arada iptal ettiyse (cancelled) karar durumu EZMEZ.
+        const next = status === 'approved' ? 'published' : 'rejected';
+        const rows = await tx.$queryRaw<{ id: string }[]>(Prisma.sql`
+          UPDATE events SET status = ${next}, updated_at = now()
+          WHERE id = ${entityId}::uuid AND status = 'pending'
           RETURNING id
         `);
         if (rows.length === 0) return null;

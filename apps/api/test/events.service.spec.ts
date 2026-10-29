@@ -1,9 +1,11 @@
 import { EventsService } from '../src/modules/events/application/events.service';
 import {
+  CreateUserEventInput,
   DealRow,
   EventParticipant,
   EventRow,
   EventsRepository,
+  PublicAttendee,
   RegisterOutcome,
   UpsertDealInput,
   UpsertEventInput,
@@ -66,6 +68,9 @@ function ev(partial: Partial<EventRow>): EventRow {
     audience: 'all',
     status: 'published',
     registeredByViewer: false,
+    // SP-4 (0023): varsayılan = Koybul resmi etkinliği.
+    createdBy: null,
+    template: null,
     ...partial,
   };
 }
@@ -75,7 +80,12 @@ class FakeEventsRepo implements EventsRepository {
   eventRows: EventRow[] = [];
   registerOutcome: RegisterOutcome = { result: 'registered', remaining: 6 };
   registerCalls: string[] = [];
+  showNames: boolean[] = [];
   cancelOk = true;
+  // SP-4
+  created: Array<{ id: string; userId: string; input: CreateUserEventInput }> = [];
+  cancelOwnOk = true;
+  attendeeRows: PublicAttendee[] = [];
 
   activeDeals(): Promise<DealRow[]> {
     return Promise.resolve(this.dealRows);
@@ -86,8 +96,14 @@ class FakeEventsRepo implements EventsRepository {
   findEvent(eventId: string): Promise<EventRow | null> {
     return Promise.resolve(this.eventRows.find((r) => r.id === eventId) ?? null);
   }
-  register(eventId: string): Promise<RegisterOutcome> {
+  register(
+    eventId: string,
+    _userId: string,
+    _now: Date,
+    showName: boolean,
+  ): Promise<RegisterOutcome> {
     this.registerCalls.push(eventId);
+    this.showNames.push(showName);
     return Promise.resolve(this.registerOutcome);
   }
   cancelRegistration(): Promise<boolean> {
@@ -104,6 +120,16 @@ class FakeEventsRepo implements EventsRepository {
   }
   updateEvent(): Promise<boolean> {
     return Promise.resolve(true);
+  }
+  createUserEvent(id: string, userId: string, input: CreateUserEventInput): Promise<void> {
+    this.created.push({ id, userId, input });
+    return Promise.resolve();
+  }
+  cancelOwnEvent(): Promise<boolean> {
+    return Promise.resolve(this.cancelOwnOk);
+  }
+  attendees(): Promise<PublicAttendee[]> {
+    return Promise.resolve(this.attendeeRows);
   }
   participants(): Promise<EventParticipant[]> {
     return Promise.resolve([
@@ -179,7 +205,7 @@ describe('EventsService (Etkinlikler & Fırsatlar V1 — kurucu onayı 2026-10-2
     const { svc, repo } = makeSvc({ enforce: true });
     repo.eventRows = [ev({})];
     repo.registerOutcome = { result: 'quota' };
-    await expect(svc.register(member(), 'e1', NOW)).rejects.toMatchObject({
+    await expect(svc.register(member(), 'e1', false, NOW)).rejects.toMatchObject({
       problemType: 'quota-exceeded',
     });
   });
@@ -188,20 +214,23 @@ describe('EventsService (Etkinlikler & Fırsatlar V1 — kurucu onayı 2026-10-2
     const { svc, repo } = makeSvc({ enforce: true });
     repo.eventRows = [ev({})];
     repo.registerOutcome = { result: 'not-open' };
-    await expect(svc.register(member(), 'e1', NOW)).rejects.toMatchObject({
+    await expect(svc.register(member(), 'e1', false, NOW)).rejects.toMatchObject({
       problemType: 'validation-error',
     });
     repo.registerOutcome = { result: 'already', remaining: 7 };
-    expect(await svc.register(member(), 'e1', NOW)).toEqual({ registered: true, remaining: 7 });
+    expect(await svc.register(member(), 'e1', false, NOW)).toEqual({
+      registered: true,
+      remaining: 7,
+    });
   });
 
   it('kayıt: premium etkinliğe ücretsiz üye premium-required alır; admin geçer', async () => {
     const { svc, repo } = makeSvc({ enforce: true });
     repo.eventRows = [ev({ audience: 'premium' })];
-    await expect(svc.register(member(), 'e1', NOW)).rejects.toMatchObject({
+    await expect(svc.register(member(), 'e1', false, NOW)).rejects.toMatchObject({
       problemType: 'premium-required',
     });
-    expect((await svc.register(admin(), 'e1', NOW)).registered).toBe(true);
+    expect((await svc.register(admin(), 'e1', false, NOW)).registered).toBe(true);
   });
 
   it('iptal: kayıt yoksa 404; varsa sessizce iptal olur', async () => {
@@ -212,6 +241,95 @@ describe('EventsService (Etkinlikler & Fırsatlar V1 — kurucu onayı 2026-10-2
     });
     repo.cancelOk = true;
     await expect(svc.cancel(member(), 'e1')).resolves.toBeUndefined();
+  });
+
+  // --- KULLANICI ETKİNLİKLERİ (SP-4, kurucu onayı 2026-10-31) ---
+
+  const userEventInput = (startsAt = '2026-11-20T10:00:00.000Z'): CreateUserEventInput => ({
+    template: 'bay_meetup',
+    title: 'Boynuz Koyu kahvaltı buluşması',
+    body: 'Sabah koyda demirleyip kahvaltıda tanışalım.',
+    startsAt,
+    locationText: 'Göcek, Boynuz Koyu',
+    quota: 10,
+  });
+
+  it('kurma: ücretsiz üye premium-required alır (bayrak açıkken); premium kurar, pending doğar', async () => {
+    const { svc, repo } = makeSvc({ enforce: true, premiumIds: ['u-p'] });
+    await expect(svc.createUserEvent(member(), userEventInput(), NOW)).rejects.toMatchObject({
+      problemType: 'premium-required',
+    });
+    expect(repo.created).toHaveLength(0);
+
+    const res = await svc.createUserEvent(member('u-p'), userEventInput(), NOW);
+    expect(res.status).toBe('pending');
+    expect(repo.created).toHaveLength(1);
+    expect(repo.created[0].userId).toBe('u-p');
+  });
+
+  it('kurma: admin muaf; bayrak kapalıyken ücretsiz üye de kurar', async () => {
+    const a = makeSvc({ enforce: true });
+    expect((await a.svc.createUserEvent(admin(), userEventInput(), NOW)).status).toBe('pending');
+    const b = makeSvc({ enforce: false });
+    expect((await b.svc.createUserEvent(member(), userEventInput(), NOW)).status).toBe('pending');
+  });
+
+  it('kurma: geçmiş tarih 422; bitiş başlangıçtan önce 422', async () => {
+    const { svc, repo } = makeSvc({ enforce: false });
+    await expect(
+      svc.createUserEvent(member(), userEventInput('2026-10-01T10:00:00.000Z'), NOW),
+    ).rejects.toMatchObject({ problemType: 'validation-error' });
+    await expect(
+      svc.createUserEvent(
+        member(),
+        { ...userEventInput(), endsAt: '2026-11-20T09:00:00.000Z' },
+        NOW,
+      ),
+    ).rejects.toMatchObject({ problemType: 'validation-error' });
+    expect(repo.created).toHaveLength(0);
+  });
+
+  it('liste/detay: bekleyen kullanıcı etkinliği YALNIZ kurucusuna görünür', async () => {
+    const { svc, repo } = makeSvc({ enforce: true });
+    repo.eventRows = [
+      ev({ id: 'e-p', status: 'pending', createdBy: 'u1', template: 'bay_meetup' }),
+    ];
+    // Detay: kurucu görür (mine=true), başkası 404 alır.
+    const own = await svc.event(member('u1'), 'e-p');
+    expect(own).toMatchObject({ status: 'pending', mine: true, community: true });
+    await expect(svc.event(member('u2'), 'e-p')).rejects.toMatchObject({
+      problemType: 'not-found',
+    });
+    await expect(svc.event(null, 'e-p')).rejects.toMatchObject({ problemType: 'not-found' });
+  });
+
+  it('kayıt: rıza bayrağı depoya aynen iner (varsayılan false)', async () => {
+    const { svc, repo } = makeSvc({ enforce: true });
+    repo.eventRows = [ev({})];
+    await svc.register(member(), 'e1', true, NOW);
+    await svc.register(member(), 'e1', false, NOW);
+    expect(repo.showNames).toEqual([true, false]);
+  });
+
+  it('rızalı katılımcılar: bekleyen etkinlikte yabancıya 404; yayında liste döner', async () => {
+    const { svc, repo } = makeSvc({ enforce: true });
+    repo.eventRows = [ev({ id: 'e-p', status: 'pending', createdBy: 'u1' }), ev({})];
+    repo.attendeeRows = [{ displayName: 'Kaptan Levent', levelCode: 'guide' }];
+    await expect(svc.attendees(member('u2'), 'e-p')).rejects.toMatchObject({
+      problemType: 'not-found',
+    });
+    expect(await svc.attendees(member('u1'), 'e-p')).toHaveLength(1); // kurucu görür
+    expect(await svc.attendees(member('u2'), 'e1')).toHaveLength(1); // yayında herkes (hesapla)
+  });
+
+  it('kurucu iptali: başkasının etkinliğinde 404; kendi etkinliğinde sessizce iptal', async () => {
+    const { svc, repo } = makeSvc({ enforce: true });
+    repo.cancelOwnOk = false;
+    await expect(svc.cancelOwnEvent(member(), 'e1')).rejects.toMatchObject({
+      problemType: 'not-found',
+    });
+    repo.cancelOwnOk = true;
+    await expect(svc.cancelOwnEvent(member(), 'e1')).resolves.toBeUndefined();
   });
 
   it('yönetici: katılımcı listesi var olmayan etkinlikte 404, varsa ad+e-posta döner', async () => {

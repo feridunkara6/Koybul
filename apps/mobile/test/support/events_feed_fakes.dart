@@ -1,4 +1,5 @@
-import 'package:dockly_api/dockly_api.dart' show DealView, EventView;
+import 'package:dockly_api/dockly_api.dart'
+    show DealView, EventAttendee, EventView;
 import 'package:dockly_mobile/features/events/domain/events_gateway.dart';
 
 /// Etkinlik LİSTESİ/DETAYI okuyan ekranlar için sahte geçit (docs/15: ağ yok).
@@ -22,11 +23,34 @@ class FakeEventsFeedGateway implements EventsGateway {
       eventsResult.firstWhere((EventView e) => e.id == eventId);
 
   @override
-  Future<({bool registered, int remaining})> register(String eventId) =>
+  Future<({bool registered, int remaining})> register(
+    String eventId, {
+    bool showName = false,
+  }) =>
       throw UnimplementedError('feed sahtesi kayıt taşımaz');
 
   @override
   Future<void> cancel(String eventId) => throw UnimplementedError();
+
+  // --- SP-4 (2026-10-31): bu sahte okuma ekranları içindir — boş/sessiz. ---
+
+  @override
+  Future<String> createEvent({
+    required String template,
+    required String title,
+    required String body,
+    required DateTime startsAt,
+    required String locationText,
+    required int quota,
+  }) =>
+      throw UnimplementedError('feed sahtesi etkinlik kurmaz');
+
+  @override
+  Future<void> cancelOwnEvent(String eventId) => throw UnimplementedError();
+
+  @override
+  Future<List<EventAttendee>> attendees(String eventId) async =>
+      const <EventAttendee>[];
 }
 
 /// Hazır örnek etkinlik — testlerin kurduğu teknik yer tutucu (ÖRNEK VERİ).

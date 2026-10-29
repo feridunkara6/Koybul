@@ -1,4 +1,5 @@
-import 'package:dockly_api/dockly_api.dart' show DealView, EventView;
+import 'package:dockly_api/dockly_api.dart'
+    show DealView, EventAttendee, EventView;
 import 'package:dockly_mobile/features/events/application/events_controller.dart';
 import 'package:dockly_mobile/features/events/domain/events_gateway.dart';
 import 'package:dockly_mobile/features/events/presentation/event_detail_screen.dart';
@@ -88,13 +89,51 @@ class FakeEventsGateway implements EventsGateway {
       eventRows.firstWhere((EventView e) => e.id == eventId);
 
   @override
-  Future<({bool registered, int remaining})> register(String eventId) async {
+  Future<({bool registered, int remaining})> register(
+    String eventId, {
+    bool showName = false,
+  }) async {
     registerCalls.add(eventId);
+    showNames.add(showName);
     return (registered: true, remaining: remainingAfterRegister);
   }
 
   @override
   Future<void> cancel(String eventId) async => cancelCalls.add(eventId);
+
+  // --- SP-4 (2026-10-31) ---
+
+  final List<bool> showNames = <bool>[];
+  final List<Map<String, Object?>> created = <Map<String, Object?>>[];
+  final List<String> cancelOwnCalls = <String>[];
+  List<EventAttendee> attendeeRows = const <EventAttendee>[];
+
+  @override
+  Future<String> createEvent({
+    required String template,
+    required String title,
+    required String body,
+    required DateTime startsAt,
+    required String locationText,
+    required int quota,
+  }) async {
+    created.add(<String, Object?>{
+      'template': template,
+      'title': title,
+      'body': body,
+      'startsAt': startsAt,
+      'locationText': locationText,
+      'quota': quota,
+    });
+    return 'e-new';
+  }
+
+  @override
+  Future<void> cancelOwnEvent(String eventId) async =>
+      cancelOwnCalls.add(eventId);
+
+  @override
+  Future<List<EventAttendee>> attendees(String eventId) async => attendeeRows;
 }
 
 Widget _app(FakeEventsGateway gw, Widget home) => ProviderScope(

@@ -17,6 +17,9 @@ const List<String?> kModerationTabs = <String?>[
   'qa_answer',
   // ROTA PAYLAŞIMI (Hafta 3-4, kurucu onayı 2026-10-24): her rota onaydan geçer.
   'route',
+  // KULLANICI ETKİNLİKLERİ (SP-4, kurucu onayı 2026-10-31): her kullanıcı
+  // etkinliği onaydan geçer.
+  'event',
   'media',
   'suggested_location',
   'location_report',

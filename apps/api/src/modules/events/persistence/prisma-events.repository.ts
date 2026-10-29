@@ -2,10 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../../infrastructure/prisma/prisma.service';
 import {
+  CreateUserEventInput,
   DealRow,
   EventParticipant,
   EventRow,
   EventsRepository,
+  PublicAttendee,
   RegisterOutcome,
   UpsertDealInput,
   UpsertEventInput,
@@ -52,6 +54,7 @@ export class PrismaEventsRepository implements EventsRepository {
       e.quota::int AS quota,
       e.registration_deadline AS "registrationDeadline",
       e.price_note AS "priceNote", e.conditions, e.organizer, e.audience, e.status,
+      e.created_by AS "createdBy", e.template,
       (SELECT count(*)::int FROM event_registrations r
         WHERE r.event_id = e.id AND r.status = 'registered') AS "registeredCount",
       (${viewerUserId}::uuid IS NOT NULL AND EXISTS (
@@ -67,10 +70,15 @@ export class PrismaEventsRepository implements EventsRepository {
     // diye ikiye böler (geçmiş bölümünde kayıt kapalıdır; register()
     // zaten son tarihi geçen etkinliği 'not-open' ile reddeder).
     // İPTAL edilen gelecek etkinlik dürüstçe 'iptal' rozetiyle görünür.
+    // SP-4: bekleyen/reddedilen kullanıcı etkinliği YALNIZ sahibine görünür
+    // ("paylaştım ama görünmüyor" dersi, rotalarla aynı dürüstlük) — başkasının
+    // bekleyeni asla sızmaz.
     return this.prisma.$queryRaw<EventRow[]>(Prisma.sql`
       SELECT ${this.eventSelect(viewerUserId)}
       FROM events e
       WHERE COALESCE(e.ends_at, e.starts_at) >= ${now}::timestamptz - interval '6 months'
+        AND (e.status IN ('published', 'cancelled')
+             OR (${viewerUserId}::uuid IS NOT NULL AND e.created_by = ${viewerUserId}::uuid))
       ORDER BY e.starts_at ASC
       LIMIT 100
     `);
@@ -83,7 +91,12 @@ export class PrismaEventsRepository implements EventsRepository {
     return rows.length > 0 ? rows[0] : null;
   }
 
-  async register(eventId: string, userId: string, now: Date): Promise<RegisterOutcome> {
+  async register(
+    eventId: string,
+    userId: string,
+    now: Date,
+    showName: boolean,
+  ): Promise<RegisterOutcome> {
     return this.prisma.$transaction(async (tx) => {
       // 1) Etkinlik satırı KİLİTLENİR — eşzamanlı kayıtlar burada sıralanır.
       const events = await tx.$queryRaw<
@@ -118,10 +131,11 @@ export class PrismaEventsRepository implements EventsRepository {
 
       // 3) Yaz (iptal satırı dirilir — PK sayesinde mükerrer imkânsız).
       await tx.$executeRaw(Prisma.sql`
-        INSERT INTO event_registrations (event_id, user_id, status)
-        VALUES (${eventId}::uuid, ${userId}::uuid, 'registered')
+        INSERT INTO event_registrations (event_id, user_id, status, show_name)
+        VALUES (${eventId}::uuid, ${userId}::uuid, 'registered', ${showName})
         ON CONFLICT (event_id, user_id)
-        DO UPDATE SET status = 'registered', updated_at = now()
+        DO UPDATE SET status = 'registered', show_name = ${showName},
+                      updated_at = now()
       `);
       return { result: 'registered', remaining: Math.max(0, ev.quota - n - 1) };
     });
@@ -249,6 +263,77 @@ export class PrismaEventsRepository implements EventsRepository {
       displayName: r.displayName ?? 'Koybul Kaptanı',
       email: r.email,
       registeredAt: r.registeredAt.toISOString(),
+    }));
+  }
+
+  // --- KULLANICI ETKİNLİKLERİ (SP-4, kurucu onayı 2026-10-31) ---
+
+  async createUserEvent(id: string, userId: string, input: CreateUserEventInput): Promise<void> {
+    // Etkinlik + moderasyon görevi TEK transaction (rota deseni, 0017).
+    // organizer = kaptanın görünen adı (katalog tazeliği değil — etkinlik
+    // afişindeki imzadır; profil satırı yoksa varsayılan ad).
+    await this.prisma.$executeRaw(Prisma.sql`
+      WITH ins AS (
+        INSERT INTO events
+          (id, title, body, starts_at, ends_at, location_text,
+           venue_location_id, quota, organizer, audience, status,
+           created_by, template)
+        SELECT ${id}::uuid, ${input.title}, ${input.body},
+               ${input.startsAt}::timestamptz,
+               ${input.endsAt ?? null}::timestamptz,
+               ${input.locationText}, ${input.venueLocationId ?? null}::uuid,
+               ${input.quota}, COALESCE(p.display_name, 'Koybul Kaptanı'),
+               'members', 'pending', ${userId}::uuid, ${input.template}
+        FROM (SELECT 1) one
+        LEFT JOIN user_profiles p ON p.user_id = ${userId}::uuid
+        RETURNING id
+      )
+      INSERT INTO moderation_tasks (entity_type, entity_id, status)
+      SELECT 'event'::moderation_entity, ins.id, 'pending'::moderation_status
+      FROM ins
+      ON CONFLICT (entity_type, entity_id) DO NOTHING
+    `);
+  }
+
+  async cancelOwnEvent(eventId: string, userId: string): Promise<boolean> {
+    // Yalnız kurucu, yalnız yaşayan durumlar; bekleyen moderasyon görevi
+    // kapatılır (rota silme deseni).
+    const rows = await this.prisma.$queryRaw<{ id: string }[]>(Prisma.sql`
+      WITH upd AS (
+        UPDATE events SET status = 'cancelled', updated_at = now()
+        WHERE id = ${eventId}::uuid AND created_by = ${userId}::uuid
+          AND status IN ('pending', 'published')
+        RETURNING id
+      ), task AS (
+        UPDATE moderation_tasks SET status = 'rejected'::moderation_status,
+               decision_note = 'author_cancelled', decided_at = now(), updated_at = now()
+        WHERE entity_type = 'event'::moderation_entity
+          AND entity_id IN (SELECT id FROM upd)
+          AND status = 'pending'::moderation_status
+      )
+      SELECT id FROM upd
+    `);
+    return rows.length > 0;
+  }
+
+  async attendees(eventId: string): Promise<PublicAttendee[]> {
+    // YALNIZ rıza verenler (show_name) — e-posta/kimlik asla çıkmaz.
+    const rows = await this.prisma.$queryRaw<
+      { displayName: string | null; levelCode: string | null }[]
+    >(Prisma.sql`
+      SELECT p.display_name AS "displayName",
+             COALESCE(rep.level_code, 'new') AS "levelCode"
+      FROM event_registrations r
+      LEFT JOIN user_profiles p ON p.user_id = r.user_id
+      LEFT JOIN user_reputation rep ON rep.user_id = r.user_id
+      WHERE r.event_id = ${eventId}::uuid AND r.status = 'registered'
+        AND r.show_name = true
+      ORDER BY r.created_at ASC
+      LIMIT 100
+    `);
+    return rows.map((r) => ({
+      displayName: r.displayName ?? 'Koybul Kaptanı',
+      levelCode: r.levelCode ?? 'new',
     }));
   }
 }

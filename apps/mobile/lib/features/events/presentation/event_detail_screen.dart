@@ -1,4 +1,4 @@
-import 'package:dockly_api/dockly_api.dart' show EventView;
+import 'package:dockly_api/dockly_api.dart' show EventAttendee, EventView;
 import 'package:dockly_core/dockly_core.dart';
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +28,10 @@ class EventDetailScreen extends ConsumerStatefulWidget {
 class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
   bool _busy = false;
 
+  /// RIZALI liste tercihi (SP-4): varsayılan KAPALI (gizlilik önce) —
+  /// kaptan isterse kayıttan önce açar.
+  bool _consent = false;
+
   void _snack(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
@@ -38,8 +42,9 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
     if (_busy) return;
     setState(() => _busy = true);
     try {
-      final ({bool registered, int remaining}) res =
-          await ref.read(eventsGatewayProvider).register(widget.eventId);
+      final ({bool registered, int remaining}) res = await ref
+          .read(eventsGatewayProvider)
+          .register(widget.eventId, showName: _consent);
       _snack(L10n.fmt(t.evRegisteredFmt, '${res.remaining}'));
     } on GuestNotAllowedFailure catch (f) {
       _snack(f.message);
@@ -54,6 +59,41 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
           MaterialPageRoute<void>(builder: (_) => const PremiumScreen()),
         );
       }
+    } on AppFailure catch (f) {
+      _snack(f.message);
+    } finally {
+      ref.invalidate(eventDetailProvider(widget.eventId));
+      ref.invalidate(eventsFeedProvider);
+      ref.invalidate(attendeesProvider(widget.eventId));
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  /// Kurucunun kendi etkinliğini iptali (SP-4) — onay sorulur, dönüşü yok.
+  Future<void> _cancelOwnEvent() async {
+    final L10n t = ref.read(l10nProvider);
+    final bool? ok = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) => AlertDialog(
+        content: Text(t.evCancelEventConfirm),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(t.cancelLabel),
+          ),
+          FilledButton(
+            key: const ValueKey<String>('ev-cancel-own-confirm'),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(t.evCancelEventCta),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !mounted || _busy) return;
+    setState(() => _busy = true);
+    try {
+      await ref.read(eventsGatewayProvider).cancelOwnEvent(widget.eventId);
+      _snack(t.evCancelEventDone);
     } on AppFailure catch (f) {
       _snack(f.message);
     } finally {
@@ -172,6 +212,13 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
               if (e.priceNote != null && e.priceNote!.isNotEmpty)
                 info('💰', e.priceNote!),
               info('🧭', L10n.fmt(t.evOrganizerFmt, e.organizer)),
+              // SP-4: topluluk etkinliği rozeti + şablon adı (dürüst köken).
+              if (e.community)
+                info(
+                    '🤝',
+                    e.template == null
+                        ? t.evCommunityChip
+                        : '${t.evCommunityChip} · ${_templateLabel(t, e.template!)}'),
               const SizedBox(height: 4),
               if (past)
                 Text(
@@ -186,7 +233,32 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
           ),
         ),
         const SizedBox(height: 12),
-        if (e.cancelled)
+        // SP-4: bekleyen/reddedilen yalnız kurucusuna iner — dürüst durum.
+        if (e.pending)
+          Container(
+            key: const ValueKey<String>('ev-pending-banner'),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFF7E0),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(t.evPendingBanner,
+                style: const TextStyle(
+                    color: Color(0xFFB8860B), fontWeight: FontWeight.w800)),
+          )
+        else if (e.rejected)
+          Container(
+            key: const ValueKey<String>('ev-rejected-banner'),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFDEBEC),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(t.evRejectedBanner,
+                style: const TextStyle(
+                    color: DocklyColors.error, fontWeight: FontWeight.w800)),
+          )
+        else if (e.cancelled)
           const SizedBox.shrink()
         else if (past)
           Container(
@@ -232,12 +304,100 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
           Text(t.evFullNote,
               textAlign: TextAlign.center,
               style: theme.textTheme.labelSmall?.copyWith(color: sub)),
-        ] else
+        ] else ...<Widget>[
+          // RIZALI LİSTE TERCİHİ (SP-4): varsayılan kapalı; kayıtla gider.
+          CheckboxListTile(
+            key: const ValueKey<String>('ev-consent'),
+            value: _consent,
+            onChanged: (bool? v) => setState(() => _consent = v ?? false),
+            dense: true,
+            controlAffinity: ListTileControlAffinity.leading,
+            contentPadding: EdgeInsets.zero,
+            title: Text(t.evShowNameOpt, style: theme.textTheme.bodySmall),
+          ),
           FilledButton(
             key: const ValueKey<String>('ev-register'),
             onPressed: _busy ? null : () => _register(e),
             child: Text(_busy ? t.busyLabel : t.evRegisterCta),
           ),
+        ],
+        // KURUCU İPTALİ (SP-4): yalnız kendi etkinliğinde, yaşayan durumda.
+        if (e.mine && !e.cancelled && !e.rejected && !past) ...<Widget>[
+          const SizedBox(height: 8),
+          OutlinedButton(
+            key: const ValueKey<String>('ev-cancel-own'),
+            onPressed: _busy ? null : _cancelOwnEvent,
+            style:
+                OutlinedButton.styleFrom(foregroundColor: DocklyColors.error),
+            child: Text(t.evCancelEventCta),
+          ),
+        ],
+        // RIZALI KATILIMCILAR (SP-4): yalnız izin verenler; hesapsızda ve
+        // boş listede bölüm hiç çizilmez (0-uydurma).
+        _AttendeesSection(eventId: widget.eventId, t: t),
+      ],
+    );
+  }
+
+  /// Şablon kodu → yerel etiket (oluşturma ekranıyla aynı sözlük).
+  static String _templateLabel(L10n t, String code) => switch (code) {
+        'joint_sail' => t.evTplSail,
+        'marina_meetup' => t.evTplMarina,
+        _ => t.evTplBay,
+      };
+}
+
+/// RIZALI katılımcı bölümü (SP-4) — ad + seviye; PII yok, e-posta asla.
+class _AttendeesSection extends ConsumerWidget {
+  const _AttendeesSection({required this.eventId, required this.t});
+
+  final String eventId;
+  final L10n t;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ThemeData theme = Theme.of(context);
+    final List<EventAttendee> list = ref.watch(attendeesProvider(eventId)).maybeWhen(
+          data: (List<EventAttendee> v) => v,
+          orElse: () => const <EventAttendee>[],
+        );
+    if (list.isEmpty) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const SizedBox(height: 16),
+        Text(t.evAttendeesCap.toUpperCase(),
+            style: theme.textTheme.labelSmall?.copyWith(
+                fontWeight: FontWeight.w800,
+                letterSpacing: .8,
+                color: theme.colorScheme.onSurfaceVariant)),
+        const SizedBox(height: 4),
+        Text(t.evAttendeesNote,
+            style: theme.textTheme.bodySmall
+                ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 6,
+          runSpacing: 6,
+          children: <Widget>[
+            for (final EventAttendee a in list)
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainerLow,
+                  borderRadius: BorderRadius.circular(999),
+                  border: Border.all(
+                      color: theme.dividerColor.withValues(alpha: .4)),
+                ),
+                child: Text(
+                  '${a.displayName} · ${t.levelLabel(a.levelCode)}',
+                  style: theme.textTheme.labelSmall
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ),
+          ],
+        ),
       ],
     );
   }
