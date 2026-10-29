@@ -146,18 +146,21 @@ void main() {
     expect(find.byKey(const ValueKey<String>('feed-empty')), findsOneWidget);
   });
 
-  testWidgets('Bugün bölümü: misafirde HİÇ çizilmez; üyede önizleme + köprü',
-      (WidgetTester tester) async {
+  // NOT: iki durum AYRI testtir — aynı ProviderScope ağacında override
+  // sayısı değiştirilemez (Riverpod kuralı; CI dersi 2026-10-31).
+  testWidgets('Bugün bölümü: misafirde HİÇ çizilmez', (WidgetTester tester) async {
     final FakeFeedGateway gw = FakeFeedGateway(rows: <FeedItem>[trip(), note]);
-    // Misafir/oturumsuz: bölüm yok.
     await tester.pumpWidget(_app(
         const Scaffold(body: SingleChildScrollView(child: TodayFeedSection())),
         gw,
         signedIn: false));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey<String>('today-feed-all')), findsNothing);
+  });
 
-    // Üye: başlık + kartlar + Tümünü gör.
+  testWidgets('Bugün bölümü: üyede önizleme + "Tümünü gör" köprüsü',
+      (WidgetTester tester) async {
+    final FakeFeedGateway gw = FakeFeedGateway(rows: <FeedItem>[trip(), note]);
     await tester.pumpWidget(_app(
         const Scaffold(body: SingleChildScrollView(child: TodayFeedSection())),
         gw));
