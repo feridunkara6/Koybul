@@ -198,7 +198,9 @@ void main() {
               badges: const <String>[],
             )),
       ],
-      child: MaterialApp(
+      // CI dersi (SP-1 kırmızısı): analiz 'prefer_const_constructors' ister —
+      // tüm zincir sabit olabildiğinden const.
+      child: const MaterialApp(
         home: Scaffold(
           body: SingleChildScrollView(
             child: NotesSection(
