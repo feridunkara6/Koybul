@@ -45,6 +45,23 @@ export interface PublicCaptain {
   helpfulReceived: number;
   /** Geri alınmamış rozet kodları — etiket metinleri istemcide (4 dil). */
   badges: string[];
+  /** SON KATKILAR vitrini (SP-1 Kimlik, kurucu onayı 2026-10-29): yalnız
+   *  ONAYLI içerik — en yeni birkaç not (koy adıyla) + paylaşılan rota.
+   *  PII taşımaz; içerik zaten herkese açık yüzeylerde yayındadır. */
+  recentContributions: CaptainContribution[];
+}
+
+/** Kaptan kartındaki tek vitrin satırı. */
+export interface CaptainContribution {
+  kind: 'note' | 'route';
+  /** Not için koy adı; rota için rota adı. Koy adı silinmişse null. */
+  title: string | null;
+  /** Not türü kodu ('hazard'|'status'|'experience'|'passage') — etiket istemcide. */
+  noteKind: string | null;
+  /** Rota için kaydedilme sayısı; not için null. */
+  savedCount: number | null;
+  /** ISO 8601 oluşturulma zamanı. */
+  createdAt: string;
 }
 
 /** PATCH /v1/users/me girişi — JSON Merge Patch alt kümesi; alan beyaz listesi (SEC). */

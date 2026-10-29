@@ -49,6 +49,23 @@ class FakeUserRepo implements UserRepository {
       approvedCount: 46,
       helpfulReceived: 120,
       badges: ['first_contribution', 'hazard_hero'],
+      // SP-1 Kimlik (2026-10-29): vitrin — onaylı not + rota örneği.
+      recentContributions: [
+        {
+          kind: 'note',
+          title: 'Kille Koyu',
+          noteKind: 'experience',
+          savedCount: null,
+          createdAt: '2026-10-20T10:00:00.000Z',
+        },
+        {
+          kind: 'route',
+          title: 'Gökova batı turu',
+          noteKind: null,
+          savedCount: 18,
+          createdAt: '2026-10-18T10:00:00.000Z',
+        },
+      ],
     };
   }
 

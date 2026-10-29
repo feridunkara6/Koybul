@@ -1,4 +1,5 @@
-import 'package:dockly_api/dockly_api.dart' show PublicCaptain;
+import 'package:dockly_api/dockly_api.dart'
+    show CaptainContribution, PublicCaptain;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../../community/presentation/reputation_shell.dart' show formatCount;
 import '../application/profile_controller.dart';
+import 'captain_avatar.dart';
 
 /// HERKESE AÇIK KAPTAN PROFİLİ (Sosyalleşme Hafta 1B, kurucu onayı
 /// 2026-10-24) — "kimlik → keşif → geri çağırma" zincirinin keşif halkası.
@@ -66,23 +68,9 @@ class _Body extends StatelessWidget {
         // seviye. Ad yoksa harf uydurulmaz (0-uydurma).
         Row(
           children: <Widget>[
-            Container(
-              width: 52,
-              height: 52,
-              decoration: BoxDecoration(
-                color: DocklyColors.accentTurquoise.withValues(alpha: 0.16),
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: c.initials.isEmpty
-                    ? const DocklyIcon(DocklyIcons.award,
-                        size: 22, color: DocklyColors.accentTurquoise)
-                    : Text(c.initials,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                            color: DocklyColors.accentTurquoise,
-                            fontWeight: FontWeight.w800)),
-              ),
-            ),
+            // SP-1 Kimlik (2026-10-29): kimlikten türeyen renkli avatar —
+            // aynı kaptan her yüzeyde aynı renk (captain_avatar.dart).
+            CaptainAvatar(name: c.displayName, seed: c.id, size: 52),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -166,6 +154,60 @@ class _Body extends StatelessWidget {
                 ),
             ],
           ),
+        ],
+        // SON KATKILARI vitrini (SP-1 Kimlik, 2026-10-29): yalnız ONAYLI
+        // içerik — sunucu hesaplar, istemci yalnız gösterir. Boşsa çizilmez.
+        if (c.recentContributions.isNotEmpty) ...<Widget>[
+          const SizedBox(height: 16),
+          Text(t.cpRecent.toUpperCase(),
+              style: theme.textTheme.labelSmall?.copyWith(
+                  fontWeight: FontWeight.w800, letterSpacing: .8, color: sub)),
+          const SizedBox(height: 8),
+          for (final CaptainContribution x in c.recentContributions)
+            Container(
+              margin: const EdgeInsets.only(bottom: 6),
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerLow,
+                borderRadius: BorderRadius.circular(12),
+                border:
+                    Border.all(color: theme.dividerColor.withValues(alpha: .4)),
+              ),
+              child: Row(
+                children: <Widget>[
+                  DocklyIcon(
+                    x.kind == 'route'
+                        ? DocklyIcons.navigation
+                        : DocklyIcons.eventNoteOutlined,
+                    size: 16,
+                    color: DocklyColors.accentTurquoise,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      x.kind == 'route'
+                          ? '${t.cpRouteTag} · ${x.title ?? ''}'
+                          : <String>[
+                              if (x.noteKind != null)
+                                t.noteKindLabel(x.noteKind!),
+                              if (x.title != null && x.title!.isNotEmpty)
+                                x.title!,
+                            ].join(' · '),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall
+                          ?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    // Yalnız gün hassasiyeti — vitrin satırı sade kalır.
+                    x.createdAt.length >= 10 ? x.createdAt.substring(0, 10) : '',
+                    style: theme.textTheme.labelSmall?.copyWith(color: sub),
+                  ),
+                ],
+              ),
+            ),
         ],
       ],
     );

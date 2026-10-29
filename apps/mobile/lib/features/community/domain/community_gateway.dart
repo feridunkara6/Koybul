@@ -26,4 +26,14 @@ abstract interface class CommunityGateway {
     required int overallRating,
     String? body,
   });
+
+  /// İçerik şikâyeti (SP-1 güvenlik, kurucu onayı 2026-10-29): not ya da
+  /// yorum için [targetType]/[targetId] verilir. Hesap ister; arayüz kapısı
+  /// (requireAccount) eylemden önce çalışır.
+  Future<void> report({
+    required String idOrSlug,
+    required String reason,
+    String? targetType,
+    String? targetId,
+  });
 }

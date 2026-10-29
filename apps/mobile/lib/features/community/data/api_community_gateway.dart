@@ -79,4 +79,20 @@ class ApiCommunityGateway implements CommunityGateway {
       accessToken: await _token(),
     );
   }
+
+  @override
+  Future<void> report({
+    required String idOrSlug,
+    required String reason,
+    String? targetType,
+    String? targetId,
+  }) async {
+    await _api.report(
+      idOrSlug: idOrSlug,
+      reason: reason,
+      targetType: targetType,
+      targetId: targetId,
+      accessToken: await _token(),
+    );
+  }
 }

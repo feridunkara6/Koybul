@@ -5,7 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
 import '../../../core/widgets/section_card.dart';
+import '../../community/presentation/report_sheet.dart';
 import '../../community/presentation/review_composer_screen.dart';
+import '../../profile/presentation/captain_avatar.dart';
+import '../../profile/presentation/captain_profile_screen.dart';
 import '../application/reviews_controller.dart';
 
 /// Detay ekranında "Yorumlar" bölümü (S-09). Onaylı yorumları okuma — misafir
@@ -63,7 +66,8 @@ class ReviewsSection extends ConsumerWidget {
                       ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                 )
               else
-                for (final Review r in items) _ReviewCard(review: r),
+                for (final Review r in items)
+                  _ReviewCard(review: r, idOrSlug: idOrSlug),
               // YORUM YAZMA (2026-08): bölüm artık yalnız okuma değil.
               // Üyelik kapısı eylem anında çıkar, gezinmeyi engellemez.
               const SizedBox(height: 8),
@@ -92,14 +96,34 @@ class ReviewsSection extends ConsumerWidget {
   }
 }
 
-class _ReviewCard extends StatelessWidget {
-  const _ReviewCard({required this.review});
+class _ReviewCard extends ConsumerWidget {
+  const _ReviewCard({required this.review, required this.idOrSlug});
 
   final Review review;
+  final String idOrSlug;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
+    // SP-1 Kimlik (2026-10-29): yazar satırı kaptan kartına açılır —
+    // yalnız kimliği sunucudan gelen (silinmemiş) yazarlarda.
+    final String? authorId = review.authorId;
+    final Widget author = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        CaptainAvatar(
+            name: review.authorName, seed: authorId, size: 20),
+        const SizedBox(width: 6),
+        Flexible(
+          child: Text(
+            review.authorName,
+            style: theme.textTheme.labelLarge,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Column(
@@ -111,17 +135,44 @@ class _ReviewCard extends StatelessWidget {
               _Stars(rating: review.rating),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(
-                  review.authorName,
-                  style: theme.textTheme.labelLarge,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                child: authorId == null
+                    ? author
+                    : InkWell(
+                        key: ValueKey<String>('review-author-${review.id}'),
+                        borderRadius: BorderRadius.circular(999),
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (_) =>
+                                CaptainProfileScreen(userId: authorId),
+                          ),
+                        ),
+                        child: author,
+                      ),
               ),
               Text(
                 _fmtDate(review.createdAt),
                 style: theme.textTheme.bodySmall
                     ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              ),
+              const SizedBox(width: 4),
+              // ŞİKÂYET (SP-1 güvenlik): not kartıyla aynı ⚑ kalıbı.
+              InkWell(
+                key: ValueKey<String>('review-report-${review.id}'),
+                borderRadius: BorderRadius.circular(999),
+                onTap: () => showReportSheet(
+                  context,
+                  ref,
+                  idOrSlug: idOrSlug,
+                  targetType: 'review',
+                  targetId: review.id,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Text('⚑',
+                      style: theme.textTheme.labelMedium?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w800)),
+                ),
               ),
             ],
           ),

@@ -91,6 +91,7 @@ interface SearchRow extends PinRow {
 interface ReviewRow {
   id: string;
   authorName: string | null;
+  authorId: string | null;
   rating: number;
   title: string | null;
   body: string | null;
@@ -665,6 +666,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
       SELECT
         r.id::text                          AS id,
         up.display_name                     AS "authorName",
+        u.id::text                          AS "authorId",
         r.overall_rating                    AS rating,
         r.title                             AS title,
         r.body                              AS body,
@@ -673,6 +675,10 @@ export class PrismaLocationsRepository implements LocationsRepository {
         r.helpful_count                     AS "helpfulCount"
       FROM reviews r
       LEFT JOIN user_profiles up ON up.user_id = r.user_id
+      -- SP-1 Kimlik (2026-10-29): yazar kimliği kaptan kartı bağlantısı için;
+      -- silinmiş/pasif hesapta NULL kalır (bağlantı çizilmez, ad anonim düşer).
+      LEFT JOIN users u ON u.id = r.user_id
+        AND u.deleted_at IS NULL AND u.status = 'active'
       WHERE r.location_id = ${loc.id}::uuid
         AND r.status = 'approved'
         AND r.deleted_at IS NULL
@@ -683,6 +689,7 @@ export class PrismaLocationsRepository implements LocationsRepository {
     return rows.map((r) => ({
       id: r.id,
       authorName: r.authorName ?? 'Denizci',
+      authorId: r.authorId ?? null,
       rating: Number(r.rating),
       title: r.title,
       body: r.body,

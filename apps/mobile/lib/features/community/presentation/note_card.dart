@@ -6,7 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
 import '../../auth/presentation/account_gate.dart';
+import '../../profile/presentation/captain_avatar.dart';
+import '../../profile/presentation/captain_profile_screen.dart';
 import '../application/community_controller.dart';
+import 'report_sheet.dart';
 
 /// Not tipinin rengi. UYARI her zaman kırmızı: emniyet dili tip kimlik rengine
 /// BOYANMAZ (mevcut rüzgâr uyarı bandıyla aynı ilke).
@@ -113,7 +116,12 @@ class NoteCard extends ConsumerWidget {
           ],
           if (showActions) ...<Widget>[
             const SizedBox(height: 6),
-            _Actions(note: note, hazard: hazard, helpfulCount: helpful),
+            _Actions(
+              note: note,
+              hazard: hazard,
+              helpfulCount: helpful,
+              locationId: locationId,
+            ),
           ],
         ],
       ),
@@ -130,19 +138,37 @@ class _AuthorLine extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
     final L10n t = ref.watch(l10nProvider);
-    return Row(
-      children: <Widget>[
-        Flexible(
-          child: Text(
-            note.author.displayName,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700),
-          ),
+    // SP-1 Kimlik (kurucu onayı 2026-10-29): yazar satırı artık KAPIDIR —
+    // avatar + ada dokununca kaptan kartı açılır ("bu kim?" cevabı).
+    return InkWell(
+      key: ValueKey<String>('note-author-${note.id}'),
+      borderRadius: BorderRadius.circular(999),
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => CaptainProfileScreen(userId: note.author.userId),
         ),
-        const SizedBox(width: 6),
-        _Pill(text: t.levelLabel(note.author.levelCode), color: DocklyColors.accentTurquoise),
-      ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          CaptainAvatar(
+            name: note.author.displayName,
+            seed: note.author.userId,
+            size: 20,
+          ),
+          const SizedBox(width: 6),
+          Flexible(
+            child: Text(
+              note.author.displayName,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(width: 6),
+          _Pill(text: t.levelLabel(note.author.levelCode), color: DocklyColors.accentTurquoise),
+        ],
+      ),
     );
   }
 }
@@ -173,11 +199,17 @@ class _Pill extends StatelessWidget {
 }
 
 class _Actions extends ConsumerStatefulWidget {
-  const _Actions({required this.note, required this.hazard, required this.helpfulCount});
+  const _Actions({
+    required this.note,
+    required this.hazard,
+    required this.helpfulCount,
+    required this.locationId,
+  });
 
   final Note note;
   final bool hazard;
   final int helpfulCount;
+  final String locationId;
 
   @override
   ConsumerState<_Actions> createState() => _ActionsState();
@@ -254,6 +286,22 @@ class _ActionsState extends ConsumerState<_Actions> {
             onTap: _busy ? null : () => _react('dispute'),
           ),
         ],
+        // ŞİKÂYET (SP-1 güvenlik, 2026-10-29): sunucuda hazır bekleyen uca
+        // ilk mobil kapı — ⚑ tek kalıp (report_sheet.dart).
+        _SmallButton(
+          key: ValueKey<String>('note-report-${widget.note.id}'),
+          label: '⚑ ${t.reportAction}',
+          color: theme.colorScheme.onSurfaceVariant,
+          onTap: _busy
+              ? null
+              : () => showReportSheet(
+                    context,
+                    ref,
+                    idOrSlug: widget.locationId,
+                    targetType: 'note',
+                    targetId: widget.note.id,
+                  ),
+        ),
       ],
     );
   }

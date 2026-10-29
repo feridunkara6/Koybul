@@ -3,6 +3,7 @@ class Review {
   const Review({
     required this.id,
     required this.authorName,
+    this.authorId,
     required this.rating,
     required this.title,
     required this.body,
@@ -15,6 +16,10 @@ class Review {
 
   /// Yazarın görünen adı; profil yoksa sunucu anonim fallback verir.
   final String authorName;
+
+  /// Yazarın kullanıcı kimliği — kaptan kartı bağlantısı (SP-1 Kimlik,
+  /// 2026-10-29). Eski sunucu/silinmiş yazar için null (bağlantı çizilmez).
+  final String? authorId;
 
   /// Genel puan 1..5.
   final int rating;
@@ -31,6 +36,7 @@ class Review {
   factory Review.fromJson(Map<String, dynamic> json) => Review(
         id: json['id'] as String,
         authorName: json['authorName'] as String,
+        authorId: json['authorId'] as String?,
         rating: (json['rating'] as num).toInt(),
         title: json['title'] as String?,
         body: json['body'] as String?,

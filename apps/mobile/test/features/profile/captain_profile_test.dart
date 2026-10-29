@@ -1,4 +1,5 @@
-import 'package:dockly_api/dockly_api.dart' show PublicCaptain;
+import 'package:dockly_api/dockly_api.dart'
+    show CaptainContribution, PublicCaptain;
 import 'package:dockly_mobile/features/profile/application/profile_controller.dart';
 import 'package:dockly_mobile/features/profile/presentation/captain_profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -62,5 +63,47 @@ void main() {
     expect(find.textContaining('Göcek sularındayım'), findsNothing);
     expect(find.text('Rozetler'.toUpperCase()), findsNothing);
     expect(find.text('Kaptan Levent'), findsOneWidget);
+    // Vitrin verisi yoksa "Son katkıları" başlığı da çizilmez (0-uydurma).
+    expect(find.text('Son katkıları'.toUpperCase()), findsNothing);
+  });
+
+  testWidgets('SP-1 VİTRİN (2026-10-29): son onaylı katkılar listelenir — '
+      'not türü etiketi + koy adı, rota satırı ve gün tarihi',
+      (WidgetTester tester) async {
+    final PublicCaptain c = PublicCaptain(
+      id: 'u-2',
+      displayName: 'Kaptan Levent',
+      bio: null,
+      experienceYears: 14,
+      memberSince: DateTime.utc(2026, 7, 7),
+      points: 840,
+      levelCode: 'guide',
+      approvedCount: 46,
+      helpfulReceived: 1200,
+      badges: const <String>[],
+      recentContributions: const <CaptainContribution>[
+        CaptainContribution(
+          kind: 'note',
+          title: 'Kille Koyu',
+          noteKind: 'experience',
+          savedCount: null,
+          createdAt: '2026-10-20T10:00:00.000Z',
+        ),
+        CaptainContribution(
+          kind: 'route',
+          title: 'Gökova batı turu',
+          noteKind: null,
+          savedCount: 18,
+          createdAt: '2026-10-18T09:00:00.000Z',
+        ),
+      ],
+    );
+    await tester.pumpWidget(_app(c));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Son katkıları'.toUpperCase()), findsOneWidget);
+    expect(find.textContaining('Kille Koyu'), findsOneWidget);
+    expect(find.textContaining('Rota · Gökova batı turu'), findsOneWidget);
+    expect(find.text('2026-10-20'), findsOneWidget);
   });
 }

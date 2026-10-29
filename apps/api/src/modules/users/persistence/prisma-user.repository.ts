@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { uuidv7 } from 'uuidv7';
 import { PrismaService } from '../../../infrastructure/prisma/prisma.service';
 import { DeletionAudit, UserRepository } from '../domain/user.repository';
-import { PublicCaptain, UpdateMeInput, UserMe } from '../domain/user.types';
+import { CaptainContribution, PublicCaptain, UpdateMeInput, UserMe } from '../domain/user.types';
 import { RoleCode } from '../../../core/auth/principal';
 
 const ANONYMIZED_DISPLAY_NAME = 'Silinmiş Kullanıcı';
@@ -80,6 +80,42 @@ export class PrismaUserRepository implements UserRepository {
       },
     });
     if (!user) return null;
+    // SON KATKILAR vitrini (SP-1 Kimlik, 2026-10-29): yalnız ONAYLI ve
+    // silinmemiş içerik; iki küçük sorgu (ağır birleşim yok), en yeni önce.
+    const noteRows = await this.prisma.$queryRaw<
+      { title: string | null; noteKind: string; createdAt: Date }[]
+    >`
+      SELECT l.name AS "title", n.kind::text AS "noteKind", n.created_at AS "createdAt"
+      FROM location_notes n
+      LEFT JOIN locations l ON l.id = n.location_id
+      WHERE n.user_id = ${userId}::uuid
+        AND n.status = 'approved' AND n.deleted_at IS NULL
+      ORDER BY n.created_at DESC
+      LIMIT 3`;
+    const routeRows = await this.prisma.route.findMany({
+      where: { userId, status: 'approved', deletedAt: null },
+      orderBy: { createdAt: 'desc' },
+      take: 2,
+      select: { name: true, saveCount: true, createdAt: true },
+    });
+    const recent: CaptainContribution[] = [
+      ...noteRows.map((n) => ({
+        kind: 'note' as const,
+        title: n.title,
+        noteKind: n.noteKind,
+        savedCount: null,
+        createdAt: n.createdAt.toISOString(),
+      })),
+      ...routeRows.map((r) => ({
+        kind: 'route' as const,
+        title: r.name,
+        noteKind: null,
+        savedCount: r.saveCount,
+        createdAt: r.createdAt.toISOString(),
+      })),
+    ]
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .slice(0, 4);
     return {
       id: user.id,
       displayName: user.profile?.displayName ?? DEFAULT_DISPLAY_NAME,
@@ -91,6 +127,7 @@ export class PrismaUserRepository implements UserRepository {
       approvedCount: user.reputation?.approvedCount ?? 0,
       helpfulReceived: user.reputation?.helpfulReceived ?? 0,
       badges: user.badges.map((b) => b.badgeCode),
+      recentContributions: recent,
     };
   }
 

@@ -18,6 +18,9 @@ class PublicCaptain {
     required this.approvedCount,
     required this.helpfulReceived,
     required this.badges,
+    // SP-1 Kimlik (2026-10-29): vitrin — eski sunucu yanıtlarıyla uyum için
+    // isteğe bağlı; alan gelmezse boş liste (bölüm çizilmez).
+    this.recentContributions = const <CaptainContribution>[],
   });
 
   final String id;
@@ -32,6 +35,9 @@ class PublicCaptain {
   final int approvedCount;
   final int helpfulReceived;
   final List<String> badges;
+
+  /// Son ONAYLI katkılar (vitrin): not (koy adıyla) + paylaşılan rota.
+  final List<CaptainContribution> recentContributions;
 
   /// Avatar baş harfleri: görünen adın ilk iki kelimesinden; ad boşsa boş
   /// döner (uydurma harf yok — itibar DTO'suyla aynı ilke).
@@ -55,5 +61,45 @@ class PublicCaptain {
         approvedCount: json['approvedCount'] as int,
         helpfulReceived: json['helpfulReceived'] as int,
         badges: (json['badges'] as List<dynamic>).cast<String>(),
+        recentContributions: ((json['recentContributions'] as List<dynamic>?) ??
+                const <dynamic>[])
+            .map((dynamic e) =>
+                CaptainContribution.fromJson(e as Map<String, dynamic>))
+            .toList(growable: false),
+      );
+}
+
+/// Kaptan kartı vitrinindeki tek satır (SP-1 Kimlik, 2026-10-29).
+class CaptainContribution {
+  const CaptainContribution({
+    required this.kind,
+    required this.title,
+    required this.noteKind,
+    required this.savedCount,
+    required this.createdAt,
+  });
+
+  /// 'note' | 'route'.
+  final String kind;
+
+  /// Not için koy adı; rota için rota adı. Koy silinmişse null olabilir.
+  final String? title;
+
+  /// Not türü kodu ('hazard'|'status'|'experience'|'passage') — etiket istemcide.
+  final String? noteKind;
+
+  /// Rota için kaydedilme sayısı; not için null.
+  final int? savedCount;
+
+  /// ISO 8601 oluşturulma zamanı.
+  final String createdAt;
+
+  factory CaptainContribution.fromJson(Map<String, dynamic> json) =>
+      CaptainContribution(
+        kind: json['kind'] as String,
+        title: json['title'] as String?,
+        noteKind: json['noteKind'] as String?,
+        savedCount: (json['savedCount'] as num?)?.toInt(),
+        createdAt: json['createdAt'] as String,
       );
 }

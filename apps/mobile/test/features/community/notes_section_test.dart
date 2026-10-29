@@ -2,6 +2,7 @@ import 'package:dockly_api/dockly_api.dart';
 import 'package:dockly_mobile/features/community/application/community_controller.dart';
 import 'package:dockly_mobile/features/community/presentation/note_card.dart';
 import 'package:dockly_mobile/features/community/presentation/notes_section.dart';
+import 'package:dockly_mobile/features/profile/application/profile_controller.dart';
 import 'package:dockly_mobile/features/qa/presentation/qa_composer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -173,5 +174,73 @@ void main() {
     await tester.tap(ask);
     await tester.pumpAndSettle();
     expect(find.byType(QaComposerScreen), findsOneWidget);
+  });
+
+  testWidgets('SP-1 KİMLİK (2026-10-29): yazar satırına dokununca kaptan '
+      'kartı açılır', (WidgetTester tester) async {
+    final FakeCommunityGateway gw =
+        FakeCommunityGateway(notes: <Note>[makeNote()]);
+    await tester.pumpWidget(ProviderScope(
+      overrides: <Override>[
+        communityGatewayProvider.overrideWithValue(gw),
+        // Kaptan kartı sahte veriyle açılır — ağ yok.
+        publicCaptainProvider.overrideWith((ref, String id) async =>
+            PublicCaptain(
+              id: id,
+              displayName: 'M. Kaya',
+              bio: null,
+              experienceYears: 9,
+              memberSince: DateTime.utc(2025, 5, 1),
+              points: 300,
+              levelCode: 'coastal',
+              approvedCount: 12,
+              helpfulReceived: 40,
+              badges: const <String>[],
+            )),
+      ],
+      child: MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: NotesSection(
+              locationId: 'loc-1',
+              locationName: 'Boynuzbükü',
+              position: _pos,
+            ),
+          ),
+        ),
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    final Finder author = find.byKey(const ValueKey<String>('note-author-n1'));
+    expect(author, findsOneWidget);
+    await tester.ensureVisible(author);
+    await tester.tap(author);
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('cp-name')), findsOneWidget);
+    expect(find.text('M. Kaya'), findsWidgets);
+  });
+
+  testWidgets('SP-1 GÜVENLİK (2026-10-29): ⚑ Bildir → sebep seçimi → şikâyet '
+      'ağ geçidine not hedefiyle gider', (WidgetTester tester) async {
+    final FakeCommunityGateway gw =
+        FakeCommunityGateway(notes: <Note>[makeNote()]);
+    await tester.pumpWidget(_app(gw, signedIn: true));
+    await tester.pumpAndSettle();
+
+    final Finder flag = find.byKey(const ValueKey<String>('note-report-n1'));
+    expect(flag, findsOneWidget);
+    await tester.ensureVisible(flag);
+    await tester.tap(flag);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey<String>('report-wrong')));
+    await tester.pumpAndSettle();
+
+    expect(gw.reports, hasLength(1));
+    expect(gw.reports.single.reason, 'wrong_info');
+    expect(gw.reports.single.targetType, 'note');
+    expect(gw.reports.single.targetId, 'n1');
+    expect(find.textContaining('Bildirimin alındı'), findsOneWidget);
   });
 }

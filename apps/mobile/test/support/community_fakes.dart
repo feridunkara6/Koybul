@@ -18,6 +18,11 @@ class FakeCommunityGateway implements CommunityGateway {
   final List<({String idOrSlug, int rating, String? body})> reviews =
       <({String idOrSlug, int rating, String? body})>[];
 
+  /// ⚑ şikâyet kayıtları (SP-1 güvenlik, 2026-10-29).
+  final List<({String idOrSlug, String reason, String? targetType, String? targetId})>
+      reports =
+      <({String idOrSlug, String reason, String? targetType, String? targetId})>[];
+
   /// Ayarlanırsa yazma çağrıları bu hatayla düşer.
   Object? failWith;
 
@@ -76,6 +81,22 @@ class FakeCommunityGateway implements CommunityGateway {
   }) async {
     if (failWith != null) throw failWith!;
     reviews.add((idOrSlug: idOrSlug, rating: overallRating, body: body));
+  }
+
+  @override
+  Future<void> report({
+    required String idOrSlug,
+    required String reason,
+    String? targetType,
+    String? targetId,
+  }) async {
+    if (failWith != null) throw failWith!;
+    reports.add((
+      idOrSlug: idOrSlug,
+      reason: reason,
+      targetType: targetType,
+      targetId: targetId,
+    ));
   }
 }
 

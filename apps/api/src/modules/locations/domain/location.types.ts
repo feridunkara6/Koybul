@@ -155,6 +155,9 @@ export interface ReviewItem {
   id: string;
   /** Yazarın görünen adı; profil yoksa anonim fallback. */
   authorName: string;
+  /** Yazarın kullanıcı kimliği — kaptan kartına bağlantı için (SP-1 Kimlik,
+   *  kurucu onayı 2026-10-29). Anonimleşmiş/silinmiş yazar için null. */
+  authorId: string | null;
   /** Genel puan 1..5. */
   rating: number;
   title: string | null;
