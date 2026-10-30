@@ -222,25 +222,25 @@ class _Body extends StatelessWidget {
               style: theme.textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.w800, letterSpacing: .8, color: sub)),
           const SizedBox(height: 8),
-          Container(
-            key: const ValueKey<String>('bc-story'),
-            padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(12),
-              border: Border(
-                left: BorderSide(color: theme.colorScheme.primary, width: 3),
-                top: BorderSide(
-                    color: theme.dividerColor.withValues(alpha: .4)),
-                right: BorderSide(
-                    color: theme.dividerColor.withValues(alpha: .4)),
-                bottom: BorderSide(
-                    color: theme.dividerColor.withValues(alpha: .4)),
+          // CI dersi (2026-10-30): borderRadius + tek kenarı farklı renkli
+          // çerçeve birlikte ÇİZİLEMEZ (paint assertion). Köşeler ClipRRect
+          // ile yuvarlanır; sol vurgu şeridi tek kenarlık çerçevede kalır.
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              key: const ValueKey<String>('bc-story'),
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerLow,
+                border: Border(
+                  left:
+                      BorderSide(color: theme.colorScheme.primary, width: 3),
+                ),
               ),
+              child: Text('“${b.story!.trim()}”',
+                  style: theme.textTheme.bodyMedium
+                      ?.copyWith(fontStyle: FontStyle.italic, height: 1.45)),
             ),
-            child: Text('“${b.story!.trim()}”',
-                style: theme.textTheme.bodyMedium
-                    ?.copyWith(fontStyle: FontStyle.italic, height: 1.45)),
           ),
         ],
         // PAYLAŞTIĞI ROTALAR (0024): yalnız onaylı rotalar; boşsa çizilmez.
