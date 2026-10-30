@@ -112,7 +112,8 @@ void main() {
     expect(find.text('PAYLAŞILAN SEYİR'), findsNothing);
 
     // Dolu kart: üç bölüm de çizilir, rota satırı dokunulabilir.
-    final PublicBoatCard dolu = PublicBoatCard(
+    // (const: CI dersi — analizör --fatal-infos ile info'yu da kırmızı sayar.)
+    const PublicBoatCard dolu = PublicBoatCard(
       id: 'b-marti',
       name: 'Martı',
       boatTypeCode: 'sailboat',
@@ -129,7 +130,7 @@ void main() {
       sharedTrips: 6,
       sharedRoutes: 3,
       pruvaTotal: 27,
-      routes: const <PublicBoatRouteRef>[
+      routes: <PublicBoatRouteRef>[
         PublicBoatRouteRef(
             id: 'r1', name: '12 Adalar klasiği', distanceNm: 14, saveCount: 23),
       ],

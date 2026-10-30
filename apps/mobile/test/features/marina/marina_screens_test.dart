@@ -27,7 +27,13 @@ const MyBoat kLocalBoat = MyBoat(
   homeMarina: HomeMarina(id: 'loc-marti', name: 'Martı Marina', lat: 36.77, lon: 28.12),
 );
 
-MyMarinaBoat serverBoat({bool visible = false, bool shareSpecs = false}) => MyMarinaBoat(
+MyMarinaBoat serverBoat({
+  bool visible = false,
+  bool shareSpecs = false,
+  String? story,
+  String storyStatus = 'approved',
+}) =>
+    MyMarinaBoat(
       boatId: 'b1',
       name: 'Martı',
       boatTypeCode: 'sailboat',
@@ -37,8 +43,8 @@ MyMarinaBoat serverBoat({bool visible = false, bool shareSpecs = false}) => MyMa
       marinaName: 'Martı Marina',
       visible: visible,
       shareSpecs: shareSpecs,
-      story: storySet ? story : mine?.story,
-      storyStatus: storySet && story != null ? 'pending' : 'approved',
+      story: story,
+      storyStatus: storyStatus,
     );
 
 MarinaCommunity community({
