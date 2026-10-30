@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { AppProblem } from '../../../common/problem/problem';
 import { EnvService } from '../../../config/env.service';
 import { Principal, roleAtLeast } from '../../../core/auth/principal';
+import { NotificationsService } from '../../notifications/application/notifications.service';
 import { PremiumAccessService } from '../../premium/application/premium-access.service';
 import {
   MARINA_REPOSITORY,
@@ -29,6 +30,8 @@ export class MarinaService {
     private readonly env: EnvService,
     private readonly premium: PremiumAccessService,
     @Inject(MARINA_REPOSITORY) private readonly repo: MarinaRepository,
+    /** Push tetikleri (ateşle-unut) — birim testleri vermez, yol atlanır. */
+    @Optional() private readonly notifications?: NotificationsService,
   ) {}
 
   /** Tekne sekmesindeki Marinam kartının durumu. */
@@ -55,7 +58,10 @@ export class MarinaService {
         { field: 'boatTypeCode', code: 'invalid', message: 'Bilinmeyen tip' },
       ]);
     }
-    return this.repo.upsertMyBoat(principal.userId, input);
+    const saved = await this.repo.upsertMyBoat(principal.userId, input);
+    // TEKNENİN HİKÂYESİ (0024): kuyruğa düşen metin adminlere duyurulur.
+    if (saved.storyStatus === 'pending') this.notifications?.moderationNew('boat_story');
+    return saved;
   }
 
   /**

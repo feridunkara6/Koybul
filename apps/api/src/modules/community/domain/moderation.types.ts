@@ -10,7 +10,8 @@ export interface ModerationItem {
     | 'qa_question'
     | 'qa_answer'
     | 'route'
-    | 'event';
+    | 'event'
+    | 'boat_story';
   entityId: string;
   createdAt: string;
   /** Karar verirken gereken bağlam — moderatör içeriği görmeden karar veremez. */

@@ -18,6 +18,10 @@ abstract interface class MarinaGateway {
     required String marinaLocationId,
     required bool visible,
     required bool shareSpecs,
+    /// 0024: hikâye yalnız [storySet] true iken gönderilir — gönderilmeyen
+    /// alan sunucudaki mevcut hikâyeye dokunmaz.
+    bool storySet,
+    String? story,
   });
 
   /// Topluluk: sayılar herkese; liste sunucunun erişim kararına göre.

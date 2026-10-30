@@ -38,6 +38,20 @@ export interface PublicBoatCard {
   buildYear: number | null;
   marina: { id: string; name: string } | null;
   captain: { userId: string; displayName: string; levelCode: string };
+  /** TEKNENİN HİKÂYESİ (0024): yalnız moderasyon ONAYLI metin iner. */
+  story: string | null;
+  /** Kart istatistikleri (0024) — zaten paylaşılmış içerikten TÜRETİLİR. */
+  stats: { sharedTrips: number; sharedRoutes: number; pruvaTotal: number };
+  /** Kaptanın ONAYLI rotaları (en yeni 5) — rota detayına köprü. */
+  routes: PublicBoatRouteRef[];
+}
+
+/** Karttaki tek rota satırı — herkese açık alanlar. */
+export interface PublicBoatRouteRef {
+  id: string;
+  name: string;
+  distanceNm: number;
+  saveCount: number;
 }
 
 /** POST /v1/boats girdisi — zorunlu alanlar + lookup kodları. */

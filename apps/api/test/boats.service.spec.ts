@@ -190,6 +190,10 @@ describe('BoatsService (birincil tekne + doğrulama, docs/23 §10 #7)', () => {
       buildYear: 2019,
       marina: { id: 'loc-marti', name: 'Martı Marina' },
       captain: { userId: 'u-1', displayName: 'Kaptan Levent', levelCode: 'guide' },
+      // 0024: hikâye + türetilmiş istatistikler + rota listesi.
+      story: null,
+      stats: { sharedTrips: 0, sharedRoutes: 0, pruvaTotal: 0 },
+      routes: [],
     };
     repo.publicCards.set('b-marti', card);
 

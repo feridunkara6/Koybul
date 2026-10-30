@@ -1,4 +1,5 @@
-import 'package:dockly_api/dockly_api.dart' show PublicBoatCard, PublicCaptain;
+import 'package:dockly_api/dockly_api.dart'
+    show PublicBoatCard, PublicBoatRouteRef, PublicCaptain;
 import 'package:dockly_mobile/features/boat/application/boat_card_controller.dart';
 import 'package:dockly_mobile/features/boat/presentation/boat_card_screen.dart';
 import 'package:dockly_mobile/features/profile/application/profile_controller.dart';
@@ -98,4 +99,49 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey<String>('cp-name')), findsOneWidget);
   });
+
+  testWidgets('0024: hikâye + istatistik + rota bölümleri çizilir; boşsa çizilmez',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 2000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    // Boş kart: yeni bölümlerin HİÇBİRİ çizilmez (0-uydurma).
+    await tester.pumpWidget(_app(card()));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('bc-story')), findsNothing);
+    expect(find.text('PAYLAŞILAN SEYİR'), findsNothing);
+
+    // Dolu kart: üç bölüm de çizilir, rota satırı dokunulabilir.
+    final PublicBoatCard dolu = PublicBoatCard(
+      id: 'b-marti',
+      name: 'Martı',
+      boatTypeCode: 'sailboat',
+      brand: 'Beneteau',
+      model: 'Oceanis 38.1',
+      lengthM: 11.5,
+      buildYear: 2019,
+      marinaId: 'loc-marti',
+      marinaName: 'Martı Marina',
+      captainUserId: 'u-1',
+      captainName: 'Kaptan Levent',
+      captainLevelCode: 'guide',
+      story: "2019'da Göcek'te teslim aldık; adı direğe konan martıdan.",
+      sharedTrips: 6,
+      sharedRoutes: 3,
+      pruvaTotal: 27,
+      routes: const <PublicBoatRouteRef>[
+        PublicBoatRouteRef(
+            id: 'r1', name: '12 Adalar klasiği', distanceNm: 14, saveCount: 23),
+      ],
+    );
+    await tester.pumpWidget(_app(dolu));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('bc-story')), findsOneWidget);
+    expect(find.textContaining('direğe konan martıdan'), findsOneWidget);
+    expect(find.text('PAYLAŞILAN SEYİR'), findsOneWidget);
+    expect(find.text('27'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('bc-route-r1')), findsOneWidget);
+    expect(find.text('12 Adalar klasiği'), findsOneWidget);
+  });
+
 }

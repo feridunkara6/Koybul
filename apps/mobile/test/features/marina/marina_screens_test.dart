@@ -37,6 +37,8 @@ MyMarinaBoat serverBoat({bool visible = false, bool shareSpecs = false}) => MyMa
       marinaName: 'Martı Marina',
       visible: visible,
       shareSpecs: shareSpecs,
+      story: storySet ? story : mine?.story,
+      storyStatus: storySet && story != null ? 'pending' : 'approved',
     );
 
 MarinaCommunity community({
@@ -75,6 +77,8 @@ class FakeMarinaGateway implements MarinaGateway {
     required String marinaLocationId,
     required bool visible,
     required bool shareSpecs,
+    bool storySet = false,
+    String? story,
   }) async {
     upserts.add(<String, Object?>{
       'name': name,
@@ -86,6 +90,8 @@ class FakeMarinaGateway implements MarinaGateway {
       'marinaLocationId': marinaLocationId,
       'visible': visible,
       'shareSpecs': shareSpecs,
+      'storySet': storySet,
+      'story': story,
     });
     mine = MyMarinaBoat(
       boatId: 'b1',
@@ -97,6 +103,8 @@ class FakeMarinaGateway implements MarinaGateway {
       marinaName: 'Martı Marina',
       visible: visible,
       shareSpecs: shareSpecs,
+      story: storySet ? story : mine?.story,
+      storyStatus: storySet && story != null ? 'pending' : 'approved',
     );
     return mine!;
   }
@@ -191,6 +199,35 @@ void main() {
     await tester.pumpAndSettle();
     expect(gw.upserts.single['visible'], true);
     expect(gw.upserts.single['shareSpecs'], false); // diğer anahtar korunur
+  });
+
+  testWidgets('HİKÂYE (0024): satırdan sayfa açılır, kayıt storySet ile gider; '
+      'anahtar değişikliği hikâye GÖNDERMEZ', (WidgetTester tester) async {
+    final FakeMarinaGateway gw = FakeMarinaGateway(
+        mine: serverBoat(), communityResult: community());
+    await tester.pumpWidget(_app(
+        gw: gw, home: const MarinamCard(), localBoat: kLocalBoat, wrapCard: true));
+    await tester.pumpAndSettle();
+
+    // Anahtar dokunuşu hikâye alanı taşımaz (mevcut hikâye silinmesin!).
+    await tester.tap(find.byKey(const ValueKey<String>('marinam-visible')));
+    await tester.pumpAndSettle();
+    expect(gw.upserts.single['storySet'], false);
+
+    await tester.ensureVisible(find.byKey(const ValueKey<String>('marinam-story')));
+    await tester.tap(find.byKey(const ValueKey<String>('marinam-story')));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+        find.byKey(const ValueKey<String>('marinam-story-field')),
+        "2019'da Göcek'te teslim aldık; adı direğe konan martıdan.");
+    await tester.tap(find.byKey(const ValueKey<String>('marinam-story-save')));
+    await tester.pumpAndSettle();
+
+    expect(gw.upserts, hasLength(2));
+    expect(gw.upserts.last['storySet'], true);
+    expect('${gw.upserts.last['story']}', contains('Göcek'));
+    // Dürüst süreç mesajı: önce moderasyon.
+    expect(find.textContaining('onaya gönderildi'), findsOneWidget);
   });
 
   testWidgets('Topluluk: tam erişimde liste + gizli sayısı + rıza süzgeci',

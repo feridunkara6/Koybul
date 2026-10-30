@@ -20,6 +20,8 @@ const List<String?> kModerationTabs = <String?>[
   // KULLANICI ETKİNLİKLERİ (SP-4, kurucu onayı 2026-10-31): her kullanıcı
   // etkinliği onaydan geçer.
   'event',
+  // TEKNE HİKÂYESİ (0024, 2026-10-30): her hikâye yazımı onaydan geçer.
+  'boat_story',
   'media',
   'suggested_location',
   'location_report',

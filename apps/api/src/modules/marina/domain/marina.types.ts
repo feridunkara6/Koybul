@@ -51,6 +51,10 @@ export interface MyMarinaBoat {
   marina: { id: string; name: string } | null;
   visible: boolean;
   shareSpecs: boolean;
+  /** TEKNENİN HİKÂYESİ (0024): sahibin gördüğü güncel metin + durumu. */
+  story: string | null;
+  /** 'pending' | 'approved' | 'rejected' — sahibi durumu dürüstçe görür. */
+  storyStatus: string;
 }
 
 /** PUT /v1/marina/my-boat girdisi — tekneyi kaydeder/günceller ve marinaya bağlar. */
@@ -65,6 +69,8 @@ export interface UpsertMyBoatInput {
   marinaLocationId: string;
   visible: boolean;
   shareSpecs: boolean;
+  /** Teknenin hikâyesi (0024) — her değişiklik moderasyona düşer. */
+  story?: string | null;
 }
 
 export const MARINA_REPOSITORY = Symbol('MARINA_REPOSITORY');

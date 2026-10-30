@@ -31,6 +31,8 @@ interface MyBoatRow {
   marinaName: string | null;
   visible: boolean;
   shareSpecs: boolean;
+  story: string | null;
+  storyStatus: string;
 }
 
 function toMyBoat(r: MyBoatRow): MyMarinaBoat {
@@ -46,6 +48,8 @@ function toMyBoat(r: MyBoatRow): MyMarinaBoat {
       r.marinaId !== null && r.marinaName !== null ? { id: r.marinaId, name: r.marinaName } : null,
     visible: r.visible,
     shareSpecs: r.shareSpecs,
+    story: r.story,
+    storyStatus: r.storyStatus,
   };
 }
 
@@ -53,7 +57,8 @@ const MY_BOAT_SELECT = Prisma.sql`
   b.id AS "boatId", b.name, bt.code AS "boatTypeCode", b.length_m AS "lengthM",
   b.brand, b.model, b.build_year AS "buildYear",
   l.id AS "marinaId", l.name AS "marinaName",
-  b.visible_in_marina AS visible, b.share_specs AS "shareSpecs"
+  b.visible_in_marina AS visible, b.share_specs AS "shareSpecs",
+  b.story, b.story_status AS "storyStatus"
 `;
 
 @Injectable()
@@ -107,6 +112,16 @@ export class PrismaMarinaRepository implements MarinaRepository {
             home_marina_location_id = ${input.marinaLocationId}::uuid,
             visible_in_marina = ${input.visible},
             share_specs = ${input.shareSpecs},
+            -- TEKNENİN HİKÂYESİ (0024): alan GÖNDERİLMEDİYSE dokunulmaz
+            -- (anahtar değişikliği hikâyeyi silmesin!); yalnız metin
+            -- DEĞİŞİNCE 'pending' olur; silinen hikâye nötr 'approved'.
+            story = CASE WHEN ${input.story !== undefined}
+              THEN ${input.story ?? null} ELSE b.story END,
+            story_status = CASE
+              WHEN NOT ${input.story !== undefined} THEN b.story_status
+              WHEN ${input.story ?? null}::text IS NULL THEN 'approved'
+              WHEN b.story IS DISTINCT FROM ${input.story ?? null}::text THEN 'pending'
+              ELSE b.story_status END,
             updated_at = now()
           FROM mevcut WHERE b.id = mevcut.id
           RETURNING b.*
@@ -114,22 +129,37 @@ export class PrismaMarinaRepository implements MarinaRepository {
           INSERT INTO boats (owner_user_id, name, boat_type_id, length_m, brand,
                              model, build_year,
                              home_marina_location_id, visible_in_marina, share_specs,
-                             is_primary)
+                             is_primary, story, story_status)
           SELECT ${userId}::uuid, ${input.name},
                  (SELECT id FROM boat_types WHERE code = ${input.boatTypeCode}),
                  ${input.lengthM}, ${input.brand ?? null},
                  ${input.model ?? null}, ${input.buildYear ?? null},
                  ${input.marinaLocationId}::uuid, ${input.visible}, ${input.shareSpecs},
-                 true
+                 true, ${input.story ?? null},
+                 CASE WHEN ${input.story ?? null}::text IS NULL
+                      THEN 'approved' ELSE 'pending' END
           WHERE NOT EXISTS (SELECT 1 FROM mevcut)
           RETURNING *
         ), tekne AS (
           SELECT * FROM guncel UNION ALL SELECT * FROM yeni
+        ), hikaye_gorevi AS (
+          -- Bekleyen hikâye moderasyon kuyruğuna düşer; aynı tekne için
+          -- görev TEK satırdır — yeni metin eski kararı sıfırlayıp yeniden
+          -- 'pending' yapar (rota/not desenin tekne hâli).
+          INSERT INTO moderation_tasks (entity_type, entity_id, status)
+          SELECT 'boat_story'::moderation_entity, tekne.id,
+                 'pending'::moderation_status
+          FROM tekne WHERE tekne.story_status = 'pending'
+          ON CONFLICT (entity_type, entity_id) DO UPDATE SET
+            status = 'pending'::moderation_status,
+            decided_by_user_id = NULL, decided_at = NULL,
+            decision_note = NULL, updated_at = now()
         )
         SELECT b.id AS "boatId", b.name, bt.code AS "boatTypeCode",
                b.length_m AS "lengthM", b.brand, b.model, b.build_year AS "buildYear",
                l.id AS "marinaId", l.name AS "marinaName",
-               b.visible_in_marina AS visible, b.share_specs AS "shareSpecs"
+               b.visible_in_marina AS visible, b.share_specs AS "shareSpecs",
+               b.story, b.story_status AS "storyStatus"
         FROM tekne b
         JOIN boat_types bt ON bt.id = b.boat_type_id
         LEFT JOIN locations l ON l.id = b.home_marina_location_id

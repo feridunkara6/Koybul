@@ -190,6 +190,8 @@ export class PrismaBoatRepository implements BoatRepository {
         lengthM: true,
         shareSpecs: true,
         ownerUserId: true,
+        story: true,
+        storyStatus: true,
         boatType: { select: { code: true } },
         homeMarinaLocation: { select: { id: true, name: true } },
         owner: {
@@ -201,6 +203,33 @@ export class PrismaBoatRepository implements BoatRepository {
       },
     });
     if (!row) return null;
+    // Kart istatistikleri + rota listesi (0024): kaptanın ZATEN herkese
+    // açık içeriğinden türetilir — tek tur ham SQL, kopya veri saklanmaz.
+    const owner = row.ownerUserId;
+    const [statRows, routeRows] = await Promise.all([
+      this.prisma.$queryRaw<{ trips: number; pruva: number; routes: number }[]>(Prisma.sql`
+        SELECT
+          (SELECT count(*)::int FROM shared_trips t
+            WHERE t.user_id = ${owner}::uuid AND t.deleted_at IS NULL) AS trips,
+          (SELECT COALESCE(sum(t.pruva_count), 0)::int FROM shared_trips t
+            WHERE t.user_id = ${owner}::uuid AND t.deleted_at IS NULL) AS pruva,
+          (SELECT count(*)::int FROM routes r
+            WHERE r.user_id = ${owner}::uuid
+              AND r.status = 'approved'::moderation_status
+              AND r.deleted_at IS NULL) AS routes
+      `),
+      this.prisma.$queryRaw<
+        { id: string; name: string; distanceNm: unknown; saveCount: number }[]
+      >(Prisma.sql`
+        SELECT r.id, r.name, r.distance_nm AS "distanceNm",
+               r.save_count AS "saveCount"
+        FROM routes r
+        WHERE r.user_id = ${owner}::uuid
+          AND r.status = 'approved'::moderation_status AND r.deleted_at IS NULL
+        ORDER BY r.created_at DESC
+        LIMIT 5
+      `),
+    ]);
     const specs = row.shareSpecs;
     return {
       id: row.id,
@@ -218,6 +247,19 @@ export class PrismaBoatRepository implements BoatRepository {
         displayName: row.owner.profile?.displayName ?? 'Koybul Kaptanı',
         levelCode: row.owner.reputation?.levelCode ?? 'new',
       },
+      // Yalnız ONAYLI hikâye iner (bekleyen/reddedilen kartta yoktur).
+      story: row.storyStatus === 'approved' ? row.story : null,
+      stats: {
+        sharedTrips: Number(statRows[0]?.trips ?? 0),
+        sharedRoutes: Number(statRows[0]?.routes ?? 0),
+        pruvaTotal: Number(statRows[0]?.pruva ?? 0),
+      },
+      routes: routeRows.map((r) => ({
+        id: r.id,
+        name: r.name,
+        distanceNm: Number(r.distanceNm),
+        saveCount: r.saveCount,
+      })),
     };
   }
 

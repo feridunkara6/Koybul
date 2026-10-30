@@ -25,6 +25,8 @@ const upsertMyBoatSchema = z
     marinaLocationId: UUID,
     visible: z.boolean(),
     shareSpecs: z.boolean(),
+    /** Teknenin hikâyesi (0024) — moderasyonlu serbest metin. */
+    story: z.string().trim().min(10).max(600).nullable().optional(),
   })
   .strict();
 

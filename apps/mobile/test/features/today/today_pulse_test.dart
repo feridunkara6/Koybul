@@ -72,6 +72,8 @@ class _FakeMarinaGateway implements MarinaGateway {
     required String marinaLocationId,
     required bool visible,
     required bool shareSpecs,
+    bool storySet = false,
+    String? story,
   }) =>
       throw UnimplementedError('köprü kartı yazmaz');
 }

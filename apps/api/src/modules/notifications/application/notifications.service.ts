@@ -14,7 +14,7 @@ import {
 
 /** Moderasyon kuyruğuna düşebilen içerik türleri (admin bildirimi gövdesi). */
 export type ModerationKind =
-  'route' | 'question' | 'answer' | 'note' | 'review' | 'report' | 'event';
+  'route' | 'question' | 'answer' | 'note' | 'review' | 'report' | 'event' | 'boat_story';
 
 /**
  * Dil başına bildirim metinleri — l10n dosyaları MOBİLDE yaşar, sunucunun
@@ -64,6 +64,7 @@ const STRINGS: Record<'tr' | 'en' | 'es' | 'ru', LocaleStrings> = {
       review: 'yorum',
       report: 'şikâyet',
       event: 'etkinlik',
+      boat_story: 'tekne hikâyesi',
     },
     helpfulTitle: 'Notun işe yarıyor',
     helpfulBody: (title: string, count: number) =>
@@ -98,6 +99,7 @@ const STRINGS: Record<'tr' | 'en' | 'es' | 'ru', LocaleStrings> = {
       review: 'review',
       report: 'report',
       event: 'event',
+      boat_story: 'boat story',
     },
     helpfulTitle: 'Your note is helping',
     helpfulBody: (title: string, count: number) =>
@@ -132,6 +134,7 @@ const STRINGS: Record<'tr' | 'en' | 'es' | 'ru', LocaleStrings> = {
       review: 'reseña',
       report: 'denuncia',
       event: 'evento',
+      boat_story: 'historia del barco',
     },
     helpfulTitle: 'Tu nota está ayudando',
     helpfulBody: (title: string, count: number) =>
@@ -166,6 +169,7 @@ const STRINGS: Record<'tr' | 'en' | 'es' | 'ru', LocaleStrings> = {
       review: 'отзыв',
       report: 'жалоба',
       event: 'событие',
+      boat_story: 'история лодки',
     },
     helpfulTitle: 'Ваша заметка помогает',
     helpfulBody: (title: string, count: number) =>

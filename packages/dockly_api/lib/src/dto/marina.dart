@@ -89,6 +89,9 @@ class MyMarinaBoat {
     required this.marinaName,
     required this.visible,
     required this.shareSpecs,
+    // 0024: teknenin hikâyesi — eski sunucu yanıtlarıyla uyum için varsayılanlı.
+    this.story,
+    this.storyStatus = 'approved',
   });
 
   final String boatId;
@@ -105,6 +108,12 @@ class MyMarinaBoat {
   final bool visible;
   final bool shareSpecs;
 
+  /// TEKNENİN HİKÂYESİ (0024) — sahibin gördüğü güncel metin.
+  final String? story;
+
+  /// 'pending' | 'approved' | 'rejected' — durum sahibine dürüstçe söylenir.
+  final String storyStatus;
+
   factory MyMarinaBoat.fromJson(Map<String, dynamic> json) {
     final Map<String, dynamic>? marina = json['marina'] as Map<String, dynamic>?;
     return MyMarinaBoat(
@@ -119,6 +128,8 @@ class MyMarinaBoat {
       marinaName: marina?['name'] as String?,
       visible: json['visible'] as bool,
       shareSpecs: json['shareSpecs'] as bool,
+      story: json['story'] as String?,
+      storyStatus: (json['storyStatus'] as String?) ?? 'approved',
     );
   }
 }

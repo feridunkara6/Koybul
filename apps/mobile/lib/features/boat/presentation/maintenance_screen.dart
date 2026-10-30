@@ -7,6 +7,7 @@ import '../../../core/l10n/l10n_strings.dart';
 import '../application/maintenance_controller.dart';
 import '../data/maintenance_catalog.dart';
 import '../domain/maintenance.dart';
+import 'fuel_tab.dart';
 import 'maintenance_sheet.dart';
 
 /// BAKIM TAKİBİ ekranı (Teknem Konsept A, kullanıcı onayı 2026-08).
@@ -16,11 +17,19 @@ import 'maintenance_sheet.dart';
 /// tek satırlık özetten açılan BU ekranda yaşar — içerik ve davranış birebir
 /// taşındı (kalem satırları, "bugün yaptım" alt sayfası, dürüstlük notu).
 /// 0-uydurma ilkesi aynen: kayıt girilmedikçe hiçbir kalem durum İDDİA etmez.
-class MaintenanceScreen extends ConsumerWidget {
+class MaintenanceScreen extends ConsumerStatefulWidget {
   const MaintenanceScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MaintenanceScreen> createState() => _MaintenanceScreenState();
+}
+
+class _MaintenanceScreenState extends ConsumerState<MaintenanceScreen> {
+  /// 0 = Bakım · 1 = Yakıt (kurucu onayı 2026-10-30: iki sekmeli takip).
+  int _segment = 0;
+
+  @override
+  Widget build(BuildContext context) {
     final L10n t = ref.watch(l10nProvider);
     final ThemeData theme = Theme.of(context);
     final List<MaintenanceTask> tasks =
@@ -44,6 +53,34 @@ class MaintenanceScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
         children: <Widget>[
+          // SEKME ŞERİDİ (2026-10-30): Bakım | Yakıt — Defter segment deseni.
+          Container(
+            padding: const EdgeInsets.all(3),
+            margin: const EdgeInsets.only(bottom: 12),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHigh,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: <Widget>[
+                _SegBtn(
+                  keyValue: 'maint-tab-maint',
+                  label: '🔧 ${t.maintTabMaint}',
+                  selected: _segment == 0,
+                  onTap: () => setState(() => _segment = 0),
+                ),
+                _SegBtn(
+                  keyValue: 'maint-tab-fuel',
+                  label: '⛽ ${t.maintTabFuel}',
+                  selected: _segment == 1,
+                  onTap: () => setState(() => _segment = 1),
+                ),
+              ],
+            ),
+          ),
+          if (_segment == 1)
+            const FuelTab()
+          else ...<Widget>[
           Text(
             // Hiç kayıt yoksa ne yapılacağı anlatılır; hepsi güncelse övülür.
             needsAttention == 0 && logged > 0 ? t.maintAllGood : t.maintLead,
@@ -66,7 +103,59 @@ class MaintenanceScreen extends ConsumerWidget {
               height: 1.4,
             ),
           ),
+          ],
         ],
+      ),
+    );
+  }
+}
+
+/// Segment düğmesi — Etkinlikler/Defter şeridiyle aynı aile.
+class _SegBtn extends StatelessWidget {
+  const _SegBtn({
+    required this.keyValue,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String keyValue;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Expanded(
+      child: GestureDetector(
+        key: ValueKey<String>(keyValue),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: selected ? theme.colorScheme.surface : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: selected
+                ? <BoxShadow>[
+                    BoxShadow(
+                        color: Colors.black.withValues(alpha: .08),
+                        blurRadius: 4,
+                        offset: const Offset(0, 1)),
+                  ]
+                : null,
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            label,
+            style: theme.textTheme.labelMedium?.copyWith(
+              fontWeight: FontWeight.w800,
+              color: selected
+                  ? theme.colorScheme.onSurface
+                  : theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
       ),
     );
   }

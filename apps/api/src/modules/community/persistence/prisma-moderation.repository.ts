@@ -39,13 +39,15 @@ export class PrismaModerationRepository implements ModerationRepository {
       SELECT t.id AS "taskId", t.entity_type::text AS "entityType", t.entity_id AS "entityId",
              t.created_at AS "createdAt",
              COALESCE(n.kind::text, qq.category, qaq.category, ev.template) AS kind,
-             COALESCE(n.title, r.title, qq.title, qaq.title, rt.name, ev.title) AS title,
-             COALESCE(n.body, r.body, qq.body, qa.body, rt.body, ev.body) AS body,
+             COALESCE(n.title, r.title, qq.title, qaq.title, rt.name, ev.title,
+                      bs.name) AS title,
+             COALESCE(n.body, r.body, qq.body, qa.body, rt.body, ev.body,
+                      bs.story) AS body,
              COALESCE(ln.name, lr.name, ev.location_text) AS "locationName",
              n.observed_on AS "observedOn",
              n.gps_verified AS "gpsVerified",
              COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id, rt.user_id,
-                      ev.created_by) AS "authorId",
+                      ev.created_by, bs.owner_user_id) AS "authorId",
              p.display_name AS "displayName",
              COALESCE(rep.level_code, 'new') AS "levelCode",
              COALESCE(rep.approved_count, 0)::int AS "approvedCount",
@@ -67,14 +69,17 @@ export class PrismaModerationRepository implements ModerationRepository {
       -- Kullanıcı etkinliği (0023, SP-4): başlık + açıklama + yer metni.
       LEFT JOIN events ev
         ON t.entity_type = 'event' AND ev.id = t.entity_id
+      -- Teknenin hikâyesi (0024): tekne adı + hikâye metni önizlemeye gelir.
+      LEFT JOIN boats bs
+        ON t.entity_type = 'boat_story' AND bs.id = t.entity_id AND bs.deleted_at IS NULL
       LEFT JOIN locations ln ON ln.id = n.location_id
       LEFT JOIN locations lr ON lr.id = r.location_id
       LEFT JOIN user_profiles p
         ON p.user_id = COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id, rt.user_id,
-                                ev.created_by)
+                                ev.created_by, bs.owner_user_id)
       LEFT JOIN user_reputation rep
         ON rep.user_id = COALESCE(n.user_id, r.user_id, qq.user_id, qa.user_id, rt.user_id,
-                                  ev.created_by)
+                                  ev.created_by, bs.owner_user_id)
       WHERE t.status = 'pending' ${typeFilter}
       ORDER BY (t.entity_type = 'note' AND n.kind = 'hazard') DESC, t.created_at ASC
       LIMIT ${limit}
@@ -235,6 +240,21 @@ export class PrismaModerationRepository implements ModerationRepository {
         const rows = await tx.$queryRaw<{ id: string }[]>(Prisma.sql`
           UPDATE events SET status = ${next}, updated_at = now()
           WHERE id = ${entityId}::uuid AND status = 'pending'
+          RETURNING id
+        `);
+        if (rows.length === 0) return null;
+        return { entityType, entityId, ownerUserId: null, decision, noteKind: null, bodyLength: 0 };
+      }
+
+      if (entityType === 'boat_story') {
+        // Teknenin hikâyesi (0024): karar yalnız durumu günceller. Sahibi
+        // bu arada metni DEĞİŞTİRDİYSE durum yeniden 'pending' olmuştur —
+        // eski karar yeni metni EZMEZ (yalnız pending karara bağlanır).
+        const next = status === 'approved' ? 'approved' : 'rejected';
+        const rows = await tx.$queryRaw<{ id: string }[]>(Prisma.sql`
+          UPDATE boats SET story_status = ${next}, updated_at = now()
+          WHERE id = ${entityId}::uuid AND deleted_at IS NULL
+            AND story_status = 'pending'
           RETURNING id
         `);
         if (rows.length === 0) return null;

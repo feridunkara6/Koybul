@@ -43,6 +43,10 @@ class MarinaApi {
     required String marinaLocationId,
     required bool visible,
     required bool shareSpecs,
+    // 0024: hikâye alanı YALNIZ [storySet] true iken gövdeye yazılır —
+    // gönderilmeyen alan sunucuda mevcut hikâyeye DOKUNMAZ.
+    bool storySet = false,
+    String? story,
   }) async {
     try {
       final res = await _dio.put<Map<String, dynamic>>(
@@ -58,6 +62,7 @@ class MarinaApi {
           'marinaLocationId': marinaLocationId,
           'visible': visible,
           'shareSpecs': shareSpecs,
+          if (storySet) 'story': story,
         },
         options: _maybeAuth(accessToken),
       );

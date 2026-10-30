@@ -1,4 +1,5 @@
-import 'package:dockly_api/dockly_api.dart' show PublicBoatCard;
+import 'package:dockly_api/dockly_api.dart'
+    show PublicBoatCard, PublicBoatRouteRef;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../../marina/application/marina_controller.dart' show localBoatTypeId;
 import '../../profile/presentation/captain_profile_screen.dart';
+import '../../route/presentation/shared_route_detail_screen.dart';
 import '../application/boat_card_controller.dart';
 import 'boat_model_art.dart';
 import 'boat_photo_header.dart' show BoatArtView;
@@ -199,6 +201,95 @@ class _Body extends StatelessWidget {
             ),
           ),
         ),
+        // İSTATİSTİKLER (0024, kurucu onayı 2026-10-30): zaten paylaşılmış
+        // içerikten TÜRETİLİR — üçü de sıfırsa satır hiç çizilmez (0-uydurma).
+        if (b.sharedTrips > 0 || b.sharedRoutes > 0 || b.pruvaTotal > 0) ...<Widget>[
+          const SizedBox(height: 12),
+          Row(
+            children: <Widget>[
+              _BcStat(caption: t.bcStatTrips, value: '${b.sharedTrips}'),
+              const SizedBox(width: 8),
+              _BcStat(caption: t.bcStatRoutes, value: '${b.sharedRoutes}'),
+              const SizedBox(width: 8),
+              _BcStat(caption: t.bcStatPruva, value: '${b.pruvaTotal}'),
+            ],
+          ),
+        ],
+        // TEKNENİN HİKÂYESİ (0024): yalnız ONAYLI metin iner; boşsa çizilmez.
+        if (b.story != null && b.story!.trim().isNotEmpty) ...<Widget>[
+          const SizedBox(height: 16),
+          Text(t.bcStoryCap.toUpperCase(),
+              style: theme.textTheme.labelSmall?.copyWith(
+                  fontWeight: FontWeight.w800, letterSpacing: .8, color: sub)),
+          const SizedBox(height: 8),
+          Container(
+            key: const ValueKey<String>('bc-story'),
+            padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerLow,
+              borderRadius: BorderRadius.circular(12),
+              border: Border(
+                left: BorderSide(color: theme.colorScheme.primary, width: 3),
+                top: BorderSide(
+                    color: theme.dividerColor.withValues(alpha: .4)),
+                right: BorderSide(
+                    color: theme.dividerColor.withValues(alpha: .4)),
+                bottom: BorderSide(
+                    color: theme.dividerColor.withValues(alpha: .4)),
+              ),
+            ),
+            child: Text('“${b.story!.trim()}”',
+                style: theme.textTheme.bodyMedium
+                    ?.copyWith(fontStyle: FontStyle.italic, height: 1.45)),
+          ),
+        ],
+        // PAYLAŞTIĞI ROTALAR (0024): yalnız onaylı rotalar; boşsa çizilmez.
+        if (b.routes.isNotEmpty) ...<Widget>[
+          const SizedBox(height: 16),
+          Text(t.bcRoutesCap.toUpperCase(),
+              style: theme.textTheme.labelSmall?.copyWith(
+                  fontWeight: FontWeight.w800, letterSpacing: .8, color: sub)),
+          const SizedBox(height: 8),
+          for (final PublicBoatRouteRef r in b.routes)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Material(
+                color: theme.colorScheme.surfaceContainerLow,
+                borderRadius: BorderRadius.circular(12),
+                child: InkWell(
+                  key: ValueKey<String>('bc-route-${r.id}'),
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                        builder: (_) =>
+                            SharedRouteDetailScreen(routeId: r.id)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                    child: Row(
+                      children: <Widget>[
+                        const DocklyIcon(DocklyIcons.compass,
+                            size: 16, color: DocklyColors.brandPrimary),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(r.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.w700)),
+                        ),
+                        Text(
+                          '${_num(r.distanceNm)} ${t.nmUnit} · 💾 ${r.saveCount}',
+                          style: theme.textTheme.labelSmall
+                              ?.copyWith(color: sub),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
         const SizedBox(height: 12),
         // GİZLİLİK DÜRÜSTLÜĞÜ: kart neden var, ne zaman kaybolur.
         Container(
@@ -219,4 +310,45 @@ class _Body extends StatelessWidget {
 
   static String _num(double v) =>
       v == v.roundToDouble() ? '${v.round()}' : v.toStringAsFixed(1).replaceAll('.', ',');
+}
+
+/// Kart istatistik hücresi (0024) — kaptan kartındaki _Stat ile aynı dil.
+class _BcStat extends StatelessWidget {
+  const _BcStat({required this.caption, required this.value});
+
+  final String caption;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: theme.dividerColor.withValues(alpha: .4)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.titleMedium
+                    ?.copyWith(fontWeight: FontWeight.w800)),
+            const SizedBox(height: 2),
+            Text(caption,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: .4)),
+          ],
+        ),
+      ),
+    );
+  }
 }

@@ -69,6 +69,10 @@ class FakeMarinaRepo implements MarinaRepository {
       marina: this.marinas.get(input.marinaLocationId) ?? null,
       visible: input.visible,
       shareSpecs: input.shareSpecs,
+      // 0024: hikâye — sahte geçit gerçek repoyla aynı kuralı taklit eder
+      // (metin verildiyse 'pending', boşsa nötr 'approved').
+      story: input.story ?? null,
+      storyStatus: input.story == null ? 'approved' : 'pending',
     };
     this.myBoat = boat;
     return Promise.resolve(boat);
@@ -175,5 +179,30 @@ describe('MarinaService (Marina Topluluğu V1 — kurucu onayı 2026-10-23)', ()
     const mine = await svc.myBoat(member());
     expect(mine?.name).toBe('Martı');
     expect(mine?.visible).toBe(true);
+  });
+});
+
+describe('TEKNENİN HİKÂYESİ (0024, kurucu onayı 2026-10-30)', () => {
+  it('hikâye verilen upsert pending döner; hikâyesiz upsert nötr approved', async () => {
+    const { svc, repo } = makeSvc({ enforce: true });
+    repo.marinas.set('m1', { id: 'm1', name: 'Örnek Marina' });
+    const base = {
+      name: 'Martı',
+      boatTypeCode: 'sailboat',
+      lengthM: 11.5,
+      marinaLocationId: 'm1',
+      visible: true,
+      shareSpecs: true,
+    };
+    const yok = await svc.upsertMyBoat(member(), base);
+    expect(yok.storyStatus).toBe('approved');
+    expect(yok.story).toBeNull();
+
+    const var_ = await svc.upsertMyBoat(member(), {
+      ...base,
+      story: "2019'da Göcek'te teslim aldık; adı direğe konan martıdan.",
+    });
+    expect(var_.storyStatus).toBe('pending'); // moderasyon onayı bekler
+    expect(var_.story).toContain('Göcek');
   });
 });

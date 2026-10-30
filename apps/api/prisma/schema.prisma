@@ -736,6 +736,11 @@ model Boat {
   homeMarinaLocationId String? @map("home_marina_location_id") @db.Uuid
   visibleInMarina    Boolean   @default(false) @map("visible_in_marina")
   shareSpecs         Boolean   @default(false) @map("share_specs")
+  /// TEKNENİN HİKÂYESİ (0024, kurucu onayı 2026-10-30): sahibinin kısa
+  /// tanıtımı — serbest metin, moderasyonlu; boşsa kartta bölüm çizilmez.
+  story              String?
+  /// 'pending' | 'approved' | 'rejected' (DB CHECK) — hikâye moderasyonu.
+  storyStatus        String    @default("approved") @map("story_status")
   createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
   deletedAt          DateTime? @map("deleted_at") @db.Timestamptz(6)

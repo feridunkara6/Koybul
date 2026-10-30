@@ -41,6 +41,9 @@ class _MarinamCardState extends ConsumerState<MarinamCard> {
     required MyBoat local,
     required bool visible,
     required bool shareSpecs,
+    // 0024: hikâye yalnız [withStory] true iken gönderilir.
+    bool withStory = false,
+    String? story,
   }) async {
     if (_busy) return;
     final String? typeCode = serverBoatTypeCode(local.typeId);
@@ -63,7 +66,13 @@ class _MarinamCardState extends ConsumerState<MarinamCard> {
             marinaLocationId: local.homeMarina!.id,
             visible: visible,
             shareSpecs: shareSpecs,
+            storySet: withStory,
+            story: story,
           );
+      if (withStory && story != null) {
+        // Dürüst süreç: hikâye önce moderasyona gider, sonra kartta görünür.
+        _snack(ref.read(l10nProvider).mnStorySent);
+      }
       ref.invalidate(myServerBoatProvider);
       ref.invalidate(marinaCommunityProvider(local.homeMarina!.id));
     } on AppFailure catch (f) {
@@ -71,6 +80,76 @@ class _MarinamCardState extends ConsumerState<MarinamCard> {
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  /// TEKNENİN HİKÂYESİ (0024): kısa metin sayfası — kaydet, moderasyona
+  /// gitsin; boş bırakmak hikâyeyi kaldırır (nötr durum).
+  Future<void> _editStory(MyBoat local, MyMarinaBoat mine) async {
+    final L10n t = ref.read(l10nProvider);
+    final TextEditingController ctrl =
+        TextEditingController(text: mine.story ?? '');
+    final String? result = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (BuildContext sheetContext) => Padding(
+        padding: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Text(t.mnStoryTitle,
+                style: Theme.of(sheetContext)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(fontWeight: FontWeight.w800)),
+            const SizedBox(height: 10),
+            TextField(
+              key: const ValueKey<String>('marinam-story-field'),
+              controller: ctrl,
+              minLines: 3,
+              maxLines: 6,
+              maxLength: 600,
+              autofocus: true,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                hintText: t.mnStoryHint,
+                border: const OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 8),
+            FilledButton(
+              key: const ValueKey<String>('marinam-story-save'),
+              onPressed: () =>
+                  Navigator.of(sheetContext).pop(ctrl.text.trim()),
+              child: Text(t.saveLabel),
+            ),
+            const SizedBox(height: 6),
+            Text(t.mnStoryModNote,
+                textAlign: TextAlign.center,
+                style: Theme.of(sheetContext).textTheme.bodySmall?.copyWith(
+                    color:
+                        Theme.of(sheetContext).colorScheme.onSurfaceVariant)),
+          ],
+        ),
+      ),
+    );
+    ctrl.dispose();
+    if (result == null || !mounted) return; // vazgeçti
+    if (result.isNotEmpty && result.length < 10) {
+      _snack(t.mnStoryShort);
+      return;
+    }
+    await _put(
+      local: local,
+      visible: mine.visible,
+      shareSpecs: mine.shareSpecs,
+      withStory: true,
+      story: result.isEmpty ? null : result,
+    );
   }
 
   @override
@@ -194,6 +273,7 @@ class _MarinamCardState extends ConsumerState<MarinamCard> {
                 _put(local: boat, visible: v, shareSpecs: mine.shareSpecs),
             onSpecs: (bool v) =>
                 _put(local: boat, visible: mine.visible, shareSpecs: v),
+            onStory: () => _editStory(boat, mine),
           );
         },
       ),
@@ -259,6 +339,7 @@ class _JoinedBody extends ConsumerWidget {
     required this.onSee,
     required this.onVisible,
     required this.onSpecs,
+    required this.onStory,
   });
 
   final L10n t;
@@ -268,6 +349,7 @@ class _JoinedBody extends ConsumerWidget {
   final VoidCallback onSee;
   final ValueChanged<bool> onVisible;
   final ValueChanged<bool> onSpecs;
+  final VoidCallback onStory;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -347,6 +429,55 @@ class _JoinedBody extends ConsumerWidget {
           title: t.marinamSpecsToggle,
           value: mine.shareSpecs,
           onChanged: onSpecs,
+        ),
+        // TEKNENİN HİKÂYESİ (0024): kart vitrinine kısa tanıtım — her
+        // kaydediş moderasyona düşer; durum burada dürüstçe görünür.
+        InkWell(
+          key: const ValueKey<String>('marinam-story'),
+          borderRadius: BorderRadius.circular(10),
+          onTap: busy ? null : onStory,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 7),
+            child: Row(children: <Widget>[
+              Expanded(
+                child: Text(
+                  mine.story == null ? t.mnStoryAdd : t.mnStoryTitle,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                      color: Colors.white, fontWeight: FontWeight.w700),
+                ),
+              ),
+              if (mine.story != null && mine.storyStatus == 'pending')
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(999)),
+                  child: Text(t.rtPendingChip,
+                      style: const TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w800,
+                          color: DocklyColors.warning)),
+                )
+              else if (mine.story != null && mine.storyStatus == 'rejected')
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(999)),
+                  child: Text(t.evRejectedChip,
+                      style: const TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w800,
+                          color: DocklyColors.error)),
+                ),
+              const SizedBox(width: 6),
+              const Text('›',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w800)),
+            ]),
+          ),
         ),
         Text(
           '🔒 ${t.marinamPrivacyNote}',

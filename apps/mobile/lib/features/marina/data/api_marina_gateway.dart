@@ -33,6 +33,8 @@ class ApiMarinaGateway implements MarinaGateway {
     required String marinaLocationId,
     required bool visible,
     required bool shareSpecs,
+    bool storySet = false,
+    String? story,
   }) async =>
       _api.upsertMyBoat(
         accessToken: await _requiredToken(),
@@ -45,6 +47,8 @@ class ApiMarinaGateway implements MarinaGateway {
         marinaLocationId: marinaLocationId,
         visible: visible,
         shareSpecs: shareSpecs,
+        storySet: storySet,
+        story: story,
       );
 
   @override
