@@ -84,60 +84,21 @@ class _MarinamCardState extends ConsumerState<MarinamCard> {
 
   /// TEKNENİN HİKÂYESİ (0024): kısa metin sayfası — kaydet, moderasyona
   /// gitsin; boş bırakmak hikâyeyi kaldırır (nötr durum).
+  /// NOT (CI dersi 2026-10-30): metin denetleyicisi SAYFANIN İÇİNDE yaşar —
+  /// dışarıda tutup kapanışta imha etmek, kapanış animasyonu süren alanı
+  /// "disposed controller" ile çökertti.
   Future<void> _editStory(MyBoat local, MyMarinaBoat mine) async {
     final L10n t = ref.read(l10nProvider);
-    final TextEditingController ctrl =
-        TextEditingController(text: mine.story ?? '');
     final String? result = await showModalBottomSheet<String>(
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
       builder: (BuildContext sheetContext) => Padding(
         padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Text(t.mnStoryTitle,
-                style: Theme.of(sheetContext)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w800)),
-            const SizedBox(height: 10),
-            TextField(
-              key: const ValueKey<String>('marinam-story-field'),
-              controller: ctrl,
-              minLines: 3,
-              maxLines: 6,
-              maxLength: 600,
-              autofocus: true,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
-                hintText: t.mnStoryHint,
-                border: const OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 8),
-            FilledButton(
-              key: const ValueKey<String>('marinam-story-save'),
-              onPressed: () =>
-                  Navigator.of(sheetContext).pop(ctrl.text.trim()),
-              child: Text(t.saveLabel),
-            ),
-            const SizedBox(height: 6),
-            Text(t.mnStoryModNote,
-                textAlign: TextAlign.center,
-                style: Theme.of(sheetContext).textTheme.bodySmall?.copyWith(
-                    color:
-                        Theme.of(sheetContext).colorScheme.onSurfaceVariant)),
-          ],
-        ),
+            bottom: MediaQuery.of(sheetContext).viewInsets.bottom),
+        child: _StorySheet(initial: mine.story ?? ''),
       ),
     );
-    ctrl.dispose();
     if (result == null || !mounted) return; // vazgeçti
     if (result.isNotEmpty && result.length < 10) {
       _snack(t.mnStoryShort);
@@ -508,6 +469,79 @@ class _WhiteButton extends StatelessWidget {
         textStyle: const TextStyle(fontWeight: FontWeight.w800),
       ),
       child: Text(label),
+    );
+  }
+}
+
+
+/// Hikâye yazma sayfası (0024) — denetleyici BU durumun malıdır; sayfa
+/// kapanırken Flutter kendi düzeninde imha eder (yakıt sayfası deseni).
+class _StorySheet extends ConsumerStatefulWidget {
+  const _StorySheet({required this.initial});
+
+  final String initial;
+
+  @override
+  ConsumerState<_StorySheet> createState() => _StorySheetState();
+}
+
+class _StorySheetState extends ConsumerState<_StorySheet> {
+  late final TextEditingController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = TextEditingController(text: widget.initial);
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final L10n t = ref.watch(l10nProvider);
+    final ThemeData theme = Theme.of(context);
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Text(t.mnStoryTitle,
+                style: theme.textTheme.titleMedium
+                    ?.copyWith(fontWeight: FontWeight.w800)),
+            const SizedBox(height: 10),
+            TextField(
+              key: const ValueKey<String>('marinam-story-field'),
+              controller: _ctrl,
+              minLines: 3,
+              maxLines: 6,
+              maxLength: 600,
+              autofocus: true,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                hintText: t.mnStoryHint,
+                border: const OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 8),
+            FilledButton(
+              key: const ValueKey<String>('marinam-story-save'),
+              onPressed: () => Navigator.of(context).pop(_ctrl.text.trim()),
+              child: Text(t.saveLabel),
+            ),
+            const SizedBox(height: 6),
+            Text(t.mnStoryModNote,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+          ],
+        ),
+      ),
     );
   }
 }

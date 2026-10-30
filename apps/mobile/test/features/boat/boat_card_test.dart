@@ -100,7 +100,9 @@ void main() {
     expect(find.byKey(const ValueKey<String>('cp-name')), findsOneWidget);
   });
 
-  testWidgets('0024: hikâye + istatistik + rota bölümleri çizilir; boşsa çizilmez',
+  // CI dersi (2026-10-30): aynı ağaca ikinci kez farklı aile sahtesi vermek
+  // önbellekteki eski veriyi YENİLEMEZ — boş/dolu kart iki AYRI testte sınanır.
+  testWidgets('0024 BOŞ KART: hikâye/istatistik/rota bölümleri çizilmez',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(800, 2000);
     tester.view.devicePixelRatio = 1.0;
@@ -110,8 +112,13 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey<String>('bc-story')), findsNothing);
     expect(find.text('PAYLAŞILAN SEYİR'), findsNothing);
+  });
 
-    // Dolu kart: üç bölüm de çizilir, rota satırı dokunulabilir.
+  testWidgets('0024 DOLU KART: hikâye + istatistik + rota bölümleri çizilir',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 2000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
     // (const: CI dersi — analizör --fatal-infos ile info'yu da kırmızı sayar.)
     const PublicBoatCard dolu = PublicBoatCard(
       id: 'b-marti',
