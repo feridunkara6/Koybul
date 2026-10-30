@@ -3,10 +3,19 @@ import { uuidv7 } from 'uuidv7';
 import { AppProblem, FieldError } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
 import { BOAT_REPOSITORY, BoatRepository, LookupIds } from '../domain/boat.repository';
-import { Boat, CreateBoatInput, PublicBoatCard, UpdateBoatInput } from '../domain/boat.types';
+import {
+  Boat,
+  CreateBoatInput,
+  FavoriteBoatRef,
+  PublicBoatCard,
+  UpdateBoatInput,
+} from '../domain/boat.types';
 
 /** Hesap başına aktif tekne tavanı — kötüye kullanım freni (docs/29 SEC-14 ruhu). */
 const MAX_BOATS_PER_OWNER = 25;
+
+/** Kişi başına favori tavanı — kötüye kullanım freni (takip tavanıyla aynı ruh). */
+const MAX_FAVORITES_PER_USER = 200;
 
 @Injectable()
 export class BoatsService {
@@ -31,6 +40,32 @@ export class BoatsService {
     const card = await this.boats.publicCard(boatId);
     if (!card) throw new AppProblem('not-found');
     return card;
+  }
+
+  /**
+   * FAVORİLE (TK-5, 0025): ücretsiz üyelik yeter (guard katmanı), sessiz —
+   * sahibine bildirim gitmez. Görünmez/silinmiş/kendi teknesi → kartla aynı
+   * 404 (varlık sızdırmaz). Tekrar favorileme idempotenttir.
+   */
+  async favorite(principal: Principal, boatId: string): Promise<void> {
+    const count = await this.boats.countFavoritesByUser(principal.userId);
+    if (count >= MAX_FAVORITES_PER_USER) {
+      throw new AppProblem(
+        'conflict-state',
+        `En fazla ${MAX_FAVORITES_PER_USER} tekne favorilenebilir.`,
+      );
+    }
+    const ok = await this.boats.addFavorite(principal.userId, boatId);
+    if (!ok) throw new AppProblem('not-found');
+  }
+
+  /** Favoriden çıkarma idempotenttir — olmayan kayıt sessizce geçer (204). */
+  async unfavorite(principal: Principal, boatId: string): Promise<void> {
+    await this.boats.removeFavorite(principal.userId, boatId);
+  }
+
+  async listFavorites(principal: Principal): Promise<FavoriteBoatRef[]> {
+    return this.boats.listFavorites(principal.userId);
   }
 
   async create(principal: Principal, input: CreateBoatInput): Promise<Boat> {

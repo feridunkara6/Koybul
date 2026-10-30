@@ -18,7 +18,7 @@ import { AccountGuard, RequireAccount } from '../../../common/guards/account.gua
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
-import { Boat, PublicBoatCard } from '../domain/boat.types';
+import { Boat, FavoriteBoatRef, PublicBoatCard } from '../domain/boat.types';
 
 const CURRENT_YEAR = 2026;
 
@@ -82,6 +82,25 @@ export class BoatsController {
   async create(@CurrentUser() principal: Principal, @Body() body: unknown): Promise<Boat> {
     const dto = createBoatSchema.parse(body);
     return this.boatsService.create(principal, dto);
+  }
+
+  // FAVORİLE (TK-5, 0025). DİKKAT: 'favorites' rotası ':id'den ÖNCE
+  // bildirilmeli — Nest bildirim sırasıyla eşler, yoksa ':id' yutar.
+  @Get('favorites')
+  async favorites(@CurrentUser() principal: Principal): Promise<{ data: FavoriteBoatRef[] }> {
+    return { data: await this.boatsService.listFavorites(principal) };
+  }
+
+  @Post(':id/favorite')
+  @HttpCode(204)
+  async favorite(@CurrentUser() principal: Principal, @Param('id') id: string): Promise<void> {
+    await this.boatsService.favorite(principal, this.parseId(id));
+  }
+
+  @Delete(':id/favorite')
+  @HttpCode(204)
+  async unfavorite(@CurrentUser() principal: Principal, @Param('id') id: string): Promise<void> {
+    await this.boatsService.unfavorite(principal, this.parseId(id));
   }
 
   @Get(':id')

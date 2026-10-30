@@ -24,4 +24,35 @@ class BoatsApi {
       throw mapDioError(error);
     }
   }
+
+  /// FAVORİLE (TK-5, kurucu onayı 2026-10-30) — üyelik ister, idempotent.
+  /// Görünmez/silinmiş/kendi teknesi kartla aynı `not-found`u alır.
+  Future<void> favorite(String boatId) async {
+    try {
+      await _dio.post<void>('/v1/boats/$boatId/favorite');
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  /// Favoriden çıkar — idempotent (olmayan kayıt sessizce geçer).
+  Future<void> unfavorite(String boatId) async {
+    try {
+      await _dio.delete<void>('/v1/boats/$boatId/favorite');
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  /// Kişinin favori listesi — yalnız HÂLÂ görünür tekneler iner.
+  Future<List<FavoriteBoatRef>> favorites() async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>('/v1/boats/favorites');
+      return ((res.data?['data'] as List<dynamic>?) ?? const <dynamic>[])
+          .map((dynamic e) => FavoriteBoatRef.fromJson(e as Map<String, dynamic>))
+          .toList(growable: false);
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
 }

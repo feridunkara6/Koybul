@@ -28,6 +28,10 @@ class PublicBoatCard {
     this.sharedRoutes = 0,
     this.pruvaTotal = 0,
     this.routes = const <PublicBoatRouteRef>[],
+    // TK-5 (0025, kurucu onayı 2026-10-30): favori + takipçi + kardeşler.
+    this.favoriteCount = 0,
+    this.captainFollowers = 0,
+    this.sisters = const <PublicBoatSisterRef>[],
   });
 
   final String id;
@@ -58,6 +62,15 @@ class PublicBoatCard {
 
   /// Kaptanın ONAYLI rotaları (en yeni 5) — rota detayına köprü.
   final List<PublicBoatRouteRef> routes;
+
+  /// FAVORİLE (TK-5): toplam sayı — kimlerin favorilediği İNMEZ (gizlilik).
+  final int favoriteCount;
+
+  /// Kaptanın takipçi sayısı (kurucu isteği 2026-10-30).
+  final int captainFollowers;
+
+  /// KARDEŞ TEKNELER (TK-5): aynı marka+model, çifte rızalı tekneler.
+  final List<PublicBoatSisterRef> sisters;
 
   factory PublicBoatCard.fromJson(Map<String, dynamic> json) {
     final Map<String, dynamic>? marina = json['marina'] as Map<String, dynamic>?;
@@ -92,8 +105,68 @@ class PublicBoatCard {
           .map((dynamic e) =>
               PublicBoatRouteRef.fromJson(e as Map<String, dynamic>))
           .toList(growable: false),
+      favoriteCount: (json['favoriteCount'] as num?)?.toInt() ?? 0,
+      captainFollowers: (json['captainFollowers'] as num?)?.toInt() ?? 0,
+      sisters: ((json['sisters'] as List<dynamic>?) ?? const <dynamic>[])
+          .map((dynamic e) =>
+              PublicBoatSisterRef.fromJson(e as Map<String, dynamic>))
+          .toList(growable: false),
     );
   }
+}
+
+/// Karttaki tek kardeş tekne satırı (TK-5) — herkese açık asgari alanlar.
+class PublicBoatSisterRef {
+  const PublicBoatSisterRef({
+    required this.id,
+    required this.name,
+    required this.boatTypeCode,
+    required this.marinaName,
+  });
+
+  final String id;
+  final String name;
+  final String boatTypeCode;
+  final String? marinaName;
+
+  factory PublicBoatSisterRef.fromJson(Map<String, dynamic> json) =>
+      PublicBoatSisterRef(
+        id: json['id'] as String,
+        name: json['name'] as String,
+        boatTypeCode: json['boatTypeCode'] as String? ?? 'other',
+        marinaName: json['marinaName'] as String?,
+      );
+}
+
+/// `GET /v1/boats/favorites` satırı — kişinin kendi favori listesi (TK-5).
+class FavoriteBoatRef {
+  const FavoriteBoatRef({
+    required this.id,
+    required this.name,
+    required this.boatTypeCode,
+    required this.brand,
+    required this.model,
+    required this.marinaName,
+  });
+
+  final String id;
+  final String name;
+  final String boatTypeCode;
+
+  /// Teknik rıza kapalıysa ikisi birden null.
+  final String? brand;
+  final String? model;
+  final String? marinaName;
+
+  factory FavoriteBoatRef.fromJson(Map<String, dynamic> json) =>
+      FavoriteBoatRef(
+        id: json['id'] as String,
+        name: json['name'] as String,
+        boatTypeCode: json['boatTypeCode'] as String? ?? 'other',
+        brand: json['brand'] as String?,
+        model: json['model'] as String?,
+        marinaName: json['marinaName'] as String?,
+      );
 }
 
 /// Karttaki tek rota satırı (0024) — rota detayına köprü.

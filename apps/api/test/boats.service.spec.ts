@@ -3,6 +3,7 @@ import { BoatRepository, LookupResolution } from '../src/modules/boats/domain/bo
 import {
   Boat,
   CreateBoatInput,
+  FavoriteBoatRef,
   PublicBoatCard,
   UpdateBoatInput,
 } from '../src/modules/boats/domain/boat.types';
@@ -104,6 +105,37 @@ class FakeBoatRepo implements BoatRepository {
   async publicCard(boatId: string): Promise<PublicBoatCard | null> {
     return this.publicCards.get(boatId) ?? null;
   }
+  // FAVORİLE (TK-5, 0025): görünür kartı olan tekne favorilenebilir.
+  favorites = new Set<string>(); // "userId|boatId"
+  async addFavorite(userId: string, boatId: string): Promise<boolean> {
+    const card = this.publicCards.get(boatId);
+    if (!card || card.captain.userId === userId) return false;
+    this.favorites.add(`${userId}|${boatId}`);
+    return true;
+  }
+  async removeFavorite(userId: string, boatId: string): Promise<void> {
+    this.favorites.delete(`${userId}|${boatId}`);
+  }
+  async countFavoritesByUser(userId: string): Promise<number> {
+    return [...this.favorites].filter((k) => k.startsWith(`${userId}|`)).length;
+  }
+  async listFavorites(userId: string): Promise<FavoriteBoatRef[]> {
+    return [...this.favorites]
+      .filter((k) => k.startsWith(`${userId}|`))
+      .map((k) => k.split('|')[1])
+      .filter((id) => this.publicCards.has(id)) // yalnız hâlâ görünür tekneler
+      .map((id) => {
+        const c = this.publicCards.get(id)!;
+        return {
+          id: c.id,
+          name: c.name,
+          boatTypeCode: c.boatTypeCode,
+          brand: c.brand,
+          model: c.model,
+          marinaName: c.marina?.name ?? null,
+        };
+      });
+  }
 }
 
 describe('BoatsService (birincil tekne + doğrulama, docs/23 §10 #7)', () => {
@@ -194,6 +226,10 @@ describe('BoatsService (birincil tekne + doğrulama, docs/23 §10 #7)', () => {
       story: null,
       stats: { sharedTrips: 0, sharedRoutes: 0, pruvaTotal: 0 },
       routes: [],
+      // TK-5 (0025): favori sayısı + kaptan takipçisi + kardeş tekneler.
+      favoriteCount: 0,
+      captainFollowers: 0,
+      sisters: [],
     };
     repo.publicCards.set('b-marti', card);
 
@@ -201,6 +237,57 @@ describe('BoatsService (birincil tekne + doğrulama, docs/23 §10 #7)', () => {
     // Depo null dedi (görünmez/silinmiş/yok) → servis ayrım sızdırmadan 404.
     await expect(service.publicCard('b-gizli')).rejects.toMatchObject({
       problemType: 'not-found',
+    });
+  });
+
+  describe('FAVORİLE (TK-5, 0025 — kurucu onayı 2026-10-30)', () => {
+    const kart = (id: string, captainId: string): PublicBoatCard => ({
+      id,
+      name: 'Martı',
+      boatTypeCode: 'sailboat',
+      brand: null,
+      model: null,
+      lengthM: null,
+      buildYear: null,
+      marina: { id: 'loc-1', name: 'Martı Marina' },
+      captain: { userId: captainId, displayName: 'Kaptan', levelCode: 'new' },
+      story: null,
+      stats: { sharedTrips: 0, sharedRoutes: 0, pruvaTotal: 0 },
+      routes: [],
+      favoriteCount: 0,
+      captainFollowers: 0,
+      sisters: [],
+    });
+
+    it('görünür tekne favorilenir; liste kendi favorilerini döner', async () => {
+      repo.publicCards.set('b1', kart('b1', 'baska-kaptan'));
+      await service.favorite(P, 'b1');
+      await service.favorite(P, 'b1'); // idempotent — hata yok
+      const list = await service.listFavorites(P);
+      expect(list).toHaveLength(1);
+      expect(list[0].id).toBe('b1');
+    });
+
+    it('görünmez/yok tekne ile KENDİ teknesi AYNI 404 (sızdırmaz)', async () => {
+      await expect(service.favorite(P, 'yok')).rejects.toMatchObject({
+        problemType: 'not-found',
+      });
+      repo.publicCards.set('benim', kart('benim', P.userId));
+      await expect(service.favorite(P, 'benim')).rejects.toMatchObject({
+        problemType: 'not-found',
+      });
+    });
+
+    it('favoriden çıkarma idempotenttir; görünürlük kapanınca listeden düşer', async () => {
+      repo.publicCards.set('b1', kart('b1', 'baska-kaptan'));
+      await service.favorite(P, 'b1');
+      await service.unfavorite(P, 'b1');
+      await service.unfavorite(P, 'b1'); // ikinci kez — sessiz
+      expect(await service.listFavorites(P)).toHaveLength(0);
+      // Rıza ilkesi: favori kayıtlı ama tekne görünmez olunca listelenmez.
+      await service.favorite(P, 'b1');
+      repo.publicCards.delete('b1');
+      expect(await service.listFavorites(P)).toHaveLength(0);
     });
   });
 });

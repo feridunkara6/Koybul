@@ -44,6 +44,33 @@ export interface PublicBoatCard {
   stats: { sharedTrips: number; sharedRoutes: number; pruvaTotal: number };
   /** Kaptanın ONAYLI rotaları (en yeni 5) — rota detayına köprü. */
   routes: PublicBoatRouteRef[];
+  /** FAVORİLE (TK-5, 0025): toplam sayı — kimlerin favorilediği inmez. */
+  favoriteCount: number;
+  /** Kaptanın takipçi sayısı (0021'den türetilir; kurucu isteği 2026-10-30). */
+  captainFollowers: number;
+  /**
+   * KARDEŞ TEKNELER (TK-5): aynı marka+model, yalnız görünür VE teknik
+   * bilgisini paylaşan tekneler (çifte rıza). Eşleşme yoksa boş liste.
+   */
+  sisters: PublicBoatSisterRef[];
+}
+
+/** Karttaki tek kardeş tekne satırı — herkese açık asgari alanlar. */
+export interface PublicBoatSisterRef {
+  id: string;
+  name: string;
+  boatTypeCode: string;
+  marinaName: string | null;
+}
+
+/** GET /v1/me/favorite-boats satırı — kişinin kendi favori listesi. */
+export interface FavoriteBoatRef {
+  id: string;
+  name: string;
+  boatTypeCode: string;
+  brand: string | null;
+  model: string | null;
+  marinaName: string | null;
 }
 
 /** Karttaki tek rota satırı — herkese açık alanlar. */

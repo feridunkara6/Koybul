@@ -1,14 +1,18 @@
 import 'package:dockly_api/dockly_api.dart'
-    show PublicBoatCard, PublicBoatRouteRef;
+    show PublicBoatCard, PublicBoatRouteRef, PublicBoatSisterRef;
 import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../auth/application/auth_controller.dart';
+import '../../auth/domain/auth_state.dart';
+import '../../auth/presentation/account_gate.dart' show requireAccount;
 import '../../marina/application/marina_controller.dart' show localBoatTypeId;
 import '../../profile/presentation/captain_profile_screen.dart';
 import '../../route/presentation/shared_route_detail_screen.dart';
 import '../application/boat_card_controller.dart';
+import '../application/favorites_controller.dart';
 import 'boat_model_art.dart';
 import 'boat_photo_header.dart' show BoatArtView;
 import 'boat_type_art.dart';
@@ -114,6 +118,13 @@ class _Body extends StatelessWidget {
                   ),
                 ),
               ),
+              // FAVORİLE (TK-5, kurucu onayı 2026-10-30): sessiz beğeni —
+              // misafir dokununca hesaba davet; kendi teknesinde kalp yok.
+              Positioned(
+                top: 8,
+                right: 8,
+                child: _FavoriteButton(b: b, t: t),
+              ),
               // KAYNAK ETİKETİ — dürüstlük çipi (Teknem'dekiyle aynı dil).
               Positioned(
                 top: 8,
@@ -188,10 +199,16 @@ class _Body extends StatelessWidget {
                         Text(b.captainName,
                             style: theme.textTheme.titleSmall
                                 ?.copyWith(fontWeight: FontWeight.w800)),
-                        Text(t.levelLabel(b.captainLevelCode),
-                            style: theme.textTheme.bodySmall?.copyWith(
-                                color: DocklyColors.accentTurquoise,
-                                fontWeight: FontWeight.w700)),
+                        // TAKİPÇİ SAYISI (TK-5, kurucu isteği 2026-10-30):
+                        // yalnız sıfırdan büyükse eklenir (0-uydurma).
+                        Text(
+                          b.captainFollowers > 0
+                              ? '${t.levelLabel(b.captainLevelCode)} · ${L10n.fmt(t.bcFollowersFmt, '${b.captainFollowers}')}'
+                              : t.levelLabel(b.captainLevelCode),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                              color: DocklyColors.accentTurquoise,
+                              fontWeight: FontWeight.w700),
+                        ),
                       ],
                     ),
                   ),
@@ -290,6 +307,57 @@ class _Body extends StatelessWidget {
               ),
             ),
         ],
+        // KARDEŞ TEKNELER (TK-5, kurucu onayı 2026-10-30): aynı marka+model,
+        // yalnız ÇİFTE RIZALI tekneler — eşleşme yoksa bölüm hiç çizilmez.
+        if (b.sisters.isNotEmpty) ...<Widget>[
+          const SizedBox(height: 16),
+          // NOT: metin SÖZLÜKTE büyük yazılır — çalışma anında
+          // .toUpperCase() yok (Türkçe İ/I CI dersi).
+          Text(t.bcSistersCap,
+              style: theme.textTheme.labelSmall?.copyWith(
+                  fontWeight: FontWeight.w800, letterSpacing: .8, color: sub)),
+          const SizedBox(height: 4),
+          Text(t.bcSistersNote,
+              style: theme.textTheme.bodySmall?.copyWith(color: sub)),
+          const SizedBox(height: 8),
+          for (final PublicBoatSisterRef s in b.sisters)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Material(
+                color: theme.colorScheme.surfaceContainerLow,
+                borderRadius: BorderRadius.circular(12),
+                child: InkWell(
+                  key: ValueKey<String>('bc-sister-${s.id}'),
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                        builder: (_) => BoatCardScreen(boatId: s.id)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                    child: Row(
+                      children: <Widget>[
+                        const DocklyIcon(DocklyIcons.sailing,
+                            size: 16, color: DocklyColors.accentTurquoise),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(s.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.w700)),
+                        ),
+                        if (s.marinaName != null)
+                          Text('⚓ ${s.marinaName}',
+                              style: theme.textTheme.labelSmall
+                                  ?.copyWith(color: sub)),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
         const SizedBox(height: 12),
         // GİZLİLİK DÜRÜSTLÜĞÜ: kart neden var, ne zaman kaybolur.
         Container(
@@ -310,6 +378,90 @@ class _Body extends StatelessWidget {
 
   static String _num(double v) =>
       v == v.roundToDouble() ? '${v.round()}' : v.toStringAsFixed(1).replaceAll('.', ',');
+}
+
+/// FAVORİLE kalbi (TK-5, kurucu onayı 2026-10-30) — çizimin köşesinde
+/// beyaz hap. Sayı sunucudan gelir (gerçek sayı; 0-uydurma). Misafir
+/// dokununca hesaba davet; kendi teknesinde hiç çizilmez (kendi teknesini
+/// favorilemek sunucuda da kapalıdır).
+class _FavoriteButton extends ConsumerStatefulWidget {
+  const _FavoriteButton({required this.b, required this.t});
+
+  final PublicBoatCard b;
+  final L10n t;
+
+  @override
+  ConsumerState<_FavoriteButton> createState() => _FavoriteButtonState();
+}
+
+class _FavoriteButtonState extends ConsumerState<_FavoriteButton> {
+  bool _busy = false;
+
+  Future<void> _toggle({required bool favorite}) async {
+    setState(() => _busy = true);
+    try {
+      await ref
+          .read(favoriteActionsProvider)
+          .setFavorite(widget.b.id, favorite: favorite);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+          ..clearSnackBars()
+          ..showSnackBar(SnackBar(content: Text(widget.t.actionFailed)));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final L10n t = widget.t;
+    final AuthState auth = ref.watch(authControllerProvider);
+    if (auth is Authenticated &&
+        !auth.isGuest &&
+        auth.user.id == widget.b.captainUserId) {
+      return const SizedBox.shrink(); // kendi teknesi — kalp yok
+    }
+    final bool fav =
+        ref.watch(favoriteBoatIdsProvider).contains(widget.b.id);
+    final int count = widget.b.favoriteCount;
+    final String label = fav ? t.bcFavoritedBtn : t.bcFavoriteBtn;
+    return Material(
+      color: Colors.white,
+      elevation: 1,
+      borderRadius: BorderRadius.circular(999),
+      child: InkWell(
+        key: const ValueKey<String>('bc-fav-btn'),
+        borderRadius: BorderRadius.circular(999),
+        onTap: _busy
+            ? null
+            : () {
+                if (fav) {
+                  _toggle(favorite: false);
+                } else {
+                  requireAccount(
+                    context,
+                    ref,
+                    message: t.gateFavoriteMsg,
+                    onAllowed: () => _toggle(favorite: true),
+                  );
+                }
+              },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
+          child: Text(
+            count > 0 ? '${fav ? '♥' : '♡'} $label · $count' : '${fav ? '♥' : '♡'} $label',
+            style: const TextStyle(
+              color: Color(0xFFC2334D),
+              fontSize: 11.5,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 /// Kart istatistik hücresi (0024) — kaptan kartındaki _Stat ile aynı dil.

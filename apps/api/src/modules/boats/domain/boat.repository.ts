@@ -1,4 +1,10 @@
-import { Boat, CreateBoatInput, PublicBoatCard, UpdateBoatInput } from './boat.types';
+import {
+  Boat,
+  CreateBoatInput,
+  FavoriteBoatRef,
+  PublicBoatCard,
+  UpdateBoatInput,
+} from './boat.types';
 
 /** Lookup kod→id çözümü sonucu (geçersiz kod erken 422'ye map'lenir). */
 export interface LookupResolution {
@@ -34,6 +40,15 @@ export interface BoatRepository {
    * teknede döner; teknik alanlar shareSpecs'e göre null'lanır.
    */
   publicCard(boatId: string): Promise<PublicBoatCard | null>;
+  /**
+   * FAVORİLE (TK-5, 0025). Tekne görünür değilse favorilenemez (kart
+   * yoksa kalp de yok) — o durumda false döner, servis 404 üretir.
+   */
+  addFavorite(userId: string, boatId: string): Promise<boolean>;
+  removeFavorite(userId: string, boatId: string): Promise<void>;
+  countFavoritesByUser(userId: string): Promise<number>;
+  /** Kişinin favori listesi — yalnız HÂLÂ görünür tekneler iner (rıza ilkesi). */
+  listFavorites(userId: string): Promise<FavoriteBoatRef[]>;
 }
 
 /** Çözülmüş lookup id'leri (undefined = patch'te dokunulmadı). */

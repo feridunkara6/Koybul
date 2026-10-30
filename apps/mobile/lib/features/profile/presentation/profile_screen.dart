@@ -10,6 +10,7 @@ import '../../admin/presentation/admin_screen.dart';
 import '../../auth/application/auth_controller.dart';
 import '../../auth/domain/auth_state.dart';
 import '../../auth/presentation/account_section.dart';
+import '../../boat/presentation/favorite_boats_screen.dart';
 import '../../community/presentation/contributions_block.dart';
 import '../../community/presentation/sailor_profile_card.dart';
 import '../../deck/presentation/deck_screen.dart' show deckSegmentProvider;
@@ -201,6 +202,18 @@ class ProfileScreen extends ConsumerWidget {
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute<void>(
                           builder: (_) => const FollowingScreen()),
+                    ),
+                  ),
+                  _GroupRow(
+                    icon: DocklyIcons.favorite,
+                    tint: DocklyColors.error,
+                    // FAVORİ TEKNELERİM (TK-5, kurucu onayı 2026-10-30):
+                    // kalple işaretlenen teknelerin listesi; misafirde boş
+                    // durum metni kalbe yönlendirir.
+                    label: t.favBoatsTitle,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          builder: (_) => const FavoriteBoatsScreen()),
                     ),
                   ),
                 ]),

@@ -499,6 +499,14 @@ class L10n {
     required this.bcTitle,
     required this.bcLoadFailed,
     required this.bcPrivacyNote,
+    required this.bcFavoriteBtn,
+    required this.bcFavoritedBtn,
+    required this.bcSistersCap,
+    required this.bcSistersNote,
+    required this.bcFollowersFmt,
+    required this.gateFavoriteMsg,
+    required this.favBoatsTitle,
+    required this.favBoatsEmpty,
     required this.rtDiscoverTitle,
     required this.rtTitle,
     required this.rtSortNew,
@@ -1178,6 +1186,9 @@ class L10n {
   final String evCreateCta, evCreateTitle, evTplCap, evTplBay, evTplBayDesc, evTplSail, evTplSailDesc, evTplMarina, evTplMarinaDesc, evFormTitleCap, evFormTitleHint, evFormBodyCap, evFormBodyHint, evFormWhenCap, evFormWhereCap, evFormWhereHint, evFormQuotaCap, evFormQuotaNote, evFormSend, evFormIncomplete, evCreateModNote, evCreateSent, evGateCreateMsg, evPremiumCreateTitle, evPremiumCreateBody, evPremiumCreateCta, evRejectedChip, evPendingBanner, evRejectedBanner, evShowNameOpt, evAttendeesCap, evAttendeesNote, evCommunityChip, evCancelEventCta, evCancelEventDone, evCancelEventConfirm;
   // TEKNE KARTI (Sosyalleşme Hafta 2, kurucu onayı 2026-10-24).
   final String bcTitle, bcLoadFailed, bcPrivacyNote;
+  // TK-5 (kurucu onayı 2026-10-30): favorile + kardeş tekneler + takipçi.
+  final String bcFavoriteBtn, bcFavoritedBtn, bcSistersCap, bcSistersNote,
+      bcFollowersFmt, gateFavoriteMsg, favBoatsTitle, favBoatsEmpty;
   // ROTA PAYLAŞIMI (Sosyalleşme Hafta 3, kurucu onayı 2026-10-24).
   final String rtDiscoverTitle, rtTitle, rtSortNew, rtSortPopular, rtEmpty, rtLoadFailed, rtStopsCap, rtExperienceCap, rtSeasonFmt, rtBoatFmt, rtStopCountFmt, rtSaveBtn, rtDoneBtn, rtSignInNote, rtBeyanNote, rtPendingChip, rtShareCta, rtShareTitle, rtShareIntro, rtFieldBody, rtFieldSeason, rtFieldBoat, rtShareSend, rtShareSent, rtNeedStops, rtBodyShort;
   // HAFTA 4: koy köprüsü + Bugün topluluk bloğu + moderasyon rota etiketi.
@@ -2296,6 +2307,16 @@ const L10n _tr = L10n(
   bcTitle: 'Tekne Kartı',
   bcLoadFailed: 'Tekne kartı yüklenemedi — tekne artık paylaşımda olmayabilir.',
   bcPrivacyNote: 'Bu kart yalnız sahibi izin verdiği için görünür. Konum, bağlama yeri ve iletişim bilgisi hiçbir zaman paylaşılmaz.',
+  bcFavoriteBtn: 'Favorile',
+  bcFavoritedBtn: 'Favoride',
+  bcSistersCap: 'KARDEŞ TEKNELER',
+  bcSistersNote:
+      'Aynı modelden tekneler — yalnız teknik bilgisini rızayla paylaşanlar listelenir.',
+  bcFollowersFmt: '{0} takipçi',
+  gateFavoriteMsg: 'Tekneleri favorilemek için ücretsiz bir hesap gerekir.',
+  favBoatsTitle: 'Favori Teknelerim',
+  favBoatsEmpty:
+      'Henüz favori teknen yok. Beğendiğin teknenin kartındaki kalbe dokun.',
   rtDiscoverTitle: 'Rota Keşfi',
   rtTitle: 'Rota',
   rtSortNew: 'Yeni',
@@ -3435,6 +3456,16 @@ const L10n _en = L10n(
   bcTitle: 'Boat Card',
   bcLoadFailed: 'Could not load the boat card — it may no longer be shared.',
   bcPrivacyNote: 'This card is visible only because its owner allowed it. Location, berth and contact details are never shared.',
+  bcFavoriteBtn: 'Favorite',
+  bcFavoritedBtn: 'Favorited',
+  bcSistersCap: 'SISTER BOATS',
+  bcSistersNote:
+      'Boats of the same model — only those whose owners share their specs are listed.',
+  bcFollowersFmt: '{0} followers',
+  gateFavoriteMsg: 'You need a free account to favorite boats.',
+  favBoatsTitle: 'My Favorite Boats',
+  favBoatsEmpty:
+      'No favorite boats yet. Tap the heart on a boat card you like.',
   rtDiscoverTitle: 'Route Discovery',
   rtTitle: 'Route',
   rtSortNew: 'New',
@@ -4571,6 +4602,16 @@ const L10n _es = L10n(
   bcTitle: 'Ficha del barco',
   bcLoadFailed: 'No se pudo cargar la ficha — puede que ya no esté compartida.',
   bcPrivacyNote: 'Esta ficha es visible solo porque su propietario lo permitió. La ubicación, el amarre y el contacto nunca se comparten.',
+  bcFavoriteBtn: 'Favorito',
+  bcFavoritedBtn: 'En favoritos',
+  bcSistersCap: 'BARCOS HERMANOS',
+  bcSistersNote:
+      'Barcos del mismo modelo — solo se listan los que comparten sus datos técnicos.',
+  bcFollowersFmt: '{0} seguidores',
+  gateFavoriteMsg: 'Necesitas una cuenta gratuita para marcar barcos como favoritos.',
+  favBoatsTitle: 'Mis barcos favoritos',
+  favBoatsEmpty:
+      'Aún no tienes barcos favoritos. Toca el corazón en la ficha de un barco que te guste.',
   rtDiscoverTitle: 'Descubrir rutas',
   rtTitle: 'Ruta',
   rtSortNew: 'Nuevas',
@@ -5707,6 +5748,16 @@ const L10n _ru = L10n(
   bcTitle: 'Карточка лодки',
   bcLoadFailed: 'Не удалось загрузить карточку — возможно, она больше не публикуется.',
   bcPrivacyNote: 'Эта карточка видна только с разрешения владельца. Координаты, стоянка и контакты никогда не публикуются.',
+  bcFavoriteBtn: 'В избранное',
+  bcFavoritedBtn: 'В избранном',
+  bcSistersCap: 'ОДНОТИПНЫЕ ЛОДКИ',
+  bcSistersNote:
+      'Лодки той же модели — показываются только те, чьи владельцы делятся характеристиками.',
+  bcFollowersFmt: '{0} подписчиков',
+  gateFavoriteMsg: 'Чтобы добавлять лодки в избранное, нужна бесплатная учётная запись.',
+  favBoatsTitle: 'Избранные лодки',
+  favBoatsEmpty:
+      'Пока нет избранных лодок. Нажмите на сердечко в карточке понравившейся лодки.',
   rtDiscoverTitle: 'Маршруты',
   rtTitle: 'Маршрут',
   rtSortNew: 'Новые',

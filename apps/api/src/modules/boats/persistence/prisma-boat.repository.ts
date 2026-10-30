@@ -2,7 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../../infrastructure/prisma/prisma.service';
 import { BoatRepository, LookupIds, LookupResolution } from '../domain/boat.repository';
-import { Boat, CreateBoatInput, PublicBoatCard, UpdateBoatInput } from '../domain/boat.types';
+import {
+  Boat,
+  CreateBoatInput,
+  FavoriteBoatRef,
+  PublicBoatCard,
+  UpdateBoatInput,
+} from '../domain/boat.types';
 
 type BoatRow = Prisma.BoatGetPayload<{ include: { boatType: true; engineType: true } }>;
 
@@ -206,7 +212,7 @@ export class PrismaBoatRepository implements BoatRepository {
     // Kart istatistikleri + rota listesi (0024): kaptanın ZATEN herkese
     // açık içeriğinden türetilir — tek tur ham SQL, kopya veri saklanmaz.
     const owner = row.ownerUserId;
-    const [statRows, routeRows] = await Promise.all([
+    const [statRows, routeRows, socialRows, sisterRows] = await Promise.all([
       this.prisma.$queryRaw<{ trips: number; pruva: number; routes: number }[]>(Prisma.sql`
         SELECT
           (SELECT count(*)::int FROM shared_trips t
@@ -229,6 +235,37 @@ export class PrismaBoatRepository implements BoatRepository {
         ORDER BY r.created_at DESC
         LIMIT 5
       `),
+      // FAVORİLE + TAKİPÇİ (TK-5): iki herkese açık sayı tek turda.
+      this.prisma.$queryRaw<{ favs: number; followers: number }[]>(Prisma.sql`
+        SELECT
+          (SELECT count(*)::int FROM boat_favorites f
+            WHERE f.boat_id = ${row.id}::uuid) AS favs,
+          (SELECT count(*)::int FROM user_follows uf
+            WHERE uf.followed_id = ${owner}::uuid) AS followers
+      `),
+      // KARDEŞ TEKNELER (TK-5): aynı marka+model (büyük/küçük harf dengeli),
+      // yalnız ÇİFTE RIZALI (görünür + teknik paylaşımlı) tekneler. Bu kartın
+      // kendisi de teknik paylaşmıyorsa eşleşme aranmaz (boş liste).
+      row.shareSpecs && row.brand && row.model
+        ? this.prisma.$queryRaw<
+            { id: string; name: string; typeCode: string; marinaName: string | null }[]
+          >(Prisma.sql`
+            SELECT b.id, b.name, bt.code AS "typeCode", l.name AS "marinaName"
+            FROM boats b
+            JOIN boat_types bt ON bt.id = b.boat_type_id
+            LEFT JOIN locations l ON l.id = b.home_marina_location_id
+            JOIN users u ON u.id = b.owner_user_id
+            WHERE b.id <> ${row.id}::uuid
+              AND b.deleted_at IS NULL
+              AND b.visible_in_marina = true
+              AND b.share_specs = true
+              AND u.deleted_at IS NULL AND u.status = 'active'
+              AND lower(trim(b.brand)) = lower(trim(${row.brand}))
+              AND lower(trim(b.model)) = lower(trim(${row.model}))
+            ORDER BY b.created_at DESC
+            LIMIT 5
+          `)
+        : Promise.resolve([]),
     ]);
     const specs = row.shareSpecs;
     return {
@@ -260,7 +297,90 @@ export class PrismaBoatRepository implements BoatRepository {
         distanceNm: Number(r.distanceNm),
         saveCount: r.saveCount,
       })),
+      favoriteCount: Number(socialRows[0]?.favs ?? 0),
+      captainFollowers: Number(socialRows[0]?.followers ?? 0),
+      sisters: sisterRows.map((s) => ({
+        id: s.id,
+        name: s.name,
+        boatTypeCode: s.typeCode,
+        marinaName: s.marinaName,
+      })),
     };
+  }
+
+  /**
+   * FAVORİLE (TK-5, 0025). Tek sorgu: tekne hâlâ görünür + sahibi aktifse
+   * ekler (ON CONFLICT sessiz) — görünmez tekneye kalp atılamaz (kartla
+   * aynı 404 ilkesi). RLS owner politikası kullanıcı bağlamıyla sağlanır.
+   */
+  async addFavorite(userId: string, boatId: string): Promise<boolean> {
+    const rows = await this.prisma.withUserContext(userId, (tx) =>
+      tx.$queryRaw<{ id: string }[]>(Prisma.sql`
+        INSERT INTO boat_favorites (user_id, boat_id)
+        SELECT ${userId}::uuid, b.id
+        FROM boats b
+        JOIN users u ON u.id = b.owner_user_id
+        WHERE b.id = ${boatId}::uuid
+          AND b.deleted_at IS NULL
+          AND b.visible_in_marina = true
+          AND b.owner_user_id <> ${userId}::uuid
+          AND u.deleted_at IS NULL AND u.status = 'active'
+        ON CONFLICT (user_id, boat_id) DO UPDATE SET user_id = EXCLUDED.user_id
+        RETURNING boat_id AS id
+      `),
+    );
+    return rows.length > 0;
+  }
+
+  async removeFavorite(userId: string, boatId: string): Promise<void> {
+    await this.prisma.withUserContext(userId, (tx) =>
+      tx.boatFavorite.deleteMany({ where: { userId, boatId } }),
+    );
+  }
+
+  async countFavoritesByUser(userId: string): Promise<number> {
+    return this.prisma.withUserContext(userId, (tx) =>
+      tx.boatFavorite.count({ where: { userId } }),
+    );
+  }
+
+  /** Favori listesi: yalnız HÂLÂ görünür tekneler; teknik alanlar rızaya bağlı. */
+  async listFavorites(userId: string): Promise<FavoriteBoatRef[]> {
+    const rows = await this.prisma.withUserContext(userId, (tx) =>
+      tx.$queryRaw<
+        {
+          id: string;
+          name: string;
+          typeCode: string;
+          brand: string | null;
+          model: string | null;
+          shareSpecs: boolean;
+          marinaName: string | null;
+        }[]
+      >(Prisma.sql`
+        SELECT b.id, b.name, bt.code AS "typeCode", b.brand, b.model,
+               b.share_specs AS "shareSpecs", l.name AS "marinaName"
+        FROM boat_favorites f
+        JOIN boats b ON b.id = f.boat_id
+        JOIN boat_types bt ON bt.id = b.boat_type_id
+        LEFT JOIN locations l ON l.id = b.home_marina_location_id
+        JOIN users u ON u.id = b.owner_user_id
+        WHERE f.user_id = ${userId}::uuid
+          AND b.deleted_at IS NULL
+          AND b.visible_in_marina = true
+          AND u.deleted_at IS NULL AND u.status = 'active'
+        ORDER BY f.created_at DESC
+        LIMIT 200
+      `),
+    );
+    return rows.map((r) => ({
+      id: r.id,
+      name: r.name,
+      boatTypeCode: r.typeCode,
+      brand: r.shareSpecs ? r.brand : null,
+      model: r.shareSpecs ? r.model : null,
+      marinaName: r.marinaName,
+    }));
   }
 
   private toBoat(row: BoatRow): Boat {

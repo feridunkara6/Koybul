@@ -547,6 +547,7 @@ model User {
   // TAKİP (SP-3a, 2026-10-31): kaptanı takip et — içerik aboneliği.
   following                        UserFollow[]           @relation("FollowFollower")
   followers                        UserFollow[]           @relation("FollowFollowed")
+  boatFavorites                    BoatFavorite[]         @relation("BoatFavoriteUser")
   // SEYİR PAYLAŞIMI (SP-3b, kurucu onayı 2026-10-31).
   sharedTrips                      SharedTrip[]           @relation("SharedTripOwner")
   tripReactions                    TripReaction[]         @relation("TripReactionUser")
@@ -756,6 +757,7 @@ model Boat {
   reviews             Review[]
   reservationRequests ReservationRequest[]
   boatMedia           BoatMedia[]
+  favoritedBy         BoatFavorite[]       @relation("BoatFavoriteBoat")
   notes               LocationNote[]
 
   @@index([homeMarinaLocationId], map: "ix_boats_home_marina")
@@ -1498,6 +1500,21 @@ model RouteSave {
 
   @@id([routeId, userId])
   @@map("route_saves")
+}
+
+/// TEKNE FAVORİLERİ (TK-5, 0025): sessiz beğeni — bildirim yok, liste
+/// gizli, kartta yalnız toplam sayı. Ücretsiz üyelik yeter.
+model BoatFavorite {
+  userId    String   @map("user_id") @db.Uuid
+  boatId    String   @map("boat_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation("BoatFavoriteUser", fields: [userId], references: [id], onDelete: Cascade)
+  boat Boat @relation("BoatFavoriteBoat", fields: [boatId], references: [id], onDelete: Cascade)
+
+  @@id([userId, boatId])
+  @@index([boatId], map: "idx_boat_favorites_boat")
+  @@map("boat_favorites")
 }
 
 model UserFollow {
