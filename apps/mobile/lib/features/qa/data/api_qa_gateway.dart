@@ -23,7 +23,8 @@ class ApiQaGateway implements QaGateway {
   }
 
   @override
-  Future<QaFeed> feed({String? category}) => _api.feed(category: category);
+  Future<QaFeed> feed({String? category, String? query, int page = 1}) =>
+      _api.feed(category: category, query: query, page: page);
 
   @override
   Future<QaDetail> detail(String questionId) async =>

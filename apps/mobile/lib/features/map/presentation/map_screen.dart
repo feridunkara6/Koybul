@@ -469,16 +469,33 @@ class MapScreen extends ConsumerWidget {
           // dokunuş, üyelik kapısı yok, çevrimdışı çalışır. Pin kartı
           // açılınca kart üstte çizilir (Stack sırası); kart kapanınca SOS
           // aynı yerdedir.
-          Positioned(
-            left: 12,
-            // Rota modunda alt eylem kartının ÜSTÜNE çıkar (kartla çakışmaz);
-            // SOS bilerek HER modda görünür kalır — emniyet düğmesi gizlenmez.
-            bottom: routeMode ? 150 : 78, // yakın rayının (katlı ~62) üstünde
-            child: SafeArea(
-              top: false,
-              child: KeyedSubtree(key: tourKeySos, child: const _SosButton()),
+          // SAHA HATASI (2026-10-30, kurucu): ROTA DÜZENLEME çubuğu tam
+          // genişlik ve değişken boyludur — SOS bottom:150'de çubuğun
+          // ÜSTÜNE biniyordu. Düzenleme modunda SOS üst sola (rota başlık
+          // çubuğunun altına) çıkar; her modda GÖRÜNÜR kalır — emniyet
+          // düğmesi asla gizlenmez, yalnız yer değiştirir.
+          if (routeMode && state.editingRoute && selectedPin == null)
+            Positioned(
+              left: 12,
+              top: state.isOffline ? 112 : 68,
+              child: SafeArea(
+                bottom: false,
+                child:
+                    KeyedSubtree(key: tourKeySos, child: const _SosButton()),
+              ),
+            )
+          else
+            Positioned(
+              left: 12,
+              // Rota modunda alt eylem kartının ÜSTÜNE çıkar (kartla
+              // çakışmaz); yakın rayının (katlı ~62) üstünde durur.
+              bottom: routeMode ? 150 : 78,
+              child: SafeArea(
+                top: false,
+                child:
+                    KeyedSubtree(key: tourKeySos, child: const _SosButton()),
+              ),
             ),
-          ),
           // "ROTA PLANLA" FAB'I (P0-2): uygulamanın imza özelliği artık
           // ADIYLA ve başparmağın tam altında. Rota çizilince kaybolur
           // (bilgi çipi devralır — mevcut davranış), pin kartı açıkken

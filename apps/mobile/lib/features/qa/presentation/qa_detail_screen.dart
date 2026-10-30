@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../auth/presentation/account_section.dart' show showSignInSheet;
 import '../../premium/presentation/premium_screen.dart';
 import '../../profile/presentation/captain_profile_screen.dart';
 import '../application/qa_controller.dart';
@@ -217,7 +218,16 @@ class _QaDetailScreenState extends ConsumerState<QaDetailScreen> {
         const SizedBox(height: 12),
 
         if (!d.full) ...<Widget>[
-          _LockCard(answersCount: d.answersCount, t: t),
+          _LockCard(
+            answersCount: d.answersCount,
+            t: t,
+            // ERİŞİM REVİZYONU (2026-10-30): teaser yalnız MİSAFİRE/oturumsuza
+            // iner — çağrı artık Premium değil, ücretsiz HESAP davetidir.
+            onCta: () async {
+              await showSignInSheet(context);
+              ref.invalidate(qaDetailProvider(widget.questionId));
+            },
+          ),
         ] else ...<Widget>[
           Text(
             L10n.fmt(t.qaAnswersFmt, '${d.answers.length}').toUpperCase(),
@@ -259,13 +269,18 @@ class _QaDetailScreenState extends ConsumerState<QaDetailScreen> {
   }
 }
 
-/// KİLİT KARTI — koy vitrinindeki PremiumLockCard ile aynı dil ve davranış:
-/// tek premium çağrısı, kendiliğinden pencere açmaz, sahte bulanıklık yok.
+/// KİLİT KARTI (erişim revizyonu 2026-10-30): teaser yalnız misafire iner,
+/// çağrı ÜCRETSİZ HESAP davetidir — tek çağrı, kendiliğinden pencere açmaz.
 class _LockCard extends StatelessWidget {
-  const _LockCard({required this.answersCount, required this.t});
+  const _LockCard({
+    required this.answersCount,
+    required this.t,
+    required this.onCta,
+  });
 
   final int answersCount;
   final L10n t;
+  final VoidCallback onCta;
 
   @override
   Widget build(BuildContext context) {
@@ -300,10 +315,9 @@ class _LockCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           FilledButton(
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => const PremiumScreen()),
-            ),
-            child: Text(t.premBuy),
+            key: const ValueKey<String>('qa-lock-cta'),
+            onPressed: onCta,
+            child: Text(t.accCta),
           ),
         ],
       ),

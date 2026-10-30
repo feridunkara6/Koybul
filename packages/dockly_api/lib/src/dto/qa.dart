@@ -68,10 +68,27 @@ class QaQuestionSummary {
 
 /// Ana akış: "Öne çıkan" şeridi + kronolojik liste.
 class QaFeed {
-  const QaFeed({required this.featured, required this.items});
+  const QaFeed({
+    required this.featured,
+    required this.items,
+    // SAYFALI DÜZEN (2026-10-30): eski sunucu yanıtlarıyla uyum için
+    // varsayılanlı — alan gelmezse tek sayfa varsayılır.
+    this.total = 0,
+    this.pageCount = 1,
+    this.page = 1,
+  });
 
   final List<QaQuestionSummary> featured;
   final List<QaQuestionSummary> items;
+
+  /// Süzgece uyan toplam soru (sayfalama).
+  final int total;
+
+  /// Toplam sayfa sayısı — sayfa seçici bununla çizilir.
+  final int pageCount;
+
+  /// Dönen sayfa (1 tabanlı).
+  final int page;
 
   factory QaFeed.fromJson(Map<String, dynamic> json) => QaFeed(
         featured: (json['featured'] as List<dynamic>)
@@ -80,6 +97,9 @@ class QaFeed {
         items: (json['items'] as List<dynamic>)
             .map((dynamic e) => QaQuestionSummary.fromJson(e as Map<String, dynamic>))
             .toList(),
+        total: (json['total'] as num?)?.toInt() ?? 0,
+        pageCount: (json['pageCount'] as num?)?.toInt() ?? 1,
+        page: (json['page'] as num?)?.toInt() ?? 1,
       );
 }
 

@@ -14,7 +14,8 @@ class FakeQaFeedGateway implements QaGateway {
   QaFeed feedResult;
 
   @override
-  Future<QaFeed> feed({String? category}) async => feedResult;
+  Future<QaFeed> feed({String? category, String? query, int page = 1}) async =>
+      feedResult;
 
   @override
   Future<QaDetail> detail(String questionId) =>

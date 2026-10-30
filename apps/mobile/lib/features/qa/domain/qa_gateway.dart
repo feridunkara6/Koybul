@@ -6,7 +6,8 @@ import 'package:dockly_api/dockly_api.dart'
 /// kullanılır (ağ yok). Erişim kuralları SUNUCUDADIR — bu arayüz yalnız taşır.
 abstract interface class QaGateway {
   /// Ana akış: öne çıkan + kronolojik liste. [category] null = tümü.
-  Future<QaFeed> feed({String? category});
+  /// Akış — sayfalı + anahtar kelime aramalı (2026-10-30).
+  Future<QaFeed> feed({String? category, String? query, int page});
 
   /// Detay — oturum varsa token'la sorulur (sahiplik/premium kararı için).
   Future<QaDetail> detail(String questionId);

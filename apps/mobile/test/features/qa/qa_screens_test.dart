@@ -64,8 +64,15 @@ class FakeQaGateway implements QaGateway {
   String? answeredBody;
   final List<String> reports = <String>[];
 
+  /// SAYFALI + ARAMALI akış (2026-10-30): sorgular kaydedilir (test bakar).
+  final List<({String? category, String? query, int page})> feedCalls =
+      <({String? category, String? query, int page})>[];
+
   @override
-  Future<QaFeed> feed({String? category}) async => feedResult;
+  Future<QaFeed> feed({String? category, String? query, int page = 1}) async {
+    feedCalls.add((category: category, query: query, page: page));
+    return feedResult;
+  }
 
   @override
   Future<QaDetail> detail(String questionId) async => detailResult!;
@@ -183,7 +190,68 @@ void main() {
     expect(find.byKey(const ValueKey<String>('qa-lock')), findsOneWidget);
     expect(find.textContaining('7 denizci'), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('qa-answer-field')), findsNothing);
-    expect(find.text("Premium'a geç"), findsOneWidget);
+    // ERİŞİM REVİZYONU (2026-10-30): çağrı artık HESAP davetidir — Premium değil.
+    expect(find.text('Giriş yap veya kayıt ol'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('qa-lock-cta')), findsOneWidget);
+  });
+
+  testWidgets('ARAMA (2026-10-30): yazınca sorgu geçide gider, sayfa 1e döner',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    final FakeQaGateway gw = FakeQaGateway(
+      feedResult: QaFeed(
+        featured: const <QaQuestionSummary>[],
+        items: <QaQuestionSummary>[summary()],
+        total: 1,
+        pageCount: 1,
+      ),
+    );
+    await tester.pumpWidget(_app(gw, const QaListScreen()));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('qa-search')), findsOneWidget);
+
+    await tester.enterText(
+        find.byKey(const ValueKey<String>('qa-search')), 'tonoz');
+    // Bekleme süresi (debounce 400 ms) dolmadan istek atılmaz.
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pumpAndSettle();
+
+    expect(gw.feedCalls.last.query, 'tonoz');
+    expect(gw.feedCalls.last.page, 1);
+  });
+
+  testWidgets('SAYFALAMA (2026-10-30): seçici çizilir, ileri/geri sayfayı değiştirir',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    final FakeQaGateway gw = FakeQaGateway(
+      feedResult: QaFeed(
+        featured: const <QaQuestionSummary>[],
+        items: <QaQuestionSummary>[summary()],
+        total: 23,
+        pageCount: 3,
+      ),
+    );
+    await tester.pumpWidget(_app(gw, const QaListScreen()));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('qa-page-label')), findsOneWidget);
+    expect(find.text('Sayfa 1 / 3'), findsOneWidget);
+    // 1. sayfadayken geri kapalıdır.
+    expect(
+        tester
+            .widget<OutlinedButton>(
+                find.byKey(const ValueKey<String>('qa-page-prev')))
+            .onPressed,
+        isNull);
+
+    await tester.ensureVisible(find.byKey(const ValueKey<String>('qa-page-next')));
+    await tester.tap(find.byKey(const ValueKey<String>('qa-page-next')));
+    await tester.pumpAndSettle();
+    expect(gw.feedCalls.last.page, 2);
   });
 
   testWidgets('detay (tam): cevaplar listelenir, cevap gönderimi geçide ulaşır',

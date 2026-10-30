@@ -1,11 +1,9 @@
 import { Inject, Injectable, Optional } from '@nestjs/common';
 import { uuidv7 } from 'uuidv7';
 import { AppProblem } from '../../../common/problem/problem';
-import { EnvService } from '../../../config/env.service';
-import { Principal, roleAtLeast } from '../../../core/auth/principal';
+import { Principal } from '../../../core/auth/principal';
 import { screenText } from '../../community/domain/prefilter';
 import { NotificationsService } from '../../notifications/application/notifications.service';
-import { PremiumAccessService } from '../../premium/application/premium-access.service';
 import {
   CreateQuestionInput,
   QaAnswerRow,
@@ -26,9 +24,10 @@ import {
 /**
  * Soru-cevap iş kuralları (Blog V1 — kurucu onayı 2026-10-23).
  *
- * ERİŞİM (kurucu kararı): liste+önizleme herkese; detay/yazma/beğeni Premium.
- * Kilit SUNUCUDADIR: ücretsiz üyeye soru gövdesi ve cevaplar hiç gönderilmez
- * (koy vitrin kilidiyle aynı ilke). PREMIUM_ENFORCE kapalıyken her şey açık.
+ * ERİŞİM (KURUCU REVİZYONU 2026-10-30): liste+önizleme herkese; detay,
+ * cevap okuma, soru sorma, cevap yazma ve beğeni ÜCRETSİZ HESAPLA açılır —
+ * Premium şartı KALDIRILDI. Misafir yalnız önizleme görür (hesap teşviki);
+ * kilit yine SUNUCUDADIR: misafire soru gövdesi ve cevaplar hiç gönderilmez.
  *
  * MODERASYON (karma, kurucu onayı): ilk içerik kuyruğa; onaylı içeriği olan
  * kullanıcı ön-süzgeç temizse anında yayınlanır. ⚑ Bildir her zaman açık.
@@ -39,23 +38,10 @@ import {
 @Injectable()
 export class QaService {
   constructor(
-    private readonly env: EnvService,
-    private readonly premium: PremiumAccessService,
     @Inject(QA_REPOSITORY) private readonly repo: QaRepository,
     /** Push tetikleri (ateşle-unut) — birim testleri vermez, yol atlanır. */
     @Optional() private readonly notifications?: NotificationsService,
   ) {}
-
-  /** Premium kapısı: bayrak kapalıyken herkes; açıkken admin+ veya premium. */
-  private async assertPremium(principal: Principal, now: Date): Promise<void> {
-    if (!this.env.premiumEnforce) return;
-    if (roleAtLeast(principal.role, 'admin')) return;
-    if (await this.premium.isPremium(principal.userId, now)) return;
-    throw new AppProblem(
-      'premium-required',
-      'Soru sormak, cevap yazmak ve cevapları okumak Koybul Premium ile açılır.',
-    );
-  }
 
   private toSummary(row: QaQuestionRow, now: Date): QaQuestionSummary {
     return {
@@ -91,34 +77,41 @@ export class QaService {
     };
   }
 
-  /** Ana akış: "Öne çıkan" şeridi + kronolojik liste — HERKESE açık. */
+  /**
+   * Ana akış — HERKESE açık; SAYFALI (2026-10-30) + anahtar kelime araması.
+   * "Öne çıkan" şeridi yalnız 1. sayfada ve süzgeçsiz/aramasız görünümde.
+   */
   async feed(
     category: QaCategory | null,
-    before: Date | null,
+    search: string | null,
+    page: number,
     limit: number,
     now: Date = new Date(),
   ): Promise<QaFeed> {
-    const [featured, items] = await Promise.all([
-      // Şerit yalnız ilk sayfada ve süzgeçsiz görünümde anlamlı.
-      category === null && before === null
+    const offset = (page - 1) * limit;
+    const [featured, items, total] = await Promise.all([
+      category === null && search === null && page === 1
         ? this.repo.featured(QA_FEATURED_MAX)
         : Promise.resolve([]),
-      this.repo.list(category, before, limit),
+      this.repo.list(category, search, offset, limit),
+      this.repo.count(category, search),
     ]);
     const featuredIds = new Set(featured.map((f) => f.id));
     return {
       featured: featured.map((r) => this.toSummary(r, now)),
       // Şeritte dönen soru akışta İKİNCİ kez gösterilmez.
       items: items.filter((r) => !featuredIds.has(r.id)).map((r) => this.toSummary(r, now)),
+      total,
+      pageCount: Math.max(1, Math.ceil(total / limit)),
+      page,
     };
   }
 
   /**
-   * Detay erişim kararı (vitrin deseninin soru-cevap hâli):
-   * bayrak kapalı → full; admin/premium → full; SAHİBİ → full (beklemede olsa
-   * da — "sorum nerede" diye panik yaşatmayız); bu soruda ONAYLI cevabı olan →
-   * full (süresi biten premium kendi emeğini okumaya devam eder — kurucu
-   * kararı A). Aksi hâlde teaser: başlık + önizleme + cevap SAYISI.
+   * Detay erişim kararı (KURUCU REVİZYONU 2026-10-30): HESAPLI herkes tam
+   * detayı okur — Premium şartı kaldırıldı. Misafir/anonim teaser görür
+   * (başlık + önizleme + cevap sayısı; hesap teşviki). Sahibi bekleyen
+   * sorusunu da görür ("sorum nerede" paniği yaşatmayız).
    */
   async detail(
     principal: Principal | null,
@@ -132,13 +125,7 @@ export class QaService {
     // Yayında olmayan soru yalnız sahibine görünür (varlık sızdırılmaz).
     if (q.status === 'pending' && !mine) throw new AppProblem('not-found');
 
-    const full =
-      !this.env.premiumEnforce ||
-      mine ||
-      (principal !== null &&
-        (roleAtLeast(principal.role, 'admin') ||
-          (await this.premium.isPremium(principal.userId, now)) ||
-          (await this.repo.hasApprovedAnswerIn(questionId, principal.userId))));
+    const full = mine || (principal !== null && !principal.isGuest);
 
     if (!full) {
       return {
@@ -173,8 +160,6 @@ export class QaService {
     input: CreateQuestionInput,
     now: Date = new Date(),
   ): Promise<{ id: string; status: string }> {
-    await this.assertPremium(principal, now);
-
     const prefilter = screenText(`${input.title}\n${input.body}`);
     const trusted = await this.repo.hasApprovedContent(principal.userId);
     const autoPublish = prefilter.clean && trusted;
@@ -199,10 +184,7 @@ export class QaService {
     principal: Principal,
     questionId: string,
     body: string,
-    now: Date = new Date(),
   ): Promise<{ id: string; status: string }> {
-    await this.assertPremium(principal, now);
-
     const q = await this.repo.findQuestion(questionId);
     if (!q || q.status !== 'approved') throw new AppProblem('not-found');
 
@@ -232,9 +214,7 @@ export class QaService {
   async toggleLike(
     principal: Principal,
     questionId: string,
-    now: Date = new Date(),
   ): Promise<{ liked: boolean; likeCount: number }> {
-    await this.assertPremium(principal, now);
     const q = await this.repo.findQuestion(questionId);
     if (!q || q.status !== 'approved') throw new AppProblem('not-found');
     if (q.userId === principal.userId) {
@@ -247,9 +227,7 @@ export class QaService {
   async toggleHelpful(
     principal: Principal,
     answerId: string,
-    now: Date = new Date(),
   ): Promise<{ helped: boolean; helpfulCount: number }> {
-    await this.assertPremium(principal, now);
     const meta = await this.repo.findAnswerMeta(answerId);
     if (!meta || meta.status !== 'approved') throw new AppProblem('not-found');
     if (meta.userId === principal.userId) {

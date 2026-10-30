@@ -7,6 +7,7 @@ import '../../../core/l10n/app_locale.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../../auth/application/auth_controller.dart';
 import '../../auth/domain/auth_state.dart';
+import '../../auth/presentation/account_gate.dart';
 import '../../deck/presentation/deck_screen.dart' show deckSegmentProvider;
 import '../../launch/domain/launch_answers.dart' show kHomeMarinaFocusZoom;
 import '../../map/application/map_controller.dart' show mapFocusProvider;
@@ -238,14 +239,14 @@ class BoatScreen extends ConsumerWidget {
           // baktığı şey bakım durumudur; marina topluluğu ara sıra gezilir.
           // BAKIM ÖZETİ (Konsept A): 10 kalem her açılışta tam boy durmaz —
           // kaptan çoğu gün yalnız "ilgi bekleyen var mı?" diye bakar.
-          // HESAP KAPISI (kurucu kararı 2026-10-26): tekne HESABA bağlıdır —
-          // misafirde/çıkışta tekne null gelir, bakım özeti de ÇİZİLMEZ
-          // (tekne yokken bakım takibi anlamsız; "veri yoksa kart kendini
-          // çizmez" kuralı). Kimlik kartındaki davet + kapı her zaman durur.
-          if (boat != null) ...<Widget>[
-            const _MaintenanceSummaryRow(),
-            const SizedBox(height: 12),
-          ],
+          // GÖRÜNÜRLÜK REVİZYONU (kurucu kararı 2026-10-30): satır artık
+          // HERKESE görünür — misafir de böyle bir özelliğin var olduğunu
+          // görsün (vitrin). İŞLEM kapılıdır: dokununca misafire hesap
+          // daveti, teknesizse tekne tanıtma daveti çıkar; detaya yalnız
+          // hesap + tekne ile girilir. Sayılar yalnız tekne varken yazılır
+          // (0-uydurma: misafire sahte "hepsi güncel" denmez).
+          _MaintenanceSummaryRow(member: member, hasBoat: boat != null),
+          const SizedBox(height: 12),
           // DEFTER KÖPRÜSÜ (tek ev): istatistik burada KOPYALANMAZ.
           const _DeckBridgeRow(),
           // MARİNAM (Marina Topluluğu V1, kurucu onayı 2026-10-23): teknenin
@@ -266,13 +267,21 @@ class BoatScreen extends ConsumerWidget {
 /// Dokununca tam liste kendi ekranında açılır. Sayım, eski bölümle AYNI
 /// kuralla yapılır: "kayıt yok" ilgi BEKLEMEZ (0 uydurma — kaptan girmediyse
 /// uygulama bir şey iddia etmez).
+///
+/// GÖRÜNÜRLÜK REVİZYONU (2026-10-30): satır herkese çizilir; [member] ve
+/// [hasBoat] dokunuşun kapısını belirler — misafire hesap daveti, hesaplı
+/// ama teknesize tekne tanıtma sayfası, tam donanımlıya bakım listesi.
 class _MaintenanceSummaryRow extends ConsumerWidget {
-  const _MaintenanceSummaryRow();
+  const _MaintenanceSummaryRow({required this.member, required this.hasBoat});
+
+  final bool member;
+  final bool hasBoat;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final L10n t = ref.watch(l10nProvider);
     final ThemeData theme = Theme.of(context);
+    final bool ready = member && hasBoat;
     final List<MaintenanceTask> tasks =
         maintenanceCatalog(ref.watch(appLocaleProvider));
     ref.watch(maintenanceProvider);
@@ -280,13 +289,15 @@ class _MaintenanceSummaryRow extends ConsumerWidget {
     final DateTime now = DateTime.now();
     int needsAttention = 0;
     int logged = 0;
-    for (final MaintenanceTask task in tasks) {
-      final MaintenanceStatus s =
-          maintenanceStatus(task, ctrl.recordFor(task.id), now: now);
-      if (s == MaintenanceStatus.overdue || s == MaintenanceStatus.dueSoon) {
-        needsAttention++;
+    if (ready) {
+      for (final MaintenanceTask task in tasks) {
+        final MaintenanceStatus s =
+            maintenanceStatus(task, ctrl.recordFor(task.id), now: now);
+        if (s == MaintenanceStatus.overdue || s == MaintenanceStatus.dueSoon) {
+          needsAttention++;
+        }
+        if (s != MaintenanceStatus.notLogged) logged++;
       }
-      if (s != MaintenanceStatus.notLogged) logged++;
     }
     return Material(
       color: theme.colorScheme.surfaceContainerLow,
@@ -294,9 +305,32 @@ class _MaintenanceSummaryRow extends ConsumerWidget {
       child: InkWell(
         key: const ValueKey<String>('maint-open'),
         borderRadius: BorderRadius.circular(14),
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => const MaintenanceScreen()),
-        ),
+        onTap: () {
+          if (ready) {
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                  builder: (_) => const MaintenanceScreen()),
+            );
+            return;
+          }
+          if (!member) {
+            // Misafir: kibar hesap daveti (takip kapısıyla aynı desen).
+            requireAccount(
+              context,
+              ref,
+              message: t.gateMaintMsg,
+              onAllowed: () {
+                // Girişten sonra tekne hâlâ yoksa tanıtma sayfası açılır.
+                if (ref.read(myBoatProvider) == null) {
+                  showBoatSheet(context, ref);
+                }
+              },
+            );
+            return;
+          }
+          // Hesaplı ama teknesiz: doğrudan tekne tanıtma sayfası.
+          showBoatSheet(context, ref);
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           decoration: BoxDecoration(
@@ -322,11 +356,15 @@ class _MaintenanceSummaryRow extends ConsumerWidget {
                     // Alt satır yalnız rozet YOKKEN: hepsi günceldeyse övgü,
                     // hiç kayıt yoksa ne yapılacağı. Rozet varken durum
                     // zaten rozette — satır kendini tekrar etmez.
+                    // Hazır değilse (misafir/teknesiz) VİTRİN metni: özellik
+                    // tanıtılır, sahte durum iddia edilmez (0-uydurma).
                     if (needsAttention == 0) ...<Widget>[
                       const SizedBox(height: 1),
                       Text(
-                        logged > 0 ? t.maintAllGood : t.maintLead,
-                        maxLines: 1,
+                        !ready
+                            ? t.maintGuestTeaser
+                            : (logged > 0 ? t.maintAllGood : t.maintLead),
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant),

@@ -348,7 +348,9 @@ class TodayQaCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final L10n t = ref.watch(l10nProvider);
-    final QaFeed? feed = ref.watch(qaFeedProvider(null)).valueOrNull;
+    final QaFeed? feed = ref
+        .watch(qaFeedProvider((category: null, query: '', page: 1)))
+        .valueOrNull;
     if (feed == null) return const SizedBox.shrink();
     final List<QaQuestionSummary> all =
         <QaQuestionSummary>[...feed.featured, ...feed.items];

@@ -1,3 +1,5 @@
+import 'dart:async' show Timer;
+
 import 'package:dockly_api/dockly_api.dart' show QaFeed, QaQuestionSummary, kQaCategories;
 import 'package:dockly_core/dockly_core.dart';
 import 'package:dockly_ui/dockly_ui.dart';
@@ -26,11 +28,41 @@ class _QaListScreenState extends ConsumerState<QaListScreen> {
   /// null = tüm kategoriler.
   String? _category;
 
+  /// ARAMA (kurucu isteği 2026-10-30): konu/anahtar kelime → başlık+gövde.
+  final TextEditingController _search = TextEditingController();
+  Timer? _debounce;
+  String _query = '';
+
+  /// SAYFALI DÜZEN (kurucu isteği 2026-10-30): 1 tabanlı sayfa.
+  int _page = 1;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _search.dispose();
+    super.dispose();
+  }
+
+  /// Yazarken 400 ms beklenir — her tuşta ağa gidilmez; süzgeç değişince
+  /// sayfa 1'e döner (yeni sorgu, yeni sayfalama).
+  void _onSearchChanged(String value) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 400), () {
+      if (!mounted) return;
+      setState(() {
+        _query = value;
+        _page = 1;
+      });
+    });
+  }
+
+  QaFeedKey get _key => (category: _category, query: _query, page: _page);
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final L10n t = ref.watch(l10nProvider);
-    final AsyncValue<QaFeed> feed = ref.watch(qaFeedProvider(_category));
+    final AsyncValue<QaFeed> feed = ref.watch(qaFeedProvider(_key));
 
     return Scaffold(
       appBar: AppBar(title: Text(t.qaRowTitle)),
@@ -43,7 +75,7 @@ class _QaListScreenState extends ConsumerState<QaListScreen> {
         label: Text(t.qaAskCta),
       ),
       body: RefreshIndicator(
-        onRefresh: () async => ref.invalidate(qaFeedProvider(_category)),
+        onRefresh: () async => ref.invalidate(qaFeedProvider(_key)),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
           children: <Widget>[
@@ -51,6 +83,42 @@ class _QaListScreenState extends ConsumerState<QaListScreen> {
               t.qaLead,
               style: theme.textTheme.bodySmall
                   ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+            const SizedBox(height: 10),
+            // ARAMA KUTUSU (kurucu isteği 2026-10-30): konu başlığı ya da
+            // anahtar kelime — başlık ve gövdede geçen sorular listelenir.
+            TextField(
+              key: const ValueKey<String>('qa-search'),
+              controller: _search,
+              onChanged: _onSearchChanged,
+              textInputAction: TextInputAction.search,
+              decoration: InputDecoration(
+                hintText: t.qaSearchHint,
+                isDense: true,
+                prefixIcon: const Padding(
+                  padding: EdgeInsets.all(10),
+                  child: DocklyIcon(DocklyIcons.search, size: 18),
+                ),
+                prefixIconConstraints:
+                    const BoxConstraints(minWidth: 38, minHeight: 38),
+                suffixIcon: _query.isEmpty
+                    ? null
+                    : IconButton(
+                        key: const ValueKey<String>('qa-search-clear'),
+                        visualDensity: VisualDensity.compact,
+                        icon: const DocklyIcon(DocklyIcons.close, size: 16),
+                        onPressed: () {
+                          _debounce?.cancel();
+                          _search.clear();
+                          setState(() {
+                            _query = '';
+                            _page = 1;
+                          });
+                        },
+                      ),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              ),
             ),
             const SizedBox(height: 10),
             // Kategori çipleri — haritadaki filtre çipleriyle aynı davranış.
@@ -62,13 +130,19 @@ class _QaListScreenState extends ConsumerState<QaListScreen> {
                   _CategoryChip(
                     label: t.qaCatAll,
                     selected: _category == null,
-                    onTap: () => setState(() => _category = null),
+                    onTap: () => setState(() {
+                      _category = null;
+                      _page = 1; // süzgeç değişti → sayfalama başa döner
+                    }),
                   ),
                   for (final String code in kQaCategories)
                     _CategoryChip(
                       label: t.qaCategoryLabel(code),
                       selected: _category == code,
-                      onTap: () => setState(() => _category = code),
+                      onTap: () => setState(() {
+                        _category = code;
+                        _page = 1;
+                      }),
                     ),
                 ],
               ),
@@ -81,9 +155,58 @@ class _QaListScreenState extends ConsumerState<QaListScreen> {
               ),
               error: (Object e, _) => _ErrorBox(
                 message: e is AppFailure ? e.message : '$e',
-                onRetry: () => ref.invalidate(qaFeedProvider(_category)),
+                onRetry: () => ref.invalidate(qaFeedProvider(_key)),
               ),
-              data: (QaFeed f) => _FeedBody(feed: f, t: t),
+              data: (QaFeed f) => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _FeedBody(feed: f, t: t),
+                  // SAYFA SEÇİCİ (2026-10-30): ‹ Sayfa X / Y › — tek sayfada
+                  // hiç çizilmez (gürültü olmasın).
+                  if (f.pageCount > 1)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          OutlinedButton(
+                            key: const ValueKey<String>('qa-page-prev'),
+                            onPressed: _page > 1
+                                ? () => setState(() => _page -= 1)
+                                : null,
+                            style: OutlinedButton.styleFrom(
+                                minimumSize: const Size(44, 38),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12)),
+                            child: const Text('‹'),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 14),
+                            child: Text(
+                              L10n.fmt2(
+                                  t.qaPageFmt2, '$_page', '${f.pageCount}'),
+                              key: const ValueKey<String>('qa-page-label'),
+                              style: theme.textTheme.labelMedium
+                                  ?.copyWith(fontWeight: FontWeight.w800),
+                            ),
+                          ),
+                          OutlinedButton(
+                            key: const ValueKey<String>('qa-page-next'),
+                            onPressed: _page < f.pageCount
+                                ? () => setState(() => _page += 1)
+                                : null,
+                            style: OutlinedButton.styleFrom(
+                                minimumSize: const Size(44, 38),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12)),
+                            child: const Text('›'),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
             ),
           ],
         ),

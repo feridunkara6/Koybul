@@ -8,28 +8,16 @@ import {
   QaRepository,
   QA_PREVIEW_CHARS,
 } from '../src/modules/qa/domain/qa.types';
-import { PremiumAccessService } from '../src/modules/premium/application/premium-access.service';
 import { AppProblem } from '../src/common/problem/problem';
-import { EnvService } from '../src/config/env.service';
 import { Principal } from '../src/core/auth/principal';
 
 const NOW = new Date('2026-10-23T12:00:00.000Z');
 
-function env(premiumEnforce: boolean): EnvService {
-  return { premiumEnforce } as unknown as EnvService;
-}
-
-function premiumSvc(premiumIds: string[]): PremiumAccessService {
-  return {
-    isPremium: (userId: string) => Promise.resolve(premiumIds.includes(userId)),
-  } as unknown as PremiumAccessService;
-}
-
 function member(userId = 'u-free'): Principal {
   return { userId, role: 'user', isGuest: false, familyId: 'f', jti: 'j' };
 }
-function admin(userId = 'u-admin'): Principal {
-  return { userId, role: 'admin', isGuest: false, familyId: 'f', jti: 'j' };
+function guest(): Principal {
+  return { userId: 'g-1', role: 'user', isGuest: true, familyId: 'f', jti: 'j' };
 }
 
 function q(partial: Partial<QaQuestionRow>): QaQuestionRow {
@@ -66,7 +54,7 @@ function a(partial: Partial<QaAnswerRow>): QaAnswerRow {
   };
 }
 
-/** Bellek-içi sahte depo — gerçek depoyla aynı sözleşme. */
+/** Bellek-içi sahte depo — gerçek depoyla aynı sözleşme (arama + sayfalı). */
 class FakeQaRepo implements QaRepository {
   questions: QaQuestionRow[] = [];
   answers: QaAnswerRow[] = [];
@@ -77,11 +65,28 @@ class FakeQaRepo implements QaRepository {
   createdQuestions: { status: QaModerationStatus; featuredUntil: Date | null }[] = [];
   createdAnswers: { status: QaModerationStatus }[] = [];
 
-  list(category: QaCategory | null): Promise<QaQuestionRow[]> {
-    const rows = this.questions.filter(
-      (r) => r.status === 'approved' && (category === null || r.category === category),
+  private filtered(category: QaCategory | null, search: string | null): QaQuestionRow[] {
+    const needle = search?.toLowerCase() ?? null;
+    return this.questions.filter(
+      (r) =>
+        r.status === 'approved' &&
+        (category === null || r.category === category) &&
+        (needle === null ||
+          r.title.toLowerCase().includes(needle) ||
+          r.body.toLowerCase().includes(needle)),
     );
-    return Promise.resolve(rows);
+  }
+
+  list(
+    category: QaCategory | null,
+    search: string | null,
+    offset: number,
+    limit: number,
+  ): Promise<QaQuestionRow[]> {
+    return Promise.resolve(this.filtered(category, search).slice(offset, offset + limit));
+  }
+  count(category: QaCategory | null, search: string | null): Promise<number> {
+    return Promise.resolve(this.filtered(category, search).length);
   }
   featured(limit: number): Promise<QaQuestionRow[]> {
     return Promise.resolve(
@@ -163,12 +168,8 @@ class FakeQaRepo implements QaRepository {
   }
 }
 
-function makeSvc(opts: { enforce: boolean; premiumIds?: string[]; repo?: FakeQaRepo }): {
-  svc: QaService;
-  repo: FakeQaRepo;
-} {
-  const repo = opts.repo ?? new FakeQaRepo();
-  return { svc: new QaService(env(opts.enforce), premiumSvc(opts.premiumIds ?? []), repo), repo };
+function makeSvc(repo: FakeQaRepo = new FakeQaRepo()): { svc: QaService; repo: FakeQaRepo } {
+  return { svc: new QaService(repo), repo };
 }
 
 const VALID_INPUT: CreateQuestionInput = {
@@ -177,9 +178,9 @@ const VALID_INPUT: CreateQuestionInput = {
   body: 'Hafta sonu Boynuz Koyu planı var; poyraz 15-20 kn görünüyor, tek demir mi kıçtan kara mı?',
 };
 
-describe('QaService (Blog V1 — kurucu onayı 2026-10-23)', () => {
+describe('QaService (Blog V1; erişim revizyonu 2026-10-30)', () => {
   it('akış: önizleme kesilir (… eklenir), öne çıkan akışta tekrarlanmaz', async () => {
-    const { svc, repo } = makeSvc({ enforce: true });
+    const { svc, repo } = makeSvc();
     const featured = q({
       id: 'q-feat',
       featuredUntil: new Date(NOW.getTime() + 3600_000),
@@ -187,7 +188,7 @@ describe('QaService (Blog V1 — kurucu onayı 2026-10-23)', () => {
     });
     repo.questions.push(featured, q({ id: 'q-old', body: 'kısa gövde ama otuz karakteri geçen' }));
 
-    const feed = await svc.feed(null, null, 20, NOW);
+    const feed = await svc.feed(null, null, 1, 20, NOW);
     expect(feed.featured.map((f) => f.id)).toEqual(['q-feat']);
     expect(feed.items.map((i) => i.id)).toEqual(['q-old']); // tekrar yok
     expect(feed.featured[0].preview.endsWith('…')).toBe(true);
@@ -195,70 +196,84 @@ describe('QaService (Blog V1 — kurucu onayı 2026-10-23)', () => {
     expect(feed.featured[0].featured).toBe(true);
     // Gövde liste yanıtında YOKTUR (vitrin ilkesi — alan hiç tanımlı değil).
     expect('body' in feed.featured[0]).toBe(false);
-    // KAPTAN KARTI KÖPRÜSÜ (Hafta 1B): yazar kimliği akışta taşınır.
-    expect(feed.featured[0].authorId).toBe('author-1');
+    expect(feed.total).toBe(2);
+    expect(feed.pageCount).toBe(1);
   });
 
   it('akış: kategori süzgeci varken öne çıkan şeridi boş döner', async () => {
-    const { svc, repo } = makeSvc({ enforce: true });
+    const { svc, repo } = makeSvc();
     repo.questions.push(q({ id: 'q-feat', featuredUntil: new Date(NOW.getTime() + 3600_000) }));
-    const feed = await svc.feed('demirleme', null, 20, NOW);
+    const feed = await svc.feed('demirleme', null, 1, 20, NOW);
     expect(feed.featured).toEqual([]);
     expect(feed.items.map((i) => i.id)).toEqual(['q-feat']);
   });
 
-  it('detay: bayrak KAPALIYKEN herkes full görür (bugünkü davranış ilkesi)', async () => {
-    const { svc, repo } = makeSvc({ enforce: false });
-    repo.questions.push(q({}));
-    repo.answers.push(a({}));
-    const d = await svc.detail(null, 'q1', NOW);
-    expect(d.access).toBe('full');
-    if (d.access === 'full') expect(d.answers).toHaveLength(1);
+  it('ARAMA (2026-10-30): anahtar kelime başlık/gövdede eşleşir; şerit kapalı', async () => {
+    const { svc, repo } = makeSvc();
+    repo.questions.push(
+      q({ id: 'q-demir', title: 'Tonoz demiri nasıl atılır?', body: 'uzun gövde '.repeat(5) }),
+      q({ id: 'q-yelken', title: 'Flok seçimi', body: 'Cenova mı flok mu, rüzgâra göre' }),
+      q({ id: 'q-feat', featuredUntil: new Date(NOW.getTime() + 3600_000) }),
+    );
+    const feed = await svc.feed(null, 'tonoz', 1, 10, NOW);
+    expect(feed.items.map((i) => i.id)).toEqual(['q-demir']);
+    expect(feed.featured).toEqual([]); // aramada şerit çizilmez
+    expect(feed.total).toBe(1);
   });
 
-  it('detay: ücretsiz üye vitrin görür — gövde ve cevaplar İNMEZ', async () => {
-    const { svc, repo } = makeSvc({ enforce: true });
+  it('SAYFALAMA (2026-10-30): toplam/sayfa sayısı doğru; 2. sayfa doğru dilim', async () => {
+    const { svc, repo } = makeSvc();
+    for (let i = 0; i < 13; i++) {
+      repo.questions.push(q({ id: `q-${i}`, title: `Soru ${i} — yeterince uzun başlık` }));
+    }
+    const p1 = await svc.feed('demirleme', null, 1, 10, NOW);
+    expect(p1.items).toHaveLength(10);
+    expect(p1.total).toBe(13);
+    expect(p1.pageCount).toBe(2);
+    expect(p1.page).toBe(1);
+    const p2 = await svc.feed('demirleme', null, 2, 10, NOW);
+    expect(p2.items).toHaveLength(3);
+    expect(p2.page).toBe(2);
+  });
+
+  it('detay: MİSAFİR/anonim teaser görür — gövde ve cevaplar İNMEZ', async () => {
+    const { svc, repo } = makeSvc();
     repo.questions.push(q({ answersCount: 7 }));
     repo.answers.push(a({}));
-    const d = await svc.detail(member(), 'q1', NOW);
-    expect(d.access).toBe('teaser');
-    if (d.access === 'teaser') {
-      expect(d.answersCount).toBe(7);
-      expect('body' in d.question).toBe(false);
-      expect('answers' in d).toBe(false);
+    for (const viewer of [null, guest()]) {
+      const d = await svc.detail(viewer, 'q1', NOW);
+      expect(d.access).toBe('teaser');
+      if (d.access === 'teaser') {
+        expect(d.answersCount).toBe(7);
+        expect('body' in d.question).toBe(false);
+        expect('answers' in d).toBe(false);
+      }
     }
   });
 
-  it('detay: premium üye full görür; beğeni/benim işaretleri doğru', async () => {
-    const { svc, repo } = makeSvc({ enforce: true, premiumIds: ['u-prem'] });
+  it('detay (REVİZYON 2026-10-30): ÜCRETSİZ üye full görür — Premium şartı yok', async () => {
+    const { svc, repo } = makeSvc();
     repo.questions.push(q({}));
-    repo.answers.push(
-      a({ userId: 'u-prem' }),
-      a({ id: 'a2', status: 'pending', userId: 'u-prem' }),
-    );
-    repo.likedPairs.add('q1|u-prem');
+    repo.answers.push(a({}), a({ id: 'a2', status: 'pending', userId: 'u-free' }));
+    repo.likedPairs.add('q1|u-free');
 
-    const d = await svc.detail(member('u-prem'), 'q1', NOW);
+    const d = await svc.detail(member(), 'q1', NOW);
     expect(d.access).toBe('full');
     if (d.access === 'full') {
       expect(d.question.likedByMe).toBe(true);
       expect(d.question.body).toBe('B'.repeat(200));
       expect(d.answers).toHaveLength(2); // kendi bekleyen cevabı da görünür
-      expect(d.answers.every((x) => x.mine)).toBe(true);
     }
   });
 
-  it('detay: SAHİBİ premium olmasa da kendi sorusunu (beklemede bile) görür', async () => {
-    const { svc, repo } = makeSvc({ enforce: true });
-    repo.questions.push(q({ userId: 'u-free', status: 'pending' }));
-    const d = await svc.detail(member('u-free'), 'q1', NOW);
-    expect(d.access).toBe('full');
-  });
-
-  it('detay: beklemedeki soru başkasına 404 (varlık sızdırılmaz); reddedilen herkese 404', async () => {
-    const { svc, repo } = makeSvc({ enforce: true, premiumIds: ['u-prem'] });
-    repo.questions.push(q({ status: 'pending' }), q({ id: 'q-rej', status: 'rejected' }));
-    await expect(svc.detail(member('u-prem'), 'q1', NOW)).rejects.toMatchObject({
+  it('detay: SAHİBİ kendi bekleyen sorusunu görür; başkasına 404; reddedilen herkese 404', async () => {
+    const { svc, repo } = makeSvc();
+    repo.questions.push(
+      q({ userId: 'u-free', status: 'pending' }),
+      q({ id: 'q-rej', status: 'rejected' }),
+    );
+    expect((await svc.detail(member('u-free'), 'q1', NOW)).access).toBe('full');
+    await expect(svc.detail(member('u-baska'), 'q1', NOW)).rejects.toMatchObject({
       problemType: 'not-found',
     });
     await expect(svc.detail(member('author-1'), 'q-rej', NOW)).rejects.toMatchObject({
@@ -266,30 +281,15 @@ describe('QaService (Blog V1 — kurucu onayı 2026-10-23)', () => {
     });
   });
 
-  it('detay: bu soruda ONAYLI cevabı olan, premium bitse de full görür (karar A)', async () => {
-    const { svc, repo } = makeSvc({ enforce: true });
-    repo.questions.push(q({}));
-    repo.approvedAnswerPairs.add('q1|u-eski');
-    const d = await svc.detail(member('u-eski'), 'q1', NOW);
-    expect(d.access).toBe('full');
-  });
+  it('soru oluşturma (REVİZYON): ücretsiz üye sorabilir; KARMA moderasyon işler', async () => {
+    const { svc, repo } = makeSvc();
 
-  it('soru oluşturma: bayrak açıkken ücretsiz üyeye premium-required', async () => {
-    const { svc } = makeSvc({ enforce: true });
-    await expect(svc.createQuestion(member(), VALID_INPUT, NOW)).rejects.toMatchObject({
-      problemType: 'premium-required',
-    });
-  });
-
-  it('soru oluşturma (KARMA): ilk içerik kuyruğa, onaylı geçmişi olan anında yayına', async () => {
-    const { svc, repo } = makeSvc({ enforce: true, premiumIds: ['u-prem'] });
-
-    const first = await svc.createQuestion(member('u-prem'), VALID_INPUT, NOW);
+    const first = await svc.createQuestion(member(), VALID_INPUT, NOW);
     expect(first.status).toBe('pending'); // ilk içerik — kuyruk
     expect(repo.createdQuestions[0].featuredUntil).toBeNull();
 
-    repo.approvedAuthors.add('u-prem'); // moderatör onayladı varsayımı
-    const second = await svc.createQuestion(member('u-prem'), VALID_INPUT, NOW);
+    repo.approvedAuthors.add('u-free'); // moderatör onayladı varsayımı
+    const second = await svc.createQuestion(member(), VALID_INPUT, NOW);
     expect(second.status).toBe('approved');
     expect(repo.createdQuestions[1].featuredUntil?.toISOString()).toBe(
       new Date(NOW.getTime() + 24 * 3600_000).toISOString(), // 24 saat öne çıkan
@@ -297,69 +297,55 @@ describe('QaService (Blog V1 — kurucu onayı 2026-10-23)', () => {
   });
 
   it('soru oluşturma: güvenilir yazar bile ön-süzgece takılırsa kuyruğa düşer', async () => {
-    const { svc, repo } = makeSvc({ enforce: true, premiumIds: ['u-prem'] });
-    repo.approvedAuthors.add('u-prem');
+    const { svc, repo } = makeSvc();
+    repo.approvedAuthors.add('u-free');
     const res = await svc.createQuestion(
-      member('u-prem'),
+      member(),
       { ...VALID_INPUT, body: `Bana ulaşın: kaptan@ornek.com — ${'d'.repeat(40)}` },
       NOW,
     );
     expect(res.status).toBe('pending'); // contact_info bayrağı
   });
 
-  it('soru oluşturma: yönetici premium satın almadan yazar (yönetici=premium kuralı)', async () => {
-    const { svc } = makeSvc({ enforce: true });
-    const res = await svc.createQuestion(admin(), VALID_INPUT, NOW);
-    expect(res.status).toBe('pending'); // yine karma kurala tabi — kestirme yok
-  });
-
-  it('cevap: yayında olmayan soruya yazılamaz (404)', async () => {
-    const { svc, repo } = makeSvc({ enforce: true, premiumIds: ['u-prem'] });
-    repo.questions.push(q({ status: 'pending' }));
+  it('cevap: yayında olmayan soruya yazılamaz (404); ücretsiz üye yazabilir', async () => {
+    const { svc, repo } = makeSvc();
+    repo.questions.push(q({ id: 'q-pend', status: 'pending' }), q({}));
     await expect(
-      svc.createAnswer(member('u-prem'), 'q1', 'Gayet makul bir cevap metni.', NOW),
+      svc.createAnswer(member(), 'q-pend', 'Gayet makul bir cevap metni.'),
     ).rejects.toMatchObject({ problemType: 'not-found' });
-  });
 
-  it('cevap (KARMA): onaylı geçmişi olan temiz cevap anında yayınlanır', async () => {
-    const { svc, repo } = makeSvc({ enforce: true, premiumIds: ['u-prem'] });
-    repo.questions.push(q({}));
-    repo.approvedAuthors.add('u-prem');
+    repo.approvedAuthors.add('u-free');
     const res = await svc.createAnswer(
-      member('u-prem'),
+      member(),
       'q1',
       'Kuzey yakada tek demir yeter; 20 kn üstünde kaloma 5:1 bırak.',
-      NOW,
     );
     expect(res.status).toBe('approved');
   });
 
-  it('beğeni: kendi soruna veremezsin; başkasınınkine aç/kapa çalışır', async () => {
-    const { svc, repo } = makeSvc({ enforce: true, premiumIds: ['author-1', 'u-prem'] });
-    repo.questions.push(q({}));
-    await expect(svc.toggleLike(member('author-1'), 'q1', NOW)).rejects.toMatchObject({
-      problemType: 'forbidden',
-    });
-    const r = await svc.toggleLike(member('u-prem'), 'q1', NOW);
-    expect(r).toEqual({ liked: true, likeCount: 3 });
-  });
-
-  it('faydalı: kendi cevabına veremezsin; olmayan cevaba 404', async () => {
-    const { svc, repo } = makeSvc({ enforce: true, premiumIds: ['answerer-1', 'u-prem'] });
+  it('beğeni/faydalı (REVİZYON): ücretsiz üye verebilir; kendi içeriğine veremez', async () => {
+    const { svc, repo } = makeSvc();
     repo.questions.push(q({}));
     repo.answers.push(a({}));
-    await expect(svc.toggleHelpful(member('answerer-1'), 'a1', NOW)).rejects.toMatchObject({
+    await expect(svc.toggleLike(member('author-1'), 'q1')).rejects.toMatchObject({
       problemType: 'forbidden',
     });
-    await expect(svc.toggleHelpful(member('u-prem'), 'a-yok', NOW)).rejects.toMatchObject({
+    expect(await svc.toggleLike(member(), 'q1')).toEqual({ liked: true, likeCount: 3 });
+
+    await expect(svc.toggleHelpful(member('answerer-1'), 'a1')).rejects.toMatchObject({
+      problemType: 'forbidden',
+    });
+    await expect(svc.toggleHelpful(member(), 'a-yok')).rejects.toMatchObject({
       problemType: 'not-found',
     });
-    const r = await svc.toggleHelpful(member('u-prem'), 'a1', NOW);
-    expect(r).toEqual({ helped: true, helpfulCount: 4 });
+    expect(await svc.toggleHelpful(member(), 'a1')).toEqual({
+      helped: true,
+      helpfulCount: 4,
+    });
   });
 
-  it('⚑ bildir: premium ŞARTI YOK, içerik kuyruğa düşer; olmayan içerik 404', async () => {
-    const { svc, repo } = makeSvc({ enforce: true });
+  it('⚑ bildir: hesaplı herkes bildirebilir, içerik kuyruğa düşer; olmayan 404', async () => {
+    const { svc, repo } = makeSvc();
     repo.questions.push(q({}));
     await svc.report('qa_question', 'q1');
     expect(repo.reported).toEqual(['qa_question:q1']);

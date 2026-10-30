@@ -19,13 +19,21 @@ class QaApi {
       : Options(headers: <String, dynamic>{'Authorization': 'Bearer $token'});
 
   /// Ana akış: öne çıkan şeridi + kronolojik liste (herkese açık).
-  Future<QaFeed> feed({String? category, DateTime? before, int? limit}) async {
+  /// Akış — SAYFALI (2026-10-30): [page] 1 tabanlı; [query] anahtar kelime
+  /// araması (başlık + gövde). Eski `before` imleci kaldırıldı.
+  Future<QaFeed> feed({
+    String? category,
+    String? query,
+    int? page,
+    int? limit,
+  }) async {
     try {
       final res = await _dio.get<Map<String, dynamic>>(
         '/v1/qa/questions',
         queryParameters: <String, dynamic>{
           if (category != null) 'category': category,
-          if (before != null) 'before': before.toUtc().toIso8601String(),
+          if (query != null && query.trim().length >= 2) 'q': query.trim(),
+          if (page != null) 'page': page,
           if (limit != null) 'limit': limit,
         },
       );

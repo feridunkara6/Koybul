@@ -19,11 +19,20 @@ final Provider<QaGateway> qaGatewayProvider = Provider<QaGateway>((ref) {
   );
 });
 
-/// Akış — kategori anahtarıyla aile (null = tümü). autoDispose: ekrandan
-/// çıkınca istek zinciri salınır; elle yenileme ref.invalidate ile.
-final AutoDisposeFutureProviderFamily<QaFeed, String?> qaFeedProvider =
-    FutureProvider.autoDispose.family<QaFeed, String?>((ref, String? category) {
-  return ref.watch(qaGatewayProvider).feed(category: category);
+/// Akış sorgusu anahtarı (2026-10-30): kategori + arama + sayfa. Kayıt tipi
+/// değerce eşitlenir — aynı sorgu ikinci kez ağa gitmez.
+typedef QaFeedKey = ({String? category, String query, int page});
+
+/// Akış — sayfalı + aramalı aile. autoDispose: ekrandan çıkınca istek
+/// zinciri salınır; elle yenileme ref.invalidate ile.
+/// NOT: sol taraf tür BİLEREK çıkarımda (CI dersi, invalid_assignment).
+final qaFeedProvider =
+    FutureProvider.autoDispose.family<QaFeed, QaFeedKey>((ref, QaFeedKey key) {
+  return ref.watch(qaGatewayProvider).feed(
+        category: key.category,
+        query: key.query.trim().length >= 2 ? key.query.trim() : null,
+        page: key.page,
+      );
 });
 
 /// Soru detayı — erişim kararı (full/teaser) sunucudan gelir.

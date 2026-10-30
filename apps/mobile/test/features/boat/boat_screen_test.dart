@@ -3,6 +3,8 @@ import 'package:dockly_mobile/features/boat/application/maintenance_controller.d
 import 'package:dockly_mobile/features/boat/application/my_boat_controller.dart';
 import 'package:dockly_mobile/features/boat/domain/maintenance.dart';
 import 'package:dockly_mobile/features/boat/domain/my_boat.dart';
+import 'package:dockly_mobile/features/auth/presentation/account_gate.dart'
+    show AccountRequiredSheetBody;
 import 'package:dockly_mobile/features/boat/presentation/boat_screen.dart';
 import 'package:dockly_mobile/features/boat/presentation/maintenance_screen.dart';
 import 'package:dockly_mobile/features/deck/presentation/deck_screen.dart'
@@ -69,29 +71,42 @@ void main() {
     expect(find.byKey(const ValueKey<String>('maint-summary')), findsNothing);
   });
 
-  testWidgets('HESAP KAPISI (2026-10-26): misafir Teknem\'de yalnız davet '
-      'kartı + Defter köprüsü görür — bakım ve Marinam ÇİZİLMEZ',
+  testWidgets('GÖRÜNÜRLÜK REVİZYONU (2026-10-30): misafir bakım satırını '
+      'GÖRÜR (vitrin) — dokununca hesap daveti; Marinam yine çizilmez',
       (WidgetTester tester) async {
     // member:false → oturum yok (AuthRestoring); tekne de yok.
     await tester.pumpWidget(_app(FakeMaintenanceStore(), member: false));
     await tester.pumpAndSettle();
 
     expect(find.text('Tekneni tanımla'), findsOneWidget); // davet durur
-    expect(find.byKey(const ValueKey<String>('maint-open')), findsNothing);
-    expect(find.text('Bakım takibi'), findsNothing);
+    // Satır görünür; vitrin metni sahte durum İDDİA ETMEZ (0-uydurma).
+    expect(find.byKey(const ValueKey<String>('maint-open')), findsOneWidget);
+    expect(find.textContaining('tekneni tanıt'), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('marinam-pick')), findsNothing);
     expect(find.byKey(const ValueKey<String>('boat-deck-bridge')),
         findsOneWidget);
+
+    // Dokunuş: işlem KAPILI — hesap daveti açılır, bakım listesi AÇILMAZ.
+    await tester.tap(find.byKey(const ValueKey<String>('maint-open')));
+    await tester.pumpAndSettle();
+    expect(find.byType(AccountRequiredSheetBody), findsOneWidget);
+    expect(find.byType(MaintenanceScreen), findsNothing);
   });
 
-  testWidgets('HESAP KAPISI: hesaplı ama teknesiz kullanıcıda da bakım özeti '
-      'çizilmez (tekne yokken bakım anlamsız); davet CTA\'sı durur',
+  testWidgets('GÖRÜNÜRLÜK REVİZYONU: hesaplı ama teknesiz kullanıcı satırı '
+      'görür; dokununca tekne tanıtma sayfası açılır',
       (WidgetTester tester) async {
     await tester.pumpWidget(_app(FakeMaintenanceStore()));
     await tester.pumpAndSettle();
 
     expect(find.text('Tekneni tanımla'), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('maint-open')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('maint-open')), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey<String>('maint-open')));
+    await tester.pumpAndSettle();
+    // Tekne formu alt sayfası açıldı; bakım listesi açılmadı.
+    expect(find.byKey(const ValueKey<String>('boat-name-field')), findsOneWidget);
+    expect(find.byType(MaintenanceScreen), findsNothing);
   });
 
   testWidgets('bakım özetine dokun → tam liste kendi ekranında; kayıt yokken '

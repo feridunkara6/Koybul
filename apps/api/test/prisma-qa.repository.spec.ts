@@ -52,7 +52,7 @@ const ANSWER_ROW = {
 describe('PrismaQaRepository (satır eşleme sözleşmesi)', () => {
   it('list/featured/findQuestion satırları tiplere eşler', async () => {
     const repo = new PrismaQaRepository(fakePrisma(() => [QUESTION_ROW]));
-    const [row] = await repo.list('demirleme', new Date(), 20);
+    const [row] = await repo.list('demirleme', 'demir', 0, 20);
     expect(row.status).toBe('approved');
     expect(row.likeCount).toBe(2);
     expect(row.authorPremium).toBe(true);

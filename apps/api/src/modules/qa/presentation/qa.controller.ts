@@ -25,8 +25,10 @@ import {
   QA_BODY_MAX,
   QA_BODY_MIN,
   QA_CATEGORIES,
-  QA_LIST_DEFAULT_LIMIT,
   QA_LIST_MAX_LIMIT,
+  QA_PAGE_SIZE,
+  QA_SEARCH_MAX,
+  QA_SEARCH_MIN,
   QA_TITLE_MAX,
   QA_TITLE_MIN,
 } from '../domain/qa.types';
@@ -52,16 +54,19 @@ const createAnswerSchema = z
 const feedQuerySchema = z
   .object({
     category: z.enum(QA_CATEGORIES).optional(),
-    before: z.string().datetime({ offset: true }).optional(),
+    /** Anahtar kelime araması (2026-10-30) — başlık + gövdede geçenler. */
+    q: z.string().trim().min(QA_SEARCH_MIN).max(QA_SEARCH_MAX).optional(),
+    /** Sayfa numarası (1 tabanlı) — sayfalı düzen (2026-10-30). */
+    page: z.coerce.number().int().min(1).max(500).optional(),
     limit: z.coerce.number().int().min(1).max(QA_LIST_MAX_LIMIT).optional(),
   })
   .strict();
 
 /**
- * Soru-cevap uçları (Blog V1).
- * Okuma: liste herkese, detay erişim-kararlı (OptionalJwt — misafir de teaser
- * görür). Yazma: hesap + Premium (Premium kapısı SERVİSTE; kontrolcü yalnız
- * kimlik/doğrulama yapar — iki katman ayrımı, moderasyonla aynı desen).
+ * Soru-cevap uçları (Blog V1; erişim revizyonu 2026-10-30).
+ * Okuma: liste herkese (arama + sayfalı), detay erişim-kararlı (OptionalJwt —
+ * misafir teaser, HESAPLI herkes tam detay). Yazma: hesap yeterli (Premium
+ * şartı kaldırıldı); kontrolcü yalnız kimlik/doğrulama yapar.
  */
 @Controller('qa')
 export class QaController {
@@ -74,11 +79,7 @@ export class QaController {
       throw new AppProblem('validation-error', 'Geçersiz liste parametresi.');
     }
     const q = parsed.data;
-    return this.qa.feed(
-      q.category ?? null,
-      q.before ? new Date(q.before) : null,
-      q.limit ?? QA_LIST_DEFAULT_LIMIT,
-    );
+    return this.qa.feed(q.category ?? null, q.q ?? null, q.page ?? 1, q.limit ?? QA_PAGE_SIZE);
   }
 
   @Get('questions/:id')

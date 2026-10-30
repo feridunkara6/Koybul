@@ -1,13 +1,13 @@
 /**
  * SORU-CEVAP (Blog V1 — kurucu onayı 2026-10-23).
  *
- * Erişim sözleşmesi (kurucu kararı, görsel konsept Ekran 1-5):
+ * Erişim sözleşmesi (KURUCU REVİZYONU 2026-10-30, saha kararı):
  * - Liste + başlık + kısa önizleme HERKESE açık (misafir dâhil).
- * - Detay, cevaplar, soru sorma, cevap yazma, beğeni → Premium.
- * - Kullanıcı KENDİ sorduğu sorunun ve onaylı cevap yazdığı sorunun
- *   detayını Premium'u bitse de okur ("emek rehin alınmaz" kararı).
- * - PREMIUM_ENFORCE kapalıyken (koy vitrini ile aynı bayrak) her şey açık —
- *   bugünkü davranış birebir korunur.
+ * - Detay, cevaplar, soru sorma, cevap yazma, beğeni → ÜCRETSİZ HESAP
+ *   yeterli (Premium ŞARTI KALDIRILDI — topluluk bilgisi herkese akar;
+ *   misafir yalnız önizleme görür, hesap teşviki korunur).
+ * - ARAMA + SAYFALAMA (saha isteği 2026-10-30): başlık/gövdede anahtar
+ *   kelime araması; akış sayfa sayfa döner (sonsuz kaydırma yerine).
  *
  * Moderasyon KARMA model (kurucu onayı): kullanıcının İLK soru-cevap içeriği
  * kuyruktan geçer; onaylı bir içeriği olan kullanıcının sonraki içerikleri
@@ -40,6 +40,11 @@ export const QA_FEATURED_HOURS = 24;
 export const QA_FEATURED_MAX = 3;
 export const QA_LIST_DEFAULT_LIMIT = 20;
 export const QA_LIST_MAX_LIMIT = 50;
+/** Sayfalı düzen (2026-10-30): bir sayfada bu kadar soru — kaydırma kısalır. */
+export const QA_PAGE_SIZE = 10;
+/** Arama metni sınırları (zod + istemci aynı). */
+export const QA_SEARCH_MIN = 2;
+export const QA_SEARCH_MAX = 60;
 
 export type QaModerationStatus = 'pending' | 'approved' | 'rejected';
 
@@ -89,6 +94,12 @@ export interface QaAnswerView {
 export interface QaFeed {
   featured: QaQuestionSummary[];
   items: QaQuestionSummary[];
+  /** Süzgece uyan TOPLAM soru (sayfalama için, 2026-10-30). */
+  total: number;
+  /** Toplam sayfa sayısı — istemci sayfa seçiciyi bununla çizer. */
+  pageCount: number;
+  /** Dönen sayfa (1 tabanlı). */
+  page: number;
 }
 
 /** Detay yanıtı — koy vitrin kilidiyle aynı erişim-kararı deseni. */
@@ -134,8 +145,15 @@ export interface QaAnswerRow {
 export const QA_REPOSITORY = Symbol('QA_REPOSITORY');
 
 export interface QaRepository {
-  /** Onaylı sorular, yeniden eskiye; kategori süzgeci isteğe bağlı. */
-  list(category: QaCategory | null, before: Date | null, limit: number): Promise<QaQuestionRow[]>;
+  /** Onaylı sorular, yeniden eskiye; kategori + arama süzgeçli, sayfalı. */
+  list(
+    category: QaCategory | null,
+    search: string | null,
+    offset: number,
+    limit: number,
+  ): Promise<QaQuestionRow[]>;
+  /** Süzgece uyan toplam onaylı soru — sayfa sayısı bundan türer. */
+  count(category: QaCategory | null, search: string | null): Promise<number>;
   /** "Öne çıkan" şeridi: featured_until > now, en yeni QA_FEATURED_MAX adet. */
   featured(limit: number): Promise<QaQuestionRow[]>;
   /** Soru + yazar bilgisi; silinmişse null (durum süzgeci YOK — karar serviste). */

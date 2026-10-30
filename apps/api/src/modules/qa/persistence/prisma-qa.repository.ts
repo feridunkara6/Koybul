@@ -101,21 +101,44 @@ function toAnswer(r: AnswerSqlRow): QaAnswerRow {
 export class PrismaQaRepository implements QaRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  /** Arama deseni: ILIKE %…% — kullanıcı girdisindeki joker karakterler
+   *  etkisizleştirilir (yüzde/alt çizgi aramada DÜZ metin sayılır). */
+  private static searchPattern(search: string): string {
+    return `%${search.replace(/[\\%_]/g, (m) => `\\${m}`)}%`;
+  }
+
   async list(
     category: QaCategory | null,
-    before: Date | null,
+    search: string | null,
+    offset: number,
     limit: number,
   ): Promise<QaQuestionRow[]> {
+    const pattern = search === null ? null : PrismaQaRepository.searchPattern(search);
     const rows = await this.prisma.$queryRaw<QuestionSqlRow[]>(Prisma.sql`
       SELECT ${QUESTION_COLS}
       FROM qa_questions q ${AUTHOR_JOIN}
       WHERE q.status = 'approved'::moderation_status AND q.deleted_at IS NULL
         AND (${category}::text IS NULL OR q.category = ${category})
-        AND (${before}::timestamptz IS NULL OR q.created_at < ${before})
+        AND (${pattern}::text IS NULL
+             OR q.title ILIKE ${pattern} OR q.body ILIKE ${pattern})
       ORDER BY q.created_at DESC
+      OFFSET ${offset}
       LIMIT ${limit}
     `);
     return rows.map(toQuestion);
+  }
+
+  async count(category: QaCategory | null, search: string | null): Promise<number> {
+    const pattern = search === null ? null : PrismaQaRepository.searchPattern(search);
+    const rows = await this.prisma.$queryRaw<{ n: number }[]>(Prisma.sql`
+      SELECT count(*)::int AS n
+      FROM qa_questions q
+      WHERE q.status = 'approved'::moderation_status AND q.deleted_at IS NULL
+        AND (${category}::text IS NULL OR q.category = ${category})
+        AND (${pattern}::text IS NULL
+             OR q.title ILIKE ${pattern} OR q.body ILIKE ${pattern})
+    `);
+    return Number(rows[0]?.n ?? 0);
   }
 
   async featured(limit: number): Promise<QaQuestionRow[]> {
