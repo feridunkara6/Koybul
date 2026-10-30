@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Koybul Saha Testi</title>
+<style>
+  :root{
+    --bg:#f6f8fb; --card:#ffffff; --ink:#15243a; --sub:#5b6b82;
+    --brand:#0e4f8a; --teal:#0b7a6c; --amber:#b8860b; --red:#c0392b;
+    --line:#e3e9f1; --chip:#eaf1f8;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0f1722; --card:#17212e; --ink:#e8eef6; --sub:#9db0c6;
+      --brand:#6fb1ec; --teal:#4ecdc4; --amber:#e8c468; --red:#ff8a80;
+      --line:#2a3850; --chip:#1f2d3f;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.55 -apple-system,"Segoe UI",Roboto,sans-serif;
+       padding:16px 16px 48px}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:21px;margin:8px 0 2px}
+  .lead{color:var(--sub);font-size:13.5px;margin:0 0 18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+        padding:14px 16px;margin-bottom:14px}
+  .card h2{font-size:15px;margin:0 0 2px;display:flex;gap:8px;align-items:center}
+  .tag{font-size:10px;font-weight:800;letter-spacing:.4px;padding:2px 8px;
+       border-radius:999px;background:var(--chip);color:var(--brand)}
+  .who{color:var(--sub);font-size:12px;margin:0 0 10px}
+  label.step{display:flex;gap:10px;align-items:flex-start;padding:7px 0;
+             border-top:1px dashed var(--line);cursor:pointer}
+  label.step:first-of-type{border-top:none}
+  input[type=checkbox]{margin-top:3px;width:17px;height:17px;accent-color:var(--teal);flex:0 0 auto}
+  .exp{color:var(--sub);font-size:12.5px;display:block;margin-top:1px}
+  .exp b{color:var(--teal);font-weight:700}
+  .note{background:var(--chip);border-radius:10px;padding:9px 12px;font-size:12.5px;
+        color:var(--sub);margin-top:10px}
+  .note b{color:var(--ink)}
+  .warn{border-left:3px solid var(--amber);padding-left:10px}
+  .pre{background:var(--chip);border-radius:10px;padding:10px 12px;font-size:12.5px;
+       white-space:pre-wrap;color:var(--ink)}
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+  .legend span{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--chip)}
+  .m{color:var(--sub)} .u{color:var(--brand)} .p{color:var(--amber)} .a{color:var(--red)}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>⚓ Koybul Saha Testi — Sosyal Paketler</h1>
+<p class="lead">Sürüm 9.3–9.10 ile gelen her şey: kaptan kimliği, bildirim kutusu, takip, topluluk akışı, seyir paylaşımı, Pruvan neta, kullanıcı etkinlikleri, tekne hikâyesi, yakıt takibi ve favorile/kardeş tekneler. Sırayla ilerle, her kutuyu işaretle. Beklenmeyen bir şey görürsen en alttaki şablonla bana yaz.</p>
+
+<div class="legend">
+  <span class="m">👤 MİSAFİR = hesapsız</span>
+  <span class="u">🔵 ÜYE = ücretsiz hesap</span>
+  <span class="p">⭑ PREMIUM</span>
+  <span class="a">🛠 ADMIN = senin yönetici hesabın</span>
+</div>
+
+<div class="card">
+  <h2>0 · Hazırlık <span class="tag">5 dk</span></h2>
+  <p class="who">Testin sağlıklı olması için iki telefon ya da iki hesap ideal.</p>
+  <label class="step"><input type="checkbox"><span>TestFlight'tan yeni sürümü yükle; uygulama açılıyor, eski verilerin (rotalar, seyirler, notlar, teknem) yerinde.<span class="exp"><b>Beklenen:</b> hiçbir eski kayıt kaybolmaz.</span></span></label>
+  <label class="step"><input type="checkbox"><span>İkinci bir test hesabın olsun (başka e-posta ya da ikinci telefon). Takip/akış testleri iki hesap ister.<span class="exp">A hesabı = senin admin hesabın · B hesabı = sıradan üye.</span></span></label>
+</div>
+
+<div class="card">
+  <h2>1 · Kaptan Kimliği <span class="tag">SP-1</span></h2>
+  <p class="who">🔵 ÜYE ile</p>
+  <label class="step"><input type="checkbox"><span>Bir koy aç → notlardaki yazar adlarının yanında renkli harfli avatarlar var.<span class="exp"><b>Beklenen:</b> aynı kaptan her yerde aynı renk.</span></span></label>
+  <label class="step"><input type="checkbox"><span>Bir yazar adına dokun → kaptan kartı açılır: avatar, seviye, üyelik yılı, sayılar, rozetler, SON KATKILARI.</span></label>
+  <label class="step"><input type="checkbox"><span>Bir notun ⚑ işaretine dokun → şikâyet sayfası açılır, sebep seçince "Bildirimin alındı" der.</span></label>
+</div>
+
+<div class="card">
+  <h2>2 · Bildirim Kutusu <span class="tag">SP-2</span></h2>
+  <p class="who">🔵 ÜYE ile (iki hesap)</p>
+  <label class="step"><input type="checkbox"><span>B hesabından, A'nın bir notuna "Faydalı" ver ya da sorusuna cevap yaz.</span></label>
+  <label class="step"><input type="checkbox"><span>A hesabında Bugün ekranındaki zile dokun → gelen kutusunda bu olay listeleniyor; dokununca doğru içeriğe gidiyor.</span></label>
+  <label class="step"><input type="checkbox"><span>Uygulama kapalıyken gelen push bildirimine dokun → uygulama doğru ekranda açılır.</span></label>
+</div>
+
+<div class="card">
+  <h2>3 · Takip <span class="tag">SP-3a</span></h2>
+  <label class="step"><input type="checkbox"><span>🔵 B hesabıyla A'nın kaptan kartını aç → "Takip et"e dokun → düğme "Takip ediliyor" olur, TAKİPÇİ sayısı 1 artar.</span></label>
+  <label class="step"><input type="checkbox"><span>Profil → Topluluk → "Takip ettiklerim" → A listede; satıra dokununca kartı açılır.</span></label>
+  <label class="step"><input type="checkbox"><span>Tekrar dokun ("Takip ediliyor") → takip bırakılır, sayı geri düşer.</span></label>
+  <label class="step"><input type="checkbox"><span>Kendi kaptan kartını aç → takip düğmesi <b>yok</b> (kendini takip edemezsin).</span></label>
+  <label class="step"><input type="checkbox"><span>👤 MİSAFİR olarak bir kaptan kartında "Takip et"e dokun → kibarca hesap daveti çıkar, işlem yapılmaz.</span></label>
+</div>
+
+<div class="card">
+  <h2>4 · Seyir Paylaşımı + Akış + Pruvan neta <span class="tag">SP-3b</span></h2>
+  <label class="step"><input type="checkbox"><span>🔵 A hesabıyla Defter'de bir planı "Gerçekleşti" yap → sayfada "Toplulukla paylaş" anahtarı var, <b>kapalı</b> başlıyor.</span></label>
+  <label class="step"><input type="checkbox"><span>Anahtarı aç ve kaydet → "paylaşıldı ⚓" mesajı gelir.<span class="exp"><b>Gizlilik kontrolü:</b> başlangıç "Konumum" ise akıştaki kartta başlangıç adı GÖRÜNMEZ, yalnız varış görünür.</span></span></label>
+  <label class="step"><input type="checkbox"><span>B hesabı (A'yı takip ediyorken) Bugün'ü aç → "Topluluk Akışı" bölümünde A'nın seyri kart olarak akar; "Tümünü gör" tam listeyi açar.</span></label>
+  <label class="step"><input type="checkbox"><span>Karttaki "⚓ Pruvan neta"ya dokun → sayaç artar ve dolu görünür; tekrar dokununca geri alınır.</span></label>
+  <label class="step"><input type="checkbox"><span>A'nın onaylı bir notu/rotası varsa akışta o da kart olarak görünür; rota kartına dokununca rota detayı açılır.</span></label>
+  <label class="step"><input type="checkbox"><span>👤 MİSAFİR'de Bugün ekranında Topluluk Akışı bölümü <b>hiç görünmez</b>.</span></label>
+</div>
+
+<div class="card">
+  <h2>5 · Kullanıcı Etkinlikleri <span class="tag">SP-4</span></h2>
+  <label class="step"><input type="checkbox"><span>Etkinlikler sayfasında üstte "＋ Etkinlik kur" düğmesi <b>herkese</b> görünüyor.</span></label>
+  <label class="step"><input type="checkbox"><span>👤 MİSAFİR dokununca → hesap daveti çıkar.</span></label>
+  <label class="step"><input type="checkbox"><span>🔵 ÜCRETSİZ ÜYE dokununca → "Etkinlik kurma Premium ayrıcalığı" tanıtım sayfası çıkar (zorlamadan, kapatılabilir).</span></label>
+  <label class="step"><input type="checkbox"><span>🛠 ADMIN (ya da ⭑ PREMIUM) dokununca → form açılır: 3 şablon (koy buluşması / birlikte seyir / marina), başlık, açıklama, tarih-saat, yer, kontenjan.</span></label>
+  <label class="step"><input type="checkbox"><span>Formu doldur, "Onaya gönder" → "onaya gönderildi" mesajı; listede etkinliğin "ONAY BEKLİYOR" rozetiyle yalnız <b>sana</b> görünür (B hesabı onu görmemeli).</span></label>
+  <label class="step"><input type="checkbox"><span>🛠 ADMIN ile Moderasyon kuyruğunu aç → yeni "Etkinlik" sekmesinde bekliyor; ONAYLA → etkinlik herkese açık listeye düşer.</span></label>
+  <label class="step"><input type="checkbox"><span>🔵 B hesabıyla etkinliğe kaydol → "Adım katılımcı listesinde görünsün" kutusu <b>kapalı</b> başlıyor. Önce kutusuz kaydol: detaydaki Katılımcılar bölümünde adın <b>yok</b>.</span></label>
+  <label class="step"><input type="checkbox"><span>Kaydı iptal et, kutuyu işaretleyip tekrar kaydol → adın + seviyen Katılımcılar'da görünür. E-posta hiçbir yerde görünmez.</span></label>
+  <label class="step"><input type="checkbox"><span>Etkinliği kuran hesapta "Etkinliği iptal et" → onay sorusu → iptal; listede İPTAL rozetiyle kalır, kayıtlıya bildirim gider.</span></label>
+</div>
+
+<div class="card">
+  <h2>6 · Harita ve Rota düzeltmeleri <span class="tag">9.3–9.4</span></h2>
+  <label class="step"><input type="checkbox"><span>Rota oluştur, 3+ nokta ekle → alttaki şeritte noktaları sürükleyerek sırala; <b>en sona sürüklediğin nokta varış (B) olur</b>.</span></label>
+  <label class="step"><input type="checkbox"><span>Bildiğin birkaç koyun pini artık koyun içinde, mantıklı yerde (71 nokta düzeltildi — özellikle Göcek/Fethiye/Gökova çevresine bak).</span></label>
+</div>
+
+<div class="card">
+  <h2>7 · Teknem + Soru-Cevap düzeltmeleri <span class="tag">9.7–9.8</span></h2>
+  <label class="step"><input type="checkbox"><span>👤 MİSAFİR Teknem sekmesini açınca Bakım Takibi satırı <b>görünüyor</b> (gizli değil); dokununca hesap daveti çıkar, detay açılmaz.</span></label>
+  <label class="step"><input type="checkbox"><span>🔵 ÜYE Soru-Cevap'ı açabiliyor ve soru sorabiliyor (artık Premium istemiyor).</span></label>
+  <label class="step"><input type="checkbox"><span>Soru-Cevap'ta üstteki arama kutusuna bir anahtar kelime yaz (örn. "demir") → yalnız eşleşen sorular listelenir.</span></label>
+  <label class="step"><input type="checkbox"><span>Liste sayfa sayfa: altta ‹ 1/3 › gibi sayfa geçişi var, sonsuz kaydırma yok.</span></label>
+  <label class="step"><input type="checkbox"><span>Deniz rotası çizerken düzenleme modunda SOS düğmesi rota araçlarıyla <b>çakışmıyor</b> (üst sol köşeye taşınır).</span></label>
+</div>
+
+<div class="card">
+  <h2>8 · Teknenin Hikâyesi + kart zenginleşmesi <span class="tag">TK-1 · 9.9</span></h2>
+  <label class="step"><input type="checkbox"><span>🔵 A hesabıyla Marinam kartında "Teknenin hikâyesi" satırına dokun → yazma sayfası açılır; 10–600 karakter arası yaz, kaydet → "onaya gönderildi" mesajı.</span></label>
+  <label class="step"><input type="checkbox"><span>Onaylanmadan önce B hesabı A'nın tekne kartını açarsa hikâye <b>görünmez</b>.</span></label>
+  <label class="step"><input type="checkbox"><span>🛠 ADMIN Moderasyon → "Tekne hikâyesi" sekmesi → metni ONAYLA.</span></label>
+  <label class="step"><input type="checkbox"><span>B hesabı tekne kartını tekrar açar → hikâye tırnak içinde, sol mavi şeritle görünür.</span></label>
+  <label class="step"><input type="checkbox"><span>Kartta SEYİR / ROTA / PRUVA sayıları ve PAYLAŞILAN SEYİR rotaları yalnız <b>gerçekten varsa</b> görünür; rota satırına dokununca rota detayı açılır.</span></label>
+  <label class="step"><input type="checkbox"><span>Marinada görünürlüğü kapat → tekne kartı (hikâyesiyle birlikte) başkalarına anında kaybolur.</span></label>
+</div>
+
+<div class="card">
+  <h2>9 · Yakıt Takibi <span class="tag">TK-2 · 9.9</span></h2>
+  <p class="who">🔵 ÜYE ile — kayıtlar yalnız cihazında, hesabına bağlı.</p>
+  <label class="step"><input type="checkbox"><span>Teknem → Bakım ekranında üstte 🔧 Bakım / ⛽ Yakıt sekmeleri var; Yakıt'a geç.</span></label>
+  <label class="step"><input type="checkbox"><span>"Dolum ekle" → litre + istersen tutar ve motor saati gir, kaydet → geçmişte satır belirir, sezon toplamı artar.</span></label>
+  <label class="step"><input type="checkbox"><span>Motor saati <b>iki</b> dolumda da girildiyse "ortalama lt/sa" hesaplanır; tek kayıtla çizgi (—) görünür — uydurma ortalama yok.</span></label>
+  <label class="step"><input type="checkbox"><span>Bir kaydı sil → onay sorar, silinince toplamlar güncellenir.</span></label>
+  <label class="step"><input type="checkbox"><span><b>Hesap kapısı:</b> çıkış yap → yakıt (ve bakım) kayıtları görünmez. Aynı hesapla geri gir → kayıtlar geri gelir. Başka hesapla girince o hesabın kayıtları değil, boş liste görünür.</span></label>
+</div>
+
+<div class="card">
+  <h2>10 · Favorile + Kardeş Tekneler + takipçi <span class="tag">TK-5 · 9.10</span></h2>
+  <label class="step"><input type="checkbox"><span>🔵 B hesabıyla A'nın tekne kartını aç → çizimin köşesinde ♡ kalp hapı var; dokun → ♥ olur, sayı 1 artar (kart yenilenince görünür).</span></label>
+  <label class="step"><input type="checkbox"><span>Profil → Topluluk → "Favori Teknelerim" → tekne listede; satıra dokununca kartı açılır. Tekrar kalbe dokununca favoriden çıkar, listeden düşer.</span></label>
+  <label class="step"><input type="checkbox"><span>👤 MİSAFİR kalbe dokununca → hesap daveti çıkar, işlem yapılmaz.</span></label>
+  <label class="step"><input type="checkbox"><span>Kendi teknenin kartında kalp <b>hiç görünmez</b>.</span></label>
+  <label class="step"><input type="checkbox"><span>Kaptan satırında seviyenin yanında takipçi sayısı görünür (yalnız 0'dan büyükse).</span></label>
+  <label class="step"><input type="checkbox"><span>İki tekne de aynı marka+model VE ikisi de "görünür + teknik paylaş" açıksa → kartın altında KARDEŞ TEKNELER bölümü çıkar; satıra dokununca diğer teknenin kartı açılır. Birinin teknik paylaşımını kapat → eşleşme kaybolur.</span></label>
+  <label class="step"><input type="checkbox"><span>A hesabında tekne sahibine favori <b>bildirimi gitmez</b>, kimin favorilediği hiçbir yerde görünmez (sessiz beğeni).</span></label>
+</div>
+
+<div class="card warn">
+  <h2>🚩 Kırmızı bayraklar</h2>
+  <p class="who">Bunlardan biri olursa mutlaka yaz:</p>
+  <label class="step"><input type="checkbox"><span>Misafirin herhangi bir sosyal eylemi yapabilmesi (takip, tepki, paylaşım, kayıt) — <b>olmamalı</b>.</span></label>
+  <label class="step"><input type="checkbox"><span>Akışta/etkinlikte e-posta, konum izi ya da "Konumum" başlangıç adının görünmesi — <b>olmamalı</b>.</span></label>
+  <label class="step"><input type="checkbox"><span>Ücretsiz üyenin etkinlik formunu açabilmesi; başkasının BEKLEYEN etkinliğini görmesi — <b>olmamalı</b>.</span></label>
+  <label class="step"><input type="checkbox"><span>Onaylanmamış bir tekne hikâyesinin başkasının ekranında görünmesi — <b>olmamalı</b>.</span></label>
+  <label class="step"><input type="checkbox"><span>Başka bir hesabın yakıt/bakım kayıtlarının senin hesabında görünmesi — <b>olmamalı</b>.</span></label>
+  <label class="step"><input type="checkbox"><span>Favorileyenlerin isim listesinin herhangi bir yerde görünmesi — <b>olmamalı</b> (yalnız toplam sayı var).</span></label>
+  <label class="step"><input type="checkbox"><span>Uygulamanın donması, çökmesi ya da eski kayıtların kaybolması.</span></label>
+</div>
+
+<div class="card">
+  <h2>📝 Hata bildirirken bana şunu yaz</h2>
+  <div class="pre">Ekran: (örn. Etkinlik detayı)
+Hesap: misafir / üye / premium / admin
+Yaptığım: (örn. rıza kutusunu işaretleyip kaydoldum)
+Beklediğim: (örn. adım listede görünecekti)
+Olan: (örn. liste hiç gelmedi)
++ Ekran görüntüsü</div>
+</div>
+
+</div></body>
+</html>
