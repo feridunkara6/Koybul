@@ -5,6 +5,7 @@ import 'package:dockly_mobile/features/auth/presentation/account_gate.dart'
 import 'package:dockly_mobile/features/profile/application/profile_controller.dart';
 import 'package:dockly_mobile/features/profile/domain/profile_gateway.dart';
 import 'package:dockly_mobile/features/profile/presentation/captain_profile_screen.dart';
+import 'package:dockly_mobile/features/profile/presentation/follow_list_screen.dart';
 import 'package:dockly_mobile/features/profile/presentation/following_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,6 +55,17 @@ class FakeProfileGateway implements ProfileGateway {
     unfollowed.add(userId);
     rows = rows.where((FollowedCaptain f) => f.id != userId).toList();
   }
+
+  // PR-1 (2026-11-03): liste uçları — takipçiler ayrı kayıttan, takip
+  // edilenler mevcut `rows` kaydından okunur (liste ekranı testleri için).
+  List<FollowedCaptain> followerRows = <FollowedCaptain>[];
+
+  @override
+  Future<List<FollowedCaptain>> followersOf(String userId) async =>
+      followerRows;
+
+  @override
+  Future<List<FollowedCaptain>> followingOf(String userId) async => rows;
 
   @override
   Future<UserProfileMe> me() => throw UnimplementedError();
@@ -137,6 +149,83 @@ void main() {
     expect(find.byType(AccountRequiredSheetBody), findsOneWidget);
     expect(find.textContaining('ücretsiz bir hesap'), findsOneWidget);
     expect(gw.followed, isEmpty);
+  });
+
+  // --- PR-1 Profil düzeni (kurucu onayı 2026-11-03) ---
+
+  testWidgets('PR-1 SAYAÇLAR: kaptan kartında takipçi/takip/katkı hücreleri',
+      (WidgetTester tester) async {
+    final FakeProfileGateway gw = FakeProfileGateway();
+    await tester.pumpWidget(
+        _profileApp(gw, extra: <Override>[signedInAuthOverride()]));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey<String>('cp-cnt-followers')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('cp-cnt-following')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('cp-cnt-contrib')), findsOneWidget);
+    expect(find.text('KATKI'), findsOneWidget);
+    expect(find.text('46'), findsOneWidget); // onaylı katkı sayacı
+  });
+
+  testWidgets('PR-1 HESAP KAPISI: hesapsız sayaca dokununca davet açılır, '
+      'liste açılmaz', (WidgetTester tester) async {
+    final FakeProfileGateway gw = FakeProfileGateway();
+    await tester.pumpWidget(_profileApp(gw)); // auth yok → hesapsız
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey<String>('cp-cnt-followers')));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AccountRequiredSheetBody), findsOneWidget);
+    expect(find.byType(FollowListScreen), findsNothing);
+  });
+
+  testWidgets('PR-1 LİSTE: üye sayaca dokununca takipçi listesi açılır; '
+      'sekme değişince takip listesi gelir', (WidgetTester tester) async {
+    final FakeProfileGateway gw = FakeProfileGateway()
+      ..followerRows = const <FollowedCaptain>[
+        FollowedCaptain(id: 'u-5', displayName: 'Kaptan Deniz', levelCode: 'guide'),
+      ];
+    await tester.pumpWidget(
+        _profileApp(gw, extra: <Override>[signedInAuthOverride()]));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey<String>('cp-cnt-followers')));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(FollowListScreen), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('fl-row-u-5')), findsOneWidget);
+    expect(find.text('Kaptan Deniz'), findsOneWidget);
+
+    // Takip sekmesi: kimseyi takip etmiyor → boş durum (0-uydurma).
+    await tester.tap(find.byKey(const ValueKey<String>('fl-tab-following')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey<String>('fl-empty')), findsOneWidget);
+  });
+
+  testWidgets('PR-1 HIZLI TAKİP: listedeki düğme geçide gider, durum tazelenir',
+      (WidgetTester tester) async {
+    final FakeProfileGateway gw = FakeProfileGateway()
+      ..followerRows = const <FollowedCaptain>[
+        FollowedCaptain(id: 'u-5', displayName: 'Kaptan Deniz', levelCode: 'guide'),
+      ];
+    await tester.pumpWidget(ProviderScope(
+      overrides: <Override>[
+        profileGatewayProvider.overrideWithValue(gw),
+        signedInAuthOverride(),
+      ],
+      child: const MaterialApp(
+        home: FollowListScreen(userId: 'u-2', displayName: 'Kaptan Levent'),
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey<String>('fl-follow-u-5')));
+    await tester.pumpAndSettle();
+
+    expect(gw.followed, <String>['u-5']);
+    // Takip listem tazelendi → düğme "Takip ediliyor" hâline döner.
+    expect(find.byKey(const ValueKey<String>('fl-unfollow-u-5')), findsOneWidget);
   });
 
   testWidgets('Takip ettiklerim: boş durum metni (misafir/boş liste)',

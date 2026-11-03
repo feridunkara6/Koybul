@@ -410,6 +410,17 @@ class L10n {
     required this.followBtn,
     required this.followingBtn,
     required this.cpFollowersCap,
+    required this.cpFollowingCap,
+    required this.cpContribCap,
+    required this.cpPointsCap,
+    required this.cpHelpfulShort,
+    required this.cpTripsCap,
+    required this.cpRoutesCap,
+    required this.flFollowersTab,
+    required this.flFollowingTab,
+    required this.flFollowersEmpty,
+    required this.flFollowingEmpty,
+    required this.gateFollowListMsg,
     required this.followingTitle,
     required this.followingEmpty,
     required this.gateFollowMsg,
@@ -1173,6 +1184,10 @@ class L10n {
   // TAKİP (SP-3a, kurucu onayı 2026-10-31): takip düğmesi + listesi.
   final String followBtn, followingBtn, cpFollowersCap, followingTitle,
       followingEmpty, gateFollowMsg;
+  // PR-1 Profil düzeni (kurucu onayı 2026-11-03): sayaçlar + listeler.
+  final String cpFollowingCap, cpContribCap, cpPointsCap, cpHelpfulShort,
+      cpTripsCap, cpRoutesCap, flFollowersTab, flFollowingTab,
+      flFollowersEmpty, flFollowingEmpty, gateFollowListMsg;
   // SAHA PAKETİ (2026-10-30): S-C arama/sayfa + bakım vitrini.
   // TEKNE KARTI 0024 (2026-10-30): hikâye + istatistik + rotalar.
   // YAKIT TAKİBİ (kurucu onayı 2026-10-30): cihazda, hesaba bağlı.
@@ -2216,6 +2231,18 @@ const L10n _tr = L10n(
   followBtn: 'Takip et',
   followingBtn: 'Takip ediliyor',
   cpFollowersCap: 'TAKİPÇİ',
+  cpFollowingCap: 'TAKİP',
+  cpContribCap: 'KATKI',
+  cpPointsCap: 'PUAN',
+  cpHelpfulShort: 'FAYDALI',
+  cpTripsCap: 'SEYİR',
+  cpRoutesCap: 'ROTA',
+  flFollowersTab: 'Takipçiler',
+  flFollowingTab: 'Takip',
+  flFollowersEmpty: 'Henüz takipçi yok.',
+  flFollowingEmpty: 'Henüz kimseyi takip etmiyor.',
+  gateFollowListMsg:
+      'Takipçi ve takip listelerini görmek için ücretsiz bir hesap gerekir.',
   followingTitle: 'Takip ettiklerim',
   followingEmpty:
       'Henüz kimseyi takip etmiyorsun. Beğendiğin bir kaptanın profilinden "Takip et"e dokun.',
@@ -3365,6 +3392,18 @@ const L10n _en = L10n(
   followBtn: 'Follow',
   followingBtn: 'Following',
   cpFollowersCap: 'FOLLOWERS',
+  cpFollowingCap: 'FOLLOWING',
+  cpContribCap: 'POSTS',
+  cpPointsCap: 'POINTS',
+  cpHelpfulShort: 'HELPFUL',
+  cpTripsCap: 'VOYAGES',
+  cpRoutesCap: 'ROUTES',
+  flFollowersTab: 'Followers',
+  flFollowingTab: 'Following',
+  flFollowersEmpty: 'No followers yet.',
+  flFollowingEmpty: 'Not following anyone yet.',
+  gateFollowListMsg:
+      'You need a free account to see follower and following lists.',
   followingTitle: 'Captains I follow',
   followingEmpty:
       'You are not following anyone yet. Tap "Follow" on a captain profile you like.',
@@ -4511,6 +4550,18 @@ const L10n _es = L10n(
   followBtn: 'Seguir',
   followingBtn: 'Siguiendo',
   cpFollowersCap: 'SEGUIDORES',
+  cpFollowingCap: 'SIGUIENDO',
+  cpContribCap: 'APORTES',
+  cpPointsCap: 'PUNTOS',
+  cpHelpfulShort: 'ÚTILES',
+  cpTripsCap: 'TRAVESÍAS',
+  cpRoutesCap: 'RUTAS',
+  flFollowersTab: 'Seguidores',
+  flFollowingTab: 'Siguiendo',
+  flFollowersEmpty: 'Aún no hay seguidores.',
+  flFollowingEmpty: 'Aún no sigue a nadie.',
+  gateFollowListMsg:
+      'Necesitas una cuenta gratuita para ver las listas de seguidores y seguidos.',
   followingTitle: 'Capitanes que sigo',
   followingEmpty:
       'Aún no sigues a nadie. Toca "Seguir" en el perfil de un capitán que te guste.',
@@ -5657,6 +5708,18 @@ const L10n _ru = L10n(
   followBtn: 'Подписаться',
   followingBtn: 'Вы подписаны',
   cpFollowersCap: 'ПОДПИСЧИКИ',
+  cpFollowingCap: 'ПОДПИСКИ',
+  cpContribCap: 'ВКЛАД',
+  cpPointsCap: 'БАЛЛЫ',
+  cpHelpfulShort: 'ПОЛЕЗНО',
+  cpTripsCap: 'ПОХОДЫ',
+  cpRoutesCap: 'МАРШРУТЫ',
+  flFollowersTab: 'Подписчики',
+  flFollowingTab: 'Подписки',
+  flFollowersEmpty: 'Пока нет подписчиков.',
+  flFollowingEmpty: 'Пока ни на кого не подписан.',
+  gateFollowListMsg:
+      'Чтобы видеть списки подписчиков и подписок, нужна бесплатная учётная запись.',
   followingTitle: 'Мои подписки',
   followingEmpty:
       'Вы пока ни на кого не подписаны. Нажмите «Подписаться» в профиле капитана.',

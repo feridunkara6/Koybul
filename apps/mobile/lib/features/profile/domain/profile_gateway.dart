@@ -28,4 +28,12 @@ abstract interface class ProfileGateway {
 
   /// Takibi bırak — idempotent.
   Future<void> unfollow(String userId);
+
+  // --- TAKİPÇİ/TAKİP LİSTELERİ (PR-1 profil düzeni, 2026-11-03) ---
+
+  /// Bir kaptanın takipçileri — kurucu kuralı: üyelik şart.
+  Future<List<FollowedCaptain>> followersOf(String userId);
+
+  /// Bir kaptanın takip ettikleri — üyelik şart.
+  Future<List<FollowedCaptain>> followingOf(String userId);
 }

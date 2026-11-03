@@ -26,8 +26,10 @@ export interface UserRepository {
   follow(followerId: string, followedId: string): Promise<void>;
   /** Takibi bırakır; satır yoksa sessizce geçer (idempotent). */
   unfollow(followerId: string, followedId: string): Promise<void>;
-  /** Takip ettiklerim — en yeni takip önce. */
+  /** Takip ettikleri — en yeni takip önce (PR-1: herhangi bir kullanıcı için). */
   following(userId: string): Promise<FollowedCaptain[]>;
+  /** Takipçileri — en yeni takip önce (PR-1 profil düzeni, 2026-11-03). */
+  followers(userId: string): Promise<FollowedCaptain[]>;
 }
 
 export const USER_REPOSITORY = Symbol('USER_REPOSITORY');

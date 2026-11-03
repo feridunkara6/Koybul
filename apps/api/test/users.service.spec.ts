@@ -56,6 +56,10 @@ class FakeUserRepo implements UserRepository {
       badges: ['first_contribution', 'hazard_hero'],
       // SP-3a Takip (2026-10-31): herkese açık takipçi sayısı.
       followerCount: 12,
+      // PR-1 Profil düzeni (2026-11-03): takip sayısı + sezon şeridi.
+      followingCount: 7,
+      sharedTrips: 18,
+      sharedRoutes: 6,
       // SP-1 Kimlik (2026-10-29): vitrin — onaylı not + rota örneği.
       recentContributions: [
         {
@@ -110,6 +114,13 @@ class FakeUserRepo implements UserRepository {
     return this.follows
       .filter(([a]) => a === userId)
       .map(([, b]) => ({ id: b, displayName: 'Kaptan ' + b, levelCode: 'new' }));
+  }
+
+  // PR-1 (2026-11-03): takipçi listesi — following() aynası.
+  async followers(userId: string): Promise<FollowedCaptain[]> {
+    return this.follows
+      .filter(([, b]) => b === userId)
+      .map(([a]) => ({ id: a, displayName: 'Kaptan ' + a, levelCode: 'new' }));
   }
 }
 
@@ -212,5 +223,25 @@ describe('UsersService (unit)', () => {
     await service.follow('u-1', 'u-2');
     const list = await service.following('u-1');
     expect(list).toEqual([{ id: 'u-2', displayName: 'Kaptan u-2', levelCode: 'new' }]);
+  });
+
+  // PR-1 Profil düzeni (kurucu onayı 2026-11-03): takipçi/takip listeleri.
+  it('followersOf/followingOf: iki yön doğru döner (PR-1)', async () => {
+    await service.follow('u-1', 'u-2');
+    await service.follow('u-3', 'u-2');
+    const followers = await service.followersOf('u-2');
+    expect(followers.map((f) => f.id).sort()).toEqual(['u-1', 'u-3']);
+    const following = await service.followingOf('u-1');
+    expect(following.map((f) => f.id)).toEqual(['u-2']);
+  });
+
+  it('followersOf: olmayan/pasif hedef 404 (sızdırmaz)', async () => {
+    repo.targetExists = false;
+    await expect(service.followersOf('u-yok')).rejects.toMatchObject({
+      problemType: 'not-found',
+    });
+    await expect(service.followingOf('u-yok')).rejects.toMatchObject({
+      problemType: 'not-found',
+    });
   });
 });

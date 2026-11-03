@@ -23,6 +23,10 @@ class PublicCaptain {
     this.recentContributions = const <CaptainContribution>[],
     // SP-3a Takip (2026-10-31): takipçi sayısı — alan gelmezse 0.
     this.followerCount = 0,
+    // PR-1 Profil düzeni (2026-11-03): takip + sezon şeridi — varsayılanlı.
+    this.followingCount = 0,
+    this.sharedTrips = 0,
+    this.sharedRoutes = 0,
   });
 
   final String id;
@@ -43,6 +47,13 @@ class PublicCaptain {
 
   /// Takipçi sayısı (SP-3a) — herkese açık; eski sunucuda alan yoksa 0.
   final int followerCount;
+
+  /// Takip ettiği sayısı (PR-1) — sayaç herkese açık, LİSTE üyelik ister.
+  final int followingCount;
+
+  /// Sezon şeridi (PR-1): paylaşılan seyir + ONAYLI rota sayısı.
+  final int sharedTrips;
+  final int sharedRoutes;
 
   /// Avatar baş harfleri: görünen adın ilk iki kelimesinden; ad boşsa boş
   /// döner (uydurma harf yok — itibar DTO'suyla aynı ilke).
@@ -72,6 +83,9 @@ class PublicCaptain {
                 CaptainContribution.fromJson(e as Map<String, dynamic>))
             .toList(growable: false),
         followerCount: (json['followerCount'] as num?)?.toInt() ?? 0,
+        followingCount: (json['followingCount'] as num?)?.toInt() ?? 0,
+        sharedTrips: (json['sharedTrips'] as num?)?.toInt() ?? 0,
+        sharedRoutes: (json['sharedRoutes'] as num?)?.toInt() ?? 0,
       );
 }
 

@@ -12,6 +12,7 @@ import '../../community/presentation/reputation_shell.dart' show formatCount;
 import '../application/follow_controller.dart';
 import '../application/profile_controller.dart';
 import 'captain_avatar.dart';
+import 'follow_list_screen.dart';
 
 /// HERKESE AÇIK KAPTAN PROFİLİ (Sosyalleşme Hafta 1B, kurucu onayı
 /// 2026-10-24) — "kimlik → keşif → geri çağırma" zincirinin keşif halkası.
@@ -71,30 +72,69 @@ class _Body extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
       children: <Widget>[
-        // KİMLİK BAŞLIĞI — denizci kartıyla aynı dil: baş harfler + ad +
-        // seviye. Ad yoksa harf uydurulmaz (0-uydurma).
+        // KİMLİK BAŞLIĞI (PR-1 profil düzeni, kurucu onayı 2026-11-03):
+        // Instagram/Strava karışımı — solda büyük avatar, sağda üç sayaç.
+        // Sayılar herkese açık; LİSTELER kurucu kuralıyla üyelik ister
+        // (misafir sayaca dokununca hesaba davet edilir).
         Row(
           children: <Widget>[
             // SP-1 Kimlik (2026-10-29): kimlikten türeyen renkli avatar —
             // aynı kaptan her yüzeyde aynı renk (captain_avatar.dart).
-            CaptainAvatar(name: c.displayName, seed: c.id, size: 52),
-            const SizedBox(width: 12),
+            CaptainAvatar(name: c.displayName, seed: c.id, size: 64),
+            const SizedBox(width: 14),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: <Widget>[
-                  Text(c.displayName,
-                      key: const ValueKey<String>('cp-name'),
-                      style: theme.textTheme.titleMedium
-                          ?.copyWith(fontWeight: FontWeight.w800)),
-                  const SizedBox(height: 2),
-                  Text(
-                    t.levelLabel(c.levelCode),
-                    style: theme.textTheme.bodySmall?.copyWith(
-                        color: DocklyColors.accentTurquoise,
-                        fontWeight: FontWeight.w700),
+                  _CountCell(
+                    keyValue: 'cp-cnt-followers',
+                    caption: t.cpFollowersCap,
+                    value: formatCount(t, c.followerCount),
+                    onTap: () => _openList(context, ref, 0),
+                  ),
+                  const SizedBox(width: 6),
+                  _CountCell(
+                    keyValue: 'cp-cnt-following',
+                    caption: t.cpFollowingCap,
+                    value: formatCount(t, c.followingCount),
+                    onTap: () => _openList(context, ref, 1),
+                  ),
+                  const SizedBox(width: 6),
+                  _CountCell(
+                    keyValue: 'cp-cnt-contrib',
+                    caption: t.cpContribCap,
+                    value: formatCount(t, c.approvedCount),
+                    onTap: null, // katkılar zaten aşağıda vitrinde
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        // AD + SEVİYE ÇİPİ — ad anahtarı testlerle sözleşmelidir (cp-name).
+        Row(
+          children: <Widget>[
+            Flexible(
+              child: Text(c.displayName,
+                  key: const ValueKey<String>('cp-name'),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w800)),
+            ),
+            const SizedBox(width: 8),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+              decoration: BoxDecoration(
+                color: DocklyColors.accentTurquoise.withValues(alpha: .14),
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                t.levelLabel(c.levelCode),
+                style: theme.textTheme.labelSmall?.copyWith(
+                    color: DocklyColors.accentTurquoise,
+                    fontWeight: FontWeight.w800),
               ),
             ),
           ],
@@ -130,17 +170,20 @@ class _Body extends ConsumerWidget {
           ),
         ],
         const SizedBox(height: 14),
-        // İTİBAR SAYILARI — sunucu hesabı; uydurma yok.
+        // SEZON ŞERİDİ (PR-1): puan + faydalı + paylaşılan seyir/rota —
+        // hepsi sunucu hesabı; uydurma yok. (Takipçi/katkı yukarıda sayaçta.)
         Row(
           children: <Widget>[
-            _Stat(caption: t.sailorPointsCap, value: formatCount(t, c.points)),
+            _Stat(caption: t.cpPointsCap, value: formatCount(t, c.points)),
             const SizedBox(width: 8),
-            _Stat(caption: t.cpApprovedCap, value: formatCount(t, c.approvedCount)),
+            _Stat(
+                caption: t.cpHelpfulShort,
+                value: formatCount(t, c.helpfulReceived)),
             const SizedBox(width: 8),
-            _Stat(caption: t.cpHelpfulCap, value: formatCount(t, c.helpfulReceived)),
+            _Stat(caption: t.cpTripsCap, value: formatCount(t, c.sharedTrips)),
             const SizedBox(width: 8),
-            // SP-3a: takipçi sayısı — herkese açık (sunucu sayar).
-            _Stat(caption: t.cpFollowersCap, value: formatCount(t, c.followerCount)),
+            _Stat(
+                caption: t.cpRoutesCap, value: formatCount(t, c.sharedRoutes)),
           ],
         ),
         // ROZETLER — kod → yerel etiket; hiç yoksa bölüm çizilmez.
@@ -227,6 +270,78 @@ class _Body extends ConsumerWidget {
             ),
         ],
       ],
+    );
+  }
+
+  /// Sayaç dokunuşu (PR-1): üye → liste ekranı; hesapsız → hesaba davet.
+  void _openList(BuildContext context, WidgetRef ref, int tab) {
+    requireAccount(
+      context,
+      ref,
+      message: ref.read(l10nProvider).gateFollowListMsg,
+      onAllowed: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => FollowListScreen(
+            userId: c.id,
+            displayName: c.displayName,
+            initialTab: tab,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Başlık sayacı (PR-1): değer + küçük başlık; dokunulabilir olanlar hafif
+/// zeminle ayrılır (dokunulabilirlik ipucu).
+class _CountCell extends StatelessWidget {
+  const _CountCell({
+    required this.keyValue,
+    required this.caption,
+    required this.value,
+    required this.onTap,
+  });
+
+  final String keyValue;
+  final String caption;
+  final String value;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Expanded(
+      child: Material(
+        color: onTap == null
+            ? Colors.transparent
+            : theme.colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(10),
+        child: InkWell(
+          key: ValueKey<String>(keyValue),
+          borderRadius: BorderRadius.circular(10),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+            child: Column(
+              children: <Widget>[
+                Text(value,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.w800)),
+                const SizedBox(height: 1),
+                Text(caption,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: .3)),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

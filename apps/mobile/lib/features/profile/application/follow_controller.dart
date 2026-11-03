@@ -35,6 +35,24 @@ final followedIdsProvider = Provider.autoDispose<Set<String>>((ref) {
       );
 });
 
+/// TAKİPÇİ/TAKİP LİSTELERİ (PR-1 profil düzeni, kurucu onayı 2026-11-03).
+/// Kurucu kuralı: listeler yalnız GİRİŞ YAPMIŞ ÜYEYE açıktır — misafir
+/// sayaçları görür; buraya hiç gelinmez (ekran kapının arkasında).
+/// Oturum yoksa sunucuya gidilmez, boş liste döner.
+final captainFollowersProvider = FutureProvider.autoDispose
+    .family<List<FollowedCaptain>, String>((ref, String userId) async {
+  final AuthState s = ref.watch(authControllerProvider);
+  if (s is! Authenticated || s.isGuest) return const <FollowedCaptain>[];
+  return ref.watch(profileGatewayProvider).followersOf(userId);
+});
+
+final captainFollowingProvider = FutureProvider.autoDispose
+    .family<List<FollowedCaptain>, String>((ref, String userId) async {
+  final AuthState s = ref.watch(authControllerProvider);
+  if (s is! Authenticated || s.isGuest) return const <FollowedCaptain>[];
+  return ref.watch(profileGatewayProvider).followingOf(userId);
+});
+
 /// Eylemler — widget'tan `ref.read(followActionsProvider)` ile çağrılır.
 /// Hata fırlatır; ekran yakalayıp söyler (sessiz yutma yok).
 final Provider<FollowActions> followActionsProvider =
@@ -56,5 +74,8 @@ class FollowActions {
     }
     _ref.invalidate(followingProvider);
     _ref.invalidate(publicCaptainProvider(userId));
+    // PR-1: açık liste ekranları da tazelensin (takipçi sayısı/satırı değişti).
+    _ref.invalidate(captainFollowersProvider);
+    _ref.invalidate(captainFollowingProvider);
   }
 }

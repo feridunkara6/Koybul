@@ -47,6 +47,11 @@ export interface PublicCaptain {
   badges: string[];
   /** Takipçi sayısı (SP-3a, kurucu onayı 2026-10-31) — herkese açık sayı. */
   followerCount: number;
+  /** Takip ettiği sayısı (PR-1 profil düzeni, kurucu onayı 2026-11-03). */
+  followingCount: number;
+  /** Sezon şeridi (PR-1): paylaşılan seyir + ONAYLI rota sayısı — türetilir. */
+  sharedTrips: number;
+  sharedRoutes: number;
   /** SON KATKILAR vitrini (SP-1 Kimlik, kurucu onayı 2026-10-29): yalnız
    *  ONAYLI içerik — en yeni birkaç not (koy adıyla) + paylaşılan rota.
    *  PII taşımaz; içerik zaten herkese açık yüzeylerde yayındadır. */

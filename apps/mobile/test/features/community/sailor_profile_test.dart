@@ -8,6 +8,7 @@ import 'package:dockly_mobile/features/community/application/community_controlle
 import 'package:dockly_mobile/features/community/application/reputation_controller.dart';
 import 'package:dockly_mobile/features/community/presentation/badges_screen.dart';
 import 'package:dockly_mobile/features/community/presentation/sailor_profile_card.dart';
+import 'package:dockly_mobile/features/profile/application/profile_controller.dart';
 import 'package:dockly_mobile/features/premium/data/premium_offline_cache.dart';
 import 'package:dockly_mobile/features/profile/presentation/profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -35,9 +36,27 @@ void main() {
   // Kartın kendi davranış testleri İZOLE pompalanır (Profil'in diğer
   // blokları — katkı sayaçları vb. — aynı özet sayılarını gösterebilir;
   // izole yüzey, bulguları karta kilitler).
+  // PR-1 (kurucu onayı 2026-11-03): sayaçlar + bio kendi herkese açık
+  // kartımdan gelir — testte aile sahtesiyle beslenir (ağ yok, docs/15).
+  PublicCaptain mePub() => PublicCaptain(
+        id: 'u1',
+        displayName: 'Feridun Kara',
+        bio: 'Gökova sevdalısı.',
+        experienceYears: 8,
+        memberSince: DateTime.utc(2026, 1, 1),
+        points: 2840,
+        levelCode: 'master',
+        approvedCount: 14,
+        helpfulReceived: 9,
+        badges: const <String>[],
+        followerCount: 37,
+        followingCount: 21,
+      );
+
   Widget card(List<Override> extra) => ProviderScope(
         overrides: <Override>[
           tripStoreProvider.overrideWithValue(FakeTripStore()),
+          publicCaptainProvider.overrideWith((ref, String id) async => mePub()),
           ...extra,
         ],
         child: const MaterialApp(
@@ -50,6 +69,7 @@ void main() {
   Widget profile(List<Override> extra) => ProviderScope(
         overrides: <Override>[
           tripStoreProvider.overrideWithValue(FakeTripStore()),
+          publicCaptainProvider.overrideWith((ref, String id) async => mePub()),
           communityGatewayProvider.overrideWithValue(FakeCommunityGateway()),
           // Kaptan Kartı başlığı premium rozetini izler (2026-09-23); depo
           // kuralı (docs/15): gerçek SharedPreferences testte asla.
@@ -215,6 +235,28 @@ void main() {
     // Seviye listesi 5 satır; bulunulan seviyede eşik yerine "şu an" yazar.
     expect(find.text('şu an'), findsOneWidget);
     expect(find.text('Deniz Rehberi'), findsWidgets);
+  });
+
+  testWidgets('PR-1 BAŞLIK: takipçi/takip/katkı sayaçları + bio + düzenle düğmesi',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(card(<Override>[
+      signedInAuthOverride(),
+      reputationGatewayProvider.overrideWithValue(FakeReputationGateway()),
+    ]));
+    await tester.pumpAndSettle();
+
+    // Sayaçlar kendi herkese açık kartımdan (tek doğruluk kaynağı).
+    expect(find.byKey(const ValueKey<String>('me-cnt-followers')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('me-cnt-following')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('me-cnt-contrib')), findsOneWidget);
+    expect(find.text('37'), findsOneWidget);
+    expect(find.text('21'), findsOneWidget);
+    expect(find.text('14'), findsOneWidget);
+    expect(find.text('TAKİPÇİ'), findsOneWidget);
+    expect(find.text('TAKİP'), findsOneWidget);
+    // Bio görünür; düzenleme düğmesi anahtar sözleşmesini korur.
+    expect(find.text('Gökova sevdalısı.'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('sailor-edit')), findsOneWidget);
   });
 
   testWidgets('kart yalnızca SailorProfileCard olarak da çalışır (izole)',

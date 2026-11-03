@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../auth/application/auth_controller.dart';
+import '../../auth/domain/auth_state.dart';
 import '../../deck/application/trip_log_controller.dart';
 import '../../deck/domain/sea_trip_log.dart';
+import '../../profile/application/profile_controller.dart';
+import '../../profile/presentation/captain_avatar.dart';
+import '../../profile/presentation/follow_list_screen.dart';
 import '../../profile/presentation/profile_edit_screen.dart';
 import '../application/reputation_controller.dart';
 import 'badges_screen.dart';
@@ -48,9 +53,16 @@ class SailorProfileCard extends ConsumerWidget {
       nm += x.distanceNm;
     }
 
+    // PR-1 Profil düzeni (kurucu onayı 2026-11-03): takipçi/takip/katkı
+    // sayaçları + bio kendi herkese açık kartımdan gelir (tek doğruluk
+    // kaynağı — kaptan kartında başkasının gördüğüyle aynı sayılar).
+    final AuthState auth = ref.watch(authControllerProvider);
+    final String uid = auth is Authenticated ? auth.user.id : '';
+    final AsyncValue<PublicCaptain> pub = ref.watch(publicCaptainProvider(uid));
+
     return Padding(
       padding: const EdgeInsets.only(top: 18),
-      child: _card(context, t, async, trips, nm),
+      child: _card(context, t, async, trips, nm, uid, pub),
     );
   }
 
@@ -64,12 +76,32 @@ class SailorProfileCard extends ConsumerWidget {
     AsyncValue<ReputationSummary> async,
     int trips,
     double nm,
+    String uid,
+    AsyncValue<PublicCaptain> pub,
   ) {
     final ThemeData theme = Theme.of(context);
     final ReputationSummary? data = async.valueOrNull;
     final ReputationSummary s = data ?? ReputationSummary.empty;
     final bool failed = data == null && async.hasError;
     final bool loading = data == null && !async.hasError;
+    // Sayaçlar: sunucudan gelmediyse SIFIR YAZILMAZ ("—" dürüsttür).
+    final PublicCaptain? me = pub.valueOrNull;
+    final String myName = s.displayName.isEmpty
+        ? (me?.displayName ?? t.sailorProfileTitle)
+        : s.displayName;
+    // Avatar için AD gerekir (baş harf kuralı) — bölüm başlığı ad değildir.
+    final String avatarName =
+        s.displayName.isNotEmpty ? s.displayName : (me?.displayName ?? '');
+
+    void openList(int tab) => Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => FollowListScreen(
+              userId: uid,
+              displayName: myName,
+              initialTab: tab,
+            ),
+          ),
+        );
 
     return Container(
       key: const ValueKey<String>('sailor-profile-card'),
@@ -90,84 +122,103 @@ class SailorProfileCard extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                // BAŞLIK (PR-1 profil düzeni, kurucu onayı 2026-11-03):
+                // solda kimlik avatarı (aynı kaptan her yüzeyde aynı renk),
+                // sağda üç sayaç — Instagram düzeni. TAKİPÇİ/TAKİP dokununca
+                // liste ekranı açılır (bu kart yalnız üyede çizilir).
                 Row(
                   children: <Widget>[
-                    Container(
-                      width: 34,
-                      height: 34,
-                      decoration: BoxDecoration(
-                        color: DocklyColors.accentTurquoise.withValues(alpha: 0.16),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      // Ad varsa BAŞ HARFLER, yoksa genel rozet ikonu.
-                      // Uydurma harf gösterilmez (0-uydurma kuralı).
-                      child: Center(
-                        child: s.initials.isEmpty
-                            ? const DocklyIcon(DocklyIcons.award,
-                                size: 18, color: DocklyColors.accentTurquoise)
-                            : Text(
-                                s.initials,
-                                style: theme.textTheme.labelLarge?.copyWith(
-                                  color: DocklyColors.accentTurquoise,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                      ),
+                    CaptainAvatar(
+                      name: avatarName,
+                      seed: uid.isEmpty ? null : uid,
+                      size: 60,
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 12),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
                         children: <Widget>[
-                          Text(
-                            // Kartın başlığı KAPTANIN ADIDIR; ad gelmediyse
-                            // bölüm adına düşer (onaylı tasarım: "FK · Feridun Kara").
-                            s.displayName.isEmpty ? t.sailorProfileTitle : s.displayName,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.titleSmall
-                                ?.copyWith(fontWeight: FontWeight.w800),
+                          _CntCell(
+                            keyValue: 'me-cnt-followers',
+                            caption: t.cpFollowersCap,
+                            value: me == null
+                                ? '—'
+                                : formatCount(t, me.followerCount),
+                            onTap: uid.isEmpty ? null : () => openList(0),
                           ),
-                          const SizedBox(height: 2),
-                          Text(
-                            // Seviye PUANDAN türetilir (sunucunun level_code'u
-                            // ödül yazımından sonra bir an geride kalabiliyor).
-                            // Veri yokken seviye UYDURULMAZ: "Yeni Denizci"
-                            // yazmak 2.840 puanlı kaptana yalan olurdu.
-                            data == null
-                                ? (failed ? t.reputationLoadFailed : '—')
-                                : t.levelLabel(levelForPoints(s.points)),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: failed
-                                  ? theme.colorScheme.onSurfaceVariant
-                                  : DocklyColors.accentTurquoise,
-                              fontWeight: FontWeight.w700,
-                            ),
+                          const SizedBox(width: 6),
+                          _CntCell(
+                            keyValue: 'me-cnt-following',
+                            caption: t.cpFollowingCap,
+                            value: me == null
+                                ? '—'
+                                : formatCount(t, me.followingCount),
+                            onTap: uid.isEmpty ? null : () => openList(1),
+                          ),
+                          const SizedBox(width: 6),
+                          _CntCell(
+                            keyValue: 'me-cnt-contrib',
+                            caption: t.cpContribCap,
+                            value: me == null
+                                ? '—'
+                                : formatCount(t, me.approvedCount),
+                            onTap: null, // katkılar aşağıda zaten görünür
                           ),
                         ],
                       ),
                     ),
-                    // PROFİL DÜZENLEME (Sosyalleşme Hafta 1A, kurucu onayı
-                    // 2026-10-24): ad/bio/deneyim artık düzenlenebilir —
-                    // kalem karttan doğrudan açılır.
-                    IconButton(
-                      key: const ValueKey<String>('sailor-edit'),
-                      tooltip: t.peTitle,
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                            builder: (_) => const ProfileEditScreen()),
-                      ),
-                      icon: DocklyIcon(DocklyIcons.edit,
-                          size: 16, color: theme.colorScheme.onSurfaceVariant),
-                      padding: EdgeInsets.zero,
-                      constraints:
-                          const BoxConstraints(minWidth: 34, minHeight: 34),
-                    ),
-                    DocklyIcon(DocklyIcons.arrowForward,
-                        size: 16, color: theme.colorScheme.onSurfaceVariant),
                   ],
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  // Kartın başlığı KAPTANIN ADIDIR; ad gelmediyse bölüm
+                  // adına düşer (onaylı tasarım).
+                  myName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.titleSmall
+                      ?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  // Seviye PUANDAN türetilir (sunucunun level_code'u ödül
+                  // yazımından sonra bir an geride kalabiliyor). Veri yokken
+                  // seviye UYDURULMAZ: "Yeni Denizci" yazmak 2.840 puanlı
+                  // kaptana yalan olurdu.
+                  data == null
+                      ? (failed ? t.reputationLoadFailed : '—')
+                      : t.levelLabel(levelForPoints(s.points)),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: failed
+                        ? theme.colorScheme.onSurfaceVariant
+                        : DocklyColors.accentTurquoise,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                // TANITIM — kendi yazdığım bio; yoksa satır hiç çizilmez.
+                if (me != null &&
+                    me.bio != null &&
+                    me.bio!.trim().isNotEmpty) ...<Widget>[
+                  const SizedBox(height: 6),
+                  Text(
+                    me.bio!.trim(),
+                    style: theme.textTheme.bodySmall?.copyWith(height: 1.4),
+                  ),
+                ],
+                const SizedBox(height: 10),
+                // PROFİL DÜZENLEME (Hafta 1A → PR-1): kalem ikonu yerine tam
+                // genişlik düğme (onaylı demo) — anahtar sözleşmesi korunur.
+                OutlinedButton.icon(
+                  key: const ValueKey<String>('sailor-edit'),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                        builder: (_) => const ProfileEditScreen()),
+                  ),
+                  icon: const DocklyIcon(DocklyIcons.edit, size: 14),
+                  label: Text(t.peTitle),
+                  style: OutlinedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(40)),
                 ),
                 const SizedBox(height: 12),
                 // EŞİT BOY: liste içinde yükseklik sınırsızdır — stretch kullanan
@@ -298,6 +349,60 @@ class _Stat extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Başlık sayacı (PR-1): değer + küçük başlık; dokunulabilir olanlar hafif
+/// zeminle ayrılır (kaptan kartındaki _CountCell ile aynı dil).
+class _CntCell extends StatelessWidget {
+  const _CntCell({
+    required this.keyValue,
+    required this.caption,
+    required this.value,
+    required this.onTap,
+  });
+
+  final String keyValue;
+  final String caption;
+  final String value;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Expanded(
+      child: Material(
+        color: onTap == null
+            ? Colors.transparent
+            : theme.colorScheme.surfaceContainerHighest.withValues(alpha: .5),
+        borderRadius: BorderRadius.circular(10),
+        child: InkWell(
+          key: ValueKey<String>(keyValue),
+          borderRadius: BorderRadius.circular(10),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+            child: Column(
+              children: <Widget>[
+                Text(value,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.w800)),
+                const SizedBox(height: 1),
+                Text(caption,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: .3)),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

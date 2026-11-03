@@ -96,6 +96,47 @@ class UsersApi {
     }
   }
 
+  /// Bir kaptanın TAKİPÇİ listesi (PR-1, kurucu onayı 2026-11-03) —
+  /// kurucu kuralı: üyelik ister; misafir yalnız sayıyı görür.
+  Future<List<FollowedCaptain>> followersOf({
+    required String accessToken,
+    required String userId,
+  }) async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>(
+        '/v1/users/$userId/followers',
+        options: _auth(accessToken),
+      );
+      final List<dynamic> data =
+          (res.data!['data'] as List<dynamic>?) ?? const <dynamic>[];
+      return data
+          .map((dynamic e) => FollowedCaptain.fromJson(e as Map<String, dynamic>))
+          .toList(growable: false);
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  /// Bir kaptanın TAKİP ettikleri listesi (PR-1) — üyelik ister.
+  Future<List<FollowedCaptain>> followingOf({
+    required String accessToken,
+    required String userId,
+  }) async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>(
+        '/v1/users/$userId/following',
+        options: _auth(accessToken),
+      );
+      final List<dynamic> data =
+          (res.data!['data'] as List<dynamic>?) ?? const <dynamic>[];
+      return data
+          .map((dynamic e) => FollowedCaptain.fromJson(e as Map<String, dynamic>))
+          .toList(growable: false);
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
   /// Kaptanı takip et — idempotent (ikinci çağrı da 204 döner).
   Future<void> follow({
     required String accessToken,

@@ -123,3 +123,30 @@ export class UsersPublicController {
     return this.usersService.getPublic(parsed.data);
   }
 }
+
+/**
+ * TAKİPÇİ/TAKİP LİSTELERİ (PR-1 profil düzeni, kurucu onayı 2026-11-03).
+ * Ayrı controller: kart kimliksiz okunurken LİSTELER kurucu kuralıyla
+ * yalnız GİRİŞ YAPMIŞ ÜYEYE açıktır — misafir sayıları görür, listeyi
+ * göremez (istemci sayaca dokununca hesaba davet eder).
+ */
+@Controller('users')
+@UseGuards(JwtAuthGuard, AccountGuard)
+@RequireAccount()
+export class UsersFollowListsController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Get(':id/followers')
+  async followers(@Param('id') id: string): Promise<{ data: FollowedCaptain[] }> {
+    const parsed = UuidParam.safeParse(id);
+    if (!parsed.success) throw new AppProblem('not-found');
+    return { data: await this.usersService.followersOf(parsed.data) };
+  }
+
+  @Get(':id/following')
+  async following(@Param('id') id: string): Promise<{ data: FollowedCaptain[] }> {
+    const parsed = UuidParam.safeParse(id);
+    if (!parsed.success) throw new AppProblem('not-found');
+    return { data: await this.usersService.followingOf(parsed.data) };
+  }
+}

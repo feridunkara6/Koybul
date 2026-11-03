@@ -83,8 +83,8 @@ export class PrismaUserRepository implements UserRepository {
           select: { badgeCode: true },
           orderBy: { awardedAt: 'asc' },
         },
-        // TAKİPÇİ SAYISI (SP-3a, 2026-10-31) — kartta herkese açık.
-        _count: { select: { followers: true } },
+        // TAKİPÇİ + TAKİP SAYISI (SP-3a + PR-1) — kartta herkese açık.
+        _count: { select: { followers: true, following: true } },
       },
     });
     if (!user) return null;
@@ -106,6 +106,16 @@ export class PrismaUserRepository implements UserRepository {
       take: 2,
       select: { name: true, saveCount: true, createdAt: true },
     });
+    // SEZON ŞERİDİ (PR-1, 2026-11-03): paylaşılan seyir + onaylı rota sayısı
+    // — tekne kartındaki hesapla AYNI kaynak, kopya veri saklanmaz.
+    const [statRow] = await this.prisma.$queryRaw<{ trips: number; routes: number }[]>`
+      SELECT
+        (SELECT count(*)::int FROM shared_trips t
+          WHERE t.user_id = ${userId}::uuid AND t.deleted_at IS NULL) AS trips,
+        (SELECT count(*)::int FROM routes r
+          WHERE r.user_id = ${userId}::uuid
+            AND r.status = 'approved'::moderation_status
+            AND r.deleted_at IS NULL) AS routes`;
     const recent: CaptainContribution[] = [
       ...noteRows.map((n) => ({
         kind: 'note' as const,
@@ -136,6 +146,9 @@ export class PrismaUserRepository implements UserRepository {
       helpfulReceived: user.reputation?.helpfulReceived ?? 0,
       badges: user.badges.map((b) => b.badgeCode),
       followerCount: user._count.followers,
+      followingCount: user._count.following,
+      sharedTrips: Number(statRow?.trips ?? 0),
+      sharedRoutes: Number(statRow?.routes ?? 0),
       recentContributions: recent,
     };
   }
@@ -182,6 +195,29 @@ export class PrismaUserRepository implements UserRepository {
       LEFT JOIN user_profiles up ON up.user_id = u.id
       LEFT JOIN user_reputation ur ON ur.user_id = u.id
       WHERE f.follower_id = ${userId}::uuid
+      ORDER BY f.created_at DESC
+      LIMIT 200
+    `;
+    return rows.map((r) => ({
+      id: r.id,
+      displayName: r.displayName ?? DEFAULT_DISPLAY_NAME,
+      levelCode: r.levelCode ?? 'new',
+    }));
+  }
+
+  /** Takipçi listesi (PR-1) — following() aynasıdır; silinmiş hesap düşer. */
+  async followers(userId: string): Promise<FollowedCaptain[]> {
+    const rows = await this.prisma.$queryRaw<
+      { id: string; displayName: string | null; levelCode: string | null }[]
+    >`
+      SELECT u.id::text AS id, up.display_name AS "displayName",
+             ur.level_code::text AS "levelCode"
+      FROM user_follows f
+      JOIN users u ON u.id = f.follower_id
+        AND u.deleted_at IS NULL AND u.status = 'active'
+      LEFT JOIN user_profiles up ON up.user_id = u.id
+      LEFT JOIN user_reputation ur ON ur.user_id = u.id
+      WHERE f.followed_id = ${userId}::uuid
       ORDER BY f.created_at DESC
       LIMIT 200
     `;

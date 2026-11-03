@@ -70,6 +70,15 @@ class FakeProfileGateway implements ProfileGateway {
 
   @override
   Future<void> unfollow(String userId) async {}
+
+  // PR-1 (2026-11-03): liste uçları — bu testte kullanılmaz.
+  @override
+  Future<List<FollowedCaptain>> followersOf(String userId) async =>
+      const <FollowedCaptain>[];
+
+  @override
+  Future<List<FollowedCaptain>> followingOf(String userId) async =>
+      const <FollowedCaptain>[];
 }
 
 /// Ekran bir ana sayfanın ÜSTÜNE itilir — kayıt sonrası pop gerçekçi olsun

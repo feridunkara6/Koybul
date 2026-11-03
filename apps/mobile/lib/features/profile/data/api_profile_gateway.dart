@@ -52,4 +52,14 @@ class ApiProfileGateway implements ProfileGateway {
   @override
   Future<void> unfollow(String userId) async =>
       _api.unfollow(accessToken: await _requiredToken(), userId: userId);
+
+  // --- TAKİPÇİ/TAKİP LİSTELERİ (PR-1 profil düzeni, 2026-11-03) ---
+
+  @override
+  Future<List<FollowedCaptain>> followersOf(String userId) async =>
+      _api.followersOf(accessToken: await _requiredToken(), userId: userId);
+
+  @override
+  Future<List<FollowedCaptain>> followingOf(String userId) async =>
+      _api.followingOf(accessToken: await _requiredToken(), userId: userId);
 }

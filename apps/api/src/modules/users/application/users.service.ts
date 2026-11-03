@@ -77,4 +77,21 @@ export class UsersService {
   following(userId: string): Promise<FollowedCaptain[]> {
     return this.users.following(userId);
   }
+
+  // --- TAKİPÇİ/TAKİP LİSTELERİ (PR-1 profil düzeni, kurucu onayı 2026-11-03) ---
+
+  /**
+   * Herhangi bir kaptanın takipçi/takip listesi — kurucu kuralı: yalnız
+   * GİRİŞ YAPMIŞ ÜYE görebilir (controller katmanında Jwt+Account kapısı);
+   * misafir sayıları görür, listeyi göremez. Olmayan/pasif hedef 404.
+   */
+  async followersOf(targetId: string): Promise<FollowedCaptain[]> {
+    if (!(await this.users.userExists(targetId))) throw new AppProblem('not-found');
+    return this.users.followers(targetId);
+  }
+
+  async followingOf(targetId: string): Promise<FollowedCaptain[]> {
+    if (!(await this.users.userExists(targetId))) throw new AppProblem('not-found');
+    return this.users.following(targetId);
+  }
 }
