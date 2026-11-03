@@ -284,7 +284,9 @@ void main() {
     expect(find.textContaining('Engellendi'), findsOneWidget); // snack
   });
 
-  testWidgets('ENG-1 GÖRÜNÜRLÜK: kendi profilinde ve misafirde ⋯ menüsü YOK',
+  // CI dersi (2026-11-03): aynı ağaca ikinci kez FARKLI SAYIDA override
+  // vermek Riverpod'da yasak — iki durum iki AYRI testte sınanır.
+  testWidgets('ENG-1 GÖRÜNÜRLÜK: kendi profilinde ⋯ menüsü YOK',
       (WidgetTester tester) async {
     final FakeProfileGateway gw = FakeProfileGateway();
     // Kendi profilim (u1 = testUser).
@@ -292,7 +294,11 @@ void main() {
         extra: <Override>[signedInAuthOverride()], captainId: 'u1'));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey<String>('cp-more')), findsNothing);
+  });
 
+  testWidgets('ENG-1 GÖRÜNÜRLÜK: misafirde ⋯ menüsü YOK',
+      (WidgetTester tester) async {
+    final FakeProfileGateway gw = FakeProfileGateway();
     // Misafir — menü yine yok (hesapsız kullanıcı etkileşemez).
     await tester.pumpWidget(_profileApp(gw));
     await tester.pumpAndSettle();
