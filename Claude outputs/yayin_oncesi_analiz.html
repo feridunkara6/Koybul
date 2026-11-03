@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Koybul Yayın Analizi</title>
+<style>
+  :root{
+    --bg:#f6f8fb; --card:#ffffff; --ink:#15243a; --sub:#5b6b82;
+    --brand:#0e4f8a; --teal:#0b7a6c; --amber:#b8860b; --red:#c0392b;
+    --line:#e3e9f1; --chip:#eaf1f8;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0f1722; --card:#17212e; --ink:#e8eef6; --sub:#9db0c6;
+      --brand:#6fb1ec; --teal:#4ecdc4; --amber:#e8c468; --red:#ff8a80;
+      --line:#2a3850; --chip:#1f2d3f;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.6 -apple-system,"Segoe UI",Roboto,sans-serif;padding:16px 16px 48px}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:21px;margin:8px 0 2px}
+  .lead{color:var(--sub);font-size:13.5px;margin:0 0 18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+  .card h2{font-size:15.5px;margin:0 0 8px}
+  .ok{border-left:4px solid var(--teal)}
+  .crit{border-left:4px solid var(--red)}
+  .mid{border-left:4px solid var(--amber)}
+  .low{border-left:4px solid var(--brand)}
+  .tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.4px;padding:2px 9px;border-radius:999px;margin-left:6px;vertical-align:2px}
+  .t-ok{background:#e6f7f3;color:var(--teal)}
+  .t-crit{background:#fdecea;color:var(--red)}
+  .t-mid{background:#fff4d6;color:#8a6a0b}
+  .t-low{background:var(--chip);color:var(--brand)}
+  ul{margin:6px 0 2px;padding-left:20px}
+  li{margin:5px 0}
+  li b{color:var(--ink)}
+  .sub{color:var(--sub);font-size:12.5px}
+  .step{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px dashed var(--line)}
+  .step:first-of-type{border-top:none}
+  .n{flex:0 0 24px;height:24px;border-radius:50%;background:var(--brand);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>⚓ Koybul — Yayın Öncesi Analiz</h1>
+<p class="lead">3 Kasım 2026 · sürüm 10 sonrası durum. Kod tabanını yayın gözüyle taradım: neler hazır, App Store incelemesinde neler sorun çıkarır, neler yayın sonrasına kalabilir.</p>
+
+<div class="card ok">
+  <h2>✅ Hazır olanlar <span class="tag t-ok">GÜÇLÜ TARAF</span></h2>
+  <ul>
+    <li><b>Satın alma doğru kurulmuş:</b> Premium, Apple'ın kendi mağaza sistemi (StoreKit) üzerinden satılıyor + "Satın alımı geri yükle" var. Apple'ın en sık red sebeplerinden biri bu — sende temiz.</li>
+    <li><b>Hesap silme:</b> Uygulama içinden, anonimleştirerek. Apple zorunluluğu — karşılanmış.</li>
+    <li><b>İçerik moderasyonu:</b> Not, soru, cevap, rota, etkinlik, tekne hikâyesi — hepsi önce onaydan geçiyor; şikâyet (⚑) düğmesi var; admin kuyruğu çalışıyor. Kullanıcı içerikli uygulamalar için Apple şartı.</li>
+    <li><b>Gizlilik mimarisi:</b> Konum izi saklanmıyor, "Konumum" gizleniyor, rıza anahtarları her yerde, PII hiçbir açık uca inmiyor. Gizlilik etiketlerini (App Privacy) doldururken elin rahat olacak.</li>
+    <li><b>Çökme takibi:</b> Sentry bağlı — yayından sonra hataları senden önce görürüz.</li>
+    <li><b>Yasal metinler:</b> Gizlilik, KVKK aydınlatma, kullanım koşulları uygulama içinde.</li>
+    <li><b>Test güvencesi:</b> 850+ mobil, 460+ sunucu testi; her sürümde üç yeşil düzeni.</li>
+  </ul>
+</div>
+
+<div class="card crit">
+  <h2>1 · Kullanıcı engelleme yok <span class="tag t-crit">YAYIN ENGELİ — ÖNCE BU</span></h2>
+  <p class="sub">Apple'ın kullanıcı içerikli uygulama kuralı (1.2) üç şey ister: içerik şikâyeti ✅, moderasyon ✅, <b>rahatsız eden KULLANICIYI engelleme ❌</b>. Şu an içerik şikâyet edilebiliyor ama kullanıcı engellenemiyor. İnceleme ekibi sosyal uygulamalarda buna özellikle bakıyor; red riski gerçek.</p>
+  <ul>
+    <li><b>Önerim:</b> Kaptan profiline "⋯ → Bu kaptanı engelle" — engellediğin kişinin notları, soruları, seyirleri, etkinlikleri sana görünmez; o seni takip edemez. Profil → ayarlarda "Engellediklerim" listesi ile geri alınabilir.</li>
+    <li>Tek paket, 1 migration (user_blocks) — tahminen 1 oturum iş.</li>
+  </ul>
+</div>
+
+<div class="card crit">
+  <h2>2 · İnceleme için hazırlık <span class="tag t-crit">SENİN YAPACAKLARIN</span></h2>
+  <p class="sub">Kod değil, App Store Connect işi — ama eksik olursa inceleme bekler ya da reddedilir:</p>
+  <ul>
+    <li><b>Demo hesap:</b> İnceleme notlarına hazır bir üye hesabı (e-posta+şifre) + bir premium hesabı yaz; admin paneli sorarlarsa "yalnız kurucu hesabında" diye açıkla.</li>
+    <li><b>Gizlilik etiketi:</b> App Privacy formunda: konum (yalnız kullanım anında, iz saklanmıyor), e-posta (hesap), içerik verileri. Takip (tracking) YOK — reklam yok.</li>
+    <li><b>Destek adresi:</b> Mağaza sayfası bir destek URL'si/e-postası ister — basit bir sayfa ya da koybul destek e-postası yeter.</li>
+    <li><b>Yaş sınıflaması:</b> Kullanıcı içeriği olduğu için anketten büyük ihtimal 12+ ya da 17+ çıkar — dürüst doldur.</li>
+    <li><b>Abonelik şartları:</b> Premium sayfasında fiyat, süre, otomatik yenileme açıklaması + kullanım koşulları/gizlilik bağlantıları görünür olmalı (Apple abonelik kuralı). Kontrol edip eksikse tek ekranlık iş.</li>
+  </ul>
+</div>
+
+<div class="card mid">
+  <h2>3 · Önerilen küçük sağlamlaştırmalar <span class="tag t-mid">YAYINDAN ÖNCE İYİ OLUR</span></h2>
+  <ul>
+    <li><b>Seyir paylaşımına şikâyet:</b> Akıştaki seyir kartları yapısal veri (serbest metin yok) diye düşük riskli; yine de karta ⚑ eklemek inceleme ekibine "her içerik şikâyet edilebilir" dedirtir.</li>
+    <li><b>Boş durum turu:</b> Yeni kullanıcı ilk açılışta boş akış/boş marina görecek — ilk izlenim için birkaç yönlendirme metni gözden geçirilebilir (çoğu ekranda var, akışta zayıf).</li>
+    <li><b>Sunucu uyku sorunu:</b> Render ücretsiz/düşük planda ilk istek yavaş uyanır — yayın günü planı bir kademe yükseltmek ilk hafta şikâyetini önler.</li>
+  </ul>
+</div>
+
+<div class="card low">
+  <h2>4 · Yayın SONRASINA kalabilecekler <span class="tag t-low">ACELESİ YOK</span></h2>
+  <ul>
+    <li>E-posta ile tek seferlik kod girişi (OTP/Resend) — şifreli giriş çalışıyor.</li>
+    <li>Tekne fotoğrafı paylaşımı (çizim sistemi bilinçli tercihti).</li>
+    <li>Bölgem sekmesi, akışta kroki ve serbest yorum (moderasyon yükü bilinçli ertelendi).</li>
+    <li>MaviSeyir/marka işleri, rota UX kalanları.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>🗺 Önerdiğim yayın yolu</h2>
+  <div class="step"><div class="n">1</div><div><b>Engelleme paketini yapalım</b> (tek yayın engeli bu). Onay verirsen tasarım demosuyla başlarım.</div></div>
+  <div class="step"><div class="n">2</div><div><b>Premium sayfası abonelik metni kontrolü</b> — aynı pakete sığar.</div></div>
+  <div class="step"><div class="n">3</div><div><b>Saha testini bitir</b> (elindeki liste) + Codemagic sürüm derlemesi.</div></div>
+  <div class="step"><div class="n">4</div><div><b>App Store Connect:</b> ekran görüntüleri, açıklama, gizlilik etiketi, demo hesap, destek adresi — adım adım birlikte doldururuz.</div></div>
+  <div class="step"><div class="n">5</div><div><b>İncelemeye gönder.</b> Red gelirse (ilk denemede sık olur) gerekçesini birlikte okur, düzeltir, yeniden göndeririz.</div></div>
+</div>
+
+</div></body>
+</html>

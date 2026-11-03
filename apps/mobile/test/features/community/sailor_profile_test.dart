@@ -132,7 +132,7 @@ void main() {
         findsNothing);
     // Teknem'in kendi parçaları yerli yerinde.
     expect(find.byKey(const ValueKey<String>('boat-edit')), findsOneWidget);
-    expect(find.text('Bakım takibi'), findsOneWidget);
+    expect(find.text('Bakım ve yakıt takibi'), findsOneWidget);
   });
 
   testWidgets('HESAP VAR: seviye, puan ve bölge çipi görünür',

@@ -63,7 +63,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey<String>('maint-open')), findsOneWidget);
-    expect(find.text('Bakım takibi'), findsOneWidget);
+    expect(find.text('Bakım ve yakıt takibi'), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('boat-deck-bridge')), findsOneWidget);
     // Kalem listesi ilk ekranda durmaz (özet yeter)…
     expect(find.text('Motor yağı ve filtresi'), findsNothing);
