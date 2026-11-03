@@ -156,6 +156,10 @@ void main() {
     // 599,99 ÷ 12 = 50,00 — dürüst bölme, uydurma indirim yüzdesi yok.
     expect(find.textContaining('₺50.00'), findsOneWidget);
     expect(find.text("Premium'a geç"), findsNWidgets(2));
+    // YAYIN HAZIRLIĞI (2026-11-03): Apple abonelik kuralı — satın alma
+    // sayfasında kullanım koşulları + gizlilik bağlantısı görünür.
+    await tester.ensureVisible(find.byKey(const ValueKey<String>('prem-legal')));
+    expect(find.byKey(const ValueKey<String>('prem-legal')), findsOneWidget);
   });
 
   testWidgets('satın alma: mağaza onayı SONRASI sunucu bağlama çağrılır, premium açılır',

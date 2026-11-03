@@ -605,6 +605,7 @@ class L10n {
     required this.premLinking,
     required this.premDone,
     required this.premCancelNote,
+    required this.premLegalBtn,
     required this.detPhotoBadgeFmt,
     required this.detLockTitle,
     required this.detLockBody,
@@ -1242,6 +1243,8 @@ class L10n {
   final String premActive, premUntilFmt;
   final String premNeedAccount, premSignInBtn, premWebMsg, premUnavailable;
   final String premPurchaseError, premLinking, premDone, premCancelNote;
+  // Yayın hazırlığı (2026-11-03): satın alma sayfasında yasal bağlantı.
+  final String premLegalBtn;
 
   // --- Kilitli koy detayı / keşif hakkı (P4, kurucu onayı 2026-09-22) ---
   final String detPhotoBadgeFmt, detLockTitle, detLockBody, detLockCta;
@@ -1857,7 +1860,7 @@ const L10n _tr = L10n(
   academyHook: 'Nasıl yapılır? Akademi rehberlerine bak',
   academyPointsTitle: 'Uygulama adımları',
   academyNoteTitle: 'Kaptan notu',
-  maintTitle: 'Bakım ve yakıt takibi',
+  maintTitle: 'Bakım takibi',
   maintLead: 'Ne zaman yaptığını gir; sırası gelince hatırlatalım.',
   maintStatusOk: 'Güncel',
   maintStatusSoon: 'Yaklaşıyor',
@@ -2432,6 +2435,7 @@ const L10n _tr = L10n(
   premPurchaseError: 'İşlem tamamlanamadı. Paran çekilmediyse tekrar deneyebilirsin; sorun sürerse App Store hesabını kontrol et.',
   premLinking: 'Aboneliğin doğrulanıyor…',
   premDone: 'Premium etkinleşti — iyi seyirler, kaptan!',
+  premLegalBtn: 'Kullanım koşulları ve gizlilik politikası',
   premCancelNote: 'Abonelik dönem sonunda kendiliğinden yenilenir; App Store hesabından istediğin an tek dokunuşla iptal edebilirsin. Premium bitse bile kayıtların silinmez.',
   detPhotoBadgeFmt: '1/{0} · kalanı Premium\'da',
   detLockTitle: 'Koyun tamamı Premium\'da',
@@ -3018,7 +3022,7 @@ const L10n _en = L10n(
   academyHook: 'Not sure how? See the Academy guides',
   academyPointsTitle: 'How to do it',
   academyNoteTitle: 'Skipper\'s note',
-  maintTitle: 'Maintenance & fuel log',
+  maintTitle: 'Maintenance log',
   maintLead: 'Log when you did it; we will remind you when it is due.',
   maintStatusOk: 'Up to date',
   maintStatusSoon: 'Due soon',
@@ -3591,6 +3595,7 @@ const L10n _en = L10n(
   premPurchaseError: 'The purchase didn\'t complete. If you weren\'t charged, try again; if the problem persists, check your App Store account.',
   premLinking: 'Verifying your subscription…',
   premDone: 'Premium is active — fair winds, captain!',
+  premLegalBtn: 'Terms of use & privacy policy',
   premCancelNote: 'The subscription renews automatically each period; cancel anytime with one tap in your App Store account. Your saved data is never deleted, even if Premium ends.',
   detPhotoBadgeFmt: '1/{0} · rest in Premium',
   detLockTitle: 'Full bay details are in Premium',
@@ -4176,7 +4181,7 @@ const L10n _es = L10n(
   academyHook: '¿No sabes cómo? Consulta las guías de la Academia',
   academyPointsTitle: 'Cómo hacerlo',
   academyNoteTitle: 'Nota del patrón',
-  maintTitle: 'Mantenimiento y combustible',
+  maintTitle: 'Registro de mantenimiento',
   maintLead: 'Anota cuándo lo hiciste; te avisamos cuando toque.',
   maintStatusOk: 'Al día',
   maintStatusSoon: 'Se acerca',
@@ -4749,6 +4754,7 @@ const L10n _es = L10n(
   premPurchaseError: 'La compra no se completó. Si no se te cobró, inténtalo de nuevo; si el problema continúa, revisa tu cuenta del App Store.',
   premLinking: 'Verificando tu suscripción…',
   premDone: '¡Premium activado — buen viento, capitán!',
+  premLegalBtn: 'Condiciones de uso y política de privacidad',
   premCancelNote: 'La suscripción se renueva automáticamente cada período; cancélala cuando quieras desde tu cuenta del App Store. Tus datos guardados nunca se borran, aunque Premium termine.',
   detPhotoBadgeFmt: '1/{0} · el resto en Premium',
   detLockTitle: 'Todos los detalles de la cala están en Premium',
@@ -5334,7 +5340,7 @@ const L10n _ru = L10n(
   academyHook: 'Не знаете как? Загляните в руководства Академии',
   academyPointsTitle: 'Как это делается',
   academyNoteTitle: 'Заметка шкипера',
-  maintTitle: 'Обслуживание и топливо',
+  maintTitle: 'Журнал обслуживания',
   maintLead: 'Отмечайте, когда сделали; мы напомним, когда подойдёт срок.',
   maintStatusOk: 'В порядке',
   maintStatusSoon: 'Скоро срок',
@@ -5907,6 +5913,7 @@ const L10n _ru = L10n(
   premPurchaseError: 'Покупка не завершилась. Если деньги не списаны — попробуйте ещё раз; если проблема повторяется, проверьте аккаунт App Store.',
   premLinking: 'Проверяем вашу подписку…',
   premDone: 'Premium активирован — попутного ветра, капитан!',
+  premLegalBtn: 'Условия использования и конфиденциальность',
   premCancelNote: 'Подписка продлевается автоматически; отменить её можно в любой момент в аккаунте App Store. Ваши сохранённые данные не удаляются, даже если Premium закончится.',
   detPhotoBadgeFmt: '1/{0} · остальное в Premium',
   detLockTitle: 'Все данные бухты — в Premium',

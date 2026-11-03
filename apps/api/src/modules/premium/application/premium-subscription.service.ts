@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { AppProblem } from '../../../common/problem/problem';
 import { Principal, roleAtLeast } from '../../../core/auth/principal';
+import { ADMIN_GRANT_PRODUCT_ID } from '../../admin/application/admin.service';
 import {
   APPLE_SUBSCRIPTION_GATEWAY,
   AppleSubscriptionGateway,
@@ -161,11 +162,22 @@ export class PremiumSubscriptionService {
   }
 
   private async saveState(userId: string, state: AppleSubscriptionState): Promise<void> {
+    // SAHA HATASI (2026-11-03, "premium tanımla çalışmıyor"): Apple yansıması
+    // bu alanların üzerine KOŞULSUZ yazıyordu — kurucunun elle tanımladığı
+    // premium (koybul.premium.admin), kişi "geri yükle"ye dokununca ya da
+    // App Store bildirimi gelince SİLİNİYORDU. Kural: elle tanım, Apple'ın
+    // verdiğinden DAHA UZUNSA korunur; Apple daha uzun hak veriyorsa Apple
+    // kazanır (kullanıcı asla kaybetmez). İşlem kimliği her durumda yazılır.
+    const current = await this.repo.findSubscription(userId);
+    const adminGrantWins =
+      current.productId === ADMIN_GRANT_PRODUCT_ID &&
+      current.premiumUntil !== null &&
+      current.premiumUntil.getTime() > (state.expiresAt?.getTime() ?? 0);
     await this.repo.saveSubscription(userId, {
       // Hak yoksa premiumUntil bitiş tarihi (geçmiş) olarak yazılır: "eski
       // abone" izi kalır, kayıtlar salt-okunur korunur (rapor §3 kutu).
-      premiumUntil: state.expiresAt,
-      productId: state.productId,
+      premiumUntil: adminGrantWins ? current.premiumUntil : state.expiresAt,
+      productId: adminGrantWins ? current.productId : state.productId,
       originalTransactionId: state.originalTransactionId,
     });
   }

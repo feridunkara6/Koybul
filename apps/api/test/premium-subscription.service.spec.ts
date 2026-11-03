@@ -232,6 +232,47 @@ describe('PremiumSubscriptionService (P2)', () => {
     expect(repo.subs.get('u1')?.premiumUntil).toEqual(PAST);
   });
 
+  // SAHA HATASI (2026-11-03): Apple yansıması, kurucunun elle tanımladığı
+  // premium'u eziyordu. Kural: elle tanım Apple'ınkinden uzunsa KORUNUR.
+  it('ELLE TANIM KORUNUR: bitmiş Apple aboneliği geri yüklense de admin tanımı silinmez', async () => {
+    const expired: AppleSubscriptionState = {
+      originalTransactionId: 't9',
+      productId: 'koybul.premium.aylik',
+      entitled: false,
+      appleStatus: 2,
+      expiresAt: PAST,
+    };
+    const repo = new FakeRepo();
+    // Kurucu elle premium tanımladı: FUTURE'a kadar, admin ürünüyle.
+    repo.subs.set('u1', {
+      premiumUntil: FUTURE,
+      productId: 'koybul.premium.admin',
+      otid: '',
+    });
+    await new PremiumSubscriptionService(repo, gateway({ t9: expired })).link(member(), 't9');
+    const s = repo.subs.get('u1')!;
+    expect(s.premiumUntil).toEqual(FUTURE); // tanım KORUNDU
+    expect(s.productId).toBe('koybul.premium.admin');
+    expect(s.otid).toBe('t9'); // işlem bağı yine de kuruldu
+  });
+
+  it('APPLE UZUNSA APPLE KAZANIR: aktif abonelik elle tanımı geçiyorsa yazılır', async () => {
+    const repo = new FakeRepo();
+    // Elle tanım geçmişte kalmış; Apple FUTURE veriyor → kullanıcı kaybetmez.
+    repo.subs.set('u1', {
+      premiumUntil: PAST,
+      productId: 'koybul.premium.admin',
+      otid: '',
+    });
+    await new PremiumSubscriptionService(repo, gateway({ t1: activeState('t1') })).link(
+      member(),
+      't1',
+    );
+    const s = repo.subs.get('u1')!;
+    expect(s.premiumUntil).toEqual(FUTURE);
+    expect(s.productId).toBe('koybul.premium.yillik');
+  });
+
   it('bildirim: bağlı kullanıcıyı Apple gerçeğiyle günceller (gövdeye güvenmez)', async () => {
     const repo = new FakeRepo();
     repo.subs.set('u1', { premiumUntil: FUTURE, productId: 'koybul.premium.yillik', otid: 't1' });

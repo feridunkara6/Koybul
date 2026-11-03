@@ -8,6 +8,7 @@ import '../../../core/l10n/l10n_strings.dart';
 import '../../auth/application/auth_controller.dart';
 import '../../auth/domain/auth_state.dart';
 import '../../auth/presentation/account_section.dart' show showSignInSheet;
+import '../../legal/presentation/legal_screen.dart';
 import '../application/premium_controller.dart';
 import '../domain/purchase_gateway.dart';
 
@@ -20,11 +21,28 @@ import '../domain/purchase_gateway.dart';
 ///
 /// Dört hâl: web (yönlendirme mesajı — K6), misafir/oturumsuz (hesap çağrısı),
 /// premium zaten etkin (durum kartı), satın alınabilir (paketler).
-class PremiumScreen extends ConsumerWidget {
+class PremiumScreen extends ConsumerStatefulWidget {
   const PremiumScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PremiumScreen> createState() => _PremiumScreenState();
+}
+
+class _PremiumScreenState extends ConsumerState<PremiumScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // SAHA HATASI (2026-11-03, "premium tanımla çalışmıyor"): durum uygulama
+    // açılışında BİR KEZ okunuyordu — kurucu elle premium tanımlayınca kişi
+    // uygulamayı yeniden başlatana dek görmüyordu. Bu ekran her açılışta
+    // durumu sunucudan tazeler (çevrimdışı koruması controller'da sürer).
+    Future<void>.microtask(() {
+      if (mounted) ref.invalidate(premiumMeProvider);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final L10n t = ref.watch(l10nProvider);
     return Scaffold(
       appBar: AppBar(title: Text(t.premTitle)),
@@ -144,6 +162,18 @@ class _StoreBody extends ConsumerWidget {
               ],
             ),
         },
+        // YAYIN HAZIRLIĞI (2026-11-03): Apple abonelik kuralı — satın alma
+        // sayfasından kullanım koşulları + gizlilik politikasına bağlantı.
+        const SizedBox(height: 4),
+        Center(
+          child: TextButton(
+            key: const ValueKey<String>('prem-legal'),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const LegalScreen()),
+            ),
+            child: Text(t.premLegalBtn),
+          ),
+        ),
       ],
     );
   }
