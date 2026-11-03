@@ -421,6 +421,15 @@ class L10n {
     required this.flFollowersEmpty,
     required this.flFollowingEmpty,
     required this.gateFollowListMsg,
+    required this.blockMenuItem,
+    required this.unblockMenuItem,
+    required this.blockConfirmTitle,
+    required this.blockConfirmBody,
+    required this.blockConfirmBtn,
+    required this.blockDoneMsg,
+    required this.blockedListTitle,
+    required this.blockedListEmpty,
+    required this.blockedAtFmt,
     required this.followingTitle,
     required this.followingEmpty,
     required this.gateFollowMsg,
@@ -1189,6 +1198,10 @@ class L10n {
   final String cpFollowingCap, cpContribCap, cpPointsCap, cpHelpfulShort,
       cpTripsCap, cpRoutesCap, flFollowersTab, flFollowingTab,
       flFollowersEmpty, flFollowingEmpty, gateFollowListMsg;
+  // ENGELLEME (ENG-1, kurucu onayı 2026-11-03): sessiz engel + liste.
+  final String blockMenuItem, unblockMenuItem, blockConfirmTitle,
+      blockConfirmBody, blockConfirmBtn, blockDoneMsg, blockedListTitle,
+      blockedListEmpty, blockedAtFmt;
   // SAHA PAKETİ (2026-10-30): S-C arama/sayfa + bakım vitrini.
   // TEKNE KARTI 0024 (2026-10-30): hikâye + istatistik + rotalar.
   // YAKIT TAKİBİ (kurucu onayı 2026-10-30): cihazda, hesaba bağlı.
@@ -1860,7 +1873,7 @@ const L10n _tr = L10n(
   academyHook: 'Nasıl yapılır? Akademi rehberlerine bak',
   academyPointsTitle: 'Uygulama adımları',
   academyNoteTitle: 'Kaptan notu',
-  maintTitle: 'Bakım takibi',
+  maintTitle: 'Bakım ve yakıt takibi',
   maintLead: 'Ne zaman yaptığını gir; sırası gelince hatırlatalım.',
   maintStatusOk: 'Güncel',
   maintStatusSoon: 'Yaklaşıyor',
@@ -2246,6 +2259,17 @@ const L10n _tr = L10n(
   flFollowingEmpty: 'Henüz kimseyi takip etmiyor.',
   gateFollowListMsg:
       'Takipçi ve takip listelerini görmek için ücretsiz bir hesap gerekir.',
+  blockMenuItem: 'Bu kaptanı engelle',
+  unblockMenuItem: 'Engeli kaldır',
+  blockConfirmTitle: 'Bu kaptanı engellemek üzeresin',
+  blockConfirmBody:
+      'Engellersen notları, soruları, cevapları, seyirleri ve etkinlikleri sana görünmez; seni takip edemez ve mevcut takip düşer. Ona bildirim gitmez. İstediğin an Profil → Engellediklerim bölümünden geri alabilirsin.',
+  blockConfirmBtn: 'Engelle',
+  blockDoneMsg: 'Engellendi — içerikleri artık sana görünmeyecek.',
+  blockedListTitle: 'Engellediklerim',
+  blockedListEmpty:
+      'Kimseyi engellemedin. Gerekirse kaptan profilindeki ⋯ menüsünden engelleyebilirsin.',
+  blockedAtFmt: 'Engellendi: {0}',
   followingTitle: 'Takip ettiklerim',
   followingEmpty:
       'Henüz kimseyi takip etmiyorsun. Beğendiğin bir kaptanın profilinden "Takip et"e dokun.',
@@ -3022,7 +3046,7 @@ const L10n _en = L10n(
   academyHook: 'Not sure how? See the Academy guides',
   academyPointsTitle: 'How to do it',
   academyNoteTitle: 'Skipper\'s note',
-  maintTitle: 'Maintenance log',
+  maintTitle: 'Maintenance & fuel log',
   maintLead: 'Log when you did it; we will remind you when it is due.',
   maintStatusOk: 'Up to date',
   maintStatusSoon: 'Due soon',
@@ -3408,6 +3432,17 @@ const L10n _en = L10n(
   flFollowingEmpty: 'Not following anyone yet.',
   gateFollowListMsg:
       'You need a free account to see follower and following lists.',
+  blockMenuItem: 'Block this captain',
+  unblockMenuItem: 'Unblock',
+  blockConfirmTitle: 'You are about to block this captain',
+  blockConfirmBody:
+      'If you block them, their notes, questions, answers, voyages and events will be hidden from you; they cannot follow you and any existing follow is removed. They are not notified. You can undo this anytime from Profile → Blocked users.',
+  blockConfirmBtn: 'Block',
+  blockDoneMsg: 'Blocked — their content will no longer be shown to you.',
+  blockedListTitle: 'Blocked users',
+  blockedListEmpty:
+      "You haven't blocked anyone. If needed, use the ⋯ menu on a captain's profile.",
+  blockedAtFmt: 'Blocked: {0}',
   followingTitle: 'Captains I follow',
   followingEmpty:
       'You are not following anyone yet. Tap "Follow" on a captain profile you like.',
@@ -4181,7 +4216,7 @@ const L10n _es = L10n(
   academyHook: '¿No sabes cómo? Consulta las guías de la Academia',
   academyPointsTitle: 'Cómo hacerlo',
   academyNoteTitle: 'Nota del patrón',
-  maintTitle: 'Registro de mantenimiento',
+  maintTitle: 'Mantenimiento y combustible',
   maintLead: 'Anota cuándo lo hiciste; te avisamos cuando toque.',
   maintStatusOk: 'Al día',
   maintStatusSoon: 'Se acerca',
@@ -4567,6 +4602,17 @@ const L10n _es = L10n(
   flFollowingEmpty: 'Aún no sigue a nadie.',
   gateFollowListMsg:
       'Necesitas una cuenta gratuita para ver las listas de seguidores y seguidos.',
+  blockMenuItem: 'Bloquear a este capitán',
+  unblockMenuItem: 'Desbloquear',
+  blockConfirmTitle: 'Vas a bloquear a este capitán',
+  blockConfirmBody:
+      'Si lo bloqueas, sus notas, preguntas, respuestas, travesías y eventos quedarán ocultos para ti; no podrá seguirte y cualquier seguimiento existente se elimina. No recibirá aviso. Puedes deshacerlo cuando quieras en Perfil → Bloqueados.',
+  blockConfirmBtn: 'Bloquear',
+  blockDoneMsg: 'Bloqueado — su contenido ya no se te mostrará.',
+  blockedListTitle: 'Bloqueados',
+  blockedListEmpty:
+      'No has bloqueado a nadie. Si hace falta, usa el menú ⋯ en el perfil de un capitán.',
+  blockedAtFmt: 'Bloqueado: {0}',
   followingTitle: 'Capitanes que sigo',
   followingEmpty:
       'Aún no sigues a nadie. Toca "Seguir" en el perfil de un capitán que te guste.',
@@ -5340,7 +5386,7 @@ const L10n _ru = L10n(
   academyHook: 'Не знаете как? Загляните в руководства Академии',
   academyPointsTitle: 'Как это делается',
   academyNoteTitle: 'Заметка шкипера',
-  maintTitle: 'Журнал обслуживания',
+  maintTitle: 'Обслуживание и топливо',
   maintLead: 'Отмечайте, когда сделали; мы напомним, когда подойдёт срок.',
   maintStatusOk: 'В порядке',
   maintStatusSoon: 'Скоро срок',
@@ -5726,6 +5772,17 @@ const L10n _ru = L10n(
   flFollowingEmpty: 'Пока ни на кого не подписан.',
   gateFollowListMsg:
       'Чтобы видеть списки подписчиков и подписок, нужна бесплатная учётная запись.',
+  blockMenuItem: 'Заблокировать этого капитана',
+  unblockMenuItem: 'Разблокировать',
+  blockConfirmTitle: 'Вы собираетесь заблокировать этого капитана',
+  blockConfirmBody:
+      'После блокировки его заметки, вопросы, ответы, походы и события будут скрыты от вас; он не сможет подписаться на вас, существующая подписка будет удалена. Уведомление ему не придёт. Отменить можно в любой момент: Профиль → Заблокированные.',
+  blockConfirmBtn: 'Заблокировать',
+  blockDoneMsg: 'Заблокировано — его материалы больше не будут показываться вам.',
+  blockedListTitle: 'Заблокированные',
+  blockedListEmpty:
+      'Вы никого не заблокировали. При необходимости используйте меню ⋯ в профиле капитана.',
+  blockedAtFmt: 'Заблокировано: {0}',
   followingTitle: 'Мои подписки',
   followingEmpty:
       'Вы пока ни на кого не подписаны. Нажмите «Подписаться» в профиле капитана.',

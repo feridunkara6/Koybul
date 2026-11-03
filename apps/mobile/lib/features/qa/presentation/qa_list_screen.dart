@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n_strings.dart';
+import '../../profile/application/block_controller.dart';
 import '../application/qa_controller.dart';
 import 'qa_composer_screen.dart';
 import 'qa_detail_screen.dart';
@@ -215,15 +216,26 @@ class _QaListScreenState extends ConsumerState<QaListScreen> {
   }
 }
 
-class _FeedBody extends StatelessWidget {
+class _FeedBody extends ConsumerWidget {
   const _FeedBody({required this.feed, required this.t});
 
   final QaFeed feed;
   final L10n t;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
+    // ENGELLEME SÜZGECİ (ENG-1, 2026-11-03): engellenen yazarın soruları
+    // listeye çizilmez (yıldızlılar dahil — aynı kural her yüzeyde).
+    final Set<String> blocked = ref.watch(blockedIdsProvider);
+    final List<QaQuestionSummary> featured = feed.featured
+        .where((QaQuestionSummary q) =>
+            q.authorId == null || !blocked.contains(q.authorId))
+        .toList(growable: false);
+    final List<QaQuestionSummary> items = feed.items
+        .where((QaQuestionSummary q) =>
+            q.authorId == null || !blocked.contains(q.authorId))
+        .toList(growable: false);
     if (feed.featured.isEmpty && feed.items.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 48),
@@ -246,16 +258,16 @@ class _FeedBody extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        if (feed.featured.isNotEmpty) ...<Widget>[
+        if (featured.isNotEmpty) ...<Widget>[
           Text('⭑ ${t.qaFeaturedCap}', style: cap(const Color(0xFFB8860B))),
           const SizedBox(height: 6),
-          for (final QaQuestionSummary q in feed.featured)
+          for (final QaQuestionSummary q in featured)
             _QuestionCard(q: q, t: t, featured: true),
           const SizedBox(height: 10),
           Text(t.qaLatestCap, style: cap(DocklyColors.text2)),
           const SizedBox(height: 6),
         ],
-        for (final QaQuestionSummary q in feed.items) _QuestionCard(q: q, t: t),
+        for (final QaQuestionSummary q in items) _QuestionCard(q: q, t: t),
       ],
     );
   }

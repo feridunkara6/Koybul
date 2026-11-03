@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import 'dto/blocked_user.dart';
 import 'dto/followed_captain.dart';
 import 'dto/public_captain.dart';
 import 'dto/user_me.dart';
@@ -160,6 +161,55 @@ class UsersApi {
     try {
       await _dio.delete<void>(
         '/v1/users/me/following/$userId',
+        options: _auth(accessToken),
+      );
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  // --- ENGELLEME (ENG-1, kurucu onayı 2026-11-03) ---
+
+  /// Engellediklerim — yalnız sahibine iner; en yeni engel önce.
+  Future<List<BlockedUser>> blocks(String accessToken) async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>(
+        '/v1/users/me/blocks',
+        options: _auth(accessToken),
+      );
+      final List<dynamic> data =
+          (res.data!['data'] as List<dynamic>?) ?? const <dynamic>[];
+      return data
+          .map((dynamic e) => BlockedUser.fromJson(e as Map<String, dynamic>))
+          .toList(growable: false);
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  /// Kullanıcıyı engelle — sessiz, idempotent; takip bağları düşer.
+  Future<void> block({
+    required String accessToken,
+    required String userId,
+  }) async {
+    try {
+      await _dio.post<void>(
+        '/v1/users/me/blocks/$userId',
+        options: _auth(accessToken),
+      );
+    } on DioException catch (error) {
+      throw mapDioError(error);
+    }
+  }
+
+  /// Engeli kaldır — idempotent.
+  Future<void> unblock({
+    required String accessToken,
+    required String userId,
+  }) async {
+    try {
+      await _dio.delete<void>(
+        '/v1/users/me/blocks/$userId',
         options: _auth(accessToken),
       );
     } on DioException catch (error) {

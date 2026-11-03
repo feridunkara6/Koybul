@@ -1,4 +1,5 @@
-import 'package:dockly_api/dockly_api.dart' show FollowedCaptain, UserProfileMe;
+import 'package:dockly_api/dockly_api.dart'
+    show BlockedUser, FollowedCaptain, UserProfileMe;
 import 'package:dockly_mobile/features/community/application/reputation_controller.dart';
 import 'package:dockly_mobile/features/community/presentation/sailor_profile_card.dart';
 import 'package:dockly_mobile/features/deck/application/trip_log_controller.dart';
@@ -79,6 +80,16 @@ class FakeProfileGateway implements ProfileGateway {
   @override
   Future<List<FollowedCaptain>> followingOf(String userId) async =>
       const <FollowedCaptain>[];
+
+  // ENG-1 (2026-11-03): engelleme uçları — bu testte kullanılmaz.
+  @override
+  Future<List<BlockedUser>> blocks() async => const <BlockedUser>[];
+
+  @override
+  Future<void> block(String userId) async {}
+
+  @override
+  Future<void> unblock(String userId) async {}
 }
 
 /// Ekran bir ana sayfanın ÜSTÜNE itilir — kayıt sonrası pop gerçekçi olsun

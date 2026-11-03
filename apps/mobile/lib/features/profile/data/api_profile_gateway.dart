@@ -62,4 +62,17 @@ class ApiProfileGateway implements ProfileGateway {
   @override
   Future<List<FollowedCaptain>> followingOf(String userId) async =>
       _api.followingOf(accessToken: await _requiredToken(), userId: userId);
+
+  // --- ENGELLEME (ENG-1, kurucu onayı 2026-11-03) ---
+
+  @override
+  Future<List<BlockedUser>> blocks() async => _api.blocks(await _requiredToken());
+
+  @override
+  Future<void> block(String userId) async =>
+      _api.block(accessToken: await _requiredToken(), userId: userId);
+
+  @override
+  Future<void> unblock(String userId) async =>
+      _api.unblock(accessToken: await _requiredToken(), userId: userId);
 }

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers.dart';
 import '../../auth/application/auth_controller.dart';
 import '../../auth/domain/auth_state.dart';
+import '../../profile/application/block_controller.dart';
 import '../data/api_feed_gateway.dart';
 import '../domain/feed_gateway.dart';
 
@@ -25,7 +26,15 @@ final Provider<FeedGateway> feedGatewayProvider = Provider<FeedGateway>((ref) {
 final feedProvider = FutureProvider.autoDispose<List<FeedItem>>((ref) async {
   final AuthState s = ref.watch(authControllerProvider);
   if (s is! Authenticated || s.isGuest) return const <FeedItem>[];
-  return ref.watch(feedGatewayProvider).following();
+  // ENGELLEME SÜZGECİ (ENG-1, 2026-11-03): engellenen yazarın kartları
+  // akışa girmez. Küme boşken (yüklenmedi/hata) süzgeç dokunmaz — dürüst
+  // düşüş; engel listesi gelince akış kendiliğinden yeniden süzülür.
+  final Set<String> blocked = ref.watch(blockedIdsProvider);
+  final List<FeedItem> items = await ref.watch(feedGatewayProvider).following();
+  if (blocked.isEmpty) return items;
+  return items
+      .where((FeedItem i) => !blocked.contains(i.authorId))
+      .toList(growable: false);
 });
 
 /// Eylemler — hata fırlatır; ekran yakalayıp söyler (sessiz yutma yok).

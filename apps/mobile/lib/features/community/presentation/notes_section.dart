@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../../../core/widgets/section_card.dart';
 import '../../auth/presentation/account_gate.dart';
+import '../../profile/application/block_controller.dart';
 import '../../../core/origin_provider.dart';
 import '../../qa/presentation/qa_composer_screen.dart';
 import '../application/community_controller.dart';
@@ -43,7 +44,13 @@ class NotesSection extends ConsumerWidget {
     // "not yok mu, yüklenemedi mi?" belirsizliği yaşamasın diye davet kalır.
     // Sayım TÜM notları kapsar (uyarılar dahil): "Tümü" bağlantısı da tümünü
     // açar. Kartın gövdesinde ise uyarılar yoktur — onlar üstteki şeritte.
-    final List<Note> all = mergeNotes(async.valueOrNull ?? const <Note>[], local);
+    // ENGELLEME SÜZGECİ (ENG-1, 2026-11-03): engellenen yazarın notları
+    // bu kullanıcıya hiç çizilmez (sayım dahil — dürüst sayı).
+    final Set<String> blocked = ref.watch(blockedIdsProvider);
+    final List<Note> all =
+        mergeNotes(async.valueOrNull ?? const <Note>[], local)
+            .where((Note n) => !blocked.contains(n.author.userId))
+            .toList(growable: false);
     final List<Note> inCard =
         all.where((Note n) => n.kind != NoteKind.hazard).toList(growable: false);
     final List<Note> shown = inCard.take(2).toList(growable: false);
@@ -196,8 +203,11 @@ class HazardNotesBand extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<List<Note>> async = ref.watch(notesForLocationProvider(locationId));
     final List<Note> local = ref.watch(noteOverridesProvider)[locationId] ?? const <Note>[];
+    // ENG-1: uyarı şeridi de engellenen yazarı süzer (aynı kural her yüzeyde).
+    final Set<String> blocked = ref.watch(blockedIdsProvider);
     final List<Note> hazards = mergeNotes(async.valueOrNull ?? const <Note>[], local)
-        .where((Note n) => n.kind == NoteKind.hazard)
+        .where((Note n) =>
+            n.kind == NoteKind.hazard && !blocked.contains(n.author.userId))
         .toList(growable: false);
     if (hazards.isEmpty) return const SizedBox.shrink();
     return Padding(

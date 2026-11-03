@@ -9,6 +9,7 @@ import '../../auth/application/auth_controller.dart';
 import '../../auth/domain/auth_state.dart';
 import '../../auth/presentation/account_gate.dart';
 import '../../community/presentation/reputation_shell.dart' show formatCount;
+import '../application/block_controller.dart';
 import '../application/follow_controller.dart';
 import '../application/profile_controller.dart';
 import 'captain_avatar.dart';
@@ -30,8 +31,20 @@ class CaptainProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final L10n t = ref.watch(l10nProvider);
     final AsyncValue<PublicCaptain> async = ref.watch(publicCaptainProvider(userId));
+    // ENGELLEME (ENG-1, kurucu onayı 2026-11-03): ⋯ menüsü yalnız ÜYEYE ve
+    // başkasının profilinde görünür (misafir zaten etkileşemez; kendini
+    // engellemek sunucuda da 422).
+    final AuthState auth = ref.watch(authControllerProvider);
+    final bool showMenu = auth is Authenticated &&
+        !auth.isGuest &&
+        auth.user.id != userId;
     return Scaffold(
-      appBar: AppBar(title: Text(t.cpTitle)),
+      appBar: AppBar(
+        title: Text(t.cpTitle),
+        actions: <Widget>[
+          if (showMenu) _BlockMenu(userId: userId, t: t),
+        ],
+      ),
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (Object e, _) => Center(
@@ -288,6 +301,97 @@ class _Body extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// ⋯ MENÜSÜ (ENG-1): "Bu kaptanı engelle" / "Engeli kaldır".
+/// Engelleme SESSİZDİR — karşı tarafa hiçbir sinyal gitmez; onay sayfası
+/// ne olacağını DÜRÜSTÇE sayar (geri alınabilirlik dahil).
+class _BlockMenu extends ConsumerWidget {
+  const _BlockMenu({required this.userId, required this.t});
+
+  final String userId;
+  final L10n t;
+
+  Future<void> _setBlocked(
+    BuildContext context,
+    WidgetRef ref, {
+    required bool blocked,
+  }) async {
+    try {
+      await ref
+          .read(blockActionsProvider)
+          .setBlocked(userId, blocked: blocked);
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context)
+        ..clearSnackBars()
+        ..showSnackBar(SnackBar(
+            content: Text(blocked ? t.blockDoneMsg : t.unblockMenuItem)));
+    } catch (_) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context)
+        ..clearSnackBars()
+        ..showSnackBar(SnackBar(content: Text(t.actionFailed)));
+    }
+  }
+
+  Future<void> _confirmBlock(BuildContext context, WidgetRef ref) async {
+    final bool? ok = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) => AlertDialog(
+        title: Text(t.blockConfirmTitle),
+        content: Text(t.blockConfirmBody),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(t.cancelLabel),
+          ),
+          FilledButton(
+            key: const ValueKey<String>('cp-block-confirm'),
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(dialogContext).colorScheme.error,
+            ),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(t.blockConfirmBtn),
+          ),
+        ],
+      ),
+    );
+    if (ok == true && context.mounted) {
+      await _setBlocked(context, ref, blocked: true);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bool blocked = ref.watch(blockedIdsProvider).contains(userId);
+    return PopupMenuButton<String>(
+      key: const ValueKey<String>('cp-more'),
+      onSelected: (String v) {
+        if (v == 'block') {
+          _confirmBlock(context, ref);
+        } else if (v == 'unblock') {
+          _setBlocked(context, ref, blocked: false);
+        }
+      },
+      itemBuilder: (BuildContext _) => <PopupMenuEntry<String>>[
+        if (blocked)
+          PopupMenuItem<String>(
+            key: const ValueKey<String>('cp-unblock'),
+            value: 'unblock',
+            child: Text(t.unblockMenuItem),
+          )
+        else
+          PopupMenuItem<String>(
+            key: const ValueKey<String>('cp-block'),
+            value: 'block',
+            child: Text(
+              t.blockMenuItem,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          ),
+      ],
     );
   }
 }

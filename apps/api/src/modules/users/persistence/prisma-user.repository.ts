@@ -4,6 +4,7 @@ import { uuidv7 } from 'uuidv7';
 import { PrismaService } from '../../../infrastructure/prisma/prisma.service';
 import { DeletionAudit, UserRepository } from '../domain/user.repository';
 import {
+  BlockedUser,
   CaptainContribution,
   FollowedCaptain,
   PublicCaptain,
@@ -226,6 +227,68 @@ export class PrismaUserRepository implements UserRepository {
       displayName: r.displayName ?? DEFAULT_DISPLAY_NAME,
       levelCode: r.levelCode ?? 'new',
     }));
+  }
+
+  // --- ENGELLEME (ENG-1, kurucu onayı 2026-11-03) ---
+
+  async block(blockerId: string, blockedId: string): Promise<void> {
+    // TEK transaction: engel satırı + iki yöndeki takip bağlarının düşmesi
+    // birlikte olur ya da hiç olmaz (yarım durum kalmaz).
+    // ALTYAPI YOLU (bilinçli): karşı tarafın takip satırı (blocked→blocker)
+    // kullanıcı bağlamında RLS'e takılır (user_follows sahibi = takip eden);
+    // uygulama katmanı birincil yetkidir (ADR-003, saveSubscription deseni).
+    await this.prisma.$transaction([
+      this.prisma.$executeRaw`
+        INSERT INTO user_blocks (blocker_id, blocked_id)
+        VALUES (${blockerId}::uuid, ${blockedId}::uuid)
+        ON CONFLICT (blocker_id, blocked_id) DO NOTHING
+      `,
+      this.prisma.$executeRaw`
+        DELETE FROM user_follows
+        WHERE (follower_id = ${blockerId}::uuid AND followed_id = ${blockedId}::uuid)
+           OR (follower_id = ${blockedId}::uuid AND followed_id = ${blockerId}::uuid)
+      `,
+    ]);
+  }
+
+  async unblock(blockerId: string, blockedId: string): Promise<void> {
+    await this.prisma.withUserContext(blockerId, (tx) =>
+      tx.userBlock.deleteMany({ where: { blockerId, blockedId } }),
+    );
+  }
+
+  async blockedList(userId: string): Promise<BlockedUser[]> {
+    const rows = await this.prisma.$queryRaw<
+      {
+        id: string;
+        displayName: string | null;
+        levelCode: string | null;
+        blockedAt: Date;
+      }[]
+    >`
+      SELECT u.id::text AS id, up.display_name AS "displayName",
+             ur.level_code::text AS "levelCode", b.created_at AS "blockedAt"
+      FROM user_blocks b
+      JOIN users u ON u.id = b.blocked_id AND u.deleted_at IS NULL
+      LEFT JOIN user_profiles up ON up.user_id = u.id
+      LEFT JOIN user_reputation ur ON ur.user_id = u.id
+      WHERE b.blocker_id = ${userId}::uuid
+      ORDER BY b.created_at DESC
+      LIMIT 200
+    `;
+    return rows.map((r) => ({
+      id: r.id,
+      displayName: r.displayName ?? DEFAULT_DISPLAY_NAME,
+      levelCode: r.levelCode ?? 'new',
+      blockedAt: r.blockedAt.toISOString(),
+    }));
+  }
+
+  async isBlockedBy(userId: string, targetId: string): Promise<boolean> {
+    const n = await this.prisma.userBlock.count({
+      where: { blockerId: targetId, blockedId: userId },
+    });
+    return n > 0;
   }
 
   async updateMe(userId: string, patch: UpdateMeInput): Promise<UserMe> {

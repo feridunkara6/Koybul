@@ -548,6 +548,8 @@ model User {
   following                        UserFollow[]           @relation("FollowFollower")
   followers                        UserFollow[]           @relation("FollowFollowed")
   boatFavorites                    BoatFavorite[]         @relation("BoatFavoriteUser")
+  blocksMade                       UserBlock[]            @relation("BlockBlocker")
+  blocksReceived                   UserBlock[]            @relation("BlockBlocked")
   // SEYİR PAYLAŞIMI (SP-3b, kurucu onayı 2026-10-31).
   sharedTrips                      SharedTrip[]           @relation("SharedTripOwner")
   tripReactions                    TripReaction[]         @relation("TripReactionUser")
@@ -1515,6 +1517,21 @@ model BoatFavorite {
   @@id([userId, boatId])
   @@index([boatId], map: "idx_boat_favorites_boat")
   @@map("boat_favorites")
+}
+
+/// KULLANICI ENGELLEME (ENG-1, 0026): sessiz — bildirim yok, karşı taraf
+/// görmez; liste yalnız engelleyenin (RLS okuma dahi sahibe kilitli).
+model UserBlock {
+  blockerId String   @map("blocker_id") @db.Uuid
+  blockedId String   @map("blocked_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  blocker User @relation("BlockBlocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked User @relation("BlockBlocked", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@id([blockerId, blockedId])
+  @@index([blockedId], map: "idx_user_blocks_blocked")
+  @@map("user_blocks")
 }
 
 model UserFollow {

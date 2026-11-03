@@ -1,4 +1,4 @@
-import { FollowedCaptain, PublicCaptain, UpdateMeInput, UserMe } from './user.types';
+import { BlockedUser, FollowedCaptain, PublicCaptain, UpdateMeInput, UserMe } from './user.types';
 
 export interface DeletionAudit {
   ip?: string;
@@ -30,6 +30,20 @@ export interface UserRepository {
   following(userId: string): Promise<FollowedCaptain[]>;
   /** Takipçileri — en yeni takip önce (PR-1 profil düzeni, 2026-11-03). */
   followers(userId: string): Promise<FollowedCaptain[]>;
+
+  // --- ENGELLEME (ENG-1, kurucu onayı 2026-11-03) ---
+
+  /**
+   * Engel koyar (idempotent) ve İKİ YÖNDEKİ takip bağlarını TEK transaction
+   * içinde düşürür (engellenen artık takip edemez; engelleyen de etmez).
+   */
+  block(blockerId: string, blockedId: string): Promise<void>;
+  /** Engeli kaldırır; satır yoksa sessizce geçer (takip bağları GERİ GELMEZ). */
+  unblock(blockerId: string, blockedId: string): Promise<void>;
+  /** Engellediklerim — en yeni engel önce; yalnız sahibine. */
+  blockedList(userId: string): Promise<BlockedUser[]>;
+  /** [targetId], [userId] kullanıcısını engellemiş mi? (takip kapısı) */
+  isBlockedBy(userId: string, targetId: string): Promise<boolean>;
 }
 
 export const USER_REPOSITORY = Symbol('USER_REPOSITORY');

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n_strings.dart';
 import '../../auth/presentation/account_section.dart' show showSignInSheet;
 import '../../premium/presentation/premium_screen.dart';
+import '../../profile/application/block_controller.dart';
 import '../../profile/presentation/captain_profile_screen.dart';
 import '../application/qa_controller.dart';
 import 'qa_list_screen.dart' show QaPremiumBadge;
@@ -94,6 +95,17 @@ class _QaDetailScreenState extends ConsumerState<QaDetailScreen> {
       await ref.read(qaGatewayProvider).report(entity: entity, id: id);
       _snack(t.qaReported);
     });
+  }
+
+  /// ENGELLEME SÜZGECİ (ENG-1, 2026-11-03): engellenen yazarın cevapları
+  /// bu kullanıcıya çizilmez. Küme boşken liste olduğu gibi döner.
+  List<QaAnswer> _visibleAnswers(QaDetail d) {
+    final Set<String> blocked = ref.watch(blockedIdsProvider);
+    if (blocked.isEmpty) return d.answers;
+    return d.answers
+        .where((QaAnswer a) =>
+            a.authorId == null || !blocked.contains(a.authorId))
+        .toList(growable: false);
   }
 
   @override
@@ -230,12 +242,14 @@ class _QaDetailScreenState extends ConsumerState<QaDetailScreen> {
           ),
         ] else ...<Widget>[
           Text(
-            L10n.fmt(t.qaAnswersFmt, '${d.answers.length}').toUpperCase(),
+            // ENG-1: sayı da süzülmüş listeyi söyler (dürüst sayı).
+            L10n.fmt(t.qaAnswersFmt, '${_visibleAnswers(d).length}')
+                .toUpperCase(),
             style: theme.textTheme.labelSmall
                 ?.copyWith(color: sub, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 6),
-          for (final QaAnswer a in d.answers)
+          for (final QaAnswer a in _visibleAnswers(d))
             _AnswerCard(
               a: a,
               t: t,

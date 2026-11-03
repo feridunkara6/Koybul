@@ -2,6 +2,7 @@ import { UsersService } from '../src/modules/users/application/users.service';
 import { SessionService } from '../src/modules/auth/application/session.service';
 import { UserRepository, DeletionAudit } from '../src/modules/users/domain/user.repository';
 import {
+  BlockedUser,
   FollowedCaptain,
   PublicCaptain,
   UpdateMeInput,
@@ -121,6 +122,37 @@ class FakeUserRepo implements UserRepository {
     return this.follows
       .filter(([, b]) => b === userId)
       .map(([a]) => ({ id: a, displayName: 'Kaptan ' + a, levelCode: 'new' }));
+  }
+
+  // ENG-1 (2026-11-03): engelleme — gerçek repo gibi takip bağlarını düşürür.
+  blocks: Array<[string, string]> = [];
+
+  async block(blockerId: string, blockedId: string): Promise<void> {
+    if (!this.blocks.some(([a, b]) => a === blockerId && b === blockedId)) {
+      this.blocks.push([blockerId, blockedId]);
+    }
+    this.follows = this.follows.filter(
+      ([a, b]) => !(a === blockerId && b === blockedId) && !(a === blockedId && b === blockerId),
+    );
+  }
+
+  async unblock(blockerId: string, blockedId: string): Promise<void> {
+    this.blocks = this.blocks.filter(([a, b]) => !(a === blockerId && b === blockedId));
+  }
+
+  async blockedList(userId: string): Promise<BlockedUser[]> {
+    return this.blocks
+      .filter(([a]) => a === userId)
+      .map(([, b]) => ({
+        id: b,
+        displayName: 'Kaptan ' + b,
+        levelCode: 'new',
+        blockedAt: '2026-11-03T10:00:00.000Z',
+      }));
+  }
+
+  async isBlockedBy(userId: string, targetId: string): Promise<boolean> {
+    return this.blocks.some(([a, b]) => a === targetId && b === userId);
   }
 }
 
@@ -243,5 +275,45 @@ describe('UsersService (unit)', () => {
     await expect(service.followingOf('u-yok')).rejects.toMatchObject({
       problemType: 'not-found',
     });
+  });
+
+  // --- ENGELLEME (ENG-1, kurucu onayı 2026-11-03) ---
+
+  it('block: iki yöndeki takip bağları düşer; liste engeli gösterir', async () => {
+    await service.follow('u-1', 'u-2'); // ben onu takip ediyorum
+    await service.follow('u-2', 'u-1'); // o beni takip ediyor
+    await service.block('u-1', 'u-2');
+    await service.block('u-1', 'u-2'); // idempotent — hata yok
+    expect(repo.follows).toHaveLength(0); // İKİ bağ da düştü
+    const list = await service.blockedList('u-1');
+    expect(list.map((b: BlockedUser) => b.id)).toEqual(['u-2']);
+  });
+
+  it('block: kendini engelleme 422; olmayan hedef 404', async () => {
+    await expect(service.block('u-1', 'u-1')).rejects.toMatchObject({
+      problemType: 'validation-error',
+    });
+    repo.targetExists = false;
+    await expect(service.block('u-1', 'u-yok')).rejects.toMatchObject({
+      problemType: 'not-found',
+    });
+  });
+
+  it('TAKİP KAPISI: engellenen kişi takip edemez — SESSİZCE yazılmaz (204)', async () => {
+    await service.block('u-1', 'u-2'); // u-1, u-2'yi engelledi
+    await service.follow('u-2', 'u-1'); // u-2 takip etmeye çalışır — hata YOK
+    expect(repo.follows).toHaveLength(0); // ama bağ da YOK
+  });
+
+  it('unblock: idempotent; takip bağları kendiliğinden GERİ GELMEZ', async () => {
+    await service.follow('u-2', 'u-1');
+    await service.block('u-1', 'u-2');
+    await service.unblock('u-1', 'u-2');
+    await service.unblock('u-1', 'u-2'); // ikinci kez — sessiz
+    expect(await service.blockedList('u-1')).toHaveLength(0);
+    expect(repo.follows).toHaveLength(0); // düşen bağ geri gelmedi
+    // Engel kalktı: artık yeniden takip EDEBİLİR (bilinçli karar).
+    await service.follow('u-2', 'u-1');
+    expect(repo.follows).toHaveLength(1);
   });
 });

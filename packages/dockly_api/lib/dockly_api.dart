@@ -23,6 +23,7 @@ export 'src/dto/user_me.dart';
 export 'src/dto/inbox_item.dart';
 export 'src/dto/public_captain.dart';
 export 'src/dto/followed_captain.dart';
+export 'src/dto/blocked_user.dart';
 export 'src/dto/feed_item.dart';
 export 'src/dto/public_boat.dart';
 export 'src/dto/routes.dart';

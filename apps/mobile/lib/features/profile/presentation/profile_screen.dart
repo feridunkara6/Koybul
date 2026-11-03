@@ -11,6 +11,7 @@ import '../../auth/application/auth_controller.dart';
 import '../../auth/domain/auth_state.dart';
 import '../../auth/presentation/account_section.dart';
 import '../../boat/presentation/favorite_boats_screen.dart';
+import 'blocked_users_screen.dart';
 import '../../community/presentation/contributions_block.dart';
 import '../../community/presentation/sailor_profile_card.dart';
 import '../../deck/presentation/deck_screen.dart' show deckSegmentProvider;
@@ -242,6 +243,17 @@ class ProfileScreen extends ConsumerWidget {
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute<void>(
                           builder: (_) => const NotificationSettingsScreen()),
+                    ),
+                  ),
+                  _GroupRow(
+                    icon: DocklyIcons.personOutline,
+                    tint: DocklyColors.error,
+                    // ENGELLEDİKLERİM (ENG-1, kurucu onayı 2026-11-03):
+                    // engellenen kaptanların listesi; satırdan geri alınır.
+                    label: t.blockedListTitle,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          builder: (_) => const BlockedUsersScreen()),
                     ),
                   ),
                   const _LanguageGroupRow(),

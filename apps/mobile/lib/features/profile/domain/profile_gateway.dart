@@ -1,4 +1,5 @@
-import 'package:dockly_api/dockly_api.dart' show FollowedCaptain, UserProfileMe;
+import 'package:dockly_api/dockly_api.dart'
+    show BlockedUser, FollowedCaptain, UserProfileMe;
 
 /// Profil ağ geçidi sözleşmesi (Sosyalleşme Hafta 1A, kurucu onayı 2026-10-24).
 ///
@@ -36,4 +37,15 @@ abstract interface class ProfileGateway {
 
   /// Bir kaptanın takip ettikleri — üyelik şart.
   Future<List<FollowedCaptain>> followingOf(String userId);
+
+  // --- ENGELLEME (ENG-1, kurucu onayı 2026-11-03) ---
+
+  /// Engellediklerim — yalnız bana iner.
+  Future<List<BlockedUser>> blocks();
+
+  /// Kullanıcıyı engelle — sessiz, idempotent.
+  Future<void> block(String userId);
+
+  /// Engeli kaldır — idempotent.
+  Future<void> unblock(String userId);
 }

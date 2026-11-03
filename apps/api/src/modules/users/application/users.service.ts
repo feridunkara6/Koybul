@@ -3,7 +3,13 @@ import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
 import { SessionService } from '../../auth/application/session.service';
 import { DeletionAudit, USER_REPOSITORY, UserRepository } from '../domain/user.repository';
-import { FollowedCaptain, PublicCaptain, UpdateMeInput, UserMe } from '../domain/user.types';
+import {
+  BlockedUser,
+  FollowedCaptain,
+  PublicCaptain,
+  UpdateMeInput,
+  UserMe,
+} from '../domain/user.types';
 
 /** users/me use-case'leri (docs/23 §10 #4-5). */
 @Injectable()
@@ -67,6 +73,9 @@ export class UsersService {
       ]);
     }
     if (!(await this.users.userExists(targetId))) throw new AppProblem('not-found');
+    // ENGELLEME KAPISI (ENG-1): hedef bu kullanıcıyı engellediyse takip
+    // SESSİZCE yazılmaz (204) — kişi engellendiğini bu yoldan ÖĞRENEMEZ.
+    if (await this.users.isBlockedBy(followerId, targetId)) return;
     await this.users.follow(followerId, targetId);
   }
 
@@ -93,5 +102,30 @@ export class UsersService {
   async followingOf(targetId: string): Promise<FollowedCaptain[]> {
     if (!(await this.users.userExists(targetId))) throw new AppProblem('not-found');
     return this.users.following(targetId);
+  }
+
+  // --- ENGELLEME (ENG-1, kurucu onayı 2026-11-03) ---
+
+  /**
+   * Engelle: kendini engelleme 422, olmayan/pasif hedef 404; tekrar 204
+   * (idempotent). SESSİZ eylem: karşı tarafa bildirim gitmez; iki yöndeki
+   * takip bağları düşer ve engel kalksa bile kendiliğinden GERİ GELMEZ.
+   */
+  async block(blockerId: string, targetId: string): Promise<void> {
+    if (blockerId === targetId) {
+      throw new AppProblem('validation-error', 'Kendini engelleyemezsin.', [
+        { field: 'id', code: 'self_block', message: 'Hedef kendin olamaz' },
+      ]);
+    }
+    if (!(await this.users.userExists(targetId))) throw new AppProblem('not-found');
+    await this.users.block(blockerId, targetId);
+  }
+
+  async unblock(blockerId: string, targetId: string): Promise<void> {
+    await this.users.unblock(blockerId, targetId);
+  }
+
+  blockedList(userId: string): Promise<BlockedUser[]> {
+    return this.users.blockedList(userId);
   }
 }

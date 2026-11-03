@@ -93,3 +93,12 @@ export interface FollowedCaptain {
   displayName: string;
   levelCode: string;
 }
+
+/** ENGELLEDİKLERİM satırı (ENG-1, 2026-11-03) — yalnız sahibine iner. */
+export interface BlockedUser {
+  id: string;
+  displayName: string;
+  levelCode: string;
+  /** ISO 8601 — "3.11.2026'da engellendi" satırı için. */
+  blockedAt: string;
+}

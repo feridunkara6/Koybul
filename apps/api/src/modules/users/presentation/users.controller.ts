@@ -20,7 +20,7 @@ import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { currentRequestId } from '../../../common/context/request-context';
 import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
-import { FollowedCaptain, PublicCaptain, UserMe } from '../domain/user.types';
+import { BlockedUser, FollowedCaptain, PublicCaptain, UserMe } from '../domain/user.types';
 
 /**
  * PATCH beyaz listesi (docs/24 §7.3 mass-assignment önlemi): yalnız bu alanlar.
@@ -99,6 +99,32 @@ export class UsersController {
     const parsed = UuidParam.safeParse(id);
     if (!parsed.success) throw new AppProblem('not-found');
     await this.usersService.unfollow(principal.userId, parsed.data);
+  }
+
+  // --- ENGELLEME (ENG-1, kurucu onayı 2026-11-03) ---
+
+  /** Engellediklerim — yalnız sahibine; en yeni engel önce. */
+  @Get('blocks')
+  async blocks(@CurrentUser() principal: Principal): Promise<{ data: BlockedUser[] }> {
+    return { data: await this.usersService.blockedList(principal.userId) };
+  }
+
+  /** Kullanıcıyı engelle — sessiz, idempotent; takip bağları düşer. */
+  @Post('blocks/:id')
+  @HttpCode(204)
+  async block(@CurrentUser() principal: Principal, @Param('id') id: string): Promise<void> {
+    const parsed = UuidParam.safeParse(id);
+    if (!parsed.success) throw new AppProblem('not-found');
+    await this.usersService.block(principal.userId, parsed.data);
+  }
+
+  /** Engeli kaldır — idempotent (takip bağları kendiliğinden GERİ GELMEZ). */
+  @Delete('blocks/:id')
+  @HttpCode(204)
+  async unblock(@CurrentUser() principal: Principal, @Param('id') id: string): Promise<void> {
+    const parsed = UuidParam.safeParse(id);
+    if (!parsed.success) throw new AppProblem('not-found');
+    await this.usersService.unblock(principal.userId, parsed.data);
   }
 }
 
