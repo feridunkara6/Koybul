@@ -1,5 +1,4 @@
 import 'package:dockly_api/dockly_api.dart' show BlockedUser;
-import 'package:dockly_ui/dockly_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
