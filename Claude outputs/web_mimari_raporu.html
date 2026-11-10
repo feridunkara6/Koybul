@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Koybul Web Mimarisi</title>
+<style>
+  :root{--bg:#f6f8fb;--card:#fff;--ink:#15243a;--sub:#5b6b82;--brand:#0e4f8a;--teal:#0b7a6c;--amber:#b8860b;--red:#c0392b;--line:#e3e9f1;--chip:#eaf1f8}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0f1722;--card:#17212e;--ink:#e8eef6;--sub:#9db0c6;--brand:#6fb1ec;--teal:#4ecdc4;--amber:#e8c468;--red:#ff8a80;--line:#2a3850;--chip:#1f2d3f}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,"Segoe UI",Roboto,sans-serif;padding:16px 16px 48px}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:21px;margin:8px 0 2px}
+  .lead{color:var(--sub);font-size:13.5px;margin:0 0 18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+  .card h2{font-size:15.5px;margin:0 0 8px}
+  ul{margin:6px 0 2px;padding-left:20px}
+  li{margin:5px 0}
+  .sub{color:var(--sub);font-size:12.5px}
+  .tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.4px;padding:2px 9px;border-radius:999px;background:var(--chip);color:var(--brand);margin-left:6px;vertical-align:2px}
+  .ok{border-left:4px solid var(--teal)}
+  .warn{border-left:4px solid var(--amber)}
+  .site{background:var(--chip);border-radius:10px;padding:10px 12px;font-size:12.5px;white-space:pre-wrap;margin-top:8px}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>🌊 Koybul Web — İnceleme ve Mimari Önerisi</h1>
+<p class="lead">3 Kasım 2026 · WEB-0 analizi. Önce ne bulduğum, sonra ne öneriyorum, sonra ilk paketin kapsamı.</p>
+
+<div class="card warn">
+  <h2>1 · Bugünkü durum: koybul.com = uygulamanın tarayıcı kopyası</h2>
+  <p class="sub">Tam da şikâyet ettiğin şey teknik olarak doğrulandı: koybul.com şu an mobil uygulamanın Flutter web derlemesi. Her push'ta GitHub Pages'a yayınlanıyor (ücretsiz). Bu yapı Google için neredeyse görünmez — arama motoru tek boş sayfa görüyor, koyların hiçbirinin kendi adresi yok. SEO hedefin bu yapıyla ulaşılamaz; yeni bir site şart ve bu kararın doğru.</p>
+</div>
+
+<div class="card">
+  <h2>2 · Navily incelemesi — webde gerçekten ne çalışıyor?</h2>
+  <ul>
+    <li><b>Koy (anchorage) sayfaları:</b> Her koyun kendi adresi var (ör. /mouillage/anit-mezar/49647). İçerik: ad + puan sayısı, koordinat, "demirleme serbest / şamandıra var" rozetleri, zemin türleri (kum, kaya), hizmet simgeleri (plaj, su, iskele…), topluluk görüşü bölümü ve güçlü bir "uygulamayı indir" çağrısı. Derinlik ayrıntısı ve yorum metinleri webde kısıtlı — tam deneyim uygulamaya bırakılmış.</li>
+    <li><b>Bölge sayfaları:</b> /region/fethiye gibi bölge adresleri var; bölgenin koylarını listeleyip SEO trafiği topluyorlar.</li>
+    <li><b>Ders:</b> Navily webde "vitrin + keşif" sunuyor, derin veriyi uygulamada tutuyor. Bu, senin premium modelinle birebir örtüşüyor: bizde de sunucu zaten "teaser" sözleşmesine sahip — kimlik, konum, derinlik/zemin/korunak özeti, puan özeti ve 1 kapak fotoğrafı herkese açık; açıklama, olanaklar, doluluk Premium'da. <b>Web sitesi tam olarak teaser verisini yayınlayacak — premium'u baltalamadan SEO kazanacağız.</b></li>
+  </ul>
+</div>
+
+<div class="card ok">
+  <h2>3 · Önerilen mimari <span class="tag">0 TL ek maliyet</span></h2>
+  <ul>
+    <li><b>Yeni bir statik site</b> (apps/web klasörü): sayfalar yayın anında, sunucudaki HERKESE AÇIK uçlardan çekilen gerçek veriyle üretilir ve GitHub Pages'ta yayınlanır. Google'ın sevdiği şey tam bu: her koyun hazır, hızlı, indekslenebilir HTML sayfası.</li>
+    <li><b>İnteraktif harita sayfası</b> (/kesfet): MapLibre (ücretsiz, açık kaynak) + mevcut harita katmanları (OSM / eldeki Esri anahtarı). Harita gezindikçe sonuçlar mevcut <code>GET /v1/locations?bbox</code> ucundan canlı gelir — API sözleşmesine dokunulmaz. Masaüstünde solda liste + sağda tam ekran harita; mobilde liste/harita geçişi. İşaretçiler zoom'a göre gruplanır.</li>
+    <li><b>Koy/marina sayfaları</b> (/koy/gocek-bedri-rahmi gibi — sunucuda zaten benzersiz <b>slug</b> alanı var!): teaser verisi + kapak fotoğrafı + puan özeti + "derinlik/zemin/korunak" güvenlik özeti + onaylı yorum/not sayıları + yakın koylar + uygulama çağrısı. Tam açıklama ve olanaklar "Uygulamada gör" kilidiyle.</li>
+    <li><b>Bölge sayfaları</b> (/bolge/gocek): bölge tanıtımı + bölgenin koy kartları + bölge haritası + iç bağlantılar. Başlangıç listesi: verinin yoğun olduğu bölgelerden seçilir (uydurma bölge sayfası yok).</li>
+    <li><b>Ana sayfa:</b> büyük deniz görseli + arama kutusu (mevcut /v1/locations/search ucu) + popüler bölgeler + öne çıkan koylar + uygulama tanıtımı. Yasal ve destek sayfaları da bu sitenin parçası olur (hazırladıklarım buraya taşınır).</li>
+    <li><b>SEO paketi:</b> her sayfada özel başlık/açıklama, sitemap.xml, robots.txt, canonical, yapılandırılmış veri (Place/BreadcrumbList), alt metinler, iç bağlantılar. Veri tazeliği için haftalık otomatik yeniden yayın (zamanlanmış derleme).</li>
+    <li><b>Mobil uygulamaya sıfır dokunuş:</b> apps/mobile, apps/api, veritabanı, API sözleşmeleri aynen kalır. Yeni site yalnız MEVCUT açık uçları OKUR.</li>
+  </ul>
+  <div class="site">koybul.com          → yeni keşif sitesi (ana sayfa, /kesfet, /koy/…, /bolge/…, /destek, /yasal)
+koybul.com/app/     → bugünkü tarayıcı uygulaması AYNEN burada yaşamaya devam eder (önerim)</div>
+</div>
+
+<div class="card">
+  <h2>4 · Bilinçli sınırlar (dürüstlük)</h2>
+  <ul>
+    <li>Webde giriş/üyelik/yorum yazma V1'de YOK — okuma ve keşif var, etkileşim uygulamaya yönlendirir (Navily'nin yaptığı gibi). Kimlik sistemine dokunmamanın en güvenli yolu.</li>
+    <li>Yalnız herkese açık (teaser) veri yayınlanır: premium içerik webe sızmaz, "bilinmeyen" alanlar uydurulmaz.</li>
+    <li>Fotoğraflar: sunucuda koy kapak görseli olmayan yerlerde stok görsel KOY FOTOĞRAFI gibi gösterilmez; tip çizimi/harita önizlemesi kullanılır.</li>
+    <li>Yeni ücretli servis yok: GitHub Pages + MapLibre + mevcut API. Tek koşullu kalem: Esri harita anahtarının web sitesinde de kullanımı — mevcut anahtar zaten web derlemesinde kullanılıyor, aynı sınırlar içinde kalıyoruz.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>5 · Paket planı (her paket ayrı commit, geri alınabilir)</h2>
+  <ul>
+    <li><b>WEB-1 — İskelet + ana sayfa + yasal/destek:</b> apps/web üretici, tasarım dili, ana sayfa, arama kutusu, destek+yasal sayfaları, yayın hattı (koybul.com kökü + /app altına uygulama).</li>
+    <li><b>WEB-2 — Keşif haritası:</b> /kesfet sayfası, canlı işaretçiler, liste/harita görünümü, filtreler.</li>
+    <li><b>WEB-3 — Koy/marina detay sayfaları:</b> tüm yerler için üretilen sayfalar + sitemap + yapılandırılmış veri.</li>
+    <li><b>WEB-4 — Bölge sayfaları + ana sayfa vitrinleri + son SEO/performans turu.</b></li>
+  </ul>
+  <p class="sub">Her paketin sonunda önizlemeyi görüp onaylarsın; beğenmediğin paket tek başına geri alınır.</p>
+</div>
+
+</div></body>
+</html>

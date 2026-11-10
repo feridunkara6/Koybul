@@ -65,6 +65,9 @@ jobs:
           export API_BASE_URL="${{ vars.API_BASE_URL || 'https://dockly-proje.onrender.com' }}"
           export FLAVOR="${{ vars.FLAVOR || 'staging' }}"
           sh tool/check_release_config.sh "$API_BASE_URL" "$FLAVOR"
+          # YENİ EV (WEB-1, kurucu onayı 2026-11-10): koybul.com kökü artık
+          # KEŞİF SİTESİDİR (apps/web/site); tarayıcı uygulaması /app/ altında
+          # AYNEN yaşar — hesaplar, veriler ve API sözleşmeleri değişmedi.
           flutter build web --release \
             --web-renderer canvaskit \
             --no-web-resources-cdn \
@@ -72,13 +75,18 @@ jobs:
             --dart-define=FLAVOR="$FLAVOR" \
             --dart-define=ESRI_TILE_KEY=${{ secrets.ESRI_TILE_KEY }} \
             --dart-define=ESRI_TILE_STYLE=${{ vars.ESRI_TILE_STYLE || 'arcgis/community' }} \
-            --base-href="/"  # ozel alan adi (koybul.com) kok dizinde servis eder
+            --base-href="/app/"  # uygulamanın yeni evi: koybul.com/app/
+      - name: Siteyi birleştir (kök = keşif sitesi, /app = uygulama)
+        run: |
+          mkdir -p dist/app
+          cp -r apps/web/site/. dist/
+          cp -r apps/mobile/build/web/. dist/app/
           # ESRI_TILE_KEY tanimsizsa bos gecer -> uygulama OSM'e guvenli duser.
           # Stil degistirmek icin: Settings > Secrets and variables > Actions >
           # Variables sekmesi > ESRI_TILE_STYLE degiskeni (ör. arcgis/oceans) —
           # kod paketi GEREKMEZ, sonraki yayinla stil degisir.
       - name: Yayına it (gh-pages dalı)
-        working-directory: apps/mobile/build/web
+        working-directory: dist
         run: |
           # Özel alan adı + Jekyll kapalı (dosyalar olduğu gibi servis edilir).
           echo koybul.com > CNAME

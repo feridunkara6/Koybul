@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Koybul Yayın Rehberi</title>
+<style>
+  :root{
+    --bg:#f6f8fb; --card:#ffffff; --ink:#15243a; --sub:#5b6b82;
+    --brand:#0e4f8a; --teal:#0b7a6c; --amber:#b8860b; --red:#c0392b;
+    --line:#e3e9f1; --chip:#eaf1f8;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0f1722; --card:#17212e; --ink:#e8eef6; --sub:#9db0c6;
+      --brand:#6fb1ec; --teal:#4ecdc4; --amber:#e8c468; --red:#ff8a80;
+      --line:#2a3850; --chip:#1f2d3f;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.6 -apple-system,"Segoe UI",Roboto,sans-serif;padding:16px 16px 48px}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:21px;margin:8px 0 2px}
+  .lead{color:var(--sub);font-size:13.5px;margin:0 0 18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+  .card h2{font-size:15.5px;margin:0 0 8px}
+  .step{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px dashed var(--line)}
+  .step:first-of-type{border-top:none}
+  label.chk{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px dashed var(--line);cursor:pointer}
+  label.chk:first-of-type{border-top:none}
+  input[type=checkbox]{margin-top:3px;width:17px;height:17px;accent-color:var(--teal);flex:0 0 auto}
+  .exp{color:var(--sub);font-size:12.5px;display:block;margin-top:1px}
+  .exp b{color:var(--teal)}
+  .pre{background:var(--chip);border-radius:10px;padding:10px 12px;font-size:12.5px;white-space:pre-wrap;color:var(--ink);margin-top:8px}
+  .note{background:#fff7e0;border-radius:12px;padding:10px 12px;font-size:12px;color:#7a5b10;line-height:1.45;margin-top:10px}
+  .tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.4px;padding:2px 9px;border-radius:999px;background:var(--chip);color:var(--brand);margin-left:6px;vertical-align:2px}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>🍎 Koybul — App Store Yayın Rehberi</h1>
+<p class="lead">Kod tarafı hazır; bundan sonrası App Store Connect'te form doldurma işi. Sırayla ilerle, her kutuyu işaretle. Takıldığın ekranın görüntüsünü bana gönder, birlikte dolduralım.</p>
+
+<div class="card">
+  <h2>1 · Uygulama kaydı <span class="tag">appstoreconnect.apple.com</span></h2>
+  <label class="chk"><input type="checkbox"><span>My Apps → ＋ → New App. Platform: iOS · Name: <b>Koybul</b> · Primary language: Turkish · Bundle ID: <b>com.moorira.app</b> (listeden seç) · SKU: koybul-ios.<span class="exp">Bundle ID değişmez — TestFlight'ta kullandığının aynısı.</span></span></label>
+  <label class="chk"><input type="checkbox"><span>Category: <b>Navigation</b> (ikincil: Travel). Price: Free.</span></span></label>
+</div>
+
+<div class="card">
+  <h2>2 · Mağaza sayfası metinleri</h2>
+  <label class="chk"><input type="checkbox"><span>Subtitle (30 karakter): aşağıdaki taslaklardan birini seç ya da kendin yaz.</span></label>
+  <div class="pre">Taslak başlık altı: "Koy, marina ve rota rehberi"
+Taslak açıklama (ilk paragraf — istersen birlikte uzatırız):
+"Koybul, Türkiye kıyılarında tekneyle gezenler için koy ve marina rehberi: canlı hava ve rüzgâr, demirleme notları, rota planlama, seyir defteri, bakım ve yakıt takibi. Kaptan topluluğu gerçek deneyimlerini paylaşır — notlar, sorular, rotalar ve etkinlikler moderasyondan geçer."
+Anahtar kelimeler (100 krk): koy,marina,tekne,yelken,rota,seyir,demirleme,hava,rüzgar,deniz</div>
+  <label class="chk"><input type="checkbox"><span>Support URL: bir destek adresi gerek. En hızlısı: koybul.com altında /destek sayfası ya da "mailto" yerine basit bir iletişim sayfası. Yoksa birlikte tek sayfalık destek sayfası hazırlarız.</span></label>
+  <label class="chk"><input type="checkbox"><span>Privacy Policy URL: gizlilik politikasının web adresi (App Store bunu URL olarak İSTER, uygulama içi metin yetmez). Yoksa uygulamadaki metni tek sayfalık web sayfası yaparız.</span></label>
+</div>
+
+<div class="card">
+  <h2>3 · Ekran görüntüleri</h2>
+  <label class="chk"><input type="checkbox"><span>Zorunlu boyut: 6.7"/6.9" (iPhone Pro Max) — 1290×2796. Simülatörden ya da Pro Max cihazdan al; 4-6 adet yeter.<span class="exp"><b>Önerilen kareler:</b> Keşfet haritası · koy detayı (hava+notlar) · rota planlama · Bugün ekranı · tekne kartı · topluluk akışı.</span></span></label>
+  <label class="chk"><input type="checkbox"><span>Görüntülerde GERÇEK kullanıcı adı/e-posta görünmesin — test verisiyle çek.</span></label>
+</div>
+
+<div class="card">
+  <h2>4 · App Privacy (gizlilik etiketi) — cevap anahtarı</h2>
+  <p class="exp">"Data Collection" anketinde Koybul için doğru cevaplar:</p>
+  <label class="chk"><input type="checkbox"><span><b>Contact Info → Email:</b> Evet, toplanıyor · App Functionality (hesap) · kimliğe bağlı · takip için DEĞİL.</span></label>
+  <label class="chk"><input type="checkbox"><span><b>Location → Precise Location:</b> Evet · App Functionality (harita/yakın koylar) · <b>kimliğe bağlı DEĞİL</b> (iz saklanmıyor) · takip için değil.</span></label>
+  <label class="chk"><input type="checkbox"><span><b>User Content:</b> Evet (notlar, sorular, fotoğraflar değil—metin) · App Functionality · kimliğe bağlı.</span></label>
+  <label class="chk"><input type="checkbox"><span><b>Identifiers/Usage Data:</b> Çökme kayıtları (Sentry) → Diagnostics → Crash Data: Evet, kimliğe bağlı değil. Reklam/izleme YOK → "Tracking" sorusuna <b>Hayır</b>.</span></label>
+</div>
+
+<div class="card">
+  <h2>5 · Abonelik ürünleri <span class="tag">Features → In-App Purchases</span></h2>
+  <label class="chk"><input type="checkbox"><span>Subscription Group: "Koybul Premium" → iki ürün: <b>koybul.premium.yillik</b> ve <b>koybul.premium.aylik</b> (uygulamadaki kimliklerle birebir aynı).</span></label>
+  <label class="chk"><input type="checkbox"><span>Her ürüne TR + EN görünen ad ve açıklama, fiyat kademesi; ekran görüntüsü alanına premium sayfasının görüntüsü.</span></label>
+  <label class="chk"><input type="checkbox"><span>Paid Apps sözleşmesi + banka/vergi bilgileri (Agreements, Tax, and Banking) tamamlanmış olmalı — yoksa abonelikler incelemeye giremez.</span></label>
+</div>
+
+<div class="card">
+  <h2>6 · Yaş sınıflaması + inceleme notları</h2>
+  <label class="chk"><input type="checkbox"><span>Age Rating anketi: şiddet/kumar vb. hepsi "None"; <b>"Unrestricted Web Access" Hayır</b>; kullanıcı içeriği sorusu çıkarsa "Evet, moderasyonlu". Büyük ihtimal <b>12+</b> çıkar.</span></label>
+  <label class="chk"><input type="checkbox"><span>App Review Information → Notes alanına aşağıdakini yapıştır (hesapları kendin doldur):</span></label>
+  <div class="pre">Demo accounts:
+- Member: [test e-postası] / [şifre]
+- Premium member: [premium test e-postası] / [şifre]
+
+Notes for review:
+- All user content (notes, Q&A, routes, events, boat stories) is pre-moderated before becoming public.
+- Users can report any content (flag icon) and block other users (••• menu on captain profiles).
+- Account deletion is available in-app: Profile → Account → Delete account.
+- Premium is sold only via StoreKit auto-renewable subscriptions (yearly/monthly) with restore purchases.
+- Admin/moderation panel is only visible to admin role accounts; it is not part of the normal user experience.</div>
+</div>
+
+<div class="card">
+  <h2>7 · Sürümü gönder</h2>
+  <label class="chk"><input type="checkbox"><span>Codemagic → sürüm derlemesi → TestFlight'a düşen build'i App Store Connect'te sürüme bağla (Build bölümü → ＋).</span></label>
+  <label class="chk"><input type="checkbox"><span>Export Compliance: "standart şifreleme (HTTPS) dışında şifreleme yok" → <b>None of the algorithms mentioned</b> / muaf.</span></label>
+  <label class="chk"><input type="checkbox"><span>"Submit for Review" → incelemede genelde 1-3 gün. Red gelirse panik yok: gerekçe ekran görüntüsünü bana gönder, düzeltir yeniden göndeririz (ilk denemede red çok yaygındır).</span></label>
+  <div class="note">⚓ Yayın günü için: Render planını bir kademe yükseltmeyi düşün (ilk istek uyanma gecikmesi) ve Supabase/DB yedeklerinin açık olduğunu kontrol et. İkisini de istersen birlikte bakarız.</div>
+</div>
+
+</div></body>
+</html>

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Koybul — Koy, Marina ve Rota Rehberi</title>
+<meta name="description" content="Türkiye kıyılarında koylar, marinalar ve bağlama yerleri: derinlik, zemin, korunak bilgisi ve kaptan topluluğunun deneyimleri. Haritadan keşfet.">
+<link rel="canonical" href="https://koybul.com/">
+<meta property="og:title" content="Koybul — Koy, Marina ve Rota Rehberi">
+<meta property="og:description" content="Bir sonraki koyunu bul: harita üzerinden keşfet, güvenlik özetini gör, topluluğun deneyimini oku.">
+<meta property="og:url" content="https://koybul.com/">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="/assets/koybul.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"Koybul",
+ "url":"https://koybul.com/",
+ "description":"Türkiye kıyılarında koy, marina ve bağlama yeri rehberi."}
+</script>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <a class="logo" href="/">⚓ Koy<b>bul</b></a>
+  <a class="lnk" href="/kesfet/">Keşfet</a>
+  <a class="lnk" href="/destek/">Destek</a>
+  <span class="right">
+    <a class="btn ghost" href="/app/">🖥 Tarayıcıda aç</a>
+    <a class="btn deep" href="/app/">📱 Uygulama</a>
+  </span>
+</nav>
+
+<div class="hero">
+  <h1>Bir sonraki koyunu bul</h1>
+  <p>Türkiye kıyılarında koylar, marinalar ve bağlama yerleri — kaptan topluluğunun gözünden</p>
+  <div class="searchwrap">
+    <div class="search">
+      <input id="q" placeholder="Koy, marina ya da bölge ara… (örn. Göcek)" autocomplete="off">
+      <button onclick="document.getElementById('q').dispatchEvent(new KeyboardEvent('keydown',{key:'Enter'}))">Ara</button>
+    </div>
+    <div class="sresults" id="qres" hidden></div>
+  </div>
+  <div class="quick">
+    <a href="/kesfet/#c=28.93500,36.74500,12">Göcek</a>
+    <a href="/kesfet/#c=29.11000,36.62500,12">Fethiye</a>
+    <a href="/kesfet/#c=27.42500,37.03500,11">Bodrum</a>
+    <a href="/kesfet/#c=27.68500,36.72500,11">Datça</a>
+    <a href="/kesfet/#c=29.63500,36.19500,12">Kaş</a>
+    <a href="/kesfet/">🗺 Haritayı keşfet</a>
+  </div>
+</div>
+
+<h2 class="sec">Popüler bölgeler</h2>
+<p class="secsub">Denizcilerin en çok keşfettiği sular</p>
+<div class="grid">
+  <a class="reg" style="background:linear-gradient(160deg,#0C5A94,#0C7BDC)" href="/kesfet/#c=28.93500,36.74500,12">Göcek</a>
+  <a class="reg" style="background:linear-gradient(160deg,#0A2540,#0C5A94)" href="/kesfet/#c=29.11000,36.62500,12">Fethiye</a>
+  <a class="reg" style="background:linear-gradient(160deg,#0B6B74,#2EC4B6)" href="/kesfet/#c=27.42500,37.03500,11">Bodrum</a>
+  <a class="reg" style="background:linear-gradient(160deg,#0A2540,#0B6B74)" href="/kesfet/#c=27.68500,36.72500,11">Datça</a>
+  <a class="reg" style="background:linear-gradient(160deg,#0C5A94,#2EC4B6)" href="/kesfet/#c=29.63500,36.19500,12">Kaş · Kekova</a>
+</div>
+
+<h2 class="sec">Göcek'te öne çıkanlar</h2>
+<p class="secsub">Canlı veriden gelir — puanı en yüksek yerler</p>
+<div class="grid" id="featured">
+  <p class="secsub" id="feat-status">Yükleniyor…</p>
+</div>
+
+<h2 class="sec">Koybul'u cebine al</h2>
+<p class="secsub">Canlı hava ve rüzgâr, rota planlama, seyir defteri, bakım ve yakıt takibi, kaptan topluluğu — tam deneyim uygulamada. Tarayıcı uygulaması da aynı hesapla çalışır.</p>
+<p>
+  <a class="btn deep" href="/app/">🖥 Tarayıcıda aç</a>
+  <span class="btn ghost" style="cursor:default">📱 Yakında App Store'da</span>
+</p>
+
+<footer>
+  ⚓ Koybul ·
+  <a href="/kesfet/">Keşfet</a> ·
+  <a href="/app/">Uygulama</a> ·
+  <a href="/destek/">Destek</a> ·
+  <a href="/yasal/">Gizlilik ve Yasal</a>
+</footer>
+</div>
+
+<script src="/assets/koybul.js"></script>
+<script>
+'use strict';
+koybulSearchInit('q', 'qres');
+
+/* Öne çıkanlar: Göcek çevresi canlı iğne verisinden, puana göre ilk 4.
+   Sunucu uyanıyorsa (ücretsiz plan) ilk yükleme uzayabilir — dürüst mesaj. */
+(function featured() {
+  var box = document.getElementById('featured');
+  var st = document.getElementById('feat-status');
+  fetch(window.KOYBUL_API + '/v1/locations?bbox=28.85,36.65,29.05,36.82&zoom=13')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      var pins = (j && j.locations) || [];
+      pins = pins.filter(function (p) { return p.ratingAvg != null; })
+        .sort(function (a, b) { return (b.ratingAvg || 0) - (a.ratingAvg || 0); })
+        .slice(0, 4);
+      if (!pins.length) pins = ((j && j.locations) || []).slice(0, 4);
+      if (!pins.length) { st.textContent = 'Şu an listelenemedi — haritadan keşfedebilirsin.'; return; }
+      box.innerHTML = pins.map(function (p) {
+        var rate = p.ratingAvg != null ? '★ ' + p.ratingAvg.toFixed(1).replace('.', ',') : 'Yeni';
+        return '<a class="kcard" href="/kesfet/#c=' + p.position.lon.toFixed(5) + ',' +
+          p.position.lat.toFixed(5) + ',15">' +
+          '<div class="kimg"><i>' + escapeHtml(koybulTypeLabel(p.type).toLocaleUpperCase('tr')) + '</i></div>' +
+          '<div class="kbody"><b>' + escapeHtml(p.name) + '</b>' +
+          '<span>Göcek çevresi</span><div class="m">' + rate +
+          (p.maxBoatLengthM ? ' · azami ' + p.maxBoatLengthM + ' m' : '') + '</div></div></a>';
+      }).join('');
+    })
+    .catch(function () {
+      st.textContent = 'Sunucu uyanıyor olabilir — birazdan yenile ya da haritadan keşfet.';
+    });
+})();
+</script>
+</body>
+</html>

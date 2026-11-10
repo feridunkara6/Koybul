@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keşfet — Koybul Haritası</title>
+<meta name="description" content="Türkiye kıyılarındaki koyları, marinaları ve bağlama yerlerini interaktif haritada keşfet: derinlik, zemin ve korunak özetleriyle.">
+<link rel="canonical" href="https://koybul.com/kesfet/">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="/assets/koybul.css">
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <a class="logo" href="/">⚓ Koy<b>bul</b></a>
+  <a class="lnk on" href="/kesfet/">Keşfet</a>
+  <a class="lnk" href="/destek/">Destek</a>
+  <span class="right">
+    <div class="searchwrap" style="min-width:230px">
+      <div class="search" style="box-shadow:none;border:1.4px solid var(--line);background:var(--surface);padding:3px">
+        <input id="q" placeholder="Koy ya da marina ara…" autocomplete="off" style="color:var(--ink);padding:7px 10px">
+      </div>
+      <div class="sresults" id="qres" hidden></div>
+    </div>
+    <a class="btn deep" href="/app/">📱 Uygulama</a>
+  </span>
+</nav>
+
+<div class="explore" id="explore">
+  <div class="panel">
+    <div class="filters" id="filters"></div>
+    <div class="rows" id="rows"><p class="secsub" style="padding:6px">Harita yükleniyor…</p></div>
+  </div>
+  <div class="mapbox">
+    <div id="map"></div>
+    <div class="hint" id="hint" hidden></div>
+    <button class="mtog" id="mtog">☰ Liste</button>
+  </div>
+</div>
+<p class="secsub" style="margin-top:10px">Veriler Koybul topluluğundan ve kaynak derlemelerinden gelir; seyir kararlarını her zaman resmî haritalarla ver. Ayrıntılı rehber, notlar ve canlı doluluk <a href="/app/">uygulamada</a>.</p>
+
+<footer>⚓ Koybul · <a href="/">Anasayfa</a> · <a href="/app/">Uygulama</a> · <a href="/destek/">Destek</a> · <a href="/yasal/">Gizlilik ve Yasal</a></footer>
+</div>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="/assets/koybul.js"></script>
+<script>
+'use strict';
+koybulSearchInit('q', 'qres');
+
+/* ============================================================
+   KEŞFET (WEB-2): MapLibre + uygulamanın AÇIK uçları.
+   - Veri: GET /v1/locations?bbox&zoom — sözleşme aynen, dokunulmadı.
+   - zoom ≥ 12 iğneler, < 12 sunucu kümeleri (sayılı daire) gelir.
+   - Karo: OpenStreetMap (uygulamanın yedek katmanıyla aynı kaynak).
+   ============================================================ */
+var FILTERS = [
+  ['tumu', 'Tümü', null],
+  ['koy', 'Koy ve demir', ['mooring_point', 'guest_mooring', 'buoy']],
+  ['marina', 'Marinalar', ['private_marina', 'municipal_marina', 'boat_club']],
+  ['iskele', 'İskeleler', ['municipal_pier', 'restaurant_pier', 'fuel_pier']]
+];
+var filter = 'tumu';
+var selectedId = null;
+var markers = [];
+var lastPins = [];
+var popup = null;
+
+/* Başlangıç görünümü: #c=lon,lat,zoom (ana sayfadaki bölge kartları böyle
+   bağlanır); yoksa Göcek. */
+function startView() {
+  var m = /c=([-0-9.]+),([-0-9.]+),([0-9.]+)/.exec(location.hash || '');
+  if (m) return { center: [parseFloat(m[1]), parseFloat(m[2])], zoom: parseFloat(m[3]) };
+  return { center: [28.935, 36.745], zoom: 12 };
+}
+/* Harita kütüphanesi (CDN) bir aksilikle yüklenmediyse sayfa ÇÖKMEZ:
+   dürüst mesaj + arama çalışmaya devam eder. */
+if (typeof maplibregl === 'undefined') {
+  document.getElementById('rows').innerHTML =
+    '<p class="secsub" style="padding:6px">Harita bileşeni yüklenemedi — sayfayı yenilemeyi dene. Arama kutusu çalışıyor.</p>';
+  document.getElementById('hint').textContent = 'Harita yüklenemedi';
+  document.getElementById('hint').hidden = false;
+  throw new Error('maplibre yüklenemedi');
+}
+var sv = startView();
+var map = new maplibregl.Map({
+  container: 'map',
+  center: sv.center,
+  zoom: sv.zoom,
+  attributionControl: { compact: true },
+  style: {
+    version: 8,
+    sources: {
+      osm: {
+        type: 'raster',
+        tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+        tileSize: 256,
+        attribution: '© OpenStreetMap katkıcıları'
+      }
+    },
+    layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+  }
+});
+map.addControl(new maplibregl.NavigationControl({ showCompass: false }));
+
+function hintShow(t) { var h = document.getElementById('hint'); h.textContent = t; h.hidden = false; }
+function hintHide() { document.getElementById('hint').hidden = true; }
+
+function typeQuery() {
+  var f = FILTERS.find(function (x) { return x[0] === filter; });
+  if (!f || !f[2]) return '';
+  return f[2].map(function (t) { return '&type=' + t; }).join('');
+}
+
+var inflight = null;
+function refresh() {
+  var b = map.getBounds();
+  var w = b.getWest(), s = b.getSouth(), e = b.getEast(), n = b.getNorth();
+  if (e - w > 4.9 || n - s > 4.9) { // sunucu bbox tavanı 5° — dürüst ipucu
+    hintShow('Sonuçlar için haritaya biraz yakınlaş');
+    renderRows([], []);
+    return;
+  }
+  hintHide();
+  var url = window.KOYBUL_API + '/v1/locations?bbox=' +
+    [w.toFixed(4), s.toFixed(4), e.toFixed(4), n.toFixed(4)].join(',') +
+    '&zoom=' + Math.round(map.getZoom()) + typeQuery();
+  var my = (inflight = url);
+  fetch(url).then(function (r) { return r.json(); }).then(function (j) {
+    if (inflight !== my) return; // eski yanıt — yenisi yolda
+    lastPins = (j && j.locations) || [];
+    renderMap(lastPins, (j && j.clusters) || []);
+    renderRows(lastPins, (j && j.clusters) || []);
+    if (j && j.truncated) hintShow('Bu görünümde her şey gösterilemedi — yakınlaş');
+  }).catch(function () {
+    hintShow('Sunucuya ulaşılamadı — uyanıyor olabilir, birazdan tekrar dene');
+  });
+}
+
+function clearMarkers() {
+  markers.forEach(function (m) { m.remove(); });
+  markers = [];
+}
+
+function renderMap(pins, clusters) {
+  clearMarkers();
+  clusters.forEach(function (c) {
+    var el = document.createElement('button');
+    el.className = 'pin-clu';
+    el.textContent = c.count > 99 ? '99+' : String(c.count);
+    el.addEventListener('click', function () {
+      map.fitBounds([[c.bbox[0], c.bbox[1]], [c.bbox[2], c.bbox[3]]], { padding: 60, maxZoom: 14 });
+    });
+    markers.push(new maplibregl.Marker({ element: el })
+      .setLngLat([c.position.lon, c.position.lat]).addTo(map));
+  });
+  pins.forEach(function (p) {
+    var el = document.createElement('button');
+    var isMarina = p.type.indexOf('marina') >= 0 || p.type === 'boat_club';
+    el.className = 'pin-dot' + (isMarina ? ' marina' : '') + (p.id === selectedId ? ' sel' : '');
+    el.textContent = (isMarina ? '🧭 ' : '⚓ ') + p.name;
+    el.addEventListener('click', function () { selectPin(p, true); });
+    markers.push(new maplibregl.Marker({ element: el, anchor: 'bottom' })
+      .setLngLat([p.position.lon, p.position.lat]).addTo(map));
+  });
+}
+
+function renderRows(pins, clusters) {
+  var rows = document.getElementById('rows');
+  if (!pins.length) {
+    rows.innerHTML = '<p class="secsub" style="padding:6px">' +
+      (clusters.length ? 'Yakınlaştıkça yerler tek tek listelenir — sayılı dairelere dokun.'
+                       : 'Bu görünümde sonuç yok — haritayı kaydır ya da yakınlaş.') + '</p>';
+    return;
+  }
+  rows.innerHTML = pins.map(function (p) {
+    var rate = p.ratingAvg != null ? '★ ' + p.ratingAvg.toFixed(1).replace('.', ',') : 'Yeni';
+    var extra = p.maxBoatLengthM ? ' · azami ' + p.maxBoatLengthM + ' m' : '';
+    return '<button class="lrow' + (p.id === selectedId ? ' sel' : '') + '" data-id="' + p.id + '">' +
+      '<div style="min-width:0"><b>' + escapeHtml(p.name) + '</b>' +
+      '<span>' + escapeHtml(koybulTypeLabel(p.type)) + extra + '</span>' +
+      '<div class="r">' + rate + '</div></div></button>';
+  }).join('');
+  Array.prototype.forEach.call(rows.querySelectorAll('.lrow'), function (el) {
+    el.addEventListener('click', function () {
+      var p = lastPins.find(function (x) { return x.id === el.getAttribute('data-id'); });
+      if (p) { selectPin(p, false); map.flyTo({ center: [p.position.lon, p.position.lat], zoom: Math.max(map.getZoom(), 14) }); }
+      document.getElementById('explore').classList.remove('list');
+    });
+  });
+}
+
+function selectPin(p, fromMap) {
+  selectedId = p.id;
+  renderMap(lastPins, []);
+  renderRows(lastPins, []);
+  if (popup) popup.remove();
+  var rate = p.ratingAvg != null ? '★ ' + p.ratingAvg.toFixed(1).replace('.', ',') : 'Yeni';
+  var lim = p.maxBoatLengthM ? ' · azami tekne ' + p.maxBoatLengthM + ' m' : '';
+  popup = new maplibregl.Popup({ offset: 14, closeButton: true })
+    .setLngLat([p.position.lon, p.position.lat])
+    .setHTML('<div class="popcard"><b>' + escapeHtml(p.name) + '</b>' +
+      '<span class="t">' + escapeHtml(koybulTypeLabel(p.type)) + ' · ' + rate + lim + '</span>' +
+      'Ayrıntılı rehber, notlar ve canlı doluluk uygulamada.' +
+      '<a href="/app/">Uygulamada aç →</a></div>')
+    .addTo(map);
+}
+
+function renderFilters() {
+  var f = document.getElementById('filters');
+  f.innerHTML = FILTERS.map(function (x) {
+    return '<button class="fchip' + (filter === x[0] ? ' on' : '') + '" data-f="' + x[0] + '">' + x[1] + '</button>';
+  }).join('');
+  Array.prototype.forEach.call(f.querySelectorAll('.fchip'), function (el) {
+    el.addEventListener('click', function () { filter = el.getAttribute('data-f'); renderFilters(); refresh(); });
+  });
+}
+
+document.getElementById('mtog').addEventListener('click', function () {
+  document.getElementById('explore').classList.toggle('list');
+});
+window.addEventListener('hashchange', function () {
+  var v = startView();
+  map.jumpTo({ center: v.center, zoom: v.zoom });
+});
+var moveTimer = null;
+map.on('moveend', function () {
+  clearTimeout(moveTimer); moveTimer = setTimeout(refresh, 200);
+  // Görünümü adrese yaz: paylaşılabilir bağlantı.
+  var c = map.getCenter();
+  var h = '#c=' + c.lng.toFixed(5) + ',' + c.lat.toFixed(5) + ',' + map.getZoom().toFixed(1);
+  if (location.hash !== h) history.replaceState(null, '', h);
+});
+map.on('load', function () { renderFilters(); refresh(); });
+</script>
+</body>
+</html>
