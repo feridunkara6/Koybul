@@ -1,33 +1,25 @@
 name: web-preview
 
-# Web yayını: uygulamayı tarayıcı için derler ve GH-PAGES DALINA iter.
+# YAKINDA MODU (kurucu kararı 2026-11-10): internet sitesi YAYINA KAPALI.
+# koybul.com yalnız tek sayfalık "Koybul — Yakında" sayfasını servis eder;
+# uygulama webden ve keşif sitesi yayında DEĞİLDİR.
 #
-# YAYIN YOLU DEĞİŞİKLİĞİ (2026-08): "Actions ile Pages yayını"
-# (deploy-pages@v4) bir gün içinde dört FARKLI altyapı hatası üretti
-# (deployment_queued zaman aşımı, "Multiple artifacts", "Deployment
-# cancelled", Waiting kilidi). Kod her seferinde yeşildi; çuvallayan hep
-# GitHub'ın yayın kuyruğuydu. Bu yüzden en eski ve en sağlam yönteme
-# dönüldü: derlenen site gh-pages dalına itilir, GitHub Pages oradan
-# servis eder. Kuyruk yok, paket yok, iptal yarışı yok.
+# GERİ AÇMAK İÇİN: bu dosyayı git geçmişindeki WEB-1 sürümüne döndürmek
+# yeterli (keşif sitesi kökte + uygulama /app altında) — site dosyaları
+# apps/web/site'ta hazır bekliyor. Flutter derlemesi olmadığı için bu iş
+# ~1 dakikada biter ve her push'ta yalnız yakında sayfasını tazeler.
 #
-# TEK SEFERLİK AYAR (repo sahibi): Settings > Pages > Build and deployment >
-# Source: "Deploy from a branch" > Branch: gh-pages / (root) > Save.
-# (gh-pages dalı bu iş akışının İLK yeşilinden sonra listede görünür.)
-#
-# Özel alan adı (koybul.com) her yayında CNAME dosyasıyla korunur.
-# Bu iş kırmızı olsa bile api/mobile/security işlerini etkilemez.
+# Yayın yolu notu (2026-08'den beri aynı): site gh-pages DALINA itilir,
+# GitHub Pages oradan servis eder (Settings > Pages > Branch: gh-pages).
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-# gh-pages dalına itebilmek için yazma izni gerekir.
 permissions:
   contents: write
 
-# Aynı anda tek yayın (yenisi başlarsa eskisi iptal olur — dal itmesi
-# atomiktir, yarım yayın kalmaz).
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -37,67 +29,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: 3.27.4
-          cache: true
-      - name: Web iskeleti + derleme
-        working-directory: apps/mobile
+      - name: Yakında sayfasını hazırla
         run: |
-          flutter create --platforms=web --project-name dockly_mobile .
-          flutter pub get
-          # PWA önbelleği AÇIK (2026-08 hız kararı): motor+uygulama dosyaları
-          # cihazda önbelleklenir -> tekrar ziyaretler ANINDA açılır. Yeni sürüm
-          # arka planda iner, bir sonraki ziyarette devreye girer.
-          # ÇİZİM MOTORU SABİT (2026-08, "tanıtım mobilde bozuk" düzeltmesi):
-          # bayrak verilmeyince Flutter 3.27 TELEFON tarayıcılarında eski HTML
-          # motoruna düşer — tanıtım turunun ışık efektleri (bulanık kenar,
-          # delikli karartma, ışık havuzu) orada desteklenmez ve yanlış çizilir.
-          # CanvasKit her cihazda aynı sonucu verir; motor dosyası PWA
-          # önbelleğine girdiği için tekrar ziyaretlerde ek maliyeti yoktur.
-          # (--no-web-resources-cdn: motor dosyaları DIŞ CDN'den değil kendi
-          # sitemizden gelir — tek kaynak, PWA çevrimdışı desteğiyle uyumlu.)
-          # YAYIN YAPILANDIRMASI DENETIMI: yanlis/yerel sunucu adresiyle web
-          # paketi uretilmesin (ayni kural uygulamanin icinde de var —
-          # lib/config/flavor.dart). Adres Settings > Variables altindaki
-          # API_BASE_URL degiskeninden gelir; yoksa asagidaki varsayilan.
-          export API_BASE_URL="${{ vars.API_BASE_URL || 'https://dockly-proje.onrender.com' }}"
-          export FLAVOR="${{ vars.FLAVOR || 'staging' }}"
-          sh tool/check_release_config.sh "$API_BASE_URL" "$FLAVOR"
-          # YENİ EV (WEB-1, kurucu onayı 2026-11-10): koybul.com kökü artık
-          # KEŞİF SİTESİDİR (apps/web/site); tarayıcı uygulaması /app/ altında
-          # AYNEN yaşar — hesaplar, veriler ve API sözleşmeleri değişmedi.
-          flutter build web --release \
-            --web-renderer canvaskit \
-            --no-web-resources-cdn \
-            --dart-define=API_BASE_URL="$API_BASE_URL" \
-            --dart-define=FLAVOR="$FLAVOR" \
-            --dart-define=ESRI_TILE_KEY=${{ secrets.ESRI_TILE_KEY }} \
-            --dart-define=ESRI_TILE_STYLE=${{ vars.ESRI_TILE_STYLE || 'arcgis/community' }} \
-            --base-href="/app/"  # uygulamanın yeni evi: koybul.com/app/
-      - name: Siteyi birleştir (kök = keşif sitesi, /app = uygulama)
-        run: |
-          mkdir -p dist/app
-          cp -r apps/web/site/. dist/
-          cp -r apps/mobile/build/web/. dist/app/
-          # ESRI_TILE_KEY tanimsizsa bos gecer -> uygulama OSM'e guvenli duser.
-          # Stil degistirmek icin: Settings > Secrets and variables > Actions >
-          # Variables sekmesi > ESRI_TILE_STYLE degiskeni (ör. arcgis/oceans) —
-          # kod paketi GEREKMEZ, sonraki yayinla stil degisir.
+          mkdir -p dist
+          cp apps/web/yakinda/index.html dist/index.html
+          # Eski sitenin/uygulamanın bilinen yolları da yakında sayfasına
+          # düşsün (boş 404 yerine marka görünür).
+          cp apps/web/yakinda/index.html dist/404.html
+          # Arama motorlarına açıkça "indeksleme" denir.
+          printf 'User-agent: *\nDisallow: /\n' > dist/robots.txt
       - name: Yayına it (gh-pages dalı)
         working-directory: dist
         run: |
-          # Özel alan adı + Jekyll kapalı (dosyalar olduğu gibi servis edilir).
           echo koybul.com > CNAME
           touch .nojekyll
           git init -b gh-pages
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "web yayını: ${GITHUB_SHA::7}"
-          # Tek commit'lik dal her seferinde baştan yazılır (geçmiş sitede
-          # değil kaynak depodadır — dal şişmez, yayın atomiktir).
+          git commit -m "yakında sayfası: ${GITHUB_SHA::7}"
           git push --force \
             "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
             gh-pages

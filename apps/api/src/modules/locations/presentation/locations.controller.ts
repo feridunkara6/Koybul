@@ -15,6 +15,7 @@ import {
 import { Response } from 'express';
 import { z } from 'zod';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
+import { ContentRate, ContentRateGuard } from '../../../common/guards/content-rate.guard';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AuthedRequest, JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from '../../../common/guards/optional-jwt.guard';
@@ -161,8 +162,9 @@ export class LocationsController {
    * POST olduğu için CDN cache'lenmez; dönen özet istemcide ekranı tazeler.
    */
   @Post(':idOrSlug/occupancy')
-  @UseGuards(JwtAuthGuard, AccountGuard)
+  @UseGuards(JwtAuthGuard, AccountGuard, ContentRateGuard)
   @RequireAccount()
+  @ContentRate('occupancy', 10) // spam freni: kullanıcı başı saatte 10 doluluk bildirimi
   @HttpCode(200)
   async reportOccupancy(
     @CurrentUser() principal: Principal,

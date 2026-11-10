@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { UuidParam } from '../../../common/validation/uuid';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
+import { ContentRate, ContentRateGuard } from '../../../common/guards/content-rate.guard';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { AppProblem } from '../../../common/problem/problem';
 import { Principal } from '../../../core/auth/principal';
@@ -41,6 +42,9 @@ export class ReviewsController {
 
   @Post('locations/:idOrSlug/reviews')
   @HttpCode(201)
+  // Metot guard'ı sınıf guard'larından SONRA çalışır → principal hazırdır.
+  @UseGuards(ContentRateGuard)
+  @ContentRate('review', 10) // spam freni: kullanıcı başı saatte 10 yorum
   async create(
     @CurrentUser() principal: Principal,
     @Param('idOrSlug') idOrSlug: string,

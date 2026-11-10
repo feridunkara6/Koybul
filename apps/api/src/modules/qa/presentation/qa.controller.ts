@@ -13,6 +13,7 @@ import { z } from 'zod';
 import { UuidParam } from '../../../common/validation/uuid';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
+import { ContentRate, ContentRateGuard } from '../../../common/guards/content-rate.guard';
 import { AuthedRequest, JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from '../../../common/guards/optional-jwt.guard';
 import { AppProblem } from '../../../common/problem/problem';
@@ -89,8 +90,9 @@ export class QaController {
   }
 
   @Post('questions')
-  @UseGuards(JwtAuthGuard, AccountGuard)
+  @UseGuards(JwtAuthGuard, AccountGuard, ContentRateGuard)
   @RequireAccount()
+  @ContentRate('question', 5) // spam freni: kullanıcı başı saatte 5 soru
   async createQuestion(
     @CurrentUser() principal: Principal,
     @Body() body: unknown,
@@ -99,8 +101,9 @@ export class QaController {
   }
 
   @Post('questions/:id/answers')
-  @UseGuards(JwtAuthGuard, AccountGuard)
+  @UseGuards(JwtAuthGuard, AccountGuard, ContentRateGuard)
   @RequireAccount()
+  @ContentRate('answer', 20) // spam freni: kullanıcı başı saatte 20 cevap
   async createAnswer(
     @CurrentUser() principal: Principal,
     @Param('id') id: string,
@@ -130,16 +133,18 @@ export class QaController {
   }
 
   @Post('questions/:id/report')
-  @UseGuards(JwtAuthGuard, AccountGuard)
+  @UseGuards(JwtAuthGuard, AccountGuard, ContentRateGuard)
   @RequireAccount()
+  @ContentRate('report', 10) // spam freni: konum bildirimleriyle ORTAK kova
   @HttpCode(204)
   async reportQuestion(@Param('id') id: string): Promise<void> {
     await this.qa.report('qa_question', UUID.parse(id));
   }
 
   @Post('answers/:id/report')
-  @UseGuards(JwtAuthGuard, AccountGuard)
+  @UseGuards(JwtAuthGuard, AccountGuard, ContentRateGuard)
   @RequireAccount()
+  @ContentRate('report', 10) // spam freni: konum bildirimleriyle ORTAK kova
   @HttpCode(204)
   async reportAnswer(@Param('id') id: string): Promise<void> {
     await this.qa.report('qa_answer', UUID.parse(id));

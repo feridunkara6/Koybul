@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { UuidParam } from '../../../common/validation/uuid';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
+import { ContentRate, ContentRateGuard } from '../../../common/guards/content-rate.guard';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { Principal } from '../../../core/auth/principal';
 import { ReportsService } from '../application/reports.service';
@@ -32,6 +33,9 @@ export class ReportsController {
 
   @Post('locations/:idOrSlug/reports')
   @HttpCode(201)
+  // Metot guard'ı sınıf guard'larından SONRA çalışır → principal hazırdır.
+  @UseGuards(ContentRateGuard)
+  @ContentRate('report', 10) // spam freni: QA bildirimleriyle ORTAK kova (saatte 10 bildirim)
   async create(
     @CurrentUser() principal: Principal,
     @Param('idOrSlug') idOrSlug: string,

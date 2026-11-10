@@ -1,7 +1,10 @@
 name: dockly_mobile
 description: Dockly mobil uygulaması (docs/26). İskelet — auth ekranları 2.4b'de.
 publish_to: none
-version: 0.1.0+1
+# Yayın sürümü (kurucu onayı 2026-11-10): App Store'a 1.0.0 ile çıkılır.
+# Soldaki sürüm kullanıcıya görünür; +N derleme numarasıdır ve her
+# TestFlight/App Store yüklemesinde bir artırılır (Codemagic/Xcode).
+version: 1.0.0+1
 
 environment:
   sdk: ^3.5.0

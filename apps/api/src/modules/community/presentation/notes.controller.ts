@@ -18,6 +18,7 @@ import { z } from 'zod';
 import { UuidParam } from '../../../common/validation/uuid';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
+import { ContentRate, ContentRateGuard } from '../../../common/guards/content-rate.guard';
 import { AuthedRequest, JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from '../../../common/guards/optional-jwt.guard';
 import { AppProblem } from '../../../common/problem/problem';
@@ -157,8 +158,9 @@ export class NotesController {
 
   @Post('locations/:locationId/notes')
   @HttpCode(201)
-  @UseGuards(JwtAuthGuard, AccountGuard)
+  @UseGuards(JwtAuthGuard, AccountGuard, ContentRateGuard)
   @RequireAccount()
+  @ContentRate('note', 10) // spam freni: kullanıcı başı saatte 10 not (yayın hazırlığı 2026-11)
   async create(
     @CurrentUser() principal: Principal,
     @Param('locationId') locationId: string,

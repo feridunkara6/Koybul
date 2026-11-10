@@ -14,6 +14,7 @@ import { z } from 'zod';
 import { UuidParam } from '../../../common/validation/uuid';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { AccountGuard, RequireAccount } from '../../../common/guards/account.guard';
+import { ContentRate, ContentRateGuard } from '../../../common/guards/content-rate.guard';
 import { AuthedRequest, JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from '../../../common/guards/optional-jwt.guard';
 import { MinRole, RolesGuard } from '../../../common/guards/roles.guard';
@@ -115,8 +116,9 @@ export class EventsController {
   /** Etkinlik kurma — hesap ister; Premium kapısı SERVİSTE (dürüst 402). */
   @Post()
   @HttpCode(201)
-  @UseGuards(JwtAuthGuard, AccountGuard)
+  @UseGuards(JwtAuthGuard, AccountGuard, ContentRateGuard)
   @RequireAccount()
+  @ContentRate('event', 5) // spam freni: kullanıcı başı saatte 5 etkinlik
   async createUserEvent(
     @CurrentUser() principal: Principal,
     @Body() body: unknown,
