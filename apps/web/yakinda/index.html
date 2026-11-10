@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Koybul — Yakında</title>
+<meta name="description" content="Koybul: Türkiye kıyılarında koy, marina ve rota rehberi. Çok yakında.">
+<meta name="robots" content="noindex">
+<style>
+  :root{--deep:#0A2540;--brand:#0C7BDC;--turq:#2EC4B6}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,"Segoe UI",Roboto,sans-serif;color:#fff;
+    background:linear-gradient(170deg,var(--deep) 0%,#0C5A94 55%,var(--brand) 95%);
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    padding:24px;overflow:hidden;position:relative;
+  }
+  .glow{position:absolute;width:640px;height:640px;border-radius:50%;
+    background:radial-gradient(circle,rgba(46,196,182,.22) 0%,transparent 65%);
+    bottom:-320px;left:50%;transform:translateX(-50%);pointer-events:none}
+  main{position:relative;max-width:480px}
+  .mark{font-size:52px;line-height:1;margin-bottom:14px}
+  h1{font-size:34px;font-weight:800;letter-spacing:-.5px;margin-bottom:8px}
+  h1 b{color:#7CC4FF}
+  .tag{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);
+    border-radius:999px;padding:7px 18px;font-size:13px;font-weight:700;margin-bottom:18px;letter-spacing:.4px}
+  p{font-size:15px;line-height:1.65;opacity:.92}
+  .waves{position:absolute;left:0;right:0;bottom:0;height:90px;opacity:.5;pointer-events:none;
+    background:
+      radial-gradient(70px 26px at 12% 100%, rgba(255,255,255,.14) 40%, transparent 42%),
+      radial-gradient(90px 32px at 38% 100%, rgba(255,255,255,.1) 40%, transparent 42%),
+      radial-gradient(76px 28px at 64% 100%, rgba(255,255,255,.12) 40%, transparent 42%),
+      radial-gradient(96px 34px at 88% 100%, rgba(255,255,255,.09) 40%, transparent 42%)}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<main>
+  <div class="mark">⚓</div>
+  <h1>Koy<b>bul</b></h1>
+  <div class="tag">ÇOK YAKINDA</div>
+  <p>Türkiye kıyılarında koylar, marinalar ve bağlama yerleri —
+  derinlik, zemin ve korunak bilgisiyle, kaptan topluluğunun gözünden.<br><br>
+  Denize açılmaya hazırlanıyoruz. ⛵</p>
+</main>
+<div class="waves"></div>
+<script>
+// Eski ziyaretçi önbelliği temizliği: koybul.com daha önce uygulama/site
+// yayınladı; service worker kalıntısı temizlenmezse bu sayfa görünmez.
+try {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function (rs) {
+      rs.forEach(function (r) { r.unregister(); });
+    }).catch(function () {});
+  }
+  if (window.caches && caches.keys) {
+    caches.keys().then(function (ks) { ks.forEach(function (k) { caches.delete(k); }); }).catch(function () {});
+  }
+} catch (e) {}
+</script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Koybul Yayın Denetimi</title>
+<style>
+  :root{--bg:#f6f8fb;--card:#fff;--ink:#15243a;--sub:#5b6b82;--brand:#0C7BDC;--deep:#0A2540;--teal:#0b7a6c;--amber:#b8860b;--red:#c0392b;--line:#e3e9f1;--chip:#eaf1f8}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0f1722;--card:#17212e;--ink:#e8eef6;--sub:#9db0c6;--brand:#6fb1ec;--teal:#4ecdc4;--amber:#e8c468;--red:#ff8a80;--line:#2a3850;--chip:#1f2d3f}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14.5px/1.6 -apple-system,"Segoe UI",Roboto,sans-serif;padding:16px 16px 48px}
+  .wrap{max-width:780px;margin:0 auto}
+  h1{font-size:21px;margin:8px 0 2px}
+  .lead{color:var(--sub);font-size:13px;margin:0 0 14px}
+  .verdict{border-radius:14px;padding:14px 16px;background:rgba(255,178,36,.14);border:1.5px solid rgba(255,178,36,.5);margin-bottom:16px}
+  .verdict b{font-size:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:13px}
+  .card h2{font-size:15px;margin:0 0 8px}
+  ul{margin:4px 0 2px;padding-left:19px}
+  li{margin:4px 0}
+  .ok{color:var(--teal);font-weight:700}
+  .kismi{color:var(--amber);font-weight:700}
+  .yok{color:var(--red);font-weight:700}
+  .na{color:var(--sub);font-weight:700}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{text-align:left;padding:7px 8px;border-top:1px solid var(--line);vertical-align:top}
+  th{color:var(--sub);font-size:10.5px;letter-spacing:.4px}
+  .p0{color:#fff;background:var(--red);border-radius:6px;padding:1px 7px;font-weight:800;font-size:10.5px;white-space:nowrap}
+  .p1{color:#7a4a00;background:rgba(255,178,36,.35);border-radius:6px;padding:1px 7px;font-weight:800;font-size:10.5px;white-space:nowrap}
+  .p2{color:var(--brand);background:var(--chip);border-radius:6px;padding:1px 7px;font-weight:800;font-size:10.5px;white-space:nowrap}
+  .p3{color:var(--sub);background:var(--chip);border-radius:6px;padding:1px 7px;font-weight:800;font-size:10.5px;white-space:nowrap}
+  .sub{color:var(--sub);font-size:12px}
+  .tablo{overflow-x:auto}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>⚓ Koybul — Yayın Öncesi Denetim Raporu (Aşama 1)</h1>
+<p class="lead">10 Kasım 2026 · Kod tabanı salt-okunur tarandı (sürüm: "web güncelleme" commit'i). Hiçbir değişiklik yapılmadı. Cihazda koşan testler, canlı sunucu ölçümleri ve mağaza sandbox akışları bu ortamdan yürütülemedi — bunlar "test edilemedi" olarak dürüstçe işaretlendi ve son test planına kondu.</p>
+
+<div class="verdict">
+  <b>GENEL KARAR: KOŞULLU HAZIR 🟡</b><br>
+  <span class="sub">Kod tarafında yayına engel açık yok. Kalan engellerin tamamı kod dışı: 2 hukuki boşluk (veri sorumlusu kimliği, çalışır destek kutusu), 3 panel doğrulaması (yedek, hata izleme anahtarı, premium bayrağı) ve App Store Connect hazırlıkları. Bunlar kapatıldığında yayın kararı "Hazır"a döner.</span>
+</div>
+
+<div class="card">
+  <h2>1 · Genel hazır olma durumu</h2>
+  <ul>
+    <li><span class="ok">TAMAM</span> — Mobil uygulama (iOS): keşif, hava, rota, defter, teknem (bakım+yakıt), topluluk (kimlik, takip, akış, soru-cevap, etkinlik, engelleme), premium (IAP + elle tanım), bildirimler, moderasyon. 860+ otomatik mobil test + 460+ sunucu testi her push'ta koşuyor.</li>
+    <li><span class="ok">TAMAM</span> — Sunucu: NestJS + Postgres(PostGIS), 26 migration, satır düzeyi güvenlik (RLS) tüm kullanıcı tablolarında, tüm yazmalar kullanıcı bağlamında.</li>
+    <li><span class="ok">TAMAM</span> — Web: koybul.com keşif sitesi (yeni) + /app tarayıcı uygulaması; destek ve yasal sayfalar yayında.</li>
+    <li><span class="ok">TAMAM</span> — Yönetim: uygulama içi admin panel (istatistik, elle premium, içerik yönetimi) + 8 sekmeli moderasyon kuyruğu.</li>
+    <li><span class="kismi">KISMEN</span> — Mağaza hazırlığı: TestFlight çalışıyor; App Store Connect kayıt/metin/görsel/gizlilik etiketi henüz yapılmadı (rehberi elinde).</li>
+    <li><span class="yok">KAPSAM DIŞI</span> — Android: projede android klasörü yok; ilk yayın iOS. Android ayrı bir iş paketi ister (orta zorluk; kod çoğunlukla hazır, yapılandırma+test gerekir).</li>
+    <li><span class="na">PLANLI EKSİK</span> — Blog yok (hiç planlanmadı; Soru-Cevap var). Web'de koy detay sayfaları (WEB-3) ve bölge sayfaları (WEB-4) sırada.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>2-3 · Fonksiyonel durum (akış akış)</h2>
+  <div class="tablo"><table>
+    <tr><th>AKIŞ</th><th>DURUM</th><th>NOT</th></tr>
+    <tr><td>Kayıt / giriş (Apple, Google, e-posta)</td><td><span class="ok">Çalışıyor</span></td><td>Firebase; sahada kullanılıyor. Apple Sign-In cihaz testi son planda.</td></tr>
+    <tr><td>Şifre sıfırlama</td><td><span class="ok">Var</span></td><td>"Şifremi unuttum" düğmesi + Firebase e-postası (account_section.dart).</td></tr>
+    <tr><td>Çıkış / hesap silme</td><td><span class="ok">Çalışıyor</span></td><td>Silme: anonimleştirme + tüm oturumların kapanması (Apple şartı ✓).</td></tr>
+    <tr><td>Profil düzenleme, kaptan kimliği, takip/takipçi listeleri</td><td><span class="ok">Çalışıyor</span></td><td>Yeni profil düzeni testli.</td></tr>
+    <tr><td>Keşif, arama, filtre, koy detayı, keşif hakkı/teaser</td><td><span class="ok">Çalışıyor</span></td><td>Kilit sunucuda; istemciye kilitli veri inmiyor.</td></tr>
+    <tr><td>Rota oluşturma/paylaşma, rota keşfi</td><td><span class="ok">Çalışıyor</span></td><td>Saha düzeltmeleri (SOS çakışması vb.) kapatıldı.</td></tr>
+    <tr><td>Teknem: tekne, fotoğraf (cihazda), bakım + yakıt, hesap kapısı</td><td><span class="ok">Çalışıyor</span></td><td>Hesapla gelir/çıkışta gizlenir kuralı testli.</td></tr>
+    <tr><td>Marinam, komşu tekneler, tekne kartı (hikâye/istatistik/rota/favori/kardeş)</td><td><span class="ok">Çalışıyor</span></td><td>Hikâye moderasyonlu.</td></tr>
+    <tr><td>Topluluk: not, soru-cevap, seyir akışı, Pruvan neta, etkinlik</td><td><span class="ok">Çalışıyor</span></td><td>Hepsi ön-moderasyonlu; etkinlik kurma premium.</td></tr>
+    <tr><td>Şikâyet + kullanıcı engelleme</td><td><span class="ok">Çalışıyor</span></td><td>Apple 1.2 UGC üçlüsü tamam (şikâyet+moderasyon+engel).</td></tr>
+    <tr><td>Bildirimler (kutu + push)</td><td><span class="kismi">Cihaz testi şart</span></td><td>Kod testli; push uçtan uca yalnız gerçek cihazda doğrulanır.</td></tr>
+    <tr><td>Premium satın alma / geri yükleme / elle tanım</td><td><span class="kismi">Sandbox testi şart</span></td><td>Elle tanım düzeltildi (Apple ezmesi + anında görünme). Gerçek IAP akışı TestFlight'ta denenmeli.</td></tr>
+    <tr><td>Web: ana sayfa, keşfet haritası, arama, /app</td><td><span class="kismi">Senin onayın</span></td><td>Üç yeşil + yayında; konteynerden canlı site doğrulanamadı — senin gezmen esas test.</td></tr>
+  </table></div>
+</div>
+
+<div class="card">
+  <h2>3 · Kullanıcı deneyimi — "ilk 5 dakika" sorusu</h2>
+  <p class="sub"><b>Cevap: Evet, büyük ölçüde.</b> Açılış turu + Keşfet haritası ilk dakikada değer veriyor (yakın koylar, hava). Boş durumlar genel olarak yönlendirmeli (takip boşsa "profilden takip et", favori boşsa "kalbe dokun" vb.).</p>
+  <ul>
+    <li><span class="kismi">P1</span> İlk kullanıcı sorunu "boş topluluk": akış/etkinlik/soru-cevap ilk gün boş görünür. Çözüm kod değil içerik: yayın öncesi 15-20 kaliteli tohum içerik (senin admin+2-3 dost hesabıyla gerçek notlar, 2-3 rota, 1 etkinlik). Uydurma kullanıcı üretme — gerçek ama az kişiyle gerçek içerik.</li>
+    <li><span class="p2">P2</span> Bugün ekranı misafire de bir "hesap aç" değer önerisi kartı gösterebilir (dönüşüm).</li>
+    <li><span class="p2">P2</span> Web→uygulama köprüsü: sitede App Store bağlantısı yayın günü eklenecek (tek satır).</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>4 · Güvenlik ve veri koruma</h2>
+  <ul>
+    <li><span class="ok">SAĞLAM</span> Kimlik: Firebase ID token → sunucu oturumu; rol hiyerarşisi (RolesGuard) admin uçlarında; misafir/üye/premium kapıları sunucuda.</li>
+    <li><span class="ok">SAĞLAM</span> Veri izolasyonu: RLS tüm kişisel tablolarda (sahip politikaları); kamuya açık uçlar PII taşımıyor (denetimlerde tekrar tekrar doğrulandı); engel listesi okuma dahi sahibe kilitli.</li>
+    <li><span class="ok">SAĞLAM</span> Girdi doğrulama: tüm gövdeler zod + strict (bilinmeyen alan 422); kimlik parametreleri UUID süzgeçli; sahiplik denetimleri "404 sızdırmaz" deseninde.</li>
+    <li><span class="ok">SAĞLAM</span> Fotoğraf: kullanıcı fotoğrafı sunucuya HİÇ yüklenmiyor (cihazda) — yükleme saldırı yüzeyi yok.</li>
+    <li><span class="ok">SAĞLAM</span> Gizli anahtarlar: depoda anahtar yok; Render/Codemagic/GitHub secrets. Web'deki Esri karo anahtarı tasarım gereği istemcide (karo anahtarları için normal; Esri panelinden alan adı kısıtı önerilir — P2).</li>
+    <li><span class="kismi">P1</span> Hız sınırı yalnız oturum uçlarında. İçerik yazma uçları moderasyonla korunuyor (spam yayına düşemez) ama kuyruğu şişirebilir. Öneri: yazma uçlarına basit kullanıcı-başı sınır (ör. 10 içerik/saat) — düşük zorluk, yayın sonrası ilk hafta da olabilir.</li>
+    <li><span class="p0">P0</span> KVKK: veri sorumlusu <b>unvanı ve adresi hâlâ yer tutucu</b> ("Koybul"/"Türkiye" — legal_content.dart içinde bilinçli bırakılmış). Gerçek unvan+adres gerekli; uygulama+web tek seferde güncellenir. <b>Hukuki metinlerin son hâli bir uzmana danışılmalı — bu rapor hukuki onay değildir.</b></li>
+    <li><span class="p0">P0</span> destek@koybul.com: metinlerin başvuru adresi — kutunun gerçekten kurulu ve okunur olduğu doğrulanmalı.</li>
+    <li><span class="kismi">P1-panel</span> Yedekleme: Supabase otomatik yedek ayarı panelden doğrulanmalı (ben erişemem). Render ortam değişkenlerinin yedeği (bir metin dosyasına) alınmalı.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>5 · Performans ve altyapı</h2>
+  <ul>
+    <li><span class="kismi">P1</span> <b>Soğuk başlama:</b> Render ücretsiz/düşük planda uyuyan sunucu ilk isteği 30-60 sn geciktirir — yeni kullanıcının ilk izlenimini bozar. Öneri: yayın haftasında planı bir kademe yükselt (aylık küçük maliyet; kararı sana ait, panelden 2 dakika).</li>
+    <li><span class="ok">İYİ</span> Okuma uçlarında HTTP önbellek başlıkları var (harita 120sn, arama 30sn); harita yanıtı iğne tavanlı + kümeli (büyük bbox'ta veri patlamaz, sunucu 5° sınırı koyar).</li>
+    <li><span class="ok">İYİ</span> Çevrimdışı: premium izi cihazda korunur, defter/teknem zaten cihazda; ağ hatalarında ekranlar dürüst mesaj + yeniden dene veriyor (testli desen).</li>
+    <li><span class="kismi">Ölçülmedi</span> Gerçek yanıt süreleri, eşzamanlı yük, pil/bellek: bu ortamdan ölçülemez. Son test planına kondu (aşağıda). Tahmin sunmuyorum.</li>
+    <li><span class="ok">İYİ</span> Hata izleme: mobilde Sentry bağlı; sunucuda Sentry hazır ama <b>DSN panelde tanımlı mı doğrulanmalı</b> (tanımsızsa sessizce kapalı — bilinçli tasarım). <span class="kismi">P1-panel</span></li>
+    <li><span class="p2">P2</span> Çalışır durumda mı uyarısı (uptime monitor) yok — ücretsiz bir servis (ör. UptimeRobot) + /health ucu bağlanabilir.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>6 · Mağaza hazırlığı (iOS)</h2>
+  <ul>
+    <li><span class="ok">HAZIR</span> Paket kimliği com.moorira.app, Codemagic imzalama+TestFlight hattı çalışıyor; izin metinleri Info.plist'te Türkçe ve dürüst (konum/kamera/galeri — arka plan takibi yok beyanı dahil); uygulama ikonu+açılış ekranı mevcut.</li>
+    <li><span class="kismi">YAPILACAK</span> (rehberdeki 7 adım): App Store Connect kaydı, metinler, 6.7" ekran görüntüleri, gizlilik etiketi (cevap anahtarı rehberde), abonelik ürünleri (koybul.premium.yillik/aylik) + Paid Apps sözleşmesi, demo hesaplar + inceleme notu, yaş anketi.</li>
+    <li><span class="p2">P2</span> Sürüm pubspec'te 0.1.0+1 — mağaza sürümünü 1.0.0 yapmak ilk yayında doğru olur (tek satır, Codemagic build no otomatik).</li>
+    <li><span class="na">—</span> Google Play: Android hedefi yok; ayrı karar/paket.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>7 · Ürün ve ilk kullanıcılar</h2>
+  <ul>
+    <li>Veri tabanı güçlü başlıyor: <b>2.000+ gerçek koy/bağlama yeri</b> derinlik-zemin-korunak alanlarıyla — "boş uygulama" değil, boş olan yalnız sosyal katman.</li>
+    <li>Tekrar açma nedenleri yerinde: hava/rüzgâr, canlı doluluk, akış+bildirimler, bakım hatırlatması. Keşif hakkı (ayda 3 koy) premium merdiveni kuruyor.</li>
+    <li>İlk kullanıcı planı önerisi: TestFlight'taki saha listesini bitir → 10-15 denizci tanıdıkla "kurucu kaptanlar" grubu → tohum içerik → App Store. Web sitesi (SEO) orta vadeli kazanım kanalı; WEB-3 koy sayfaları bunu büyütür.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>8 · P0-P3 listesi (tam)</h2>
+  <div class="tablo"><table>
+    <tr><th></th><th>KONU</th><th>ETKİ / NEDEN</th><th>ÇÖZÜM</th><th>SİSTEM</th><th>ZORLUK</th></tr>
+    <tr><td><span class="p0">P0</span></td><td>KVKK veri sorumlusu unvan+adres yer tutucu</td><td>Hukuki geçerlilik; metin eksik sayılır</td><td>Bana unvan+adresi yaz; uygulama+web tek pakette güncellerim. Son metni uzmana danıştır.</td><td>Mobil+Web</td><td>Düşük</td></tr>
+    <tr><td><span class="p0">P0</span></td><td>destek@koybul.com kutusu</td><td>KVKK başvuru + mağaza desteği bu adrese bakar</td><td>Posta kutusunu kur/yönlendir, test et (ya da adresi değiştirelim)</td><td>Operasyon</td><td>Düşük</td></tr>
+    <tr><td><span class="p0">P0</span></td><td>Panel doğrulamaları: Supabase yedek açık mı · Render'da SENTRY_DSN ve PREMIUM_ENFORCE tanımlı mı</td><td>Veri kaybı/kör uçuş riski; premium bayrağı kapalıysa kilitler çalışmaz</td><td>3 panel kontrolü — sana tek tek ekran adımlarıyla eşlik ederim</td><td>Altyapı</td><td>Düşük</td></tr>
+    <tr><td><span class="p0">P0</span></td><td>App Store Connect seti (kayıt, görsel, etiket, IAP ürünleri, demo hesap)</td><td>Yayının kendisi</td><td>Elindeki 7 adımlı rehber; birlikte dolduralım</td><td>Mağaza</td><td>Orta (form işi)</td></tr>
+    <tr><td><span class="p1">P1</span></td><td>Cihaz uçtan-uca turu (saha listesi 13 bölüm) + IAP sandbox + push + Apple Sign-In</td><td>Kod testleri cihaz gerçeğini %100 temsil etmez</td><td>TestFlight'ta listeyi bitir; premium satın al/geri yükle dene</td><td>Mobil</td><td>Orta (senin zamanın)</td></tr>
+    <tr><td><span class="p1">P1</span></td><td>Render planı (soğuk başlama)</td><td>İlk izlenim: 30-60 sn boş bekleme</td><td>Yayın haftası plan yükselt (panel, 2 dk)</td><td>Altyapı</td><td>Düşük</td></tr>
+    <tr><td><span class="p1">P1</span></td><td>Tohum içerik (15-20 gerçek katkı)</td><td>Boş topluluk ilk kullanıcıyı kaçırır</td><td>Kurucu+dost hesaplarla gerçek not/rota/etkinlik</td><td>İçerik</td><td>Düşük</td></tr>
+    <tr><td><span class="p1">P1</span></td><td>Yazma uçlarına hız sınırı</td><td>Spam moderasyon kuyruğunu şişirebilir</td><td>Kullanıcı-başı saatlik tavan (mevcut RateLimiter servisiyle)</td><td>Backend</td><td>Düşük</td></tr>
+    <tr><td><span class="p2">P2</span></td><td>Sürümü 1.0.0 yap · Esri anahtarına alan kısıtı · uptime monitor · web App Store rozeti · misafire Bugün değer kartı</td><td>Cila ve işletme rahatlığı</td><td>Küçük tekil işler</td><td>Karışık</td><td>Düşük</td></tr>
+    <tr><td><span class="p3">P3</span></td><td>Android sürümü · WEB-3/4 (koy+bölge sayfaları) · webden kartla ödeme (V2) · OTP girişi · Bölgem/krokiler · favori bildirimleri</td><td>Büyüme adımları</td><td>Yayından sonra sırayla</td><td>Karışık</td><td>Orta-Yüksek</td></tr>
+  </table></div>
+</div>
+
+<div class="card">
+  <h2>9-11 · Yayın öncesi kesin liste · sonraya kalanlar · son test planı</h2>
+  <p><b>Yayından önce mutlaka (sıra önerisi):</b> ① KVKK unvan+adres (bana yaz) ② destek kutusu ③ 3 panel doğrulaması ④ saha listesi cihaz turu + IAP sandbox ⑤ tohum içerik ⑥ App Store Connect seti ⑦ sürüm 1.0.0 paketi (KVKK güncellemesiyle birlikte tek commit).</p>
+  <p><b>Sonraya kalabilir:</b> P2'nin kalanı + P3'ün tamamı. Hiçbiri yayını tutmaz.</p>
+  <p><b>Son test planı (cihazda, ~2 saat):</b> saha listesinin 13 bölümü + şu 6 ek: şifre sıfırlama e-postası gerçekten geliyor mu · Apple ile giriş · uçak modunda açılış (çevrimdışı davranış) · zayıf ağda harita · IAP sandbox satın al + geri yükle + iptal · push bildirimine dokunup doğru ekrana düşme. Web'de: koybul.com telefon+bilgisayar, /app girişli tur.</p>
+</div>
+
+<p class="sub" style="text-align:center">Bu rapor koddan okunabilen gerçeklerle sınırlıdır; "test edilemedi" denilen hiçbir şey çalışıyor varsayılmadı. Hukuki konularda uzman görüşü şarttır.</p>
+
+</div></body>
+</html>
